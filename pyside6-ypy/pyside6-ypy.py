@@ -14,6 +14,8 @@ from websockets import connect
 
 class YDocWorker(QObject):
     ydoc_signal = Signal(str, YMapEvent)
+    ydoc_observations = {}
+    ydoc_subscription_ids = {}
     ydoc: YDoc()
     
     def __init__(self, *args, **kwargs):
@@ -24,8 +26,22 @@ class YDocWorker(QObject):
     @Slot(str)
     def observe(self, name: str):
         print(name)
-        self.ydoc.get_map(name).observe_deep(partial(self.ydoc_signal.emit, name))
+        counter = self.ydoc_observations.get(name, 0)
+        if counter == 0:
+            self.ydoc_subscription_ids[name] = self.ydoc.get_map(name).observe_deep(partial(self.ydoc_signal.emit, name))
+        self.ydoc_observations[name] = counter + 1
 
+    @Slot(str)
+    def unobserve(self, name: str):
+        counter = self.ydoc_observations.get(name, 0)
+        if counter > 0:
+            counter = counter - 1
+            if counter == 0:
+                self.ydoc.get_map(name).unobserve(self.ydoc_subscription_ids[name])
+                del self.ydoc_subscription_ids[name]
+                del self.ydoc_observations[name]
+                print('released')
+ 
     async def _connect(self):
         print("server link")
         async with (
@@ -50,5 +66,7 @@ if __name__ == '__main__':
         worker.ydoc_signal.connect(update)
         worker.observe("document1")
         worker.observe("document2")
+        # worker.unobserve("document1")
+        # worker.unobserve("document2")
 
         sys.exit(app.exec())
