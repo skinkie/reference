@@ -49,7 +49,6 @@ class EnumerationComboBox(QtWidgets.QComboBox):
     optional: bool
     ydoc_worker: YDocWorker
     ydoc_path: str
-    propagate: bool = True
 
     def __init__(self, enum_type: EnumType, optional: bool=False, ydoc_worker: YDocWorker=None, ydoc_path: str=None, parent=None):
         super(EnumerationComboBox, self).__init__(parent)
@@ -69,9 +68,6 @@ class EnumerationComboBox(QtWidgets.QComboBox):
 
 
     def ydocSignal(self):
-        if not self.propagate:
-            return
-
         value = self.currentText()
         if value == '' and self.optional:
             value = None
@@ -86,11 +82,11 @@ class EnumerationComboBox(QtWidgets.QComboBox):
 
         if name == sname and skey in value:
             text = value[skey]
-            if self.currentText() != text:
-                self.propagate = False
-                self.setCurrentText(text)
-                self.propagate = True
 
+            # Prevent looping updates
+            self.currentIndexChanged.disconnect(self.ydocSignal)
+            self.setCurrentText(text)
+            self.currentIndexChanged.connect(self.ydocSignal)
 
 def get_type(clazz):
     optional = False
