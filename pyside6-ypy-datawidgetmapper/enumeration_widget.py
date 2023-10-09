@@ -66,7 +66,7 @@ class EnumerationComboBox(QtWidgets.QComboBox):
 
             self.currentIndexChanged.connect(self.ydocSignal)
 
-
+    # Sends a message to the YDocWorker thread, with the path and value
     def ydocSignal(self):
         value = self.currentText()
         if value == '' and self.optional:
@@ -75,6 +75,7 @@ class EnumerationComboBox(QtWidgets.QComboBox):
         print("ydocSignal", self.ydoc_path, value)
         self.ydoc_signal.emit(self.ydoc_path, value)
 
+    # Receives a messages from the YDocWorker thread
     @Slot(str, str)
     def ydocSlot(self, name: str, value: dict):
         sname, skey = self.ydoc_path.split('/')

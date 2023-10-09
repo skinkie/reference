@@ -16,7 +16,6 @@ class YDocWorker(QObject):
     ydoc_signal = Signal(str, YMapEvent)
     ydoc_observations = {}
     ydoc_subscription_ids = {}
-    ydoc_signals = {}
     ydoc: YDoc()
     
     def __init__(self, *args, **kwargs):
@@ -32,6 +31,7 @@ class YDocWorker(QObject):
         if counter == 0:
             print("SUBSCRIBE: " + name)
             self.ydoc_subscription_ids[name] = self.ydoc.get_map(name).observe_deep(partial(self.sender_map, name))
+
         self.ydoc_observations[name] = counter + 1
 
     def sender_map(self, name: str, ymap_event: YMapEvent):
