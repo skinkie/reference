@@ -2,6 +2,7 @@ import dataclasses
 import decimal
 from dataclasses import Field
 from enum import Enum, EnumType
+from netex import MultilingualString, VersionOfObjectRef
 
 import xsdata
 from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime, XmlDate, XmlPeriod
@@ -130,12 +131,12 @@ def get_type(clazz, parent_name):
     # This is a hack because upstream did not use VersionOfObjectRef as substitution group consistently
 
     # TODO temporary disable
-    # if len([x for x in clazz_resolved.__mro__ if x.__name__.endswith('RefStructure')]) > 0:
+    if len([x for x in clazz_resolved.__mro__ if x.__name__.endswith('RefStructure')]) > 0:
         # Inline RefClasses
         # return (list_attributes(clazz_resolved, parent_name), optional)
-        # return (netex.VersionOfObjectRef, optional)
+        return (VersionOfObjectRef, optional)
 
-    if clazz_resolved not in (int, str, bool, float, bytes, XmlPeriod, XmlTime, XmlDate, XmlDateTime, XmlDuration, decimal.Decimal): #, netex.MultilingualString):
+    if clazz_resolved not in (int, str, bool, float, bytes, XmlPeriod, XmlTime, XmlDate, XmlDateTime, XmlDuration, decimal.Decimal, MultilingualString):
         listed_attributes = list_attributes(clazz_resolved, parent_name)
         if listed_attributes:
             return (listed_attributes, optional)

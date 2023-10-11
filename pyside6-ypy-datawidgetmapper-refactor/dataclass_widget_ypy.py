@@ -12,16 +12,14 @@ from enum import EnumType, Enum
 from mro_attributes import list_attributes, likely_type
 from enumeration_widget import DataclassEnumerationComboBox
 from string_widget import DataclassStringLineEdit
+from multiligualstring_widget import DataclassMultiLingualStringLineEdit
 from ydoc_worker import YDocWorker
+
+from netex import DataSource, ScheduledStopPoint
 
 class MyQLineEdit(QLineEdit):
     def __init__(self, parent=None):
         super(MyQLineEdit, self).__init__(parent)
-
-
-class MultilingualStringEdit(QLineEdit):
-    def __init__(self, parent=None):
-        super(MultilingualStringEdit, self).__init__(parent)
 
 
 """
@@ -48,12 +46,14 @@ class GenericModel(QAbstractTableModel):
     def __init__(self, dataclazz, ydoc_worker: YDocWorker=None, ydoc_path: str=None, parent=None):
         self.ydoc_worker = ydoc_worker
         self.ydoc_path = ydoc_path
-        self.test = [['point', '0'],]
+
 
         super(GenericModel, self).__init__(parent)
         self.all_attributes = list_attributes(dataclazz)
         self.index_attributes = {self.all_attributes[i][0]: i for i in range(0, len(self.all_attributes))}
         self.ytype_attributes = [likely_type(x[3]) for x in self.all_attributes]
+
+        self.test = [['' for x in self.all_attributes]]
 
         if self.ydoc_worker:
             self.ydoc_worker.observe_map(self.ydoc_path, self.ydocSlot)
@@ -72,16 +72,16 @@ class GenericModel(QAbstractTableModel):
                 col = self.index_attributes.get(key, None)
                 print("Emit datachange for index " + str(col))
                 if col is not None:
-                    cursorPositions = []
-                    if col in self.widget_list:
-                        cursorPositions = [(x, x.cursorPosition()) for x in self.widget_list[col]]
-
                     row = 0 # TODO: fetch row
                     if self.ytype_attributes[col] == 'str':
                         self.test[row][col] = str(value[key])
                     else:
                         self.test[row][col] = value[key]
 
+                    # HACK: Is there any other way so we can retain the current cursor position before the model updates?
+                    cursorPositions = []
+                    if col in self.widget_list:
+                        cursorPositions = [(x, x.cursorPosition()) for x in self.widget_list[col]]
 
                     self.dataChanged.emit(self.index(0, col), self.index(0, col))
 
@@ -112,6 +112,8 @@ class GenericModel(QAbstractTableModel):
 
         self.test[row][col] = value
 
+        # This is disabled, because we likely receive the edit via the ydocSlot
+        # there we handle the moving cursor, prior to updating
         # self.dataChanged.emit(index, index)
 
         path = self.ydoc_path + "/" + self.all_attributes[col][0]
@@ -153,7 +155,7 @@ class GenericForm(QFormLayout):
 
         widget_mapping = {
             'str': DataclassStringLineEdit,
-            'MultilingualString': MultilingualStringEdit,
+            'MultilingualString': DataclassMultiLingualStringLineEdit,
             'EnumType': DataclassEnumerationComboBox,
         }
 
@@ -175,6 +177,7 @@ class GenericForm(QFormLayout):
             print(all_attributes[i], mytype, lt, optional)
 
             lt = mytype.__name__
+            print(lt)
             if str(lt) in widget_mapping:
                 label = all_attributes[i][0]
                 if hasattr(all_attributes[i][3], 'metadata') and 'name' in all_attributes[i][3].metadata:
@@ -188,7 +191,7 @@ class GenericForm(QFormLayout):
                 self.addRow(label, w)
                 self.mapper.addMapping(w, i)
 
-                # TODO: Is there any other way so we can retain the current cursor position before the model updates?
+                # HACK: Is there any other way so we can retain the current cursor position before the model updates?
                 # https://stackoverflow.com/questions/15801259/qlineedit-cursor-moves-to-end-after-textchanged-or-commitdata
                 # https://stackoverflow.com/questions/14145110/qtextedit-change-carriage-position-after-settext
 
@@ -266,13 +269,14 @@ if __name__ == '__main__':
         )
 
 
+
     app = QApplication(sys.argv)
     signal.signal(signal.SIGINT, lambda a, b: QApplication.quit())
 
     with qtinter.using_asyncio_from_qt():
         ydoc_worker = YDocWorker()
 
-        layout = GenericForm(Version, ydoc_worker, "document1")
+        layout = GenericForm(ScheduledStopPoint, ydoc_worker, "document1")
 
         # dccombobox = DataclassEnumerationComboBox(VersionVersionStructure.__dataclass_fields__['version_type'], ydoc_worker, "document1/testenum")
 

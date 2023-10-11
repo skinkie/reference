@@ -13,16 +13,34 @@ from y_py import YMapEvent
 
 from ydoc_worker import YDocWorker
 
-class StringLineEdit(QtWidgets.QLineEdit):
+from string_widget import StringLineEdit
+from enumeration_widget import EnumerationComboBox
+from netex import MultilingualString
+
+class Languages(Enum):
+    NL = 'nl'
+    EN = 'en'
+
+class MultiLingualStringLineEdit(QtWidgets.QWidget):
     abstract_changed = Signal()
     optional: bool
 
     def __init__(self, str_type: str, optional: bool=False, parent=None):
-        super(StringLineEdit, self).__init__(parent)
+        super(MultiLingualStringLineEdit, self).__init__(parent)
         self.optional = optional
+        self.value = StringLineEdit(str_type, False)
+        self.lang = EnumerationComboBox(Languages, False)
 
-        self.textEdited.connect(self.abstract_changed)
-
+        self.setContentsMargins(0, 0, 0, 0)
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        # self.layout.setHorizontalSpacing(0)
+        # elf.layout.setVerticalSpacing(0)
+        self.setLayout(self.layout)
+        self.layout.addWidget(self.value, 0, 0)
+        self.layout.addWidget(self.lang, 0, 1)
+        self.value.abstract_changed.connect(self.abstract_changed)
+        # self.lang.abstract_changed.connect(self.abstract_changed)
 
 def get_type(clazz):
     optional = False
@@ -43,10 +61,10 @@ def get_type(clazz):
 
     return (clazz_resolved, optional)
 
-class DataclassStringLineEdit(StringLineEdit):
+class DataclassMultiLingualStringLineEdit(MultiLingualStringLineEdit):
     def __init__(self, field: Field, parent=None):
         str_type, optional = get_type(field.type)
-        super(DataclassStringLineEdit, self).__init__(str_type, optional, parent)
+        super(DataclassMultiLingualStringLineEdit, self).__init__(optional, parent)
 
 if __name__ == '__main__':
     import sys
@@ -116,7 +134,7 @@ if __name__ == '__main__':
 
     layout = QGridLayout()
 
-    dccombobox = DataclassStringLineEdit(Version.__dataclass_fields__['id'])
+    dccombobox = DataclassMultiLingualStringLineEdit(Version.__dataclass_fields__['id'])
 
     layout.addWidget(dccombobox)
 
