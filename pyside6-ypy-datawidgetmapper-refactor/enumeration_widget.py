@@ -5,18 +5,14 @@ from functools import lru_cache
 
 import typing
 
-import qtinter
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtCore import Slot, Signal
-from PySide6.QtWidgets import QApplication, QWidget, QGridLayout, QLineEdit
-from y_py import YMapEvent
+from PySide6.QtWidgets import QApplication, QWidget, QGridLayout
 
-from ydoc_worker import YDocWorker
 
 # The QAbstractListModel is used here as container to get access to individual items within the Enumeration
-# it is not used to represent a column of a datastore. Therefore this model has nothing to do with Ydoc.
+# it is not used to represent a column of a datastore. Therefore, this model has nothing to do with Ydoc.
 class EnumerationModel(QtCore.QAbstractListModel):
-    ydoc_path: str
     enum_type: EnumType
     optional: bool
     def __init__(self, enum_type: EnumType, optional: bool=False, parent=None):
@@ -45,49 +41,18 @@ class EnumerationModel(QtCore.QAbstractListModel):
             return list(self.enum_type)[row].value
 
 class EnumerationComboBox(QtWidgets.QComboBox):
+    abstract_changed = Signal()
     ydoc_signal = Signal(str, str)
     optional: bool
-    ydoc_worker: YDocWorker
-    ydoc_path: str
 
-    def __init__(self, enum_type: EnumType, optional: bool=False, ydoc_worker: YDocWorker=None, ydoc_path: str=None, parent=None):
+    def __init__(self, enum_type: EnumType, optional: bool=False, parent=None):
         super(EnumerationComboBox, self).__init__(parent)
         self.optional = optional
-        self.ydoc_worker = ydoc_worker
-        self.ydoc_path = ydoc_path
 
         model = EnumerationModel(enum_type, optional)
         self.setModel(model)
 
-        if self.ydoc_worker:
-            # self.ydoc_worker.ydoc_signal.connect(self.ydocSlot)
-            self.ydoc_worker.observe_map(self.ydoc_path, self.ydocSlot)
-            self.ydoc_signal.connect(self.ydoc_worker.update_map)
-
-            self.currentIndexChanged.connect(self.ydocSignal)
-
-    # Sends a message to the YDocWorker thread, with the path and value
-    def ydocSignal(self):
-        value = self.currentText()
-        if value == '' and self.optional:
-            value = None
-
-        print("ydocSignal", self.ydoc_path, value)
-        self.ydoc_signal.emit(self.ydoc_path, value)
-
-    # Receives a messages from the YDocWorker thread
-    @Slot(str, str)
-    def ydocSlot(self, name: str, value: dict):
-        sname, skey = self.ydoc_path.split('/')
-        print('ydocSlot', name, value)
-
-        if name == sname and skey in value:
-            text = value[skey]
-
-            # Prevent looping updates
-            self.currentIndexChanged.disconnect(self.ydocSignal)
-            self.setCurrentText(text)
-            self.currentIndexChanged.connect(self.ydocSignal)
+        self.currentIndexChanged.connect(self.abstract_changed)
 
 def get_type(clazz):
     optional = False
@@ -109,9 +74,9 @@ def get_type(clazz):
     return (clazz_resolved, optional)
 
 class DataclassEnumerationComboBox(EnumerationComboBox):
-    def __init__(self, field: Field, ydoc_worker: YDocWorker=None, ydoc_path: str=None, parent=None):
+    def __init__(self, field: Field, parent=None):
         enum_type, optional = get_type(field.type)
-        super(DataclassEnumerationComboBox, self).__init__(enum_type, optional, ydoc_worker, ydoc_path + '/' + field.name, parent)
+        super(DataclassEnumerationComboBox, self).__init__(enum_type, optional, parent)
 
 if __name__ == '__main__':
     import sys
@@ -158,17 +123,14 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     signal.signal(signal.SIGINT, lambda a, b: QApplication.quit())
 
-    with qtinter.using_asyncio_from_qt():
-        ydoc_worker = YDocWorker()
+    layout = QGridLayout()
 
-        layout = QGridLayout()
+    dccombobox = DataclassEnumerationComboBox(VersionVersionStructure.__dataclass_fields__['version_type'])
 
-        dccombobox = DataclassEnumerationComboBox(VersionVersionStructure.__dataclass_fields__['version_type'], ydoc_worker, "document1")
+    layout.addWidget(dccombobox)
 
-        layout.addWidget(dccombobox)
+    mywindow = QWidget()
+    mywindow.setLayout(layout)
+    mywindow.show()
 
-        mywindow = QWidget()
-        mywindow.setLayout(layout)
-        mywindow.show()
-
-        sys.exit(app.exec())
+    sys.exit(app.exec())

@@ -1,43 +1,32 @@
+import signal
 from dataclasses import Field
 from enum import EnumType, Enum
 from functools import lru_cache
 
 import typing
+
+import qtinter
 from PySide6 import QtWidgets, QtCore
+from PySide6.QtCore import Slot, Signal
 from PySide6.QtWidgets import QApplication, QWidget, QGridLayout, QLineEdit
+from y_py import YMapEvent
 
+from ydoc_worker import YDocWorker
 
-class EnumerationModel(QtCore.QAbstractListModel):
-    def __init__(self, enum_type: EnumType, optional: bool=False, parent=None):
-        QtCore.QAbstractListModel.__init__(self, parent)
-        self.enum_type = enum_type
+class StringLineEdit(QtWidgets.QLineEdit):
+    abstract_changed = Signal()
+    optional: bool
+
+    def __init__(self, str_type: str, optional: bool=False, parent=None):
+        super(StringLineEdit, self).__init__(parent)
         self.optional = optional
 
-    @lru_cache(maxsize=None)
-    def rowCount(self, parent=QtCore.QModelIndex()):
-        return len(self.enum_type) + int(self.optional)
+        self.textEdited.connect(self.abstract_changed)
+        self.textChanged.connect(self.update)
 
-    def index(self, row, column, parent):
-        if row < 0 or row >= self.rowCount():
-            return QtCore.QModelIndex()
-        return self.createIndex(row, column)
-
-    def data(self, index, role):
-        if not index.isValid():
-            return
-
-        if role == QtCore.Qt.DisplayRole:
-            if index.row() == 0 and self.optional:
-                return ''
-
-            row = index.row() - int(self.optional)
-            return list(self.enum_type)[row].value
-
-class EnumerationComboBox(QtWidgets.QComboBox):
-    def __init__(self, enum_type: EnumType, optional: bool=False, parent=None):
-        super(EnumerationComboBox, self).__init__(parent)
-        model = EnumerationModel(enum_type, optional)
-        self.setModel(model)
+    def update(self):
+        # self.cursorPosition()
+        print(self.cursorPosition())
 
 def get_type(clazz):
     optional = False
@@ -58,10 +47,10 @@ def get_type(clazz):
 
     return (clazz_resolved, optional)
 
-class DataclassEnumerationComboBox(EnumerationComboBox):
+class DataclassStringLineEdit(StringLineEdit):
     def __init__(self, field: Field, parent=None):
-        enum_type, optional = get_type(field.type)
-        super(DataclassEnumerationComboBox, self).__init__(enum_type, optional, parent)
+        str_type, optional = get_type(field.type)
+        super(DataclassStringLineEdit, self).__init__(str_type, optional, parent)
 
 if __name__ == '__main__':
     import sys
@@ -105,13 +94,34 @@ if __name__ == '__main__':
             }
         )
 
+    @dataclass(unsafe_hash=True, kw_only=True)
+    class Version(VersionVersionStructure):
+        """A group of operational data instances which share the same VALIDITY
+        CONDITIONs.
+
+        A VERSION belongs to a unique VERSION FRAME and is characterized by
+        a unique TYPE OF VERSION. E.g.  NETWORK VERSION for Line 12 starting
+        from 2000-01-01.
+        """
+
+        class Meta:
+            namespace = "http://www.netex.org.uk/netex"
+
+        id: str = field(
+            metadata={
+                "type": "Attribute",
+                "required": True,
+            }
+        )
+
+
     app = QApplication(sys.argv)
+    signal.signal(signal.SIGINT, lambda a, b: QApplication.quit())
 
     layout = QGridLayout()
-    combobox = EnumerationComboBox(VersionTypeEnumeration)
-    layout.addWidget(combobox)
 
-    dccombobox = DataclassEnumerationComboBox(VersionVersionStructure.__dataclass_fields__['version_type'])
+    dccombobox = DataclassStringLineEdit(Version.__dataclass_fields__['id'])
+
     layout.addWidget(dccombobox)
 
     mywindow = QWidget()

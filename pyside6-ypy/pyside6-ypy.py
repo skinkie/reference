@@ -65,7 +65,7 @@ if __name__ == '__main__':
         worker = YDocWorker()
         worker.ydoc_signal.connect(update)
         worker.observe("document1")
-        worker.observe("document2")
+        # worker.observe("document2")
         # worker.unobserve("document1")
         # worker.unobserve("document2")
 
