@@ -146,7 +146,6 @@ class GenericForm(QFormLayout):
             'EnumType': DataclassEnumerationComboBox,
         }
 
-        # widget_list = {}
         all_attributes = self.model.get_attributes()
 
         for i in range(0, len(all_attributes)):
