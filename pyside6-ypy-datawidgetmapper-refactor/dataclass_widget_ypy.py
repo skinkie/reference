@@ -38,8 +38,6 @@ class GenericModel(QAbstractTableModel):
 
     test: list
 
-    widget_list: dict
-
     # TODO: If this is an abstract table, we might actually want to have a list (preferably of the same type)
     # TODO: as input, and use this as an interface to crawl through the data, that is possible if we would
     # TODO: take the dataclazz as some sort of filter in a database
@@ -78,14 +76,8 @@ class GenericModel(QAbstractTableModel):
                     else:
                         self.test[row][col] = value[key]
 
-                    # HACK: Is there any other way so we can retain the current cursor position before the model updates?
-                    cursorPositions = []
-                    if col in self.widget_list:
-                        cursorPositions = [(x, x.cursorPosition()) for x in self.widget_list[col]]
-
                     self.dataChanged.emit(self.index(0, col), self.index(0, col))
 
-                    [w.setCursorPosition(c) for w, c in cursorPositions]
 
 
     def data(self, index, role=Qt.DisplayRole):
@@ -108,13 +100,11 @@ class GenericModel(QAbstractTableModel):
         if self.test[row][col] == value:
             return True
 
-        print("Setting: " + self.test[row][col] + " -> " + value)
+        # print("Setting: " + self.test[row][col] + " -> " + value)
 
         self.test[row][col] = value
 
-        # This is disabled, because we likely receive the edit via the ydocSlot
-        # there we handle the moving cursor, prior to updating
-        # self.dataChanged.emit(index, index)
+        self.dataChanged.emit(index, index)
 
         path = self.ydoc_path + "/" + self.all_attributes[col][0]
 
@@ -125,9 +115,6 @@ class GenericModel(QAbstractTableModel):
             self.ydoc_signal.emit(path, value, 'map')
 
         return True
-
-    def set_widget_list(self, widget_list: list):
-        self.widget_list = widget_list
 
     # TODO: Better place in the model?
     def get_attributes(self):
@@ -159,7 +146,7 @@ class GenericForm(QFormLayout):
             'EnumType': DataclassEnumerationComboBox,
         }
 
-        widget_list = {}
+        # widget_list = {}
         all_attributes = self.model.get_attributes()
 
         for i in range(0, len(all_attributes)):
@@ -191,17 +178,8 @@ class GenericForm(QFormLayout):
                 self.addRow(label, w)
                 self.mapper.addMapping(w, i)
 
-                # HACK: Is there any other way so we can retain the current cursor position before the model updates?
-                # https://stackoverflow.com/questions/15801259/qlineedit-cursor-moves-to-end-after-textchanged-or-commitdata
-                # https://stackoverflow.com/questions/14145110/qtextedit-change-carriage-position-after-settext
-
-                if str(lt) == 'str':
-                    wl = widget_list.setdefault(i, [])
-                    wl.append(w)
-
                 print(label, i)
 
-        self.model.set_widget_list(widget_list)
         self.mapper.toFirst()
 
 if __name__ == '__main__':

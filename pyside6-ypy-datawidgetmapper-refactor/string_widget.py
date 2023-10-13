@@ -7,7 +7,7 @@ import typing
 
 import qtinter
 from PySide6 import QtWidgets, QtCore
-from PySide6.QtCore import Slot, Signal
+from PySide6.QtCore import Slot, Signal, Property
 from PySide6.QtWidgets import QApplication, QWidget, QGridLayout, QLineEdit
 from y_py import YMapEvent
 
@@ -23,6 +23,17 @@ class StringLineEdit(QtWidgets.QLineEdit):
 
         self.textEdited.connect(self.abstract_changed)
 
+    def readText2(self):
+        return self.text()
+
+    def setText2(self, text: str) -> None:
+        cursorposition = self.cursorPosition()
+        self.setText(text)
+        self.setCursorPosition(cursorposition)
+
+    # This property allows us to restore the cursor position,
+    # when it updates from an external source.
+    text2 = Property(str, readText2, setText2, user=True)
 
 def get_type(clazz):
     optional = False
