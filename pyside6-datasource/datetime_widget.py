@@ -10,6 +10,8 @@ from PySide6 import QtWidgets, QtCore
 from PySide6.QtCore import Slot, Signal, Property, QDateTime, QDate
 from PySide6.QtWidgets import QApplication, QWidget, QGridLayout, QLineEdit
 
+# Might want to implement, this does not work yet
+# https://github.com/Qt-Widgets/QDateEditEx
 
 class DateTimeEdit(QtWidgets.QDateTimeEdit):
     abstract_changed = Signal()
@@ -26,19 +28,26 @@ class DateTimeEdit(QtWidgets.QDateTimeEdit):
         self.setDateTime(QDateTime.fromString("01/01/0001", "dd/MM/yyyy"))
         self.setDisplayFormat("yyyy-MM-ddThh:mm:ss")
 
+        print(self.metaObject().userProperty().name())
+
         # self.textEdited.connect(self.abstract_changed)
 
-    # def readText2(self):
-    #    return self.text()
+    def clear(self) -> None:
+        self.setDateTime(self.minimumDateTime())
+    def readDateTimeNull(self):
+        if self.dateTime() == self.minimumDateTime():
+            return QDateTime()
+        return self.dateTime()
 
-    # def setText2(self, text: str) -> None:
-    #    cursorposition = self.cursorPosition()
-    #    self.setText(text)
-    #    self.setCursorPosition(cursorposition)
+    def setDateTimeNull(self, dateTime: QDateTime) -> None:
+        if dateTime.isNull():
+            self.setDateTime(self.minimumDateTime())
+        else:
+            self.setDateTime(dateTime)
 
     # This property allows us to restore the cursor position,
     # when it updates from an external source.
-    # text2 = Property(str, readText2, setText2, user=True)
+    dateTimeNull = Property(QDateTime, readDateTimeNull, setDateTimeNull, user=True)
 
 def get_type(clazz):
     optional = False

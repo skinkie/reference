@@ -50,6 +50,7 @@ def create_multiwidget(name, mytype, optional, default, field: Field, layout):
                 formlayout = QFormLayout()
                 create_multiwidget(name, mytype, optional, default, field, formlayout)
 
+                # TODO: https://github.com/eyalk11/qt-collapsible-section-pyside6
                 groupbox = QGroupBox() # (name)
                 groupbox.setLayout(formlayout)
                 layout.addRow(label, groupbox)
@@ -89,8 +90,8 @@ if __name__ == '__main__':
     mywindow = QWidget()
     formlayout = QFormLayout()
 
-    mytype = list_attributes(KeyValueStructure)
-    create_multiwidget(KeyValueStructure.__name__, mytype, None, None, None, formlayout)
+    mytype = list_attributes(DataSource)
+    create_multiwidget(DataSource.__name__, mytype, None, None, None, formlayout)
 
     mywindow.setLayout(formlayout)
     mywindow.show()
