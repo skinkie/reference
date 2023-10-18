@@ -18,12 +18,12 @@ def hasdefault(default):
 
     return default
 
-def unembed(fields):
+def unembed(fields, all_module_classes):
     all_references = []
     all_classes = []
 
     for name, field in fields.items():
-        resolved_class = resolve_class(field.type)
+        resolved_class = resolve_class(field.type, all_module_classes)
         if not resolved_class:
             continue
 
@@ -44,42 +44,45 @@ def unembed(fields):
 
     return result
 
-def resolve_class(clazz):
+def resolve_class(clazz, all_module_classes):
     clazz_resolved = clazz
 
     if hasattr(clazz, '_name'):
         if clazz._name == 'Optional':
-            optional = True
+            optional = True # TODO: check why this is not used.
             clazz_resolved = [x for x in clazz.__args__ if x is not None.__class__][0]
         elif clazz._name == 'List':
-            return None # TODO: handle list elements
+            clazz_resolved = likely_type2(clazz, all_module_classes)
         else:
             clazz_resolved = [x for x in clazz.__args__ if x is not None.__class__][0]
 
     return clazz_resolved
 
 IGNORE_ATTRIBUTES = ['name_of_class_attribute']
-def list_attributes(clazz, parent_name=None):
+def list_attributes(clazz, all_module_classes, class_set, parent_name=None):
+    old_class_set = class_set
     buffer = []
-    for name, field in unembed(clazz.__dataclass_fields__):
+    for name, field in unembed(clazz.__dataclass_fields__, all_module_classes):
+        class_set = set(old_class_set)
+
         if name in IGNORE_ATTRIBUTES:
             continue
 
         if parent_name:
             full_name = parent_name + '.' + name
-            buffer.append((full_name, get_type(field.type, full_name), hasdefault(field.default), field))
+            buffer.append((full_name, get_type(field.type, full_name, all_module_classes, class_set), hasdefault(field.default), field))
         else:
-            buffer.append((name, get_type(field.type, name), hasdefault(field.default), field))
+            buffer.append((name, get_type(field.type, name, all_module_classes, class_set), hasdefault(field.default), field))
 
     return buffer
 
-def likely_type(obj: Field):
+def likely_type(obj: Field, all_module_classes):
     if hasattr(obj.type, '__args__'):
         if hasattr(obj.type.__args__[0], '__name__'):
             return obj.type.__args__[0].__name__
 
         elif obj.type.__args__[0].__class__ == typing.ForwardRef:
-            return obj.type.__args__[0].__forward_arg__
+            return all_module_classes[obj.type.__args__[0].__forward_arg__]
 
         else:
             return obj.type.__class__.__name__
@@ -88,8 +91,25 @@ def likely_type(obj: Field):
     else:
         return obj.type.__class__.__name__
 
+def likely_type2(obj, all_module_classes):
+    if hasattr(obj, '__args__'):
+        # TODO: Figure something out by returning for example List
 
-def get_type(clazz, parent_name):
+        if obj.__args__[0].__class__ == typing.ForwardRef:
+            return all_module_classes[obj.__args__[0].__forward_arg__]
+        else:
+            return obj.__args__[0]
+
+    elif obj.__class__.__name__ == 'type':
+        # TODO
+        return obj.__name__
+    else:
+
+        # TODO
+        return obj.__class__.__name__
+
+
+def get_type(clazz, parent_name, all_module_classes, class_set: set):
     optional = False
     clazz_resolved = clazz
 
@@ -102,12 +122,19 @@ def get_type(clazz, parent_name):
             optional = True
             clazz_resolved = [x for x in clazz.__args__ if x is not None.__class__][0]
         elif clazz._name == 'List':
-            return None # TODO: handle list elements
+            clazz_resolved = resolve_class(clazz, all_module_classes)
+            # return None # TODO: handle list elements
         else:
             clazz_resolved = [x for x in clazz.__args__ if x is not None.__class__][0]
 
+    if clazz_resolved in class_set:
+        # TODO: We can't handle recurive attributes
+        return None
+
+    class_set.add(clazz_resolved)
+
     if clazz_resolved == object:
-        # TODO: We don't handle these yet
+        # TODO: We don't handle these yet, this should check metadata and 'choices'
         return None
 
     if hasattr(clazz_resolved, "_name") and clazz_resolved._name == 'List':
@@ -123,6 +150,10 @@ def get_type(clazz, parent_name):
          print()
 
     if len([x for x in clazz_resolved.__mro__ if x.__name__.endswith('RelStructure')]) > 0:
+        # TODO now it becomes a single instance, we obviously want to have a list
+        listed_attributes =  list_attributes(clazz_resolved, all_module_classes, class_set, parent_name)
+        if listed_attributes:
+            return (listed_attributes, optional)
         return None
 
     if len([x for x in clazz_resolved.__mro__ if x.__name__ == 'Enum']) > 0:
@@ -137,7 +168,7 @@ def get_type(clazz, parent_name):
         return (VersionOfObjectRef, optional)
 
     if clazz_resolved not in (int, str, bool, float, bytes, XmlPeriod, XmlTime, XmlDate, XmlDateTime, XmlDuration, decimal.Decimal): #, MultilingualString):
-        listed_attributes = list_attributes(clazz_resolved, parent_name)
+        listed_attributes = list_attributes(clazz_resolved, all_module_classes, class_set, parent_name)
         if listed_attributes:
             return (listed_attributes, optional)
         return None

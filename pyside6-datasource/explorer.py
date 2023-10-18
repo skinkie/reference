@@ -36,9 +36,9 @@ def create_widget(name, mytype, optional, default, field: Field):
     else:
         print(name, mytype)
 
-def create_multiwidget(name, mytype, optional, default, field: Field, layout):
+def create_multiwidget(name, mytype1, optional, default, field: Field, layout):
     print("\n" + name + "\n-----")
-    for name, type_optional, default, field in mytype:
+    for name, type_optional, default, field in mytype1:
         if type_optional is not None:
             mytype, optional = type_optional
 
@@ -84,13 +84,19 @@ def print_attributes(dataclazz):
 
 if __name__ == '__main__':
     import sys
+    import netex
+    import inspect
+
     app = QApplication(sys.argv)
     signal.signal(signal.SIGINT, lambda a, b: QApplication.quit())
 
     mywindow = QWidget()
     formlayout = QFormLayout()
 
-    mytype = list_attributes(DataSource)
+    members = inspect.getmembers(netex)
+    class_list = {x[0]: x[1] for x in members}
+
+    mytype = list_attributes(DataSource, class_list, set([]))
     create_multiwidget(DataSource.__name__, mytype, None, None, None, formlayout)
 
     mywindow.setLayout(formlayout)

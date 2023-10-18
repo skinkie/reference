@@ -45,12 +45,15 @@ class EnumerationComboBox(QtWidgets.QComboBox):
     ydoc_signal = Signal(str, str)
     optional: bool
 
-    def __init__(self, enum_type: EnumType, optional: bool=False, parent=None):
+    def __init__(self, enum_type: EnumType, optional: bool=False, default=None, parent=None):
         super(EnumerationComboBox, self).__init__(parent)
         self.optional = optional
 
         model = EnumerationModel(enum_type, optional)
         self.setModel(model)
+
+        if default:
+            self.setPlaceholderText(str(default.value))
 
         self.currentIndexChanged.connect(self.abstract_changed)
 
@@ -76,7 +79,7 @@ def get_type(clazz):
 class DataclassEnumerationComboBox(EnumerationComboBox):
     def __init__(self, field: Field, parent=None):
         enum_type, optional = get_type(field.type)
-        super(DataclassEnumerationComboBox, self).__init__(enum_type, optional, parent)
+        super(DataclassEnumerationComboBox, self).__init__(enum_type, optional, field.default, parent)
 
 if __name__ == '__main__':
     import sys
