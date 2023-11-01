@@ -4,3 +4,5 @@ y-py
 ypy-websocket
 diff-match-patch
 websockets
+xsdata[cli,lxml,soap]
+duckdb
