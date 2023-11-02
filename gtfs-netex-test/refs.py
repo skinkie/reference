@@ -35,9 +35,7 @@ def getFakeRef(id: str, klass, version: str):
     if id is None:
         return None
 
-    instance = klass()
-    instance.ref = id
-    instance.version = version
+    instance = klass(ref=id, version=version)
     return instance
 
 def getIdByRef(obj: object, codespace: Codespace, ref: str):
