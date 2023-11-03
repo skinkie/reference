@@ -452,7 +452,6 @@ class GtfsNeTexProfile(CallsProfile):
                     link_sequence_projection.append(LinkSequenceProjection(id=getId(LinkSequenceProjection, self.codespace, prev_shape_id), version=self.version.version,
                                                                            distance=de_distance, points_or_line_string=LineString(id=prev_shape_id, srs_name="EPSG:4326", srs_dimension=2, pos_or_point_property_or_pos_list=[PosList(value=pos_list)])))
                     pos_list = []
-                    pos_list_d = [] # Optimise
                     prev_distance = 0
 
                 pos_list += [shape_pt_lats[i], shape_pt_lons[i]]
@@ -717,8 +716,6 @@ class GtfsNeTexProfile(CallsProfile):
 
                         shape_used.add(shape_id)
 
-                    # route_ref = getFakeRef(getId(Route, self.codespace, shape_ids[i]), RouteRef, self.version.version)
-
                 luggage_carriage_facility_list = []
                 facitities = None
                 bikes_allowed = get_or_none(bikes_alloweds, i)
@@ -765,7 +762,6 @@ class GtfsNeTexProfile(CallsProfile):
                                                  private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  validity_conditions_or_valid_between=ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None]),
-                                                 # route_ref=route_ref,
                                                  journey_pattern_view=journey_pattern_view,
                                                  direction_type=self.directionToNeTEx(get_or_none(direction_ids, i)),
                                                  train_block_ref_or_block_ref=block_ref,
@@ -774,47 +770,8 @@ class GtfsNeTexProfile(CallsProfile):
                                                  link_sequence_projection_ref_or_link_sequence_projection=lsp
                                                  )
 
-                # TODO: LinkSequenceProjectionRef
-                # LinkSequenceProjection()
-
                 service_journeys[trip_ids[i]] = service_journey
 
-        #
-        #     for row in cur.fetchall():
-        #         line = lines[getIdByRef(Line(), self.codespace, row['route_id'])]
-        #         availability_condition = availability_conditions[getIdByRef(AvailabilityCondition(), self.codespace, row['service_id'])]
-        #         destination_display_view = None
-        #         if row['trip_headsign']:
-        #             destination_display_view = DestinationDisplayView(name=MultilingualString(row['trip_headsign']),
-        #                                                               front_text=MultilingualString(
-        #                                                                   row['trip_headsign']))
-        #
-        #         accessibility_assessment = None
-        #         if row['wheelchair_accessible']:
-        #             accessibility_assessment = AccessibilityAssessment(mobility_impaired_access=self.wheelchairToNeTEx(row['wheelchair_accessible']))
-        #             setIdVersion(accessibility_assessment, self.codespace, row['trip_id'], self.version)
-        #
-        #         route_ref = None
-        #         if row['shape_id']:
-        #             route_ref = getRef(routes[row['shape_id']], RouteRef)
-        #             # route_ref = getFakeRef(row['shape_id'], RouteRef, self.version.version)
-        #
-        #         service_journey = ServiceJourney(line_ref=getRef(line, LineRef),
-        #                                           private_code=PrivateCode(value=row['trip_id'], type="trip_id"),
-        #                                           short_name=getOptionalString(row['trip_short_name']),
-        #                                           validity_conditions_or_valid_between=ValidityConditionsRelStructure(choice=[getRef(availability_condition, AvailabilityConditionRef)]),
-        #                                           route_ref=route_ref, # shape_id
-        #                                           journey_pattern_view=JourneyPatternView(destination_display_view=destination_display_view),
-        #                                           direction_type=self.directionToNeTEx(row['direction_id']),
-        #                                           block_ref=getFakeRef(row['block_id'], BlockRef, "any"),
-        #                                           accessibility_assessment=accessibility_assessment
-        #                                           )
-        #         setIdVersion(service_journey, self.codespace, row['trip_id'], self.version)
-        #
-        #         service_journeys[row['trip_id']] = service_journey
-        #
-        # scheduled_stop_points = getIndex(self.scheduled_stop_points)
-        #
         with self.conn.cursor() as cur:
             cur.execute(**stop_times_sql)
             trip_id = None
@@ -852,7 +809,6 @@ class GtfsNeTexProfile(CallsProfile):
                                                                       front_text=MultilingualString(value=stop_headsign))
 
                 from_point_ref = getId(ScheduledStopPoint, self.codespace, stop_ids[i])
-                # from_ssp = scheduled_stop_points[from_point_ref]
                 arrival_time, arrival_dayoffset = self.noonTimeToNeTEx(arrival_times[i])
                 departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[i])
 
