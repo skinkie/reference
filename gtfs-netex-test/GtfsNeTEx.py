@@ -1,7 +1,10 @@
 import datetime
 import math
+from _decimal import Decimal
+from typing import List
 
 import duckdb
+import numpy
 # import psycopg2, psycopg2.extras
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
@@ -28,7 +31,8 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     RoutePoint, PointsOnRouteRelStructure, RoutePointRef, PointOnRoute, RoutePointsInFrameRelStructure, \
     RoutesInFrameRelStructure, RouteLink, RouteLinksInFrameRelStructure, __all__, DayTypesRelStructure, DayType, \
     PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, Block, ServiceFacilitySetsRelStructure, \
-    ServiceFacilitySet, LuggageCarriageEnumeration, LinkSequenceProjection
+    ServiceFacilitySet, LuggageCarriageEnumeration, LinkSequenceProjection, LinkSequenceProjectionRef, LineString, \
+    PosList
 from refs import setIdVersion, getRef, getIndex, getIdByRef, getBitString2, getFakeRef, getOptionalString, getId
 
 
@@ -422,6 +426,56 @@ class GtfsNeTexProfile(CallsProfile):
 
         return (list(routes.values()), route_points, route_links)
 
+    def getLineStrings(self, shape_sql = {'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence, shape_dist_traveled from shapes order by shape_id, shape_pt_sequence, shape_dist_traveled;"""}) -> List[LinkSequenceProjection]:
+        link_sequence_projection = []
+
+        with self.conn.cursor() as cur:
+            cur.execute(**shape_sql)
+
+            df = cur.df()
+            shape_ids = df.get('shape_id')
+            shape_pt_lats = df.get('shape_pt_lat')
+            shape_pt_lons = df.get('shape_pt_lon')
+            # shape_pt_sequences = df.get('shape_pt_sequence')
+            shape_dist_traveleds = df.get('shape_dist_traveled')
+
+            prev_distance = 0
+            prev_shape_id = None
+            pos_list = []
+
+            for i in range(0, len(shape_ids)):
+                if shape_ids[i] != prev_shape_id and prev_shape_id is not None:
+                    de_distance = None
+                    if prev_distance is not None and not numpy.isnan(prev_distance):
+                        de_distance = Decimal(prev_distance)
+
+                    link_sequence_projection.append(LinkSequenceProjection(id=getId(LinkSequenceProjection, self.codespace, prev_shape_id), version=self.version.version,
+                                                                           distance=de_distance, points_or_line_string=LineString(id=prev_shape_id, srs_name="EPSG:4326", srs_dimension=2, pos_or_point_property_or_pos_list=[PosList(value=pos_list)])))
+                    pos_list = []
+                    pos_list_d = [] # Optimise
+                    prev_distance = 0
+
+                pos_list += [shape_pt_lats[i], shape_pt_lons[i]]
+
+                prev_shape_id = shape_ids[i]
+                prev_distance = get_or_none(shape_dist_traveleds, i)
+
+            if len(pos_list) > 0:
+                de_distance = None
+                if prev_distance is not None and not numpy.isnan(prev_distance):
+                    de_distance = Decimal(prev_distance)
+
+                link_sequence_projection.append(
+                    LinkSequenceProjection(id=getId(LinkSequenceProjection, self.codespace, prev_shape_id),
+                                           version=self.version.version, distance=de_distance,
+                                           points_or_line_string=LineString(id=getId(LinkSequenceProjection, self.codespace, prev_shape_id).replace(":", "_"), srs_name="EPSG:4326",
+                                                                            srs_dimension=2,
+                                                                            pos_or_point_property_or_pos_list=[
+                                                                                PosList(value=pos_list)])))
+
+        return link_sequence_projection
+
+
     def getServiceFrame(self, lines, stop_areas, scheduled_stop_points, id="ServiceFrame") -> ServiceFrame:
         if lines is None:
             lines = self.lines
@@ -598,10 +652,16 @@ class GtfsNeTexProfile(CallsProfile):
 
         return LuggageCarriageEnumeration.UNKNOWN
 
+    def gtfs_shape_to_linestring(self, shape_sql={'query': """select * from shapes order by shape_id;"""}):
+
+        with self.conn.cursor() as cur:
+            cur.execute(**shape_sql)
+
     def getServiceJourneys(self, availability_conditions, trips_sql={'query': """select * from trips order by trip_id;"""}, stop_times_sql = {'query': """select * from stop_times order by trip_id, stop_sequence;"""}) -> list[ServiceJourney]:
         availability_conditions = getIndex(availability_conditions)
 
         service_journeys = {}
+        shape_used = set([])
 
         with self.conn.cursor() as cur:
             cur.execute(**trips_sql)
@@ -645,8 +705,19 @@ class GtfsNeTexProfile(CallsProfile):
                     block_ref = getFakeRef(getId(Block, self.codespace, block_ids[i]), BlockRef, None)
 
                 route_ref = None
-                if shape_ids[i] is not None:
-                    route_ref = getFakeRef(getId(Route, self.codespace, shape_ids[i]), RouteRef, self.version.version)
+                lsp = None
+                shape_id = get_or_none(shape_ids, i)
+                if shape_id is not None:
+                    if shape_id in shape_used:
+                        lsp = getFakeRef(getId(LinkSequenceProjection, self.codespace, shape_id), LinkSequenceProjectionRef, self.version.version)
+                    else:
+                        lsps = self.getLineStrings({'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence, shape_dist_traveled from shapes where shape_id = ? order by shape_id, shape_pt_sequence, shape_dist_traveled;""", 'parameters': (shape_id,)})
+                        if len(lsps) > 0:
+                            lsp = lsps[0]
+
+                        shape_used.add(shape_id)
+
+                    # route_ref = getFakeRef(getId(Route, self.codespace, shape_ids[i]), RouteRef, self.version.version)
 
                 luggage_carriage_facility_list = []
                 facitities = None
@@ -700,6 +771,7 @@ class GtfsNeTexProfile(CallsProfile):
                                                  train_block_ref_or_block_ref=block_ref,
                                                  accessibility_assessment=accessibility_assessment,
                                                  facilities=facitities,
+                                                 link_sequence_projection_ref_or_link_sequence_projection=lsp
                                                  )
 
                 # TODO: LinkSequenceProjectionRef
