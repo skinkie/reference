@@ -32,7 +32,7 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     RoutesInFrameRelStructure, RouteLink, RouteLinksInFrameRelStructure, __all__, DayTypesRelStructure, DayType, \
     PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, Block, ServiceFacilitySetsRelStructure, \
     ServiceFacilitySet, LuggageCarriageEnumeration, LinkSequenceProjection, LinkSequenceProjectionRef, LineString, \
-    PosList
+    PosList, CodespaceRefStructure, DataSourceRefStructure
 from refs import setIdVersion, getRef, getIndex, getIdByRef, getBitString2, getFakeRef, getOptionalString, getId
 
 
@@ -81,8 +81,8 @@ class GtfsNeTexProfile(CallsProfile):
                                      short_name=MultilingualString(value=short_name),
                                      description=MultilingualString(value=df['feed_publisher_name'][0]))
 
-            frame_defaults = VersionFrameDefaultsStructure(default_codespace_ref=getRef(codespace),
-                                                           default_data_source_ref=getRef(data_source),
+            frame_defaults = VersionFrameDefaultsStructure(default_codespace_ref=getRef(codespace, CodespaceRefStructure),
+                                                           default_data_source_ref=getRef(data_source, DataSourceRefStructure),
                                                            default_locale=LocaleStructure(default_language=df['feed_lang'][0]),
                                                            default_location_system="EPSG:4326",
                                                            default_system_of_units=SystemOfUnits.SI_METRES

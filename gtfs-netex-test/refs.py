@@ -5,7 +5,7 @@ from netex import *
 
 def getRef(obj: object, klass=None):
     if klass == None:
-        asobj = type(obj).__name__ + 'RefStructure'
+        asobj = type(obj).__name__ + 'Ref' # Was: RefStructure
         klass = globals()[asobj]
 
     if hasattr(obj, 'id'):
