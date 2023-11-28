@@ -22,6 +22,8 @@ with duckdb.cursor(con) as cur:
     cur.execute("""CREATE TABLE shapes AS SELECT * FROM read_csv('gtfs/shapes.txt', delim=',', header=true, auto_detect=true);""")
     cur.execute("""CREATE TABLE trips AS SELECT * FROM read_csv('gtfs/trips.txt', delim=',', header=true, auto_detect=true);""")
     cur.execute("""CREATE TABLE transfers AS SELECT * FROM read_csv('gtfs/transfers.txt', delim=',', header=true, auto_detect=true);""")
-    cur.execute("""CREATE TABLE stop_times AS SELECT * FROM read_csv('gtfs/stop_times.txt', delim=',', header=true, auto_detect=true);""")\
+    cur.execute("""CREATE TABLE stop_times AS SELECT * FROM read_csv('gtfs/stop_times.txt', delim=',', header=true, auto_detect=true);""")
+
+    cur.execute("""ALTER TABLE shapes ADD COLUMN shape_dist_traveled FLOAT;""")
 
 con.close()
