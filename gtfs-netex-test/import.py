@@ -1,6 +1,6 @@
 import duckdb
 
-con = duckdb.connect(database='/tmp/gtfs2.duckdb')
+con = duckdb.connect(database='gtfs2.duckdb')
 with duckdb.cursor(con) as cur:
     cur.execute("""CREATE TABLE feed_info AS SELECT * FROM read_csv('/tmp/eu/feed_info.txt', delim=',', header=true, auto_detect=true);""")
     cur.execute("""CREATE TABLE agency AS SELECT * FROM read_csv('/tmp/eu/agency.txt', delim=',', header=true, auto_detect=true);""")

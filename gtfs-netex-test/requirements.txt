@@ -1,0 +1,2 @@
+xsdata[cli,lxml,soap]
+duckdb
