@@ -8,9 +8,11 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from netex import ServiceJourney, ServiceJourneyPattern, Codespace, Version, ServiceFrame, \
-    JourneyPatternsInFrameRelStructure, AvailabilityCondition, ServiceCalendarFrame, TypeOfFrameRef
+    JourneyPatternsInFrameRelStructure, AvailabilityCondition, ServiceCalendarFrame, TypeOfFrameRef, ScheduledStopPoint, \
+    StopAssignmentsInFrameRelStructure
 from refs import getIndex, getId
 from servicecalendarepip import ServiceCalendarEPIPFrame
+from siteframeepip import SiteFrameEPIP
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 
 ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
@@ -28,6 +30,7 @@ def conversion(input_filename: str, output_filename: str):
     service_journeys = []
     service_journey_patterns = []
     availability_conditions = []
+    # scheduled_stop_points = []
     has_servicejourney_patterns = False
 
     tree = lxml.etree.parse(input_filename)
@@ -60,16 +63,26 @@ def conversion(input_filename: str, output_filename: str):
     timetabledpassingtimesprofile = TimetablePassingTimesProfile(codespace, version, service_journeys, service_journey_patterns)
     timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
 
+    service_frame: ServiceFrame
+    service_frame = parser.parse(tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
     if not has_servicejourney_patterns:
-        service_frame: ServiceFrame
-        service_frame = parser.parse(tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
         service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(choice=service_journey_patterns)
 
+    # for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPoint"):
+    #    scheduled_stop_point: ScheduledStopPoint
+    #     scheduled_stop_point = parser.parse(element, ScheduledStopPoint)
+    #     scheduled_stop_points.append(scheduled_stop_point)
+
+    service_frame.stop_assignments = StopAssignmentsInFrameRelStructure(
+        choice=SiteFrameEPIP.getPassengerStopAssignments(service_frame.scheduled_stop_points.scheduled_stop_point))
+
+    site_frame_epip = SiteFrameEPIP(codespace)
+    site_frame = site_frame_epip.getSiteFrame(service_frame.scheduled_stop_points.scheduled_stop_point)
 
     sjs = getIndex(service_journeys)
     keys = set(sjs.keys())
     parser = lxml.etree.XMLParser(remove_blank_text=True)
-    tree = lxml.etree.parse("/tmp/Flix_Line_x400.xml", parser=parser)
+    tree = lxml.etree.parse(input_filename, parser=parser)
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourney"):
         # TODO iets met 'modified' timestamp meenemen?
         if element.attrib['id'] in keys:
@@ -81,6 +94,9 @@ def conversion(input_filename: str, output_filename: str):
 
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     element.getparent().append(lxml.etree.fromstring(serializer.render(service_calendar_frame, ns_map).encode('utf-8'), parser))
+
+    element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    element.getparent().append(lxml.etree.fromstring(serializer.render(site_frame, ns_map).encode('utf-8'), parser))
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}versions"):
         element.getparent().remove(element)
