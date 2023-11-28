@@ -1,0 +1,14 @@
+from dataclasses import dataclass
+from netex.simple_vehicle_type_ref_structure import SimpleVehicleTypeRefStructure
+
+__NAMESPACE__ = "http://www.netex.org.uk/netex"
+
+
+@dataclass(unsafe_hash=True, kw_only=True)
+class SimpleVehicleTypeRef(SimpleVehicleTypeRefStructure):
+    """Reference to a PERSONAL TRANSPORT TYPE.
+
+    +v1.2.2
+    """
+    class Meta:
+        namespace = "http://www.netex.org.uk/netex"

@@ -1,0 +1,98 @@
+from dataclasses import dataclass, field
+from typing import Optional
+from netex.all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
+from netex.alternative_texts_rel_structure import DataManagedObjectStructure
+from netex.control_centre_ref import ControlCentreRef
+from netex.department_ref import DepartmentRef
+from netex.multilingual_string import MultilingualString
+from netex.organisation_part_ref import OrganisationPartRef
+from netex.organisational_unit_ref import OrganisationalUnitRef
+from netex.private_code import PrivateCode
+from netex.transport_submode import TransportSubmode
+
+__NAMESPACE__ = "http://www.netex.org.uk/netex"
+
+
+@dataclass(unsafe_hash=True, kw_only=True)
+class OperationalContextVersionStructure(DataManagedObjectStructure):
+    """
+    Type for an OPERATIONAL CONTEXT.
+
+    :ivar name: The name of the OPERATIONAL CONTEXT.
+    :ivar short_name: A short name of the OPERATIONAL CONTEXT.
+    :ivar private_code:
+    :ivar choice:
+    :ivar vehicle_mode: Vehicle mode to which context applies.
+    :ivar transport_submode:
+    """
+    class Meta:
+        name = "OperationalContext_VersionStructure"
+
+    name: Optional[MultilingualString] = field(
+        default=None,
+        metadata={
+            "name": "Name",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        }
+    )
+    short_name: Optional[MultilingualString] = field(
+        default=None,
+        metadata={
+            "name": "ShortName",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        }
+    )
+    private_code: Optional[PrivateCode] = field(
+        default=None,
+        metadata={
+            "name": "PrivateCode",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        }
+    )
+    choice: Optional[object] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "ControlCentreRef",
+                    "type": ControlCentreRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OrganisationalUnitRef",
+                    "type": OrganisationalUnitRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DepartmentRef",
+                    "type": DepartmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OrganisationPartRef",
+                    "type": OrganisationPartRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        }
+    )
+    vehicle_mode: Optional[AllVehicleModesOfTransportEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "VehicleMode",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        }
+    )
+    transport_submode: Optional[TransportSubmode] = field(
+        default=None,
+        metadata={
+            "name": "TransportSubmode",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        }
+    )

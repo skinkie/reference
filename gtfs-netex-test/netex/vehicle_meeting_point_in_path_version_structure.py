@@ -1,0 +1,24 @@
+from dataclasses import dataclass, field
+from typing import Optional
+from netex.onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
+from netex.point_in_journey_pattern_versioned_child_structure import PointInJourneyPatternVersionedChildStructure
+
+__NAMESPACE__ = "http://www.netex.org.uk/netex"
+
+
+@dataclass(unsafe_hash=True, kw_only=True)
+class VehicleMeetingPointInPathVersionStructure(PointInJourneyPatternVersionedChildStructure):
+    """
+    Type for VEHICLE MEETING POINT IN SINGLE JOURNEY PATH .
+    """
+    class Meta:
+        name = "VehicleMeetingPointInPath_VersionStructure"
+
+    onward_vehicle_meeting_link_ref: Optional[OnwardVehicleMeetingLinkRef] = field(
+        default=None,
+        metadata={
+            "name": "OnwardVehicleMeetingLinkRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        }
+    )
