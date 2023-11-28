@@ -1,3 +1,5 @@
+import glob
+
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
@@ -13,7 +15,7 @@ from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 
 ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
-if __name__ == '__main__':
+def conversion(input_filename: str, output_filename: str):
     serializer_config = SerializerConfig(ignore_default_attributes=True)
     serializer_config.pretty_print = True
     serializer_config.ignore_default_attributes = True
@@ -28,7 +30,7 @@ if __name__ == '__main__':
     availability_conditions = []
     has_servicejourney_patterns = False
 
-    tree = lxml.etree.parse("/tmp/Flix_Line_x400.xml")
+    tree = lxml.etree.parse(input_filename)
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}AvailabilityCondition"):
         availability_condition: AvailabilityCondition
@@ -112,6 +114,10 @@ if __name__ == '__main__':
         x.attrib.pop("derivedFromVersionRef", None)
         x.attrib.pop("derivedFromObjectRef", None)
 
-    tree.write('/tmp/output.xml', pretty_print=True, strip_text=True)
+    tree.write(output_filename, pretty_print=True, strip_text=True)
 
-    print("...")
+if __name__ == '__main__':
+    for input_filename in glob.glob("netex-output/*xml"):
+        output_filename = input_filename.replace('netex-output/', 'netex-output-epip/')
+        conversion(input_filename, output_filename)
+        print(input_filename)

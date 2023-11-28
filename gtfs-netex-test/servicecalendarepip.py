@@ -61,17 +61,17 @@ class ServiceCalendarEPIPFrame:
     def flattenAvailabilityCondition(availability_condition: AvailabilityCondition) -> (Set[datetime], List[DayOfWeekEnumeration], bool):
         operational_dates: datetime
         days_of_week: List[DayOfWeekEnumeration]
-        days_of_week = None
+        days_of_week = []
 
-        if len(availability_condition.day_types.choice) > 1:
-            warnings.warn("AvailabilityCondition {availability_condition.id} has multiple DayTypes, we cannot handle this (yet), as we don't know the intention. Only the first DayType is being evaluated.")
+        if availability_condition.day_types is not None and len(availability_condition.day_types.choice) > 1:
+            warnings.warn(f"AvailabilityCondition {availability_condition.id} has multiple DayTypes, we cannot handle this (yet), as we don't know the intention. Only the first DayType is being evaluated.")
 
-        if len(availability_condition.day_types.choice) == 0:
+        if availability_condition.day_types is None or len(availability_condition.day_types.choice) == 0:
             if len(availability_condition.valid_day_bits) > 0:
                 operational_dates = [availability_condition.from_date.to_datetime() + timedelta(days=i) for i in range(0, len(availability_condition.valid_day_bits)) if availability_condition.valid_day_bits[i] == '1']
             else:
                 warnings.warn(
-                    "AvailabilityCondition {availability_condition.id} is using an unknown date limitation.")
+                    f"AvailabilityCondition {availability_condition.id} is using an unknown date limitation.")
                 return None
 
         elif len(availability_condition.day_types.choice) >= 1:
@@ -96,13 +96,16 @@ class ServiceCalendarEPIPFrame:
         negative_dates: Set[datetime]
         positive_dates = set([])
         negative_dates = set([])
+        days_of_week = []
 
         for availability_condition in availability_conditions:
-            operational_dates, days_of_week, available = ServiceCalendarEPIPFrame.flattenAvailabilityCondition(availability_condition)
-            if available:
-                positive_dates = positive_dates.union(operational_dates)
-            else:
-                negative_dates = negative_dates.union(operational_dates)
+            output = ServiceCalendarEPIPFrame.flattenAvailabilityCondition(availability_condition)
+            if output is not None:
+                operational_dates, days_of_week, available = ServiceCalendarEPIPFrame.flattenAvailabilityCondition(availability_condition)
+                if available:
+                    positive_dates = positive_dates.union(operational_dates)
+                else:
+                    negative_dates = negative_dates.union(operational_dates)
 
         if len(negative_dates) > 0:
             positive_dates -= negative_dates
