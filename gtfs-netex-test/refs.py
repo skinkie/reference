@@ -13,6 +13,9 @@ def getRef(obj: object, klass=None):
     elif hasattr(obj, 'ref'):
         instance = klass(obj.ref)
 
+    if hasattr(instance, 'order'):
+        instance.order = obj.order
+
     name = type(obj).__name__
     if hasattr(obj, 'Meta') and hasattr(obj.Meta, 'name'):
         name = obj.Meta.name
