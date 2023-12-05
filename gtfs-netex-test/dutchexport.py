@@ -44,7 +44,7 @@ responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, sh
 
 dutchprofile = DutchProfile(codespace, data_source, responsibility_set, version)
 resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set])
-composite_frame = dutchprofile.getCompositeFrame(resource_frames=resource_frames)
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], resource_frames=resource_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste TESO export")
 
 serializer_config = SerializerConfig(ignore_default_attributes=True)

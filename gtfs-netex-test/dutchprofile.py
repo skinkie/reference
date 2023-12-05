@@ -15,7 +15,8 @@ from netex import Codespace, VehicleScheduleFrame, Version, ServiceCalendarFrame
     TimeDemandType, RoutePointsInFrameRelStructure, RouteLinksInFrameRelStructure, RoutesInFrameRelStructure, \
     LinesInFrameRelStructure, DestinationDisplaysInFrameRelStructure, ScheduledStopPointsInFrameRelStructure, \
     StopAreasInFrameRelStructure, StopAssignmentsInFrameRelStructure, TimingPointsInFrameRelStructure, \
-    TimingLinksInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure
+    TimingLinksInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure, \
+    CodespacesInFrameRelStructure, CodespacesRelStructure
 from refs import getId, getRef
 
 
@@ -210,6 +211,7 @@ class DutchProfile:
 
     def getCompositeFrame(self, id: str = "CompositeFrame",
                           versions: List[Version] = None,
+                          codespaces: List[Codespace] = None,
                           resource_frames: List[ResourceFrame] = [],
                           service_frames: List[ServiceFrame] = [],
                           timetable_frames: List[TimetableFrame] = [],
@@ -218,6 +220,9 @@ class DutchProfile:
 
         if versions is not None and len(versions) > 0:
             versions = VersionsRelStructure(version_ref_or_version=versions)
+
+        if codespaces is not None and len(codespaces) > 0:
+            codespaces = CodespacesRelStructure(codespace_ref_or_codespace=codespaces)
 
         composite_frame = CompositeFrame(
             id=getId(CompositeFrame, self.codespace, id),
@@ -233,6 +238,7 @@ class DutchProfile:
                 default_currency="EUR",
             ),
             versions=versions,
+            codespaces=codespaces,
             frames=FramesRelStructure(choice=resource_frames + service_frames +
                                               timetable_frames + service_calendar_frames +
                                               vehicle_schedule_frames)
