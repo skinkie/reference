@@ -22,7 +22,7 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     PointsInJourneyPatternRelStructure, StopPointInJourneyPattern, JourneyRunTimesRelStructure, JourneyRunTime, \
     TimingLinkRefStructure, PointRefStructure, RoutePointRefStructure, TimingPointRefStructure, LineString, PosList, \
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
-    ContactStructure
+    ContactStructure, ServiceJourney
 import datetime
 
 from refs import getId, getRef, getFakeRef
@@ -33,7 +33,7 @@ ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gm
 short_name = "TESO"
 
 codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
-                      xmlns_url="https://teso.nl/", description=short_name)
+                      xmlns_url="http://bison.dova.nu/ns/TESO", description="Texels Eigen Stoomboot Onderneming")
 
 start_date = datetime.datetime(year=2023, month=11, day=29)
 end_date = datetime.datetime(year=2023, month=12, day=29)
@@ -112,6 +112,7 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
                                                  vehicle_types=[vehicle_type], zones=[transport_administrative_zone])
 
 line = Line(id=getId(Line, codespace, "TESO"), version=version.version, name=MultilingualString(value="TESO"),
+            responsibility_set_ref_attribute=getId(ResponsibilitySet, codespace, short_name),
               monitored=False,
               description=MultilingualString(value="Veer tussen Den Helder en Texel"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
@@ -129,12 +130,14 @@ rp_tx = RoutePoint(id=getId(RoutePoint, codespace, "TX"), version=version.versio
 route_points = [rp_dh, rp_tx]
 
 rl_dhtx = RouteLink(id=getId(RouteLink, codespace, "DH-TX"), version=version.version,
+                    distance=Decimal('4000'),
                     from_point_ref=getRef(rp_dh, RoutePointRefStructure), to_point_ref=getRef(rp_tx, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "DH-TX").replace(":", "_").replace("-", "_"),
                                            pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=(rp_dh.location.pos.value + rp_tx.location.pos.value))]),
                     operational_context_ref=getRef(operational_context))
 
 rl_txdh = RouteLink(id=getId(RouteLink, codespace, "TX-DH"), version=version.version,
+                    distance=Decimal('4000'),
                     from_point_ref=getRef(rp_tx, RoutePointRefStructure), to_point_ref=getRef(rp_dh, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "TX-DH").replace(":", "_").replace("-", "_"),
                         pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=rp_tx.location.pos.value + rp_dh.location.pos.value)]),
@@ -145,6 +148,7 @@ route_links = [rl_dhtx, rl_txdh]
 
 
 route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
+                   distance=Decimal('4000'),
                    flexible_line_ref_or_line_ref=getRef(line),
                    direction_type=DirectionTypeEnumeration.INBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
@@ -154,6 +158,7 @@ route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
                    )
 
 route_txdh = Route(id=getId(Route, codespace, "TX-DH"), version=version.version,
+                   distance=Decimal('4000'),
                    flexible_line_ref_or_line_ref=getRef(line),
                    direction_type=DirectionTypeEnumeration.OUTBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
@@ -235,10 +240,12 @@ ssp_tx_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-A"), v
 scheduled_stop_points=[ssp_dh_b, ssp_dh_a, ssp_tx_b, ssp_tx_a]
 
 tl_dhtx = TimingLink(id=getId(TimingLink, codespace, "DH-TX"), version=version.version,
+                     distance=Decimal('4000'),
                     from_point_ref=getRef(ssp_dh_b, TimingPointRefStructure), to_point_ref=getRef(ssp_tx_a, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
 tl_txdh = TimingLink(id=getId(TimingLink, codespace, "TX-DH"), version=version.version,
+                     distance=Decimal('4000'),
                     from_point_ref=getRef(ssp_tx_b, TimingPointRefStructure), to_point_ref=getRef(ssp_dh_a, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
@@ -312,6 +319,10 @@ service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_
 
 stt = SimpleTimetable(codespace, version)
 service_journeys, availability_conditions = stt.simple_timetable('../teso/scrape-output/teso-20231129.csv')
+
+sj: ServiceJourney
+for sj in service_journeys:
+    sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type)
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 

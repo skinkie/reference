@@ -6,3 +6,4 @@ diff-match-patch
 websockets
 xsdata[cli,lxml,soap]
 duckdb
+openapi-python-client
