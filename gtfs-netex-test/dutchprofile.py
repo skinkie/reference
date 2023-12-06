@@ -16,7 +16,8 @@ from netex import Codespace, VehicleScheduleFrame, Version, ServiceCalendarFrame
     LinesInFrameRelStructure, DestinationDisplaysInFrameRelStructure, ScheduledStopPointsInFrameRelStructure, \
     StopAreasInFrameRelStructure, StopAssignmentsInFrameRelStructure, TimingPointsInFrameRelStructure, \
     TimingLinksInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure, \
-    CodespacesInFrameRelStructure, CodespacesRelStructure
+    CodespacesInFrameRelStructure, CodespacesRelStructure, TransportAdministrativeZone, ZonesInFrameRelStructure, \
+    NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure
 from refs import getId, getRef
 
 
@@ -32,7 +33,7 @@ class DutchProfile:
                          organisations: List[object]=None,
                          operational_contexts: List[OperationalContext]=None,
                          vehicle_types: List[VehicleType]=None,
-                         ) -> List[ResourceFrame]:
+                         zones: List[TransportAdministrativeZone]=None) -> List[ResourceFrame]:
         if data_sources is not None and len(data_sources) > 0:
             data_sources = DataSourcesInFrameRelStructure(data_source=data_sources)
 
@@ -48,7 +49,11 @@ class DutchProfile:
         if vehicle_types is not None and len(vehicle_types) > 0:
             vehicle_types = VehicleTypesInFrameRelStructure(choice=vehicle_types)
 
-        if data_sources is not None or responsibility_sets is not None or organisations is not None or operational_contexts is not None or vehicle_types is not None:
+        if zones is not None and len(zones) > 0:
+            zones = ZonesInFrameRelStructure(choice=zones)
+
+        if data_sources is not None or responsibility_sets is not None or organisations is not None or \
+                operational_contexts is not None or vehicle_types is not None or zones is not None:
             resource_frame = ResourceFrame(
                 id=getId(ServiceFrame, self.codespace, id),
                 version=self.version.version,
@@ -58,11 +63,12 @@ class DutchProfile:
                 organisations=organisations,
                 operational_contexts=operational_contexts,
                 vehicle_types=vehicle_types,
+                zones=zones,
             )
             return [resource_frame]
 
         return []
-    def getServiceFrame(self, id: str = "ServiceFrame",
+    def getServiceFrames(self, id: str = "ServiceFrame",
                         route_points: List[RoutePoint] = None,
                         route_links: List[RouteLink] = None,
                         routes: List[Route] = None,
@@ -75,6 +81,8 @@ class DutchProfile:
                         timing_links: List[TimingLink] = None,
                         service_journey_patterns: List[ServiceJourneyPattern] = None,
                         time_demand_types: List[TimeDemandType] = None,
+                        notices: List[Notice] = None,
+                        notice_assignments: List[NoticeAssignment] = None,
                         ) -> List[ServiceFrame]:
 
         if route_points is not None and len(route_points) > 0:
@@ -113,6 +121,12 @@ class DutchProfile:
         if time_demand_types is not None and len(time_demand_types) > 0:
             time_demand_types = TimeDemandTypesInFrameRelStructure(time_demand_type=time_demand_types)
 
+        if notices is not None and len(notices) > 0:
+            notices = NoticesInFrameRelStructure(notice=notices)
+
+        if notice_assignments is not None and len(notice_assignments) > 0:
+            notice_assignments = NoticeAssignmentsInFrameRelStructure(sales_notice_assignment_or_notice_assignment=notice_assignments)
+
         if route_points is not None or \
             route_links is not None or \
             routes is not None or \
@@ -124,7 +138,9 @@ class DutchProfile:
             timing_points is not None or \
             timing_links is not None or \
             service_journey_patterns is not None or \
-            time_demand_types is not None:
+            time_demand_types is not None or \
+            notices is not None or \
+            notice_assignments is not None:
 
             service_frame = ServiceFrame(
                 id=getId(ServiceFrame, self.codespace, id),
@@ -142,8 +158,10 @@ class DutchProfile:
                 timing_links=timing_links,
                 journey_patterns=service_journey_patterns,
                 time_demand_types=time_demand_types,
+                notices=notices,
+                notice_assignments=notice_assignments
             )
-            return service_frame
+            return [service_frame]
 
         return []
 
@@ -251,6 +269,7 @@ class DutchProfile:
             participant_ref="NDOV",
             description=MultilingualString(value=description),
             data_objects=DataObjectsRelStructure(choice=[composite_frame]),
+            version="ntx:1.1",
         )
 
         return publication_delivery
