@@ -17,7 +17,7 @@ from netex import Codespace, VehicleScheduleFrame, Version, ServiceCalendarFrame
     StopAreasInFrameRelStructure, StopAssignmentsInFrameRelStructure, TimingPointsInFrameRelStructure, \
     TimingLinksInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure, \
     CodespacesInFrameRelStructure, CodespacesRelStructure, TransportAdministrativeZone, ZonesInFrameRelStructure, \
-    NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure
+    NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, ServiceJourney, CallZ
 from refs import getId, getRef
 
 

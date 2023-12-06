@@ -1,6 +1,7 @@
 from _decimal import Decimal
 
 from xsdata.formats.dataclass.models.generics import AnyElement
+from xsdata.formats.dataclass.parsers.handlers import lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime, XmlDuration
@@ -20,16 +21,18 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     ProjectionsRelStructure, PointProjection, StopAreaRefsRelStructure, TopographicPlaceView, \
     PointsInJourneyPatternRelStructure, StopPointInJourneyPattern, JourneyRunTimesRelStructure, JourneyRunTime, \
     TimingLinkRefStructure, PointRefStructure, RoutePointRefStructure, TimingPointRefStructure, LineString, PosList, \
-    PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure
+    PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
+    ContactStructure
 import datetime
 
-from refs import getId, getRef
+from refs import getId, getRef, getFakeRef
+from simpletimetable import SimpleTimetable
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
 short_name = "TESO"
 
-codespace = Codespace(id="{}:Codespace:{}".format(short_name, short_name), xmlns=short_name,
+codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
                       xmlns_url="https://teso.nl/", description=short_name)
 
 start_date = datetime.datetime(year=2023, month=11, day=29)
@@ -65,13 +68,15 @@ responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, sh
                                                                         responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
                                        ]))
 
-organisation = Operator(id=getId(Operator, codespace, "TESO"), version=version.version,
+operator = Operator(id=getId(Operator, codespace, "TESO"), version=version.version,
                         company_number="37000097",
                         name=MultilingualString(value="TESO"),
                         short_name=MultilingualString(value="TESO"),
                         legal_name=MultilingualString(value="Koninklijke N.V. Texels Eigen Stoomboot Onderneming"),
                         organisation_type=[OrganisationTypeEnumeration.OPERATOR],
                         primary_mode=AllModesEnumeration.FERRY,
+                        contact_details=ContactStructure(url="https://teso.nl/"),
+                        customer_service_contact_details=ContactStructure(email="info@teso.nl", phone="+31222369600", url="https://teso.nl/"),
                         operator_activities=[OperatorActivitiesEnumeration.PASSENGER])
 
 operational_context = OperationalContext(id=getId(OperationalContext, codespace, "WATER"), version=version.version,
@@ -103,7 +108,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), ver
 
 dutchprofile = DutchProfile(codespace, data_source, responsibility_set, version)
 resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set],
-                                                 organisations=[organisation], operational_contexts=[operational_context],
+                                                 organisations=[operator], operational_contexts=[operational_context],
                                                  vehicle_types=[vehicle_type], zones=[transport_administrative_zone])
 
 line = Line(id=getId(Line, codespace, "TESO"), version=version.version, name=MultilingualString(value="TESO"),
@@ -111,6 +116,8 @@ line = Line(id=getId(Line, codespace, "TESO"), version=version.version, name=Mul
               description=MultilingualString(value="Veer tussen Den Helder en Texel"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
+              public_code="TESO",
+              private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "TESO"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
               )
@@ -124,13 +131,13 @@ route_points = [rp_dh, rp_tx]
 rl_dhtx = RouteLink(id=getId(RouteLink, codespace, "DH-TX"), version=version.version,
                     from_point_ref=getRef(rp_dh, RoutePointRefStructure), to_point_ref=getRef(rp_tx, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "DH-TX").replace(":", "_").replace("-", "_"),
-                                           pos_or_point_property_or_pos_list=[PosList(value=(rp_dh.location.pos.value + rp_tx.location.pos.value))]),
+                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=(rp_dh.location.pos.value + rp_tx.location.pos.value))]),
                     operational_context_ref=getRef(operational_context))
 
 rl_txdh = RouteLink(id=getId(RouteLink, codespace, "TX-DH"), version=version.version,
                     from_point_ref=getRef(rp_tx, RoutePointRefStructure), to_point_ref=getRef(rp_dh, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "TX-DH").replace(":", "_").replace("-", "_"),
-                        pos_or_point_property_or_pos_list=[PosList(value=rp_tx.location.pos.value + rp_dh.location.pos.value)]),
+                        pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=rp_tx.location.pos.value + rp_dh.location.pos.value)]),
                     operational_context_ref=getRef(operational_context))
 
 route_links = [rl_dhtx, rl_txdh]
@@ -193,52 +200,63 @@ sa_tx = StopArea(id=getId(StopArea, codespace, "TX"),
 
 stop_areas=[sa_dh, sa_tx]
 
-ssp_dh_1 = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-B"), version=version.version,
+ssp_dh_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-B"), version=version.version,
                               name=MultilingualString(value="Den Helder"),
                               location=LocationStructure2(pos=Pos(value=[114066, 553040], srs_dimension=2)),
                               projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "DH-B-1"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
                               for_alighting=False, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dh)]),
-                              private_code=PrivateCode(value="1", type_value="UserStopCode"))
+                              private_code=PrivateCode(value="34000001", type_value="UserStopCode"))
 
-ssp_dh_2 = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-A"), version=version.version,
+ssp_dh_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-A"), version=version.version,
                               name=MultilingualString(value="Den Helder"),
                               location=LocationStructure2(pos=Pos(value=[114066, 553040], srs_dimension=2)),
                               projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "DH-A-3"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
                               for_alighting=True, for_boarding=False,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dh)]),
-                              private_code=PrivateCode(value="3", type_value="UserStopCode"))
+                              private_code=PrivateCode(value="34000003", type_value="UserStopCode"))
 
-ssp_tx_1 = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-B"), version=version.version,
+ssp_tx_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-B"), version=version.version,
                               name=MultilingualString(value="Texel"),
                               location=LocationStructure2(pos=Pos(value=[114311, 557575], srs_dimension=2)),
                               projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "DH-B-2"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
                               for_alighting=False, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_tx)]),
-                              private_code=PrivateCode(value="2", type_value="UserStopCode"))
+                              private_code=PrivateCode(value="34130002", type_value="UserStopCode"))
 
-ssp_tx_2 = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-A"), version=version.version,
+ssp_tx_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-A"), version=version.version,
                               name=MultilingualString(value="Texel"),
                               location=LocationStructure2(pos=Pos(value=[114311, 557575], srs_dimension=2)),
                               projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "DH-A-4"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
                               for_alighting=True, for_boarding=False,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_tx)]),
-                              private_code=PrivateCode(value="4", type_value="UserStopCode"))
+                              private_code=PrivateCode(value="34130004", type_value="UserStopCode"))
 
-scheduled_stop_points=[ssp_dh_1, ssp_dh_2, ssp_tx_1, ssp_tx_2]
+scheduled_stop_points=[ssp_dh_b, ssp_dh_a, ssp_tx_b, ssp_tx_a]
 
 tl_dhtx = TimingLink(id=getId(TimingLink, codespace, "DH-TX"), version=version.version,
-                    from_point_ref=getRef(ssp_dh_1, TimingPointRefStructure), to_point_ref=getRef(ssp_tx_2, TimingPointRefStructure),
+                    from_point_ref=getRef(ssp_dh_b, TimingPointRefStructure), to_point_ref=getRef(ssp_tx_a, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
 tl_txdh = TimingLink(id=getId(TimingLink, codespace, "TX-DH"), version=version.version,
-                    from_point_ref=getRef(ssp_tx_1, TimingPointRefStructure), to_point_ref=getRef(ssp_dh_2, TimingPointRefStructure),
+                    from_point_ref=getRef(ssp_tx_b, TimingPointRefStructure), to_point_ref=getRef(ssp_dh_a, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
 timing_links = [tl_dhtx, tl_txdh]
 
 
-# stop_assignments=[PassengerStopAssignment(), PassengerStopAssignment(), PassengerStopAssignment(), PassengerStopAssignment()]
+stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "DH-B"), version=version.version, order=1,
+                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_dh_b),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:34000001", QuayRef, "any")),
+                  PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "DH-A"), version=version.version, order=1,
+                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_tx_a),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:34000003", QuayRef, "any")),
+                  PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TX-B"), version=version.version, order=1,
+                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_tx_b),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:34130002", QuayRef, "any")),
+                  PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TX-A"), version=version.version, order=1,
+                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_dh_a),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:34130004", QuayRef, "any"))]
 
 sjp_dhtx = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "DH-TX"), version=version.version,
                                  route_ref_or_route_view=getRef(route_dhtx),
@@ -247,13 +265,13 @@ sjp_dhtx = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "DH-
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "DH-TX-DH"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_dh_1),
+                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_dh_b),
                                                                    onward_timing_link_ref=getRef(tl_dhtx, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "DH-TX-TX"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_tx_2)),
+                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_tx_a)),
                                      ]
                                     )
                                  )
@@ -265,13 +283,13 @@ sjp_txdh = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "TX-
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "TX-DH-TX"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_tx_1),
+                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_tx_b),
                                                                    onward_timing_link_ref=getRef(tl_txdh, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "TX-DH-DH"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_dh_2)),
+                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_dh_a)),
                                      ]
                                     )
                                  )
@@ -289,10 +307,15 @@ time_demand_types=[tdt_dhtx, tdt_txdh]
 
 service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_links=route_links, routes=routes, lines=lines,
                                                destination_displays=destination_displays, scheduled_stop_points=scheduled_stop_points, stop_areas=stop_areas,
-                                              stop_assignments=None, timing_points=None, timing_links=timing_links, service_journey_patterns=journey_patterns, time_demand_types=None,
+                                              stop_assignments=stop_assignments, timing_points=None, timing_links=timing_links, service_journey_patterns=journey_patterns, time_demand_types=time_demand_types,
                                               notices=None, notice_assignments=None)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], resource_frames=resource_frames, service_frames=service_frames)
+stt = SimpleTimetable(codespace, version)
+service_journeys, availability_conditions = stt.simple_timetable('../teso/scrape-output/teso-20231129.csv')
+
+timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
+
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste TESO export")
 
 serializer_config = SerializerConfig(ignore_default_attributes=True)
@@ -300,5 +323,12 @@ serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(serializer_config)
 
-with open('netex-output/out.xml', 'w') as out:
+with open('netex-output/teso.xml', 'w') as out:
     serializer.write(out, publication_delivery, ns_map)
+
+parser = lxml.etree.XMLParser(remove_blank_text=True)
+tree = lxml.etree.parse("netex-output/teso.xml", parser=parser)
+for element in tree.iterfind(".//*"):
+    if element.text is None and len(element) == 0 and len(element.attrib.keys()) == 0:
+        element.getparent().remove(element)
+tree.write("netex-output/teso-filter.xml", pretty_print=True, strip_text=True)
