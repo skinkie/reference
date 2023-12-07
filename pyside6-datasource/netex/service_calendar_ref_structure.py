@@ -9,3 +9,4 @@ class ServiceCalendarRefStructure(VersionOfObjectRefStructure):
     """
     Type for a reference to a SERVICE CALENDAR.
     """
+    value: RestrictedVar

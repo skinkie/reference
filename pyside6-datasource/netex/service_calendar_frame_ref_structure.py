@@ -9,3 +9,4 @@ class ServiceCalendarFrameRefStructure(VersionFrameRefStructure):
     """
     Type for a reference to a SERVICE CALENDAR FRAME.
     """
+    value: RestrictedVar

@@ -9,3 +9,4 @@ class ValidityTriggerRefStructure(ValidityConditionRefStructure):
     """
     Type for a reference to a VALIDITY TRIGGER.
     """
+    value: RestrictedVar

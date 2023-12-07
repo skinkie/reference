@@ -9,3 +9,4 @@ class ServicedOrganisationRefStructure(OtherOrganisationRefStructure):
     """
     Type for a reference to a SERVICED ORGANISATION.
     """
+    value: RestrictedVar

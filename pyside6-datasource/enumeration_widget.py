@@ -52,7 +52,7 @@ class EnumerationComboBox(QtWidgets.QComboBox):
         model = EnumerationModel(enum_type, optional)
         self.setModel(model)
 
-        if default:
+        if default and hasattr(default, 'value'):
             self.setPlaceholderText(str(default.value))
 
         self.currentIndexChanged.connect(self.abstract_changed)
@@ -70,7 +70,9 @@ def get_type(clazz):
             optional = True
             clazz_resolved = [x for x in clazz.__args__ if x is not None.__class__][0]
         elif clazz._name == 'List':
-            return None # TODO: handle list elements
+            # For enumeration this may also be a special case, hence multiple checkboxes
+            clazz_resolved = [x for x in clazz.__args__ if x is not None.__class__][0]
+            # return None # TODO: handle list elements
         else:
             clazz_resolved = [x for x in clazz.__args__ if x is not None.__class__][0]
 
@@ -78,7 +80,12 @@ def get_type(clazz):
 
 class DataclassEnumerationComboBox(EnumerationComboBox):
     def __init__(self, field: Field, parent=None):
-        enum_type, optional = get_type(field.type)
+        type_optional = get_type(field.type)
+        if type_optional is None:
+            type_optional = get_type(field.type)
+            return
+
+        enum_type, optional = type_optional
         super(DataclassEnumerationComboBox, self).__init__(enum_type, optional, field.default, parent)
 
 if __name__ == '__main__':

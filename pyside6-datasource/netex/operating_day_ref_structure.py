@@ -9,3 +9,4 @@ class OperatingDayRefStructure(VersionOfObjectRefStructure):
     """
     Type for a reference to an OPERATING DAY.
     """
+    value: RestrictedVar

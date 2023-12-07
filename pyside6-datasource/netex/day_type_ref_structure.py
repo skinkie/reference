@@ -9,3 +9,4 @@ class DayTypeRefStructure(VersionOfObjectRefStructure):
     """
     Type for a reference to a DAY TYPE.
     """
+    value: RestrictedVar

@@ -9,3 +9,4 @@ class TypeOfValueRefStructure(VersionOfObjectRefStructure):
     """
     Type for a reference to a TYPE OF VALUE.
     """
+    value: RestrictedVar

@@ -23,11 +23,17 @@ def unembed(fields, all_module_classes):
     all_classes = []
 
     for name, field in fields.items():
+        if name == 'responsibility_set_ref_attribute':
+            pass
+
         resolved_class = resolve_class(field.type, all_module_classes)
         if not resolved_class:
             continue
 
         if hasattr(resolved_class, "__forward_arg__"):
+            continue
+
+        if not hasattr(resolved_class, "__mro__"):
             continue
 
         resolved_class_name = resolved_class.__mro__[0].__name__
@@ -60,6 +66,18 @@ def resolve_class(clazz, all_module_classes):
 
 IGNORE_ATTRIBUTES = ['name_of_class_attribute']
 def list_attributes(clazz, all_module_classes, class_set, parent_name=None):
+    # hack om velden met andere naam weg te krijgen
+    # pak alle attribuut namen in
+    is_none = [y.name for x, y in clazz.__dataclass_fields__.items() if y.type is None]
+    for my_none_type in is_none:
+        if my_none_type.endswith('_attribute'):
+            key = my_none_type[:-10]
+        else:
+            key = my_none_type + '_attribute'
+
+        if key in clazz.__dataclass_fields__:
+            clazz.__dataclass_fields__[key].type = None
+
     old_class_set = class_set
     buffer = []
     for name, field in unembed(clazz.__dataclass_fields__, all_module_classes):
@@ -96,7 +114,11 @@ def likely_type2(obj, all_module_classes):
         # TODO: Figure something out by returning for example List
 
         if obj.__args__[0].__class__ == typing.ForwardRef:
-            return all_module_classes[obj.__args__[0].__forward_arg__]
+            if obj.__args__[0].__forward_arg__ in all_module_classes:
+                return all_module_classes[obj.__args__[0].__forward_arg__]
+            else:
+                print("Module not found: " + obj.__args__[0].__forward_arg__)
+                return None
         else:
             return obj.__args__[0]
 
@@ -129,6 +151,7 @@ def get_type(clazz, parent_name, all_module_classes, class_set: set):
 
     if clazz_resolved in class_set:
         # TODO: We can't handle recurive attributes
+        print("Recursion: ", parent_name)
         return None
 
     class_set.add(clazz_resolved)

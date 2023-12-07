@@ -9,3 +9,4 @@ class ValidityConditionRefStructure(VersionOfObjectRefStructure):
     """
     Type for a reference to a VALIDITY CONDITION.
     """
+    value: RestrictedVar

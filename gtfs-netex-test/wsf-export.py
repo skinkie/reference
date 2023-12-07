@@ -229,7 +229,7 @@ ssp_v = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "V"), version
                               projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "V"), version=version.version, project_to_point_ref=getRef(rp_v, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_v)]),
-                              private_code=PrivateCode(value="7660001", type_value="UserStopCode"))
+                              private_code=PrivateCode(value="76600001", type_value="UserStopCode"))
 
 ssp_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "B"), version=version.version,
                               name=MultilingualString(value="Breskens, Veerhaven"),
@@ -237,7 +237,7 @@ ssp_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "B"), version
                               projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "B"), version=version.version, project_to_point_ref=getRef(rp_b, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_b)]),
-                              private_code=PrivateCode(value="7960001", type_value="UserStopCode"))
+                              private_code=PrivateCode(value="79600001", type_value="UserStopCode"))
 
 
 scheduled_stop_points=[ssp_v, ssp_b]
@@ -257,10 +257,10 @@ timing_links = [tl_vb, tl_bv]
 
 stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "V"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_v),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:7660001", QuayRef, "any")),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:76600001", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "B"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_b),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:7960001", QuayRef, "any"))]
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:79600001", QuayRef, "any"))]
 
 sjp_dhtx = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "V-B"), version=version.version,
                                  route_ref_or_route_view=getRef(route_vb),

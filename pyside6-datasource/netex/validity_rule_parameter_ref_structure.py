@@ -9,3 +9,4 @@ class ValidityRuleParameterRefStructure(ValidityConditionRefStructure):
     """
     Type for a reference to a VALIDITY RULE PARAMETER.
     """
+    value: RestrictedVar

@@ -9,3 +9,4 @@ class AvailabilityConditionRefStructure(ValidityConditionRefStructure):
     """
     Type for a reference to an AVAILABILITY CONDITION.
     """
+    value: RestrictedVar

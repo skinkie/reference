@@ -1,7 +1,8 @@
 import signal
 from dataclasses import Field
 
-from PySide6.QtWidgets import QGroupBox, QFormLayout, QApplication, QWidget
+from PySide6.QtWidgets import QGroupBox, QFormLayout, QApplication, QWidget, QScrollArea
+import PySide6.QtCore
 
 from mro_attributes import list_attributes
 from netex.data_source import DataSource
@@ -96,10 +97,15 @@ if __name__ == '__main__':
     members = inspect.getmembers(netex)
     class_list = {x[0]: x[1] for x in members}
 
-    mytype = list_attributes(DataSource, class_list, set([]))
-    create_multiwidget(DataSource.__name__, mytype, None, None, None, formlayout)
+    mytype = list_attributes(netex.ScheduledStopPoint, class_list, set([]))
+    create_multiwidget(netex.ScheduledStopPoint.__name__, mytype, None, None, None, formlayout)
 
     mywindow.setLayout(formlayout)
-    mywindow.show()
+
+
+    scrollarea = QScrollArea()
+    scrollarea.setWidget(mywindow)
+    scrollarea.setHorizontalScrollBarPolicy(PySide6.QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+    scrollarea.show()
 
     sys.exit(app.exec())

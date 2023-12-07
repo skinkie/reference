@@ -9,3 +9,4 @@ class VersionFrameRefStructure(VersionOfObjectRefStructure):
     """
     Type for a reference to a  VERSION FRAME.
     """
+    value: RestrictedVar

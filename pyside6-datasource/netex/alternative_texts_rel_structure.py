@@ -746,6 +746,11 @@ class AlternativeText(AlternativeTextVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
+    extensions: RestrictedVar
+
 
 @dataclass(unsafe_hash=True, kw_only=True)
 class DayType(DayTypeVersionStructure):
@@ -756,13 +761,6 @@ class DayType(DayTypeVersionStructure):
     """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
@@ -782,13 +780,6 @@ class OperatingDay(OperatingDayVersionStructure):
     """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
@@ -858,12 +849,9 @@ class ValidityCondition(ValidityConditionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
@@ -1017,18 +1005,9 @@ class FareDayType(FareDayTypeVersionedStructure):
     A type of day used in the fare collection domain, characterized by one or more
     properties which affect the definition of access rights and prices in the fare
     system.
-
-    :ivar id: Identifier of ENTITY.
     """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
@@ -1036,18 +1015,9 @@ class OrganisationDayType(OrganisationDayTypeVersionStructure):
     """
     DAY TYPE defined as being available on days when ORGANISATION is open and
     requires service.
-
-    :ivar id: Identifier of  ORGANISATION DAY TYPE.
     """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
@@ -1059,6 +1029,17 @@ class ValidBetween(ValidBetweenVersionStructure):
     """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
+
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
+    key_list: RestrictedVar
+    extensions: RestrictedVar
+    branding_ref: RestrictedVar
+    name: RestrictedVar
+    description: RestrictedVar
+    conditioned_object_ref: RestrictedVar
+    with_condition_ref: RestrictedVar
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
@@ -1123,12 +1104,9 @@ class ValidityRuleParameter(ValidityRuleParameterVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
@@ -1141,12 +1119,9 @@ class ValidityTrigger(ValidityTriggerVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
@@ -1157,17 +1132,14 @@ class AvailabilityCondition(AvailabilityConditionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
 
 
 @dataclass(unsafe_hash=True, kw_only=True)
 class SimpleAvailabilityCondition(ValidDuringVersionStructure):
-    """Simple version of an AVAILABILITY CONDITION used in order to characterise a
+    """Simple version of an  AVAILABILITY CONDITION used in order to characterise a
     given VERSION of a VERSION FRAME.
 
     Comprises a simple period and DAY TYPE.
@@ -1175,26 +1147,16 @@ class SimpleAvailabilityCondition(ValidDuringVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
-
 
 @dataclass(unsafe_hash=True, kw_only=True)
 class ValidDuring(ValidDuringVersionStructure):
-    """OPTIMISATION: Sversion  of an AVAILABILITY CONDITION    Comprises a simple period and DAY TYPE.
-
-    :ivar id: Identifier of ENTITY.
-    """
+    """OPTIMISATION: Sversion  of an AVAILABILITY CONDITION    Comprises a simple period and DAY TYPE."""
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
+    key_list: RestrictedVar
+    extensions: RestrictedVar
+    branding_ref: RestrictedVar

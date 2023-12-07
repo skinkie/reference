@@ -9,3 +9,4 @@ class OtherOrganisationRefStructure(OrganisationRefStructure):
     """
     Type for a reference to an OTHER ORGANISATION.
     """
+    value: RestrictedVar

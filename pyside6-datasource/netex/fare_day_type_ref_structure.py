@@ -9,3 +9,4 @@ class FareDayTypeRefStructure(DayTypeRefStructure):
     """
     Type for Reference to a FARE DAY TYPE.
     """
+    value: RestrictedVar

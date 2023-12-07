@@ -9,3 +9,4 @@ class TimebandRefStructure(VersionOfObjectRefStructure):
     """
     Type for a reference to a TIMEBAND.
     """
+    value: RestrictedVar
