@@ -34,7 +34,7 @@ def getRef(obj: object, klass=None):
         instance.name_of_ref_class = name
     return instance
 
-def getFakeRef(id: str, klass, version: str):
+def getFakeRef(id: str, klass: object, version: str) -> object:
     if id is None:
         return None
 

@@ -1,3 +1,5 @@
+from typing import List
+
 from xsdata.models.datatype import XmlDuration
 
 from netex import ServiceJourney, StopPointInJourneyPattern, ServiceJourneyPattern, PointsInJourneyPatternRelStructure, \
@@ -5,7 +7,7 @@ from netex import ServiceJourney, StopPointInJourneyPattern, ServiceJourneyPatte
     TimingLinkRefStructure, TimingLinkRef, Call, DepartureStructure, ArrivalStructure, JourneyRunTime, JourneyWaitTime, \
     StopPointInJourneyPatternRef, StopPointInJourneyPatternRefStructure, PointInJourneyPatternRefStructure, \
     OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, TimeDemandTypeRef, \
-    TimeDemandTypeRefStructure, RouteView
+    TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint
 from refs import setIdVersion, getRef, getIndex, getIdByRef
 
 
@@ -74,7 +76,7 @@ class CallsProfile:
 
         return list(tdts.values())
 
-    def getServiceJourneyPatterns(self) -> (list[ServiceJourneyPattern], list[TimingLink]):
+    def getServiceJourneyPatterns(self, lines: List[Line], routes: List[Route], ssps: List[ScheduledStopPoint]) -> (list[ServiceJourneyPattern], list[TimingLink]):
         lines = getIndex(self.lines)
         routes = getIndex(self.routes)
         ssp = getIndex(self.scheduled_stop_points)

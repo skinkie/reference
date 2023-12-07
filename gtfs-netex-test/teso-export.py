@@ -254,16 +254,16 @@ timing_links = [tl_dhtx, tl_txdh]
 
 stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "DH-B"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_dh_b),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:34000001", QuayRef, "any")),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:34000001", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "DH-A"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_tx_a),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:34000003", QuayRef, "any")),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:34000003", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TX-B"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_tx_b),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:34130002", QuayRef, "any")),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:34130002", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TX-A"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_dh_a),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:34130004", QuayRef, "any"))]
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:34130004", QuayRef, "any"))]
 
 sjp_dhtx = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "DH-TX"), version=version.version,
                                  route_ref_or_route_view=getRef(route_dhtx),

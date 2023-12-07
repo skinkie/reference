@@ -87,7 +87,7 @@ responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, sh
                                        name=MultilingualString(value=short_name),
                                        roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
                                            ResponsibilityRoleAssignment(
-                                               id=getId(ResponsibilityRoleAssignment, codespace, "ZLD"),
+                                               id=getId(ResponsibilityRoleAssignment, codespace, "RIJK"),
                                                version=version.version,
                                                data_role_type=None,
                                                stakeholder_role_type=None,
@@ -410,7 +410,7 @@ route_th = Route(id=getId(Route, codespace, "T-H"), version=version.version,
                  flexible_line_ref_or_line_ref=getRef(line_ht),
                    direction_type=DirectionTypeEnumeration.INBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "Tf-H-T"), version=version.version, order=1, choice_1=getRef(rp_th), onward_route_link_ref=getRef(rl_th, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-H-T"), version=version.version, order=1, choice_1=getRef(rp_th), onward_route_link_ref=getRef(rl_th, RouteLinkRefStructure)),
                        PointOnRoute(id=getId(PointOnRoute, codespace, "T-H-H"), version=version.version, order=2, choice_1=getRef(rp_ht)),
                    ])
                    )
@@ -602,28 +602,28 @@ timing_links = [tl_th, tl_ht, tl_vh, tl_hv, tl_tv, tl_vt]
 
 stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "HT"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_v),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:20670002", QuayRef, "any")),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:20670002", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "HV"), version=version.version,
                                           order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(
                                               ssp_v),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:20670003", QuayRef,
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:20670003", QuayRef,
                                                                                         "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TH"), version=version.version,
                                           order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(
                                               ssp_v),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:29110001", QuayRef,
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:29110001", QuayRef,
                                                                                         "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TV"), version=version.version,
                                           order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(
                                               ssp_v),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:29110003", QuayRef,
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:29110003", QuayRef,
                                                                                         "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "V"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_v),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:29010001", QuayRef, "any"))]
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:29010001", QuayRef, "any"))]
 
 sjp_ht = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "HT-TH"), version=version.version,
                                  route_ref_or_route_view=getRef(route_ht),
