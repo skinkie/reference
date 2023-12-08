@@ -7,7 +7,7 @@ from netex import ServiceJourney, StopPointInJourneyPattern, ServiceJourneyPatte
     TimingLinkRefStructure, TimingLinkRef, Call, DepartureStructure, ArrivalStructure, JourneyRunTime, JourneyWaitTime, \
     StopPointInJourneyPatternRef, StopPointInJourneyPatternRefStructure, PointInJourneyPatternRefStructure, \
     OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, TimeDemandTypeRef, \
-    TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint
+    TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint, Route
 from refs import setIdVersion, getRef, getIndex, getIdByRef
 
 

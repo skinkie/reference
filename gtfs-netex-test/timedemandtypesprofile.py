@@ -88,7 +88,9 @@ class TimeDemandTypesProfile:
 
             if tdt_hash not in time_demand_types_hash:
                 order = 0
+
                 tdt =  TimeDemandType(id=getId(TimeDemandType, self.codespace, tdt_hash_hex),
+                                      version=self.version.version,
                                       run_times=JourneyRunTimesRelStructure(
                                           journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, self.codespace, "{:s}-{:d}".format(tdt_hash_hex, (order:=order+1))), # TODO make more elegant
                                                      version=self.version.version,
@@ -97,6 +99,9 @@ class TimeDemandTypesProfile:
                                                                                                        version=self.version.version,
                                                                                                        choice=getRef(ssps.get(x[1]), ScheduledStopPointRef),
                                                                                                        wait_time=XmlDuration("PT{:d}S".format(x[0]))) for x in wait_times if x[0].seconds > 0]))
+
+                if len(tdt.wait_times.journey_wait_time) == 0:
+                    tdt.wait_times = None
 
                 time_demand_types[tdt.id] = tdt
                 time_demand_types_hash[tdt_hash] = tdt.id
@@ -137,17 +142,23 @@ class TimeDemandTypesProfile:
             sjp_hash = hash('-'.join(x.ref for x in ssps_in_seq))
             sjp_hash_hex = TimeDemandTypesProfile.getHexHash(sjp_hash)
 
-            if sjp_hash not in service_journey_patterns_hash:
+            if sjp_hash not in service_journey_patterns_hash or service_journey_patterns[service_journey_patterns_hash[sjp_hash]].id != service_journey.choice.ref:
                 piss = [(i, ssps_in_seq[i], getFakeRef(onward_tls[i], TimingLinkRefStructure, version=self.version.version)) for i in range(0, len(ssps_in_seq) - 1)]
                 piss.append((len(ssps_in_seq) - 1, ssps_in_seq[-1], None))
 
-                sjp =  ServiceJourneyPattern(id=getId(ServiceJourneyPattern, self.codespace, sjp_hash_hex),
+                id = getId(ServiceJourneyPattern, self.codespace, sjp_hash_hex)
+                if service_journey.choice is not None:
+                    id = service_journey.choice.ref
+                suffix = id.split(':')[-1]
+
+                sjp =  ServiceJourneyPattern(id=id,
+                                             version=self.version.version,
                                              points_in_sequence=PointsInJourneyPatternRelStructure(
                                                  point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
-                                                     StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, self.codespace, "{:s}-{:d}".format(sjp_hash_hex, x[0])),
+                                                     StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, self.codespace, "{:s}-{:d}".format(suffix, x[0] + 1)),
                                                                                version=self.version.version,
                                                                                order=x[0] + 1,
-                                                         fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=x[1], onward_timing_link_ref=x[2]) for x in piss]))
+                                                         fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssps[x[1].ref]), onward_timing_link_ref=x[2]) for x in piss]))
 
 
                 service_journey_patterns[sjp.id] = sjp

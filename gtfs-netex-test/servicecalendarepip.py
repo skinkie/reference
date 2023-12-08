@@ -6,7 +6,8 @@ from xsdata.models.datatype import XmlDateTime, XmlDate
 
 from netex import AvailabilityCondition, DayType, DayOfWeekEnumeration, UicOperatingPeriod, ServiceJourney, \
     ServiceCalendar, Codespace, DayTypeAssignment, OperatingPeriodRef, DayTypesRelStructure, OperatingDaysRelStructure, \
-    ValidityConditionsRelStructure, AvailabilityConditionRef, DayTypeRefsRelStructure, OperatingPeriodsRelStructure
+    ValidityConditionsRelStructure, AvailabilityConditionRef, DayTypeRefsRelStructure, OperatingPeriodsRelStructure, \
+    DayTypeAssignmentsRelStructure
 from datetime import datetime, timedelta
 from dateutil.rrule import rrule, DAILY
 
@@ -183,7 +184,8 @@ class ServiceCalendarEPIPFrame:
                                version=service_journeys[0].version,
                                from_date=XmlDate.from_date(from_date.date()), to_date=XmlDate.from_date(to_date.date()),
                                day_types=DayTypesRelStructure(choice=list(day_types.values())),
-                               operating_periods=OperatingPeriodsRelStructure(choice=uic_operating_periods))
+                               operating_periods=OperatingPeriodsRelStructure(choice=uic_operating_periods),
+                               day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments))
 
     def __init__(self, codespace: Codespace):
         self.codespace = codespace

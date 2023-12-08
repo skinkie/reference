@@ -18,7 +18,7 @@ from netex import ServiceJourney, Codespace, MultilingualString, Version, Route,
     ArrivalStructure, DepartureStructure, ServiceJourneyPatternRef, ServiceJourneyPattern, OnwardTimingLinkView, \
     PublicationDelivery, DataObjectsRelStructure, GeneralFrame, CodespacesRelStructure, VersionsRelStructure, \
     GeneralFrameMembersRelStructure, DataSource, Operator, OrganisationTypeEnumeration, AllModesEnumeration, \
-    ContactStructure, OperatorActivitiesEnumeration
+    ContactStructure, OperatorActivitiesEnumeration, VersionTypeEnumeration
 from refs import getId, getFakeRef, getRef
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
@@ -82,9 +82,9 @@ class WagenborgTimetable():
         origin = WagenborgTimetable.shortenHarbor(journey['originHarbor'])
         destination = WagenborgTimetable.shortenHarbor(journey['destinationHarbor'])
         if origin not in self.ssps:
-            self.ssps[origin] = ScheduledStopPoint(id=getId(ScheduledStopPoint, self.codespace, origin), name=MultilingualString(value=journey['originHarbor']), for_boarding=True, for_alighting=True)
+            self.ssps[origin] = ScheduledStopPoint(id=getId(ScheduledStopPoint, self.codespace, origin), version=version.version, name=MultilingualString(value=journey['originHarbor']), for_boarding=True, for_alighting=True)
         if destination not in self.ssps:
-            self.ssps[destination] = ScheduledStopPoint(id=getId(ScheduledStopPoint, self.codespace, destination), name=MultilingualString(value=journey['destinationHarbor']), for_boarding=True, for_alighting=True)
+            self.ssps[destination] = ScheduledStopPoint(id=getId(ScheduledStopPoint, self.codespace, destination), version=version.version, name=MultilingualString(value=journey['destinationHarbor']), for_boarding=True, for_alighting=True)
 
         departure = journey['departureDate'].replace(':', '').replace('-', '')
 
@@ -111,10 +111,13 @@ print("...")
 if __name__ == '__main__':
     json_post = ["HOAM", "SHSA", "AMHO", "SASH", "SCLA", "SSSL", "LASC", "SLSS"]
     firstdate = datetime.date.today()
-    days = 4
+    days = 60
 
     codespace = Codespace(id="BISON:Codespace:WPD", xmlns_url="http://bison.dova.nu/ns/WPD", xmlns="WPD", description="Wagenborg Passagiers Diensten")
-    version = Version(id=getId(Version, codespace, "1"))
+    version = Version(id=getId(Version, codespace, "1"), version="1",
+                      version_type=VersionTypeEnumeration.BASELINE,
+                      start_date=XmlDateTime.from_datetime(datetime.datetime.combine(firstdate, datetime.time.min)),
+                      end_date=XmlDateTime.from_datetime(datetime.datetime.combine(firstdate + datetime.timedelta(days=days), datetime.time.min)))
     data_source = DataSource(id=getId(DataSource, codespace, "WPD"),
                              version=version.version,
                              name=MultilingualString(value="Wagenborg Passagiersdiensten"),
