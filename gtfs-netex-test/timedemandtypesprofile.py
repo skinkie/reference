@@ -42,6 +42,7 @@ class TimeDemandTypesProfile:
 
     @staticmethod
     def getTimeDemandTypeHash(tdt: TimeDemandType):
+        # TODO: Check if the output of this code is the same as inline
         l = [(x.run_time, x.timing_link_ref.ref) for x in tdt.run_times.journey_run_time] + [(x.wait_time, x.choice.ref) for x in tdt.wait_times.journey_wait_time]
         return hash(l)
 
@@ -52,6 +53,11 @@ class TimeDemandTypesProfile:
     @staticmethod
     def getHexHash(hash_in: int):
         return ("%0.2X" % (hash_in**2))[0:8]
+
+    @staticmethod
+    def getServiceJourneyPatternHash(sjp: ServiceJourneyPattern):
+        # TODO: This will work for the simple cases, but will fail for routes having the same sequence, but for example a different route_ref (for a different line_ref)
+        return hash('-'.join([x.ref for x in sjp.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern]))
 
     def getTimeDemandType(self, service_journey: ServiceJourney, time_demand_types: Dict[str, TimeDemandType], time_demand_types_hash: Dict[int, str], ssps: Dict[str, ScheduledStopPoint], tls: Dict[str, TimingLink]):
         if service_journey.time_demand_type_ref is not None and service_journey.time_demand_type_ref.ref in time_demand_types:

@@ -24,7 +24,6 @@ from refs import getId, getRef
 class DutchProfile:
     codespace: Codespace
     data_source: DataSource
-    responsibility_set: ResponsibilitySet
     version: Version
 
     def getResourceFrames(self, id: str = "ResourceFrame",
@@ -230,6 +229,7 @@ class DutchProfile:
     def getCompositeFrame(self, id: str = "CompositeFrame",
                           versions: List[Version] = None,
                           codespaces: List[Codespace] = None,
+                          responsibility_set: ResponsibilitySet = None,
                           resource_frames: List[ResourceFrame] = [],
                           service_frames: List[ServiceFrame] = [],
                           timetable_frames: List[TimetableFrame] = [],
@@ -249,7 +249,7 @@ class DutchProfile:
             frame_defaults=VersionFrameDefaultsStructure(
                 default_codespace_ref=getRef(self.codespace, CodespaceRefStructure),
                 default_data_source_ref=getRef(self.data_source, DataSourceRefStructure),
-                default_responsibility_set_ref=getRef(self.responsibility_set, ResponsibilitySetRefStructure),
+                default_responsibility_set_ref=getRef(responsibility_set, ResponsibilitySetRefStructure),
                 default_locale=LocaleStructure(time_zone="Europe/Amsterdam", default_language="nl"),
                 default_location_system="EPSG:28992",
                 default_system_of_units=SystemOfUnits.SI_METRES,
@@ -274,8 +274,7 @@ class DutchProfile:
 
         return publication_delivery
 
-    def __init__(self, codespace: Codespace, data_source: DataSource, responsibility_set: ResponsibilitySet, version: Version):
+    def __init__(self, codespace: Codespace, data_source: DataSource, version: Version):
         self.codespace = codespace
         self.data_source = data_source
-        self.responsibility_set = responsibility_set
         self.version = version

@@ -106,7 +106,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), ver
                                                   )]
                            ))
 
-dutchprofile = DutchProfile(codespace, data_source, responsibility_set, version)
+dutchprofile = DutchProfile(codespace, data_source, version)
 resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set],
                                                  organisations=[operator], operational_contexts=[operational_context],
                                                  vehicle_types=[vehicle_type], zones=[transport_administrative_zone])
@@ -326,7 +326,8 @@ for sj in service_journeys:
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], responsibility_set=responsibility_set,
+                                                 resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste TESO export")
 
 serializer_config = SerializerConfig(ignore_default_attributes=True)

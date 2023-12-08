@@ -124,7 +124,7 @@ sj: ServiceJourney
 for sj in service_journeys:
     sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type)
 
-dutchprofile = DutchProfile(codespace, data_source, responsibility_set, version)
+dutchprofile = DutchProfile(codespace, data_source, version)
 resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set],
                                                  organisations=[operator, authority], operational_contexts=[operational_context],
                                                  vehicle_types=[vehicle_type], zones=[transport_administrative_zone])
@@ -317,7 +317,9 @@ service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version],
+                                                 responsibility_set=responsibility_set,
+                                                 resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste WSF export")
 
 serializer_config = SerializerConfig(ignore_default_attributes=True)

@@ -4,6 +4,9 @@ from typing import Optional
 from netex import *
 
 def getRef(obj: object, klass=None):
+    if obj is None:
+        return None
+
     if klass == None:
         asobj = type(obj).__name__ + 'Ref' # Was: RefStructure
         klass = globals()[asobj]

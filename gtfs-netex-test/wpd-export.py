@@ -202,7 +202,7 @@ vehicle_type_esonborg = VehicleType(id=getId(VehicleType, codespace, "ESONBORG")
                            )]))
 
 
-dutchprofile = DutchProfile(codespace, data_source, responsibility_set, version)
+dutchprofile = DutchProfile(codespace, data_source, version)
 resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set],
                                                  organisations=[operator, authority], operational_contexts=[operational_context],
                                                  vehicle_types=[vehicle_type_rottummonnik,
@@ -521,7 +521,9 @@ service_frames = dutchprofile.getServiceFrames(route_points=list(route_points.va
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[dova_codespace, codespace], versions=[version], resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[dova_codespace, codespace], versions=[version],
+                                                 responsibility_set=responsibility_set,
+                                                 resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste WPD export")
 
 serializer_config = SerializerConfig(ignore_default_attributes=True)

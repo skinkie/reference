@@ -50,6 +50,9 @@ def conversion(input_filename: str, output_filename: str):
         service_journey_pattern = parser.parse(element, ServiceJourneyPattern)
         service_journey_patterns.append(service_journey_pattern)
 
+    if len(service_journeys) == 0:
+        return
+
     has_servicejourney_patterns = len(service_journey_patterns) > 0
 
     codespace = Codespace(id="OPENOV", xmlns="OPENOV", xmlns_url="http://openov.nl/")
@@ -133,7 +136,7 @@ def conversion(input_filename: str, output_filename: str):
     tree.write(output_filename, pretty_print=True, strip_text=True)
 
 if __name__ == '__main__':
-    for input_filename in glob.glob("netex-output/Flix_Line_025.xml"):
+    for input_filename in glob.glob("netex-output/Flix_*.xml"):
+        print(input_filename)
         output_filename = input_filename.replace('netex-output/', 'netex-output-epip/')
         conversion(input_filename, output_filename)
-        print(input_filename)
