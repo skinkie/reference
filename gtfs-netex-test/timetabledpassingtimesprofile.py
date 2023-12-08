@@ -130,11 +130,11 @@ class TimetablePassingTimesProfile:
                     sj.passing_times = TimetabledPassingTimesRelStructure(timetabled_passing_time=ttpt)
 
             # if there is a servicejourneypattern, departure time, timedemandtype it can be expanded
-            elif sj.service_journey_pattern_ref and sj.departure_time and sj.time_demand_type_ref:
+            elif sj.choice and sj.departure_time and sj.time_demand_type_ref:
                 pass
 
             # if there are servicejourneypattern, departure time, waittimes, runtimes they can be expanded
-            elif sj.service_journey_pattern_ref and sj.departure_time and sj.run_times:
+            elif sj.choice and sj.departure_time and sj.run_times:
                 pass
 
             if clean:

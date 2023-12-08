@@ -166,6 +166,7 @@ class ServiceCalendarEPIPFrame:
                 day_types[day_type_id] = day_type
 
                 day_type_assignment = DayTypeAssignment(id=acs[0].id.replace('AvailabilityCondition', 'DayTypeAssignment'), version=acs[0].version,
+                                                        order=1,
                                                         derived_from_object_ref=acs[0].id, derived_from_version_ref_attribute=acs[0].version,
                                                         choice=getRef(uic_operating_period, OperatingPeriodRef),
                                                         fare_day_type_ref_or_day_type_ref=getRef(day_type)
