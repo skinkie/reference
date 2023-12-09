@@ -91,7 +91,7 @@ class AvailabilityConditionsProfile:
         sjs = []
         for sj in service_journeys:
             sj = copy.deepcopy(sj)
-            sj.validity_conditions_or_valid_between = ValidityConditionsRelStructure(choice=getRef(day_type_to_ac[sj.day_types.fare_day_type_ref_or_day_type_ref[0].ref]))
+            sj.validity_conditions_or_valid_between = ValidityConditionsRelStructure(choice=[getRef(day_type_to_ac[sj.day_types.fare_day_type_ref_or_day_type_ref[0].ref])])
             sj.day_types = None
             sjs.append(sj)
 
