@@ -100,8 +100,8 @@ def timeZoneConversion(sj: ServiceJourney, availability_conditions: Dict[str, Av
     naive_offset = datetime.datetime.combine(datetime.date.min, projected_departure_time.time()) - datetime.datetime.combine(datetime.date.min, original_departure_time.time())
 
     sj.departure_time = XmlTime(projected_departure_time.hour, projected_departure_time.minute, projected_departure_time.second)
-    if naive_offset.days > 0:
-        sj.departure_day_offset = naive_offset.days
+    if naive_offset.days != 0:
+        sj.departure_day_offset = naive_offset.days * -1
     else:
         sj.departure_day_offset = None
 
