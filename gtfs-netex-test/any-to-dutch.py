@@ -14,7 +14,7 @@ from netex import Codespace, DataSource, ResponsibilitySet, Version, Operator, O
     TransportAdministrativeZone, MultilingualString, RoutePoint, RouteLink, Route, Line, DestinationDisplay, \
     ScheduledStopPoint, StopArea, PassengerStopAssignment, TimingPoint, TimingLink, ServiceJourneyPattern, \
     TimeDemandType, Notice, NoticeAssignment, AvailabilityCondition, OperatorView, Authority, ServiceJourney, \
-    ServiceCalendar, PrivateCode
+    ServiceCalendar, PrivateCode, ServiceLink
 from refs import getId, getRef
 from timedemandtypesprofile import TimeDemandTypesProfile
 
@@ -39,7 +39,7 @@ def conversion(input_filename: str, output_filename: str):
 
     versions: List[Version] = parseFromEtree(parser, tree, "{http://www.netex.org.uk/netex}Version", Version)
     if len(versions) == 0:
-        versions.append(Version(id=getId(Version, codespaces[0], "1"), version=1))
+        versions.append(Version(id=getId(Version, codespaces[0], "1"), version="1"))
 
     data_sources: List[DataSource] = parseFromEtree(parser, tree, "{http://www.netex.org.uk/netex}Datasource", DataSource)
     if len(data_sources) == 0:
@@ -76,9 +76,8 @@ def conversion(input_filename: str, output_filename: str):
     timing_points: List[TimingPoint] = parseFromEtree(parser, tree, "{http://www.netex.org.uk/netex}TimingPoint", TimingPoint)
 
     timing_links: List[TimingLink] = parseFromEtree(parser, tree, "{http://www.netex.org.uk/netex}TimingLink", TimingLink)
-    if len(timing_links) == 0:
-        # Cause: ServiceLinks are used instead, nothing is used, no time demand types are present either
-        pass
+
+    service_links: List[ServiceLink] = parseFromEtree(parser, tree, "{http://www.netex.org.uk/netex}ServiceLink", ServiceLink)
 
     service_journeys: List[ServiceJourney] = parseFromEtree(parser, tree, "{http://www.netex.org.uk/netex}ServiceJourney", ServiceJourney)
 
@@ -91,6 +90,7 @@ def conversion(input_filename: str, output_filename: str):
     if len(service_journey_patterns) == 0 or len(time_demand_types) == 0:
         ssps = {x.id: x for x in scheduled_stop_points}
         tls = {x.id: x for x in timing_links}
+        sls = {x.id: x for x in service_links}
         sjps = {x.id: x for x in service_journey_patterns}
         sjps_hash = {TimeDemandTypesProfile.getServiceJourneyPatternHash(x): x.id for x in service_journey_patterns}
         tdts = {x.id: x for x in time_demand_types}
@@ -98,7 +98,7 @@ def conversion(input_filename: str, output_filename: str):
 
         for sj in service_journeys:
             tdtp.getServiceJourneyPattern(sj, sjps, sjps_hash, ssps, tls)
-            tdtp.getTimeDemandType(sj, tdts, tdts_hash, ssps, tls)
+            tdtp.getTimeDemandType(sj, sjps, tdts, tdts_hash, ssps, tls, sls)
 
         service_journey_patterns = list(sjps.values())
         time_demand_types = list(tdts.values())
@@ -154,13 +154,26 @@ def conversion(input_filename: str, output_filename: str):
 
     parser = lxml.etree.XMLParser(remove_blank_text=True)
     tree = lxml.etree.parse("netex-output/dutch.xml", parser=parser)
+
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}passingTimes"):
+        element.getparent().remove(element)
+
+    for element in tree.iterfind(".//*"):
+        if element.text is None and len(element) == 0 and len(element.attrib.keys()) == 0:
+            element.getparent().remove(element)
+
+    for x in tree.iterfind(".//{http://www.netex.org.uk/netex}*"):
+        x.attrib.pop("derivedFromVersionRef", None)
+        x.attrib.pop("derivedFromObjectRef", None)
+
+
     for element in tree.iterfind(".//*"):
         if element.text is None and len(element) == 0 and len(element.attrib.keys()) == 0:
             element.getparent().remove(element)
     tree.write("netex-output/dutch-filter.xml", pretty_print=True, strip_text=True)
 
 if __name__ == '__main__':
-    for input_filename in glob.glob("netex-output/Flix_Line_001.xml"):
+    for input_filename in glob.glob("netex-output-epip/Flix_Line_025.xml"):
         print(input_filename)
         output_filename = input_filename.replace('netex-output/', 'netex-output-epip/')
         conversion(input_filename, output_filename)

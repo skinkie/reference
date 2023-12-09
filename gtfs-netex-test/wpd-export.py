@@ -458,7 +458,7 @@ tdtp = TimeDemandTypesProfile(codespace=codespace, version=version)
 
 for sj in sjs:
     tdtp.getServiceJourneyPattern(sj, sjps, sjps_hash, ssps, tls)
-    tdtp.getTimeDemandType(sj, tdts, tdts_hash, ssps, tls)
+    tdtp.getTimeDemandType(sj, sjps, tdts, tdts_hash, ssps, tls, None)
     sj.private_code = PrivateCode(type_value="JourneyNumber", value=str(int(str(sj.departure_time).replace(':', ''))))
     if sj.choice.ref in ('WPD:ServiceJourneyPattern:AMHO', 'WPD:ServiceJourneyPattern:HOAM'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_vieroerd, VehicleTypeRef)
