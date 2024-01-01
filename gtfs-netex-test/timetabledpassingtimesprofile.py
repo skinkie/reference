@@ -50,7 +50,7 @@ class TimetablePassingTimesProfile:
     def sjp_hash(points_in_sequence: PointsInJourneyPatternRelStructure):
         spijp: StopPointInJourneyPattern
         spijp_hash = hash(
-            tuple([(spijp.choice.ref, spijp.for_alighting,
+            tuple([(spijp.scheduled_stop_point_ref.ref, spijp.for_alighting,
                     spijp.for_boarding,
                     spijp.onward_timing_link_ref, spijp.onward_service_link_ref,
                     spijp.destination_display_ref_or_destination_display_view)
