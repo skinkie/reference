@@ -78,7 +78,7 @@ class TimetablePassingTimesProfile:
             elif sj.calls:
                 service_journey_pattern: ServiceJourneyPattern
                 service_journey_pattern = None
-                if not sj.choice:
+                if not sj.journey_pattern_ref:
                     if len(sj.calls.call) <= 1:
                         print(f"{sj.id} has not enough calls.")
                         continue
@@ -111,7 +111,7 @@ class TimetablePassingTimesProfile:
                     sj.choice = getRef(service_journey_pattern, ServiceJourneyPatternRef)
                     # existing_sjps[service_journey_pattern.id] = service_journey_pattern
 
-                elif not service_journey_pattern:
+                if not service_journey_pattern:
                     if sj.journey_pattern_ref:
                         service_journey_pattern = existing_sjps[sj.journey_pattern_ref.ref]
                     else:
