@@ -22,7 +22,7 @@ class TimetablePassingTimesProfile:
             derived_from_object_ref=call.id,
             derived_from_version_ref_attribute=call.version
         )
-        stop_point_in_journey_pattern.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref = call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view
+        stop_point_in_journey_pattern.scheduled_stop_point_ref = call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view
         stop_point_in_journey_pattern.for_alighting = call.arrival.for_alighting
         stop_point_in_journey_pattern.for_boarding = call.departure.for_boarding
         stop_point_in_journey_pattern.onward_timing_link_ref = call.onward_timing_link_view
