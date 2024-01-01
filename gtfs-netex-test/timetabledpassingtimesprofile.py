@@ -79,6 +79,9 @@ class TimetablePassingTimesProfile:
                 service_journey_pattern: ServiceJourneyPattern
                 service_journey_pattern = None
                 if not sj.choice:
+                    if len(sj.calls.call) <= 1:
+                        print(f"{sj.id} has not enough calls.")
+                        pass
 
                     call: Call
                     spijps = PointsInJourneyPatternRelStructure(

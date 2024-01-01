@@ -94,7 +94,7 @@ class GtfsNeTexProfile(CallsProfile):
         resource_frame = ResourceFrame(id=getId(ResourceFrame, self.codespace, id), version=self.version.version)
         resource_frame.data_sources = DataSourcesInFrameRelStructure(data_source=[self.data_source])
         # resource_frame.zones = ZonesInFrameRelStructure(transport_administrative_zone=[transport_administrative_zone])
-        resource_frame.organisations = OrganisationsInFrameRelStructure(choice=operators)
+        resource_frame.organisations = OrganisationsInFrameRelStructure(organisation_or_transport_organisation=operators)
         resource_frame.operational_contexts = OperationalContextsInFrameRelStructure(
             operational_context=self.getOperationalContexts())
         # resource_frame.vehicle_types = VehicleTypesInFrameRelStructure(compound_train_or_train_or_vehicle_type=getVehicleTypes(codespace))
@@ -210,9 +210,7 @@ class GtfsNeTexProfile(CallsProfile):
                             url=get_or_none(route_urls, i),
                             authority_ref_or_operator_ref=operator_ref,
                             public_code=get_or_none(route_short_names, i),
-                            private_code=PrivateCode(value=get_or_none(route_ids, i), type_value="route_id"),
-                            payment_methods=None,
-                            purchase_moment=None
+                            private_code=PrivateCode(value=get_or_none(route_ids, i), type_value="route_id")
                             )
                 lines.append(line)
 
@@ -303,7 +301,7 @@ class GtfsNeTexProfile(CallsProfile):
                                                           public_code=get_or_none(stop_codes, i),
                                                           url=get_or_none(stop_urls, i),
                                                           location=location,
-                                                          stop_areas=stop_areas, vehicle_modes=None)
+                                                          stop_areas=stop_areas)
                 scheduled_stop_points.append(scheduled_stop_point)
 
                 """
@@ -488,7 +486,7 @@ class GtfsNeTexProfile(CallsProfile):
         service_frame = ServiceFrame(id=getId(ServiceFrame, self.codespace, id), version=self.version.version)
         # service_frame.prerequisites.resource_frame_ref
         # setIdVersion(service_frame, self.codespace, "ServiceFrame", self.version)
-        service_frame.lines = LinesInFrameRelStructure(flexible_line_or_line=lines)
+        service_frame.lines = LinesInFrameRelStructure(line=lines)
 
         stop_areas = sorted(stop_areas, key=lambda x: x.id)
         if stop_areas:
@@ -609,7 +607,7 @@ class GtfsNeTexProfile(CallsProfile):
                 availability_conditions.append(AvailabilityCondition(id=getId(AvailabilityCondition, self.codespace, service_ids[i]), version=self.version.version,
                                                                      is_available=True,
                                                                      from_date=date_to_xmldatetime(gtfs_date(start_dates[i])), to_date=date_to_xmldatetime(gtfs_date(end_dates[i])),
-                                                                     day_types=DayTypesRelStructure(choice=[DayType(id=getId(DayType, self.codespace, service_ids[i]), version=self.version.version,
+                                                                     day_types=DayTypesRelStructure(day_type_ref_or_day_type=[DayType(id=getId(DayType, self.codespace, service_ids[i]), version=self.version.version,
                                                                                                                     properties=PropertiesOfDayRelStructure(property_of_day=[PropertyOfDay(tides=None, weeks_of_month=None, holiday_types=None, seasons=None, days_of_week=days_of_week)]))])))
 
         return availability_conditions
@@ -691,7 +689,9 @@ class GtfsNeTexProfile(CallsProfile):
 
                 journey_pattern_view = None
                 if trip_headsigns[i] is not None:
-                    journey_pattern_view = JourneyPatternView(DestinationDisplayView(name=MultilingualString(trip_headsigns[i]), front_text=MultilingualString(value=trip_headsigns[i])))
+                    journey_pattern_view = JourneyPatternView(
+                        destination_display_ref_or_destination_display_view=DestinationDisplayView(
+                            name=MultilingualString(value=trip_headsigns[i]), front_text=MultilingualString(value=trip_headsigns[i])))
 
                 accessibility_assessment = None
                 if wheelchair_accessibles[i] is not None:
@@ -729,42 +729,17 @@ class GtfsNeTexProfile(CallsProfile):
                     facitities = ServiceFacilitySetsRelStructure(
                             service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
                                 id=getId(ServiceFacilitySet, self.codespace, trip_ids[i]), version=self.version.version,
-                                accessibility_info_facility_list=None,
-                                assistance_facility_list=None,
-                                accessibility_tool_list=None,
-                                car_service_facility_list=None,
-                                catering_facility_list=None,
-                                family_facility_list=None,
-                                fare_classes=None,
-                                meal_facility_list=None,
-                                medical_facility_list=None,
-                                mobility_facility_list=None,
-                                nuisance_facility_list=None,
-                                passenger_comms_facility_list=None,
-                                passenger_information_facility_list=None,
-                                retail_facility_list=None,
-                                safety_facility_list=None,
-                                sanitary_facility_list=None,
-                                ticketing_facility_list=None,
-                                ticketing_service_facility_list=None,
-                                vehicle_access_facility_list=None,
-                                accommodation_access_list=None,
-                                accommodation_facility_list=None,
-                                booking_process_facility_list=None,
-                                couchette_facility_list=None,
-                                luggage_carriage_facility_list=luggage_carriage_facility_list,
-                                service_reservation_facility_list=None,
-                                uic_product_characteristic_list=None)])
+                                luggage_carriage_facility_list=luggage_carriage_facility_list)])
 
                 service_journey = ServiceJourney(id=getId(ServiceJourney, self.codespace, trip_ids[i]),
                                                  version=self.version.version,
-                                                 choice_1=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
+                                                 choice=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
                                                  private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
-                                                 validity_conditions_or_valid_between=ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None]),
+                                                 validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None])],
                                                  journey_pattern_view=journey_pattern_view,
                                                  direction_type=self.directionToNeTEx(get_or_none(direction_ids, i)),
-                                                 train_block_ref_or_block_ref=block_ref,
+                                                 block_ref=block_ref,
                                                  accessibility_assessment=accessibility_assessment,
                                                  facilities=facitities,
                                                  link_sequence_projection_ref_or_link_sequence_projection=lsp
