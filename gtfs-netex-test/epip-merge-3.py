@@ -10,7 +10,7 @@ from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
-from xsdata.models.datatype import XmlDateTime
+from xsdata.models.datatype import XmlDateTime, XmlDate
 
 from netex import ServiceFrame, ScheduledStopPointsInFrameRelStructure, ScheduledStopPoint, LinesInFrameRelStructure, \
     Line, JourneyPatternsInFrameRelStructure, ServiceJourneyPattern, DeadRun, DeadRunJourneyPattern, TimetableFrame, \
@@ -91,10 +91,22 @@ with (open('/tmp/test.xml', 'w') as f):
                                      vehicle_journeys=JourneysInFrameRelStructure(choice=generate_from_duckdb(con, QUERY_VJ))
                                      )
 
+    from_dates = []
+    to_dates = []
+    x: UicOperatingPeriod
+    for x in generate_from_duckdb(con, QUERY_UOP, UicOperatingPeriod):
+        from_dates.append(x.from_operating_day_ref_or_from_date.to_datetime())
+        to_dates.append(x.to_operating_day_ref_or_to_date.to_datetime())
+    from_date = XmlDate.from_date(min(from_dates).date())
+    to_date = XmlDate.from_date(max(to_dates).date())
+    from_dates = None
+    to_dates = None
+
     service_calendar_frame = ServiceCalendarFrame(id="OPENOV:ServiceCalendarFrame:Aggregated", version="1",
                                                   type_of_frame_ref=TypeOfFrameRef(ref="epip:EU_PI_CALENDAR", version_ref="epip:1.0"),
                                                   service_calendar=ServiceCalendar(id="1",
-                                                                                   # from_date=XmlDate.from_date(from_date.date()), to_date=XmlDate.from_date(to_date.date()),
+                                                                                   from_date=from_date,
+                                                                                   to_date=to_date,
                                                                                    day_types=DayTypesRelStructure(day_type_ref_or_day_type=generate_from_duckdb(con, QUERY_DT, DayType)),
                                                                                    operating_periods=OperatingPeriodsRelStructure(choice=generate_from_duckdb(con, QUERY_UOP, UicOperatingPeriod)),
                                                                                    day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=generate_from_duckdb(con, QUERY_DTA, DayTypeAssignment))))
