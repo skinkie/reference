@@ -85,7 +85,7 @@ class TimetablePassingTimesProfile:
 
                     call: Call
                     spijps = PointsInJourneyPatternRelStructure(
-                        point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[self.mapCallToStopPointInJourneyPattern(call) for call in sj.calls.choice])
+                        point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[self.mapCallToStopPointInJourneyPattern(call) for call in sj.calls.call])
                     spijp_hash = TimetablePassingTimesProfile.sjp_hash(spijps)
 
                     """
