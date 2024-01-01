@@ -50,7 +50,7 @@ class TimetablePassingTimesProfile:
     def sjp_hash(points_in_sequence: PointsInJourneyPatternRelStructure):
         spijp: StopPointInJourneyPattern
         spijp_hash = hash(
-            tuple([(spijp.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref.ref, spijp.for_alighting,
+            tuple([(spijp.choice.ref, spijp.for_alighting,
                     spijp.for_boarding,
                     spijp.onward_timing_link_ref, spijp.onward_service_link_ref,
                     spijp.destination_display_ref_or_destination_display_view)
@@ -100,7 +100,7 @@ class TimetablePassingTimesProfile:
                     if len(spijps.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern) > 0 and service_journey_pattern is None:
                         service_journey_pattern = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, self.codespace, spijp_hash),
                                                                         version=sj.version,
-                                                                        route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.choice_1),
+                                                                        route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.choice),
                                                                         name=MultilingualString(value=spijp_hash),
                                                                         derived_from_object_ref = sj.id,
                                                                         derived_from_version_ref_attribute = sj.version,
@@ -112,17 +112,17 @@ class TimetablePassingTimesProfile:
                     # existing_sjps[service_journey_pattern.id] = service_journey_pattern
 
                 elif not service_journey_pattern:
-                    service_journey_pattern = existing_sjps[sj.service_journey_pattern_ref.ref]
+                    service_journey_pattern = existing_sjps[sj.journey_pattern_ref.ref]
 
                 pattern = {x.order: x for x in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern}
 
                 ttpt = []
-                for call in sj.calls.choice:
+                for call in sj.calls.call:
                     # TODO: do something with the different elements of the choice (Call, CallZ, DatedCall, DatedCallZ)
                     pis = pattern[call.order]
                     if pis.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref.ref != call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref: # TODO: make sure we get the right one
                         print("{} order does not match {} order ({} vs {})".format(service_journey_pattern.id, sj.id,
-                                                                                   call.scheduled_stop_point_ref,
+                                                                                   call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view,
                                                                                    pis.scheduled_stop_point_ref),
                               file=sys.stderr)
 
