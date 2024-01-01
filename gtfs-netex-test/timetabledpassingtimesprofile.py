@@ -81,7 +81,7 @@ class TimetablePassingTimesProfile:
                 if not sj.choice:
                     if len(sj.calls.call) <= 1:
                         print(f"{sj.id} has not enough calls.")
-                        pass
+                        continue
 
                     call: Call
                     spijps = PointsInJourneyPatternRelStructure(
@@ -112,7 +112,10 @@ class TimetablePassingTimesProfile:
                     # existing_sjps[service_journey_pattern.id] = service_journey_pattern
 
                 elif not service_journey_pattern:
-                    service_journey_pattern = existing_sjps[sj.journey_pattern_ref.ref]
+                    if sj.journey_pattern_ref:
+                        service_journey_pattern = existing_sjps[sj.journey_pattern_ref.ref]
+                    else:
+                        continue
 
                 pattern = {x.order: x for x in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern}
 
