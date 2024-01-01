@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class SameZoneEnumeration(Enum):
-    """
-    Allowed values for Zone ENTITLEMENT CONSTRAINT.
-    """
     ANY = "any"
     SAME = "same"
     SAME_AS_ORIGIN = "sameAsOrigin"

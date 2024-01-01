@@ -1,26 +1,16 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from netex.site_equipment_version_structure import SiteEquipmentVersionStructure
+from .site_equipment_version_structure import SiteEquipmentVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
-    """
-    Type for Waiting EQUIPMENT.
-
-    :ivar seats: Number of seats in Area.
-    :ivar width: Width of area.
-    :ivar length: Length of Area.
-    :ivar step_free: Whether area is step free.
-    :ivar wheelchair_area_width: Width of Wheelchair Area.
-    :ivar wheelchair_area_length: Width of Wheelchair Area.
-    :ivar smoking_allowed: Whether smoking is allowed in area.
-    :ivar heated: Whether shelter has heating.
-    :ivar air_conditioned: Whether shelter has air conditioining.
-    """
     class Meta:
         name = "WaitingEquipment_VersionStructure"
 
@@ -30,7 +20,7 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "Seats",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     width: Optional[Decimal] = field(
         default=None,
@@ -38,7 +28,7 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "Width",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     length: Optional[Decimal] = field(
         default=None,
@@ -46,7 +36,7 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "Length",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     step_free: Optional[bool] = field(
         default=None,
@@ -54,7 +44,7 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "StepFree",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     wheelchair_area_width: Optional[Decimal] = field(
         default=None,
@@ -62,7 +52,7 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "WheelchairAreaWidth",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     wheelchair_area_length: Optional[Decimal] = field(
         default=None,
@@ -70,7 +60,7 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "WheelchairAreaLength",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     smoking_allowed: Optional[bool] = field(
         default=None,
@@ -78,7 +68,7 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "SmokingAllowed",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     heated: Optional[bool] = field(
         default=None,
@@ -86,7 +76,7 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "Heated",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     air_conditioned: Optional[bool] = field(
         default=None,
@@ -94,5 +84,5 @@ class WaitingEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "AirConditioned",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.property_of_day import PropertyOfDay
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .property_of_day import PropertyOfDay
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PropertiesOfDayRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of properties of day.
-    """
     class Meta:
         name = "propertiesOfDay_RelStructure"
 
@@ -21,5 +23,5 @@ class PropertiesOfDayRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,53 +1,42 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from netex.air_submode_enumeration import AirSubmodeEnumeration
-from netex.all_modes_enumeration import AllModesEnumeration
-from netex.bus_submode_enumeration import BusSubmodeEnumeration
-from netex.coach_submode_enumeration import CoachSubmodeEnumeration
-from netex.contact_structure import ContactStructure
-from netex.country_ref import CountryRef
-from netex.departments_rel_structure import DepartmentsRelStructure
-from netex.flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from netex.funicular_submode_enumeration import FunicularSubmodeEnumeration
-from netex.metro_submode_enumeration import MetroSubmodeEnumeration
-from netex.mode_refs_rel_structure import ModeRefsRelStructure
-from netex.operator_activities_enumeration import OperatorActivitiesEnumeration
-from netex.organisation_version_structure import OrganisationVersionStructure
-from netex.personal_mode_of_operation_ref import PersonalModeOfOperationRef
-from netex.postal_address import PostalAddress
-from netex.postal_address_version_structure import PostalAddressVersionStructure
-from netex.rail_submode_enumeration import RailSubmodeEnumeration
-from netex.road_address import RoadAddress
-from netex.scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
-from netex.self_drive_submode_enumeration import SelfDriveSubmodeEnumeration
-from netex.snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
-from netex.taxi_submode_enumeration import TaxiSubmodeEnumeration
-from netex.telecabin_submode_enumeration import TelecabinSubmodeEnumeration
-from netex.tram_submode_enumeration import TramSubmodeEnumeration
-from netex.vehicle_pooling_ref import VehiclePoolingRef
-from netex.vehicle_rental_ref import VehicleRentalRef
-from netex.vehicle_sharing_ref import VehicleSharingRef
-from netex.water_submode_enumeration import WaterSubmodeEnumeration
+from typing import List, Optional, Type, Union
+from .air_submode_enumeration import AirSubmodeEnumeration
+from .all_modes_enumeration import AllModesEnumeration
+from .bus_submode_enumeration import BusSubmodeEnumeration
+from .coach_submode_enumeration import CoachSubmodeEnumeration
+from .contact_structure import ContactStructure
+from .country_ref import CountryRef
+from .departments_rel_structure import DepartmentsRelStructure
+from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
+from .funicular_submode_enumeration import FunicularSubmodeEnumeration
+from .metro_submode_enumeration import MetroSubmodeEnumeration
+from .mode_refs_rel_structure import ModeRefsRelStructure
+from .operator_activities_enumeration import OperatorActivitiesEnumeration
+from .organisation_version_structure import OrganisationVersionStructure
+from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
+from .postal_address import PostalAddress
+from .postal_address_version_structure import PostalAddressVersionStructure
+from .rail_submode_enumeration import RailSubmodeEnumeration
+from .road_address import RoadAddress
+from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .self_drive_submode_enumeration import SelfDriveSubmodeEnumeration
+from .snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
+from .taxi_submode_enumeration import TaxiSubmodeEnumeration
+from .telecabin_submode_enumeration import TelecabinSubmodeEnumeration
+from .tram_submode_enumeration import TramSubmodeEnumeration
+from .vehicle_pooling_ref import VehiclePoolingRef
+from .vehicle_rental_ref import VehicleRentalRef
+from .vehicle_sharing_ref import VehicleSharingRef
+from .water_submode_enumeration import WaterSubmodeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransportOrganisationVersionStructure(OrganisationVersionStructure):
-    """
-    Type for an TRANSPORT ORGANISATION.
-
-    :ivar country_ref:
-    :ivar postal_address_or_road_address_or_address:
-    :ivar primary_mode: Primary transport MODE of TRANSPORT ORGANISATION
-    :ivar choice:
-    :ivar choice_1:
-    :ivar operator_activities: Activities undertaken by OPERATOR.
-    :ivar customer_service_contact_details: Contact details for Customer
-        service use.
-    :ivar departments: Departments of OPERATOR.
-    :ivar other_modes: Additional transport MODEs for OPERATOR.
-    """
     class Meta:
         name = "TransportOrganisation_VersionStructure"
 
@@ -57,9 +46,15 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "name": "CountryRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    postal_address_or_road_address_or_address: Optional[object] = field(
+    address: Optional[
+        Union[
+            PostalAddress,
+            RoadAddress,
+            "TransportOrganisationVersionStructure.Address",
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -76,11 +71,13 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
                 },
                 {
                     "name": "Address",
-                    "type": PostalAddressVersionStructure,
+                    "type": Type[
+                        "TransportOrganisationVersionStructure.Address"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     primary_mode: Optional[AllModesEnumeration] = field(
         default=None,
@@ -88,9 +85,24 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "name": "PrimaryMode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            AirSubmodeEnumeration,
+            BusSubmodeEnumeration,
+            CoachSubmodeEnumeration,
+            FunicularSubmodeEnumeration,
+            MetroSubmodeEnumeration,
+            TramSubmodeEnumeration,
+            TelecabinSubmodeEnumeration,
+            RailSubmodeEnumeration,
+            WaterSubmodeEnumeration,
+            SnowAndIceSubmodeEnumeration,
+            TaxiSubmodeEnumeration,
+            SelfDriveSubmodeEnumeration,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -156,9 +168,18 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice_1: Optional[object] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
+        Union[
+            PersonalModeOfOperationRef,
+            VehiclePoolingRef,
+            VehicleSharingRef,
+            VehicleRentalRef,
+            FlexibleModeOfOperationRef,
+            ScheduledModeOfOperationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -194,7 +215,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     operator_activities: List[OperatorActivitiesEnumeration] = field(
         default_factory=list,
@@ -203,7 +224,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "tokens": True,
-        }
+        },
     )
     customer_service_contact_details: Optional[ContactStructure] = field(
         default=None,
@@ -211,14 +232,14 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "name": "CustomerServiceContactDetails",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     departments: Optional[DepartmentsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     other_modes: Optional[ModeRefsRelStructure] = field(
         default=None,
@@ -226,5 +247,15 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "name": "otherModes",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
+
+    @dataclass(kw_only=True)
+    class Address(PostalAddressVersionStructure):
+        validity_conditions: RestrictedVar
+        valid_between: RestrictedVar
+        alternative_texts: RestrictedVar
+        key_list: RestrictedVar
+        extensions: RestrictedVar
+        branding_ref: RestrictedVar
+        members: RestrictedVar

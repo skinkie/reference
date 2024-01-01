@@ -1,24 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.derived_view_structure import DerivedViewStructure
-from netex.multilingual_string import MultilingualString
-from netex.point_of_interest_ref import PointOfInterestRef
-from netex.type_of_place_refs_rel_structure import TypeOfPlaceRefsRelStructure
+from .derived_view_structure import DerivedViewStructure
+from .multilingual_string import MultilingualString
+from .point_of_interest_ref import PointOfInterestRef
+from .type_of_place_refs_rel_structure import TypeOfPlaceRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointOfInterestDerivedViewStructure(DerivedViewStructure):
-    """
-    Type for POINT OF INTEREST VIEW.
-
-    :ivar point_of_interest_ref:
-    :ivar name: Name of POINT OF INTEREST.
-    :ivar place_types: Classification of PLACE. Used for arbitrary
-        documentation.
-    :ivar short_name: Name of POINT OF INTEREST.
-    """
     class Meta:
         name = "PointOfInterest_DerivedViewStructure"
 
@@ -28,7 +22,7 @@ class PointOfInterestDerivedViewStructure(DerivedViewStructure):
             "name": "PointOfInterestRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     name: Optional[MultilingualString] = field(
         default=None,
@@ -36,7 +30,7 @@ class PointOfInterestDerivedViewStructure(DerivedViewStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     place_types: Optional[TypeOfPlaceRefsRelStructure] = field(
         default=None,
@@ -44,7 +38,7 @@ class PointOfInterestDerivedViewStructure(DerivedViewStructure):
             "name": "placeTypes",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     short_name: Optional[MultilingualString] = field(
         default=None,
@@ -52,5 +46,5 @@ class PointOfInterestDerivedViewStructure(DerivedViewStructure):
             "name": "ShortName",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

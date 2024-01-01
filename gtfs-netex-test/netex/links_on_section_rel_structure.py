@@ -1,17 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.link_on_section import LinkOnSection
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .link_on_section import LinkOnSection
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinksOnSectionRelStructure(StrictContainmentAggregationStructure):
-    """Type for a list of LINKS on SECTION.
-
-    +v1.1.
-    """
     class Meta:
         name = "linksOnSection_RelStructure"
 
@@ -22,5 +23,5 @@ class LinksOnSectionRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

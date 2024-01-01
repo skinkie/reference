@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.controllable_element_in_sequence import ControllableElementInSequence
-from netex.fare_structure_element_in_sequence import FareStructureElementInSequence
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .controllable_element_in_sequence import ControllableElementInSequence
+from .fare_structure_element_in_sequence import FareStructureElementInSequence
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class FareStructureElementsInSequenceRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of FARE STRUCTURE ELEMENT PRICEs.
-    """
+@dataclass(kw_only=True)
+class FareStructureElementsInSequenceRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "fareStructureElementsInSequence_RelStructure"
 
-    fare_structure_element_in_sequence_or_controllable_element_in_sequence: List[object] = field(
+    fare_structure_element_in_sequence_or_controllable_element_in_sequence: List[
+        Union[FareStructureElementInSequence, ControllableElementInSequence]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class FareStructureElementsInSequenceRelStructure(StrictContainmentAggregationSt
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

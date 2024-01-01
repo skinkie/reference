@@ -1,28 +1,42 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.entrance_ref import EntranceRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
-from netex.parking_entrance_ref import ParkingEntranceRef
-from netex.parking_passenger_entrance_ref import ParkingPassengerEntranceRef
-from netex.point_of_interest_entrance_ref import PointOfInterestEntranceRef
-from netex.point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
-from netex.stop_place_entrance_ref import StopPlaceEntranceRef
-from netex.stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
-from netex.vehicle_entrance_ref import VehicleEntranceRef
+from typing import List, Union
+from .entrance_ref import EntranceRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
+from .parking_entrance_ref import ParkingEntranceRef
+from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
+from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
+from .point_of_interest_vehicle_entrance_ref import (
+    PointOfInterestVehicleEntranceRef,
+)
+from .stop_place_entrance_ref import StopPlaceEntranceRef
+from .stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
+from .vehicle_entrance_ref import VehicleEntranceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class EntranceRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a collection of one or more ENTRANCEs.
-    """
     class Meta:
         name = "entranceRefs_RelStructure"
 
-    choice: List[object] = field(
+    entrance_ref_or_parking_entrance_ref: List[
+        Union[
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
+            ParkingEntranceForVehiclesRef,
+            ParkingPassengerEntranceRef,
+            ParkingEntranceRef,
+            PointOfInterestVehicleEntranceRef,
+            PointOfInterestEntranceRef,
+            VehicleEntranceRef,
+            EntranceRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -73,5 +87,5 @@ class EntranceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

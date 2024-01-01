@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.pricing_service import PricingService
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .pricing_service import PricingService
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PricingServicesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for containment in frame of FARE DYNAMIC PRICING SERVICEs.
-    """
     class Meta:
         name = "pricingServices_RelStructure"
 
@@ -21,5 +23,5 @@ class PricingServicesRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

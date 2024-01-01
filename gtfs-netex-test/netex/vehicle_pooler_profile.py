@@ -1,22 +1,15 @@
-from dataclasses import dataclass, field
-from netex.vehicle_pooler_profile_version_structure import VehiclePoolerProfileVersionStructure
+from dataclasses import dataclass
+from .vehicle_pooler_profile_version_structure import (
+    VehiclePoolerProfileVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehiclePoolerProfile(VehiclePoolerProfileVersionStructure):
-    """A set of USER PARAMETERS characterising access rights to VEHICLE POOLING
-    SERVICE.
-
-    +v1.2.2
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

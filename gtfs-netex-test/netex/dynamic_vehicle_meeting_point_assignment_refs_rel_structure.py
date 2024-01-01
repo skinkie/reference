@@ -1,15 +1,19 @@
 from dataclasses import dataclass, field
-from netex.dynamic_vehicle_meeting_point_assignment_ref import DynamicVehicleMeetingPointAssignmentRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .dynamic_vehicle_meeting_point_assignment_ref import (
+    DynamicVehicleMeetingPointAssignmentRef,
+)
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class DynamicVehicleMeetingPointAssignmentRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of DYNAMIC VEHICLE MEETING POINT ASSIGNMENTs.
-    """
+@dataclass(kw_only=True)
+class DynamicVehicleMeetingPointAssignmentRefsRelStructure(
+    OneToManyRelationshipStructure
+):
     class Meta:
         name = "dynamicVehicleMeetingPointAssignmentRefs_RelStructure"
 

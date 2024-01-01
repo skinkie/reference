@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.customer_ref import CustomerRef
-from netex.security_listing_versioned_child_structure import SecurityListingVersionedChildStructure
+from .customer_ref import CustomerRef
+from .security_listing_versioned_child_structure import (
+    SecurityListingVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class CustomerSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
-    """
-    Type for CUSTOMER SECURITY LISTING.
-    """
+@dataclass(kw_only=True)
+class CustomerSecurityListingVersionedChildStructure(
+    SecurityListingVersionedChildStructure
+):
     class Meta:
         name = "CustomerSecurityListing_VersionedChildStructure"
 
@@ -20,5 +24,5 @@ class CustomerSecurityListingVersionedChildStructure(SecurityListingVersionedChi
             "name": "CustomerRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

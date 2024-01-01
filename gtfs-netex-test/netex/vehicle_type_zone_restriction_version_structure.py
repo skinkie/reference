@@ -1,26 +1,22 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Optional
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.compound_train_ref import CompoundTrainRef
-from netex.simple_vehicle_type_ref import SimpleVehicleTypeRef
-from netex.train_ref import TrainRef
-from netex.transport_type_ref import TransportTypeRef
-from netex.transport_zone_use_enumeration import TransportZoneUseEnumeration
-from netex.vehicle_type_ref import VehicleTypeRef
+from typing import Optional, Union
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .compound_train_ref import CompoundTrainRef
+from .simple_vehicle_type_ref import SimpleVehicleTypeRef
+from .train_ref import TrainRef
+from .transport_type_ref import TransportTypeRef
+from .transport_zone_use_enumeration import TransportZoneUseEnumeration
+from .vehicle_type_ref import VehicleTypeRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleTypeZoneRestrictionVersionStructure(VersionedChildStructure):
-    """
-    Type for VEHICLE TYPE ZONE RESTRICTION restricts id.
-
-    :ivar zone_use: How ZONE may be used.
-    :ivar maximum_speed: Maximum speed  in  ZONE.
-    :ivar choice:
-    """
     class Meta:
         name = "VehicleTypeZoneRestriction_VersionStructure"
 
@@ -30,7 +26,7 @@ class VehicleTypeZoneRestrictionVersionStructure(VersionedChildStructure):
             "name": "ZoneUse",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     maximum_speed: Optional[Decimal] = field(
         default=None,
@@ -38,9 +34,17 @@ class VehicleTypeZoneRestrictionVersionStructure(VersionedChildStructure):
             "name": "MaximumSpeed",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[
+        Union[
+            SimpleVehicleTypeRef,
+            CompoundTrainRef,
+            TrainRef,
+            VehicleTypeRef,
+            TransportTypeRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -71,5 +75,5 @@ class VehicleTypeZoneRestrictionVersionStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

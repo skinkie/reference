@@ -1,31 +1,46 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.complex_feature_projection import ComplexFeatureProjection
-from netex.complex_feature_projection_ref import ComplexFeatureProjectionRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.link_projection import LinkProjection
-from netex.link_projection_ref import LinkProjectionRef
-from netex.link_sequence_projection import LinkSequenceProjection
-from netex.link_sequence_projection_ref import LinkSequenceProjectionRef
-from netex.point_projection import PointProjection
-from netex.point_projection_ref import PointProjectionRef
-from netex.topographic_projection import TopographicProjection
-from netex.topographic_projection_ref import TopographicProjectionRef
-from netex.zone_projection import ZoneProjection
-from netex.zone_projection_ref import ZoneProjectionRef
+from typing import List, Union
+from .complex_feature_projection import ComplexFeatureProjection
+from .complex_feature_projection_ref import ComplexFeatureProjectionRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .link_projection import LinkProjection
+from .link_projection_ref import LinkProjectionRef
+from .link_sequence_projection import LinkSequenceProjection
+from .link_sequence_projection_ref import LinkSequenceProjectionRef
+from .point_projection import PointProjection
+from .point_projection_ref import PointProjectionRef
+from .topographic_projection import TopographicProjection
+from .topographic_projection_ref import TopographicProjectionRef
+from .zone_projection import ZoneProjection
+from .zone_projection_ref import ZoneProjectionRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ProjectionsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of PROJECTIONS.
-    """
     class Meta:
         name = "projections_RelStructure"
 
-    choice: List[object] = field(
+    projection_ref_or_projection: List[
+        Union[
+            TopographicProjectionRef,
+            ComplexFeatureProjectionRef,
+            LinkSequenceProjectionRef,
+            ZoneProjectionRef,
+            LinkProjectionRef,
+            PointProjectionRef,
+            TopographicProjection,
+            ZoneProjection,
+            ComplexFeatureProjection,
+            LinkSequenceProjection,
+            LinkProjection,
+            PointProjection,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -91,5 +106,5 @@ class ProjectionsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

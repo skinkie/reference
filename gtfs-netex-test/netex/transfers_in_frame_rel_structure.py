@@ -1,23 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access import Access
-from netex.connection import Connection
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.default_connection import DefaultConnection
-from netex.site_connection import SiteConnection
+from typing import List, Union
+from .access import Access
+from .connection import Connection
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .default_connection import DefaultConnection
+from .site_connection import SiteConnection
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransfersInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of CONNECTIONs.
-    """
     class Meta:
         name = "transfersInFrame_RelStructure"
 
-    choice: List[object] = field(
+    transfer: List[
+        Union[Connection, DefaultConnection, SiteConnection, Access]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +45,5 @@ class TransfersInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

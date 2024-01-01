@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.charging_equipment_profile_ref import ChargingEquipmentProfileRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
+from typing import List, Union
+from .charging_equipment_profile_ref import ChargingEquipmentProfileRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleEquipmentProfileRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of VEHICLE EQUIPMENT PROFILEs.
-    """
     class Meta:
         name = "vehicleEquipmentProfileRefs_RelStructure"
 
-    charging_equipment_profile_ref_or_vehicle_equipment_profile_ref: List[object] = field(
+    vehicle_equipment_profile_ref: List[
+        Union[ChargingEquipmentProfileRef, VehicleEquipmentProfileRef]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class VehicleEquipmentProfileRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

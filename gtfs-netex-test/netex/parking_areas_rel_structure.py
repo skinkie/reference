@@ -1,27 +1,38 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.parking_area import ParkingArea
-from netex.parking_area_ref import ParkingAreaRef
-from netex.taxi_parking_area import TaxiParkingArea
-from netex.taxi_parking_area_ref import TaxiParkingAreaRef
-from netex.vehicle_pooling_parking_area import VehiclePoolingParkingArea
-from netex.vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
-from netex.vehicle_sharing_parking_area import VehicleSharingParkingArea
-from netex.vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .parking_area import ParkingArea
+from .parking_area_ref import ParkingAreaRef
+from .taxi_parking_area import TaxiParkingArea
+from .taxi_parking_area_ref import TaxiParkingAreaRef
+from .vehicle_pooling_parking_area import VehiclePoolingParkingArea
+from .vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
+from .vehicle_sharing_parking_area import VehicleSharingParkingArea
+from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingAreasRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of PARKING AREAs.
-    """
     class Meta:
         name = "parkingAreas_RelStructure"
 
-    choice: List[object] = field(
+    parking_area_ref_or_parking_area: List[
+        Union[
+            VehiclePoolingParkingAreaRef,
+            VehicleSharingParkingAreaRef,
+            TaxiParkingAreaRef,
+            ParkingAreaRef,
+            VehiclePoolingParkingArea,
+            VehicleSharingParkingArea,
+            TaxiParkingArea,
+            ParkingArea,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -67,5 +78,5 @@ class ParkingAreasRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

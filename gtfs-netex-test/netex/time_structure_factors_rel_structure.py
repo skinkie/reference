@@ -1,22 +1,28 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.parking_charge_band_ref import ParkingChargeBandRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.time_structure_factor import TimeStructureFactor
-from netex.time_structure_factor_ref import TimeStructureFactorRef
+from typing import List, Union
+from .parking_charge_band_ref import ParkingChargeBandRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .time_structure_factor import TimeStructureFactor
+from .time_structure_factor_ref import TimeStructureFactorRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimeStructureFactorsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of TIME STRUCTURE FACTOR.
-    """
     class Meta:
         name = "timeStructureFactors_RelStructure"
 
-    parking_charge_band_ref_or_time_structure_factor_ref_or_time_structure_factor: List[object] = field(
+    parking_charge_band_ref_or_time_structure_factor_ref_or_time_structure_factor: List[
+        Union[
+            ParkingChargeBandRef, TimeStructureFactorRef, TimeStructureFactor
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +43,5 @@ class TimeStructureFactorsRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

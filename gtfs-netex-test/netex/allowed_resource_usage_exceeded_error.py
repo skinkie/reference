@@ -1,11 +1,17 @@
 from dataclasses import dataclass
-from netex.allowed_resource_usage_exceeded_error_structure import AllowedResourceUsageExceededErrorStructure
+from .allowed_resource_usage_exceeded_error_structure import (
+    AllowedResourceUsageExceededErrorStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class AllowedResourceUsageExceededError(AllowedResourceUsageExceededErrorStructure):
-    """Error: Valid request was made but request would exceed the permitted resource usage of the client."""
+@dataclass(kw_only=True)
+class AllowedResourceUsageExceededError(
+    AllowedResourceUsageExceededErrorStructure
+):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

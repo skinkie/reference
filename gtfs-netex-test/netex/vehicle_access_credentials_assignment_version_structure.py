@@ -1,29 +1,39 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.assignment_version_structure_1 import AssignmentVersionStructure1
-from netex.car_pooling_service_ref import CarPoolingServiceRef
-from netex.chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from netex.emv_card_ref import EmvCardRef
-from netex.mobile_device_ref import MobileDeviceRef
-from netex.service_access_code_ref import ServiceAccessCodeRef
-from netex.smartcard_ref import SmartcardRef
-from netex.taxi_service_ref import TaxiServiceRef
-from netex.vehicle_ref import VehicleRef
-from netex.vehicle_rental_service_ref import VehicleRentalServiceRef
-from netex.vehicle_sharing_service_ref import VehicleSharingServiceRef
+from typing import Optional, Union
+from .assignment_version_structure_1 import AssignmentVersionStructure1
+from .car_pooling_service_ref import CarPoolingServiceRef
+from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
+from .emv_card_ref import EmvCardRef
+from .mobile_device_ref import MobileDeviceRef
+from .service_access_code_ref import ServiceAccessCodeRef
+from .smartcard_ref import SmartcardRef
+from .taxi_service_ref import TaxiServiceRef
+from .vehicle_ref import VehicleRef
+from .vehicle_rental_service_ref import VehicleRentalServiceRef
+from .vehicle_sharing_service_ref import VehicleSharingServiceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleAccessCredentialsAssignmentVersionStructure(AssignmentVersionStructure1):
-    """
-    Type for VEHICLE ACCESS CREDENTIALs ASSIGNMENT restricts id.
-    """
+@dataclass(kw_only=True)
+class VehicleAccessCredentialsAssignmentVersionStructure(
+    AssignmentVersionStructure1
+):
     class Meta:
         name = "VehicleAccessCredentialsAssignment_VersionStructure"
 
-    choice: Optional[object] = field(
+    common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[
+        Union[
+            VehicleRentalServiceRef,
+            VehicleSharingServiceRef,
+            ChauffeuredVehicleServiceRef,
+            TaxiServiceRef,
+            CarPoolingServiceRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -54,7 +64,7 @@ class VehicleAccessCredentialsAssignmentVersionStructure(AssignmentVersionStruct
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     vehicle_ref: Optional[VehicleRef] = field(
         default=None,
@@ -62,9 +72,11 @@ class VehicleAccessCredentialsAssignmentVersionStructure(AssignmentVersionStruct
             "name": "VehicleRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    mobile_device_ref_or_emv_card_ref_or_smartcard_ref: Optional[object] = field(
+    medium_access_device_ref: Optional[
+        Union[MobileDeviceRef, EmvCardRef, SmartcardRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -85,7 +97,7 @@ class VehicleAccessCredentialsAssignmentVersionStructure(AssignmentVersionStruct
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     service_access_code_ref: ServiceAccessCodeRef = field(
         metadata={

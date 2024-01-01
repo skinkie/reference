@@ -1,21 +1,13 @@
-from dataclasses import dataclass, field
-from netex.exchanging_version_structure import ExchangingVersionStructure
+from dataclasses import dataclass
+from .exchanging_version_structure import ExchangingVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class Exchanging(ExchangingVersionStructure):
-    """
-    The number and characteristics of persons entitled to use the public transport
-    service instead of the original customer.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

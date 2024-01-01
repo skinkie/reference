@@ -1,56 +1,45 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.all_modes_enumeration import AllModesEnumeration
-from netex.assistance_availability_enumeration import AssistanceAvailabilityEnumeration
-from netex.authority_ref import AuthorityRef
-from netex.booking_arrangements_structure import BookingArrangementsStructure
-from netex.contact_structure import ContactStructure
-from netex.flexible_line_ref import FlexibleLineRef
-from netex.flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from netex.line_ref import LineRef
-from netex.local_service_version_structure import LocalServiceVersionStructure
-from netex.notice_assignments_rel_structure import NoticeAssignmentsRelStructure
-from netex.operator_ref import OperatorRef
-from netex.personal_mode_of_operation_ref import PersonalModeOfOperationRef
-from netex.scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
-from netex.vehicle_pooling_ref import VehiclePoolingRef
-from netex.vehicle_rental_ref import VehicleRentalRef
-from netex.vehicle_sharing_ref import VehicleSharingRef
-from netex.version_of_object_ref_structure import VersionOfObjectRefStructure
+from typing import Optional, Union
+from .all_modes_enumeration import AllModesEnumeration
+from .assistance_availability_enumeration import (
+    AssistanceAvailabilityEnumeration,
+)
+from .authority_ref import AuthorityRef
+from .booking_arrangements_structure import BookingArrangementsStructure
+from .contact_structure import ContactStructure
+from .flexible_line_ref import FlexibleLineRef
+from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
+from .line_ref import LineRef
+from .local_service_version_structure import LocalServiceVersionStructure
+from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
+from .operator_ref import OperatorRef
+from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
+from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .vehicle_pooling_ref import VehiclePoolingRef
+from .vehicle_rental_ref import VehicleRentalRef
+from .vehicle_sharing_ref import VehicleSharingRef
+from .version_of_object_ref_structure import VersionOfObjectRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
-    """
-    Type for ASSISTANCE BOOKING SERVICE.
-
-    :ivar assistance_availability: Availilability of assistance.
-    :ivar wheelchair_booking_required: Whether a booking is needed to
-        use a wheelchair.
-    :ivar booking_contact: Contact details for ASSISTANCE BOOKING
-        SERVICE.
-    :ivar booking_arrangements: Booking conditions for ASSISTANCE
-        BOOKING SERVICE.
-    :ivar vehicle_mode:
-    :ivar choice:
-    :ivar authority_ref_or_operator_ref:
-    :ivar flexible_line_ref_or_line_ref:
-    :ivar booked_object_ref: Specific object to which booking relates,
-        e.g. SCHEDULED STOP POINT, STOP, VEHICLE JOURNEY, etc.
-    :ivar notice_assignments: NOTICEs for ASSISTANCE BOOKING SERVICE.
-    """
     class Meta:
         name = "AssistanceBookingService_VersionStructure"
 
-    assistance_availability: Optional[AssistanceAvailabilityEnumeration] = field(
+    assistance_availability: Optional[
+        AssistanceAvailabilityEnumeration
+    ] = field(
         default=None,
         metadata={
             "name": "AssistanceAvailability",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     wheelchair_booking_required: Optional[bool] = field(
         default=None,
@@ -58,7 +47,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "name": "WheelchairBookingRequired",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     booking_contact: Optional[ContactStructure] = field(
         default=None,
@@ -66,7 +55,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "name": "BookingContact",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     booking_arrangements: Optional[BookingArrangementsStructure] = field(
         default=None,
@@ -74,7 +63,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "name": "BookingArrangements",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     vehicle_mode: Optional[AllModesEnumeration] = field(
         default=None,
@@ -82,9 +71,18 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "name": "VehicleMode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
+        Union[
+            PersonalModeOfOperationRef,
+            VehiclePoolingRef,
+            VehicleSharingRef,
+            VehicleRentalRef,
+            FlexibleModeOfOperationRef,
+            ScheduledModeOfOperationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -120,9 +118,11 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    authority_ref_or_operator_ref: Optional[object] = field(
+    transport_organisation_ref: Optional[
+        Union[AuthorityRef, OperatorRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -138,9 +138,9 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    flexible_line_ref_or_line_ref: Optional[object] = field(
+    line_ref: Optional[Union[FlexibleLineRef, LineRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -156,7 +156,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     booked_object_ref: Optional[VersionOfObjectRefStructure] = field(
         default=None,
@@ -164,7 +164,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "name": "BookedObjectRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     notice_assignments: Optional[NoticeAssignmentsRelStructure] = field(
         default=None,
@@ -172,5 +172,5 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "name": "noticeAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,30 +1,35 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from netex.parking_area_refs_rel_structure import ParkingAreaRefsRelStructure
-from netex.personal_mode_of_operation_ref import PersonalModeOfOperationRef
-from netex.scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
-from netex.site_entrance_version_structure import SiteEntranceVersionStructure
-from netex.vehicle_pooling_ref import VehiclePoolingRef
-from netex.vehicle_rental_ref import VehicleRentalRef
-from netex.vehicle_sharing_ref import VehicleSharingRef
+from typing import Optional, Union
+from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
+from .parking_area_refs_rel_structure import ParkingAreaRefsRelStructure
+from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
+from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .site_entrance_version_structure import SiteEntranceVersionStructure
+from .vehicle_pooling_ref import VehiclePoolingRef
+from .vehicle_rental_ref import VehicleRentalRef
+from .vehicle_sharing_ref import VehicleSharingRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingEntranceForVehiclesVersionStructure(SiteEntranceVersionStructure):
-    """
-    Type for PARKING ENTRANCE.
-
-    :ivar choice:
-    :ivar areas: PARKING AREAs to which ENtrance gives access appky
-        +v1.1.
-    """
     class Meta:
         name = "ParkingEntranceForVehicles__VersionStructure"
 
-    choice: Optional[object] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
+        Union[
+            PersonalModeOfOperationRef,
+            VehiclePoolingRef,
+            VehicleSharingRef,
+            VehicleRentalRef,
+            FlexibleModeOfOperationRef,
+            ScheduledModeOfOperationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -60,12 +65,12 @@ class ParkingEntranceForVehiclesVersionStructure(SiteEntranceVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     areas: Optional[ParkingAreaRefsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

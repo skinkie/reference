@@ -1,22 +1,32 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.point_in_journey_pattern import PointInJourneyPattern
-from netex.stop_point_in_journey_pattern import StopPointInJourneyPattern
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.timing_point_in_journey_pattern import TimingPointInJourneyPattern
+from typing import List, Union
+from .point_in_journey_pattern import PointInJourneyPattern
+from .stop_point_in_journey_pattern import StopPointInJourneyPattern
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .timing_point_in_journey_pattern import TimingPointInJourneyPattern
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class PointsInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for POINT IN JOURNEY PATTERN.
-    """
+@dataclass(kw_only=True)
+class PointsInJourneyPatternRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "pointsInJourneyPattern_RelStructure"
 
-    point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern: List[object] = field(
+    point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern: List[
+        Union[
+            PointInJourneyPattern,
+            StopPointInJourneyPattern,
+            TimingPointInJourneyPattern,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -38,5 +48,5 @@ class PointsInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
                 },
             ),
             "min_occurs": 2,
-        }
+        },
     )

@@ -1,20 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDuration
-from netex.journey_timing_versioned_child_structure import JourneyTimingVersionedChildStructure
-from netex.timing_link_ref import TimingLinkRef
+from .journey_timing_versioned_child_structure import (
+    JourneyTimingVersionedChildStructure,
+)
+from .timing_link_ref import TimingLinkRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class JourneyRunTimeVersionedChildStructure(JourneyTimingVersionedChildStructure):
-    """
-    Type for JOURNEY RUN TIME.
-
-    :ivar timing_link_ref:
-    :ivar run_time: RUN TIME as an interval.
-    """
+@dataclass(kw_only=True)
+class JourneyRunTimeVersionedChildStructure(
+    JourneyTimingVersionedChildStructure
+):
     class Meta:
         name = "JourneyRunTime_VersionedChildStructure"
 
@@ -24,7 +25,7 @@ class JourneyRunTimeVersionedChildStructure(JourneyTimingVersionedChildStructure
             "name": "TimingLinkRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     run_time: XmlDuration = field(
         metadata={

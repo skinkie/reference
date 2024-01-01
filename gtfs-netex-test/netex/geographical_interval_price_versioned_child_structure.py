@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.fare_price_versioned_child_structure import FarePriceVersionedChildStructure
-from netex.geographical_interval_ref import GeographicalIntervalRef
+from .fare_price_versioned_child_structure import (
+    FarePriceVersionedChildStructure,
+)
+from .geographical_interval_ref import GeographicalIntervalRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class GeographicalIntervalPriceVersionedChildStructure(FarePriceVersionedChildStructure):
-    """
-    Type for a GEOGRAPHICAL INTERVAL PRICEs.
-    """
+@dataclass(kw_only=True)
+class GeographicalIntervalPriceVersionedChildStructure(
+    FarePriceVersionedChildStructure
+):
     class Meta:
         name = "GeographicalIntervalPrice_VersionedChildStructure"
 
@@ -20,5 +24,5 @@ class GeographicalIntervalPriceVersionedChildStructure(FarePriceVersionedChildSt
             "name": "GeographicalIntervalRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

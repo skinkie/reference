@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.blacklist_ref import BlacklistRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.whitelist_ref import WhitelistRef
+from typing import List, Union
+from .blacklist_ref import BlacklistRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .whitelist_ref import WhitelistRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SecuritylistRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of SECURITY LIST.s.
-    """
     class Meta:
         name = "securitylistRefs_RelStructure"
 
-    whitelist_ref_or_blacklist_ref: List[object] = field(
+    security_list_ref: List[Union[WhitelistRef, BlacklistRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class SecuritylistRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

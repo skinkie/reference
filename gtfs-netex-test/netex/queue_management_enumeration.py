@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class QueueManagementEnumeration(Enum):
-    """
-    Allowed value for Queue Management.
-    """
     NONE = "none"
     MAZE = "maze"
     SEPARATE_LINES = "separateLines"

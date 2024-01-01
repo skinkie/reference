@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.journey_pattern_wait_time import JourneyPatternWaitTime
-from netex.journey_pattern_wait_time_ref import JourneyPatternWaitTimeRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .journey_pattern_wait_time import JourneyPatternWaitTime
+from .journey_pattern_wait_time_ref import JourneyPatternWaitTimeRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class JourneyPatternWaitTimesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of JOURNEY PATTERN WAIT TIMEs.
-    """
+@dataclass(kw_only=True)
+class JourneyPatternWaitTimesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "journeyPatternWaitTimes_RelStructure"
 
-    journey_pattern_wait_time_ref_or_journey_pattern_wait_time: List[object] = field(
+    journey_pattern_wait_time_ref_or_journey_pattern_wait_time: List[
+        Union[JourneyPatternWaitTimeRef, JourneyPatternWaitTime]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class JourneyPatternWaitTimesRelStructure(StrictContainmentAggregationStructure)
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,39 +1,34 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
-from netex.capped_discount_right_ref import CappedDiscountRightRef
-from netex.cell_versioned_child_structure import PriceableObjectVersionStructure
-from netex.condition_summary import ConditionSummary
-from netex.fare_product_ref import FareProductRef
-from netex.generic_parameter_assignment_version_structure import GenericParameterAssignmentsRelStructure
-from netex.preassigned_fare_product_ref import PreassignedFareProductRef
-from netex.sale_discount_right_ref import SaleDiscountRightRef
-from netex.sales_offer_package_prices_rel_structure import SalesOfferPackagePricesRelStructure
-from netex.sales_offer_package_ref import SalesOfferPackageRef
-from netex.supplement_product_ref import SupplementProductRef
-from netex.third_party_product_ref import ThirdPartyProductRef
-from netex.type_of_travel_document_ref import TypeOfTravelDocumentRef
-from netex.usage_discount_right_ref import UsageDiscountRightRef
+from typing import Optional, Union
+from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
+from .capped_discount_right_ref import CappedDiscountRightRef
+from .cell_versioned_child_structure import PriceableObjectVersionStructure
+from .condition_summary import ConditionSummary
+from .fare_product_ref import FareProductRef
+from .generic_parameter_assignment_version_structure import (
+    GenericParameterAssignmentsRelStructure,
+)
+from .preassigned_fare_product_ref import PreassignedFareProductRef
+from .sale_discount_right_ref import SaleDiscountRightRef
+from .sales_offer_package_prices_rel_structure import (
+    SalesOfferPackagePricesRelStructure,
+)
+from .sales_offer_package_ref import SalesOfferPackageRef
+from .supplement_product_ref import SupplementProductRef
+from .third_party_product_ref import ThirdPartyProductRef
+from .type_of_travel_document_ref import TypeOfTravelDocumentRef
+from .usage_discount_right_ref import UsageDiscountRightRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class SalesOfferPackageElementVersionStructure(PriceableObjectVersionStructure):
-    """
-    Type for SALES OFFER PACKAGE ELEMENT.
-
-    :ivar requires_validation: Whether element requires validation
-        before it can be used.
-    :ivar condition_summary:
-    :ivar sales_offer_package_ref:
-    :ivar type_of_travel_document_ref:
-    :ivar choice:
-    :ivar validity_parameter_assignments: VALIDITY PARAMETER ASSIGNMENTs
-        associated with SALES OFFER PACKAGE ELEMENT.
-    :ivar prices: PRICEs of SALES OFFER PACKAGE ELEMENT.
-    :ivar order: Relative order of element.
-    """
+@dataclass(kw_only=True)
+class SalesOfferPackageElementVersionStructure(
+    PriceableObjectVersionStructure
+):
     class Meta:
         name = "SalesOfferPackageElement_VersionStructure"
 
@@ -43,7 +38,7 @@ class SalesOfferPackageElementVersionStructure(PriceableObjectVersionStructure):
             "name": "RequiresValidation",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     condition_summary: Optional[ConditionSummary] = field(
         default=None,
@@ -51,7 +46,7 @@ class SalesOfferPackageElementVersionStructure(PriceableObjectVersionStructure):
             "name": "ConditionSummary",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     sales_offer_package_ref: Optional[SalesOfferPackageRef] = field(
         default=None,
@@ -59,7 +54,7 @@ class SalesOfferPackageElementVersionStructure(PriceableObjectVersionStructure):
             "name": "SalesOfferPackageRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     type_of_travel_document_ref: Optional[TypeOfTravelDocumentRef] = field(
         default=None,
@@ -67,9 +62,20 @@ class SalesOfferPackageElementVersionStructure(PriceableObjectVersionStructure):
             "name": "TypeOfTravelDocumentRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[
+        Union[
+            SupplementProductRef,
+            PreassignedFareProductRef,
+            AmountOfPriceUnitProductRef,
+            UsageDiscountRightRef,
+            ThirdPartyProductRef,
+            CappedDiscountRightRef,
+            SaleDiscountRightRef,
+            FareProductRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -115,26 +121,28 @@ class SalesOfferPackageElementVersionStructure(PriceableObjectVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    validity_parameter_assignments: Optional[GenericParameterAssignmentsRelStructure] = field(
+    validity_parameter_assignments: Optional[
+        GenericParameterAssignmentsRelStructure
+    ] = field(
         default=None,
         metadata={
             "name": "validityParameterAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     prices: Optional[SalesOfferPackagePricesRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     order: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )

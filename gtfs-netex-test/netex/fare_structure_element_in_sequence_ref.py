@@ -1,13 +1,17 @@
 from dataclasses import dataclass
-from netex.fare_structure_element_in_sequence_ref_structure import FareStructureElementInSequenceRefStructure
+from .fare_structure_element_in_sequence_ref_structure import (
+    FareStructureElementInSequenceRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class FareStructureElementInSequenceRef(FareStructureElementInSequenceRefStructure):
-    """
-    Reference to a FARE STRUCTURE ELEMENT IN SEQUENCE.
-    """
+@dataclass(kw_only=True)
+class FareStructureElementInSequenceRef(
+    FareStructureElementInSequenceRefStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

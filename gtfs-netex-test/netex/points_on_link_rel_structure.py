@@ -1,17 +1,19 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
-from netex.line_string_type import LineStringType
-from netex.point_on_link import PointOnLink
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .line_string_type import LineStringType
+from .point_on_link import PointOnLink
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointsOnLinkRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of POINTs ON LINK.
-    """
     class Meta:
         name = "pointsOnLink_RelStructure"
 
@@ -22,7 +24,7 @@ class PointsOnLinkRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )
     line_string: Optional[LineStringType] = field(
         default=None,
@@ -30,5 +32,5 @@ class PointsOnLinkRelStructure(StrictContainmentAggregationStructure):
             "name": "LineString",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

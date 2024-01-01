@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.activation_assignment import ActivationAssignment
-from netex.activation_assignment_ref import ActivationAssignmentRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from typing import List, Union
+from .activation_assignment import ActivationAssignment
+from .activation_assignment_ref import ActivationAssignmentRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ActivationAssignmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of ACTIVATION ASSIGNMENTs.
-    """
     class Meta:
         name = "activationAssignments_RelStructure"
 
-    activation_assignment_ref_or_activation_assignment: List[object] = field(
+    activation_assignment_ref_or_activation_assignment: List[
+        Union[ActivationAssignmentRef, ActivationAssignment]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class ActivationAssignmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

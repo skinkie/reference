@@ -1,15 +1,17 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.luggage_service_facility_enumeration import LuggageServiceFacilityEnumeration
+from .luggage_service_facility_enumeration import (
+    LuggageServiceFacilityEnumeration,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LuggageServiceFacilityList:
-    """
-    List of LUGGAGE SERVICE FACILITies.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -17,5 +19,5 @@ class LuggageServiceFacilityList:
         default_factory=list,
         metadata={
             "tokens": True,
-        }
+        },
     )

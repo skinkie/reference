@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.authority import Authority
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.operator import Operator
+from typing import List, Union
+from .authority import Authority
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .operator import Operator
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransportOperatorsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of TRANSPORT OPERATORs.
-    """
     class Meta:
         name = "transportOperatorsInFrame_RelStructure"
 
-    authority_or_operator: List[object] = field(
+    authority_or_operator: List[Union[Authority, Operator]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class TransportOperatorsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

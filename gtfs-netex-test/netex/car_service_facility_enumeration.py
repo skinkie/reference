@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class CarServiceFacilityEnumeration(Enum):
-    """
-    Allowed values for Car Service Facility.
-    """
     UNKNOWN = "unknown"
     VALET_PARKING = "valetParking"
     CAR_WASH = "carWash"

@@ -1,21 +1,34 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.dynamic_vehicle_meeting_point_assignment_ref import DynamicVehicleMeetingPointAssignmentRef
-from netex.vehicle_meeting_point_assignment_ref import VehicleMeetingPointAssignmentRef
-from netex.vehicle_meeting_point_assignment_version_structure import VehicleMeetingPointAssignmentVersionStructure
+from typing import Optional, Union
+from .dynamic_vehicle_meeting_point_assignment_ref import (
+    DynamicVehicleMeetingPointAssignmentRef,
+)
+from .vehicle_meeting_point_assignment_ref import (
+    VehicleMeetingPointAssignmentRef,
+)
+from .vehicle_meeting_point_assignment_version_structure import (
+    VehicleMeetingPointAssignmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class DynamicVehicleMeetingPointAssignmentVersionStructure(VehicleMeetingPointAssignmentVersionStructure):
-    """
-    Type for DYNAMIC VEHICLE MEETING POINT ASSIGNMENT restricts id.
-    """
+@dataclass(kw_only=True)
+class DynamicVehicleMeetingPointAssignmentVersionStructure(
+    VehicleMeetingPointAssignmentVersionStructure
+):
     class Meta:
         name = "DynamicVehicleMeetingPointAssignment_VersionStructure"
 
-    dynamic_vehicle_meeting_point_assignment_ref_or_vehicle_meeting_point_assignment_ref: Optional[object] = field(
+    vehicle_meeting_point_assignment_ref: Optional[
+        Union[
+            DynamicVehicleMeetingPointAssignmentRef,
+            VehicleMeetingPointAssignmentRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -31,5 +44,5 @@ class DynamicVehicleMeetingPointAssignmentVersionStructure(VehicleMeetingPointAs
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

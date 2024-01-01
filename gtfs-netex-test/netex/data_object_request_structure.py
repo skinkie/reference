@@ -1,24 +1,22 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.abstract_functional_service_request_structure import AbstractFunctionalServiceRequestStructure
-from netex.extensions_1 import Extensions1
-from netex.network_frame_request_policy_structure import NetworkFrameRequestPolicyStructure
-from netex.network_frame_topic import NetworkFrameTopic
+from .abstract_functional_service_request_structure import (
+    AbstractFunctionalServiceRequestStructure,
+)
+from .extensions_1 import Extensions1
+from .network_frame_request_policy_structure import (
+    NetworkFrameRequestPolicyStructure,
+)
+from .network_frame_topic import NetworkFrameTopic
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DataObjectRequestStructure(AbstractFunctionalServiceRequestStructure):
-    """
-    Type for Service Request Type for one or more NeTEx Data Objects,
-
-    :ivar topics: One or more Request filters that specify tthe data to
-        be included in output. Multiple filters are logically ANDed.
-    :ivar policy: Policies to apply when fetching data specified by
-        Topics.
-    :ivar extensions:
-    """
     topics: "DataObjectRequestStructure.Topics" = field(
         metadata={
             "type": "Element",
@@ -32,7 +30,7 @@ class DataObjectRequestStructure(AbstractFunctionalServiceRequestStructure):
             "name": "Policy",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     extensions: Optional[Extensions1] = field(
         default=None,
@@ -40,10 +38,10 @@ class DataObjectRequestStructure(AbstractFunctionalServiceRequestStructure):
             "name": "Extensions",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
 
-    @dataclass(unsafe_hash=True, kw_only=True)
+    @dataclass(kw_only=True)
     class Topics:
         network_frame_topic: NetworkFrameTopic = field(
             metadata={

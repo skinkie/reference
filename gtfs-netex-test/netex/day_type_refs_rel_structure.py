@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.day_type_ref import DayTypeRef
-from netex.fare_day_type_ref import FareDayTypeRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from typing import List, Union
+from .day_type_ref import DayTypeRef
+from .fare_day_type_ref import FareDayTypeRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DayTypeRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of DAY TYPEs.
-    """
     class Meta:
         name = "dayTypeRefs_RelStructure"
 
-    fare_day_type_ref_or_day_type_ref: List[object] = field(
+    day_type_ref: List[Union[FareDayTypeRef, DayTypeRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class DayTypeRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

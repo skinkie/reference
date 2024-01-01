@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.distribution_assignment import DistributionAssignment
-from netex.frame_containment_structure import FrameContainmentStructure
+from .distribution_assignment import DistributionAssignment
+from .frame_containment_structure import FrameContainmentStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DistributionAssignmentsInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of DISTRIBUTION ASSIGNMENT.
-    """
     class Meta:
         name = "distributionAssignmentsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class DistributionAssignmentsInFrameRelStructure(FrameContainmentStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,22 +1,17 @@
-from dataclasses import dataclass, field
-from netex.stop_place_entrance_version_structure import StopPlaceEntranceVersionStructure
+from dataclasses import dataclass
+from .stop_place_entrance_version_structure import (
+    StopPlaceEntranceVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopPlaceEntrance(StopPlaceEntranceVersionStructure):
-    """
-    Passenger Entrance to a STOP PLACE.
-
-    :ivar id: Identifier of STOP PLACE ENTRANCE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    members: RestrictedVar

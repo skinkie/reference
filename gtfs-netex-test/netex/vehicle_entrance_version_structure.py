@@ -1,17 +1,15 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.site_entrance_version_structure import SiteEntranceVersionStructure
+from .site_entrance_version_structure import SiteEntranceVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleEntranceVersionStructure(SiteEntranceVersionStructure):
-    """
-    Type for a VEHICLE ENTRANCE.
-
-    :ivar public: Whether private vehicles can use this entrance.
-    """
     class Meta:
         name = "VehicleEntrance_VersionStructure"
 
@@ -21,5 +19,5 @@ class VehicleEntranceVersionStructure(SiteEntranceVersionStructure):
             "name": "Public",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

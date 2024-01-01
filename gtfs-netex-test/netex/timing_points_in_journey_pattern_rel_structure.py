@@ -1,18 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.timing_point_in_journey_pattern import TimingPointInJourneyPattern
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .timing_point_in_journey_pattern import TimingPointInJourneyPattern
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TimingPointsInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of TIMING POINTs.
-
-    :ivar timing_point_in_journey_pattern: TIMING POINT.
-    """
+@dataclass(kw_only=True)
+class TimingPointsInJourneyPatternRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "timingPointsInJourneyPattern_RelStructure"
 
@@ -23,5 +25,5 @@ class TimingPointsInJourneyPatternRelStructure(StrictContainmentAggregationStruc
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 2,
-        }
+        },
     )

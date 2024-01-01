@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.path_link_ref import PathLinkRef
-from netex.site_path_link import SitePathLink
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .path_link_ref import PathLinkRef
+from .site_path_link import SitePathLink
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SitePathLinksRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of SITE PATH LINKs.
-    """
     class Meta:
         name = "sitePathLinks_RelStructure"
 
-    path_link_ref_or_site_path_link: List[object] = field(
+    path_link_ref_or_site_path_link: List[
+        Union[PathLinkRef, SitePathLink]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class SitePathLinksRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

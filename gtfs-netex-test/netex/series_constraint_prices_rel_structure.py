@@ -1,22 +1,34 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.cell_ref import CellRef
-from netex.series_constraint_price_ref import SeriesConstraintPriceRef
-from netex.series_constraint_price_versioned_child_structure import SeriesConstraintPriceVersionedChildStructure
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .cell_ref import CellRef
+from .series_constraint_price_ref import SeriesConstraintPriceRef
+from .series_constraint_price_versioned_child_structure import (
+    SeriesConstraintPriceVersionedChildStructure,
+)
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class SeriesConstraintPricesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of SERIES CONSTRAINT PRICEs.
-    """
+@dataclass(kw_only=True)
+class SeriesConstraintPricesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "seriesConstraintPrices_RelStructure"
 
-    series_constraint_price_ref_or_series_constraint_price_or_cell_ref: List[object] = field(
+    series_constraint_price_ref_or_series_constraint_price_or_cell_ref: List[
+        Union[
+            SeriesConstraintPriceRef,
+            SeriesConstraintPriceVersionedChildStructure,
+            CellRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +49,5 @@ class SeriesConstraintPricesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

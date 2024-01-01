@@ -1,11 +1,14 @@
 from dataclasses import dataclass
-from netex.common_vehicle_service_ref_structure import CommonVehicleServiceRefStructure
+from .common_vehicle_service_ref_structure import (
+    CommonVehicleServiceRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleSharingServiceRefStructure(CommonVehicleServiceRefStructure):
-    """
-    Type for a reference to an VEHICLE SHARING SERVICE.
-    """
+    value: RestrictedVar

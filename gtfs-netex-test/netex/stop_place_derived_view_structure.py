@@ -1,35 +1,27 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
-from netex.derived_view_structure import DerivedViewStructure
-from netex.multilingual_string import MultilingualString
-from netex.stop_place_ref import StopPlaceRef
-from netex.stop_type_enumeration import StopTypeEnumeration
-from netex.taxi_rank_ref import TaxiRankRef
-from netex.type_of_place_refs_rel_structure import TypeOfPlaceRefsRelStructure
+from typing import Optional, Union
+from .all_vehicle_modes_of_transport_enumeration import (
+    AllVehicleModesOfTransportEnumeration,
+)
+from .derived_view_structure import DerivedViewStructure
+from .multilingual_string import MultilingualString
+from .stop_place_ref import StopPlaceRef
+from .stop_type_enumeration import StopTypeEnumeration
+from .taxi_rank_ref import TaxiRankRef
+from .type_of_place_refs_rel_structure import TypeOfPlaceRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopPlaceDerivedViewStructure(DerivedViewStructure):
-    """
-    Type for STOP PLACE VIEW.
-
-    :ivar taxi_rank_ref_or_stop_place_ref:
-    :ivar name: Name of STOP PLACE.
-    :ivar place_types: Classification of PLACE.
-    :ivar short_name: Name of STOP PLACE.
-    :ivar public_code: Short public code for passengers to use when
-        uniquely identifying the stop by SMS and other self-service
-        channels.
-    :ivar stop_place_type: Type of STOP PLACE.
-    :ivar transport_mode: Primary MODE of Vehicle transport.
-    """
     class Meta:
         name = "StopPlace_DerivedViewStructure"
 
-    taxi_rank_ref_or_stop_place_ref: Optional[object] = field(
+    stop_place_ref: Optional[Union[TaxiRankRef, StopPlaceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -45,7 +37,7 @@ class StopPlaceDerivedViewStructure(DerivedViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     name: Optional[MultilingualString] = field(
         default=None,
@@ -53,7 +45,7 @@ class StopPlaceDerivedViewStructure(DerivedViewStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     place_types: Optional[TypeOfPlaceRefsRelStructure] = field(
         default=None,
@@ -61,7 +53,7 @@ class StopPlaceDerivedViewStructure(DerivedViewStructure):
             "name": "placeTypes",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     short_name: Optional[MultilingualString] = field(
         default=None,
@@ -69,7 +61,7 @@ class StopPlaceDerivedViewStructure(DerivedViewStructure):
             "name": "ShortName",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     public_code: Optional[str] = field(
         default=None,
@@ -77,7 +69,7 @@ class StopPlaceDerivedViewStructure(DerivedViewStructure):
             "name": "PublicCode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     stop_place_type: Optional[StopTypeEnumeration] = field(
         default=None,
@@ -85,7 +77,7 @@ class StopPlaceDerivedViewStructure(DerivedViewStructure):
             "name": "StopPlaceType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     transport_mode: Optional[AllVehicleModesOfTransportEnumeration] = field(
         default=None,
@@ -93,5 +85,5 @@ class StopPlaceDerivedViewStructure(DerivedViewStructure):
             "name": "TransportMode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

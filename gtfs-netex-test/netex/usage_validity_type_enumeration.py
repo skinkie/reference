@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class UsageValidityTypeEnumeration(Enum):
-    """
-    Allowed values for Usage Validity Period Type.
-    """
     SINGLE_RIDE = "singleRide"
     SINGLE_TRIP = "singleTrip"
     RETURN_TRIP = "returnTrip"

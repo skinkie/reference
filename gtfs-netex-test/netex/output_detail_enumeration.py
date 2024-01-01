@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class OutputDetailEnumeration(Enum):
-    """
-    Detail Levels for Network Request.
-    """
     ALL = "All"
     BASIC = "Basic"
     NO_GEOMETRY = "NoGeometry"

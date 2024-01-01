@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.transferability_ref_structure import TransferabilityRefStructure
+from .transferability_ref_structure import TransferabilityRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransferabilityRef(TransferabilityRefStructure):
-    """
-    Reference to a TRANSFERABILITY USAGE PARAMETER.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

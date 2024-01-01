@@ -1,21 +1,18 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.fare_product_version_structure import FareProductVersionStructure
-from netex.general_group_of_entities import GeneralGroupOfEntities
-from netex.general_group_of_entities_ref import GeneralGroupOfEntitiesRef
-from netex.sale_discount_right_enumeration import SaleDiscountRightEnumeration
+from typing import Optional, Union
+from .fare_product_version_structure import FareProductVersionStructure
+from .general_group_of_entities import GeneralGroupOfEntities
+from .general_group_of_entities_ref import GeneralGroupOfEntitiesRef
+from .sale_discount_right_enumeration import SaleDiscountRightEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SaleDiscountRightVersionStructure(FareProductVersionStructure):
-    """
-    Type for SALES DISCOUNT RIGHT.
-
-    :ivar product_type: Classification of USAGE DISOCUNT RIGHT. +v1.1
-    :ivar general_group_of_entities_ref_or_general_group_of_entities:
-    """
     class Meta:
         name = "SaleDiscountRight_VersionStructure"
 
@@ -25,9 +22,11 @@ class SaleDiscountRightVersionStructure(FareProductVersionStructure):
             "name": "ProductType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    general_group_of_entities_ref_or_general_group_of_entities: Optional[object] = field(
+    general_group_of_entities_ref_or_general_group_of_entities: Optional[
+        Union[GeneralGroupOfEntitiesRef, GeneralGroupOfEntities]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -43,5 +42,5 @@ class SaleDiscountRightVersionStructure(FareProductVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

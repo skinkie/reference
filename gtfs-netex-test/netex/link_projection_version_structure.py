@@ -1,25 +1,18 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.link_ref_structure import LinkRefStructure
-from netex.point_on_link_by_value_structure import PointOnLinkByValueStructure
-from netex.point_on_link_ref_structure_1 import PointOnLinkRefStructure1
-from netex.projection_version_structure import ProjectionVersionStructure
+from typing import Optional, Union
+from .link_ref_structure import LinkRefStructure
+from .point_on_link_by_value_structure import PointOnLinkByValueStructure
+from .point_on_link_ref_structure_1 import PointOnLinkRefStructure1
+from .projection_version_structure import ProjectionVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinkProjectionVersionStructure(ProjectionVersionStructure):
-    """
-    Type for a LINK PROJECTION.
-
-    :ivar projected_link_ref: Link that is being projected. Can be
-        omitted if given by context.
-    :ivar project_to_link_ref: Link onto which projected LINK is being
-        projected.
-    :ivar start_point_on_link_ref_or_start_point_on_link_by_value:
-    :ivar end_point_on_link_ref_or_end_point_on_link_by_value:
-    """
     class Meta:
         name = "LinkProjection_VersionStructure"
 
@@ -29,7 +22,7 @@ class LinkProjectionVersionStructure(ProjectionVersionStructure):
             "name": "ProjectedLinkRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     project_to_link_ref: Optional[LinkRefStructure] = field(
         default=None,
@@ -37,9 +30,11 @@ class LinkProjectionVersionStructure(ProjectionVersionStructure):
             "name": "ProjectToLinkRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    start_point_on_link_ref_or_start_point_on_link_by_value: Optional[object] = field(
+    start_point_on_link_ref_or_start_point_on_link_by_value: Optional[
+        Union[PointOnLinkRefStructure1, PointOnLinkByValueStructure]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -55,9 +50,11 @@ class LinkProjectionVersionStructure(ProjectionVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    end_point_on_link_ref_or_end_point_on_link_by_value: Optional[object] = field(
+    end_point_on_link_ref_or_end_point_on_link_by_value: Optional[
+        Union[PointOnLinkRefStructure1, PointOnLinkByValueStructure]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -73,5 +70,5 @@ class LinkProjectionVersionStructure(ProjectionVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

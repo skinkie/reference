@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class KeyValueStructure:
-    """
-    Type for a Key List.
-
-    :ivar key: Identifier of value e.g. System.
-    :ivar value: Value for alternative key.
-    :ivar type_of_key: Identifier of type of key.
-    """
     key: str = field(
         metadata={
             "name": "Key",
@@ -34,5 +30,5 @@ class KeyValueStructure:
         metadata={
             "name": "typeOfKey",
             "type": "Attribute",
-        }
+        },
     )

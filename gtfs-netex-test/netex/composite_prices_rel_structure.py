@@ -1,58 +1,102 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.capping_rule_price import CappingRulePrice
-from netex.capping_rule_price_ref import CappingRulePriceRef
-from netex.cell_versioned_child_structure import (
+from typing import List, Union
+from .capping_rule_price import CappingRulePrice
+from .capping_rule_price_ref import CappingRulePriceRef
+from .cell_versioned_child_structure import (
     ParkingPrice,
     PriceGroup,
 )
-from netex.controllable_element_price import ControllableElementPrice
-from netex.controllable_element_price_ref import ControllableElementPriceRef
-from netex.customer_purchase_package_price import CustomerPurchasePackagePrice
-from netex.customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
-from netex.distance_matrix_element_price import DistanceMatrixElementPrice
-from netex.distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
-from netex.fare_price_ref import FarePriceRef
-from netex.fare_product_price import FareProductPrice
-from netex.fare_product_price_ref import FareProductPriceRef
-from netex.fare_structure_element_price import FareStructureElementPrice
-from netex.fare_structure_element_price_ref import FareStructureElementPriceRef
-from netex.fulfilment_method_price import FulfilmentMethodPrice
-from netex.fulfilment_method_price_ref import FulfilmentMethodPriceRef
-from netex.geographical_interval_price import GeographicalIntervalPrice
-from netex.geographical_interval_price_ref import GeographicalIntervalPriceRef
-from netex.geographical_unit_price import GeographicalUnitPrice
-from netex.geographical_unit_price_ref import GeographicalUnitPriceRef
-from netex.parking_price_ref import ParkingPriceRef
-from netex.price_group_ref import PriceGroupRef
-from netex.quality_structure_factor_price import QualityStructureFactorPrice
-from netex.quality_structure_factor_price_ref import QualityStructureFactorPriceRef
-from netex.sales_offer_package_price import SalesOfferPackagePrice
-from netex.sales_offer_package_price_ref import SalesOfferPackagePriceRef
-from netex.series_constraint_price import SeriesConstraintPrice
-from netex.series_constraint_price_ref import SeriesConstraintPriceRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.time_interval_price import TimeIntervalPrice
-from netex.time_interval_price_ref import TimeIntervalPriceRef
-from netex.time_unit_price import TimeUnitPrice
-from netex.time_unit_price_ref import TimeUnitPriceRef
-from netex.usage_parameter_price import UsageParameterPrice
-from netex.usage_parameter_price_ref import UsageParameterPriceRef
-from netex.validable_element_price import ValidableElementPrice
-from netex.validable_element_price_ref import ValidableElementPriceRef
+from .controllable_element_price import ControllableElementPrice
+from .controllable_element_price_ref import ControllableElementPriceRef
+from .customer_purchase_package_price import CustomerPurchasePackagePrice
+from .customer_purchase_package_price_ref import (
+    CustomerPurchasePackagePriceRef,
+)
+from .distance_matrix_element_price import DistanceMatrixElementPrice
+from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
+from .fare_price_ref import FarePriceRef
+from .fare_product_price import FareProductPrice
+from .fare_product_price_ref import FareProductPriceRef
+from .fare_structure_element_price import FareStructureElementPrice
+from .fare_structure_element_price_ref import FareStructureElementPriceRef
+from .fulfilment_method_price import FulfilmentMethodPrice
+from .fulfilment_method_price_ref import FulfilmentMethodPriceRef
+from .geographical_interval_price import GeographicalIntervalPrice
+from .geographical_interval_price_ref import GeographicalIntervalPriceRef
+from .geographical_unit_price import GeographicalUnitPrice
+from .geographical_unit_price_ref import GeographicalUnitPriceRef
+from .parking_price_ref import ParkingPriceRef
+from .price_group_ref import PriceGroupRef
+from .quality_structure_factor_price import QualityStructureFactorPrice
+from .quality_structure_factor_price_ref import QualityStructureFactorPriceRef
+from .sales_offer_package_price import SalesOfferPackagePrice
+from .sales_offer_package_price_ref import SalesOfferPackagePriceRef
+from .series_constraint_price import SeriesConstraintPrice
+from .series_constraint_price_ref import SeriesConstraintPriceRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .time_interval_price import TimeIntervalPrice
+from .time_interval_price_ref import TimeIntervalPriceRef
+from .time_unit_price import TimeUnitPrice
+from .time_unit_price_ref import TimeUnitPriceRef
+from .usage_parameter_price import UsageParameterPrice
+from .usage_parameter_price_ref import UsageParameterPriceRef
+from .validable_element_price import ValidableElementPrice
+from .validable_element_price_ref import ValidableElementPriceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CompositePricesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of FARE PRICEs.
-    """
     class Meta:
         name = "compositePrices_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            CustomerPurchasePackagePriceRef,
+            ParkingPriceRef,
+            TimeIntervalPriceRef,
+            TimeUnitPriceRef,
+            QualityStructureFactorPriceRef,
+            ControllableElementPriceRef,
+            ValidableElementPriceRef,
+            GeographicalIntervalPriceRef,
+            GeographicalUnitPriceRef,
+            UsageParameterPriceRef,
+            SeriesConstraintPriceRef,
+            SalesOfferPackagePriceRef,
+            DistanceMatrixElementPriceRef,
+            FareStructureElementPriceRef,
+            FulfilmentMethodPriceRef,
+            CappingRulePriceRef,
+            FareProductPriceRef,
+            FarePriceRef,
+            PriceGroupRef,
+            CustomerPurchasePackagePrice,
+            ParkingPrice,
+            SalesOfferPackagePrice,
+            FulfilmentMethodPrice,
+            CappingRulePrice,
+            FareProductPrice,
+            FareStructureElementPrice,
+            TimeIntervalPrice,
+            TimeUnitPrice,
+            QualityStructureFactorPrice,
+            ControllableElementPrice,
+            ValidableElementPrice,
+            UsageParameterPrice,
+            DistanceMatrixElementPrice,
+            GeographicalIntervalPrice,
+            GeographicalUnitPrice,
+            SeriesConstraintPrice,
+            PriceGroup,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -243,5 +287,5 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

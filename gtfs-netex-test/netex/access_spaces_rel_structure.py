@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_space import AccessSpace
-from netex.access_space_ref import AccessSpaceRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from typing import List, Union
+from .access_space import AccessSpace
+from .access_space_ref import AccessSpaceRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AccessSpacesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of ACCESS SPACEs.
-    """
     class Meta:
         name = "accessSpaces_RelStructure"
 
-    access_space_ref_or_access_space: List[object] = field(
+    access_space_ref_or_access_space: List[
+        Union[AccessSpaceRef, AccessSpace]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class AccessSpacesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

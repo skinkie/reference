@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.residential_qualification import ResidentialQualification
-from netex.residential_qualification_ref import ResidentialQualificationRef
+from typing import List, Union
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .residential_qualification import ResidentialQualification
+from .residential_qualification_ref import ResidentialQualificationRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ResidentialQualificationsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for  a list of RESIDENTIAL QUALIFICATIONs.
-    """
     class Meta:
         name = "residentialQualifications_RelStructure"
 
-    residential_qualification_ref_or_residential_qualification: List[object] = field(
+    residential_qualification_ref_or_residential_qualification: List[
+        Union[ResidentialQualificationRef, ResidentialQualification]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class ResidentialQualificationsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

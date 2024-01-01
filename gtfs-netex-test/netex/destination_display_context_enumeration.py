@@ -1,13 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class DestinationDisplayContextEnumeration(Enum):
-    """Allowed values forr Destination Display Context.
-
-    +v1.1.
-    """
     ANY = "any"
     CONTINUE_TO = "continueTo"
     ENDS_AT = "endsAt"

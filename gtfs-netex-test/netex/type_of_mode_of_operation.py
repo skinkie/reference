@@ -1,21 +1,15 @@
-from dataclasses import dataclass, field
-from netex.type_of_mode_of_operation_value_structure import TypeOfModeOfOperationValueStructure
+from dataclasses import dataclass
+from .type_of_mode_of_operation_value_structure import (
+    TypeOfModeOfOperationValueStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfModeOfOperation(TypeOfModeOfOperationValueStructure):
-    """A classification for a MODE OF OPERATION.
-
-    +v1.2.2
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

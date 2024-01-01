@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.train_number_ref import TrainNumberRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .train_number_ref import TrainNumberRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TrainNumberRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of TRAIN NUMBERs.
-    """
     class Meta:
         name = "trainNumberRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class TrainNumberRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

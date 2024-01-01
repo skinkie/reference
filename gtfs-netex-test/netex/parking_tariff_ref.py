@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.parking_tariff_ref_structure import ParkingTariffRefStructure
+from .parking_tariff_ref_structure import ParkingTariffRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingTariffRef(ParkingTariffRefStructure):
-    """
-    Reference to a PARKING TARIFF.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

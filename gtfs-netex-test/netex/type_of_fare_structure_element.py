@@ -1,21 +1,15 @@
-from dataclasses import dataclass, field
-from netex.type_of_fare_structure_element_version_structure import TypeOfFareStructureElementVersionStructure
+from dataclasses import dataclass
+from .type_of_fare_structure_element_version_structure import (
+    TypeOfFareStructureElementVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfFareStructureElement(TypeOfFareStructureElementVersionStructure):
-    """
-    A classification of FARE STRUCTURE ELEMENTs expressing their general
-    functionalities .
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

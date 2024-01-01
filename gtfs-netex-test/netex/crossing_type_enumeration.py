@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class CrossingTypeEnumeration(Enum):
-    """
-    Allowed values for CROSSING EQUIPMENT.
-    """
     LEVEL_CROSSING = "levelCrossing"
     BARROW_CROSSING = "barrowCrossing"
     ROAD_CROSSING = "roadCrossing"

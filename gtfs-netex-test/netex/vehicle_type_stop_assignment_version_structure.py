@@ -1,30 +1,24 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.assignment_version_structure_1 import AssignmentVersionStructure1
-from netex.compound_train_ref import CompoundTrainRef
-from netex.dead_run_ref import DeadRunRef
-from netex.simple_vehicle_type_ref import SimpleVehicleTypeRef
-from netex.train_ref import TrainRef
-from netex.transport_type_ref import TransportTypeRef
-from netex.vehicle_journey_ref import VehicleJourneyRef
-from netex.vehicle_orientation_enumeration import VehicleOrientationEnumeration
-from netex.vehicle_stopping_position_ref import VehicleStoppingPositionRef
-from netex.vehicle_type_ref import VehicleTypeRef
+from typing import Optional, Union
+from .assignment_version_structure_1 import AssignmentVersionStructure1
+from .compound_train_ref import CompoundTrainRef
+from .dead_run_ref import DeadRunRef
+from .simple_vehicle_type_ref import SimpleVehicleTypeRef
+from .train_ref import TrainRef
+from .transport_type_ref import TransportTypeRef
+from .vehicle_journey_ref import VehicleJourneyRef
+from .vehicle_orientation_enumeration import VehicleOrientationEnumeration
+from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
+from .vehicle_type_ref import VehicleTypeRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
-    """
-    Type for VEHICLE TYPE STOP ASSIGNNMENT.
-
-    :ivar vehicle_orientation: Relative orientation of vehicle - Default
-        is forwards.
-    :ivar vehicle_stopping_position_ref:
-    :ivar dead_run_ref_or_vehicle_journey_ref:
-    :ivar choice:
-    """
     class Meta:
         name = "VehicleTypeStopAssignment_VersionStructure"
 
@@ -34,17 +28,21 @@ class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "VehicleOrientation",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    vehicle_stopping_position_ref: Optional[VehicleStoppingPositionRef] = field(
+    vehicle_stopping_position_ref: Optional[
+        VehicleStoppingPositionRef
+    ] = field(
         default=None,
         metadata={
             "name": "VehicleStoppingPositionRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    dead_run_ref_or_vehicle_journey_ref: Optional[object] = field(
+    vehicle_journey_ref: Optional[
+        Union[DeadRunRef, VehicleJourneyRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -60,9 +58,17 @@ class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice: Optional[object] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[
+        Union[
+            SimpleVehicleTypeRef,
+            CompoundTrainRef,
+            TrainRef,
+            VehicleTypeRef,
+            TransportTypeRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -93,5 +99,5 @@ class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

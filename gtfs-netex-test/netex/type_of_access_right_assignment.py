@@ -1,25 +1,15 @@
-from dataclasses import dataclass, field
-from netex.type_of_access_right_assignment_version_structure import TypeOfAccessRightAssignmentVersionStructure
+from dataclasses import dataclass
+from .type_of_access_right_assignment_version_structure import (
+    TypeOfAccessRightAssignmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfAccessRightAssignment(TypeOfAccessRightAssignmentVersionStructure):
-    """A classification of ACCESS RIGHT ASSIGNMENTs expressing their general
-    functionalities and local functional characteristics specific to the operator.
-
-    Types of ACCESS RIGHT ASSIGNMENTs like e.g. throw-away ticket,
-    throw-away ticket unit, value card, electronic purse allowing
-    access, public transport credit card etc. may be used to define
-    these categories.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

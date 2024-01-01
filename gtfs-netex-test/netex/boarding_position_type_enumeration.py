@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class BoardingPositionTypeEnumeration(Enum):
-    """
-    Allowed values for BOARDING POSITION Component Types.
-    """
     UNKNOWN = "unknown"
     DOOR_FROM_AIRLINE_GATE = "doorFromAirlineGate"
     POSITION_ON_RAIL_PLATFORM = "positionOnRailPlatform"

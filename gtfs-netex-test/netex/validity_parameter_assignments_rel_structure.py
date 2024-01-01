@@ -1,27 +1,42 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_right_parameter_assignment import AccessRightParameterAssignment
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.customer_purchase_parameter_assignment import CustomerPurchaseParameterAssignment
-from netex.generic_parameter_assignment_version_structure import (
+from typing import List, Union
+from .access_right_parameter_assignment import AccessRightParameterAssignment
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .customer_purchase_parameter_assignment import (
+    CustomerPurchaseParameterAssignment,
+)
+from .generic_parameter_assignment_version_structure import (
     GenericParameterAssignment,
     GenericParameterAssignmentInContext,
 )
-from netex.specific_parameter_assignment_version_structure import SpecificParameterAssignment
-from netex.validity_parameter_assignment import ValidityParameterAssignment
+from .specific_parameter_assignment_version_structure import (
+    SpecificParameterAssignment,
+)
+from .validity_parameter_assignment import ValidityParameterAssignment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ValidityParameterAssignmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of VALIDITY PARAMETER ASSIGNMENT.
-    """
+@dataclass(kw_only=True)
+class ValidityParameterAssignmentsRelStructure(
+    ContainmentAggregationStructure
+):
     class Meta:
         name = "validityParameterAssignments_RelStructure"
 
-    choice: List[object] = field(
+    access_right_parameter_assignment: List[
+        Union[
+            CustomerPurchaseParameterAssignment,
+            SpecificParameterAssignment,
+            GenericParameterAssignmentInContext,
+            GenericParameterAssignment,
+            ValidityParameterAssignment,
+            AccessRightParameterAssignment,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -57,5 +72,5 @@ class ValidityParameterAssignmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

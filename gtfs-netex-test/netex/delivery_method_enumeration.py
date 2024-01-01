@@ -1,9 +1,11 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
 class DeliveryMethodEnumeration(Enum):
-    """Delivery Method: Fetched or Direct Delivery."""
     DIRECT = "direct"
     FETCHED = "fetched"

@@ -1,22 +1,34 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.cell_ref import CellRef
-from netex.sales_offer_package_price_ref import SalesOfferPackagePriceRef
-from netex.sales_offer_package_price_versioned_child_structure import SalesOfferPackagePriceVersionedChildStructure
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .cell_ref import CellRef
+from .sales_offer_package_price_ref import SalesOfferPackagePriceRef
+from .sales_offer_package_price_versioned_child_structure import (
+    SalesOfferPackagePriceVersionedChildStructure,
+)
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class SalesOfferPackagePricesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of SALES OFFER PACKAGE PRICEs.
-    """
+@dataclass(kw_only=True)
+class SalesOfferPackagePricesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "salesOfferPackagePrices_RelStructure"
 
-    sales_offer_package_price_ref_or_sales_offer_package_price_or_cell_ref: List[object] = field(
+    sales_offer_package_price_ref_or_sales_offer_package_price_or_cell_ref: List[
+        Union[
+            SalesOfferPackagePriceRef,
+            SalesOfferPackagePriceVersionedChildStructure,
+            CellRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +49,5 @@ class SalesOfferPackagePricesRelStructure(StrictContainmentAggregationStructure)
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

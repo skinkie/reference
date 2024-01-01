@@ -1,18 +1,15 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.cell_versioned_child_structure import PriceableObjectVersionStructure
+from .cell_versioned_child_structure import PriceableObjectVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareIntervalVersionStructure(PriceableObjectVersionStructure):
-    """
-    Type for FARE INTERVAL.
-
-    :ivar name_of_class_of_unit: Name of implementation class associated
-        with e.g. gDay, t.
-    """
     class Meta:
         name = "FareInterval_VersionStructure"
 
@@ -21,5 +18,5 @@ class FareIntervalVersionStructure(PriceableObjectVersionStructure):
         metadata={
             "name": "nameOfClassOfUnit",
             "type": "Attribute",
-        }
+        },
     )

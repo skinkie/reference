@@ -1,56 +1,49 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from netex.access_space_ref import AccessSpaceRef
-from netex.all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
-from netex.authority_ref import AuthorityRef
-from netex.boarding_position_ref import BoardingPositionRef
-from netex.multilingual_string import MultilingualString
-from netex.operator_ref import OperatorRef
-from netex.operator_view import OperatorView
-from netex.parking_area_ref import ParkingAreaRef
-from netex.parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
-from netex.parking_entrance_ref import ParkingEntranceRef
-from netex.parking_passenger_entrance_ref import ParkingPassengerEntranceRef
-from netex.parking_ref import ParkingRef
-from netex.point_of_interest_entrance_ref import PointOfInterestEntranceRef
-from netex.point_of_interest_ref import PointOfInterestRef
-from netex.point_of_interest_space_ref import PointOfInterestSpaceRef
-from netex.point_ref_structure import PointRefStructure
-from netex.quay_ref import QuayRef
-from netex.scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
-from netex.stop_area_ref_structure import StopAreaRefStructure
-from netex.stop_place_entrance_ref import StopPlaceEntranceRef
-from netex.stop_place_ref import StopPlaceRef
-from netex.taxi_parking_area_ref import TaxiParkingAreaRef
-from netex.taxi_rank_ref import TaxiRankRef
-from netex.taxi_stand_ref import TaxiStandRef
-from netex.vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
-from netex.vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
+from typing import List, Optional, Union
+from .access_space_ref import AccessSpaceRef
+from .all_vehicle_modes_of_transport_enumeration import (
+    AllVehicleModesOfTransportEnumeration,
+)
+from .authority_ref import AuthorityRef
+from .boarding_position_ref import BoardingPositionRef
+from .multilingual_string import MultilingualString
+from .operator_ref import OperatorRef
+from .operator_view import OperatorView
+from .parking_area_ref import ParkingAreaRef
+from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
+from .parking_entrance_ref import ParkingEntranceRef
+from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
+from .parking_ref import ParkingRef
+from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
+from .point_of_interest_ref import PointOfInterestRef
+from .point_of_interest_space_ref import PointOfInterestSpaceRef
+from .point_ref_structure import PointRefStructure
+from .quay_ref import QuayRef
+from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
+from .stop_area_ref_structure import StopAreaRefStructure
+from .stop_place_entrance_ref import StopPlaceEntranceRef
+from .stop_place_ref import StopPlaceRef
+from .taxi_parking_area_ref import TaxiParkingAreaRef
+from .taxi_rank_ref import TaxiRankRef
+from .taxi_stand_ref import TaxiStandRef
+from .vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
+from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SiteConnectionEndStructure:
-    """
-    Type for a SITE CONNECTION End.
-
-    :ivar transport_mode: MODE of end point of TRANSFER . Default is all
-        modes, i.e. all modes of referenced stop place and or stop
-        point.
-    :ivar stop_area_ref: Identifier of a Place at end point of transfer.
-    :ivar scheduled_stop_point_ref_or_vehicle_meeting_point_ref:
-    :ivar choice:
-    :ivar authority_ref_or_operator_ref_or_operator_view:
-    :ivar label: Label at end of site connection.
-    """
     transport_mode: Optional[AllVehicleModesOfTransportEnumeration] = field(
         default=None,
         metadata={
             "name": "TransportMode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     stop_area_ref: Optional[StopAreaRefStructure] = field(
         default=None,
@@ -58,9 +51,11 @@ class SiteConnectionEndStructure:
             "name": "StopAreaRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    scheduled_stop_point_ref_or_vehicle_meeting_point_ref: Optional[object] = field(
+    scheduled_stop_point_ref_or_vehicle_meeting_point_ref: Optional[
+        Union[ScheduledStopPointRefStructure, PointRefStructure]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -76,9 +71,30 @@ class SiteConnectionEndStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            TaxiRankRef,
+            StopPlaceRef,
+            AccessSpaceRef,
+            BoardingPositionRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceEntranceRef,
+            PointOfInterestRef,
+            PointOfInterestSpaceRef,
+            PointOfInterestEntranceRef,
+            ParkingRef,
+            VehiclePoolingParkingAreaRef,
+            VehicleSharingParkingAreaRef,
+            TaxiParkingAreaRef,
+            ParkingAreaRef,
+            ParkingEntranceForVehiclesRef,
+            ParkingPassengerEntranceRef,
+            ParkingEntranceRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -175,9 +191,11 @@ class SiteConnectionEndStructure:
                 },
             ),
             "max_occurs": 8,
-        }
+        },
     )
-    authority_ref_or_operator_ref_or_operator_view: Optional[object] = field(
+    authority_ref_or_operator_ref_or_operator_view: Optional[
+        Union[AuthorityRef, OperatorRef, OperatorView]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -198,7 +216,7 @@ class SiteConnectionEndStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     label: Optional[MultilingualString] = field(
         default=None,
@@ -206,5 +224,5 @@ class SiteConnectionEndStructure:
             "name": "Label",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,35 +1,23 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.request_structure import RequestStructure
-from netex.subscription_context_structure import SubscriptionContextStructure
+from .request_structure import RequestStructure
+from .subscription_context_structure import SubscriptionContextStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AbstractSubscriptionRequestStructure(RequestStructure):
-    """
-    Type for COmmon Subscription Request.
-
-    :ivar consumer_address: Address to which data is to be sent, if
-        different from Address. This may also be determined from
-        RequestorRef and preconfigured data.
-    :ivar subscription_filter_identifier: Reference to a Subscription
-        Filter with which this subscription is to be aggregated for
-        purposes of notification and delivery. If absent, use the
-        default filter. If present, use any existing filter with that
-        identifier, if none found, create a new one. Optional SIRI
-        feature.
-    :ivar subscription_context: General values that apply to
-        subscription. Usually set by configuration.
-    """
     consumer_address: Optional[str] = field(
         default=None,
         metadata={
             "name": "ConsumerAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     subscription_filter_identifier: Optional[str] = field(
         default=None,
@@ -37,7 +25,7 @@ class AbstractSubscriptionRequestStructure(RequestStructure):
             "name": "SubscriptionFilterIdentifier",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     subscription_context: Optional[SubscriptionContextStructure] = field(
         default=None,
@@ -45,5 +33,5 @@ class AbstractSubscriptionRequestStructure(RequestStructure):
             "name": "SubscriptionContext",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )

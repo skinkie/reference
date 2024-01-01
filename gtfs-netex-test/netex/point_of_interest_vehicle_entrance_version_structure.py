@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from netex.site_entrance_version_structure import SiteEntranceVersionStructure
+from .site_entrance_version_structure import SiteEntranceVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class PointOfInterestVehicleEntranceVersionStructure(SiteEntranceVersionStructure):
-    """
-    Type for a POINT OF INTEREST VEHICLE ENTRANCE.
-    """
+@dataclass(kw_only=True)
+class PointOfInterestVehicleEntranceVersionStructure(
+    SiteEntranceVersionStructure
+):
     class Meta:
         name = "PointOfInterestVehicleEntrance_VersionStructure"

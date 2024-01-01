@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.group_of_distance_matrix_elements import GroupOfDistanceMatrixElements
-from netex.group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .group_of_distance_matrix_elements import GroupOfDistanceMatrixElements
+from .group_of_distance_matrix_elements_ref import (
+    GroupOfDistanceMatrixElementsRef,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class GroupsOfDistanceMatrixElementsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of GROUP OF DISTANCE MATRIX ELEMENTss.
-    """
+@dataclass(kw_only=True)
+class GroupsOfDistanceMatrixElementsRelStructure(
+    ContainmentAggregationStructure
+):
     class Meta:
         name = "groupsOfDistanceMatrixElements_RelStructure"
 
-    group_of_distance_matrix_elements_ref_or_group_of_distance_matrix_elements: List[object] = field(
+    group_of_distance_matrix_elements_ref_or_group_of_distance_matrix_elements: List[
+        Union[GroupOfDistanceMatrixElementsRef, GroupOfDistanceMatrixElements]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class GroupsOfDistanceMatrixElementsRelStructure(ContainmentAggregationStructure
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

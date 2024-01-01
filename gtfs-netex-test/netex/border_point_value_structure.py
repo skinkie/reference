@@ -1,22 +1,18 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.group_of_operators import GroupOfOperators
-from netex.group_of_operators_ref import GroupOfOperatorsRef
-from netex.multilingual_string import MultilingualString
-from netex.timing_point_version_structure import TimingPointVersionStructure
+from typing import Optional, Union
+from .group_of_operators import GroupOfOperators
+from .group_of_operators_ref import GroupOfOperatorsRef
+from .multilingual_string import MultilingualString
+from .timing_point_version_structure import TimingPointVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BorderPointValueStructure(TimingPointVersionStructure):
-    """
-    Type for a BORDER POINT.
-
-    :ivar short_name: Short Name of BORDER POINT.
-    :ivar description: Description of BORDER POINT.
-    :ivar group_of_operators_ref_or_group_of_operators:
-    """
     class Meta:
         name = "BorderPoint_ValueStructure"
 
@@ -26,7 +22,7 @@ class BorderPointValueStructure(TimingPointVersionStructure):
             "name": "ShortName",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -34,9 +30,11 @@ class BorderPointValueStructure(TimingPointVersionStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    group_of_operators_ref_or_group_of_operators: Optional[object] = field(
+    group_of_operators_ref_or_group_of_operators: Optional[
+        Union[GroupOfOperatorsRef, GroupOfOperators]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -52,5 +50,5 @@ class BorderPointValueStructure(TimingPointVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

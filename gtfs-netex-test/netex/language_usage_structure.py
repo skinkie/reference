@@ -1,18 +1,15 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.language_use_enumeration import LanguageUseEnumeration
+from .language_use_enumeration import LanguageUseEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LanguageUsageStructure:
-    """
-    Type describing language usage properties.
-
-    :ivar language: Language whose usage is described.
-    :ivar language_use: Usages of language supported. Based on UN terms.
-    """
     language: str = field(
         metadata={
             "name": "Language",
@@ -29,5 +26,5 @@ class LanguageUsageStructure:
             "namespace": "http://www.netex.org.uk/netex",
             "required": True,
             "tokens": True,
-        }
+        },
     )

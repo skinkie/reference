@@ -1,37 +1,26 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.compound_train_ref import CompoundTrainRef
-from netex.parking_properties_ref import ParkingPropertiesRef
-from netex.parking_properties_ref_structure import ParkingPropertiesRefStructure
-from netex.parking_ref import ParkingRef
-from netex.parking_stay_enumeration import ParkingStayEnumeration
-from netex.parking_user_enumeration import ParkingUserEnumeration
-from netex.parking_vehicle_enumeration import ParkingVehicleEnumeration
-from netex.simple_vehicle_type_ref import SimpleVehicleTypeRef
-from netex.train_ref import TrainRef
-from netex.transport_type_ref import TransportTypeRef
-from netex.vehicle_type_ref import VehicleTypeRef
+from typing import Optional, Union
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .compound_train_ref import CompoundTrainRef
+from .parking_properties_ref import ParkingPropertiesRef
+from .parking_properties_ref_structure import ParkingPropertiesRefStructure
+from .parking_ref import ParkingRef
+from .parking_stay_enumeration import ParkingStayEnumeration
+from .parking_user_enumeration import ParkingUserEnumeration
+from .parking_vehicle_enumeration import ParkingVehicleEnumeration
+from .simple_vehicle_type_ref import SimpleVehicleTypeRef
+from .train_ref import TrainRef
+from .transport_type_ref import TransportTypeRef
+from .vehicle_type_ref import VehicleTypeRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
-    """
-    Type for a PARKING CAPACITY.
-
-    :ivar parking_ref:
-    :ivar parent_ref: DEPRECATED As not integrity checked.
-    :ivar parking_properties_ref:
-    :ivar parking_user_type: Type of users: disabled, all etc.
-    :ivar parking_vehicle_type: Type of vehicle that PARKING allows.
-    :ivar choice:
-    :ivar parking_stay_type: Type of Stay allowed in PARKING.
-    :ivar number_of_spaces: Total number of parking places.
-    :ivar number_of_spaces_with_recharge_point: Number of parking places
-        with eletric chargepoints.
-    """
     class Meta:
         name = "ParkingCapacity_VersionedChildStructure"
 
@@ -41,7 +30,7 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "name": "ParkingRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     parent_ref: Optional[ParkingPropertiesRefStructure] = field(
         default=None,
@@ -49,7 +38,7 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "name": "ParentRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     parking_properties_ref: Optional[ParkingPropertiesRef] = field(
         default=None,
@@ -57,7 +46,7 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "name": "ParkingPropertiesRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     parking_user_type: Optional[ParkingUserEnumeration] = field(
         default=None,
@@ -65,7 +54,7 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "name": "ParkingUserType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     parking_vehicle_type: Optional[ParkingVehicleEnumeration] = field(
         default=None,
@@ -73,9 +62,17 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "name": "ParkingVehicleType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[
+        Union[
+            SimpleVehicleTypeRef,
+            CompoundTrainRef,
+            TrainRef,
+            VehicleTypeRef,
+            TransportTypeRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -106,7 +103,7 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     parking_stay_type: Optional[ParkingStayEnumeration] = field(
         default=None,
@@ -114,7 +111,7 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "name": "ParkingStayType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     number_of_spaces: Optional[int] = field(
         default=None,
@@ -122,7 +119,7 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "name": "NumberOfSpaces",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     number_of_spaces_with_recharge_point: Optional[int] = field(
         default=None,
@@ -130,5 +127,5 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "name": "NumberOfSpacesWithRechargePoint",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

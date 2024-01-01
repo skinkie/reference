@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class UsageEndEnumeration(Enum):
-    """
-    Allowed values for Usage End.
-    """
     STANDARD_DURATION = "standardDuration"
     END_OF_CALENDAR_PERIOD = "endOfCalendarPeriod"
     END_OF_RIDE = "endOfRide"

@@ -1,11 +1,14 @@
 from dataclasses import dataclass
-from netex.vehicle_model_profile_ref_structure import VehicleModelProfileRefStructure
+from .vehicle_model_profile_ref_structure import (
+    VehicleModelProfileRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CycleModelProfileRefStructure(VehicleModelProfileRefStructure):
-    """
-    Type for a reference to a CYCLE MODEL PROFILE.
-    """
+    value: RestrictedVar

@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.group_of_entities_version_structure import GroupOfEntitiesVersionStructure
-from netex.timing_link_refs_rel_structure import TimingLinkRefsRelStructure
+from .group_of_entities_version_structure import (
+    GroupOfEntitiesVersionStructure,
+)
+from .timing_link_refs_rel_structure import TimingLinkRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfTimingLinksRelStructure(GroupOfEntitiesVersionStructure):
-    """
-    Type for GROUP OF TIMING LINKs.
-
-    :ivar members: TIMING LINKs in group.
-    """
     class Meta:
         name = "GroupOfTimingLinks_RelStructure"
 
@@ -21,5 +21,5 @@ class GroupOfTimingLinksRelStructure(GroupOfEntitiesVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

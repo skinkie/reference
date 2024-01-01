@@ -1,28 +1,30 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.destination_display_ref import DestinationDisplayRef
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.multilingual_string import MultilingualString
-from netex.place_ref import PlaceRef
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
+from typing import Optional, Union
+from .destination_display_ref import DestinationDisplayRef
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .multilingual_string import MultilingualString
+from .place_ref import PlaceRef
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyEndpointStructure:
-    """
-    Data type for Planned VEHICLE JOURNEY (Production Timetable Service).
-    """
     name: Optional[MultilingualString] = field(
         default=None,
         metadata={
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref: Optional[object] = field(
+    scheduled_stop_point_ref: Optional[
+        Union[FareScheduledStopPointRef, ScheduledStopPointRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -38,7 +40,7 @@ class JourneyEndpointStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     destination_display_ref: Optional[DestinationDisplayRef] = field(
         default=None,
@@ -46,7 +48,7 @@ class JourneyEndpointStructure:
             "name": "DestinationDisplayRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     place_ref: Optional[PlaceRef] = field(
         default=None,
@@ -54,5 +56,5 @@ class JourneyEndpointStructure:
             "name": "PlaceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

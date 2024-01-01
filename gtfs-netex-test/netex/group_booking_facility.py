@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
-from netex.group_booking_enumeration import GroupBookingEnumeration
+from .group_booking_enumeration import GroupBookingEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupBookingFacility:
-    """Classification of GROUP FACILITY type - TPEG pti23."""
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -14,5 +16,5 @@ class GroupBookingFacility:
         default=GroupBookingEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

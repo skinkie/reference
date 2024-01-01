@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.entitlement_required_ref import EntitlementRequiredRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .entitlement_required_ref import EntitlementRequiredRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class EntitlementRequiredRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for references to a ENTITLEMENT REQUIRED PARAMETER.
-    """
     class Meta:
         name = "entitlementRequiredRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class EntitlementRequiredRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

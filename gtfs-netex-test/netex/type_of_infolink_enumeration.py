@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class TypeOfInfolinkEnumeration(Enum):
-    """
-    Enumeration of Uses of language.
-    """
     CONTACT = "contact"
     RESOURCE = "resource"
     INFO = "info"

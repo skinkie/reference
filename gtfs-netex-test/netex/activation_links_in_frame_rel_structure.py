@@ -1,20 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.activation_link import ActivationLink
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from .activation_link import ActivationLink
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ActivationLinksInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of ACTIVATION LINKs.
-
-    :ivar activation_link: A LINK where a control process is activated
-        when a vehicle passes it.  Activation links are directional -
-        there will be separate links for each direction of a route.
-    """
     class Meta:
         name = "activationLinksInFrame_RelStructure"
 
@@ -25,5 +21,5 @@ class ActivationLinksInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

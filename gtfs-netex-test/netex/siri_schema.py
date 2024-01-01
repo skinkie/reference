@@ -1,28 +1,50 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.capabilities_request import CapabilitiesRequest
-from netex.capabilities_response import CapabilitiesResponse
-from netex.check_status_request import CheckStatusRequest
-from netex.check_status_response import CheckStatusResponse
-from netex.data_ready_acknowledgement import DataReadyAcknowledgement
-from netex.data_ready_notification import DataReadyNotification
-from netex.data_received_acknowledgement import DataReceivedAcknowledgement
-from netex.data_supply_request import DataSupplyRequest
-from netex.extensions_1 import Extensions1
-from netex.heartbeat_notification import HeartbeatNotification
-from netex.service_delivery import ServiceDelivery
-from netex.service_request import ServiceRequest
-from netex.subscription_request import SubscriptionRequest
-from netex.subscription_response import SubscriptionResponse
-from netex.terminate_subscription_request import TerminateSubscriptionRequest
-from netex.terminate_subscription_response import TerminateSubscriptionResponse
+from typing import Optional, Union
+from .capabilities_request import CapabilitiesRequest
+from .capabilities_response import CapabilitiesResponse
+from .check_status_request import CheckStatusRequest
+from .check_status_response import CheckStatusResponse
+from .data_ready_acknowledgement import DataReadyAcknowledgement
+from .data_ready_notification import DataReadyNotification
+from .data_received_acknowledgement import DataReceivedAcknowledgement
+from .data_supply_request import DataSupplyRequest
+from .extensions_1 import Extensions1
+from .heartbeat_notification import HeartbeatNotification
+from .service_delivery import ServiceDelivery
+from .service_request import ServiceRequest
+from .subscription_request import SubscriptionRequest
+from .subscription_response import SubscriptionResponse
+from .terminate_subscription_request import TerminateSubscriptionRequest
+from .terminate_subscription_response import TerminateSubscriptionResponse
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SiriSchema:
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            ServiceRequest,
+            SubscriptionRequest,
+            TerminateSubscriptionRequest,
+            DataReadyNotification,
+            DataSupplyRequest,
+            CheckStatusRequest,
+            HeartbeatNotification,
+            CapabilitiesRequest,
+            SubscriptionResponse,
+            TerminateSubscriptionResponse,
+            DataReadyAcknowledgement,
+            ServiceDelivery,
+            DataReceivedAcknowledgement,
+            CheckStatusResponse,
+            CapabilitiesResponse,
+            Extensions1,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -108,11 +130,11 @@ class SiriSchema:
                     "namespace": "http://www.siri.org.uk/siri",
                 },
             ),
-        }
+        },
     )
     version: str = field(
         default="2.0",
         metadata={
             "type": "Attribute",
-        }
+        },
     )

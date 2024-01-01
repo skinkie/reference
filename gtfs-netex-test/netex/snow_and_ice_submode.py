@@ -1,10 +1,13 @@
 from dataclasses import dataclass, field
-from netex.snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
+from .snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SnowAndIceSubmode:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
@@ -13,5 +16,5 @@ class SnowAndIceSubmode:
         default=SnowAndIceSubmodeEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

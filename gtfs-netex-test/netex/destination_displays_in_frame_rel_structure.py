@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.destination_display import DestinationDisplay
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .destination_display import DestinationDisplay
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DestinationDisplaysInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of DESTINATION DISPLAY.
-    """
     class Meta:
         name = "destinationDisplaysInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class DestinationDisplaysInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

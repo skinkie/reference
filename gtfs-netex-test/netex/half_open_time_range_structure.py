@@ -2,19 +2,14 @@ from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlTime
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class HalfOpenTimeRangeStructure:
-    """Data Type for a range of times.
-
-    Start time must be specified, end time is optional.
-
-    :ivar start_time: The (inclusive) start time.
-    :ivar end_time: The (inclusive) end time. If omitted, the range end
-        is open-ended, that is, it should be interpreted as "forever".
-    """
     start_time: XmlTime = field(
         metadata={
             "name": "StartTime",
@@ -29,5 +24,5 @@ class HalfOpenTimeRangeStructure:
             "name": "EndTime",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

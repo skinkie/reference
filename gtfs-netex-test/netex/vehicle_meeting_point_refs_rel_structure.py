@@ -1,15 +1,15 @@
 from dataclasses import dataclass, field
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.vehicle_meeting_point_ref import VehicleMeetingPointRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .vehicle_meeting_point_ref import VehicleMeetingPointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleMeetingPointRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of VEHICLE MEETING POINTs.
-    """
     class Meta:
         name = "vehicleMeetingPointRefs_RelStructure"
 

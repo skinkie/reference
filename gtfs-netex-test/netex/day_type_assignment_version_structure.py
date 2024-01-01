@@ -1,30 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Union
 from xsdata.models.datatype import XmlDate
-from netex.assignment_version_structure_1 import AssignmentVersionStructure1
-from netex.day_type_ref import DayTypeRef
-from netex.fare_day_type_ref import FareDayTypeRef
-from netex.operating_day_ref import OperatingDayRef
-from netex.operating_period_ref import OperatingPeriodRef
-from netex.service_calendar_ref import ServiceCalendarRef
-from netex.timeband_ref import TimebandRef
-from netex.uic_operating_period_ref import UicOperatingPeriodRef
+from .assignment_version_structure_1 import AssignmentVersionStructure1
+from .day_type_ref import DayTypeRef
+from .fare_day_type_ref import FareDayTypeRef
+from .operating_day_ref import OperatingDayRef
+from .operating_period_ref import OperatingPeriodRef
+from .service_calendar_ref import ServiceCalendarRef
+from .timeband_ref import TimebandRef
+from .uic_operating_period_ref import UicOperatingPeriodRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DayTypeAssignmentVersionStructure(AssignmentVersionStructure1):
-    """
-    Type for a DAY TYPE ASSIGNMENT.
-
-    :ivar service_calendar_ref: Reference to parent Calendar. If given
-        by context does not need to be given.
-    :ivar choice:
-    :ivar fare_day_type_ref_or_day_type_ref:
-    :ivar timeband_ref:
-    :ivar is_available: Whether availabel on assigned day
-    """
     class Meta:
         name = "DayTypeAssignment_VersionStructure"
 
@@ -34,9 +27,13 @@ class DayTypeAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "ServiceCalendarRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            UicOperatingPeriodRef, OperatingPeriodRef, OperatingDayRef, XmlDate
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -62,9 +59,9 @@ class DayTypeAssignmentVersionStructure(AssignmentVersionStructure1):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    fare_day_type_ref_or_day_type_ref: Optional[object] = field(
+    day_type_ref: Optional[Union[FareDayTypeRef, DayTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -80,7 +77,7 @@ class DayTypeAssignmentVersionStructure(AssignmentVersionStructure1):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     timeband_ref: List[TimebandRef] = field(
         default_factory=list,
@@ -89,7 +86,7 @@ class DayTypeAssignmentVersionStructure(AssignmentVersionStructure1):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "max_occurs": 5,
-        }
+        },
     )
     is_available: Optional[bool] = field(
         default=None,
@@ -97,5 +94,5 @@ class DayTypeAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "isAvailable",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

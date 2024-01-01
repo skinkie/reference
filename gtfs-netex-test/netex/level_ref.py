@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.level_ref_structure import LevelRefStructure
+from .level_ref_structure import LevelRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LevelRef(LevelRefStructure):
-    """
-    Reference to LEVEL of a SITE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

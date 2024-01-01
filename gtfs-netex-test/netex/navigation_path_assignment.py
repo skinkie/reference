@@ -1,20 +1,15 @@
-from dataclasses import dataclass, field
-from netex.navigation_path_assignment_version_structure import NavigationPathAssignmentVersionStructure
+from dataclasses import dataclass
+from .navigation_path_assignment_version_structure import (
+    NavigationPathAssignmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NavigationPathAssignment(NavigationPathAssignmentVersionStructure):
-    """
-    Assignment of a CONNECTION link to a NAVIGATION PATH.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

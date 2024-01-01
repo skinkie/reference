@@ -1,27 +1,21 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.flexible_line_ref import FlexibleLineRef
-from netex.group_of_lines_ref import GroupOfLinesRef
-from netex.line_ref import LineRef
-from netex.line_sections_rel_structure import LineSectionsRelStructure
-from netex.multilingual_string import MultilingualString
-from netex.network_ref import NetworkRef
+from typing import Optional, Union
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .flexible_line_ref import FlexibleLineRef
+from .group_of_lines_ref import GroupOfLinesRef
+from .line_ref import LineRef
+from .line_sections_rel_structure import LineSectionsRelStructure
+from .multilingual_string import MultilingualString
+from .network_ref import NetworkRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LineNetworkVersionStructure(DataManagedObjectStructure):
-    """
-    Type for a LINE NETWORK restricts id.
-
-    :ivar name: Name of LINE NETWORK.
-    :ivar description: Description of LINE NETWORK.
-    :ivar network_ref_or_group_of_lines_ref:
-    :ivar flexible_line_ref_or_line_ref:
-    :ivar sections: LINE SECTIONS within the LINE NETWORK.
-    """
     class Meta:
         name = "LineNetwork_VersionStructure"
 
@@ -31,7 +25,7 @@ class LineNetworkVersionStructure(DataManagedObjectStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -39,9 +33,9 @@ class LineNetworkVersionStructure(DataManagedObjectStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    network_ref_or_group_of_lines_ref: Optional[object] = field(
+    group_of_lines_ref: Optional[Union[NetworkRef, GroupOfLinesRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -57,9 +51,9 @@ class LineNetworkVersionStructure(DataManagedObjectStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    flexible_line_ref_or_line_ref: Optional[object] = field(
+    line_ref: Optional[Union[FlexibleLineRef, LineRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -75,12 +69,12 @@ class LineNetworkVersionStructure(DataManagedObjectStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     sections: Optional[LineSectionsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

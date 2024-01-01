@@ -1,24 +1,36 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.compound_train_ref import CompoundTrainRef
-from netex.infrastructure_link_restriction_version_structure import InfrastructureLinkRestrictionVersionStructure
-from netex.simple_vehicle_type_ref import SimpleVehicleTypeRef
-from netex.train_ref import TrainRef
-from netex.transport_type_ref import TransportTypeRef
-from netex.vehicle_type_ref import VehicleTypeRef
+from typing import Optional, Union
+from .compound_train_ref import CompoundTrainRef
+from .infrastructure_link_restriction_version_structure import (
+    InfrastructureLinkRestrictionVersionStructure,
+)
+from .simple_vehicle_type_ref import SimpleVehicleTypeRef
+from .train_ref import TrainRef
+from .transport_type_ref import TransportTypeRef
+from .vehicle_type_ref import VehicleTypeRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class RestrictedManoeuvreVersionStructure(InfrastructureLinkRestrictionVersionStructure):
-    """
-    Type for a MANOEUVRE.
-    """
+@dataclass(kw_only=True)
+class RestrictedManoeuvreVersionStructure(
+    InfrastructureLinkRestrictionVersionStructure
+):
     class Meta:
         name = "RestrictedManoeuvre_VersionStructure"
 
-    choice: Optional[object] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[
+        Union[
+            SimpleVehicleTypeRef,
+            CompoundTrainRef,
+            TrainRef,
+            VehicleTypeRef,
+            TransportTypeRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -49,5 +61,5 @@ class RestrictedManoeuvreVersionStructure(InfrastructureLinkRestrictionVersionSt
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

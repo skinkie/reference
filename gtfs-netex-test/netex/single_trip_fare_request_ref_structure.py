@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.fare_request_ref_structure import FareRequestRefStructure
+from .fare_request_ref_structure import FareRequestRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SingleTripFareRequestRefStructure(FareRequestRefStructure):
-    """
-    Type for Reference to a SINGLE TRIP FARE REQUEST.
-    """
+    value: RestrictedVar

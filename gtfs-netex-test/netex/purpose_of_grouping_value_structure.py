@@ -1,61 +1,60 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.class_refs_rel_structure import ClassRefsRelStructure
-from netex.customer_account_status import CustomerAccountStatus
-from netex.type_of_access_right_assignment import TypeOfAccessRightAssignment
-from netex.type_of_activation import TypeOfActivation
-from netex.type_of_battery_chemistry import TypeOfBatteryChemistry
-from netex.type_of_congestion import TypeOfCongestion
-from netex.type_of_customer_account import TypeOfCustomerAccount
-from netex.type_of_delivery_variant import TypeOfDeliveryVariant
-from netex.type_of_entity import TypeOfEntity
-from netex.type_of_equipment import TypeOfEquipment
-from netex.type_of_facility import TypeOfFacility
-from netex.type_of_fare_contract import TypeOfFareContract
-from netex.type_of_fare_contract_entry import TypeOfFareContractEntry
-from netex.type_of_fare_product import TypeOfFareProduct
-from netex.type_of_fare_structure_element import TypeOfFareStructureElement
-from netex.type_of_fare_structure_factor import TypeOfFareStructureFactor
-from netex.type_of_feature import TypeOfFeature
-from netex.type_of_flexible_service import TypeOfFlexibleService
-from netex.type_of_journey_pattern import TypeOfJourneyPattern
-from netex.type_of_line import TypeOfLine
-from netex.type_of_link import TypeOfLink
-from netex.type_of_link_sequence import TypeOfLinkSequence
-from netex.type_of_mobility_service import TypeOfMobilityService
-from netex.type_of_mode_of_operation import TypeOfModeOfOperation
-from netex.type_of_notice import TypeOfNotice
-from netex.type_of_operation import TypeOfOperation
-from netex.type_of_organisation import TypeOfOrganisation
-from netex.type_of_organisation_part import TypeOfOrganisationPart
-from netex.type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
-from netex.type_of_place import TypeOfPlace
-from netex.type_of_plug import TypeOfPlug
-from netex.type_of_point import TypeOfPoint
-from netex.type_of_projection import TypeOfProjection
-from netex.type_of_responsibility_role import TypeOfResponsibilityRole
-from netex.type_of_retail_device import TypeOfRetailDevice
-from netex.type_of_sales_offer_package import TypeOfSalesOfferPackage
-from netex.type_of_service import TypeOfService
-from netex.type_of_tariff import TypeOfTariff
-from netex.type_of_time_demand_type import TypeOfTimeDemandType
-from netex.type_of_transfer import TypeOfTransfer
-from netex.type_of_travel_document import TypeOfTravelDocument
-from netex.type_of_value_version_structure import TypeOfValueVersionStructure
-from netex.type_of_zone import TypeOfZone
-from netex.types_of_frame_rel_structure import TypeOfFrame
+from typing import Optional, Union
+from .class_refs_rel_structure import ClassRefsRelStructure
+from .customer_account_status import CustomerAccountStatus
+from .type_of_access_right_assignment import TypeOfAccessRightAssignment
+from .type_of_activation import TypeOfActivation
+from .type_of_battery_chemistry import TypeOfBatteryChemistry
+from .type_of_congestion import TypeOfCongestion
+from .type_of_customer_account import TypeOfCustomerAccount
+from .type_of_delivery_variant import TypeOfDeliveryVariant
+from .type_of_entity import TypeOfEntity
+from .type_of_equipment import TypeOfEquipment
+from .type_of_facility import TypeOfFacility
+from .type_of_fare_contract import TypeOfFareContract
+from .type_of_fare_contract_entry import TypeOfFareContractEntry
+from .type_of_fare_product import TypeOfFareProduct
+from .type_of_fare_structure_element import TypeOfFareStructureElement
+from .type_of_fare_structure_factor import TypeOfFareStructureFactor
+from .type_of_feature import TypeOfFeature
+from .type_of_flexible_service import TypeOfFlexibleService
+from .type_of_journey_pattern import TypeOfJourneyPattern
+from .type_of_line import TypeOfLine
+from .type_of_link import TypeOfLink
+from .type_of_link_sequence import TypeOfLinkSequence
+from .type_of_mobility_service import TypeOfMobilityService
+from .type_of_mode_of_operation import TypeOfModeOfOperation
+from .type_of_notice import TypeOfNotice
+from .type_of_operation import TypeOfOperation
+from .type_of_organisation import TypeOfOrganisation
+from .type_of_organisation_part import TypeOfOrganisationPart
+from .type_of_passenger_information_equipment import (
+    TypeOfPassengerInformationEquipment,
+)
+from .type_of_place import TypeOfPlace
+from .type_of_plug import TypeOfPlug
+from .type_of_point import TypeOfPoint
+from .type_of_projection import TypeOfProjection
+from .type_of_responsibility_role import TypeOfResponsibilityRole
+from .type_of_retail_device import TypeOfRetailDevice
+from .type_of_sales_offer_package import TypeOfSalesOfferPackage
+from .type_of_service import TypeOfService
+from .type_of_tariff import TypeOfTariff
+from .type_of_time_demand_type import TypeOfTimeDemandType
+from .type_of_transfer import TypeOfTransfer
+from .type_of_travel_document import TypeOfTravelDocument
+from .type_of_value_version_structure import TypeOfValueVersionStructure
+from .type_of_zone import TypeOfZone
+from .types_of_frame_rel_structure import TypeOfFrame
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
-    """
-    Type for a PURPOSE OF GROUPING.
-
-    :ivar classes: Allowed class types for grouping.
-    :ivar choice:
-    """
     class Meta:
         name = "PurposeOfGrouping_ValueStructure"
 
@@ -64,9 +63,54 @@ class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    type_of_entity: Optional[
+        Union[
+            TypeOfMobilityService,
+            TypeOfRetailDevice,
+            CustomerAccountStatus,
+            TypeOfCustomerAccount,
+            TypeOfFareContractEntry,
+            TypeOfFareContract,
+            TypeOfTravelDocument,
+            TypeOfSalesOfferPackage,
+            TypeOfFareProduct,
+            TypeOfFareStructureElement,
+            TypeOfTariff,
+            TypeOfAccessRightAssignment,
+            TypeOfFareStructureFactor,
+            TypeOfFlexibleService,
+            TypeOfTimeDemandType,
+            TypeOfPassengerInformationEquipment,
+            TypeOfJourneyPattern,
+            TypeOfActivation,
+            TypeOfModeOfOperation,
+            TypeOfPlug,
+            TypeOfBatteryChemistry,
+            TypeOfLine,
+            TypeOfDeliveryVariant,
+            TypeOfNotice,
+            TypeOfCongestion,
+            TypeOfFacility,
+            TypeOfService,
+            TypeOfEquipment,
+            TypeOfFeature,
+            TypeOfLinkSequence,
+            TypeOfPlace,
+            TypeOfTransfer,
+            TypeOfOperation,
+            TypeOfOrganisationPart,
+            TypeOfOrganisation,
+            TypeOfZone,
+            TypeOfLink,
+            TypeOfPoint,
+            TypeOfProjection,
+            TypeOfFrame,
+            TypeOfResponsibilityRole,
+            TypeOfEntity,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -282,5 +326,5 @@ class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

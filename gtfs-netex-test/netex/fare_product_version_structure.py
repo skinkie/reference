@@ -1,63 +1,53 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.access_rights_in_product_rel_structure import AccessRightsInProductRelStructure
-from netex.amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
-from netex.authority_ref import AuthorityRef
-from netex.capped_discount_right_ref import CappedDiscountRightRef
-from netex.charging_moment_enumeration import ChargingMomentEnumeration
-from netex.charging_moment_ref import ChargingMomentRef
-from netex.condition_summary import ConditionSummary
-from netex.fare_product_prices_rel_structure import FareProductPricesRelStructure
-from netex.fare_product_ref import FareProductRef
-from netex.general_organisation_ref import GeneralOrganisationRef
-from netex.generic_parameter_assignment_version_structure import (
+from typing import Optional, Union
+from .access_rights_in_product_rel_structure import (
+    AccessRightsInProductRelStructure,
+)
+from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
+from .authority_ref import AuthorityRef
+from .capped_discount_right_ref import CappedDiscountRightRef
+from .charging_moment_enumeration import ChargingMomentEnumeration
+from .charging_moment_ref import ChargingMomentRef
+from .condition_summary import ConditionSummary
+from .fare_product_prices_rel_structure import FareProductPricesRelStructure
+from .fare_product_ref import FareProductRef
+from .general_organisation_ref import GeneralOrganisationRef
+from .generic_parameter_assignment_version_structure import (
     GenericParameterAssignment,
     GenericParameterAssignmentInContext,
     GenericParameterAssignmentsRelStructure,
 )
-from netex.management_agent_ref import ManagementAgentRef
-from netex.online_service_operator_ref import OnlineServiceOperatorRef
-from netex.operator_ref import OperatorRef
-from netex.organisation_ref import OrganisationRef
-from netex.other_organisation_ref import OtherOrganisationRef
-from netex.preassigned_fare_product_ref import PreassignedFareProductRef
-from netex.retail_consortium_ref import RetailConsortiumRef
-from netex.sale_discount_right_ref import SaleDiscountRightRef
-from netex.service_access_right_version_structure import ServiceAccessRightVersionStructure
-from netex.serviced_organisation_ref import ServicedOrganisationRef
-from netex.supplement_product_ref import SupplementProductRef
-from netex.tariff_refs_rel_structure import TariffRefsRelStructure
-from netex.third_party_product_ref import ThirdPartyProductRef
-from netex.travel_agent_ref import TravelAgentRef
-from netex.type_of_fare_product_ref import TypeOfFareProductRef
-from netex.type_of_fare_product_refs_rel_structure import TypeOfFareProductRefsRelStructure
-from netex.usage_discount_right_ref import UsageDiscountRightRef
-from netex.validable_elements_rel_structure import ValidableElementsRelStructure
+from .management_agent_ref import ManagementAgentRef
+from .online_service_operator_ref import OnlineServiceOperatorRef
+from .operator_ref import OperatorRef
+from .organisation_ref import OrganisationRef
+from .other_organisation_ref import OtherOrganisationRef
+from .preassigned_fare_product_ref import PreassignedFareProductRef
+from .retail_consortium_ref import RetailConsortiumRef
+from .sale_discount_right_ref import SaleDiscountRightRef
+from .service_access_right_version_structure import (
+    ServiceAccessRightVersionStructure,
+)
+from .serviced_organisation_ref import ServicedOrganisationRef
+from .supplement_product_ref import SupplementProductRef
+from .tariff_refs_rel_structure import TariffRefsRelStructure
+from .third_party_product_ref import ThirdPartyProductRef
+from .travel_agent_ref import TravelAgentRef
+from .type_of_fare_product_ref import TypeOfFareProductRef
+from .type_of_fare_product_refs_rel_structure import (
+    TypeOfFareProductRefsRelStructure,
+)
+from .usage_discount_right_ref import UsageDiscountRightRef
+from .validable_elements_rel_structure import ValidableElementsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareProductVersionStructure(ServiceAccessRightVersionStructure):
-    """
-    Type for FARE PRODUCT.
-
-    :ivar charging_moment_ref:
-    :ivar charging_moment_type: Enumeration of standardised Charging
-        moment values _v1.1
-    :ivar type_of_fare_product_ref_or_types_of_fare_product:
-    :ivar choice:
-    :ivar condition_summary:
-    :ivar choice_1:
-    :ivar
-        validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context:
-    :ivar validable_elements: VALIDABLE ELEMENTs making up FARE SERVICE
-        ACCESS RIGHT.
-    :ivar access_rights_in_product: Access rights given by product.
-    :ivar tariffs: TARIFFs  used by FARE PRODUCT. These may be derived
-        from lower level references.
-    :ivar prices: PRICEs  making up FARE PRODUCT.
-    """
     class Meta:
         name = "FareProduct_VersionStructure"
 
@@ -67,7 +57,7 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
             "name": "ChargingMomentRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     charging_moment_type: Optional[ChargingMomentEnumeration] = field(
         default=None,
@@ -75,9 +65,11 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
             "name": "ChargingMomentType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    type_of_fare_product_ref_or_types_of_fare_product: Optional[object] = field(
+    type_of_fare_product_ref_or_types_of_fare_product: Optional[
+        Union[TypeOfFareProductRef, TypeOfFareProductRefsRelStructure]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -93,9 +85,22 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice: Optional[object] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
+        Union[
+            RetailConsortiumRef,
+            OnlineServiceOperatorRef,
+            GeneralOrganisationRef,
+            ManagementAgentRef,
+            ServicedOrganisationRef,
+            TravelAgentRef,
+            OtherOrganisationRef,
+            AuthorityRef,
+            OperatorRef,
+            OrganisationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -151,7 +156,7 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     condition_summary: Optional[ConditionSummary] = field(
         default=None,
@@ -159,9 +164,20 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
             "name": "ConditionSummary",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice_1: Optional[object] = field(
+    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[
+        Union[
+            SupplementProductRef,
+            PreassignedFareProductRef,
+            AmountOfPriceUnitProductRef,
+            UsageDiscountRightRef,
+            ThirdPartyProductRef,
+            CappedDiscountRightRef,
+            SaleDiscountRightRef,
+            FareProductRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -207,9 +223,15 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context: Optional[object] = field(
+    validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context: Optional[
+        Union[
+            GenericParameterAssignmentsRelStructure,
+            GenericParameterAssignment,
+            GenericParameterAssignmentInContext,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -230,7 +252,7 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     validable_elements: Optional[ValidableElementsRelStructure] = field(
         default=None,
@@ -238,27 +260,29 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
             "name": "validableElements",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    access_rights_in_product: Optional[AccessRightsInProductRelStructure] = field(
+    access_rights_in_product: Optional[
+        AccessRightsInProductRelStructure
+    ] = field(
         default=None,
         metadata={
             "name": "accessRightsInProduct",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     tariffs: Optional[TariffRefsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     prices: Optional[FareProductPricesRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

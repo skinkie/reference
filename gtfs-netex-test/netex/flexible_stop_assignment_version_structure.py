@@ -1,19 +1,19 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.flexible_area_ref import FlexibleAreaRef
-from netex.flexible_quay_ref import FlexibleQuayRef
-from netex.flexible_stop_place_ref import FlexibleStopPlaceRef
-from netex.hail_and_ride_area_ref import HailAndRideAreaRef
-from netex.stop_assignment_version_structure import StopAssignmentVersionStructure
+from typing import Optional, Union
+from .flexible_area_ref import FlexibleAreaRef
+from .flexible_quay_ref import FlexibleQuayRef
+from .flexible_stop_place_ref import FlexibleStopPlaceRef
+from .hail_and_ride_area_ref import HailAndRideAreaRef
+from .stop_assignment_version_structure import StopAssignmentVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FlexibleStopAssignmentVersionStructure(StopAssignmentVersionStructure):
-    """
-    Type for a FLEXIBLE STOP ASSIGNMENT.
-    """
     class Meta:
         name = "FlexibleStopAssignment_VersionStructure"
 
@@ -25,7 +25,9 @@ class FlexibleStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             "required": True,
         }
     )
-    hail_and_ride_area_ref_or_flexible_area_ref_or_flexible_quay_ref: Optional[object] = field(
+    flexible_quay_ref: Optional[
+        Union[HailAndRideAreaRef, FlexibleAreaRef, FlexibleQuayRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -46,5 +48,5 @@ class FlexibleStopAssignmentVersionStructure(StopAssignmentVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

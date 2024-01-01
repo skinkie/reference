@@ -1,23 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.block_part import BlockPart
-from netex.block_part_ref import BlockPartRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.train_block_part import TrainBlockPart
-from netex.train_block_part_ref import TrainBlockPartRef
+from typing import List, Union
+from .block_part import BlockPart
+from .block_part_ref import BlockPartRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .train_block_part import TrainBlockPart
+from .train_block_part_ref import TrainBlockPartRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BlockPartsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of BLOCK PARTs.
-    """
     class Meta:
         name = "blockParts_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[TrainBlockPartRef, BlockPartRef, BlockPart, TrainBlockPart]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +45,5 @@ class BlockPartsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

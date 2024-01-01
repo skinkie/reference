@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.metro_submode_enumeration import MetroSubmodeEnumeration
+from .metro_submode_enumeration import MetroSubmodeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MetroSubmode:
-    """
-    TPEG pti04 Metro submodes.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -16,5 +16,5 @@ class MetroSubmode:
         default=MetroSubmodeEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

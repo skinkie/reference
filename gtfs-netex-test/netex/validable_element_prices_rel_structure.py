@@ -1,22 +1,28 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.cell_ref import CellRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.validable_element_price import ValidableElementPrice
-from netex.validable_element_price_ref import ValidableElementPriceRef
+from typing import List, Union
+from .cell_ref import CellRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .validable_element_price import ValidableElementPrice
+from .validable_element_price_ref import ValidableElementPriceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ValidableElementPricesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of VALIDABLE ELEMENT PRICEs.
-    """
+@dataclass(kw_only=True)
+class ValidableElementPricesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "validableElementPrices_RelStructure"
 
-    validable_element_price_ref_or_validable_element_price_or_cell_ref: List[object] = field(
+    validable_element_price_ref_or_validable_element_price_or_cell_ref: List[
+        Union[ValidableElementPriceRef, ValidableElementPrice, CellRef]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +43,5 @@ class ValidableElementPricesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

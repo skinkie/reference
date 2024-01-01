@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class DayEventEnumeration(Enum):
-    """
-    Allowed values for DAY EVENT.
-    """
     ANY_DAY = "anyDay"
     NORMAL_DAY = "normalDay"
     MARKET_DAY = "marketDay"

@@ -1,41 +1,66 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.activation_link_ref import ActivationLinkRef
-from netex.activation_link_ref_by_value import ActivationLinkRefByValue
-from netex.line_link_ref import LineLinkRef
-from netex.line_link_ref_by_value import LineLinkRefByValue
-from netex.link_ref_by_value import LinkRefByValue
-from netex.modal_link_ref_by_value import ModalLinkRefByValue
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
-from netex.path_link_ref import PathLinkRef
-from netex.path_link_ref_by_value import PathLinkRefByValue
-from netex.railway_link_ref import RailwayLinkRef
-from netex.railway_link_ref_by_value import RailwayLinkRefByValue
-from netex.road_link_ref import RoadLinkRef
-from netex.road_link_ref_by_value import RoadLinkRefByValue
-from netex.route_link_ref import RouteLinkRef
-from netex.route_link_ref_by_value import RouteLinkRefByValue
-from netex.service_link_ref import ServiceLinkRef
-from netex.service_link_ref_by_value import ServiceLinkRefByValue
-from netex.timing_link_ref import TimingLinkRef
-from netex.timing_link_ref_by_value import TimingLinkRefByValue
-from netex.vehicle_meeting_link_ref import VehicleMeetingLinkRef
-from netex.wire_link_ref import WireLinkRef
-from netex.wire_link_ref_by_value import WireLinkRefByValue
+from typing import List, Union
+from .activation_link_ref import ActivationLinkRef
+from .activation_link_ref_by_value import ActivationLinkRefByValue
+from .line_link_ref import LineLinkRef
+from .line_link_ref_by_value import LineLinkRefByValue
+from .link_ref_by_value import LinkRefByValue
+from .modal_link_ref_by_value import ModalLinkRefByValue
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
+from .path_link_ref import PathLinkRef
+from .path_link_ref_by_value import PathLinkRefByValue
+from .railway_link_ref import RailwayLinkRef
+from .railway_link_ref_by_value import RailwayLinkRefByValue
+from .road_link_ref import RoadLinkRef
+from .road_link_ref_by_value import RoadLinkRefByValue
+from .route_link_ref import RouteLinkRef
+from .route_link_ref_by_value import RouteLinkRefByValue
+from .service_link_ref import ServiceLinkRef
+from .service_link_ref_by_value import ServiceLinkRefByValue
+from .timing_link_ref import TimingLinkRef
+from .timing_link_ref_by_value import TimingLinkRefByValue
+from .vehicle_meeting_link_ref import VehicleMeetingLinkRef
+from .wire_link_ref import WireLinkRef
+from .wire_link_ref_by_value import WireLinkRefByValue
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinkRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a LINK.
-    """
     class Meta:
         name = "linkRefs_RelStructure"
 
-    choice: List[object] = field(
+    link_ref_or_infrastructure_link_ref_or_link_ref_by_value: List[
+        Union[
+            OnwardVehicleMeetingLinkRef,
+            VehicleMeetingLinkRef,
+            ServiceLinkRef,
+            LineLinkRef,
+            TimingLinkRef,
+            WireLinkRef,
+            RoadLinkRef,
+            RailwayLinkRef,
+            ActivationLinkRef,
+            PathLinkRef,
+            RouteLinkRef,
+            ServiceLinkRefByValue,
+            LineLinkRefByValue,
+            TimingLinkRefByValue,
+            WireLinkRefByValue,
+            RoadLinkRefByValue,
+            RailwayLinkRefByValue,
+            ActivationLinkRefByValue,
+            ModalLinkRefByValue,
+            PathLinkRefByValue,
+            RouteLinkRefByValue,
+            LinkRefByValue,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -151,5 +176,5 @@ class LinkRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.vehicle_profile_ref_structure import VehicleProfileRefStructure
+from .vehicle_profile_ref_structure import VehicleProfileRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleProfileRef(VehicleProfileRefStructure):
-    """
-    Reference to a VEHICLE PROFILE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

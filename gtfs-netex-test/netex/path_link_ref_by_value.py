@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.path_link_ref_by_value_structure import PathLinkRefByValueStructure
+from .path_link_ref_by_value_structure import PathLinkRefByValueStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PathLinkRefByValue(PathLinkRefByValueStructure):
-    """
-    Reference to a PATH LINK BY VALUE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

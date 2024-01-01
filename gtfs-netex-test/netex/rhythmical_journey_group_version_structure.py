@@ -1,18 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.journey_frequency_group_version_structure import JourneyFrequencyGroupVersionStructure
-from netex.timeband_refs_rel_structure import TimebandRefsRelStructure
+from .journey_frequency_group_version_structure import (
+    JourneyFrequencyGroupVersionStructure,
+)
+from .timeband_refs_rel_structure import TimebandRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class RhythmicalJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructure):
-    """
-    Type for   Rhythmical JOURNEY GROUP.
-
-    :ivar timebands: TIMEBANDS associated with JOURNEY FREQUENCY GROUP.
-    """
+@dataclass(kw_only=True)
+class RhythmicalJourneyGroupVersionStructure(
+    JourneyFrequencyGroupVersionStructure
+):
     class Meta:
         name = "RhythmicalJourneyGroup_VersionStructure"
 
@@ -21,5 +23,5 @@ class RhythmicalJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructu
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

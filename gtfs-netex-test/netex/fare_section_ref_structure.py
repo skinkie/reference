@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.general_section_ref_structure import GeneralSectionRefStructure
+from .general_section_ref_structure import GeneralSectionRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareSectionRefStructure(GeneralSectionRefStructure):
-    """
-    Type for Reference to a FARE SECTION.
-    """
+    value: RestrictedVar

@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.flexible_line import FlexibleLine
-from netex.line import Line
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .flexible_line import FlexibleLine
+from .line import Line
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinesInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of LINe.
-    """
     class Meta:
         name = "linesInFrame_RelStructure"
 
-    flexible_line_or_line: List[object] = field(
+    line: List[Union[FlexibleLine, Line]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class LinesInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

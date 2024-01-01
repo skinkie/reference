@@ -1,21 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.charging_equipment_profile import ChargingEquipmentProfile
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.vehicle_equipment_profile import VehicleEquipmentProfile
+from typing import List, Union
+from .charging_equipment_profile import ChargingEquipmentProfile
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .vehicle_equipment_profile import VehicleEquipmentProfile
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleEquipmenProfilesInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of VEHICLE EQUIPMENT PROFILEs.
-    """
+@dataclass(kw_only=True)
+class VehicleEquipmenProfilesInFrameRelStructure(
+    ContainmentAggregationStructure
+):
     class Meta:
         name = "vehicleEquipmenProfilesInFrame_RelStructure"
 
-    vehicle_equipment_profile_or_charging_equipment_profile: List[object] = field(
+    vehicle_equipment_profile_or_charging_equipment_profile: List[
+        Union[VehicleEquipmentProfile, ChargingEquipmentProfile]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +35,5 @@ class VehicleEquipmenProfilesInFrameRelStructure(ContainmentAggregationStructure
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

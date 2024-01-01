@@ -1,26 +1,36 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.alternative_mode_of_operation import AlternativeModeOfOperation
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.flexible_operation import FlexibleOperation
-from netex.personal_mode_of_operation import PersonalModeOfOperation
-from netex.scheduled_operation import ScheduledOperation
-from netex.vehicle_pooling import VehiclePooling
-from netex.vehicle_rental import VehicleRental
-from netex.vehicle_sharing import VehicleSharing
+from typing import List, Union
+from .alternative_mode_of_operation import AlternativeModeOfOperation
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .flexible_operation import FlexibleOperation
+from .personal_mode_of_operation import PersonalModeOfOperation
+from .scheduled_operation import ScheduledOperation
+from .vehicle_pooling import VehiclePooling
+from .vehicle_rental import VehicleRental
+from .vehicle_sharing import VehicleSharing
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ModesOfOperationRelStructure(ContainmentAggregationStructure):
-    """
-    SUBMODEs  associated with entity.
-    """
     class Meta:
         name = "modesOfOperationRelStructure"
 
-    choice: List[object] = field(
+    mode_of_operation_or_alternative_mode_of_operation_or_conventional_mode_of_operation: List[
+        Union[
+            PersonalModeOfOperation,
+            AlternativeModeOfOperation,
+            VehiclePooling,
+            VehicleSharing,
+            VehicleRental,
+            FlexibleOperation,
+            ScheduledOperation,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -61,5 +71,5 @@ class ModesOfOperationRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

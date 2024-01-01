@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.infrastructure_point_ref_structure import InfrastructurePointRefStructure
+from .infrastructure_point_ref_structure import InfrastructurePointRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class WirePointRefStructure(InfrastructurePointRefStructure):
-    """
-    Type for Reference to a WIRE POINT.
-    """
+    value: RestrictedVar

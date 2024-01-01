@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.codespace_ref_structure import CodespaceRefStructure
+from .codespace_ref_structure import CodespaceRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CodespaceRef(CodespaceRefStructure):
-    """
-    Reference to a CODESPACE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

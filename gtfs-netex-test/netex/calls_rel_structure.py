@@ -1,23 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.call import Call
-from netex.call_z import CallZ
-from netex.dated_call import DatedCall
-from netex.dated_call_z import DatedCallZ
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .call import Call
+from .call_z import CallZ
+from .dated_call import DatedCall
+from .dated_call_z import DatedCallZ
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CallsRelStructure(StrictContainmentAggregationStructure):
-    """
-    CALLs associated with entity.
-    """
     class Meta:
         name = "calls_RelStructure"
 
-    choice: List[object] = field(
+    call: List[Union[DatedCallZ, DatedCall, CallZ, Call]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +45,5 @@ class CallsRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

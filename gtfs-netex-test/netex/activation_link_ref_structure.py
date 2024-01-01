@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.link_ref_structure import LinkRefStructure
+from .link_ref_structure import LinkRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ActivationLinkRefStructure(LinkRefStructure):
-    """
-    Type for a reference to an ACTIVATION LINK.
-    """
+    value: RestrictedVar

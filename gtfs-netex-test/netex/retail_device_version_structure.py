@@ -1,30 +1,28 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.authority_ref import AuthorityRef
-from netex.general_organisation_ref import GeneralOrganisationRef
-from netex.installed_equipment_version_structure import InstalledEquipmentVersionStructure
-from netex.management_agent_ref import ManagementAgentRef
-from netex.online_service_operator_ref import OnlineServiceOperatorRef
-from netex.operator_ref import OperatorRef
-from netex.organisation_ref import OrganisationRef
-from netex.other_organisation_ref import OtherOrganisationRef
-from netex.retail_consortium_ref import RetailConsortiumRef
-from netex.serviced_organisation_ref import ServicedOrganisationRef
-from netex.travel_agent_ref import TravelAgentRef
-from netex.type_of_retail_device_ref import TypeOfRetailDeviceRef
+from typing import Optional, Union
+from .authority_ref import AuthorityRef
+from .general_organisation_ref import GeneralOrganisationRef
+from .installed_equipment_version_structure import (
+    InstalledEquipmentVersionStructure,
+)
+from .management_agent_ref import ManagementAgentRef
+from .online_service_operator_ref import OnlineServiceOperatorRef
+from .operator_ref import OperatorRef
+from .organisation_ref import OrganisationRef
+from .other_organisation_ref import OtherOrganisationRef
+from .retail_consortium_ref import RetailConsortiumRef
+from .serviced_organisation_ref import ServicedOrganisationRef
+from .travel_agent_ref import TravelAgentRef
+from .type_of_retail_device_ref import TypeOfRetailDeviceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RetailDeviceVersionStructure(InstalledEquipmentVersionStructure):
-    """
-    Type for RETAIL DEVICE.
-
-    :ivar status: Status of Retail device.
-    :ivar choice:
-    :ivar type_of_retail_device_ref:
-    """
     class Meta:
         name = "RetailDevice_VersionStructure"
 
@@ -34,9 +32,22 @@ class RetailDeviceVersionStructure(InstalledEquipmentVersionStructure):
             "name": "Status",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
+        Union[
+            RetailConsortiumRef,
+            OnlineServiceOperatorRef,
+            GeneralOrganisationRef,
+            ManagementAgentRef,
+            ServicedOrganisationRef,
+            TravelAgentRef,
+            OtherOrganisationRef,
+            AuthorityRef,
+            OperatorRef,
+            OrganisationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -92,7 +103,7 @@ class RetailDeviceVersionStructure(InstalledEquipmentVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     type_of_retail_device_ref: Optional[TypeOfRetailDeviceRef] = field(
         default=None,
@@ -100,5 +111,5 @@ class RetailDeviceVersionStructure(InstalledEquipmentVersionStructure):
             "name": "TypeOfRetailDeviceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

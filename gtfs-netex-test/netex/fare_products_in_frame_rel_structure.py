@@ -1,26 +1,36 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.amount_of_price_unit_product import AmountOfPriceUnitProduct
-from netex.capped_discount_right import CappedDiscountRight
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.preassigned_fare_product import PreassignedFareProduct
-from netex.sale_discount_right import SaleDiscountRight
-from netex.supplement_product import SupplementProduct
-from netex.third_party_product import ThirdPartyProduct
-from netex.usage_discount_right import UsageDiscountRight
+from typing import List, Union
+from .amount_of_price_unit_product import AmountOfPriceUnitProduct
+from .capped_discount_right import CappedDiscountRight
+from .frame_containment_structure import FrameContainmentStructure
+from .preassigned_fare_product import PreassignedFareProduct
+from .sale_discount_right import SaleDiscountRight
+from .supplement_product import SupplementProduct
+from .third_party_product import ThirdPartyProduct
+from .usage_discount_right import UsageDiscountRight
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareProductsInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of FARE PRODUCT.
-    """
     class Meta:
         name = "fareProductsInFrame_RelStructure"
 
-    choice: List[object] = field(
+    fare_product: List[
+        Union[
+            SupplementProduct,
+            PreassignedFareProduct,
+            AmountOfPriceUnitProduct,
+            CappedDiscountRight,
+            UsageDiscountRight,
+            ThirdPartyProduct,
+            SaleDiscountRight,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -61,5 +71,5 @@ class FareProductsInFrameRelStructure(FrameContainmentStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from netex.meeting_point_service_ref_structure import MeetingPointServiceRefStructure
+from .meeting_point_service_ref_structure import (
+    MeetingPointServiceRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MeetingPointServiceRef(MeetingPointServiceRefStructure):
-    """
-    Identifier of an MEETING POINT SERVICE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

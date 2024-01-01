@@ -1,38 +1,26 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlTime
-from netex.day_type_ref import DayTypeRef
-from netex.dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
-from netex.derived_view_structure import DerivedViewStructure
-from netex.destination_display_view import DestinationDisplayView
-from netex.fare_day_type_ref import FareDayTypeRef
-from netex.frequency_structure import FrequencyStructure
-from netex.journey_pattern_ref import JourneyPatternRef
-from netex.multilingual_string import MultilingualString
-from netex.service_journey_pattern_ref import ServiceJourneyPatternRef
-from netex.service_journey_ref_structure import ServiceJourneyRefStructure
-from netex.service_pattern_ref import ServicePatternRef
+from .day_type_ref import DayTypeRef
+from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
+from .derived_view_structure import DerivedViewStructure
+from .destination_display_view import DestinationDisplayView
+from .fare_day_type_ref import FareDayTypeRef
+from .frequency_structure import FrequencyStructure
+from .journey_pattern_ref import JourneyPatternRef
+from .multilingual_string import MultilingualString
+from .service_journey_pattern_ref import ServiceJourneyPatternRef
+from .service_journey_ref_structure import ServiceJourneyRefStructure
+from .service_pattern_ref import ServicePatternRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
-    """
-    Type for CONNECTING JOURNEY VIEW.
-
-    :ivar service_journey_ref: Service Journey to which srevice
-        connects.
-    :ivar departure_time_or_frequency:
-    :ivar name: Name of journey.
-    :ivar destination_display_view:
-    :ivar fare_day_type_ref_or_day_type_ref:
-    :ivar choice:
-    :ivar connecting_order: Order of Point within Connecting journey as
-        an absolute number.
-    :ivar connecting_visit_number: Order of Point within Connecting as
-        number of visits to the same stop.  Default is 1.
-    """
     class Meta:
         name = "ConnectingJourney_DerivedViewStructure"
 
@@ -44,7 +32,9 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
             "required": True,
         }
     )
-    departure_time_or_frequency: Optional[object] = field(
+    departure_time_or_frequency: Optional[
+        Union[XmlTime, FrequencyStructure]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -60,7 +50,7 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     name: Optional[MultilingualString] = field(
         default=None,
@@ -68,7 +58,7 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     destination_display_view: Optional[DestinationDisplayView] = field(
         default=None,
@@ -76,9 +66,9 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
             "name": "DestinationDisplayView",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    fare_day_type_ref_or_day_type_ref: Optional[object] = field(
+    day_type_ref: Optional[Union[FareDayTypeRef, DayTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -94,9 +84,16 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice: Optional[object] = field(
+    journey_pattern_ref: Optional[
+        Union[
+            ServiceJourneyPatternRef,
+            ServicePatternRef,
+            DeadRunJourneyPatternRef,
+            JourneyPatternRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -122,7 +119,7 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     connecting_order: Optional[int] = field(
         default=None,
@@ -130,7 +127,7 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
             "name": "ConnectingOrder",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     connecting_visit_number: Optional[int] = field(
         default=None,
@@ -138,5 +135,5 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
             "name": "ConnectingVisitNumber",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

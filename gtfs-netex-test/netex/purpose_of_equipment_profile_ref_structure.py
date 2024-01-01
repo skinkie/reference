@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.type_of_value_ref_structure import TypeOfValueRefStructure
+from .type_of_value_ref_structure import TypeOfValueRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PurposeOfEquipmentProfileRefStructure(TypeOfValueRefStructure):
-    """
-    Type for a reference to a PURPOSE OF EQUIPMENT PROFILE.
-    """
+    value: RestrictedVar

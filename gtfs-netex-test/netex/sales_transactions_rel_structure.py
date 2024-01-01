@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.sales_transaction import SalesTransaction
-from netex.sales_transaction_ref import SalesTransactionRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .sales_transaction import SalesTransaction
+from .sales_transaction_ref import SalesTransactionRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SalesTransactionsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of SALES TRANSACTIONs.
-    """
     class Meta:
         name = "salesTransactions_RelStructure"
 
-    sales_transaction_ref_or_sales_transaction: List[object] = field(
+    sales_transaction_ref_or_sales_transaction: List[
+        Union[SalesTransactionRef, SalesTransaction]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class SalesTransactionsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

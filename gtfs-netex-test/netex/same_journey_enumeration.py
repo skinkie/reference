@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class SameJourneyEnumeration(Enum):
-    """
-    Allowed values for Journey ENTITLEMENT CONSTRAINT.
-    """
     ANY = "any"
     SAME = "same"
     SIMILAR = "similar"

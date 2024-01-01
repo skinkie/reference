@@ -1,29 +1,22 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.direction_ref import DirectionRef
-from netex.external_object_ref_structure import ExternalObjectRefStructure
-from netex.flexible_line_ref import FlexibleLineRef
-from netex.line_ref import LineRef
+from typing import Optional, Union
+from .direction_ref import DirectionRef
+from .external_object_ref_structure import ExternalObjectRefStructure
+from .flexible_line_ref import FlexibleLineRef
+from .line_ref import LineRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LineInDirectionRefStructure:
-    """
-    Type for a Reference to a LINE in a specific DIRECTION.
-
-    :ivar flexible_line_ref_or_line_ref:
-    :ivar direction_ref:
-    :ivar external_line_ref: Alternative  LINE Reference  for AVMS
-        system.
-    :ivar external_direction_ref: Alternative DIRECTION Reference  for
-        AVMS system.
-    """
     class Meta:
         name = "LineInDirectionRef_Structure"
 
-    flexible_line_ref_or_line_ref: Optional[object] = field(
+    line_ref: Optional[Union[FlexibleLineRef, LineRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -39,7 +32,7 @@ class LineInDirectionRefStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     direction_ref: Optional[DirectionRef] = field(
         default=None,
@@ -47,7 +40,7 @@ class LineInDirectionRefStructure:
             "name": "DirectionRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     external_line_ref: Optional[ExternalObjectRefStructure] = field(
         default=None,
@@ -55,7 +48,7 @@ class LineInDirectionRefStructure:
             "name": "ExternalLineRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     external_direction_ref: Optional[ExternalObjectRefStructure] = field(
         default=None,
@@ -63,5 +56,5 @@ class LineInDirectionRefStructure:
             "name": "ExternalDirectionRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

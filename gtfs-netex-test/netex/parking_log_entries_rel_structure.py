@@ -1,23 +1,30 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.parking_bay_condition import ParkingBayCondition
-from netex.parking_bay_condition_ref import ParkingBayConditionRef
-from netex.rental_availability import RentalAvailability
-from netex.rental_availability_ref import RentalAvailabilityRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .parking_bay_condition import ParkingBayCondition
+from .parking_bay_condition_ref import ParkingBayConditionRef
+from .rental_availability import RentalAvailability
+from .rental_availability_ref import RentalAvailabilityRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingLogEntriesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of PARKING LOG ENTRYs.
-    """
     class Meta:
         name = "parkingLogEntries_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            ParkingBayConditionRef,
+            RentalAvailabilityRef,
+            ParkingBayCondition,
+            RentalAvailability,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +50,5 @@ class ParkingLogEntriesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

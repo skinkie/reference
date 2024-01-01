@@ -1,30 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.address_version_structure import AddressVersionStructure
-from netex.compass_bearing16_enumeration import CompassBearing16Enumeration
-from netex.multilingual_string import MultilingualString
-from netex.road_number_range_structure import RoadNumberRangeStructure
+from .address_version_structure import AddressVersionStructure
+from .compass_bearing16_enumeration import CompassBearing16Enumeration
+from .multilingual_string import MultilingualString
+from .road_number_range_structure import RoadNumberRangeStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RoadAddressVersionStructure(AddressVersionStructure):
-    """
-    Type for Road ADDRESS.
-
-    :ivar gis_feature_ref: Reference to a GIS feature identifier.
-    :ivar road_number: Road Number.
-    :ivar road_name: Road name.
-    :ivar bearing_compass: Bearing of Road at point in compass octants
-        to North.
-    :ivar bearing_degrees: Bearing of Road in absolute degrees against
-        North.
-    :ivar odd_number_range: Range of odd house numbers that the ROAD
-        ADDRESS covers.
-    :ivar even_number_range: Range of even house numbers that the ROAD
-        ADDRESS covers.
-    """
     class Meta:
         name = "RoadAddress_VersionStructure"
 
@@ -34,7 +22,7 @@ class RoadAddressVersionStructure(AddressVersionStructure):
             "name": "GisFeatureRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     road_number: Optional[str] = field(
         default=None,
@@ -42,7 +30,7 @@ class RoadAddressVersionStructure(AddressVersionStructure):
             "name": "RoadNumber",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     road_name: Optional[MultilingualString] = field(
         default=None,
@@ -50,7 +38,7 @@ class RoadAddressVersionStructure(AddressVersionStructure):
             "name": "RoadName",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     bearing_compass: Optional[CompassBearing16Enumeration] = field(
         default=None,
@@ -58,7 +46,7 @@ class RoadAddressVersionStructure(AddressVersionStructure):
             "name": "BearingCompass",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     bearing_degrees: Optional[int] = field(
         default=None,
@@ -66,7 +54,7 @@ class RoadAddressVersionStructure(AddressVersionStructure):
             "name": "BearingDegrees",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     odd_number_range: Optional[RoadNumberRangeStructure] = field(
         default=None,
@@ -74,7 +62,7 @@ class RoadAddressVersionStructure(AddressVersionStructure):
             "name": "OddNumberRange",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     even_number_range: Optional[RoadNumberRangeStructure] = field(
         default=None,
@@ -82,5 +70,5 @@ class RoadAddressVersionStructure(AddressVersionStructure):
             "name": "EvenNumberRange",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

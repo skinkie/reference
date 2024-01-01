@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class LanguageUseEnumeration(Enum):
-    """
-    Enumeration of Uses of language.
-    """
     NORMALLY_USED = "normallyUsed"
     UNDERSTOOD = "understood"
     NATIVE = "native"

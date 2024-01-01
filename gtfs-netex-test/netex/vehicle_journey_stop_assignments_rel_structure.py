@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
-from netex.vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
+from .vehicle_journey_stop_assignment_ref import (
+    VehicleJourneyStopAssignmentRef,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleJourneyStopAssignmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment of VEHICLE JOURNEY STOP ASSIGNMENTs.
-    """
+@dataclass(kw_only=True)
+class VehicleJourneyStopAssignmentsRelStructure(
+    ContainmentAggregationStructure
+):
     class Meta:
         name = "vehicleJourneyStopAssignments_RelStructure"
 
-    vehicle_journey_stop_assignment_ref_or_vehicle_journey_stop_assignment: List[object] = field(
+    vehicle_journey_stop_assignment_ref_or_vehicle_journey_stop_assignment: List[
+        Union[VehicleJourneyStopAssignmentRef, VehicleJourneyStopAssignment]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class VehicleJourneyStopAssignmentsRelStructure(ContainmentAggregationStructure)
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

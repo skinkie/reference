@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.sales_transaction_ref_structure import SalesTransactionRefStructure
+from .sales_transaction_ref_structure import SalesTransactionRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SalesTransactionRef(SalesTransactionRefStructure):
-    """
-    Reference to a SALES TRANSACTION.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

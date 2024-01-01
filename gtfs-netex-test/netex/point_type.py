@@ -1,11 +1,14 @@
 from dataclasses import dataclass, field
-from netex.abstract_geometric_primitive_type import AbstractGeometricPrimitiveType
-from netex.pos import Pos
+from .abstract_geometric_primitive_type import AbstractGeometricPrimitiveType
+from .pos import Pos
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointType(AbstractGeometricPrimitiveType):
     pos: Pos = field(
         metadata={

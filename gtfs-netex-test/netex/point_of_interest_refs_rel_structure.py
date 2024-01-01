@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.point_of_interest_ref import PointOfInterestRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .point_of_interest_ref import PointOfInterestRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointOfInterestRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a collection of one or more POINTs OF INTEREST.
-    """
     class Meta:
         name = "pointOfInterestRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class PointOfInterestRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

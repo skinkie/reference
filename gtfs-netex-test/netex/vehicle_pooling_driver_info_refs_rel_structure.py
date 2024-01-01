@@ -1,15 +1,15 @@
 from dataclasses import dataclass, field
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.vehicle_pooling_driver_info_ref import VehiclePoolingDriverInfoRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .vehicle_pooling_driver_info_ref import VehiclePoolingDriverInfoRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehiclePoolingDriverInfoRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of VEHICLE POOLING DRIVER INFOs.
-    """
     class Meta:
         name = "vehiclePoolingDriverInfoRefs_RelStructure"
 

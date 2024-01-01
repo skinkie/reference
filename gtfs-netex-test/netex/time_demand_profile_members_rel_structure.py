@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.time_demand_profile_member import TimeDemandProfileMember
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .time_demand_profile_member import TimeDemandProfileMember
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TimeDemandProfileMembersRelStructure(StrictContainmentAggregationStructure):
-    """
-    A collection of one or more TIME DEMAND PROFILE member.
-    """
+@dataclass(kw_only=True)
+class TimeDemandProfileMembersRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "timeDemandProfileMembers_RelStructure"
 
@@ -21,5 +25,5 @@ class TimeDemandProfileMembersRelStructure(StrictContainmentAggregationStructure
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

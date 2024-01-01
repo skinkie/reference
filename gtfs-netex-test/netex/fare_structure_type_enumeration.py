@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class FareStructureTypeEnumeration(Enum):
-    """
-    Allowed values for  FARE STRUCTURE TYPE.
-    """
     NETWORK_FLAT_FARE = "networkFlatFare"
     LINE_FLAT_FARE = "lineFlatFare"
     ZONAL_FARE = "zonalFare"

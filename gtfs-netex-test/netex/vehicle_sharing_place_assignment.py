@@ -1,24 +1,17 @@
-from dataclasses import dataclass, field
-from netex.vehicle_sharing_place_assignment_version_structure import VehicleSharingPlaceAssignmentVersionStructure
+from dataclasses import dataclass
+from .vehicle_sharing_place_assignment_version_structure import (
+    VehicleSharingPlaceAssignmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleSharingPlaceAssignment(VehicleSharingPlaceAssignmentVersionStructure):
-    """The allocation of a VEHICLE SHARING AREA to any vehicle sharing or rental
-    service.
-
-    +V1.2.2
-
-    :ivar id: Identifier of ENTITY.
-    """
+@dataclass(kw_only=True)
+class VehicleSharingPlaceAssignment(
+    VehicleSharingPlaceAssignmentVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

@@ -1,22 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.alternative_name_versioned_child_structure import AlternativeNameVersionedChildStructure
-from netex.multilingual_string import MultilingualString
+from .alternative_name_versioned_child_structure import (
+    AlternativeNameVersionedChildStructure,
+)
+from .multilingual_string import MultilingualString
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class AlternativeQuayDescriptorVersionedChildStructure(AlternativeNameVersionedChildStructure):
-    """
-    Type for a STOP PLACE COMPONENT.
-
-    :ivar cross_road: Name of a Road that crosses the Road the street
-        near the SITE ELEMENT that can be used to describe its relative
-        location.
-    :ivar landmark: Name of a Landmark near the SITE ELEMENT that can be
-        used to describe its relative location.
-    """
+@dataclass(kw_only=True)
+class AlternativeQuayDescriptorVersionedChildStructure(
+    AlternativeNameVersionedChildStructure
+):
     class Meta:
         name = "AlternativeQuayDescriptor_VersionedChildStructure"
 
@@ -26,7 +24,7 @@ class AlternativeQuayDescriptorVersionedChildStructure(AlternativeNameVersionedC
             "name": "CrossRoad",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     landmark: Optional[MultilingualString] = field(
         default=None,
@@ -34,5 +32,5 @@ class AlternativeQuayDescriptorVersionedChildStructure(AlternativeNameVersionedC
             "name": "Landmark",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

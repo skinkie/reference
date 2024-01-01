@@ -1,19 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.presentation_structure import PresentationStructure
-from netex.type_of_value_version_structure import TypeOfValueVersionStructure
+from .presentation_structure import PresentationStructure
+from .type_of_value_version_structure import TypeOfValueVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BrandingVersionStructure(TypeOfValueVersionStructure):
-    """
-    Type for a BRANDING.
-
-    :ivar presentation: Preferred presentation values associated with
-        BRANDING. +v1.1
-    """
     class Meta:
         name = "Branding_VersionStructure"
 
@@ -23,5 +20,5 @@ class BrandingVersionStructure(TypeOfValueVersionStructure):
             "name": "Presentation",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

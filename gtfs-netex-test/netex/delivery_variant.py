@@ -1,21 +1,13 @@
-from dataclasses import dataclass, field
-from netex.delivery_variant_version_structure import DeliveryVariantVersionStructure
+from dataclasses import dataclass
+from .delivery_variant_version_structure import DeliveryVariantVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DeliveryVariant(DeliveryVariantVersionStructure):
-    """
-    A variant text of a NOTICE for use in a specific media or delivery channel
-    (voice, printed material, etc).
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

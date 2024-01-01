@@ -1,23 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_ref import AccessRef
-from netex.connection_ref import ConnectionRef
-from netex.default_connection_ref import DefaultConnectionRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.site_connection_ref import SiteConnectionRef
+from typing import List, Union
+from .access_ref import AccessRef
+from .connection_ref import ConnectionRef
+from .default_connection_ref import DefaultConnectionRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .site_connection_ref import SiteConnectionRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransferRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a TRANSFER.
-    """
     class Meta:
         name = "transferRefs_RelStructure"
 
-    choice: List[object] = field(
+    connection_ref_or_transfer_ref: List[
+        Union[
+            DefaultConnectionRef, SiteConnectionRef, ConnectionRef, AccessRef
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +47,5 @@ class TransferRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

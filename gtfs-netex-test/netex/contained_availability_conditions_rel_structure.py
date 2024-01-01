@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.alternative_texts_rel_structure import AvailabilityCondition
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from .alternative_texts_rel_structure import AvailabilityCondition
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ContainedAvailabilityConditionsRelStructure(ContainmentAggregationStructure):
-    """
-    A collection of one or more AVAILABILITY CONDITIONs.
-    """
+@dataclass(kw_only=True)
+class ContainedAvailabilityConditionsRelStructure(
+    ContainmentAggregationStructure
+):
     class Meta:
         name = "containedAvailabilityConditions_RelStructure"
 
@@ -21,5 +23,5 @@ class ContainedAvailabilityConditionsRelStructure(ContainmentAggregationStructur
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.group_of_points import GroupOfPoints
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .group_of_points import GroupOfPoints
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfPointsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of GROUPs OF POINTs.
-    """
     class Meta:
         name = "groupOfPoints_RelStructure"
 
@@ -21,5 +23,5 @@ class GroupOfPointsRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

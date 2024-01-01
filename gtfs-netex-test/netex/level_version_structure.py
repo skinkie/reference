@@ -1,34 +1,25 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.accessibility_assessment_versioned_child_structure import AccessibilityAssessmentVersionedChildStructure
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.multilingual_string import MultilingualString
-from netex.parking_ref import ParkingRef
-from netex.point_of_interest_ref import PointOfInterestRef
-from netex.service_site_ref import ServiceSiteRef
-from netex.site_ref import SiteRef
-from netex.stop_place_ref import StopPlaceRef
-from netex.taxi_rank_ref import TaxiRankRef
+from typing import Optional, Union
+from .accessibility_assessment_versioned_child_structure import (
+    AccessibilityAssessmentVersionedChildStructure,
+)
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .multilingual_string import MultilingualString
+from .parking_ref import ParkingRef
+from .point_of_interest_ref import PointOfInterestRef
+from .service_site_ref import ServiceSiteRef
+from .site_ref import SiteRef
+from .stop_place_ref import StopPlaceRef
+from .taxi_rank_ref import TaxiRankRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LevelVersionStructure(DataManagedObjectStructure):
-    """
-    Type for a SITE LEVEL.
-
-    :ivar name: Name of LEVEL.
-    :ivar short_name: Short Name of LEVEL.
-    :ivar description: Description of LEVEL.
-    :ivar public_code: Public code for LEVEL.
-    :ivar public_use: Whether level is for public use.
-    :ivar accessibility_assessment: Accessibility values associated with
-        LEVEL.
-    :ivar all_areas_wheelchair_accessible: Whether all areas of the
-        LEVEL are wheelchair accessible.
-    :ivar choice:
-    """
     class Meta:
         name = "Level_VersionStructure"
 
@@ -38,7 +29,7 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     short_name: Optional[MultilingualString] = field(
         default=None,
@@ -46,7 +37,7 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "name": "ShortName",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -54,7 +45,7 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     public_code: Optional[str] = field(
         default=None,
@@ -62,7 +53,7 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "name": "PublicCode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     public_use: Optional[bool] = field(
         default=None,
@@ -70,15 +61,17 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "name": "PublicUse",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    accessibility_assessment: Optional[AccessibilityAssessmentVersionedChildStructure] = field(
+    accessibility_assessment: Optional[
+        AccessibilityAssessmentVersionedChildStructure
+    ] = field(
         default=None,
         metadata={
             "name": "AccessibilityAssessment",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     all_areas_wheelchair_accessible: Optional[bool] = field(
         default=None,
@@ -86,9 +79,18 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "name": "AllAreasWheelchairAccessible",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    stop_place_ref_or_site_ref: Optional[
+        Union[
+            TaxiRankRef,
+            StopPlaceRef,
+            ParkingRef,
+            PointOfInterestRef,
+            ServiceSiteRef,
+            SiteRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -124,5 +126,5 @@ class LevelVersionStructure(DataManagedObjectStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

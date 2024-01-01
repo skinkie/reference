@@ -1,22 +1,17 @@
-from dataclasses import dataclass, field
-from netex.travel_document_security_listing_versioned_child_structure import TravelDocumentSecurityListingVersionedChildStructure
+from dataclasses import dataclass
+from .travel_document_security_listing_versioned_child_structure import (
+    TravelDocumentSecurityListingVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TravelDocumentSecurityListing(TravelDocumentSecurityListingVersionedChildStructure):
-    """
-    A listing of a TRAVEL DOCUMENT on a SECURITY LIST.
-
-    :ivar id: Identifier of ENTITY.
-    """
+@dataclass(kw_only=True)
+class TravelDocumentSecurityListing(
+    TravelDocumentSecurityListingVersionedChildStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

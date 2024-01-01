@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class PlugTypeEnumeration(Enum):
-    """
-    Values for Plug Types +v1.2.2.
-    """
     UNDEFINED = "undefined"
     TYPE1 = "type1"
     TYPE2 = "type2"

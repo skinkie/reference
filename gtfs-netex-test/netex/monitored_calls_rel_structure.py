@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.monitored_call import MonitoredCall
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .monitored_call import MonitoredCall
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MonitoredCallsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for List of MONITORED CALLs.
-    """
     class Meta:
         name = "monitoredCalls_RelStructure"
 
@@ -21,5 +23,5 @@ class MonitoredCallsRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 2,
-        }
+        },
     )

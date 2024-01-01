@@ -1,67 +1,122 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_space_ref import AccessSpaceRef
-from netex.address_ref import AddressRef
-from netex.addressable_place_ref import AddressablePlaceRef
-from netex.boarding_position_ref import BoardingPositionRef
-from netex.entrance_ref import EntranceRef
-from netex.equipment_place_ref import EquipmentPlaceRef
-from netex.equipment_position_ref import EquipmentPositionRef
-from netex.flexible_area_ref import FlexibleAreaRef
-from netex.flexible_quay_ref import FlexibleQuayRef
-from netex.flexible_stop_place_ref import FlexibleStopPlaceRef
-from netex.garage_ref import GarageRef
-from netex.hail_and_ride_area_ref import HailAndRideAreaRef
-from netex.monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.parking_area_ref import ParkingAreaRef
-from netex.parking_bay_ref import ParkingBayRef
-from netex.parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
-from netex.parking_entrance_ref import ParkingEntranceRef
-from netex.parking_passenger_entrance_ref import ParkingPassengerEntranceRef
-from netex.parking_ref import ParkingRef
-from netex.path_junction_ref import PathJunctionRef
-from netex.point_of_interest_entrance_ref import PointOfInterestEntranceRef
-from netex.point_of_interest_ref import PointOfInterestRef
-from netex.point_of_interest_space_ref import PointOfInterestSpaceRef
-from netex.point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
-from netex.postal_address_ref import PostalAddressRef
-from netex.quay_ref import QuayRef
-from netex.road_address_ref import RoadAddressRef
-from netex.service_site_ref import ServiceSiteRef
-from netex.site_component_ref import SiteComponentRef
-from netex.site_element_ref import SiteElementRef
-from netex.site_ref import SiteRef
-from netex.stop_place_entrance_ref import StopPlaceEntranceRef
-from netex.stop_place_ref import StopPlaceRef
-from netex.stop_place_space_ref import StopPlaceSpaceRef
-from netex.stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
-from netex.taxi_parking_area_ref import TaxiParkingAreaRef
-from netex.taxi_rank_ref import TaxiRankRef
-from netex.taxi_stand_ref import TaxiStandRef
-from netex.topographic_place_ref import TopographicPlaceRef
-from netex.vehicle_entrance_ref import VehicleEntranceRef
-from netex.vehicle_meeting_place_ref import VehicleMeetingPlaceRef
-from netex.vehicle_pooling_meeting_place_ref import VehiclePoolingMeetingPlaceRef
-from netex.vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
-from netex.vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
-from netex.vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
-from netex.vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
-from netex.vehicle_stopping_place_ref import VehicleStoppingPlaceRef
-from netex.vehicle_stopping_position_ref import VehicleStoppingPositionRef
+from typing import List, Union
+from .access_space_ref import AccessSpaceRef
+from .address_ref import AddressRef
+from .addressable_place_ref import AddressablePlaceRef
+from .boarding_position_ref import BoardingPositionRef
+from .entrance_ref import EntranceRef
+from .equipment_place_ref import EquipmentPlaceRef
+from .equipment_position_ref import EquipmentPositionRef
+from .flexible_area_ref import FlexibleAreaRef
+from .flexible_quay_ref import FlexibleQuayRef
+from .flexible_stop_place_ref import FlexibleStopPlaceRef
+from .garage_ref import GarageRef
+from .hail_and_ride_area_ref import HailAndRideAreaRef
+from .monitored_vehicle_sharing_parking_bay_ref import (
+    MonitoredVehicleSharingParkingBayRef,
+)
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .parking_area_ref import ParkingAreaRef
+from .parking_bay_ref import ParkingBayRef
+from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
+from .parking_entrance_ref import ParkingEntranceRef
+from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
+from .parking_ref import ParkingRef
+from .path_junction_ref import PathJunctionRef
+from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
+from .point_of_interest_ref import PointOfInterestRef
+from .point_of_interest_space_ref import PointOfInterestSpaceRef
+from .point_of_interest_vehicle_entrance_ref import (
+    PointOfInterestVehicleEntranceRef,
+)
+from .postal_address_ref import PostalAddressRef
+from .quay_ref import QuayRef
+from .road_address_ref import RoadAddressRef
+from .service_site_ref import ServiceSiteRef
+from .site_component_ref import SiteComponentRef
+from .site_element_ref import SiteElementRef
+from .site_ref import SiteRef
+from .stop_place_entrance_ref import StopPlaceEntranceRef
+from .stop_place_ref import StopPlaceRef
+from .stop_place_space_ref import StopPlaceSpaceRef
+from .stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
+from .taxi_parking_area_ref import TaxiParkingAreaRef
+from .taxi_rank_ref import TaxiRankRef
+from .taxi_stand_ref import TaxiStandRef
+from .topographic_place_ref import TopographicPlaceRef
+from .vehicle_entrance_ref import VehicleEntranceRef
+from .vehicle_meeting_place_ref import VehicleMeetingPlaceRef
+from .vehicle_pooling_meeting_place_ref import VehiclePoolingMeetingPlaceRef
+from .vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
+from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
+from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
+from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+from .vehicle_stopping_place_ref import VehicleStoppingPlaceRef
+from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a PLACE.
-    """
     class Meta:
         name = "dummyPlaceRefs_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            HailAndRideAreaRef,
+            FlexibleAreaRef,
+            FlexibleQuayRef,
+            FlexibleStopPlaceRef,
+            PathJunctionRef,
+            EquipmentPlaceRef,
+            EquipmentPositionRef,
+            TopographicPlaceRef,
+            VehiclePoolingMeetingPlaceRef,
+            VehicleMeetingPlaceRef,
+            GarageRef,
+            VehicleStoppingPositionRef,
+            VehicleStoppingPlaceRef,
+            BoardingPositionRef,
+            AccessSpaceRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceSpaceRef,
+            VehiclePoolingParkingBayRef,
+            MonitoredVehicleSharingParkingBayRef,
+            VehicleSharingParkingBayRef,
+            ParkingBayRef,
+            VehiclePoolingParkingAreaRef,
+            VehicleSharingParkingAreaRef,
+            TaxiParkingAreaRef,
+            ParkingAreaRef,
+            PointOfInterestSpaceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
+            ParkingEntranceForVehiclesRef,
+            ParkingPassengerEntranceRef,
+            ParkingEntranceRef,
+            PointOfInterestVehicleEntranceRef,
+            PointOfInterestEntranceRef,
+            VehicleEntranceRef,
+            EntranceRef,
+            SiteComponentRef,
+            TaxiRankRef,
+            StopPlaceRef,
+            ParkingRef,
+            PointOfInterestRef,
+            ServiceSiteRef,
+            SiteRef,
+            SiteElementRef,
+            AddressablePlaceRef,
+            PostalAddressRef,
+            RoadAddressRef,
+            AddressRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -307,5 +362,5 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

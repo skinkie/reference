@@ -1,28 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDateTime, XmlDuration
-from netex.data_objects_rel_structure import DataObjectsRelStructure
-from netex.multilingual_string import MultilingualString
-from netex.publication_request_structure import PublicationRequestStructure
+from .data_objects_rel_structure import DataObjectsRelStructure
+from .multilingual_string import MultilingualString
+from .publication_request_structure import PublicationRequestStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PublicationDeliveryStructure:
-    """
-    Type for Publication Delivery.
-
-    :ivar publication_timestamp: Time of output of data.
-    :ivar participant_ref:
-    :ivar publication_request: Echo Request used to create bulk
-        response.
-    :ivar publication_refresh_interval: How often data in publication is
-        refreshed.
-    :ivar description: Description of contents.
-    :ivar data_objects: NeTEx Entities of any type.
-    :ivar version:
-    """
     publication_timestamp: XmlDateTime = field(
         metadata={
             "name": "PublicationTimestamp",
@@ -45,7 +35,7 @@ class PublicationDeliveryStructure:
             "name": "PublicationRequest",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     publication_refresh_interval: Optional[XmlDuration] = field(
         default=None,
@@ -53,7 +43,7 @@ class PublicationDeliveryStructure:
             "name": "PublicationRefreshInterval",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -61,7 +51,7 @@ class PublicationDeliveryStructure:
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     data_objects: Optional[DataObjectsRelStructure] = field(
         default=None,
@@ -69,11 +59,11 @@ class PublicationDeliveryStructure:
             "name": "dataObjects",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     version: str = field(
         default="1.0",
         metadata={
             "type": "Attribute",
-        }
+        },
     )

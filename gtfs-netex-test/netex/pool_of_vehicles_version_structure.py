@@ -1,37 +1,44 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.car_pooling_service_ref import CarPoolingServiceRef
-from netex.chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from netex.group_of_entities_version_structure import GroupOfEntitiesVersionStructure
-from netex.mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
-from netex.online_service_ref import OnlineServiceRef
-from netex.parking_component_refs_rel_structure import ParkingComponentRefsRelStructure
-from netex.parking_ref import ParkingRef
-from netex.taxi_service_ref import TaxiServiceRef
-from netex.vehicle_refs_rel_structure import VehicleRefsRelStructure
-from netex.vehicle_rental_service_ref import VehicleRentalServiceRef
-from netex.vehicle_sharing_service_ref import VehicleSharingServiceRef
+from typing import Optional, Union
+from .car_pooling_service_ref import CarPoolingServiceRef
+from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
+from .group_of_entities_version_structure import (
+    GroupOfEntitiesVersionStructure,
+)
+from .mobility_service_constraint_zone_ref import (
+    MobilityServiceConstraintZoneRef,
+)
+from .online_service_ref import OnlineServiceRef
+from .parking_component_refs_rel_structure import (
+    ParkingComponentRefsRelStructure,
+)
+from .parking_ref import ParkingRef
+from .taxi_service_ref import TaxiServiceRef
+from .vehicle_refs_rel_structure import VehicleRefsRelStructure
+from .vehicle_rental_service_ref import VehicleRentalServiceRef
+from .vehicle_sharing_service_ref import VehicleSharingServiceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PoolOfVehiclesVersionStructure(GroupOfEntitiesVersionStructure):
-    """
-    Type for POOL OF VEHICLEs restricts id.
-
-    :ivar choice:
-    :ivar mobility_service_constraint_zone_ref:
-    :ivar parking_ref:
-    :ivar parking_components: Vehclie restrictions in Zone
-    :ivar must_return_to_same_bay: Whether a VEICLE must be returned to
-        same bay as it was was taken from.
-    :ivar vehicles: VEHICLEs in POOL OF VEHICLEs.
-    """
     class Meta:
         name = "PoolOfVehicles_VersionStructure"
 
-    choice: Optional[object] = field(
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[
+        Union[
+            OnlineServiceRef,
+            VehicleRentalServiceRef,
+            VehicleSharingServiceRef,
+            ChauffeuredVehicleServiceRef,
+            TaxiServiceRef,
+            CarPoolingServiceRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -67,15 +74,17 @@ class PoolOfVehiclesVersionStructure(GroupOfEntitiesVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    mobility_service_constraint_zone_ref: Optional[MobilityServiceConstraintZoneRef] = field(
+    mobility_service_constraint_zone_ref: Optional[
+        MobilityServiceConstraintZoneRef
+    ] = field(
         default=None,
         metadata={
             "name": "MobilityServiceConstraintZoneRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     parking_ref: Optional[ParkingRef] = field(
         default=None,
@@ -83,7 +92,7 @@ class PoolOfVehiclesVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "ParkingRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     parking_components: Optional[ParkingComponentRefsRelStructure] = field(
         default=None,
@@ -91,7 +100,7 @@ class PoolOfVehiclesVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "parkingComponents",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     must_return_to_same_bay: Optional[bool] = field(
         default=None,
@@ -99,12 +108,12 @@ class PoolOfVehiclesVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "MustReturnToSameBay",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     vehicles: Optional[VehicleRefsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

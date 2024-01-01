@@ -1,23 +1,32 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.service_journey_ref import ServiceJourneyRef
-from netex.single_journey_ref import SingleJourneyRef
-from netex.template_service_journey_ref import TemplateServiceJourneyRef
-from netex.train_number_ref import TrainNumberRef
+from typing import List, Union
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .service_journey_ref import ServiceJourneyRef
+from .single_journey_ref import SingleJourneyRef
+from .template_service_journey_ref import TemplateServiceJourneyRef
+from .train_number_ref import TrainNumberRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TravelSpecificationJourneyRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of JOURNEYs.
-    """
+@dataclass(kw_only=True)
+class TravelSpecificationJourneyRefsRelStructure(
+    OneToManyRelationshipStructure
+):
     class Meta:
         name = "travelSpecificationJourneyRefs_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            TemplateServiceJourneyRef,
+            ServiceJourneyRef,
+            SingleJourneyRef,
+            TrainNumberRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +52,5 @@ class TravelSpecificationJourneyRefsRelStructure(OneToManyRelationshipStructure)
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

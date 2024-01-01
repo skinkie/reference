@@ -1,21 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.garage_point import GaragePoint
-from netex.garage_point_ref import GaragePointRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .garage_point import GaragePoint
+from .garage_point_ref import GaragePointRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GaragePointsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of GARAGEs.
-    """
     class Meta:
         name = "garagePoints_RelStructure"
 
-    garage_point_ref_or_garage_point: List[object] = field(
+    garage_point_ref_or_garage_point: List[
+        Union[GaragePointRef, GaragePoint]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +35,5 @@ class GaragePointsRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

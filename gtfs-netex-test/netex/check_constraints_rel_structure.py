@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.check_constraint import CheckConstraint
-from netex.check_constraint_ref import CheckConstraintRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from typing import List, Union
+from .check_constraint import CheckConstraint
+from .check_constraint_ref import CheckConstraintRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CheckConstraintsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of CHECK CONSTRAINTs.
-    """
     class Meta:
         name = "checkConstraints_RelStructure"
 
-    check_constraint_ref_or_check_constraint: List[object] = field(
+    check_constraint_ref_or_check_constraint: List[
+        Union[CheckConstraintRef, CheckConstraint]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class CheckConstraintsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.journey_accounting_ref_structure import JourneyAccountingRefStructure
+from .journey_accounting_ref_structure import JourneyAccountingRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyAccountingRef(JourneyAccountingRefStructure):
-    """
-    Reference to a JOURNEY ACCOUNTING.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

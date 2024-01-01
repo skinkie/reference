@@ -1,29 +1,24 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from netex.empty_type_1 import EmptyType1
+from typing import List, Optional, Union
+from .empty_type_1 import EmptyType1
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TerminateSubscriptionRequestBodyStructure:
-    """Type for Body of Terminate Subscription Request content.
-
-    Used in WSDL.
-
-    :ivar subscriber_ref: Participant identifier of Subscriber.
-        Subscription ref will be unique within this.
-    :ivar all_or_subscription_ref:
-    """
     subscriber_ref: Optional[str] = field(
         default=None,
         metadata={
             "name": "SubscriberRef",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
-    all_or_subscription_ref: List[object] = field(
+    all_or_subscription_ref: List[Union[EmptyType1, str]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -39,5 +34,5 @@ class TerminateSubscriptionRequestBodyStructure:
                     "namespace": "http://www.siri.org.uk/siri",
                 },
             ),
-        }
+        },
     )

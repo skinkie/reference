@@ -1,13 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class VehicleAccessFacilityEnumeration(Enum):
-    """Allowed values for Vehicle Access Facility.
-
-    NB. These are the  properties of access to a VEHICLE. +1.1
-    """
     UNKNOWN = "unknown"
     WHEELCHAIR_LIFT = "wheelchairLift"
     MANUAL_RAMP = "manualRamp"

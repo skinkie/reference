@@ -1,25 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.all_modes_enumeration import AllModesEnumeration
-from netex.link_version_structure import LinkVersionStructure
-from netex.operational_context_ref import OperationalContextRef
-from netex.scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
+from .all_modes_enumeration import AllModesEnumeration
+from .link_version_structure import LinkVersionStructure
+from .operational_context_ref import OperationalContextRef
+from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ServiceLinkVersionStructure(LinkVersionStructure):
-    """
-    Type for SERVICE LINK.
-
-    :ivar from_point_ref: Identifier of SCHEDULED STOP POINT from which
-        Link starts.
-    :ivar to_point_ref: Identifier of SCHEDULED STOP POINT at which Link
-        ends.
-    :ivar vehicle_mode:
-    :ivar operational_context_ref:
-    """
     class Meta:
         name = "ServiceLink_VersionStructure"
 
@@ -45,7 +38,7 @@ class ServiceLinkVersionStructure(LinkVersionStructure):
             "name": "VehicleMode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     operational_context_ref: Optional[OperationalContextRef] = field(
         default=None,
@@ -53,5 +46,5 @@ class ServiceLinkVersionStructure(LinkVersionStructure):
             "name": "OperationalContextRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

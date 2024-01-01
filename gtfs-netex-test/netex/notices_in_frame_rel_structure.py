@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.notice import Notice
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .notice import Notice
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NoticesInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of  NOTICEs.
-    """
     class Meta:
         name = "noticesInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class NoticesInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

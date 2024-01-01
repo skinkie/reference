@@ -1,35 +1,56 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.entrance import Entrance
-from netex.entrance_ref import EntranceRef
-from netex.parking_entrance_for_vehicles import ParkingEntranceForVehicles
-from netex.parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
-from netex.parking_entrance_ref import ParkingEntranceRef
-from netex.parking_passenger_entrance import ParkingPassengerEntrance
-from netex.parking_passenger_entrance_ref import ParkingPassengerEntranceRef
-from netex.point_of_interest_entrance import PointOfInterestEntrance
-from netex.point_of_interest_entrance_ref import PointOfInterestEntranceRef
-from netex.point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
-from netex.point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
-from netex.stop_place_entrance import StopPlaceEntrance
-from netex.stop_place_entrance_ref import StopPlaceEntranceRef
-from netex.stop_place_vehicle_entrance import StopPlaceVehicleEntrance
-from netex.stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
-from netex.vehicle_entrance_ref import VehicleEntranceRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .entrance import Entrance
+from .entrance_ref import EntranceRef
+from .parking_entrance_for_vehicles import ParkingEntranceForVehicles
+from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
+from .parking_entrance_ref import ParkingEntranceRef
+from .parking_passenger_entrance import ParkingPassengerEntrance
+from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
+from .point_of_interest_entrance import PointOfInterestEntrance
+from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
+from .point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
+from .point_of_interest_vehicle_entrance_ref import (
+    PointOfInterestVehicleEntranceRef,
+)
+from .stop_place_entrance import StopPlaceEntrance
+from .stop_place_entrance_ref import StopPlaceEntranceRef
+from .stop_place_vehicle_entrance import StopPlaceVehicleEntrance
+from .stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
+from .vehicle_entrance_ref import VehicleEntranceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SiteEntrancesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of ENTRANCEs.
-    """
     class Meta:
         name = "siteEntrances_RelStructure"
 
-    choice: List[object] = field(
+    entrance_ref_or_parking_entrance_ref_or_entrance: List[
+        Union[
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
+            ParkingEntranceForVehiclesRef,
+            ParkingPassengerEntranceRef,
+            ParkingEntranceRef,
+            PointOfInterestVehicleEntranceRef,
+            PointOfInterestEntranceRef,
+            VehicleEntranceRef,
+            EntranceRef,
+            PointOfInterestVehicleEntrance,
+            PointOfInterestEntrance,
+            ParkingPassengerEntrance,
+            ParkingEntranceForVehicles,
+            StopPlaceVehicleEntrance,
+            StopPlaceEntrance,
+            Entrance,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -115,5 +136,5 @@ class SiteEntrancesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

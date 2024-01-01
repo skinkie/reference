@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class SnowAndIceSubmodeEnumeration(Enum):
-    """
-    Values for Snow and Ice SUBMODEs of TRANSPORT.
-    """
     UNKNOWN = "unknown"
     UNDEFINED = "undefined"
     SNOW_MOBILE = "snowMobile"

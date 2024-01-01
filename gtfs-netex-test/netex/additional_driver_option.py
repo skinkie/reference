@@ -1,21 +1,15 @@
-from dataclasses import dataclass, field
-from netex.additional_driver_option_version_structure import AdditionalDriverOptionVersionStructure
+from dataclasses import dataclass
+from .additional_driver_option_version_structure import (
+    AdditionalDriverOptionVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AdditionalDriverOption(AdditionalDriverOptionVersionStructure):
-    """Parameters relating to paying by AdditionalDriverOption for a product.
-
-    +v1.1
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

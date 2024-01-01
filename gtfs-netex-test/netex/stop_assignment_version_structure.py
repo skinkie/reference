@@ -1,27 +1,19 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.assignment_version_structure_1 import AssignmentVersionStructure1
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.private_code import PrivateCode
-from netex.scheduled_stop_point import ScheduledStopPoint
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
+from typing import Optional, Union
+from .assignment_version_structure_1 import AssignmentVersionStructure1
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .private_code import PrivateCode
+from .scheduled_stop_point import ScheduledStopPoint
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopAssignmentVersionStructure(AssignmentVersionStructure1):
-    """
-    Type for a STOP ASSIGNMENT.
-
-    :ivar boarding_use: Whether alignment is for boarding use. Default
-        is 'true'.
-    :ivar alighting_use: Whether alignment is for alighting use. Default
-        is 'true'.
-    :ivar private_code:
-    :ivar
-        fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point:
-    """
     class Meta:
         name = "StopAssignment_VersionStructure"
 
@@ -31,7 +23,7 @@ class StopAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "BoardingUse",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     alighting_use: Optional[bool] = field(
         default=None,
@@ -39,7 +31,7 @@ class StopAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "AlightingUse",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     private_code: Optional[PrivateCode] = field(
         default=None,
@@ -47,9 +39,15 @@ class StopAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "PrivateCode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point: Optional[object] = field(
+    fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point: Optional[
+        Union[
+            FareScheduledStopPointRef,
+            ScheduledStopPointRef,
+            ScheduledStopPoint,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -70,5 +68,5 @@ class StopAssignmentVersionStructure(AssignmentVersionStructure1):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

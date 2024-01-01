@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.stop_place_space_ref_structure import StopPlaceSpaceRefStructure
+from .stop_place_space_ref_structure import StopPlaceSpaceRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopPlaceSpaceRef(StopPlaceSpaceRefStructure):
-    """
-    Reference to a STOP PLACE SPACE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

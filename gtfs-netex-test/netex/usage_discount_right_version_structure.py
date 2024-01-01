@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.fare_product_version_structure import FareProductVersionStructure
-from netex.usage_discount_right_enumeration import UsageDiscountRightEnumeration
+from .fare_product_version_structure import FareProductVersionStructure
+from .usage_discount_right_enumeration import UsageDiscountRightEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class UsageDiscountRightVersionStructure(FareProductVersionStructure):
-    """
-    Type for USAGE DISCOUNT RIGHT.
-
-    :ivar product_type: Classification of USAGE DISOCUNT RIGHT. +v1.1
-    """
     class Meta:
         name = "UsageDiscountRight_VersionStructure"
 
@@ -22,5 +20,5 @@ class UsageDiscountRightVersionStructure(FareProductVersionStructure):
             "name": "ProductType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

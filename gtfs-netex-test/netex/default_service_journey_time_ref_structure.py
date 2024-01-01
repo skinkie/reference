@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.journey_timing_ref_structure import JourneyTimingRefStructure
+from .journey_timing_ref_structure import JourneyTimingRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DefaultServiceJourneyTimeRefStructure(JourneyTimingRefStructure):
-    """
-    Type for a reference to a DEFAULT SERVICE JOURNEY TIME.
-    """
+    value: RestrictedVar

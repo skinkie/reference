@@ -1,11 +1,14 @@
 from dataclasses import dataclass
-from netex.usage_parameter_ref_structure import UsageParameterRefStructure
+from .usage_parameter_ref_structure import UsageParameterRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class SalesOfferPackageEntitlementGivenRefStructure(UsageParameterRefStructure):
-    """
-    Type for Reference to a SALES OFFER  ENTITLEMENT GIVEN parameter.
-    """
+@dataclass(kw_only=True)
+class SalesOfferPackageEntitlementGivenRefStructure(
+    UsageParameterRefStructure
+):
+    value: RestrictedVar

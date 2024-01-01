@@ -1,20 +1,15 @@
-from dataclasses import dataclass, field
-from netex.flexible_point_properties_versioned_child_structure import FlexiblePointPropertiesVersionedChildStructure
+from dataclasses import dataclass
+from .flexible_point_properties_versioned_child_structure import (
+    FlexiblePointPropertiesVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FlexiblePointProperties(FlexiblePointPropertiesVersionedChildStructure):
-    """
-    Flexible properties of a POINT.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

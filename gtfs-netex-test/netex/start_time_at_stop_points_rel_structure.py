@@ -1,21 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.start_time_at_stop_point import StartTimeAtStopPoint
-from netex.start_time_at_stop_point_ref import StartTimeAtStopPointRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .start_time_at_stop_point import StartTimeAtStopPoint
+from .start_time_at_stop_point_ref import StartTimeAtStopPointRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StartTimeAtStopPointsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of START TIME AT STOP POINT.
-    """
     class Meta:
         name = "startTimeAtStopPoints_RelStructure"
 
-    start_time_at_stop_point_ref_or_start_time_at_stop_point: List[object] = field(
+    start_time_at_stop_point_ref_or_start_time_at_stop_point: List[
+        Union[StartTimeAtStopPointRef, StartTimeAtStopPoint]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +35,5 @@ class StartTimeAtStopPointsRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

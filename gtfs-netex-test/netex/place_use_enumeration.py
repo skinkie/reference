@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class PlaceUseEnumeration(Enum):
-    """
-    Allowed values for PlaceUsage.
-    """
     START_AT = "startAt"
     END_AT = "endAt"
     VIA = "via"

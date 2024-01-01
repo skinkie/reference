@@ -1,20 +1,27 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
-from netex.journey_layover_structure import JourneyLayoverStructure
-from netex.journey_pattern_ref import JourneyPatternRef
-from netex.service_journey_pattern_ref import ServiceJourneyPatternRef
-from netex.service_pattern_ref import ServicePatternRef
+from typing import Optional, Union
+from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
+from .journey_layover_structure import JourneyLayoverStructure
+from .journey_pattern_ref import JourneyPatternRef
+from .service_journey_pattern_ref import ServiceJourneyPatternRef
+from .service_pattern_ref import ServicePatternRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyPatternLayoverStructure(JourneyLayoverStructure):
-    """
-    Type for a JOURNEY PATTERN LAYOVER.
-    """
-    choice_1: Optional[object] = field(
+    journey_pattern_ref: Optional[
+        Union[
+            ServiceJourneyPatternRef,
+            ServicePatternRef,
+            DeadRunJourneyPatternRef,
+            JourneyPatternRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -40,5 +47,5 @@ class JourneyPatternLayoverStructure(JourneyLayoverStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.journey_ref_structure import JourneyRefStructure
-from netex.passing_time_versioned_child_structure import PassingTimeVersionedChildStructure
+from .journey_ref_structure import JourneyRefStructure
+from .passing_time_versioned_child_structure import (
+    PassingTimeVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class DatedPassingTimeVersionedChildStructure(PassingTimeVersionedChildStructure):
-    """
-    Type for DATED PASSING TIME.
-
-    :ivar dated_journey_ref: Dated journey for which this is the
-        PASSING TIME. If given by context does not need to be restated.
-    """
+@dataclass(kw_only=True)
+class DatedPassingTimeVersionedChildStructure(
+    PassingTimeVersionedChildStructure
+):
     class Meta:
         name = "DatedPassingTime_VersionedChildStructure"
 
@@ -23,5 +24,5 @@ class DatedPassingTimeVersionedChildStructure(PassingTimeVersionedChildStructure
             "name": "DatedJourneyRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

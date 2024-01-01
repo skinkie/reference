@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.alternative_texts_rel_structure import OperatingDay
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from .alternative_texts_rel_structure import OperatingDay
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OperatingDaysInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of OPERATING DAY.
-    """
     class Meta:
         name = "operatingDaysInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class OperatingDaysInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

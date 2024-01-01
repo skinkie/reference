@@ -1,11 +1,11 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class FareBasisEnumeration(Enum):
-    """
-    Allowed values for Fare Basis.
-    """
     ROUTE = "route"
     DISTANCE = "distance"

@@ -1,83 +1,152 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_vehicle_equipment import AccessVehicleEquipment
-from netex.access_vehicle_equipment_ref import AccessVehicleEquipmentRef
-from netex.battery_equipment import BatteryEquipment
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.crossing_equipment import CrossingEquipment
-from netex.crossing_equipment_ref import CrossingEquipmentRef
-from netex.cycle_storage_equipment import CycleStorageEquipment
-from netex.cycle_storage_equipment_ref import CycleStorageEquipmentRef
-from netex.entrance_equipment import EntranceEquipment
-from netex.entrance_equipment_ref import EntranceEquipmentRef
-from netex.escalator_equipment import EscalatorEquipment
-from netex.escalator_equipment_ref import EscalatorEquipmentRef
-from netex.general_sign import GeneralSign
-from netex.general_sign_ref import GeneralSignRef
-from netex.heading_sign import HeadingSign
-from netex.heading_sign_ref import HeadingSignRef
-from netex.help_point_equipment import HelpPointEquipment
-from netex.help_point_equipment_ref import HelpPointEquipmentRef
-from netex.lift_equipment import LiftEquipment
-from netex.lift_equipment_ref import LiftEquipmentRef
-from netex.luggage_locker_equipment_ref import LuggageLockerEquipmentRef
-from netex.passenger_equipment_ref import PassengerEquipmentRef
-from netex.passenger_information_equipment import PassengerInformationEquipment
-from netex.passenger_information_equipment_ref import PassengerInformationEquipmentRef
-from netex.passenger_safety_equipment import PassengerSafetyEquipment
-from netex.passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
-from netex.place_lighting import PlaceLighting
-from netex.place_lighting_equipment_ref import PlaceLightingEquipmentRef
-from netex.place_sign import PlaceSign
-from netex.place_sign_ref import PlaceSignRef
-from netex.queueing_equipment import QueueingEquipment
-from netex.queueing_equipment_ref import QueueingEquipmentRef
-from netex.ramp_equipment import RampEquipment
-from netex.ramp_equipment_ref import RampEquipmentRef
-from netex.refuelling_equipment import RefuellingEquipment
-from netex.retail_device import RetailDevice
-from netex.rough_surface import RoughSurface
-from netex.rough_surface_ref import RoughSurfaceRef
-from netex.rubbish_disposal_equipment import RubbishDisposalEquipment
-from netex.rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
-from netex.sanitary_equipment import SanitaryEquipment
-from netex.sanitary_equipment_ref import SanitaryEquipmentRef
-from netex.seating_equipment import SeatingEquipment
-from netex.seating_equipment_ref import SeatingEquipmentRef
-from netex.shelter_equipment import ShelterEquipment
-from netex.shelter_equipment_ref import ShelterEquipmentRef
-from netex.sign_equipment import SignEquipment
-from netex.sign_equipment_ref import SignEquipmentRef
-from netex.site_equipment_ref import SiteEquipmentRef
-from netex.staircase_equipment import StaircaseEquipment
-from netex.staircase_equipment_ref import StaircaseEquipmentRef
-from netex.ticket_validator_equipment import TicketValidatorEquipment
-from netex.ticketing_equipment import TicketingEquipment
-from netex.travelator_equipment import TravelatorEquipment
-from netex.travelator_equipment_ref import TravelatorEquipmentRef
-from netex.trolley_stand_equipment import TrolleyStandEquipment
-from netex.trolley_stand_equipment_ref import TrolleyStandEquipmentRef
-from netex.vehicle_charging_equipment import VehicleChargingEquipment
-from netex.vehicle_equipment_ref import VehicleEquipmentRef
-from netex.vehicle_release_equipment import VehicleReleaseEquipment
-from netex.waiting_equipment_ref import WaitingEquipmentRef
-from netex.waiting_room_equipment import WaitingRoomEquipment
-from netex.waiting_room_equipment_ref import WaitingRoomEquipmentRef
-from netex.wheelchair_vehicle_equipment import WheelchairVehicleEquipment
-from netex.wheelchair_vehicle_ref import WheelchairVehicleRef
+from typing import List, Union
+from .access_vehicle_equipment import AccessVehicleEquipment
+from .access_vehicle_equipment_ref import AccessVehicleEquipmentRef
+from .battery_equipment import BatteryEquipment
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .crossing_equipment import CrossingEquipment
+from .crossing_equipment_ref import CrossingEquipmentRef
+from .cycle_storage_equipment import CycleStorageEquipment
+from .cycle_storage_equipment_ref import CycleStorageEquipmentRef
+from .entrance_equipment import EntranceEquipment
+from .entrance_equipment_ref import EntranceEquipmentRef
+from .escalator_equipment import EscalatorEquipment
+from .escalator_equipment_ref import EscalatorEquipmentRef
+from .general_sign import GeneralSign
+from .general_sign_ref import GeneralSignRef
+from .heading_sign import HeadingSign
+from .heading_sign_ref import HeadingSignRef
+from .help_point_equipment import HelpPointEquipment
+from .help_point_equipment_ref import HelpPointEquipmentRef
+from .lift_equipment import LiftEquipment
+from .lift_equipment_ref import LiftEquipmentRef
+from .luggage_locker_equipment_ref import LuggageLockerEquipmentRef
+from .passenger_equipment_ref import PassengerEquipmentRef
+from .passenger_information_equipment import PassengerInformationEquipment
+from .passenger_information_equipment_ref import (
+    PassengerInformationEquipmentRef,
+)
+from .passenger_safety_equipment import PassengerSafetyEquipment
+from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
+from .place_lighting import PlaceLighting
+from .place_lighting_equipment_ref import PlaceLightingEquipmentRef
+from .place_sign import PlaceSign
+from .place_sign_ref import PlaceSignRef
+from .queueing_equipment import QueueingEquipment
+from .queueing_equipment_ref import QueueingEquipmentRef
+from .ramp_equipment import RampEquipment
+from .ramp_equipment_ref import RampEquipmentRef
+from .refuelling_equipment import RefuellingEquipment
+from .retail_device import RetailDevice
+from .rough_surface import RoughSurface
+from .rough_surface_ref import RoughSurfaceRef
+from .rubbish_disposal_equipment import RubbishDisposalEquipment
+from .rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
+from .sanitary_equipment import SanitaryEquipment
+from .sanitary_equipment_ref import SanitaryEquipmentRef
+from .seating_equipment import SeatingEquipment
+from .seating_equipment_ref import SeatingEquipmentRef
+from .shelter_equipment import ShelterEquipment
+from .shelter_equipment_ref import ShelterEquipmentRef
+from .sign_equipment import SignEquipment
+from .sign_equipment_ref import SignEquipmentRef
+from .site_equipment_ref import SiteEquipmentRef
+from .staircase_equipment import StaircaseEquipment
+from .staircase_equipment_ref import StaircaseEquipmentRef
+from .ticket_validator_equipment import TicketValidatorEquipment
+from .ticketing_equipment import TicketingEquipment
+from .travelator_equipment import TravelatorEquipment
+from .travelator_equipment_ref import TravelatorEquipmentRef
+from .trolley_stand_equipment import TrolleyStandEquipment
+from .trolley_stand_equipment_ref import TrolleyStandEquipmentRef
+from .vehicle_charging_equipment import VehicleChargingEquipment
+from .vehicle_equipment_ref import VehicleEquipmentRef
+from .vehicle_release_equipment import VehicleReleaseEquipment
+from .waiting_equipment_ref import WaitingEquipmentRef
+from .waiting_room_equipment import WaitingRoomEquipment
+from .waiting_room_equipment_ref import WaitingRoomEquipmentRef
+from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+from .wheelchair_vehicle_ref import WheelchairVehicleRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PlaceEquipmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of LOCAL SERVICEs.
-    """
     class Meta:
         name = "placeEquipments_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            PassengerInformationEquipmentRef,
+            CycleStorageEquipmentRef,
+            TrolleyStandEquipmentRef,
+            SeatingEquipmentRef,
+            ShelterEquipmentRef,
+            LuggageLockerEquipmentRef,
+            WaitingRoomEquipmentRef,
+            WaitingEquipmentRef,
+            SiteEquipmentRef,
+            PlaceLightingEquipmentRef,
+            RoughSurfaceRef,
+            StaircaseEquipmentRef,
+            QueueingEquipmentRef,
+            TravelatorEquipmentRef,
+            EscalatorEquipmentRef,
+            LiftEquipmentRef,
+            CrossingEquipmentRef,
+            RampEquipmentRef,
+            EntranceEquipmentRef,
+            HeadingSignRef,
+            GeneralSignRef,
+            PlaceSignRef,
+            SignEquipmentRef,
+            RubbishDisposalEquipmentRef,
+            HelpPointEquipmentRef,
+            PassengerSafetyEquipmentRef,
+            SanitaryEquipmentRef,
+            WheelchairVehicleRef,
+            AccessVehicleEquipmentRef,
+            VehicleEquipmentRef,
+            PassengerEquipmentRef,
+            RetailDevice,
+            BatteryEquipment,
+            VehicleReleaseEquipment,
+            RefuellingEquipment,
+            VehicleChargingEquipment,
+            CycleStorageEquipment,
+            SeatingEquipment,
+            ShelterEquipment,
+            TrolleyStandEquipment,
+            WaitingRoomEquipment,
+            CrossingEquipment,
+            QueueingEquipment,
+            EntranceEquipment,
+            RampEquipment,
+            LiftEquipment,
+            TravelatorEquipment,
+            StaircaseEquipment,
+            EscalatorEquipment,
+            PlaceLighting,
+            RoughSurface,
+            GeneralSign,
+            HeadingSign,
+            PlaceSign,
+            SignEquipment,
+            PassengerInformationEquipment,
+            RubbishDisposalEquipment,
+            HelpPointEquipment,
+            PassengerSafetyEquipment,
+            SanitaryEquipment,
+            TicketValidatorEquipment,
+            TicketingEquipment,
+            WheelchairVehicleEquipment,
+            AccessVehicleEquipment,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -403,5 +472,5 @@ class PlaceEquipmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

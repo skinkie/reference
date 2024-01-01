@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.parking_bay_status_enumeration import ParkingBayStatusEnumeration
-from netex.type_of_value_version_structure import TypeOfValueVersionStructure
+from .parking_bay_status_enumeration import ParkingBayStatusEnumeration
+from .type_of_value_version_structure import TypeOfValueVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingBayStatusValueStructure(TypeOfValueVersionStructure):
-    """
-    Type for a PARKING BAY STATUS.
-
-    :ivar status: Current status
-    """
     class Meta:
         name = "ParkingBayStatus_ValueStructure"
 
@@ -22,5 +20,5 @@ class ParkingBayStatusValueStructure(TypeOfValueVersionStructure):
             "name": "Status",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

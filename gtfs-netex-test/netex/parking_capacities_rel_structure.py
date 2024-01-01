@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.parking_capacity import ParkingCapacity
-from netex.parking_capacity_ref import ParkingCapacityRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .parking_capacity import ParkingCapacity
+from .parking_capacity_ref import ParkingCapacityRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingCapacitiesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of PARKING CAPACITies.
-    """
     class Meta:
         name = "parkingCapacities_RelStructure"
 
-    parking_capacity_ref_or_parking_capacity: List[object] = field(
+    parking_capacity_ref_or_parking_capacity: List[
+        Union[ParkingCapacityRef, ParkingCapacity]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class ParkingCapacitiesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

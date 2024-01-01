@@ -1,9 +1,12 @@
 from dataclasses import dataclass
-from netex.error_code_structure import ErrorCodeStructure
+from .error_code_structure import ErrorCodeStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NoInfoForTopicErrorStructure(ErrorCodeStructure):
-    """Type for Error: No Info for Topic"""
+    pass

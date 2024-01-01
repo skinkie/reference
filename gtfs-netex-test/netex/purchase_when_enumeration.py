@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class PurchaseWhenEnumeration(Enum):
-    """
-    Allowed values for Purchase when.
-    """
     ADVANCE_ONLY = "advanceOnly"
     UNTIL_PREVIOUS_DAY = "untilPreviousDay"
     DAY_OF_TRAVEL_ONLY = "dayOfTravelOnly"

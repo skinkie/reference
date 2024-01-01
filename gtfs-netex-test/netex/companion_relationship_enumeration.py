@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class CompanionRelationshipEnumeration(Enum):
-    """
-    Allowed values for COMPANION RELATIONSHIP TYPE Type.
-    """
     ANYONE = "anyone"
     PARENT = "parent"
     GRANDPARENT = "grandparent"

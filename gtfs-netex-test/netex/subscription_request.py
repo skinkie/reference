@@ -1,14 +1,13 @@
 from dataclasses import dataclass
-from netex.subscription_request_structure import SubscriptionRequestStructure
+from .subscription_request_structure import SubscriptionRequestStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SubscriptionRequest(SubscriptionRequestStructure):
-    """Request from Subscriber to Producer for a subscription.
-
-    Answered with a SubscriptionResponse.
-    """
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

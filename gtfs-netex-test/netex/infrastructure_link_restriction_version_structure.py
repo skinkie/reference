@@ -1,20 +1,19 @@
 from dataclasses import dataclass, field
-from netex.link_ref_structure import LinkRefStructure
-from netex.network_restriction_version_structure import NetworkRestrictionVersionStructure
+from .link_ref_structure import LinkRefStructure
+from .network_restriction_version_structure import (
+    NetworkRestrictionVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class InfrastructureLinkRestrictionVersionStructure(NetworkRestrictionVersionStructure):
-    """
-    Type for a NETWORK LINK RESTRICTION.
-
-    :ivar from_link_ref: Restriction applies to movements starting from
-        INFRASTRUCTURE LINK identified by this Reference.
-    :ivar to_link_ref: Restriction applies to movements ending on
-        INFRASTRUCTURE LINK identified by this reference.
-    """
+@dataclass(kw_only=True)
+class InfrastructureLinkRestrictionVersionStructure(
+    NetworkRestrictionVersionStructure
+):
     class Meta:
         name = "InfrastructureLinkRestriction_VersionStructure"
 

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.vehicle_model import VehicleModel
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .vehicle_model import VehicleModel
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleModelsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of VEHICLE MODELs.
-    """
     class Meta:
         name = "vehicleModelsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class VehicleModelsInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

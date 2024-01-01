@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.postal_address import PostalAddress
-from netex.road_address import RoadAddress
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .postal_address import PostalAddress
+from .road_address import RoadAddress
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AddressesInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of ADDRESSes.
-    """
     class Meta:
         name = "addressesInFrame_RelStructure"
 
-    postal_address_or_road_address: List[object] = field(
+    address: List[Union[PostalAddress, RoadAddress]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class AddressesInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

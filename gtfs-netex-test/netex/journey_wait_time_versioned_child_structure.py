@@ -1,30 +1,41 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlDuration
-from netex.border_point_ref import BorderPointRef
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.garage_point_ref import GaragePointRef
-from netex.journey_timing_versioned_child_structure import JourneyTimingVersionedChildStructure
-from netex.parking_point_ref import ParkingPointRef
-from netex.relief_point_ref import ReliefPointRef
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
-from netex.timing_point_ref import TimingPointRef
+from .border_point_ref import BorderPointRef
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .garage_point_ref import GaragePointRef
+from .journey_timing_versioned_child_structure import (
+    JourneyTimingVersionedChildStructure,
+)
+from .parking_point_ref import ParkingPointRef
+from .relief_point_ref import ReliefPointRef
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+from .timing_point_ref import TimingPointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class JourneyWaitTimeVersionedChildStructure(JourneyTimingVersionedChildStructure):
-    """
-    Type for JOURNEY WAIT TIME.
-
-    :ivar choice:
-    :ivar wait_time: Wait time as interval.
-    """
+@dataclass(kw_only=True)
+class JourneyWaitTimeVersionedChildStructure(
+    JourneyTimingVersionedChildStructure
+):
     class Meta:
         name = "JourneyWaitTime_VersionedChildStructure"
 
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            BorderPointRef,
+            FareScheduledStopPointRef,
+            ScheduledStopPointRef,
+            GaragePointRef,
+            ParkingPointRef,
+            ReliefPointRef,
+            TimingPointRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -65,7 +76,7 @@ class JourneyWaitTimeVersionedChildStructure(JourneyTimingVersionedChildStructur
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     wait_time: XmlDuration = field(
         metadata={

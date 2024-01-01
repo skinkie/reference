@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.time_interval_ref_structure import TimeIntervalRefStructure
+from .time_interval_ref_structure import TimeIntervalRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimeIntervalRef(TimeIntervalRefStructure):
-    """
-    Reference to a TIME INTERVAL.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

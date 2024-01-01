@@ -1,24 +1,16 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from netex.place_equipment_version_structure import PlaceEquipmentVersionStructure
+from .place_equipment_version_structure import PlaceEquipmentVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleChargingEquipmentVersionStructure(PlaceEquipmentVersionStructure):
-    """
-    Type for a VEHICLE CHARGING EQUIPMENT.
-
-    :ivar free_recharging: whether shelter is enclosed.
-    :ivar reservation_required: Whether reservation is required.
-    :ivar reservation_url: Type of storage.
-    :ivar maximum_power: Maximum charging power of the grid supply [W].
-        The sum of the current power of all connected charging points
-        cannot exceed this value.
-    :ivar grid_voltage: Grid Voltage to the equipment.
-    """
     class Meta:
         name = "VehicleChargingEquipment_VersionStructure"
 
@@ -28,7 +20,7 @@ class VehicleChargingEquipmentVersionStructure(PlaceEquipmentVersionStructure):
             "name": "FreeRecharging",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     reservation_required: Optional[bool] = field(
         default=None,
@@ -36,7 +28,7 @@ class VehicleChargingEquipmentVersionStructure(PlaceEquipmentVersionStructure):
             "name": "ReservationRequired",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     reservation_url: Optional[str] = field(
         default=None,
@@ -44,7 +36,7 @@ class VehicleChargingEquipmentVersionStructure(PlaceEquipmentVersionStructure):
             "name": "ReservationUrl",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     maximum_power: Optional[Decimal] = field(
         default=None,
@@ -52,7 +44,7 @@ class VehicleChargingEquipmentVersionStructure(PlaceEquipmentVersionStructure):
             "name": "MaximumPower",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     grid_voltage: Optional[Decimal] = field(
         default=None,
@@ -60,5 +52,5 @@ class VehicleChargingEquipmentVersionStructure(PlaceEquipmentVersionStructure):
             "name": "GridVoltage",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

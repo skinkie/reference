@@ -1,33 +1,50 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.composite_frame_ref import CompositeFrameRef
-from netex.driver_schedule_frame_ref import DriverScheduleFrameRef
-from netex.fare_frame_ref import FareFrameRef
-from netex.general_frame_ref import GeneralFrameRef
-from netex.infrastructure_frame_ref import InfrastructureFrameRef
-from netex.mobility_journey_frame_ref import MobilityJourneyFrameRef
-from netex.mobility_service_frame_ref import MobilityServiceFrameRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.resource_frame_ref import ResourceFrameRef
-from netex.sales_transaction_frame_ref import SalesTransactionFrameRef
-from netex.service_calendar_frame_ref import ServiceCalendarFrameRef
-from netex.service_frame_ref import ServiceFrameRef
-from netex.site_frame_ref import SiteFrameRef
-from netex.timetable_frame_ref import TimetableFrameRef
-from netex.vehicle_schedule_frame_ref import VehicleScheduleFrameRef
+from typing import List, Union
+from .composite_frame_ref import CompositeFrameRef
+from .driver_schedule_frame_ref import DriverScheduleFrameRef
+from .fare_frame_ref import FareFrameRef
+from .general_frame_ref import GeneralFrameRef
+from .infrastructure_frame_ref import InfrastructureFrameRef
+from .mobility_journey_frame_ref import MobilityJourneyFrameRef
+from .mobility_service_frame_ref import MobilityServiceFrameRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .resource_frame_ref import ResourceFrameRef
+from .sales_transaction_frame_ref import SalesTransactionFrameRef
+from .service_calendar_frame_ref import ServiceCalendarFrameRef
+from .service_frame_ref import ServiceFrameRef
+from .site_frame_ref import SiteFrameRef
+from .timetable_frame_ref import TimetableFrameRef
+from .vehicle_schedule_frame_ref import VehicleScheduleFrameRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VersionFrameRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a VERSION FRAME.
-    """
     class Meta:
         name = "versionFrameRefs_RelStructure"
 
-    choice: List[object] = field(
+    version_frame_ref: List[
+        Union[
+            MobilityJourneyFrameRef,
+            MobilityServiceFrameRef,
+            SalesTransactionFrameRef,
+            FareFrameRef,
+            ServiceFrameRef,
+            DriverScheduleFrameRef,
+            VehicleScheduleFrameRef,
+            TimetableFrameRef,
+            SiteFrameRef,
+            InfrastructureFrameRef,
+            GeneralFrameRef,
+            ResourceFrameRef,
+            ServiceCalendarFrameRef,
+            CompositeFrameRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -103,5 +120,5 @@ class VersionFrameRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

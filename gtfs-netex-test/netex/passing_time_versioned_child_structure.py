@@ -1,36 +1,43 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.dated_special_service_ref import DatedSpecialServiceRef
-from netex.dated_vehicle_journey_ref import DatedVehicleJourneyRef
-from netex.dead_run_ref import DeadRunRef
-from netex.fare_point_in_pattern_ref import FarePointInPatternRef
-from netex.point_in_journey_pattern_ref import PointInJourneyPatternRef
-from netex.point_in_single_journey_path_ref import PointInSingleJourneyPathRef
-from netex.service_journey_ref import ServiceJourneyRef
-from netex.single_journey_ref import SingleJourneyRef
-from netex.special_service_ref import SpecialServiceRef
-from netex.stop_point_in_journey_pattern_ref import StopPointInJourneyPatternRef
-from netex.template_service_journey_ref import TemplateServiceJourneyRef
-from netex.timing_point_in_journey_pattern_ref import TimingPointInJourneyPatternRef
-from netex.vehicle_journey_ref import VehicleJourneyRef
+from typing import Optional, Union
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .dated_special_service_ref import DatedSpecialServiceRef
+from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
+from .dead_run_ref import DeadRunRef
+from .fare_point_in_pattern_ref import FarePointInPatternRef
+from .point_in_journey_pattern_ref import PointInJourneyPatternRef
+from .point_in_single_journey_path_ref import PointInSingleJourneyPathRef
+from .service_journey_ref import ServiceJourneyRef
+from .single_journey_ref import SingleJourneyRef
+from .special_service_ref import SpecialServiceRef
+from .stop_point_in_journey_pattern_ref import StopPointInJourneyPatternRef
+from .template_service_journey_ref import TemplateServiceJourneyRef
+from .timing_point_in_journey_pattern_ref import TimingPointInJourneyPatternRef
+from .vehicle_journey_ref import VehicleJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PassingTimeVersionedChildStructure(VersionedChildStructure):
-    """
-    Type for PASSING TIME.
-
-    :ivar choice:
-    :ivar alight_and_reboard: Whether can alight and reboard at stop.
-    :ivar choice_1:
-    """
     class Meta:
         name = "PassingTime_VersionedChildStructure"
 
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            SingleJourneyRef,
+            DatedVehicleJourneyRef,
+            DatedSpecialServiceRef,
+            SpecialServiceRef,
+            TemplateServiceJourneyRef,
+            ServiceJourneyRef,
+            DeadRunRef,
+            VehicleJourneyRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -76,7 +83,7 @@ class PassingTimeVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     alight_and_reboard: Optional[bool] = field(
         default=None,
@@ -84,9 +91,17 @@ class PassingTimeVersionedChildStructure(VersionedChildStructure):
             "name": "AlightAndReboard",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice_1: Optional[object] = field(
+    point_in_journey_pattern_ref: Optional[
+        Union[
+            PointInSingleJourneyPathRef,
+            FarePointInPatternRef,
+            StopPointInJourneyPatternRef,
+            TimingPointInJourneyPatternRef,
+            PointInJourneyPatternRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -117,5 +132,5 @@ class PassingTimeVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

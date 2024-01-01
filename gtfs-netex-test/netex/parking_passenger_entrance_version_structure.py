@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.parking_area_refs_rel_structure import ParkingAreaRefsRelStructure
-from netex.site_entrance_version_structure import SiteEntranceVersionStructure
+from .parking_area_refs_rel_structure import ParkingAreaRefsRelStructure
+from .site_entrance_version_structure import SiteEntranceVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingPassengerEntranceVersionStructure(SiteEntranceVersionStructure):
-    """
-    Type for a PARKING PASSENGER ENTRANCe.
-
-    :ivar areas: PARKING AREA to which prperties appky +v1.1.
-    """
     class Meta:
         name = "ParkingPassengerEntrance_VersionStructure"
 
@@ -21,5 +19,5 @@ class ParkingPassengerEntranceVersionStructure(SiteEntranceVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

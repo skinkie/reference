@@ -1,34 +1,32 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.boarding_position import BoardingPosition
-from netex.boarding_position_ref import BoardingPositionRef
-from netex.quay import Quay
-from netex.quay_ref import QuayRef
-from netex.stop_assignment_version_structure import StopAssignmentVersionStructure
-from netex.stop_place import StopPlace
-from netex.stop_place_ref import StopPlaceRef
-from netex.taxi_rank_ref import TaxiRankRef
-from netex.taxi_stand_ref import TaxiStandRef
-from netex.train_stop_assignments_rel_structure import TrainStopAssignmentsRelStructure
+from typing import Optional, Union
+from .boarding_position import BoardingPosition
+from .boarding_position_ref import BoardingPositionRef
+from .quay import Quay
+from .quay_ref import QuayRef
+from .stop_assignment_version_structure import StopAssignmentVersionStructure
+from .stop_place import StopPlace
+from .stop_place_ref import StopPlaceRef
+from .taxi_rank_ref import TaxiRankRef
+from .taxi_stand_ref import TaxiStandRef
+from .train_stop_assignments_rel_structure import (
+    TrainStopAssignmentsRelStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
-    """
-    Type for a PASSENGER STOP ASSIGNMENT.
-
-    :ivar taxi_rank_ref_or_stop_place_ref_or_stop_place:
-    :ivar taxi_stand_ref_or_quay_ref_or_quay:
-    :ivar boarding_position_ref_or_boarding_position:
-    :ivar train_elements: Train elements to which SCHEDULED STOP POINT
-        is to be assigned.
-    """
     class Meta:
         name = "PassengerStopAssignment_VersionStructure"
 
-    taxi_rank_ref_or_stop_place_ref_or_stop_place: Optional[object] = field(
+    taxi_rank_ref_or_stop_place_ref_or_stop_place: Optional[
+        Union[TaxiRankRef, StopPlaceRef, StopPlace]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -49,9 +47,11 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    taxi_stand_ref_or_quay_ref_or_quay: Optional[object] = field(
+    taxi_stand_ref_or_quay_ref_or_quay: Optional[
+        Union[TaxiStandRef, QuayRef, Quay]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -72,9 +72,11 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    boarding_position_ref_or_boarding_position: Optional[object] = field(
+    boarding_position_ref_or_boarding_position: Optional[
+        Union[BoardingPositionRef, BoardingPosition]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -90,7 +92,7 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     train_elements: Optional[TrainStopAssignmentsRelStructure] = field(
         default=None,
@@ -98,5 +100,5 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             "name": "trainElements",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

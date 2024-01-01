@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.relief_opportunity import ReliefOpportunity
-from netex.relief_opportunity_ref import ReliefOpportunityRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .relief_opportunity import ReliefOpportunity
+from .relief_opportunity_ref import ReliefOpportunityRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ReliefOpportunitiesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of RELIEF OPPORTUNITies.
-    """
     class Meta:
         name = "reliefOpportunities_RelStructure"
 
-    relief_opportunity_ref_or_relief_opportunity: List[object] = field(
+    relief_opportunity_ref_or_relief_opportunity: List[
+        Union[ReliefOpportunityRef, ReliefOpportunity]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class ReliefOpportunitiesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

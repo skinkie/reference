@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.headway_journey_group import HeadwayJourneyGroup
-from netex.rhythmical_journey_group import RhythmicalJourneyGroup
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .headway_journey_group import HeadwayJourneyGroup
+from .rhythmical_journey_group import RhythmicalJourneyGroup
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FrequencyGroupsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of  OURNEY FREQUENCY GROUPs.
-    """
     class Meta:
         name = "frequencyGroupsInFrame_RelStructure"
 
-    headway_journey_group_or_rhythmical_journey_group: List[object] = field(
+    headway_journey_group_or_rhythmical_journey_group: List[
+        Union[HeadwayJourneyGroup, RhythmicalJourneyGroup]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class FrequencyGroupsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

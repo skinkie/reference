@@ -1,18 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.installed_equipment_version_structure import InstalledEquipmentVersionStructure
+from .installed_equipment_version_structure import (
+    InstalledEquipmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PassengerEquipmentVersionStructure(InstalledEquipmentVersionStructure):
-    """
-    Type for a PASSENGER EQUIPMENT.
-
-    :ivar fixed: Whether the EQUIPMENT is fixed at a place or min a
-        vehicle.
-    """
     class Meta:
         name = "PassengerEquipment_VersionStructure"
 
@@ -22,5 +21,5 @@ class PassengerEquipmentVersionStructure(InstalledEquipmentVersionStructure):
             "name": "Fixed",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

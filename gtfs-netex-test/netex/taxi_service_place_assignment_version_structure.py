@@ -1,22 +1,28 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
-from netex.parking_bay_ref import ParkingBayRef
-from netex.taxi_parking_area_ref import TaxiParkingAreaRef
-from netex.taxi_service_ref import TaxiServiceRef
-from netex.taxi_stand_ref import TaxiStandRef
-from netex.vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
-from netex.vehicle_service_place_assignment_version_structure import VehicleServicePlaceAssignmentVersionStructure
-from netex.vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+from typing import Optional, Union
+from .monitored_vehicle_sharing_parking_bay_ref import (
+    MonitoredVehicleSharingParkingBayRef,
+)
+from .parking_bay_ref import ParkingBayRef
+from .taxi_parking_area_ref import TaxiParkingAreaRef
+from .taxi_service_ref import TaxiServiceRef
+from .taxi_stand_ref import TaxiStandRef
+from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
+from .vehicle_service_place_assignment_version_structure import (
+    VehicleServicePlaceAssignmentVersionStructure,
+)
+from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TaxiServicePlaceAssignmentVersionStructure(VehicleServicePlaceAssignmentVersionStructure):
-    """
-    Type for TAXI SERVICE PLACE ASSIGNMENT restricts id.
-    """
+@dataclass(kw_only=True)
+class TaxiServicePlaceAssignmentVersionStructure(
+    VehicleServicePlaceAssignmentVersionStructure
+):
     class Meta:
         name = "TaxiServicePlaceAssignment_VersionStructure"
 
@@ -34,7 +40,7 @@ class TaxiServicePlaceAssignmentVersionStructure(VehicleServicePlaceAssignmentVe
             "name": "TaxiParkingAreaRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     taxi_stand_ref: Optional[TaxiStandRef] = field(
         default=None,
@@ -42,9 +48,16 @@ class TaxiServicePlaceAssignmentVersionStructure(VehicleServicePlaceAssignmentVe
             "name": "TaxiStandRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    parking_bay_ref_or_vehicle_sharing_parking_bay_ref: Optional[
+        Union[
+            VehiclePoolingParkingBayRef,
+            MonitoredVehicleSharingParkingBayRef,
+            VehicleSharingParkingBayRef,
+            ParkingBayRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -70,5 +83,5 @@ class TaxiServicePlaceAssignmentVersionStructure(VehicleServicePlaceAssignmentVe
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

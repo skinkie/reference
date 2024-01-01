@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.stop_place_vehicle_entrance import StopPlaceVehicleEntrance
-from netex.vehicle_entrance_ref import VehicleEntranceRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .stop_place_vehicle_entrance import StopPlaceVehicleEntrance
+from .vehicle_entrance_ref import VehicleEntranceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopPlaceVehicleEntrancesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of STOP PLACE VEHICLE ENTRANCEs.
-    """
     class Meta:
         name = "stopPlaceVehicleEntrances_RelStructure"
 
-    vehicle_entrance_ref_or_stop_place_vehicle_entrance: List[object] = field(
+    vehicle_entrance_ref_or_stop_place_vehicle_entrance: List[
+        Union[VehicleEntranceRef, StopPlaceVehicleEntrance]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class StopPlaceVehicleEntrancesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,42 +1,38 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from netex.air_submode_enumeration import AirSubmodeEnumeration
-from netex.all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
-from netex.bus_submode_enumeration import BusSubmodeEnumeration
-from netex.coach_submode_enumeration import CoachSubmodeEnumeration
-from netex.flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from netex.funicular_submode_enumeration import FunicularSubmodeEnumeration
-from netex.metro_submode_enumeration import MetroSubmodeEnumeration
-from netex.personal_mode_of_operation_ref import PersonalModeOfOperationRef
-from netex.rail_submode_enumeration import RailSubmodeEnumeration
-from netex.scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
-from netex.snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
-from netex.tariff_zone_refs_rel_structure import TariffZoneRefsRelStructure
-from netex.telecabin_submode_enumeration import TelecabinSubmodeEnumeration
-from netex.tram_submode_enumeration import TramSubmodeEnumeration
-from netex.vehicle_entrance_version_structure import VehicleEntranceVersionStructure
-from netex.vehicle_mode_enumeration import VehicleModeEnumeration
-from netex.vehicle_pooling_ref import VehiclePoolingRef
-from netex.vehicle_rental_ref import VehicleRentalRef
-from netex.vehicle_sharing_ref import VehicleSharingRef
-from netex.water_submode_enumeration import WaterSubmodeEnumeration
+from typing import List, Optional, Union
+from .air_submode_enumeration import AirSubmodeEnumeration
+from .all_vehicle_modes_of_transport_enumeration import (
+    AllVehicleModesOfTransportEnumeration,
+)
+from .bus_submode_enumeration import BusSubmodeEnumeration
+from .coach_submode_enumeration import CoachSubmodeEnumeration
+from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
+from .funicular_submode_enumeration import FunicularSubmodeEnumeration
+from .metro_submode_enumeration import MetroSubmodeEnumeration
+from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
+from .rail_submode_enumeration import RailSubmodeEnumeration
+from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
+from .tariff_zone_refs_rel_structure import TariffZoneRefsRelStructure
+from .telecabin_submode_enumeration import TelecabinSubmodeEnumeration
+from .tram_submode_enumeration import TramSubmodeEnumeration
+from .vehicle_entrance_version_structure import VehicleEntranceVersionStructure
+from .vehicle_mode_enumeration import VehicleModeEnumeration
+from .vehicle_pooling_ref import VehiclePoolingRef
+from .vehicle_rental_ref import VehicleRentalRef
+from .vehicle_sharing_ref import VehicleSharingRef
+from .water_submode_enumeration import WaterSubmodeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class StopPlaceVehicleEntranceVersionStructure(VehicleEntranceVersionStructure):
-    """
-    Type for STOP PLACE VEHICLE ENTRANCE.
-
-    :ivar transport_mode: Primary MODE of Vehicle transport associated
-        by this component.
-    :ivar choice:
-    :ivar choice_1:
-    :ivar other_transport_modes: Public transport MODES which may be
-        accessed through associated place.
-    :ivar tariff_zones: TARIFF ZONEs into which component falls.
-    """
+@dataclass(kw_only=True)
+class StopPlaceVehicleEntranceVersionStructure(
+    VehicleEntranceVersionStructure
+):
     class Meta:
         name = "StopPlaceVehicleEntrance_VersionStructure"
 
@@ -46,9 +42,22 @@ class StopPlaceVehicleEntranceVersionStructure(VehicleEntranceVersionStructure):
             "name": "TransportMode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            AirSubmodeEnumeration,
+            BusSubmodeEnumeration,
+            CoachSubmodeEnumeration,
+            FunicularSubmodeEnumeration,
+            MetroSubmodeEnumeration,
+            TramSubmodeEnumeration,
+            TelecabinSubmodeEnumeration,
+            RailSubmodeEnumeration,
+            WaterSubmodeEnumeration,
+            SnowAndIceSubmodeEnumeration,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -104,9 +113,18 @@ class StopPlaceVehicleEntranceVersionStructure(VehicleEntranceVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice_1: Optional[object] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
+        Union[
+            PersonalModeOfOperationRef,
+            VehiclePoolingRef,
+            VehicleSharingRef,
+            VehicleRentalRef,
+            FlexibleModeOfOperationRef,
+            ScheduledModeOfOperationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -142,7 +160,7 @@ class StopPlaceVehicleEntranceVersionStructure(VehicleEntranceVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     other_transport_modes: List[VehicleModeEnumeration] = field(
         default_factory=list,
@@ -151,7 +169,7 @@ class StopPlaceVehicleEntranceVersionStructure(VehicleEntranceVersionStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "tokens": True,
-        }
+        },
     )
     tariff_zones: Optional[TariffZoneRefsRelStructure] = field(
         default=None,
@@ -159,5 +177,5 @@ class StopPlaceVehicleEntranceVersionStructure(VehicleEntranceVersionStructure):
             "name": "tariffZones",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

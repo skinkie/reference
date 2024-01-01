@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.point_of_interest_entrance import PointOfInterestEntrance
-from netex.site_component_ref_structure import SiteComponentRefStructure
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .point_of_interest_entrance import PointOfInterestEntrance
+from .site_component_ref_structure import SiteComponentRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointOfInterestEntrancesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of POINT OF INTEREST ENTRANCEs.
-    """
     class Meta:
         name = "pointOfInterestEntrances_RelStructure"
 
-    point_of_interest_entrance_ref_or_point_of_interest_entrance: List[object] = field(
+    point_of_interest_entrance_ref_or_point_of_interest_entrance: List[
+        Union[SiteComponentRefStructure, PointOfInterestEntrance]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class PointOfInterestEntrancesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

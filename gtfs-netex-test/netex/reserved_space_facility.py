@@ -1,14 +1,16 @@
 from dataclasses import dataclass, field
-from netex.reserved_space_facility_enumeration import ReservedSpaceFacilityEnumeration
+from .reserved_space_facility_enumeration import (
+    ReservedSpaceFacilityEnumeration,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ReservedSpaceFacility:
-    """
-    Classification of RESERVED SPACE FACILITY.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -16,5 +18,5 @@ class ReservedSpaceFacility:
         default=ReservedSpaceFacilityEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

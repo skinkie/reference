@@ -1,22 +1,24 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.dated_special_service_ref import DatedSpecialServiceRef
-from netex.special_service import SpecialService
-from netex.special_service_ref import SpecialServiceRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .dated_special_service_ref import DatedSpecialServiceRef
+from .special_service import SpecialService
+from .special_service_ref import SpecialServiceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SpecialServicesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of SPECIAL SERVICE s.
-    """
     class Meta:
         name = "specialServices_RelStructure"
 
-    dated_special_service_ref_or_special_service_ref_or_special_service: List[object] = field(
+    dated_special_service_ref_or_special_service_ref_or_special_service: List[
+        Union[DatedSpecialServiceRef, SpecialServiceRef, SpecialService]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +39,5 @@ class SpecialServicesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

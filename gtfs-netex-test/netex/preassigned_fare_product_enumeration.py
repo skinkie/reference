@@ -1,13 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class PreassignedFareProductEnumeration(Enum):
-    """Allowed values for  PREASSIGNED FARE PRODUCT ProductType.
-
-    +v1.1
-    """
     SINGLE_TRIP = "singleTrip"
     SHORT_TRIP = "shortTrip"
     TIME_LIMITED_SINGLE_TRIP = "timeLimitedSingleTrip"

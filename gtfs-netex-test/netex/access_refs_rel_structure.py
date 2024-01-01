@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.access_ref import AccessRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .access_ref import AccessRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AccessRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to an ACCESS link.
-    """
     class Meta:
         name = "accessRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class AccessRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.mobility_service_constraint_zone import MobilityServiceConstraintZone
-from netex.mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .mobility_service_constraint_zone import MobilityServiceConstraintZone
+from .mobility_service_constraint_zone_ref import (
+    MobilityServiceConstraintZoneRef,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class MobilityServiceConstraintZonesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of references to a MOBILITY SERVICE CONSTRAINT ZONEs.
-    """
+@dataclass(kw_only=True)
+class MobilityServiceConstraintZonesRelStructure(
+    ContainmentAggregationStructure
+):
     class Meta:
         name = "mobilityServiceConstraintZones_RelStructure"
 
-    mobility_service_constraint_zone_ref_or_mobility_service_constraint_zone: List[object] = field(
+    mobility_service_constraint_zone_ref_or_mobility_service_constraint_zone: List[
+        Union[MobilityServiceConstraintZoneRef, MobilityServiceConstraintZone]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class MobilityServiceConstraintZonesRelStructure(ContainmentAggregationStructure
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

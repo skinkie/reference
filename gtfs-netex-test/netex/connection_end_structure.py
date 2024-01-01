@@ -1,34 +1,27 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.all_modes_enumeration import AllModesEnumeration
-from netex.authority_ref import AuthorityRef
-from netex.operator_ref import OperatorRef
-from netex.point_ref_structure import PointRefStructure
-from netex.scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
-from netex.submode import Submode
+from typing import Optional, Union
+from .all_modes_enumeration import AllModesEnumeration
+from .authority_ref import AuthorityRef
+from .operator_ref import OperatorRef
+from .point_ref_structure import PointRefStructure
+from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
+from .submode import Submode
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ConnectionEndStructure:
-    """
-    Type for a CONNECTION END.
-
-    :ivar transport_mode: MODE of end Point of CONNECTION. Default is
-        all modes, MODE of SCHEDULED STOP POINT can be derived.
-    :ivar submode: SUBMODE of end Point of CONNECTION. SUBMODE of
-        SCHEDULED STOP POINT can be derived.
-    :ivar authority_ref_or_operator_ref:
-    :ivar scheduled_stop_point_ref_or_vehicle_meeting_point_ref:
-    """
     transport_mode: Optional[AllModesEnumeration] = field(
         default=None,
         metadata={
             "name": "TransportMode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     submode: Optional[Submode] = field(
         default=None,
@@ -36,9 +29,11 @@ class ConnectionEndStructure:
             "name": "Submode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    authority_ref_or_operator_ref: Optional[object] = field(
+    transport_organisation_ref: Optional[
+        Union[AuthorityRef, OperatorRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -54,9 +49,11 @@ class ConnectionEndStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    scheduled_stop_point_ref_or_vehicle_meeting_point_ref: Optional[object] = field(
+    scheduled_stop_point_ref_or_vehicle_meeting_point_ref: Optional[
+        Union[ScheduledStopPointRefStructure, PointRefStructure]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -72,5 +69,5 @@ class ConnectionEndStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

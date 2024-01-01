@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.dated_vehicle_journey_version_structure import DatedVehicleJourneyVersionStructure
-from netex.service_alteration_enumeration import ServiceAlterationEnumeration
+from .dated_vehicle_journey_version_structure import (
+    DatedVehicleJourneyVersionStructure,
+)
+from .service_alteration_enumeration import ServiceAlterationEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class NormalDatedVehicleJourneyVersionStructure(DatedVehicleJourneyVersionStructure):
-    """
-    Type for NORMAL DATED VEHICLE JOURNEY.
-
-    :ivar service_alteration_type: Type of Service alteration. Default
-        is planned.
-    """
+@dataclass(kw_only=True)
+class NormalDatedVehicleJourneyVersionStructure(
+    DatedVehicleJourneyVersionStructure
+):
     class Meta:
         name = "NormalDatedVehicleJourney_VersionStructure"
 
@@ -23,5 +24,5 @@ class NormalDatedVehicleJourneyVersionStructure(DatedVehicleJourneyVersionStruct
             "name": "ServiceAlterationType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

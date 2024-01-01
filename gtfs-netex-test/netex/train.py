@@ -1,21 +1,13 @@
-from dataclasses import dataclass, field
-from netex.train_version_structure import TrainVersionStructure
+from dataclasses import dataclass
+from .train_version_structure import TrainVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class Train(TrainVersionStructure):
-    """
-    A vehicle composed of TRAIN ELEMENTs in a certain order, i.e. of wagons
-    assembled together and propelled by a locomotive or one of the wagons.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

@@ -1,87 +1,81 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.access_vehicle_equipment_ref import AccessVehicleEquipmentRef
-from netex.activated_equipment_ref import ActivatedEquipmentRef
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.assistance_booking_service_ref import AssistanceBookingServiceRef
-from netex.assistance_service_ref import AssistanceServiceRef
-from netex.battery_equipment_ref import BatteryEquipmentRef
-from netex.car_pooling_service_ref import CarPoolingServiceRef
-from netex.catering_service_ref import CateringServiceRef
-from netex.chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from netex.communication_service_ref import CommunicationServiceRef
-from netex.complaints_service_ref import ComplaintsServiceRef
-from netex.crossing_equipment_ref import CrossingEquipmentRef
-from netex.customer_service_ref import CustomerServiceRef
-from netex.cycle_storage_equipment_ref import CycleStorageEquipmentRef
-from netex.entrance_equipment_ref import EntranceEquipmentRef
-from netex.equipment_ref import EquipmentRef
-from netex.escalator_equipment_ref import EscalatorEquipmentRef
-from netex.general_sign_ref import GeneralSignRef
-from netex.heading_sign_ref import HeadingSignRef
-from netex.help_point_equipment_ref import HelpPointEquipmentRef
-from netex.hire_service_ref import HireServiceRef
-from netex.left_luggage_service_ref import LeftLuggageServiceRef
-from netex.lift_equipment_ref import LiftEquipmentRef
-from netex.local_service_ref import LocalServiceRef
-from netex.lost_property_service_ref import LostPropertyServiceRef
-from netex.luggage_locker_equipment_ref import LuggageLockerEquipmentRef
-from netex.luggage_service_ref import LuggageServiceRef
-from netex.meeting_point_service_ref import MeetingPointServiceRef
-from netex.money_service_ref import MoneyServiceRef
-from netex.multilingual_string import MultilingualString
-from netex.online_service_ref import OnlineServiceRef
-from netex.passenger_equipment_ref import PassengerEquipmentRef
-from netex.passenger_information_equipment_ref import PassengerInformationEquipmentRef
-from netex.passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
-from netex.place_lighting_equipment_ref import PlaceLightingEquipmentRef
-from netex.place_sign_ref import PlaceSignRef
-from netex.purpose_of_equipment_profile_ref import PurposeOfEquipmentProfileRef
-from netex.queueing_equipment_ref import QueueingEquipmentRef
-from netex.ramp_equipment_ref import RampEquipmentRef
-from netex.refuelling_equipment_ref import RefuellingEquipmentRef
-from netex.retail_device_ref import RetailDeviceRef
-from netex.retail_service_ref import RetailServiceRef
-from netex.rough_surface_ref import RoughSurfaceRef
-from netex.rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
-from netex.sanitary_equipment_ref import SanitaryEquipmentRef
-from netex.seating_equipment_ref import SeatingEquipmentRef
-from netex.shelter_equipment_ref import ShelterEquipmentRef
-from netex.sign_equipment_ref import SignEquipmentRef
-from netex.site_equipment_ref import SiteEquipmentRef
-from netex.staircase_equipment_ref import StaircaseEquipmentRef
-from netex.taxi_service_ref import TaxiServiceRef
-from netex.ticket_validator_equipment_ref import TicketValidatorEquipmentRef
-from netex.ticketing_equipment_ref import TicketingEquipmentRef
-from netex.ticketing_service_ref import TicketingServiceRef
-from netex.travelator_equipment_ref import TravelatorEquipmentRef
-from netex.trolley_stand_equipment_ref import TrolleyStandEquipmentRef
-from netex.type_of_equipment_ref import TypeOfEquipmentRef
-from netex.vehicle_charging_equipment_ref import VehicleChargingEquipmentRef
-from netex.vehicle_equipment_ref import VehicleEquipmentRef
-from netex.vehicle_release_equipment_ref import VehicleReleaseEquipmentRef
-from netex.vehicle_rental_service_ref import VehicleRentalServiceRef
-from netex.vehicle_sharing_service_ref import VehicleSharingServiceRef
-from netex.waiting_equipment_ref import WaitingEquipmentRef
-from netex.waiting_room_equipment_ref import WaitingRoomEquipmentRef
-from netex.wheelchair_vehicle_ref import WheelchairVehicleRef
+from typing import Optional, Union
+from .access_vehicle_equipment_ref import AccessVehicleEquipmentRef
+from .activated_equipment_ref import ActivatedEquipmentRef
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .assistance_booking_service_ref import AssistanceBookingServiceRef
+from .assistance_service_ref import AssistanceServiceRef
+from .battery_equipment_ref import BatteryEquipmentRef
+from .car_pooling_service_ref import CarPoolingServiceRef
+from .catering_service_ref import CateringServiceRef
+from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
+from .communication_service_ref import CommunicationServiceRef
+from .complaints_service_ref import ComplaintsServiceRef
+from .crossing_equipment_ref import CrossingEquipmentRef
+from .customer_service_ref import CustomerServiceRef
+from .cycle_storage_equipment_ref import CycleStorageEquipmentRef
+from .entrance_equipment_ref import EntranceEquipmentRef
+from .equipment_ref import EquipmentRef
+from .escalator_equipment_ref import EscalatorEquipmentRef
+from .general_sign_ref import GeneralSignRef
+from .heading_sign_ref import HeadingSignRef
+from .help_point_equipment_ref import HelpPointEquipmentRef
+from .hire_service_ref import HireServiceRef
+from .left_luggage_service_ref import LeftLuggageServiceRef
+from .lift_equipment_ref import LiftEquipmentRef
+from .local_service_ref import LocalServiceRef
+from .lost_property_service_ref import LostPropertyServiceRef
+from .luggage_locker_equipment_ref import LuggageLockerEquipmentRef
+from .luggage_service_ref import LuggageServiceRef
+from .meeting_point_service_ref import MeetingPointServiceRef
+from .money_service_ref import MoneyServiceRef
+from .multilingual_string import MultilingualString
+from .online_service_ref import OnlineServiceRef
+from .passenger_equipment_ref import PassengerEquipmentRef
+from .passenger_information_equipment_ref import (
+    PassengerInformationEquipmentRef,
+)
+from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
+from .place_lighting_equipment_ref import PlaceLightingEquipmentRef
+from .place_sign_ref import PlaceSignRef
+from .purpose_of_equipment_profile_ref import PurposeOfEquipmentProfileRef
+from .queueing_equipment_ref import QueueingEquipmentRef
+from .ramp_equipment_ref import RampEquipmentRef
+from .refuelling_equipment_ref import RefuellingEquipmentRef
+from .retail_device_ref import RetailDeviceRef
+from .retail_service_ref import RetailServiceRef
+from .rough_surface_ref import RoughSurfaceRef
+from .rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
+from .sanitary_equipment_ref import SanitaryEquipmentRef
+from .seating_equipment_ref import SeatingEquipmentRef
+from .shelter_equipment_ref import ShelterEquipmentRef
+from .sign_equipment_ref import SignEquipmentRef
+from .site_equipment_ref import SiteEquipmentRef
+from .staircase_equipment_ref import StaircaseEquipmentRef
+from .taxi_service_ref import TaxiServiceRef
+from .ticket_validator_equipment_ref import TicketValidatorEquipmentRef
+from .ticketing_equipment_ref import TicketingEquipmentRef
+from .ticketing_service_ref import TicketingServiceRef
+from .travelator_equipment_ref import TravelatorEquipmentRef
+from .trolley_stand_equipment_ref import TrolleyStandEquipmentRef
+from .type_of_equipment_ref import TypeOfEquipmentRef
+from .vehicle_charging_equipment_ref import VehicleChargingEquipmentRef
+from .vehicle_equipment_ref import VehicleEquipmentRef
+from .vehicle_release_equipment_ref import VehicleReleaseEquipmentRef
+from .vehicle_rental_service_ref import VehicleRentalServiceRef
+from .vehicle_sharing_service_ref import VehicleSharingServiceRef
+from .waiting_equipment_ref import WaitingEquipmentRef
+from .waiting_room_equipment_ref import WaitingRoomEquipmentRef
+from .wheelchair_vehicle_ref import WheelchairVehicleRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
-    """
-    Type for a VEHICLE EQUIPMENT PROFILE.
-
-    :ivar name: Name of VEHICLE EQUIPMENT PROFILE.
-    :ivar description: Description of VEHICLE EQUIPMENT PROFILE.
-    :ivar choice:
-    :ivar units: Number of units of EQUIPMENT.
-    :ivar manufacturer: Manufacturer VEHICLE MODEL.
-    :ivar type_of_equipment_ref:
-    :ivar purpose_of_equipment_profile_ref:
-    """
     class Meta:
         name = "VehicleEquipmentProfile_VersionStructure"
 
@@ -91,7 +85,7 @@ class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -99,9 +93,73 @@ class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            RetailDeviceRef,
+            OnlineServiceRef,
+            VehicleRentalServiceRef,
+            VehicleSharingServiceRef,
+            ChauffeuredVehicleServiceRef,
+            TaxiServiceRef,
+            CarPoolingServiceRef,
+            ActivatedEquipmentRef,
+            BatteryEquipmentRef,
+            RefuellingEquipmentRef,
+            VehicleChargingEquipmentRef,
+            AssistanceBookingServiceRef,
+            CateringServiceRef,
+            RetailServiceRef,
+            MoneyServiceRef,
+            HireServiceRef,
+            CommunicationServiceRef,
+            MeetingPointServiceRef,
+            LeftLuggageServiceRef,
+            LuggageServiceRef,
+            LostPropertyServiceRef,
+            ComplaintsServiceRef,
+            CustomerServiceRef,
+            AssistanceServiceRef,
+            TicketingServiceRef,
+            LocalServiceRef,
+            VehicleReleaseEquipmentRef,
+            TicketValidatorEquipmentRef,
+            TicketingEquipmentRef,
+            PassengerInformationEquipmentRef,
+            CycleStorageEquipmentRef,
+            TrolleyStandEquipmentRef,
+            SeatingEquipmentRef,
+            ShelterEquipmentRef,
+            LuggageLockerEquipmentRef,
+            WaitingRoomEquipmentRef,
+            WaitingEquipmentRef,
+            SiteEquipmentRef,
+            PlaceLightingEquipmentRef,
+            RoughSurfaceRef,
+            StaircaseEquipmentRef,
+            QueueingEquipmentRef,
+            TravelatorEquipmentRef,
+            EscalatorEquipmentRef,
+            LiftEquipmentRef,
+            CrossingEquipmentRef,
+            RampEquipmentRef,
+            EntranceEquipmentRef,
+            HeadingSignRef,
+            GeneralSignRef,
+            PlaceSignRef,
+            SignEquipmentRef,
+            RubbishDisposalEquipmentRef,
+            HelpPointEquipmentRef,
+            PassengerSafetyEquipmentRef,
+            SanitaryEquipmentRef,
+            WheelchairVehicleRef,
+            AccessVehicleEquipmentRef,
+            VehicleEquipmentRef,
+            PassengerEquipmentRef,
+            EquipmentRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -412,7 +470,7 @@ class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     units: Optional[int] = field(
         default=None,
@@ -420,7 +478,7 @@ class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
             "name": "Units",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     manufacturer: Optional[MultilingualString] = field(
         default=None,
@@ -428,7 +486,7 @@ class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
             "name": "Manufacturer",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     type_of_equipment_ref: Optional[TypeOfEquipmentRef] = field(
         default=None,
@@ -436,13 +494,15 @@ class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
             "name": "TypeOfEquipmentRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    purpose_of_equipment_profile_ref: Optional[PurposeOfEquipmentProfileRef] = field(
+    purpose_of_equipment_profile_ref: Optional[
+        PurposeOfEquipmentProfileRef
+    ] = field(
         default=None,
         metadata={
             "name": "PurposeOfEquipmentProfileRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,20 +1,13 @@
-from dataclasses import dataclass, field
-from netex.minimum_stay_version_structure import MinimumStayVersionStructure
+from dataclasses import dataclass
+from .minimum_stay_version_structure import MinimumStayVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MinimumStay(MinimumStayVersionStructure):
-    """
-    Details of any minimum stay at the destination  required  to use the product.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

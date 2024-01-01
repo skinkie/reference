@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.fare_price_versioned_child_structure import FarePriceVersionedChildStructure
-from netex.time_interval_ref import TimeIntervalRef
+from .fare_price_versioned_child_structure import (
+    FarePriceVersionedChildStructure,
+)
+from .time_interval_ref import TimeIntervalRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TimeIntervalPriceVersionedChildStructure(FarePriceVersionedChildStructure):
-    """
-    Type for a TIME INTERVAL PRICEs.
-    """
+@dataclass(kw_only=True)
+class TimeIntervalPriceVersionedChildStructure(
+    FarePriceVersionedChildStructure
+):
     class Meta:
         name = "TimeIntervalPrice_VersionedChildStructure"
 
@@ -20,5 +24,5 @@ class TimeIntervalPriceVersionedChildStructure(FarePriceVersionedChildStructure)
             "name": "TimeIntervalRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

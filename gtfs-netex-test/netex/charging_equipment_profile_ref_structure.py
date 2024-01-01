@@ -1,11 +1,16 @@
 from dataclasses import dataclass
-from netex.vehicle_equipment_profile_ref_structure import VehicleEquipmentProfileRefStructure
+from .vehicle_equipment_profile_ref_structure import (
+    VehicleEquipmentProfileRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ChargingEquipmentProfileRefStructure(VehicleEquipmentProfileRefStructure):
-    """
-    Type for a reference to an CHARGING EQUIPMENT PROFILE.
-    """
+@dataclass(kw_only=True)
+class ChargingEquipmentProfileRefStructure(
+    VehicleEquipmentProfileRefStructure
+):
+    value: RestrictedVar

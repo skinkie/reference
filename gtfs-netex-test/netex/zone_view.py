@@ -1,14 +1,13 @@
 from dataclasses import dataclass
-from netex.zone_derived_view_structure import ZoneDerivedViewStructure
+from .zone_derived_view_structure import ZoneDerivedViewStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ZoneView(ZoneDerivedViewStructure):
-    """Simplified view of SCHEDULED STOP POINT.
-
-    Includes derived some propertries of a stop.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

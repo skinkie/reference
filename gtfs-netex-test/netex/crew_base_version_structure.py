@@ -1,26 +1,27 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.garage_point_ref import GaragePointRef
-from netex.garage_refs_rel_structure import GarageRefsRelStructure
-from netex.group_of_entities_version_structure import GroupOfEntitiesVersionStructure
-from netex.parking_point_ref import ParkingPointRef
-from netex.relief_point_ref import ReliefPointRef
+from typing import Optional, Union
+from .garage_point_ref import GaragePointRef
+from .garage_refs_rel_structure import GarageRefsRelStructure
+from .group_of_entities_version_structure import (
+    GroupOfEntitiesVersionStructure,
+)
+from .parking_point_ref import ParkingPointRef
+from .relief_point_ref import ReliefPointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CrewBaseVersionStructure(GroupOfEntitiesVersionStructure):
-    """
-    Type for CREW BASE.
-
-    :ivar garage_point_ref_or_parking_point_ref_or_relief_point_ref:
-    :ivar garages: garages associated with CREW BASe.
-    """
     class Meta:
         name = "CrewBase_VersionStructure"
 
-    garage_point_ref_or_parking_point_ref_or_relief_point_ref: Optional[object] = field(
+    parking_point_ref_or_relief_point_ref: Optional[
+        Union[GaragePointRef, ParkingPointRef, ReliefPointRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -41,12 +42,12 @@ class CrewBaseVersionStructure(GroupOfEntitiesVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     garages: Optional[GarageRefsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from netex.timetabled_passing_time_versioned_child_structure import TimetabledPassingTimeVersionedChildStructure
+from .timetabled_passing_time_versioned_child_structure import (
+    TimetabledPassingTimeVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimetabledPassingTime(TimetabledPassingTimeVersionedChildStructure):
-    """
-    TIMETABLED PASSING TIME at TIMING POINT.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

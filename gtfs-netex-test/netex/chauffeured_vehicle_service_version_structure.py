@@ -1,13 +1,17 @@
 from dataclasses import dataclass
-from netex.vehicle_pooling_service_version_structure import VehiclePoolingServiceVersionStructure
+from .vehicle_pooling_service_version_structure import (
+    VehiclePoolingServiceVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ChauffeuredVehicleServiceVersionStructure(VehiclePoolingServiceVersionStructure):
-    """
-    Type for ChauffeuredVehicle SERVICE.
-    """
+@dataclass(kw_only=True)
+class ChauffeuredVehicleServiceVersionStructure(
+    VehiclePoolingServiceVersionStructure
+):
     class Meta:
         name = "ChauffeuredVehicleService_VersionStructure"

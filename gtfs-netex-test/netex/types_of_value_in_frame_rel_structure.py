@@ -1,92 +1,170 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.branding import Branding
-from netex.charging_moment import ChargingMoment
-from netex.class_of_use import ClassOfUse
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.customer_account_status import CustomerAccountStatus
-from netex.data_source import DataSource
-from netex.direction import Direction
-from netex.open_transport_mode import OpenTransportMode
-from netex.parking_bay_status import ParkingBayStatus
-from netex.point_of_interest_classification import PointOfInterestClassification
-from netex.price_unit import PriceUnit
-from netex.purpose_of_equipment_profile import PurposeOfEquipmentProfile
-from netex.purpose_of_grouping import PurposeOfGrouping
-from netex.purpose_of_journey_partition import PurposeOfJourneyPartition
-from netex.submode import Submode
-from netex.timing_algorithm_type import TimingAlgorithmType
-from netex.type_of_access_right_assignment import TypeOfAccessRightAssignment
-from netex.type_of_activation import TypeOfActivation
-from netex.type_of_battery_chemistry import TypeOfBatteryChemistry
-from netex.type_of_codespace_assignment import TypeOfCodespaceAssignment
-from netex.type_of_concession import TypeOfConcession
-from netex.type_of_congestion import TypeOfCongestion
-from netex.type_of_customer_account import TypeOfCustomerAccount
-from netex.type_of_delivery_variant import TypeOfDeliveryVariant
-from netex.type_of_entity import TypeOfEntity
-from netex.type_of_equipment import TypeOfEquipment
-from netex.type_of_facility import TypeOfFacility
-from netex.type_of_fare_contract import TypeOfFareContract
-from netex.type_of_fare_contract_entry import TypeOfFareContractEntry
-from netex.type_of_fare_product import TypeOfFareProduct
-from netex.type_of_fare_structure_element import TypeOfFareStructureElement
-from netex.type_of_fare_structure_factor import TypeOfFareStructureFactor
-from netex.type_of_fare_table import TypeOfFareTable
-from netex.type_of_feature import TypeOfFeature
-from netex.type_of_fleet import TypeOfFleet
-from netex.type_of_flexible_service import TypeOfFlexibleService
-from netex.type_of_journey_pattern import TypeOfJourneyPattern
-from netex.type_of_line import TypeOfLine
-from netex.type_of_link import TypeOfLink
-from netex.type_of_link_sequence import TypeOfLinkSequence
-from netex.type_of_machine_readability import TypeOfMachineReadability
-from netex.type_of_medium_access_device import TypeOfMediumAccessDevice
-from netex.type_of_mobility_service import TypeOfMobilityService
-from netex.type_of_mode_of_operation import TypeOfModeOfOperation
-from netex.type_of_notice import TypeOfNotice
-from netex.type_of_operation import TypeOfOperation
-from netex.type_of_organisation import TypeOfOrganisation
-from netex.type_of_organisation_part import TypeOfOrganisationPart
-from netex.type_of_parking import TypeOfParking
-from netex.type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
-from netex.type_of_payment_method import TypeOfPaymentMethod
-from netex.type_of_place import TypeOfPlace
-from netex.type_of_plug import TypeOfPlug
-from netex.type_of_point import TypeOfPoint
-from netex.type_of_pricing_rule import TypeOfPricingRule
-from netex.type_of_product_category import TypeOfProductCategory
-from netex.type_of_projection import TypeOfProjection
-from netex.type_of_proof import TypeOfProof
-from netex.type_of_responsibility_role import TypeOfResponsibilityRole
-from netex.type_of_retail_device import TypeOfRetailDevice
-from netex.type_of_sales_offer_package import TypeOfSalesOfferPackage
-from netex.type_of_security_list import TypeOfSecurityList
-from netex.type_of_service import TypeOfService
-from netex.type_of_service_feature import TypeOfServiceFeature
-from netex.type_of_tariff import TypeOfTariff
-from netex.type_of_time_demand_type import TypeOfTimeDemandType
-from netex.type_of_transfer import TypeOfTransfer
-from netex.type_of_travel_document import TypeOfTravelDocument
-from netex.type_of_usage_parameter import TypeOfUsageParameter
-from netex.type_of_validity import TypeOfValidity
-from netex.type_of_version import TypeOfVersion
-from netex.type_of_zone import TypeOfZone
-from netex.types_of_frame_rel_structure import TypeOfFrame
-from netex.value_set import ValueSet
+from typing import List, Union
+from .branding import Branding
+from .charging_moment import ChargingMoment
+from .class_of_use import ClassOfUse
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .customer_account_status import CustomerAccountStatus
+from .data_source import DataSource
+from .direction import Direction
+from .open_transport_mode import OpenTransportMode
+from .parking_bay_status import ParkingBayStatus
+from .point_of_interest_classification import PointOfInterestClassification
+from .price_unit import PriceUnit
+from .purpose_of_equipment_profile import PurposeOfEquipmentProfile
+from .purpose_of_grouping import PurposeOfGrouping
+from .purpose_of_journey_partition import PurposeOfJourneyPartition
+from .submode import Submode
+from .timing_algorithm_type import TimingAlgorithmType
+from .type_of_access_right_assignment import TypeOfAccessRightAssignment
+from .type_of_activation import TypeOfActivation
+from .type_of_battery_chemistry import TypeOfBatteryChemistry
+from .type_of_codespace_assignment import TypeOfCodespaceAssignment
+from .type_of_concession import TypeOfConcession
+from .type_of_congestion import TypeOfCongestion
+from .type_of_customer_account import TypeOfCustomerAccount
+from .type_of_delivery_variant import TypeOfDeliveryVariant
+from .type_of_entity import TypeOfEntity
+from .type_of_equipment import TypeOfEquipment
+from .type_of_facility import TypeOfFacility
+from .type_of_fare_contract import TypeOfFareContract
+from .type_of_fare_contract_entry import TypeOfFareContractEntry
+from .type_of_fare_product import TypeOfFareProduct
+from .type_of_fare_structure_element import TypeOfFareStructureElement
+from .type_of_fare_structure_factor import TypeOfFareStructureFactor
+from .type_of_fare_table import TypeOfFareTable
+from .type_of_feature import TypeOfFeature
+from .type_of_fleet import TypeOfFleet
+from .type_of_flexible_service import TypeOfFlexibleService
+from .type_of_journey_pattern import TypeOfJourneyPattern
+from .type_of_line import TypeOfLine
+from .type_of_link import TypeOfLink
+from .type_of_link_sequence import TypeOfLinkSequence
+from .type_of_machine_readability import TypeOfMachineReadability
+from .type_of_medium_access_device import TypeOfMediumAccessDevice
+from .type_of_mobility_service import TypeOfMobilityService
+from .type_of_mode_of_operation import TypeOfModeOfOperation
+from .type_of_notice import TypeOfNotice
+from .type_of_operation import TypeOfOperation
+from .type_of_organisation import TypeOfOrganisation
+from .type_of_organisation_part import TypeOfOrganisationPart
+from .type_of_parking import TypeOfParking
+from .type_of_passenger_information_equipment import (
+    TypeOfPassengerInformationEquipment,
+)
+from .type_of_payment_method import TypeOfPaymentMethod
+from .type_of_place import TypeOfPlace
+from .type_of_plug import TypeOfPlug
+from .type_of_point import TypeOfPoint
+from .type_of_pricing_rule import TypeOfPricingRule
+from .type_of_product_category import TypeOfProductCategory
+from .type_of_projection import TypeOfProjection
+from .type_of_proof import TypeOfProof
+from .type_of_responsibility_role import TypeOfResponsibilityRole
+from .type_of_retail_device import TypeOfRetailDevice
+from .type_of_sales_offer_package import TypeOfSalesOfferPackage
+from .type_of_security_list import TypeOfSecurityList
+from .type_of_service import TypeOfService
+from .type_of_service_feature import TypeOfServiceFeature
+from .type_of_tariff import TypeOfTariff
+from .type_of_time_demand_type import TypeOfTimeDemandType
+from .type_of_transfer import TypeOfTransfer
+from .type_of_travel_document import TypeOfTravelDocument
+from .type_of_usage_parameter import TypeOfUsageParameter
+from .type_of_validity import TypeOfValidity
+from .type_of_version import TypeOfVersion
+from .type_of_zone import TypeOfZone
+from .types_of_frame_rel_structure import TypeOfFrame
+from .value_set import ValueSet
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of TYPE OF VALUEs.
-    """
     class Meta:
         name = "typesOfValueInFrame_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            ValueSet,
+            TypeOfFleet,
+            ParkingBayStatus,
+            TypeOfMediumAccessDevice,
+            TypeOfMachineReadability,
+            TypeOfProof,
+            TypeOfConcession,
+            ChargingMoment,
+            TypeOfUsageParameter,
+            TypeOfFareTable,
+            TypeOfPricingRule,
+            PriceUnit,
+            TimingAlgorithmType,
+            PurposeOfJourneyPartition,
+            PointOfInterestClassification,
+            TypeOfParking,
+            TypeOfServiceFeature,
+            Direction,
+            TypeOfSecurityList,
+            PurposeOfEquipmentProfile,
+            TypeOfProductCategory,
+            TypeOfPaymentMethod,
+            ClassOfUse,
+            Submode,
+            OpenTransportMode,
+            TypeOfCodespaceAssignment,
+            TypeOfValidity,
+            PurposeOfGrouping,
+            Branding,
+            DataSource,
+            TypeOfMobilityService,
+            TypeOfRetailDevice,
+            CustomerAccountStatus,
+            TypeOfCustomerAccount,
+            TypeOfFareContractEntry,
+            TypeOfFareContract,
+            TypeOfTravelDocument,
+            TypeOfSalesOfferPackage,
+            TypeOfFareProduct,
+            TypeOfFareStructureElement,
+            TypeOfTariff,
+            TypeOfAccessRightAssignment,
+            TypeOfFareStructureFactor,
+            TypeOfFlexibleService,
+            TypeOfTimeDemandType,
+            TypeOfPassengerInformationEquipment,
+            TypeOfJourneyPattern,
+            TypeOfActivation,
+            TypeOfModeOfOperation,
+            TypeOfPlug,
+            TypeOfBatteryChemistry,
+            TypeOfLine,
+            TypeOfDeliveryVariant,
+            TypeOfNotice,
+            TypeOfCongestion,
+            TypeOfFacility,
+            TypeOfService,
+            TypeOfEquipment,
+            TypeOfFeature,
+            TypeOfLinkSequence,
+            TypeOfPlace,
+            TypeOfTransfer,
+            TypeOfOperation,
+            TypeOfOrganisationPart,
+            TypeOfOrganisation,
+            TypeOfZone,
+            TypeOfLink,
+            TypeOfPoint,
+            TypeOfProjection,
+            TypeOfFrame,
+            TypeOfResponsibilityRole,
+            TypeOfEntity,
+            TypeOfVersion,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -457,5 +535,5 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

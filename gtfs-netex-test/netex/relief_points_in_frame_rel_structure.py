@@ -1,22 +1,24 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.garage_point import GaragePoint
-from netex.parking_point import ParkingPoint
-from netex.relief_point import ReliefPoint
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .garage_point import GaragePoint
+from .parking_point import ParkingPoint
+from .relief_point import ReliefPoint
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ReliefPointsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of RELIEF POINTs.
-    """
     class Meta:
         name = "reliefPointsInFrame_RelStructure"
 
-    parking_point_or_garage_point_or_relief_point: List[object] = field(
+    relief_point_or_parking_point: List[
+        Union[ParkingPoint, GaragePoint, ReliefPoint]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +39,5 @@ class ReliefPointsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

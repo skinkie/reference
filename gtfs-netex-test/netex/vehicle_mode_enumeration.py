@@ -1,13 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class VehicleModeEnumeration(Enum):
-    """
-    Allowed values for MODES of Public Transport applicable to timetabled public
-    transport.
-    """
     AIR = "air"
     BUS = "bus"
     COACH = "coach"

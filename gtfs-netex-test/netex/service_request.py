@@ -1,17 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.data_object_request import DataObjectRequest
-from netex.service_request_structure import ServiceRequestStructure
+from .data_object_request import DataObjectRequest
+from .service_request_structure import ServiceRequestStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ServiceRequest(ServiceRequestStructure):
-    """Request from Consumer to Producer for immediate delivery of data.
-
-    Answered with a ServiceDelivery (or a DataReadyRequest)
-    """
     class Meta:
         namespace = "http://www.siri.org.uk/siri"
 
@@ -21,5 +20,5 @@ class ServiceRequest(ServiceRequestStructure):
             "name": "DataObjectRequest",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

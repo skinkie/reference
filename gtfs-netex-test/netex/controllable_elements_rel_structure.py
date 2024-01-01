@@ -1,21 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.controllable_element import ControllableElement
-from netex.controllable_element_ref import ControllableElementRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .controllable_element import ControllableElement
+from .controllable_element_ref import ControllableElementRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ControllableElementsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of CONTROLLABLE ELEMENT PRICEs.
-    """
     class Meta:
         name = "controllableElements_RelStructure"
 
-    controllable_element_ref_or_controllable_element: List[object] = field(
+    controllable_element_ref_or_controllable_element: List[
+        Union[ControllableElementRef, ControllableElement]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +35,5 @@ class ControllableElementsRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.country_ref import CountryRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .country_ref import CountryRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CountryRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of COUNTRY references.
-
-    :ivar country_ref: Reference to a COUNTRY.
-    """
     class Meta:
         name = "countryRefs_RelStructure"
 
@@ -23,5 +21,5 @@ class CountryRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.interchange_rule_timing import InterchangeRuleTiming
-from netex.interchange_rule_timing_ref import InterchangeRuleTimingRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .interchange_rule_timing import InterchangeRuleTiming
+from .interchange_rule_timing_ref import InterchangeRuleTimingRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class InterchangeRuleTimingsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of INTERCHANGE RULE TIMINGs.
-    """
     class Meta:
         name = "interchangeRuleTimings_RelStructure"
 
-    interchange_rule_timing_ref_or_interchange_rule_timing: List[object] = field(
+    interchange_rule_timing_ref_or_interchange_rule_timing: List[
+        Union[InterchangeRuleTimingRef, InterchangeRuleTiming]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class InterchangeRuleTimingsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

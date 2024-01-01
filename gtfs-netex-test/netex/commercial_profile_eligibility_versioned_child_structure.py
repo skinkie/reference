@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.commercial_profile_ref import CommercialProfileRef
-from netex.customer_eligibility_versioned_child_structure import CustomerEligibilityVersionedChildStructure
+from .commercial_profile_ref import CommercialProfileRef
+from .customer_eligibility_versioned_child_structure import (
+    CustomerEligibilityVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class CommercialProfileEligibilityVersionedChildStructure(CustomerEligibilityVersionedChildStructure):
-    """
-    Type for COMMERCIAL PROFILE ELIGIBILITY.
-    """
+@dataclass(kw_only=True)
+class CommercialProfileEligibilityVersionedChildStructure(
+    CustomerEligibilityVersionedChildStructure
+):
     class Meta:
         name = "CommercialProfileEligibility_VersionedChildStructure"
 
@@ -20,5 +24,5 @@ class CommercialProfileEligibilityVersionedChildStructure(CustomerEligibilityVer
             "name": "CommercialProfileRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

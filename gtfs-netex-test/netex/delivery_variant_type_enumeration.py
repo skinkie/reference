@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class DeliveryVariantTypeEnumeration(Enum):
-    """
-    Allowed values for Notice delivery media type.
-    """
     ANY = "any"
     PRINTED = "printed"
     TEXT_TO_SPEECH = "textToSpeech"

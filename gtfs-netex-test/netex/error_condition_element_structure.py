@@ -1,34 +1,54 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.access_not_allowed_error import AccessNotAllowedError
-from netex.allowed_resource_usage_exceeded_error import AllowedResourceUsageExceededError
-from netex.beyond_data_horizon import BeyondDataHorizon
-from netex.capability_not_supported_error import CapabilityNotSupportedError
-from netex.endpoint_denied_access_error import EndpointDeniedAccessError
-from netex.endpoint_not_available_access_error import EndpointNotAvailableAccessError
-from netex.invalid_data_references_error import InvalidDataReferencesError
-from netex.no_info_for_topic_error import NoInfoForTopicError
-from netex.other_error import OtherError
-from netex.parameters_ignored_error import ParametersIgnoredError
-from netex.service_not_available_error import ServiceNotAvailableError
-from netex.unapproved_key_access_error import UnapprovedKeyAccessError
-from netex.unknown_endpoint_error import UnknownEndpointError
-from netex.unknown_extensions_error import UnknownExtensionsError
-from netex.unknown_participant_error import UnknownParticipantError
-from netex.unknown_subscription_error import UnknownSubscriptionError
+from typing import Optional, Union
+from .access_not_allowed_error import AccessNotAllowedError
+from .allowed_resource_usage_exceeded_error import (
+    AllowedResourceUsageExceededError,
+)
+from .beyond_data_horizon import BeyondDataHorizon
+from .capability_not_supported_error import CapabilityNotSupportedError
+from .endpoint_denied_access_error import EndpointDeniedAccessError
+from .endpoint_not_available_access_error import (
+    EndpointNotAvailableAccessError,
+)
+from .invalid_data_references_error import InvalidDataReferencesError
+from .no_info_for_topic_error import NoInfoForTopicError
+from .other_error import OtherError
+from .parameters_ignored_error import ParametersIgnoredError
+from .service_not_available_error import ServiceNotAvailableError
+from .unapproved_key_access_error import UnapprovedKeyAccessError
+from .unknown_endpoint_error import UnknownEndpointError
+from .unknown_extensions_error import UnknownExtensionsError
+from .unknown_participant_error import UnknownParticipantError
+from .unknown_subscription_error import UnknownSubscriptionError
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ErrorConditionElementStructure:
-    """
-    Type for Standard ErrorConditions for Service request.
-
-    :ivar choice:
-    :ivar description: Text description of error.
-    """
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            UnapprovedKeyAccessError,
+            UnknownParticipantError,
+            UnknownEndpointError,
+            EndpointDeniedAccessError,
+            EndpointNotAvailableAccessError,
+            ServiceNotAvailableError,
+            CapabilityNotSupportedError,
+            AccessNotAllowedError,
+            InvalidDataReferencesError,
+            BeyondDataHorizon,
+            NoInfoForTopicError,
+            ParametersIgnoredError,
+            UnknownExtensionsError,
+            AllowedResourceUsageExceededError,
+            OtherError,
+            UnknownSubscriptionError,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -114,7 +134,7 @@ class ErrorConditionElementStructure:
                     "namespace": "http://www.siri.org.uk/siri",
                 },
             ),
-        }
+        },
     )
     description: Optional[str] = field(
         default=None,
@@ -122,5 +142,5 @@ class ErrorConditionElementStructure:
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )

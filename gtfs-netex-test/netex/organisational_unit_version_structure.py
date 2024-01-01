@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.department_ref import DepartmentRef
-from netex.organisation_part_version_structure import OrganisationPartVersionStructure
+from .department_ref import DepartmentRef
+from .organisation_part_version_structure import (
+    OrganisationPartVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OrganisationalUnitVersionStructure(OrganisationPartVersionStructure):
-    """
-    Type for a ORGANISATIONAL UNIT.
-    """
     class Meta:
         name = "OrganisationalUnit_VersionStructure"
 
@@ -20,5 +22,5 @@ class OrganisationalUnitVersionStructure(OrganisationPartVersionStructure):
             "name": "DepartmentRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

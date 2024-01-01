@@ -1,22 +1,28 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.emv_card_ref import EmvCardRef
-from netex.mobile_device_ref import MobileDeviceRef
-from netex.security_listing_versioned_child_structure import SecurityListingVersionedChildStructure
-from netex.smartcard_ref import SmartcardRef
+from typing import Optional, Union
+from .emv_card_ref import EmvCardRef
+from .mobile_device_ref import MobileDeviceRef
+from .security_listing_versioned_child_structure import (
+    SecurityListingVersionedChildStructure,
+)
+from .smartcard_ref import SmartcardRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class MediumAccessDeviceSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
-    """
-    Type for MEDIUM ACCESS DEVICE SECURITY LISTING.
-    """
+@dataclass(kw_only=True)
+class MediumAccessDeviceSecurityListingVersionedChildStructure(
+    SecurityListingVersionedChildStructure
+):
     class Meta:
         name = "MediumAccessDeviceSecurityListing_VersionedChildStructure"
 
-    mobile_device_ref_or_emv_card_ref_or_smartcard_ref: Optional[object] = field(
+    medium_access_device_ref: Optional[
+        Union[MobileDeviceRef, EmvCardRef, SmartcardRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -37,5 +43,5 @@ class MediumAccessDeviceSecurityListingVersionedChildStructure(SecurityListingVe
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

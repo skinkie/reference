@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class BorderTypeEnumeration(Enum):
-    """
-    Allowed values for border types.
-    """
     WALL = "wall"
     GRASS = "grass"
     EARTH = "earth"

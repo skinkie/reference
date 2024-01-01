@@ -1,14 +1,15 @@
 from dataclasses import dataclass
-from netex.link_in_journey_pattern_ref_structure import LinkInJourneyPatternRefStructure
+from .link_in_journey_pattern_ref_structure import (
+    LinkInJourneyPatternRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinkInJourneyPatternRef(LinkInJourneyPatternRefStructure):
-    """Reference to a LINK IN JOURNEY PATTERN.
-
-    If Given by Context does not need to stated.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

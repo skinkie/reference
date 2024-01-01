@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.service_site_ref_structure import ServiceSiteRefStructure
+from .service_site_ref_structure import ServiceSiteRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ServiceSiteRef(ServiceSiteRefStructure):
-    """
-    Reference to a SERVICE SITE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

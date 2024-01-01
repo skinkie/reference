@@ -1,10 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class AirSubmodeEnumeration(Enum):
-    """Values for Air MODEs of TRANSPORT: TPEG pti_table_08."""
     UNKNOWN = "unknown"
     UNDEFINED = "undefined"
     INTERNATIONAL_FLIGHT = "internationalFlight"

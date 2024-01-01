@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.relief_opportunity import ReliefOpportunity
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .relief_opportunity import ReliefOpportunity
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ReliefOpportunitiesInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of RELIEF OPPORTUNITies.
-    """
     class Meta:
         name = "reliefOpportunitiesInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class ReliefOpportunitiesInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

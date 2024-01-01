@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
-from netex.location_structure_1 import LocationStructure1
+from .location_structure_1 import LocationStructure1
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BoundingBoxStructure1:
-    """Defines a bounding box using two corner points.
-
-    GML terminology.  +SIRI v2.0
-
-    :ivar upper_left: A geospatial point. Upper Left corner. .
-    :ivar lower_right: A geospatial point. Lower right corner. .
-    """
     class Meta:
         name = "BoundingBoxStructure"
 

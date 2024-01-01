@@ -1,17 +1,17 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.topographic_place import TopographicPlace
-from netex.topographic_place_ref import TopographicPlaceRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .topographic_place import TopographicPlace
+from .topographic_place_ref import TopographicPlaceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TopographicPlacesRelStructure(ContainmentAggregationStructure):
-    """
-    Collection of TOPOGRAPHIC PLACEs.
-    """
     class Meta:
         name = "topographicPlaces_RelStructure"
 
@@ -23,7 +23,7 @@ class TopographicPlacesRelStructure(ContainmentAggregationStructure):
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
             "sequence": 1,
-        }
+        },
     )
     topographic_place: List[TopographicPlace] = field(
         default_factory=list,
@@ -33,5 +33,5 @@ class TopographicPlacesRelStructure(ContainmentAggregationStructure):
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
             "sequence": 1,
-        }
+        },
     )

@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.meal_facility_enumeration import MealFacilityEnumeration
+from .meal_facility_enumeration import MealFacilityEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MealFacility:
-    """
-    Classification of MEAL FACILITY type.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 

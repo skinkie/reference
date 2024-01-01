@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.priceable_object_ref_structure import PriceableObjectRefStructure
+from .priceable_object_ref_structure import PriceableObjectRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SalesOfferPackageElementRefStructure(PriceableObjectRefStructure):
-    """
-    Type for Reference to a SALES OFFER PACKAGE ELEMENT.
-    """
+    value: RestrictedVar

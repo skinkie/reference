@@ -1,35 +1,28 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.authority_ref import AuthorityRef
-from netex.general_organisation_ref import GeneralOrganisationRef
-from netex.management_agent_ref import ManagementAgentRef
-from netex.multilingual_string import MultilingualString
-from netex.online_service_operator_ref import OnlineServiceOperatorRef
-from netex.operator_ref import OperatorRef
-from netex.organisation_ref import OrganisationRef
-from netex.other_organisation_ref import OtherOrganisationRef
-from netex.retail_consortium_ref import RetailConsortiumRef
-from netex.security_listings_rel_structure import SecurityListingsRelStructure
-from netex.serviced_organisation_ref import ServicedOrganisationRef
-from netex.travel_agent_ref import TravelAgentRef
-from netex.type_of_security_list_ref import TypeOfSecurityListRef
+from typing import Optional, Union
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .authority_ref import AuthorityRef
+from .general_organisation_ref import GeneralOrganisationRef
+from .management_agent_ref import ManagementAgentRef
+from .multilingual_string import MultilingualString
+from .online_service_operator_ref import OnlineServiceOperatorRef
+from .operator_ref import OperatorRef
+from .organisation_ref import OrganisationRef
+from .other_organisation_ref import OtherOrganisationRef
+from .retail_consortium_ref import RetailConsortiumRef
+from .security_listings_rel_structure import SecurityListingsRelStructure
+from .serviced_organisation_ref import ServicedOrganisationRef
+from .travel_agent_ref import TravelAgentRef
+from .type_of_security_list_ref import TypeOfSecurityListRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SecurityListVersionStructure(DataManagedObjectStructure):
-    """Type for SECURITY LIST.
-
-    +v1.1
-
-    :ivar name: Name of SECURITY LIST.
-    :ivar description: Description of SECURITY LIST.
-    :ivar type_of_security_list_ref:
-    :ivar choice:
-    :ivar security_listings: Items in SECURITY LIST.
-    """
     class Meta:
         name = "SecurityList_VersionStructure"
 
@@ -39,7 +32,7 @@ class SecurityListVersionStructure(DataManagedObjectStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -47,7 +40,7 @@ class SecurityListVersionStructure(DataManagedObjectStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     type_of_security_list_ref: Optional[TypeOfSecurityListRef] = field(
         default=None,
@@ -55,9 +48,22 @@ class SecurityListVersionStructure(DataManagedObjectStructure):
             "name": "TypeOfSecurityListRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
+        Union[
+            RetailConsortiumRef,
+            OnlineServiceOperatorRef,
+            GeneralOrganisationRef,
+            ManagementAgentRef,
+            ServicedOrganisationRef,
+            TravelAgentRef,
+            OtherOrganisationRef,
+            AuthorityRef,
+            OperatorRef,
+            OrganisationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -113,7 +119,7 @@ class SecurityListVersionStructure(DataManagedObjectStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     security_listings: Optional[SecurityListingsRelStructure] = field(
         default=None,
@@ -121,5 +127,5 @@ class SecurityListVersionStructure(DataManagedObjectStructure):
             "name": "securityListings",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

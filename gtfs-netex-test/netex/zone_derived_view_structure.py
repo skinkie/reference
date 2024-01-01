@@ -1,33 +1,42 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.access_zone_ref import AccessZoneRef
-from netex.administrative_zone_ref import AdministrativeZoneRef
-from netex.derived_view_structure import DerivedViewStructure
-from netex.fare_zone_ref import FareZoneRef
-from netex.mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
-from netex.multilingual_string import MultilingualString
-from netex.stop_area_ref import StopAreaRef
-from netex.tariff_zone_ref import TariffZoneRef
-from netex.transport_administrative_zone_ref import TransportAdministrativeZoneRef
-from netex.type_of_zone_ref import TypeOfZoneRef
-from netex.zone_ref import ZoneRef
+from typing import Optional, Union
+from .access_zone_ref import AccessZoneRef
+from .administrative_zone_ref import AdministrativeZoneRef
+from .derived_view_structure import DerivedViewStructure
+from .fare_zone_ref import FareZoneRef
+from .mobility_service_constraint_zone_ref import (
+    MobilityServiceConstraintZoneRef,
+)
+from .multilingual_string import MultilingualString
+from .stop_area_ref import StopAreaRef
+from .tariff_zone_ref import TariffZoneRef
+from .transport_administrative_zone_ref import TransportAdministrativeZoneRef
+from .type_of_zone_ref import TypeOfZoneRef
+from .zone_ref import ZoneRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ZoneDerivedViewStructure(DerivedViewStructure):
-    """
-    Type for SCHEDULED STOP POINT VIEW.
-
-    :ivar choice:
-    :ivar name: Name of Stop Point.
-    :ivar type_of_zone_ref:
-    """
     class Meta:
         name = "Zone_DerivedViewStructure"
 
-    choice: Optional[object] = field(
+    zone_ref_or_tariff_zone_ref: Optional[
+        Union[
+            MobilityServiceConstraintZoneRef,
+            StopAreaRef,
+            TransportAdministrativeZoneRef,
+            AccessZoneRef,
+            AdministrativeZoneRef,
+            FareZoneRef,
+            TariffZoneRef,
+            ZoneRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -73,7 +82,7 @@ class ZoneDerivedViewStructure(DerivedViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     name: Optional[MultilingualString] = field(
         default=None,
@@ -81,7 +90,7 @@ class ZoneDerivedViewStructure(DerivedViewStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     type_of_zone_ref: Optional[TypeOfZoneRef] = field(
         default=None,
@@ -89,5 +98,5 @@ class ZoneDerivedViewStructure(DerivedViewStructure):
             "name": "TypeOfZoneRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

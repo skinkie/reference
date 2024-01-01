@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.catering_service_enumeration import CateringServiceEnumeration
-from netex.local_service_version_structure import LocalServiceVersionStructure
+from .catering_service_enumeration import CateringServiceEnumeration
+from .local_service_version_structure import LocalServiceVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CateringServiceVersionStructure(LocalServiceVersionStructure):
-    """
-    Type for CATERING SERVICE.
-
-    :ivar service_list: CATERING SERVICEs available.
-    """
     class Meta:
         name = "CateringService_VersionStructure"
 
@@ -24,5 +22,5 @@ class CateringServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
             "required": True,
             "tokens": True,
-        }
+        },
     )

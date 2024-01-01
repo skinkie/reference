@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.fare_contract_ref import FareContractRef
-from netex.security_listing_versioned_child_structure import SecurityListingVersionedChildStructure
+from .fare_contract_ref import FareContractRef
+from .security_listing_versioned_child_structure import (
+    SecurityListingVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class FareContractSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
-    """
-    Type for FARE CONTRACT SECURITY LISTING.
-    """
+@dataclass(kw_only=True)
+class FareContractSecurityListingVersionedChildStructure(
+    SecurityListingVersionedChildStructure
+):
     class Meta:
         name = "FareContractSecurityListing_VersionedChildStructure"
 
@@ -20,5 +24,5 @@ class FareContractSecurityListingVersionedChildStructure(SecurityListingVersione
             "name": "FareContractRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

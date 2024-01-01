@@ -1,30 +1,23 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
 from xsdata.models.datatype import XmlDateTime
-from netex.multilingual_string import MultilingualString
-from netex.network_frame_request_policy_structure import NetworkFrameRequestPolicyStructure
-from netex.network_frame_subscription_policy_structure import NetworkFrameSubscriptionPolicyStructure
-from netex.network_frame_topic_structure import NetworkFrameTopicStructure
+from .multilingual_string import MultilingualString
+from .network_frame_request_policy_structure import (
+    NetworkFrameRequestPolicyStructure,
+)
+from .network_frame_subscription_policy_structure import (
+    NetworkFrameSubscriptionPolicyStructure,
+)
+from .network_frame_topic_structure import NetworkFrameTopicStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PublicationRequestStructure:
-    """
-    Type for Publication Request.
-
-    :ivar request_timestamp: Time of request.
-    :ivar participant_ref:
-    :ivar description:
-    :ivar topics: One or more Request filters that specify tthe data to
-        be included in output. Multiple filters are logically ANDed.
-    :ivar request_policy: Policies to apply when fetching data specified
-        by Topics.
-    :ivar subscription_policy: Policy to use when processing Network
-        Subscriptions.
-    :ivar version:
-    """
     request_timestamp: XmlDateTime = field(
         metadata={
             "name": "RequestTimestamp",
@@ -39,7 +32,7 @@ class PublicationRequestStructure:
             "name": "ParticipantRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -47,14 +40,14 @@ class PublicationRequestStructure:
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     topics: Optional["PublicationRequestStructure.Topics"] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     request_policy: Optional[NetworkFrameRequestPolicyStructure] = field(
         default=None,
@@ -62,28 +55,27 @@ class PublicationRequestStructure:
             "name": "RequestPolicy",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    subscription_policy: Optional[NetworkFrameSubscriptionPolicyStructure] = field(
+    subscription_policy: Optional[
+        NetworkFrameSubscriptionPolicyStructure
+    ] = field(
         default=None,
         metadata={
             "name": "SubscriptionPolicy",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     version: str = field(
         default="1.0",
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
-    @dataclass(unsafe_hash=True, kw_only=True)
+    @dataclass(kw_only=True)
     class Topics:
-        """
-        :ivar network_frame_topic: Vaues to use select Network Objects.
-        """
         network_frame_topic: List[NetworkFrameTopicStructure] = field(
             default_factory=list,
             metadata={
@@ -91,5 +83,5 @@ class PublicationRequestStructure:
                 "type": "Element",
                 "namespace": "http://www.netex.org.uk/netex",
                 "min_occurs": 1,
-            }
+            },
         )

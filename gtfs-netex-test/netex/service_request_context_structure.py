@@ -1,68 +1,26 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlDuration
-from netex.data_name_spaces_structure import DataNameSpacesStructure
-from netex.delivery_method_enumeration import DeliveryMethodEnumeration
-from netex.empty_type_1 import EmptyType1
-from netex.predictors_enumeration import PredictorsEnumeration
+from .data_name_spaces_structure import DataNameSpacesStructure
+from .delivery_method_enumeration import DeliveryMethodEnumeration
+from .empty_type_1 import EmptyType1
+from .predictors_enumeration import PredictorsEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ServiceRequestContextStructure:
-    """Configurable context for requests.
-
-    Intended Primarily as a documentation mechanism.
-
-    :ivar check_status_address: Address to which CheckStatus requests
-        are to be sent.
-    :ivar subscribe_address: Address to which subscription requests are
-        to be sent.
-    :ivar manage_subscription_address: Address to which subscription
-        requests are to be sent. If absent, same as SubscribeAddress.
-    :ivar get_data_address: Address to which requests are to return
-        data.
-    :ivar status_response_address: Address to which CheckStatus
-        responses and heartbeats are to be sent. If absent, same as
-        SubscriberAddress.
-    :ivar subscriber_address: Address to which subscription responses
-        are to be sent.
-    :ivar notify_address: Address to which notifcations requests are to
-        be sent. If absent, same as SubscriberAddress.
-    :ivar consumer_address: Address to which data is to be sent. If
-        absent, same as NotifyAddress.
-    :ivar data_name_spaces: Default names pace used to scope data
-        identifiers.
-    :ivar language: Preferred language in which to return text values.
-    :ivar wgs_decimal_degrees_or_gml_coordinate_format:
-    :ivar distance_units: Units for Distance Type. Default is metres.
-        +SIRI v2.0
-    :ivar velocity_units: Units for Distance Type. Default is metres per
-        second. +SIRI v2.0
-    :ivar data_horizon: Maximum data horizon for requests.
-    :ivar request_timeout: Timeout for requests. [Should this be
-        separate for each type?]
-    :ivar delivery_method: Whether Delivery is fetched or retrieved.
-    :ivar multipart_despatch: Whether multi-part delivery is allowed,
-        i.e. the breaking up of updates into more than one delivery
-        messages with a MoreData flag,
-    :ivar confirm_delivery: Whether Consumers should issue an
-        acknowledgement on successful receipt of a delivery. Default is
-        ' false'.
-    :ivar maximimum_number_of_subscriptions: Maximum Number of
-        subscriptions that can be sustained by the subscriber. If absent
-        no limit.
-    :ivar allowed_predictors: Who may make a prediction.
-    :ivar prediction_function: Name of prediction method used.
-    """
     check_status_address: Optional[str] = field(
         default=None,
         metadata={
             "name": "CheckStatusAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     subscribe_address: Optional[str] = field(
         default=None,
@@ -70,7 +28,7 @@ class ServiceRequestContextStructure:
             "name": "SubscribeAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     manage_subscription_address: Optional[str] = field(
         default=None,
@@ -78,7 +36,7 @@ class ServiceRequestContextStructure:
             "name": "ManageSubscriptionAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     get_data_address: Optional[str] = field(
         default=None,
@@ -86,7 +44,7 @@ class ServiceRequestContextStructure:
             "name": "GetDataAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     status_response_address: Optional[str] = field(
         default=None,
@@ -94,7 +52,7 @@ class ServiceRequestContextStructure:
             "name": "StatusResponseAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     subscriber_address: Optional[str] = field(
         default=None,
@@ -102,7 +60,7 @@ class ServiceRequestContextStructure:
             "name": "SubscriberAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     notify_address: Optional[str] = field(
         default=None,
@@ -110,7 +68,7 @@ class ServiceRequestContextStructure:
             "name": "NotifyAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     consumer_address: Optional[str] = field(
         default=None,
@@ -118,7 +76,7 @@ class ServiceRequestContextStructure:
             "name": "ConsumerAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     data_name_spaces: Optional[DataNameSpacesStructure] = field(
         default=None,
@@ -126,7 +84,7 @@ class ServiceRequestContextStructure:
             "name": "DataNameSpaces",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     language: Optional[str] = field(
         default=None,
@@ -134,9 +92,11 @@ class ServiceRequestContextStructure:
             "name": "Language",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
-    wgs_decimal_degrees_or_gml_coordinate_format: Optional[object] = field(
+    wgs_decimal_degrees_or_gml_coordinate_format: Optional[
+        Union[EmptyType1, str]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -152,7 +112,7 @@ class ServiceRequestContextStructure:
                     "namespace": "http://www.siri.org.uk/siri",
                 },
             ),
-        }
+        },
     )
     distance_units: Optional[str] = field(
         default=None,
@@ -160,7 +120,7 @@ class ServiceRequestContextStructure:
             "name": "DistanceUnits",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     velocity_units: Optional[str] = field(
         default=None,
@@ -168,7 +128,7 @@ class ServiceRequestContextStructure:
             "name": "VelocityUnits",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     data_horizon: Optional[XmlDuration] = field(
         default=None,
@@ -176,7 +136,7 @@ class ServiceRequestContextStructure:
             "name": "DataHorizon",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     request_timeout: Optional[XmlDuration] = field(
         default=None,
@@ -184,7 +144,7 @@ class ServiceRequestContextStructure:
             "name": "RequestTimeout",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     delivery_method: Optional[DeliveryMethodEnumeration] = field(
         default=None,
@@ -192,7 +152,7 @@ class ServiceRequestContextStructure:
             "name": "DeliveryMethod",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     multipart_despatch: Optional[bool] = field(
         default=None,
@@ -200,7 +160,7 @@ class ServiceRequestContextStructure:
             "name": "MultipartDespatch",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     confirm_delivery: Optional[bool] = field(
         default=None,
@@ -208,7 +168,7 @@ class ServiceRequestContextStructure:
             "name": "ConfirmDelivery",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     maximimum_number_of_subscriptions: Optional[int] = field(
         default=None,
@@ -216,7 +176,7 @@ class ServiceRequestContextStructure:
             "name": "MaximimumNumberOfSubscriptions",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     allowed_predictors: Optional[PredictorsEnumeration] = field(
         default=None,
@@ -224,7 +184,7 @@ class ServiceRequestContextStructure:
             "name": "AllowedPredictors",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     prediction_function: Optional[str] = field(
         default=None,
@@ -232,5 +192,5 @@ class ServiceRequestContextStructure:
             "name": "PredictionFunction",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )

@@ -1,21 +1,19 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.group_of_entities_version_structure import GroupOfEntitiesVersionStructure
-from netex.notice_assignments_rel_structure import NoticeAssignmentsRelStructure
-from netex.single_journey_refs_rel_structure import SingleJourneyRefsRelStructure
+from .group_of_entities_version_structure import (
+    GroupOfEntitiesVersionStructure,
+)
+from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
+from .single_journey_refs_rel_structure import SingleJourneyRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfSingleJourneysVersionStructure(GroupOfEntitiesVersionStructure):
-    """
-    Type for a GROUP OF SINGLE JOURNEYs.
-
-    :ivar members: Services in GROUP.
-    :ivar notice_assignments: NOTICEs  relevant for the whole GROUP OF
-        SINGLE JOURNEYs.
-    """
     class Meta:
         name = "GroupOfSingleJourneys_VersionStructure"
 
@@ -24,7 +22,7 @@ class GroupOfSingleJourneysVersionStructure(GroupOfEntitiesVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     notice_assignments: Optional[NoticeAssignmentsRelStructure] = field(
         default=None,
@@ -32,5 +30,5 @@ class GroupOfSingleJourneysVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "noticeAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

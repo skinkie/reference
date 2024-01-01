@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.complex_feature import ComplexFeature
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.simple_feature import SimpleFeature
+from typing import List, Union
+from .complex_feature import ComplexFeature
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .simple_feature import SimpleFeature
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SpatialFeaturesInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of TSPATIAL FEATURe.
-    """
     class Meta:
         name = "spatialFeaturesInFrame_RelStructure"
 
-    simple_feature_or_complex_feature: List[object] = field(
+    simple_feature_or_complex_feature: List[
+        Union[SimpleFeature, ComplexFeature]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class SpatialFeaturesInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

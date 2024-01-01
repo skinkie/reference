@@ -1,29 +1,42 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.dated_special_service_ref import DatedSpecialServiceRef
-from netex.dated_vehicle_journey_ref import DatedVehicleJourneyRef
-from netex.dead_run_ref import DeadRunRef
-from netex.journey_designator import JourneyDesignator
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.service_designator import ServiceDesignator
-from netex.service_journey_ref import ServiceJourneyRef
-from netex.single_journey_ref import SingleJourneyRef
-from netex.special_service_ref import SpecialServiceRef
-from netex.template_service_journey_ref import TemplateServiceJourneyRef
-from netex.vehicle_journey_ref import VehicleJourneyRef
+from typing import List, Union
+from .dated_special_service_ref import DatedSpecialServiceRef
+from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
+from .dead_run_ref import DeadRunRef
+from .journey_designator import JourneyDesignator
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .service_designator import ServiceDesignator
+from .service_journey_ref import ServiceJourneyRef
+from .single_journey_ref import SingleJourneyRef
+from .special_service_ref import SpecialServiceRef
+from .template_service_journey_ref import TemplateServiceJourneyRef
+from .vehicle_journey_ref import VehicleJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of JOURNEYs.
-    """
     class Meta:
         name = "journeyRefs_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            SingleJourneyRef,
+            DatedVehicleJourneyRef,
+            DatedSpecialServiceRef,
+            SpecialServiceRef,
+            TemplateServiceJourneyRef,
+            ServiceJourneyRef,
+            DeadRunRef,
+            VehicleJourneyRef,
+            JourneyDesignator,
+            ServiceDesignator,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -79,5 +92,5 @@ class JourneyRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

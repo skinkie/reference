@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.line_ref_structure import LineRefStructure
+from .line_ref_structure import LineRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FlexibleLineRefStructure(LineRefStructure):
-    """
-    Type for a reference to a FLEXIBLE LINE.
-    """
+    value: RestrictedVar

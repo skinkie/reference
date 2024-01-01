@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.customer_ref_structure import CustomerRefStructure
+from .customer_ref_structure import CustomerRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CustomerRef(CustomerRefStructure):
-    """
-    Reference to a CUSTOMER.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

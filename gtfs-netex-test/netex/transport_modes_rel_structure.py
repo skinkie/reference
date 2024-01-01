@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.open_transport_mode_ref import OpenTransportModeRef
-from netex.transport_mode_structure import TransportModeStructure
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .open_transport_mode_ref import OpenTransportModeRef
+from .transport_mode_structure import TransportModeStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransportModesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of TRANSPORT MODEs.
-    """
     class Meta:
         name = "transportModes_RelStructure"
 
-    open_transport_mode_ref_or_transport_mode: List[object] = field(
+    open_transport_mode_ref_or_transport_mode: List[
+        Union[OpenTransportModeRef, TransportModeStructure]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class TransportModesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

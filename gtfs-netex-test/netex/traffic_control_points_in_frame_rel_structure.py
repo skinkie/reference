@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.traffic_control_point import TrafficControlPoint
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .traffic_control_point import TrafficControlPoint
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TrafficControlPointsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of TRAFFIC CONTROL POINTs.
-    """
     class Meta:
         name = "trafficControlPointsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class TrafficControlPointsInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

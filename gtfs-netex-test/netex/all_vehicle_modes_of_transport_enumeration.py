@@ -1,33 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class AllVehicleModesOfTransportEnumeration(Enum):
-    """Allowed values for MODES of Transport : TPEG pti_table 01.
-
-    :cvar ALL:
-    :cvar UNKNOWN:
-    :cvar BUS:
-    :cvar TROLLEY_BUS:
-    :cvar TRAM:
-    :cvar COACH:
-    :cvar RAIL:
-    :cvar INTERCITY_RAIL:
-    :cvar URBAN_RAIL:
-    :cvar METRO:
-    :cvar AIR:
-    :cvar WATER:
-    :cvar CABLEWAY:
-    :cvar FUNICULAR:
-    :cvar SNOW_AND_ICE:
-    :cvar TAXI:
-    :cvar FERRY:
-    :cvar LIFT:
-    :cvar SELF_DRIVE: See pti12_x.
-    :cvar ANY_MODE:
-    :cvar OTHER:
-    """
     ALL = "all"
     UNKNOWN = "unknown"
     BUS = "bus"

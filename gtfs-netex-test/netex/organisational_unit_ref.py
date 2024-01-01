@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.organisational_unit_ref_structure import OrganisationalUnitRefStructure
+from .organisational_unit_ref_structure import OrganisationalUnitRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OrganisationalUnitRef(OrganisationalUnitRefStructure):
-    """
-    Reference to a ORGANISATIONAL UNIT.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

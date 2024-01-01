@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.vehicle_meeting_place_2 import VehicleMeetingPlace2
-from netex.vehicle_pooling_meeting_place import VehiclePoolingMeetingPlace
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .vehicle_meeting_place_2 import VehicleMeetingPlace2
+from .vehicle_pooling_meeting_place import VehiclePoolingMeetingPlace
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleMeetingPlacesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of references to a VEHICLE MEETING PLACE.
-    """
     class Meta:
         name = "vehicleMeetingPlaces_RelStructure"
 
-    vehicle_pooling_meeting_place_or_vehicle_meeting_place: List[object] = field(
+    vehicle_meeting_place: List[
+        Union[VehiclePoolingMeetingPlace, VehicleMeetingPlace2]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class VehicleMeetingPlacesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

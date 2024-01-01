@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.stop_place_ref import StopPlaceRef
-from netex.taxi_rank_ref import TaxiRankRef
+from typing import List, Union
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .stop_place_ref import StopPlaceRef
+from .taxi_rank_ref import TaxiRankRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopPlaceRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a collection of one or more references to a STOP PLACE.
-    """
     class Meta:
         name = "stopPlaceRefs_RelStructure"
 
-    taxi_rank_ref_or_stop_place_ref: List[object] = field(
+    stop_place_ref: List[Union[TaxiRankRef, StopPlaceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class StopPlaceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

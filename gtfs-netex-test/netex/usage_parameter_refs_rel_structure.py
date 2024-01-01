@@ -1,54 +1,96 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.additional_driver_option_ref import AdditionalDriverOptionRef
-from netex.booking_policy_ref import BookingPolicyRef
-from netex.cancelling_ref import CancellingRef
-from netex.charging_policy_ref import ChargingPolicyRef
-from netex.commercial_profile_ref import CommercialProfileRef
-from netex.companion_profile_ref import CompanionProfileRef
-from netex.eligibility_change_policy_ref import EligibilityChangePolicyRef
-from netex.entitlement_given_ref import EntitlementGivenRef
-from netex.entitlement_required_ref import EntitlementRequiredRef
-from netex.exchanging_ref import ExchangingRef
-from netex.frequency_of_use_ref import FrequencyOfUseRef
-from netex.group_ticket_ref import GroupTicketRef
-from netex.interchanging_ref import InterchangingRef
-from netex.luggage_allowance_ref import LuggageAllowanceRef
-from netex.minimum_stay_ref import MinimumStayRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.penalty_policy_ref import PenaltyPolicyRef
-from netex.profile_parameter_ref import ProfileParameterRef
-from netex.purchase_window_ref import PurchaseWindowRef
-from netex.refunding_ref import RefundingRef
-from netex.rental_option_ref import RentalOptionRef
-from netex.rental_penalty_policy_ref import RentalPenaltyPolicyRef
-from netex.replacing_ref import ReplacingRef
-from netex.reselling_ref import ResellingRef
-from netex.reserving_ref import ReservingRef
-from netex.round_trip_ref import RoundTripRef
-from netex.routing_ref import RoutingRef
-from netex.sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
-from netex.sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
-from netex.step_limit_ref import StepLimitRef
-from netex.subscribing_ref import SubscribingRef
-from netex.suspending_ref import SuspendingRef
-from netex.transferability_ref import TransferabilityRef
-from netex.usage_validity_period_ref import UsageValidityPeriodRef
-from netex.user_profile_ref import UserProfileRef
-from netex.vehicle_pooler_profile_ref import VehiclePoolerProfileRef
+from typing import List, Union
+from .additional_driver_option_ref import AdditionalDriverOptionRef
+from .booking_policy_ref import BookingPolicyRef
+from .cancelling_ref import CancellingRef
+from .charging_policy_ref import ChargingPolicyRef
+from .commercial_profile_ref import CommercialProfileRef
+from .companion_profile_ref import CompanionProfileRef
+from .eligibility_change_policy_ref import EligibilityChangePolicyRef
+from .entitlement_given_ref import EntitlementGivenRef
+from .entitlement_required_ref import EntitlementRequiredRef
+from .exchanging_ref import ExchangingRef
+from .frequency_of_use_ref import FrequencyOfUseRef
+from .group_ticket_ref import GroupTicketRef
+from .interchanging_ref import InterchangingRef
+from .luggage_allowance_ref import LuggageAllowanceRef
+from .minimum_stay_ref import MinimumStayRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .penalty_policy_ref import PenaltyPolicyRef
+from .profile_parameter_ref import ProfileParameterRef
+from .purchase_window_ref import PurchaseWindowRef
+from .refunding_ref import RefundingRef
+from .rental_option_ref import RentalOptionRef
+from .rental_penalty_policy_ref import RentalPenaltyPolicyRef
+from .replacing_ref import ReplacingRef
+from .reselling_ref import ResellingRef
+from .reserving_ref import ReservingRef
+from .round_trip_ref import RoundTripRef
+from .routing_ref import RoutingRef
+from .sales_offer_package_entitlement_given_ref import (
+    SalesOfferPackageEntitlementGivenRef,
+)
+from .sales_offer_package_entitlement_required_ref import (
+    SalesOfferPackageEntitlementRequiredRef,
+)
+from .step_limit_ref import StepLimitRef
+from .subscribing_ref import SubscribingRef
+from .suspending_ref import SuspendingRef
+from .transferability_ref import TransferabilityRef
+from .usage_validity_period_ref import UsageValidityPeriodRef
+from .user_profile_ref import UserProfileRef
+from .vehicle_pooler_profile_ref import VehiclePoolerProfileRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class UsageParameterRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of USAGE PARAMETERs.
-    """
     class Meta:
         name = "usageParameterRefs_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            AdditionalDriverOptionRef,
+            RentalOptionRef,
+            RentalPenaltyPolicyRef,
+            SalesOfferPackageEntitlementGivenRef,
+            SalesOfferPackageEntitlementRequiredRef,
+            MinimumStayRef,
+            InterchangingRef,
+            FrequencyOfUseRef,
+            SuspendingRef,
+            UsageValidityPeriodRef,
+            StepLimitRef,
+            RoutingRef,
+            RoundTripRef,
+            LuggageAllowanceRef,
+            EntitlementGivenRef,
+            EntitlementRequiredRef,
+            EligibilityChangePolicyRef,
+            GroupTicketRef,
+            CommercialProfileRef,
+            VehiclePoolerProfileRef,
+            CompanionProfileRef,
+            UserProfileRef,
+            ProfileParameterRef,
+            SubscribingRef,
+            PenaltyPolicyRef,
+            ChargingPolicyRef,
+            TransferabilityRef,
+            ReplacingRef,
+            RefundingRef,
+            ExchangingRef,
+            ResellingRef,
+            CancellingRef,
+            ReservingRef,
+            BookingPolicyRef,
+            PurchaseWindowRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -229,5 +271,5 @@ class UsageParameterRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

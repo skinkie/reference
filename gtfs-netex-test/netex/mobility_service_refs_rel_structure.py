@@ -1,25 +1,34 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.car_pooling_service_ref import CarPoolingServiceRef
-from netex.chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.online_service_ref import OnlineServiceRef
-from netex.taxi_service_ref import TaxiServiceRef
-from netex.vehicle_rental_service_ref import VehicleRentalServiceRef
-from netex.vehicle_sharing_service_ref import VehicleSharingServiceRef
+from typing import List, Union
+from .car_pooling_service_ref import CarPoolingServiceRef
+from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .online_service_ref import OnlineServiceRef
+from .taxi_service_ref import TaxiServiceRef
+from .vehicle_rental_service_ref import VehicleRentalServiceRef
+from .vehicle_sharing_service_ref import VehicleSharingServiceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MobilityServiceRefsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of refernces to MOBILITY SERVICEs.
-    """
     class Meta:
         name = "mobilityServiceRefs_RelStructure"
 
-    choice: List[object] = field(
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref: List[
+        Union[
+            OnlineServiceRef,
+            VehicleRentalServiceRef,
+            VehicleSharingServiceRef,
+            ChauffeuredVehicleServiceRef,
+            TaxiServiceRef,
+            CarPoolingServiceRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -55,5 +64,5 @@ class MobilityServiceRefsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

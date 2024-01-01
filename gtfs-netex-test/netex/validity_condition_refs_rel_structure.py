@@ -1,23 +1,30 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.availability_condition_ref import AvailabilityConditionRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.validity_condition_ref import ValidityConditionRef
-from netex.validity_rule_parameter_ref import ValidityRuleParameterRef
-from netex.validity_trigger_ref import ValidityTriggerRef
+from typing import List, Union
+from .availability_condition_ref import AvailabilityConditionRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .validity_condition_ref import ValidityConditionRef
+from .validity_rule_parameter_ref import ValidityRuleParameterRef
+from .validity_trigger_ref import ValidityTriggerRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ValidityConditionRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    A collection of one or more VALIDITY CONDITIONs.
-    """
     class Meta:
         name = "validityConditionRefs_RelStructure"
 
-    choice: List[object] = field(
+    validity_condition_ref: List[
+        Union[
+            AvailabilityConditionRef,
+            ValidityRuleParameterRef,
+            ValidityTriggerRef,
+            ValidityConditionRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +50,5 @@ class ValidityConditionRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

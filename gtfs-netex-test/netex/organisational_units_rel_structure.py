@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.organisational_unit import OrganisationalUnit
-from netex.organisational_unit_ref import OrganisationalUnitRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .organisational_unit import OrganisationalUnit
+from .organisational_unit_ref import OrganisationalUnitRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OrganisationalUnitsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of ORGANISATIONAL UNITs.
-    """
     class Meta:
         name = "organisationalUnits_RelStructure"
 
-    organisational_unit_ref_or_organisational_unit: List[object] = field(
+    organisational_unit_ref_or_organisational_unit: List[
+        Union[OrganisationalUnitRef, OrganisationalUnit]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class OrganisationalUnitsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.administrative_zone_ref_structure import AdministrativeZoneRefStructure
+from .administrative_zone_ref_structure import AdministrativeZoneRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AdministrativeZoneRef(AdministrativeZoneRefStructure):
-    """
-    Reference to an ADMINISTRATIVE ZONE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

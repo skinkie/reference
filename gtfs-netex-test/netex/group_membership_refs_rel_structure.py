@@ -1,27 +1,40 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_zone_ref import AccessZoneRef
-from netex.administrative_zone_ref import AdministrativeZoneRef
-from netex.fare_zone_ref import FareZoneRef
-from netex.mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.stop_area_ref import StopAreaRef
-from netex.tariff_zone_ref import TariffZoneRef
-from netex.transport_administrative_zone_ref import TransportAdministrativeZoneRef
-from netex.zone_ref import ZoneRef
+from typing import List, Union
+from .access_zone_ref import AccessZoneRef
+from .administrative_zone_ref import AdministrativeZoneRef
+from .fare_zone_ref import FareZoneRef
+from .mobility_service_constraint_zone_ref import (
+    MobilityServiceConstraintZoneRef,
+)
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .stop_area_ref import StopAreaRef
+from .tariff_zone_ref import TariffZoneRef
+from .transport_administrative_zone_ref import TransportAdministrativeZoneRef
+from .zone_ref import ZoneRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupMembershipRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of GROUP OF POINT memberships.
-    """
     class Meta:
         name = "groupMembershipRefs_RelStructure"
 
-    choice: List[object] = field(
+    zone_ref_or_tariff_zone_ref: List[
+        Union[
+            MobilityServiceConstraintZoneRef,
+            StopAreaRef,
+            TransportAdministrativeZoneRef,
+            AccessZoneRef,
+            AdministrativeZoneRef,
+            FareZoneRef,
+            TariffZoneRef,
+            ZoneRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -67,5 +80,5 @@ class GroupMembershipRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

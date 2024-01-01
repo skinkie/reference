@@ -1,22 +1,22 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.fare_product_ref_structure import FareProductRefStructure
-from netex.fare_product_refs_rel_structure import FareProductRefsRelStructure
-from netex.preassigned_fare_product_version_structure import PreassignedFareProductVersionStructure
-from netex.supplement_product_enumeration import SupplementProductEnumeration
+from typing import Optional, Union
+from .fare_product_ref_structure import FareProductRefStructure
+from .fare_product_refs_rel_structure import FareProductRefsRelStructure
+from .preassigned_fare_product_version_structure import (
+    PreassignedFareProductVersionStructure,
+)
+from .supplement_product_enumeration import SupplementProductEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class SupplementProductVersionStructure(PreassignedFareProductVersionStructure):
-    """
-    Type for PREASSIGNED FARE PRODUCT.
-
-    :ivar supplement_product_type: Classification of SUPPLEMENT PRODUCT.
-        +v1.1
-    :ivar supplement_to_fare_product_ref_or_supplement_to:
-    """
+@dataclass(kw_only=True)
+class SupplementProductVersionStructure(
+    PreassignedFareProductVersionStructure
+):
     class Meta:
         name = "SupplementProduct_VersionStructure"
 
@@ -26,9 +26,11 @@ class SupplementProductVersionStructure(PreassignedFareProductVersionStructure):
             "name": "SupplementProductType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    supplement_to_fare_product_ref_or_supplement_to: Optional[object] = field(
+    supplement_to_fare_product_ref_or_supplement_to: Optional[
+        Union[FareProductRefStructure, FareProductRefsRelStructure]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -44,5 +46,5 @@ class SupplementProductVersionStructure(PreassignedFareProductVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

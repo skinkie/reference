@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.destination_display_variant import DestinationDisplayVariant
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .destination_display_variant import DestinationDisplayVariant
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class DestinationDisplayVariantsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of DESTINATION DISPLAY VARIANTs.
-    """
+@dataclass(kw_only=True)
+class DestinationDisplayVariantsRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "destinationDisplayVariants_RelStructure"
 
@@ -21,5 +25,5 @@ class DestinationDisplayVariantsRelStructure(StrictContainmentAggregationStructu
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

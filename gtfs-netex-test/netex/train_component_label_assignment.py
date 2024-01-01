@@ -1,21 +1,17 @@
-from dataclasses import dataclass, field
-from netex.train_component_label_assignment_version_structure import TrainComponentLabelAssignmentVersionStructure
+from dataclasses import dataclass
+from .train_component_label_assignment_version_structure import (
+    TrainComponentLabelAssignmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TrainComponentLabelAssignment(TrainComponentLabelAssignmentVersionStructure):
-    """
-    The allocation of an advertised designation for a vehicle or vehicle element
-    for passengers.
-    """
+@dataclass(kw_only=True)
+class TrainComponentLabelAssignment(
+    TrainComponentLabelAssignmentVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

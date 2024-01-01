@@ -1,23 +1,30 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
-from netex.journey_pattern_ref import JourneyPatternRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.service_journey_pattern_ref import ServiceJourneyPatternRef
-from netex.service_pattern_ref import ServicePatternRef
+from typing import List, Union
+from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
+from .journey_pattern_ref import JourneyPatternRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .service_journey_pattern_ref import ServiceJourneyPatternRef
+from .service_pattern_ref import ServicePatternRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyPatternRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a collection of one or more references to a JOURNEY PATTERN.
-    """
     class Meta:
         name = "journeyPatternRefs_RelStructure"
 
-    choice: List[object] = field(
+    journey_pattern_ref: List[
+        Union[
+            ServiceJourneyPatternRef,
+            ServicePatternRef,
+            DeadRunJourneyPatternRef,
+            JourneyPatternRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +50,5 @@ class JourneyPatternRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

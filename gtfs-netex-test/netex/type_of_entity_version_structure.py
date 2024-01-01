@@ -1,20 +1,15 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.type_of_value_version_structure import TypeOfValueVersionStructure
+from .type_of_value_version_structure import TypeOfValueVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfEntityVersionStructure(TypeOfValueVersionStructure):
-    """Type for a TYPE OF ENTITY.
-
-    Abstract supertype used to define open  classifications of value
-    types.
-
-    :ivar name_of_classified_entity_class: Name of Class of the ENTITY.
-        Allows reflection. Fixed for each ENTITY type.
-    """
     class Meta:
         name = "TypeOfEntity_VersionStructure"
 
@@ -23,5 +18,5 @@ class TypeOfEntityVersionStructure(TypeOfValueVersionStructure):
         metadata={
             "name": "nameOfClassifiedEntityClass",
             "type": "Attribute",
-        }
+        },
     )

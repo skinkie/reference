@@ -1,21 +1,13 @@
-from dataclasses import dataclass, field
-from netex.type_of_activation_value_structure import TypeOfActivationValueStructure
+from dataclasses import dataclass
+from .type_of_activation_value_structure import TypeOfActivationValueStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfActivation(TypeOfActivationValueStructure):
-    """
-    A classification of real-time processes that are activated when vehicles passes
-    an ACTIVATION POINT or an ACTIVATION LINK.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

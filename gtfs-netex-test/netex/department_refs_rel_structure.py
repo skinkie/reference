@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.department_ref import DepartmentRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .department_ref import DepartmentRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DepartmentRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of DEPARTMENTs.
-    """
     class Meta:
         name = "departmentRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class DepartmentRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class RoundingMethodEnumeration(Enum):
-    """
-    Allowed values for ROUNDING METHOD.
-    """
     NONE = "none"
     DOWN = "down"
     UP = "up"

@@ -1,20 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.derived_view_structure import DerivedViewStructure
-from netex.direction_ref import DirectionRef
-from netex.multilingual_string import MultilingualString
+from .derived_view_structure import DerivedViewStructure
+from .direction_ref import DirectionRef
+from .multilingual_string import MultilingualString
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DirectionDerivedViewStructure(DerivedViewStructure):
-    """
-    Type for DIRECTION VIEW.
-
-    :ivar direction_ref:
-    :ivar name: Name of DIRECTION.
-    """
     class Meta:
         name = "Direction_DerivedViewStructure"
 
@@ -24,7 +21,7 @@ class DirectionDerivedViewStructure(DerivedViewStructure):
             "name": "DirectionRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     name: Optional[MultilingualString] = field(
         default=None,
@@ -32,5 +29,5 @@ class DirectionDerivedViewStructure(DerivedViewStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

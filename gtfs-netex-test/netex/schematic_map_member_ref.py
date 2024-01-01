@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.schematic_map_member_ref_structure import SchematicMapMemberRefStructure
+from .schematic_map_member_ref_structure import SchematicMapMemberRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SchematicMapMemberRef(SchematicMapMemberRefStructure):
-    """
-    Reference to a SCHEMATIC MAP MEMBER.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

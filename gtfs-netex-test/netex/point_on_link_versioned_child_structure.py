@@ -1,58 +1,51 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Optional
-from netex.activation_point import ActivationPoint
-from netex.activation_point_ref import ActivationPointRef
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.beacon_point import BeaconPoint
-from netex.beacon_point_ref import BeaconPointRef
-from netex.border_point import BorderPoint
-from netex.border_point_ref import BorderPointRef
-from netex.fare_scheduled_stop_point import FareScheduledStopPoint
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.garage_point import GaragePoint
-from netex.garage_point_ref import GaragePointRef
-from netex.link_ref_structure import LinkRefStructure
-from netex.multilingual_string import MultilingualString
-from netex.parking_point import ParkingPoint
-from netex.parking_point_ref import ParkingPointRef
-from netex.path_junction import PathJunction
-from netex.point_2 import Point2
-from netex.point_ref import PointRef
-from netex.railway_junction import RailwayJunction
-from netex.railway_point_ref import RailwayPointRef
-from netex.relief_point import ReliefPoint
-from netex.relief_point_ref import ReliefPointRef
-from netex.road_junction import RoadJunction
-from netex.road_point_ref import RoadPointRef
-from netex.route_point import RoutePoint
-from netex.route_point_ref import RoutePointRef
-from netex.scheduled_stop_point import ScheduledStopPoint
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
-from netex.timing_point import TimingPoint
-from netex.timing_point_ref import TimingPointRef
-from netex.traffic_control_point import TrafficControlPoint
-from netex.traffic_control_point_ref import TrafficControlPointRef
-from netex.vehicle_meeting_point import VehicleMeetingPoint
-from netex.vehicle_meeting_point_ref import VehicleMeetingPointRef
-from netex.wire_junction import WireJunction
-from netex.wire_point_ref import WirePointRef
+from typing import Optional, Union
+from .activation_point import ActivationPoint
+from .activation_point_ref import ActivationPointRef
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .beacon_point import BeaconPoint
+from .beacon_point_ref import BeaconPointRef
+from .border_point import BorderPoint
+from .border_point_ref import BorderPointRef
+from .fare_scheduled_stop_point import FareScheduledStopPoint
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .garage_point import GaragePoint
+from .garage_point_ref import GaragePointRef
+from .link_ref_structure import LinkRefStructure
+from .multilingual_string import MultilingualString
+from .parking_point import ParkingPoint
+from .parking_point_ref import ParkingPointRef
+from .path_junction import PathJunction
+from .point_2 import Point2
+from .point_ref import PointRef
+from .railway_junction import RailwayJunction
+from .railway_point_ref import RailwayPointRef
+from .relief_point import ReliefPoint
+from .relief_point_ref import ReliefPointRef
+from .road_junction import RoadJunction
+from .road_point_ref import RoadPointRef
+from .route_point import RoutePoint
+from .route_point_ref import RoutePointRef
+from .scheduled_stop_point import ScheduledStopPoint
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+from .timing_point import TimingPoint
+from .timing_point_ref import TimingPointRef
+from .traffic_control_point import TrafficControlPoint
+from .traffic_control_point_ref import TrafficControlPointRef
+from .vehicle_meeting_point import VehicleMeetingPoint
+from .vehicle_meeting_point_ref import VehicleMeetingPointRef
+from .wire_junction import WireJunction
+from .wire_point_ref import WirePointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointOnLinkVersionedChildStructure(VersionedChildStructure):
-    """
-    Type for a POINT ON LINK.
-
-    :ivar name: Name of LINK.
-    :ivar link_ref: Parent LINK -Can be omitted if given by context.
-    :ivar distance_from_start: Distance of Point on Link from start of
-        LINK.
-    :ivar choice:
-    :ivar order: Order of step in sequence
-    """
     class Meta:
         name = "PointOnLink_VersionedChildStructure"
 
@@ -62,7 +55,7 @@ class PointOnLinkVersionedChildStructure(VersionedChildStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     link_ref: Optional[LinkRefStructure] = field(
         default=None,
@@ -70,7 +63,7 @@ class PointOnLinkVersionedChildStructure(VersionedChildStructure):
             "name": "LinkRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     distance_from_start: Optional[Decimal] = field(
         default=None,
@@ -78,9 +71,45 @@ class PointOnLinkVersionedChildStructure(VersionedChildStructure):
             "name": "DistanceFromStart",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            VehicleMeetingPointRef,
+            WirePointRef,
+            RoadPointRef,
+            RailwayPointRef,
+            TrafficControlPointRef,
+            BeaconPointRef,
+            ActivationPointRef,
+            BorderPointRef,
+            FareScheduledStopPointRef,
+            ScheduledStopPointRef,
+            GaragePointRef,
+            ParkingPointRef,
+            ReliefPointRef,
+            TimingPointRef,
+            RoutePointRef,
+            PointRef,
+            VehicleMeetingPoint,
+            BorderPoint,
+            FareScheduledStopPoint,
+            ScheduledStopPoint,
+            PathJunction,
+            RoutePoint,
+            ParkingPoint,
+            GaragePoint,
+            ReliefPoint,
+            TimingPoint,
+            WireJunction,
+            RoadJunction,
+            RailwayJunction,
+            TrafficControlPoint,
+            BeaconPoint,
+            ActivationPoint,
+            Point2,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -251,11 +280,11 @@ class PointOnLinkVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     order: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )

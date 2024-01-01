@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.fare_zone_ref import FareZoneRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .fare_zone_ref import FareZoneRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareZoneRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of FARE ZONEs.
-    """
     class Meta:
         name = "fareZoneRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class FareZoneRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,17 +1,15 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.point_ref_structure import PointRefStructure
+from .point_ref_structure import PointRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointOnLinkRefStructure2(PointRefStructure):
-    """
-    Type for a reference to a POINT ON LINK.
-
-    :ivar order: Order of point on link.
-    """
     class Meta:
         name = "PointOnLinkRefStructure_"
 
@@ -19,5 +17,5 @@ class PointOnLinkRefStructure2(PointRefStructure):
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )

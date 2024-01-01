@@ -1,11 +1,14 @@
 from dataclasses import dataclass
-from netex.passenger_information_request_ref_structure import PassengerInformationRequestRefStructure
+from .passenger_information_request_ref_structure import (
+    PassengerInformationRequestRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ScheduleRequestRefStructure(PassengerInformationRequestRefStructure):
-    """
-    Type for Reference to a SCHEDULE REQUEST.
-    """
+    value: RestrictedVar

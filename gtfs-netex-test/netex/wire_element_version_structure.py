@@ -1,18 +1,17 @@
 from dataclasses import dataclass, field
-from netex.infrastructure_link_version_structure import InfrastructureLinkVersionStructure
-from netex.wire_point_ref_structure import WirePointRefStructure
+from .infrastructure_link_version_structure import (
+    InfrastructureLinkVersionStructure,
+)
+from .wire_point_ref_structure import WirePointRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class WireElementVersionStructure(InfrastructureLinkVersionStructure):
-    """
-    Type for WIRE ELEMENT.
-
-    :ivar from_point_ref: Identifier of POINT from which Link starts.
-    :ivar to_point_ref: Identifier of POINT at which Link ends.
-    """
     class Meta:
         name = "WireElement_VersionStructure"
 

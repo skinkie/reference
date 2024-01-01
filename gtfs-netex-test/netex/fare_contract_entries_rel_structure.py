@@ -1,30 +1,44 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.fare_contract_entry import FareContractEntry
-from netex.fare_contract_entry_ref import FareContractEntryRef
-from netex.offered_travel_specification import OfferedTravelSpecification
-from netex.offered_travel_specification_ref import OfferedTravelSpecificationRef
-from netex.requested_travel_specification import RequestedTravelSpecification
-from netex.requested_travel_specification_ref import RequestedTravelSpecificationRef
-from netex.sales_transaction import SalesTransaction
-from netex.sales_transaction_ref import SalesTransactionRef
-from netex.travel_specification_1 import TravelSpecification1
-from netex.travel_specification_2 import TravelSpecification2
-from netex.travel_specification_ref import TravelSpecificationRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .fare_contract_entry import FareContractEntry
+from .fare_contract_entry_ref import FareContractEntryRef
+from .offered_travel_specification import OfferedTravelSpecification
+from .offered_travel_specification_ref import OfferedTravelSpecificationRef
+from .requested_travel_specification import RequestedTravelSpecification
+from .requested_travel_specification_ref import RequestedTravelSpecificationRef
+from .sales_transaction import SalesTransaction
+from .sales_transaction_ref import SalesTransactionRef
+from .travel_specification_1 import TravelSpecification1
+from .travel_specification_2 import TravelSpecification2
+from .travel_specification_ref import TravelSpecificationRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareContractEntriesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of FARE CONTRACT ENTRYs.
-    """
     class Meta:
         name = "fareContractEntries_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            SalesTransactionRef,
+            OfferedTravelSpecificationRef,
+            RequestedTravelSpecificationRef,
+            TravelSpecificationRef,
+            FareContractEntryRef,
+            SalesTransaction,
+            OfferedTravelSpecification,
+            RequestedTravelSpecification,
+            TravelSpecification1,
+            TravelSpecification2,
+            FareContractEntry,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -85,5 +99,5 @@ class FareContractEntriesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

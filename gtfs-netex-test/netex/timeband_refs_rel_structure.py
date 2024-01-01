@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.timeband_ref import TimebandRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .timeband_ref import TimebandRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimebandRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of TIMEBAND.
-    """
     class Meta:
         name = "timebandRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class TimebandRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

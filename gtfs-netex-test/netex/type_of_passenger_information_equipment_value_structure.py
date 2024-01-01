@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.multilingual_string import MultilingualString
-from netex.type_of_entity_version_structure import TypeOfEntityVersionStructure
+from .multilingual_string import MultilingualString
+from .type_of_entity_version_structure import TypeOfEntityVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TypeOfPassengerInformationEquipmentValueStructure(TypeOfEntityVersionStructure):
-    """
-    Type for a TYPE OF PASSENGER INFORMATION EQUIPMENT.
-    """
+@dataclass(kw_only=True)
+class TypeOfPassengerInformationEquipmentValueStructure(
+    TypeOfEntityVersionStructure
+):
     class Meta:
         name = "TypeOfPassengerInformationEquipment_ValueStructure"
 
@@ -20,5 +22,5 @@ class TypeOfPassengerInformationEquipmentValueStructure(TypeOfEntityVersionStruc
             "name": "BroadType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

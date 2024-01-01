@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class TaxCategoryEnumeration(Enum):
-    """
-    Allowed values for Tax categories +v1.1.
-    """
     EXEMPT = "exempt"
     GENERAL = "general"
     TRANSPORTATION = "transportation"

@@ -1,38 +1,23 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
 from xsdata.models.datatype import XmlDuration, XmlTime
-from netex.booking_access_enumeration import BookingAccessEnumeration
-from netex.booking_method_enumeration import BookingMethodEnumeration
-from netex.contact_structure import ContactStructure
-from netex.flexible_line_type_enumeration import FlexibleLineTypeEnumeration
-from netex.line_version_structure import LineVersionStructure
-from netex.multilingual_string import MultilingualString
-from netex.purchase_moment_enumeration import PurchaseMomentEnumeration
-from netex.purchase_when_enumeration import PurchaseWhenEnumeration
+from .booking_access_enumeration import BookingAccessEnumeration
+from .booking_method_enumeration import BookingMethodEnumeration
+from .contact_structure import ContactStructure
+from .flexible_line_type_enumeration import FlexibleLineTypeEnumeration
+from .line_version_structure import LineVersionStructure
+from .multilingual_string import MultilingualString
+from .purchase_moment_enumeration import PurchaseMomentEnumeration
+from .purchase_when_enumeration import PurchaseWhenEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FlexibleLineVersionStructure(LineVersionStructure):
-    """
-    Type for FLEXIBLE LINE.
-
-    :ivar flexible_line_type: Type of FLEXIBLE LINE.
-    :ivar booking_contact: Contact for Booking. +v1.1
-    :ivar booking_methods: Allowed Ways of Making a BOOKING.
-    :ivar booking_access: Who can make a booking. Default is public.
-    :ivar book_when: When Booking can be made. +V1.1
-    :ivar buy_when: When purchase can be made.  +V1.1
-    :ivar latest_booking_time: Latest time in day that booking can be
-        made.
-    :ivar minimum_booking_period: Minimum interval in advance of
-        departure day or time that Service may be ordered.
-    :ivar maximum_booking_period: Maximum interval in advance of
-        departure day or time that Service may be ordered. +V1.2..2
-    :ivar booking_url: URL for booking. +V1.1
-    :ivar booking_note: Note about booking the FLEXIBLE LINE.
-    """
     class Meta:
         name = "FlexibleLine_VersionStructure"
 
@@ -42,7 +27,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "FlexibleLineType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     booking_contact: Optional[ContactStructure] = field(
         default=None,
@@ -50,7 +35,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "BookingContact",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     booking_methods: List[BookingMethodEnumeration] = field(
         default_factory=list,
@@ -59,7 +44,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "tokens": True,
-        }
+        },
     )
     booking_access: Optional[BookingAccessEnumeration] = field(
         default=None,
@@ -67,7 +52,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "BookingAccess",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     book_when: Optional[PurchaseWhenEnumeration] = field(
         default=None,
@@ -75,7 +60,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "BookWhen",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     buy_when: List[PurchaseMomentEnumeration] = field(
         default_factory=list,
@@ -84,7 +69,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "tokens": True,
-        }
+        },
     )
     latest_booking_time: Optional[XmlTime] = field(
         default=None,
@@ -92,7 +77,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "LatestBookingTime",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     minimum_booking_period: Optional[XmlDuration] = field(
         default=None,
@@ -100,7 +85,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "MinimumBookingPeriod",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     maximum_booking_period: Optional[XmlDuration] = field(
         default=None,
@@ -108,7 +93,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "MaximumBookingPeriod",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     booking_url: Optional[str] = field(
         default=None,
@@ -116,7 +101,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "BookingUrl",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     booking_note: Optional[MultilingualString] = field(
         default=None,
@@ -124,5 +109,5 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "name": "BookingNote",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

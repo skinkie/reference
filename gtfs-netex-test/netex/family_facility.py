@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.family_facility_enumeration import FamilyFacilityEnumeration
+from .family_facility_enumeration import FamilyFacilityEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FamilyFacility:
-    """
-    Classification of FAMILY FACILITies.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -16,5 +16,5 @@ class FamilyFacility:
         default=FamilyFacilityEnumeration.NONE,
         metadata={
             "required": True,
-        }
+        },
     )

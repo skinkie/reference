@@ -1,20 +1,15 @@
-from dataclasses import dataclass, field
-from netex.type_of_flexible_service_value_structure import TypeOfFlexibleServiceValueStructure
+from dataclasses import dataclass
+from .type_of_flexible_service_value_structure import (
+    TypeOfFlexibleServiceValueStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfFlexibleService(TypeOfFlexibleServiceValueStructure):
-    """
-    A classification of FLEXIBLE SERVICEs according to their functional purpose.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

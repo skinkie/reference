@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class MobilityEnumeration(Enum):
-    """
-    Allowed values for of mobility needs.
-    """
     WHEELCHAIR = "wheelchair"
     ASSISTED_WHEELCHAIR = "assistedWheelchair"
     MOTORIZED_WHEELCHAIR = "motorizedWheelchair"

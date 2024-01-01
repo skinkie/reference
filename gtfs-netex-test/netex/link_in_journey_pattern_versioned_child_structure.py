@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.link_in_link_sequence_versioned_child_structure import LinkInLinkSequenceVersionedChildStructure
-from netex.service_link_ref import ServiceLinkRef
-from netex.timing_link_ref import TimingLinkRef
+from typing import Optional, Union
+from .link_in_link_sequence_versioned_child_structure import (
+    LinkInLinkSequenceVersionedChildStructure,
+)
+from .service_link_ref import ServiceLinkRef
+from .timing_link_ref import TimingLinkRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class LinkInJourneyPatternVersionedChildStructure(LinkInLinkSequenceVersionedChildStructure):
-    """
-    Type for LINK IN JOURNEY PATTERN.
-    """
+@dataclass(kw_only=True)
+class LinkInJourneyPatternVersionedChildStructure(
+    LinkInLinkSequenceVersionedChildStructure
+):
     class Meta:
         name = "LinkInJourneyPattern_VersionedChildStructure"
 
-    service_link_ref_or_timing_link_ref: Optional[object] = field(
+    service_link_ref_or_timing_link_ref: Optional[
+        Union[ServiceLinkRef, TimingLinkRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class LinkInJourneyPatternVersionedChildStructure(LinkInLinkSequenceVersionedChi
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

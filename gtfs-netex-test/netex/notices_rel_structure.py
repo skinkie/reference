@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.notice import Notice
-from netex.notice_ref import NoticeRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .notice import Notice
+from .notice_ref import NoticeRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NoticesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of NOTICEs.
-    """
     class Meta:
         name = "notices_RelStructure"
 
-    notice_ref_or_notice: List[object] = field(
+    notice_ref_or_notice: List[Union[NoticeRef, Notice]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class NoticesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

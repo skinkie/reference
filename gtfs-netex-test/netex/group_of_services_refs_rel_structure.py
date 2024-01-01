@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.group_of_services_ref import GroupOfServicesRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .group_of_services_ref import GroupOfServicesRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfServicesRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list references to GROUP OF SERVICEs.
-    """
     class Meta:
         name = "groupOfServicesRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class GroupOfServicesRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_vehicle_equipment import AccessVehicleEquipment
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+from typing import List, Union
+from .access_vehicle_equipment import AccessVehicleEquipment
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleEquipmentsRelStructure(ContainmentAggregationStructure):
-    """
-    List of VEHICLE EQUIPMENT.
-    """
     class Meta:
         name = "vehicleEquipments_RelStructure"
 
-    access_vehicle_equipment_or_wheelchair_vehicle_equipment: List[object] = field(
+    access_vehicle_equipment_or_wheelchair_vehicle_equipment: List[
+        Union[AccessVehicleEquipment, WheelchairVehicleEquipment]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class VehicleEquipmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

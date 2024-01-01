@@ -1,22 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.multilingual_string import MultilingualString
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .multilingual_string import MultilingualString
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TrainNumberVersionStructure(DataManagedObjectStructure):
-    """
-    Type for TRAIN NUMBER.
-
-    :ivar description: Description of TRAIN NUMBER.
-    :ivar for_advertisement: TRAIN NUMBER to use when advertising Train
-        -If different from Id.
-    :ivar for_production: TRAIN NUMBER to use for production    -If
-        different from Id.
-    """
     class Meta:
         name = "TrainNumber_VersionStructure"
 
@@ -26,7 +20,7 @@ class TrainNumberVersionStructure(DataManagedObjectStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     for_advertisement: Optional[str] = field(
         default=None,
@@ -34,7 +28,7 @@ class TrainNumberVersionStructure(DataManagedObjectStructure):
             "name": "ForAdvertisement",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     for_production: Optional[str] = field(
         default=None,
@@ -42,5 +36,5 @@ class TrainNumberVersionStructure(DataManagedObjectStructure):
             "name": "ForProduction",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

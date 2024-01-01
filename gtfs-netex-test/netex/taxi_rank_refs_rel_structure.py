@@ -1,15 +1,15 @@
 from dataclasses import dataclass, field
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.taxi_stand_ref import TaxiStandRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .taxi_stand_ref import TaxiStandRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TaxiRankRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of TAXI STANDs.
-    """
     class Meta:
         name = "taxiRankRefs_RelStructure"
 

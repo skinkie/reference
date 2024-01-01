@@ -1,30 +1,41 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.border_point_ref import BorderPointRef
-from netex.dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.garage_point_ref import GaragePointRef
-from netex.journey_headway_versioned_child_structure import JourneyHeadwayVersionedChildStructure
-from netex.journey_pattern_ref import JourneyPatternRef
-from netex.parking_point_ref import ParkingPointRef
-from netex.relief_point_ref import ReliefPointRef
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
-from netex.service_journey_pattern_ref import ServiceJourneyPatternRef
-from netex.service_pattern_ref import ServicePatternRef
-from netex.timing_point_ref import TimingPointRef
+from typing import Optional, Union
+from .border_point_ref import BorderPointRef
+from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .garage_point_ref import GaragePointRef
+from .journey_headway_versioned_child_structure import (
+    JourneyHeadwayVersionedChildStructure,
+)
+from .journey_pattern_ref import JourneyPatternRef
+from .parking_point_ref import ParkingPointRef
+from .relief_point_ref import ReliefPointRef
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+from .service_journey_pattern_ref import ServiceJourneyPatternRef
+from .service_pattern_ref import ServicePatternRef
+from .timing_point_ref import TimingPointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class JourneyPatternHeadwayVersionedChildStructure(JourneyHeadwayVersionedChildStructure):
-    """
-    Type for JOURNEY PATTERN HEADWAY.
-    """
+@dataclass(kw_only=True)
+class JourneyPatternHeadwayVersionedChildStructure(
+    JourneyHeadwayVersionedChildStructure
+):
     class Meta:
         name = "JourneyPatternHeadway_VersionedChildStructure"
 
-    choice: Optional[object] = field(
+    journey_pattern_ref: Optional[
+        Union[
+            ServiceJourneyPatternRef,
+            ServicePatternRef,
+            DeadRunJourneyPatternRef,
+            JourneyPatternRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -50,9 +61,19 @@ class JourneyPatternHeadwayVersionedChildStructure(JourneyHeadwayVersionedChildS
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice_1: Optional[object] = field(
+    choice: Optional[
+        Union[
+            BorderPointRef,
+            FareScheduledStopPointRef,
+            ScheduledStopPointRef,
+            GaragePointRef,
+            ParkingPointRef,
+            ReliefPointRef,
+            TimingPointRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -93,5 +114,5 @@ class JourneyPatternHeadwayVersionedChildStructure(JourneyHeadwayVersionedChildS
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

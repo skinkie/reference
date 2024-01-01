@@ -1,13 +1,17 @@
 from dataclasses import dataclass
-from netex.vehicle_journey_stop_assignment_ref_structure import VehicleJourneyStopAssignmentRefStructure
+from .vehicle_journey_stop_assignment_ref_structure import (
+    VehicleJourneyStopAssignmentRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleJourneyStopAssignmentRef(VehicleJourneyStopAssignmentRefStructure):
-    """
-    Reference to a VEHICLE JOURNEY STOP ASSIGNMENT.
-    """
+@dataclass(kw_only=True)
+class VehicleJourneyStopAssignmentRef(
+    VehicleJourneyStopAssignmentRefStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

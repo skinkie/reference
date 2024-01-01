@@ -1,17 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.whitelist import Whitelist
+from .frame_containment_structure import FrameContainmentStructure
+from .whitelist import Whitelist
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class WhitelistsInFrameRelStructure(FrameContainmentStructure):
-    """Type for containment in frame of BLACK LISTS.
-
-    +v1.1
-    """
     class Meta:
         name = "whitelistsInFrame_RelStructure"
 
@@ -22,5 +21,5 @@ class WhitelistsInFrameRelStructure(FrameContainmentStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

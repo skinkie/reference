@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.train_size_structure import TrainSizeStructure
+from .train_size_structure import TrainSizeStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TrainSize(TrainSizeStructure):
-    """
-    Requirements for TRAIN SIZe.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

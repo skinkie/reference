@@ -1,24 +1,22 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDuration
-from netex.common_vehicle_service_version_structure import CommonVehicleServiceVersionStructure
-from netex.fleet_refs_rel_structure import FleetRefsRelStructure
-from netex.vehicle_rental_ref import VehicleRentalRef
+from .common_vehicle_service_version_structure import (
+    CommonVehicleServiceVersionStructure,
+)
+from .fleet_refs_rel_structure import FleetRefsRelStructure
+from .vehicle_rental_ref import VehicleRentalRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleRentalServiceVersionStructure(CommonVehicleServiceVersionStructure):
-    """
-    Type for VEHICLE RENTAL SERVICE.
-
-    :ivar vehicle_rental_ref:
-    :ivar maximum_rental_period: Maximum time period for rental;
-    :ivar minimum_rental_period: Minmum time period for rental;
-    :ivar rental_policy_url: Rental policy URL.
-    :ivar fleets: fleets used by service
-    """
+@dataclass(kw_only=True)
+class VehicleRentalServiceVersionStructure(
+    CommonVehicleServiceVersionStructure
+):
     class Meta:
         name = "VehicleRentalService_VersionStructure"
 
@@ -36,7 +34,7 @@ class VehicleRentalServiceVersionStructure(CommonVehicleServiceVersionStructure)
             "name": "MaximumRentalPeriod",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     minimum_rental_period: Optional[XmlDuration] = field(
         default=None,
@@ -44,7 +42,7 @@ class VehicleRentalServiceVersionStructure(CommonVehicleServiceVersionStructure)
             "name": "MinimumRentalPeriod",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     rental_policy_url: Optional[str] = field(
         default=None,
@@ -52,12 +50,12 @@ class VehicleRentalServiceVersionStructure(CommonVehicleServiceVersionStructure)
             "name": "RentalPolicyUrl",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     fleets: Optional[FleetRefsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

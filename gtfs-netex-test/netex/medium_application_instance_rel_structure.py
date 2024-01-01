@@ -1,21 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.medium_application_instance import MediumApplicationInstance
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .medium_application_instance import MediumApplicationInstance
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MediumApplicationInstanceRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of a MEDIUM APPLICATION INSTANCEs in Sequence.
-
-    :ivar medium_application_instance: A component (mobile phone, smart
-        card, etc) with the necessary facilities (hardware and software)
-        to host a MEDIUM APPLICATION INSTANCE and communicate with a
-        control device. +v1.2.2
-    """
     class Meta:
         name = "mediumApplicationInstance_RelStructure"
 
@@ -26,5 +21,5 @@ class MediumApplicationInstanceRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

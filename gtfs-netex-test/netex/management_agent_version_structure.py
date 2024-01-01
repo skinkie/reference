@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from netex.other_organisation_version_structure import OtherOrganisationVersionStructure
+from .other_organisation_version_structure import (
+    OtherOrganisationVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ManagementAgentVersionStructure(OtherOrganisationVersionStructure):
-    """
-    Type for an OTHER ORGANISATION.
-    """
     class Meta:
         name = "ManagementAgent_VersionStructure"

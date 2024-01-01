@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class SignContentEnumeration(Enum):
-    """
-    Allowed values for Sign content.
-    """
     ENTRANCE = "entrance"
     EXIT = "exit"
     EMERGENCY_EXIT = "emergencyExit"

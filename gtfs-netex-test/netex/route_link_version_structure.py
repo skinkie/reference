@@ -1,25 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.link_version_structure import LinkVersionStructure
-from netex.mode_restriction_assessments_rel_structure import ModeRestrictionAssessmentsRelStructure
-from netex.operational_context_ref import OperationalContextRef
-from netex.route_point_ref_structure import RoutePointRefStructure
+from .link_version_structure import LinkVersionStructure
+from .mode_restriction_assessments_rel_structure import (
+    ModeRestrictionAssessmentsRelStructure,
+)
+from .operational_context_ref import OperationalContextRef
+from .route_point_ref_structure import RoutePointRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RouteLinkVersionStructure(LinkVersionStructure):
-    """
-    Type for ROUTE LINK.
-
-    :ivar from_point_ref: Identifier of ROUTE POINT from which Link
-        starts.
-    :ivar to_point_ref: Identifier of ROUTE POINT at which Link ends.
-    :ivar operational_context_ref:
-    :ivar mode_restriction_assessments: Mode restriction assessments for
-        ROUTE LINK +v1.2.2
-    """
     class Meta:
         name = "RouteLink_VersionStructure"
 
@@ -45,13 +40,15 @@ class RouteLinkVersionStructure(LinkVersionStructure):
             "name": "OperationalContextRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    mode_restriction_assessments: Optional[ModeRestrictionAssessmentsRelStructure] = field(
+    mode_restriction_assessments: Optional[
+        ModeRestrictionAssessmentsRelStructure
+    ] = field(
         default=None,
         metadata={
             "name": "modeRestrictionAssessments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

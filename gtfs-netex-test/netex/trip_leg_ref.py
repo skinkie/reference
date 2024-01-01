@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.trip_leg_ref_structure import TripLegRefStructure
+from .trip_leg_ref_structure import TripLegRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TripLegRef(TripLegRefStructure):
-    """
-    Reference to a TRIP LEG.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

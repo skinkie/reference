@@ -1,20 +1,13 @@
-from dataclasses import dataclass, field
-from netex.border_point_value_structure import BorderPointValueStructure
+from dataclasses import dataclass
+from .border_point_value_structure import BorderPointValueStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BorderPoint(BorderPointValueStructure):
-    """
-    Designated BORDER POINT.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

@@ -1,14 +1,15 @@
 from dataclasses import dataclass
-from netex.taxi_service_place_assignment_ref_structure import TaxiServicePlaceAssignmentRefStructure
+from .taxi_service_place_assignment_ref_structure import (
+    TaxiServicePlaceAssignmentRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TaxiServicePlaceAssignmentRef(TaxiServicePlaceAssignmentRefStructure):
-    """Reference to a TAXI SERVICE PLACE ASSIGNMENT.
-
-    +v1.2.2
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

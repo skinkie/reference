@@ -1,59 +1,43 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlDuration, XmlTime
-from netex.accessibility_assessment import AccessibilityAssessment
-from netex.check_constraint import CheckConstraint
-from netex.duty_part_ref import DutyPartRef
-from netex.dynamic_stop_assignment import DynamicStopAssignment
-from netex.dynamic_stop_assignment_ref import DynamicStopAssignmentRef
-from netex.interchange_rules_rel_structure import InterchangeRulesRelStructure
-from netex.journey_meeting_views_rel_structure import JourneyMeetingViewsRelStructure
-from netex.journey_part_ref import JourneyPartRef
-from netex.notice_assignments_rel_structure import NoticeAssignmentsRelStructure
-from netex.passenger_stop_assignment_ref import PassengerStopAssignmentRef
-from netex.quay_assignment_view import QuayAssignmentView
-from netex.service_journey_interchanges_rel_structure import ServiceJourneyInterchangesRelStructure
-from netex.time_demand_type_ref import TimeDemandTypeRef
-from netex.timeband_ref import TimebandRef
-from netex.vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
+from .accessibility_assessment import AccessibilityAssessment
+from .check_constraint import CheckConstraint
+from .duty_part_ref import DutyPartRef
+from .dynamic_stop_assignment import DynamicStopAssignment
+from .dynamic_stop_assignment_ref import DynamicStopAssignmentRef
+from .interchange_rules_rel_structure import InterchangeRulesRelStructure
+from .journey_meeting_views_rel_structure import (
+    JourneyMeetingViewsRelStructure,
+)
+from .journey_part_ref import JourneyPartRef
+from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
+from .passenger_stop_assignment_ref import PassengerStopAssignmentRef
+from .quay_assignment_view import QuayAssignmentView
+from .service_journey_interchanges_rel_structure import (
+    ServiceJourneyInterchangesRelStructure,
+)
+from .time_demand_type_ref import TimeDemandTypeRef
+from .timeband_ref import TimebandRef
+from .vehicle_journey_stop_assignment_ref import (
+    VehicleJourneyStopAssignmentRef,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DepartureStructure:
-    """
-    Reorganisation of Passing times as Departure.
-
-    :ivar time: Timetabled departure time - Earliest time to depart.
-    :ivar day_offset: Number of days of departure time after the
-        starting  day of the journey, if  not same calendar day. Default
-        is 0 for same dayi.
-    :ivar for_boarding: Whether  boarding is allowed at the stop.
-        Default is true.
-    :ivar is_flexible: Whether use of stop is flexible, i.e. requires
-        phoning to arrange. Must be a FLEXIBLE LINE.  Default is false.
-    :ivar wait_time: Timetabled waiting interval.
-    :ivar journey_part_ref:
-    :ivar journey_meetings: JOURNEY MEETINGs for visit.
-    :ivar interchanges: INTERCHANGEs for visit.
-    :ivar interchange_rules: INTERCHANGE RULEs for visit.
-    :ivar time_demand_type_ref_or_timeband_ref:
-    :ivar duty_part_ref:
-    :ivar choice:
-    :ivar dynamic_stop_assignment:
-    :ivar accessibility_assessment:
-    :ivar check_constraint:
-    :ivar notice_assignments: NOTICEs of a CALL that apply only to the
-        Arrival  or departure.
-    """
     time: Optional[XmlTime] = field(
         default=None,
         metadata={
             "name": "Time",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     day_offset: Optional[int] = field(
         default=None,
@@ -61,7 +45,7 @@ class DepartureStructure:
             "name": "DayOffset",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     for_boarding: Optional[bool] = field(
         default=None,
@@ -69,7 +53,7 @@ class DepartureStructure:
             "name": "ForBoarding",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     is_flexible: Optional[bool] = field(
         default=None,
@@ -77,7 +61,7 @@ class DepartureStructure:
             "name": "IsFlexible",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     wait_time: Optional[XmlDuration] = field(
         default=None,
@@ -85,7 +69,7 @@ class DepartureStructure:
             "name": "WaitTime",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     journey_part_ref: Optional[JourneyPartRef] = field(
         default=None,
@@ -93,7 +77,7 @@ class DepartureStructure:
             "name": "JourneyPartRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     journey_meetings: Optional[JourneyMeetingViewsRelStructure] = field(
         default=None,
@@ -101,14 +85,14 @@ class DepartureStructure:
             "name": "journeyMeetings",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     interchanges: Optional[ServiceJourneyInterchangesRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     interchange_rules: Optional[InterchangeRulesRelStructure] = field(
         default=None,
@@ -116,9 +100,11 @@ class DepartureStructure:
             "name": "interchangeRules",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    time_demand_type_ref_or_timeband_ref: Optional[object] = field(
+    time_demand_type_ref_or_timeband_ref: Optional[
+        Union[TimeDemandTypeRef, TimebandRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -134,7 +120,7 @@ class DepartureStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     duty_part_ref: Optional[DutyPartRef] = field(
         default=None,
@@ -142,9 +128,16 @@ class DepartureStructure:
             "name": "DutyPartRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            VehicleJourneyStopAssignmentRef,
+            DynamicStopAssignmentRef,
+            PassengerStopAssignmentRef,
+            QuayAssignmentView,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -170,7 +163,7 @@ class DepartureStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     dynamic_stop_assignment: Optional[DynamicStopAssignment] = field(
         default=None,
@@ -178,7 +171,7 @@ class DepartureStructure:
             "name": "DynamicStopAssignment",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     accessibility_assessment: Optional[AccessibilityAssessment] = field(
         default=None,
@@ -186,7 +179,7 @@ class DepartureStructure:
             "name": "AccessibilityAssessment",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     check_constraint: Optional[CheckConstraint] = field(
         default=None,
@@ -194,7 +187,7 @@ class DepartureStructure:
             "name": "CheckConstraint",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     notice_assignments: Optional[NoticeAssignmentsRelStructure] = field(
         default=None,
@@ -202,5 +195,5 @@ class DepartureStructure:
             "name": "noticeAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

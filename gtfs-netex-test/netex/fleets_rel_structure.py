@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.fleet import Fleet
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .fleet import Fleet
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FleetsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of  FLEETs.
-    """
     class Meta:
         name = "fleets_RelStructure"
 
@@ -21,5 +21,5 @@ class FleetsRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

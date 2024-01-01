@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParticipantRef:
-    """
-    Identifier of system requesting Data.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -15,5 +15,5 @@ class ParticipantRef:
         default="",
         metadata={
             "required": True,
-        }
+        },
     )

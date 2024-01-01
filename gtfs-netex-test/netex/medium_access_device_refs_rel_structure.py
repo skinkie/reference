@@ -1,22 +1,24 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.emv_card_ref import EmvCardRef
-from netex.mobile_device_ref import MobileDeviceRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.smartcard_ref import SmartcardRef
+from typing import Optional, Union
+from .emv_card_ref import EmvCardRef
+from .mobile_device_ref import MobileDeviceRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .smartcard_ref import SmartcardRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MediumAccessDeviceRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of MEDIUM ACCESS DEVICEs.
-    """
     class Meta:
         name = "mediumAccessDeviceRefs_RelStructure"
 
-    mobile_device_ref_or_emv_card_ref_or_smartcard_ref: Optional[object] = field(
+    medium_access_device_ref: Optional[
+        Union[MobileDeviceRef, EmvCardRef, SmartcardRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -37,5 +39,5 @@ class MediumAccessDeviceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

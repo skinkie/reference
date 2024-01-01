@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class OperatorActivitiesEnumeration(Enum):
-    """
-    Allowed values for Operator Activities.
-    """
     PASSENGER = "passenger"
     FREIGHT = "freight"
     INFRASTRUCTURE = "infrastructure"

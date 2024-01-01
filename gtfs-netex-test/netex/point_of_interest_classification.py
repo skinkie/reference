@@ -1,22 +1,17 @@
-from dataclasses import dataclass, field
-from netex.point_of_interest_classification_version_structure import PointOfInterestClassificationVersionStructure
+from dataclasses import dataclass
+from .point_of_interest_classification_version_structure import (
+    PointOfInterestClassificationVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class PointOfInterestClassification(PointOfInterestClassificationVersionStructure):
-    """
-    Classification of a POINT OF INTEREST.
-
-    :ivar id: Identifier of a POINT OF INTEREST CLASSIFICATION.
-    """
+@dataclass(kw_only=True)
+class PointOfInterestClassification(
+    PointOfInterestClassificationVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

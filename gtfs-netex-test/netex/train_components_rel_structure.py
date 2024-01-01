@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.train_component import TrainComponent
-from netex.train_component_ref import TrainComponentRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .train_component import TrainComponent
+from .train_component_ref import TrainComponentRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TrainComponentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of TRAIN COMPONENTs.
-    """
     class Meta:
         name = "trainComponents_RelStructure"
 
-    train_component_ref_or_train_component: List[object] = field(
+    train_component_ref_or_train_component: List[
+        Union[TrainComponentRef, TrainComponent]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class TrainComponentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.group_of_link_sequences import GroupOfLinkSequences
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .group_of_link_sequences import GroupOfLinkSequences
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfLinkSequencesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of GROUPs OF LINK SEQUENCEs.
-    """
     class Meta:
         name = "groupOfLinkSequences_RelStructure"
 
@@ -21,5 +23,5 @@ class GroupOfLinkSequencesRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

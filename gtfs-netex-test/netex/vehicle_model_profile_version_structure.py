@@ -1,26 +1,18 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.child_seat_enumeration import ChildSeatEnumeration
-from netex.multilingual_string import MultilingualString
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .child_seat_enumeration import ChildSeatEnumeration
+from .multilingual_string import MultilingualString
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleModelProfileVersionStructure(DataManagedObjectStructure):
-    """
-    Type for a VEHICLE MODEL PROFILE.
-
-    :ivar name: Name of VEHICLE MODEL PROFILE.
-    :ivar number_of_gears: Number of gears.
-    :ivar child_seat: Type of Child seat.
-    :ivar range_between_refuelling: Maximum range between refuelling for
-        vehicles of the MODEL PROFILE..
-    :ivar is_portable: Whether vehicle can be carried easily, e.g.,
-        scooter, skateboard, collapsible bicycle.
-    """
     class Meta:
         name = "VehicleModelProfile_VersionStructure"
 
@@ -30,7 +22,7 @@ class VehicleModelProfileVersionStructure(DataManagedObjectStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     number_of_gears: Optional[int] = field(
         default=None,
@@ -38,7 +30,7 @@ class VehicleModelProfileVersionStructure(DataManagedObjectStructure):
             "name": "NumberOfGears",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     child_seat: Optional[ChildSeatEnumeration] = field(
         default=None,
@@ -46,7 +38,7 @@ class VehicleModelProfileVersionStructure(DataManagedObjectStructure):
             "name": "ChildSeat",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     range_between_refuelling: Optional[Decimal] = field(
         default=None,
@@ -54,7 +46,7 @@ class VehicleModelProfileVersionStructure(DataManagedObjectStructure):
             "name": "RangeBetweenRefuelling",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     is_portable: Optional[bool] = field(
         default=None,
@@ -62,5 +54,5 @@ class VehicleModelProfileVersionStructure(DataManagedObjectStructure):
             "name": "IsPortable",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

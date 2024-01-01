@@ -1,16 +1,15 @@
 from dataclasses import dataclass, field
-from netex.contact import Contact
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from .contact import Contact
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ContactsRelStructure(ContainmentAggregationStructure):
-    """Type for containment in frame of reusable CONTACT details.
-
-    +v1.2.2
-    """
     class Meta:
         name = "contacts_RelStructure"
 

@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.timing_link import TimingLink
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .timing_link import TimingLink
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimingLinksRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of TIMING LINKs.
-    """
     class Meta:
         name = "timingLinks_RelStructure"
 
@@ -21,5 +23,5 @@ class TimingLinksRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

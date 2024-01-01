@@ -1,28 +1,30 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.encumbrance_enumeration import EncumbranceEnumeration
-from netex.medical_need_enumeration import MedicalNeedEnumeration
-from netex.mobility_enumeration import MobilityEnumeration
-from netex.pyschosensory_need_enumeration import PyschosensoryNeedEnumeration
+from typing import Optional, Union
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .encumbrance_enumeration import EncumbranceEnumeration
+from .medical_need_enumeration import MedicalNeedEnumeration
+from .mobility_enumeration import MobilityEnumeration
+from .pyschosensory_need_enumeration import PyschosensoryNeedEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class UserNeedVersionedChildStructure(VersionedChildStructure):
-    """
-    Type for of a USER NEED.
-
-    :ivar choice:
-    :ivar excluded: Whether user need is included or excluded. Default
-        is included.
-    :ivar need_ranking: Relative ranking of need on a scale 1-5
-    """
     class Meta:
         name = "UserNeed_VersionedChildStructure"
 
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            MobilityEnumeration,
+            PyschosensoryNeedEnumeration,
+            MedicalNeedEnumeration,
+            EncumbranceEnumeration,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -48,7 +50,7 @@ class UserNeedVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     excluded: Optional[bool] = field(
         default=None,
@@ -56,7 +58,7 @@ class UserNeedVersionedChildStructure(VersionedChildStructure):
             "name": "Excluded",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     need_ranking: Optional[int] = field(
         default=None,
@@ -64,5 +66,5 @@ class UserNeedVersionedChildStructure(VersionedChildStructure):
             "name": "NeedRanking",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

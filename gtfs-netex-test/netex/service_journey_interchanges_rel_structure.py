@@ -1,22 +1,32 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.service_journey_interchange import ServiceJourneyInterchange
-from netex.service_journey_interchange_ref import ServiceJourneyInterchangeRef
-from netex.service_journey_interchange_view import ServiceJourneyInterchangeView
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .service_journey_interchange import ServiceJourneyInterchange
+from .service_journey_interchange_ref import ServiceJourneyInterchangeRef
+from .service_journey_interchange_view import ServiceJourneyInterchangeView
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ServiceJourneyInterchangesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of SERVICE JOURNEY INTERCHANGE.
-    """
+@dataclass(kw_only=True)
+class ServiceJourneyInterchangesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "serviceJourneyInterchanges_RelStructure"
 
-    service_journey_interchange_ref_or_service_journey_interchange_or_service_journey_interchange_view: List[object] = field(
+    service_journey_interchange_ref_or_service_journey_interchange_or_service_journey_interchange_view: List[
+        Union[
+            ServiceJourneyInterchangeRef,
+            ServiceJourneyInterchange,
+            ServiceJourneyInterchangeView,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +47,5 @@ class ServiceJourneyInterchangesRelStructure(StrictContainmentAggregationStructu
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

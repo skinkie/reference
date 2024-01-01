@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.service_facility_set import ServiceFacilitySet
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .service_facility_set import ServiceFacilitySet
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ServiceFacilitySetsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of SERVICE FACILITY SETs.
-    """
     class Meta:
         name = "serviceFacilitySetsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class ServiceFacilitySetsInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

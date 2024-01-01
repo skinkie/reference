@@ -1,69 +1,124 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.all_distribution_channels_ref import AllDistributionChannelsRef
-from netex.customer_account_status_ref import CustomerAccountStatusRef
-from netex.flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.personal_mode_of_operation_ref import PersonalModeOfOperationRef
-from netex.scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
-from netex.type_of_access_right_assignment_ref import TypeOfAccessRightAssignmentRef
-from netex.type_of_battery_chemistry_ref import TypeOfBatteryChemistryRef
-from netex.type_of_congestion_ref import TypeOfCongestionRef
-from netex.type_of_customer_account_ref import TypeOfCustomerAccountRef
-from netex.type_of_delivery_variant_ref import TypeOfDeliveryVariantRef
-from netex.type_of_equipment_ref import TypeOfEquipmentRef
-from netex.type_of_facility_ref import TypeOfFacilityRef
-from netex.type_of_fare_contract_entry_ref import TypeOfFareContractEntryRef
-from netex.type_of_fare_contract_ref import TypeOfFareContractRef
-from netex.type_of_fare_product_ref import TypeOfFareProductRef
-from netex.type_of_fare_structure_element_ref import TypeOfFareStructureElementRef
-from netex.type_of_fare_structure_factor_ref import TypeOfFareStructureFactorRef
-from netex.type_of_feature_ref import TypeOfFeatureRef
-from netex.type_of_flexible_service_ref import TypeOfFlexibleServiceRef
-from netex.type_of_frame_ref import TypeOfFrameRef
-from netex.type_of_journey_pattern_ref import TypeOfJourneyPatternRef
-from netex.type_of_line_ref import TypeOfLineRef
-from netex.type_of_link_ref import TypeOfLinkRef
-from netex.type_of_link_sequence_ref import TypeOfLinkSequenceRef
-from netex.type_of_machine_readability_ref import TypeOfMachineReadabilityRef
-from netex.type_of_mobility_service_ref import TypeOfMobilityServiceRef
-from netex.type_of_mode_of_operation_ref import TypeOfModeOfOperationRef
-from netex.type_of_notice_ref import TypeOfNoticeRef
-from netex.type_of_organisation_part_ref import TypeOfOrganisationPartRef
-from netex.type_of_organisation_ref import TypeOfOrganisationRef
-from netex.type_of_passenger_information_equipment_ref import TypeOfPassengerInformationEquipmentRef
-from netex.type_of_place_ref import TypeOfPlaceRef
-from netex.type_of_plug_ref import TypeOfPlugRef
-from netex.type_of_point_ref import TypeOfPointRef
-from netex.type_of_pricing_rule_ref import TypeOfPricingRuleRef
-from netex.type_of_projection_ref import TypeOfProjectionRef
-from netex.type_of_retail_device_ref import TypeOfRetailDeviceRef
-from netex.type_of_sales_offer_package_ref import TypeOfSalesOfferPackageRef
-from netex.type_of_security_list_ref import TypeOfSecurityListRef
-from netex.type_of_service_feature_ref import TypeOfServiceFeatureRef
-from netex.type_of_service_ref import TypeOfServiceRef
-from netex.type_of_tariff_ref import TypeOfTariffRef
-from netex.type_of_time_demand_type_ref import TypeOfTimeDemandTypeRef
-from netex.type_of_transfer_ref import TypeOfTransferRef
-from netex.type_of_travel_document_ref import TypeOfTravelDocumentRef
-from netex.type_of_validity_ref import TypeOfValidityRef
-from netex.type_of_zone_ref import TypeOfZoneRef
-from netex.vehicle_pooling_ref import VehiclePoolingRef
-from netex.vehicle_rental_ref import VehicleRentalRef
-from netex.vehicle_sharing_ref import VehicleSharingRef
+from typing import List, Union
+from .all_distribution_channels_ref import AllDistributionChannelsRef
+from .customer_account_status_ref import CustomerAccountStatusRef
+from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
+from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .type_of_access_right_assignment_ref import TypeOfAccessRightAssignmentRef
+from .type_of_battery_chemistry_ref import TypeOfBatteryChemistryRef
+from .type_of_congestion_ref import TypeOfCongestionRef
+from .type_of_customer_account_ref import TypeOfCustomerAccountRef
+from .type_of_delivery_variant_ref import TypeOfDeliveryVariantRef
+from .type_of_equipment_ref import TypeOfEquipmentRef
+from .type_of_facility_ref import TypeOfFacilityRef
+from .type_of_fare_contract_entry_ref import TypeOfFareContractEntryRef
+from .type_of_fare_contract_ref import TypeOfFareContractRef
+from .type_of_fare_product_ref import TypeOfFareProductRef
+from .type_of_fare_structure_element_ref import TypeOfFareStructureElementRef
+from .type_of_fare_structure_factor_ref import TypeOfFareStructureFactorRef
+from .type_of_feature_ref import TypeOfFeatureRef
+from .type_of_flexible_service_ref import TypeOfFlexibleServiceRef
+from .type_of_frame_ref import TypeOfFrameRef
+from .type_of_journey_pattern_ref import TypeOfJourneyPatternRef
+from .type_of_line_ref import TypeOfLineRef
+from .type_of_link_ref import TypeOfLinkRef
+from .type_of_link_sequence_ref import TypeOfLinkSequenceRef
+from .type_of_machine_readability_ref import TypeOfMachineReadabilityRef
+from .type_of_mobility_service_ref import TypeOfMobilityServiceRef
+from .type_of_mode_of_operation_ref import TypeOfModeOfOperationRef
+from .type_of_notice_ref import TypeOfNoticeRef
+from .type_of_organisation_part_ref import TypeOfOrganisationPartRef
+from .type_of_organisation_ref import TypeOfOrganisationRef
+from .type_of_passenger_information_equipment_ref import (
+    TypeOfPassengerInformationEquipmentRef,
+)
+from .type_of_place_ref import TypeOfPlaceRef
+from .type_of_plug_ref import TypeOfPlugRef
+from .type_of_point_ref import TypeOfPointRef
+from .type_of_pricing_rule_ref import TypeOfPricingRuleRef
+from .type_of_projection_ref import TypeOfProjectionRef
+from .type_of_retail_device_ref import TypeOfRetailDeviceRef
+from .type_of_sales_offer_package_ref import TypeOfSalesOfferPackageRef
+from .type_of_security_list_ref import TypeOfSecurityListRef
+from .type_of_service_feature_ref import TypeOfServiceFeatureRef
+from .type_of_service_ref import TypeOfServiceRef
+from .type_of_tariff_ref import TypeOfTariffRef
+from .type_of_time_demand_type_ref import TypeOfTimeDemandTypeRef
+from .type_of_transfer_ref import TypeOfTransferRef
+from .type_of_travel_document_ref import TypeOfTravelDocumentRef
+from .type_of_validity_ref import TypeOfValidityRef
+from .type_of_zone_ref import TypeOfZoneRef
+from .vehicle_pooling_ref import VehiclePoolingRef
+from .vehicle_rental_ref import VehicleRentalRef
+from .vehicle_sharing_ref import VehicleSharingRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a TYPE OF VALUE.
-    """
     class Meta:
         name = "typeOfEntityRefs_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            TypeOfRetailDeviceRef,
+            CustomerAccountStatusRef,
+            TypeOfCustomerAccountRef,
+            TypeOfFareContractEntryRef,
+            TypeOfFareContractRef,
+            TypeOfAccessRightAssignmentRef,
+            TypeOfSalesOfferPackageRef,
+            TypeOfFareStructureElementRef,
+            TypeOfTariffRef,
+            AllDistributionChannelsRef,
+            TypeOfMachineReadabilityRef,
+            TypeOfTravelDocumentRef,
+            TypeOfMobilityServiceRef,
+            TypeOfFareProductRef,
+            TypeOfFareStructureFactorRef,
+            TypeOfPricingRuleRef,
+            TypeOfFlexibleServiceRef,
+            TypeOfPassengerInformationEquipmentRef,
+            TypeOfTimeDemandTypeRef,
+            TypeOfJourneyPatternRef,
+            TypeOfSecurityListRef,
+            TypeOfPlugRef,
+            TypeOfBatteryChemistryRef,
+            TypeOfServiceFeatureRef,
+            TypeOfDeliveryVariantRef,
+            TypeOfNoticeRef,
+            TypeOfCongestionRef,
+            TypeOfServiceRef,
+            TypeOfFacilityRef,
+            TypeOfModeOfOperationRef,
+            PersonalModeOfOperationRef,
+            VehiclePoolingRef,
+            VehicleSharingRef,
+            VehicleRentalRef,
+            FlexibleModeOfOperationRef,
+            ScheduledModeOfOperationRef,
+            TypeOfEquipmentRef,
+            TypeOfProjectionRef,
+            TypeOfFeatureRef,
+            TypeOfLinkSequenceRef,
+            TypeOfOrganisationPartRef,
+            TypeOfOrganisationRef,
+            TypeOfPlaceRef,
+            TypeOfTransferRef,
+            TypeOfZoneRef,
+            TypeOfLinkRef,
+            TypeOfPointRef,
+            TypeOfLineRef,
+            TypeOfValidityRef,
+            TypeOfFrameRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -319,5 +374,5 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

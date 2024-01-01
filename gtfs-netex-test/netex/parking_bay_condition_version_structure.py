@@ -1,29 +1,34 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.log_entry_version_structure import LogEntryVersionStructure
-from netex.monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
-from netex.parking_bay_ref import ParkingBayRef
-from netex.parking_bay_status_enumeration import ParkingBayStatusEnumeration
-from netex.parking_bay_status_ref import ParkingBayStatusRef
-from netex.vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
-from netex.vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+from typing import Optional, Union
+from .log_entry_version_structure import LogEntryVersionStructure
+from .monitored_vehicle_sharing_parking_bay_ref import (
+    MonitoredVehicleSharingParkingBayRef,
+)
+from .parking_bay_ref import ParkingBayRef
+from .parking_bay_status_enumeration import ParkingBayStatusEnumeration
+from .parking_bay_status_ref import ParkingBayStatusRef
+from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
+from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingBayConditionVersionStructure(LogEntryVersionStructure):
-    """
-    Type for a PARKING BAY CONDITION..
-
-    :ivar choice:
-    :ivar status: Current status
-    :ivar parking_bay_status_ref:
-    """
     class Meta:
         name = "ParkingBayCondition_VersionStructure"
 
-    choice: Optional[object] = field(
+    parking_bay_ref_or_vehicle_sharing_parking_bay_ref: Optional[
+        Union[
+            VehiclePoolingParkingBayRef,
+            MonitoredVehicleSharingParkingBayRef,
+            VehicleSharingParkingBayRef,
+            ParkingBayRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -49,7 +54,7 @@ class ParkingBayConditionVersionStructure(LogEntryVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     status: Optional[ParkingBayStatusEnumeration] = field(
         default=None,
@@ -57,7 +62,7 @@ class ParkingBayConditionVersionStructure(LogEntryVersionStructure):
             "name": "Status",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     parking_bay_status_ref: Optional[ParkingBayStatusRef] = field(
         default=None,
@@ -65,5 +70,5 @@ class ParkingBayConditionVersionStructure(LogEntryVersionStructure):
             "name": "ParkingBayStatusRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

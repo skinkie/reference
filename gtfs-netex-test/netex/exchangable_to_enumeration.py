@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ExchangableToEnumeration(Enum):
-    """
-    Allowed values for Exchangeable to.
-    """
     ANY_PRODUCT = "anyProduct"
     SAME_PRODUCT_SAME_DAY = "sameProductSameDay"
     SAME_PRODUCT_ANY_DAY = "sameProductAnyDay"

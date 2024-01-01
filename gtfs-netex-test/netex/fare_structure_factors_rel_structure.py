@@ -1,26 +1,36 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.fare_demand_factor_ref import FareDemandFactorRef
-from netex.fare_quota_factor_ref import FareQuotaFactorRef
-from netex.fare_structure_factor import FareStructureFactor
-from netex.geographical_structure_factor_ref import GeographicalStructureFactorRef
-from netex.parking_charge_band_ref import ParkingChargeBandRef
-from netex.quality_structure_factor_ref import QualityStructureFactorRef
-from netex.time_structure_factor_ref import TimeStructureFactorRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .fare_demand_factor_ref import FareDemandFactorRef
+from .fare_quota_factor_ref import FareQuotaFactorRef
+from .fare_structure_factor import FareStructureFactor
+from .geographical_structure_factor_ref import GeographicalStructureFactorRef
+from .parking_charge_band_ref import ParkingChargeBandRef
+from .quality_structure_factor_ref import QualityStructureFactorRef
+from .time_structure_factor_ref import TimeStructureFactorRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareStructureFactorsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of FARE STRUCTURE FACTORs.
-    """
     class Meta:
         name = "fareStructureFactors_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            ParkingChargeBandRef,
+            TimeStructureFactorRef,
+            FareQuotaFactorRef,
+            FareDemandFactorRef,
+            QualityStructureFactorRef,
+            GeographicalStructureFactorRef,
+            FareStructureFactor,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -61,5 +71,5 @@ class FareStructureFactorsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

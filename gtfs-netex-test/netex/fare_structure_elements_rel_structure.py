@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.fare_structure_element import FareStructureElement
-from netex.fare_structure_element_ref import FareStructureElementRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .fare_structure_element import FareStructureElement
+from .fare_structure_element_ref import FareStructureElementRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareStructureElementsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of FARE STRUCTURE ELEMENTs.
-    """
     class Meta:
         name = "fareStructureElements_RelStructure"
 
-    fare_structure_element_ref_or_fare_structure_element: List[object] = field(
+    fare_structure_element_ref_or_fare_structure_element: List[
+        Union[FareStructureElementRef, FareStructureElement]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class FareStructureElementsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.group_of_entities_version_structure import GroupOfEntitiesVersionStructure
-from netex.link_refs_rel_structure import LinkRefsRelStructure
+from .group_of_entities_version_structure import (
+    GroupOfEntitiesVersionStructure,
+)
+from .link_refs_rel_structure import LinkRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfLinksVersionStructure(GroupOfEntitiesVersionStructure):
-    """
-    Type for GROUP OF LINKs.
-
-    :ivar members: Links in group.
-    """
     class Meta:
         name = "GroupOfLinks_VersionStructure"
 
@@ -21,5 +21,5 @@ class GroupOfLinksVersionStructure(GroupOfEntitiesVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

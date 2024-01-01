@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.network_ref_structure import NetworkRefStructure
+from .network_ref_structure import NetworkRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NetworkRef(NetworkRefStructure):
-    """
-    Reference to a NETWORK.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

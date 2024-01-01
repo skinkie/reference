@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class EncumbranceEnumeration(Enum):
-    """
-    Allowed values for specific encumbrances.
-    """
     LUGGAGE_ENCUMBERED = "luggageEncumbered"
     PUSHCHAIR = "pushchair"
     BAGGAGE_TROLLEY = "baggageTrolley"

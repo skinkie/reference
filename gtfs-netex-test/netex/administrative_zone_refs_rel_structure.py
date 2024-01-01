@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.administrative_zone_ref import AdministrativeZoneRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .administrative_zone_ref import AdministrativeZoneRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AdministrativeZoneRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of ADMINISTRATIVE ZONEs.
-    """
     class Meta:
         name = "administrativeZoneRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class AdministrativeZoneRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,20 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDuration
-from netex.journey_timing_versioned_child_structure import JourneyTimingVersionedChildStructure
+from .journey_timing_versioned_child_structure import (
+    JourneyTimingVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class JourneyHeadwayVersionedChildStructure(JourneyTimingVersionedChildStructure):
-    """
-    Type for a JOURNEY HEADWAY Interval.
-
-    :ivar scheduled_headway_interval: Scheduled normal headway interval.
-    :ivar minimum_headway_interval: Minimum headway interval.
-    :ivar maximum_headway_interval: Maximum headway interval.
-    """
+@dataclass(kw_only=True)
+class JourneyHeadwayVersionedChildStructure(
+    JourneyTimingVersionedChildStructure
+):
     class Meta:
         name = "JourneyHeadway_VersionedChildStructure"
 
@@ -24,7 +24,7 @@ class JourneyHeadwayVersionedChildStructure(JourneyTimingVersionedChildStructure
             "name": "ScheduledHeadwayInterval",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     minimum_headway_interval: Optional[XmlDuration] = field(
         default=None,
@@ -32,7 +32,7 @@ class JourneyHeadwayVersionedChildStructure(JourneyTimingVersionedChildStructure
             "name": "MinimumHeadwayInterval",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     maximum_headway_interval: Optional[XmlDuration] = field(
         default=None,
@@ -40,5 +40,5 @@ class JourneyHeadwayVersionedChildStructure(JourneyTimingVersionedChildStructure
             "name": "MaximumHeadwayInterval",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

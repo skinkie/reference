@@ -1,27 +1,42 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.monitored_vehicle_sharing_parking_bay import MonitoredVehicleSharingParkingBay
-from netex.monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
-from netex.parking_bay import ParkingBay
-from netex.parking_bay_ref import ParkingBayRef
-from netex.vehicle_pooling_parking_bay import VehiclePoolingParkingBay
-from netex.vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
-from netex.vehicle_sharing_parking_bay import VehicleSharingParkingBay
-from netex.vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .monitored_vehicle_sharing_parking_bay import (
+    MonitoredVehicleSharingParkingBay,
+)
+from .monitored_vehicle_sharing_parking_bay_ref import (
+    MonitoredVehicleSharingParkingBayRef,
+)
+from .parking_bay import ParkingBay
+from .parking_bay_ref import ParkingBayRef
+from .vehicle_pooling_parking_bay import VehiclePoolingParkingBay
+from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
+from .vehicle_sharing_parking_bay import VehicleSharingParkingBay
+from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingBaysRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of PARKING BAYs.
-    """
     class Meta:
         name = "parkingBays_RelStructure"
 
-    choice: List[object] = field(
+    parking_bay_ref_or_vehicle_sharing_parking_bay_ref_or_parking_bay: List[
+        Union[
+            VehiclePoolingParkingBayRef,
+            MonitoredVehicleSharingParkingBayRef,
+            VehicleSharingParkingBayRef,
+            ParkingBayRef,
+            MonitoredVehicleSharingParkingBay,
+            VehiclePoolingParkingBay,
+            VehicleSharingParkingBay,
+            ParkingBay,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -67,5 +82,5 @@ class ParkingBaysRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

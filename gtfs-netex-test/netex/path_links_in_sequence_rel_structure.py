@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.path_link_in_sequence import PathLinkInSequence
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .path_link_in_sequence import PathLinkInSequence
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PathLinksInSequenceRelStructure(StrictContainmentAggregationStructure):
-    """
-    A collection of one or more PATH LINKs in SEQUENCE.
-    """
     class Meta:
         name = "pathLinksInSequence_RelStructure"
 
@@ -21,5 +23,5 @@ class PathLinksInSequenceRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

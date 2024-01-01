@@ -1,25 +1,34 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.dynamic_stop_assignment import DynamicStopAssignment
-from netex.flexible_stop_assignment import FlexibleStopAssignment
-from netex.navigation_path_assignment import NavigationPathAssignment
-from netex.passenger_stop_assignment import PassengerStopAssignment
-from netex.train_stop_assignment import TrainStopAssignment
-from netex.vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .dynamic_stop_assignment import DynamicStopAssignment
+from .flexible_stop_assignment import FlexibleStopAssignment
+from .navigation_path_assignment import NavigationPathAssignment
+from .passenger_stop_assignment import PassengerStopAssignment
+from .train_stop_assignment import TrainStopAssignment
+from .vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of STOP ASSIGNMENTs.
-    """
     class Meta:
         name = "stopAssignmentsInFrame_RelStructure"
 
-    choice: List[object] = field(
+    stop_assignment: List[
+        Union[
+            VehicleJourneyStopAssignment,
+            FlexibleStopAssignment,
+            NavigationPathAssignment,
+            TrainStopAssignment,
+            DynamicStopAssignment,
+            PassengerStopAssignment,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -55,5 +64,5 @@ class StopAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

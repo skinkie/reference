@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class DataRoleTypeEnumeration(Enum):
-    """
-    Allowed values for Administrative Roles.
-    """
     ALL = "all"
     CREATES = "creates"
     AUGMENTS = "augments"

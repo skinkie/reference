@@ -1,21 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.validable_element import ValidableElement
-from netex.validable_element_ref import ValidableElementRef
+from typing import List, Union
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .validable_element import ValidableElement
+from .validable_element_ref import ValidableElementRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ValidableElementsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of FARE PRODUCT PRICEs.
-    """
     class Meta:
         name = "validableElements_RelStructure"
 
-    validable_element_ref_or_validable_element: List[object] = field(
+    validable_element_ref_or_validable_element: List[
+        Union[ValidableElementRef, ValidableElement]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +35,5 @@ class ValidableElementsRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

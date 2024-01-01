@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.boarding_position_ref_structure import BoardingPositionRefStructure
+from .boarding_position_ref_structure import BoardingPositionRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BoardingPositionRef(BoardingPositionRefStructure):
-    """
-    Reference to a BOARDING POSITION.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

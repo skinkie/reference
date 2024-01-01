@@ -1,21 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDateTime
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.multilingual_string import MultilingualString
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .multilingual_string import MultilingualString
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LogEntryVersionStructure(DataManagedObjectStructure):
-    """
-    Type for LOG ENTRY.
-
-    :ivar name: Name of LOG ENTRY.
-    :ivar description: Description of LOG ENTRY.
-    :ivar date: Timestamp of LOG ENTRY.
-    """
     class Meta:
         name = "LogEntry_VersionStructure"
 
@@ -25,7 +21,7 @@ class LogEntryVersionStructure(DataManagedObjectStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -33,7 +29,7 @@ class LogEntryVersionStructure(DataManagedObjectStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     date: Optional[XmlDateTime] = field(
         default=None,
@@ -41,5 +37,5 @@ class LogEntryVersionStructure(DataManagedObjectStructure):
             "name": "Date",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

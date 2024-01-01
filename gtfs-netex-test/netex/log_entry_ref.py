@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.log_entry_ref_structure import LogEntryRefStructure
+from .log_entry_ref_structure import LogEntryRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LogEntryRef(LogEntryRefStructure):
-    """
-    Reference to a LOG ENTRY.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.alternative_mode_of_operation_value_structure import AlternativeModeOfOperationValueStructure
-from netex.vehicle_pooling_type_enumeration import VehiclePoolingTypeEnumeration
+from .alternative_mode_of_operation_value_structure import (
+    AlternativeModeOfOperationValueStructure,
+)
+from .vehicle_pooling_type_enumeration import VehiclePoolingTypeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehiclePoolingModeOfOperationValueStructure(AlternativeModeOfOperationValueStructure):
-    """
-    Type for a VEHICLE POOLING MODE OF OPERATION.
-
-    :ivar vehicle_pooling_type: Allowed values for VEHICLE POOLING
-        MODE.OF OPERATION.
-    """
+@dataclass(kw_only=True)
+class VehiclePoolingModeOfOperationValueStructure(
+    AlternativeModeOfOperationValueStructure
+):
     class Meta:
         name = "VehiclePoolingModeOfOperation_ValueStructure"
 
@@ -23,5 +24,5 @@ class VehiclePoolingModeOfOperationValueStructure(AlternativeModeOfOperationValu
             "name": "VehiclePoolingType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

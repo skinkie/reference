@@ -1,15 +1,15 @@
 from dataclasses import dataclass, field
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.single_journey_ref import SingleJourneyRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .single_journey_ref import SingleJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SingleJourneyRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of SINGLE JOURNEYs.
-    """
     class Meta:
         name = "singleJourneyRefs_RelStructure"
 

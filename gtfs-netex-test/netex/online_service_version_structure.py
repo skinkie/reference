@@ -1,19 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.mobility_service_refs_rel_structure import MobilityServiceRefsRelStructure
-from netex.mobility_service_version_structure import MobilityServiceVersionStructure
+from .mobility_service_refs_rel_structure import (
+    MobilityServiceRefsRelStructure,
+)
+from .mobility_service_version_structure import MobilityServiceVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OnlineServiceVersionStructure(MobilityServiceVersionStructure):
-    """
-    Type for ONLINE SERVICE.
-
-    :ivar log_in_required: Whether login  is required to use service.
-    :ivar proposing_services:
-    """
     class Meta:
         name = "OnlineService_VersionStructure"
 
@@ -23,7 +22,7 @@ class OnlineServiceVersionStructure(MobilityServiceVersionStructure):
             "name": "LogInRequired",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     proposing_services: Optional[MobilityServiceRefsRelStructure] = field(
         default=None,
@@ -31,5 +30,5 @@ class OnlineServiceVersionStructure(MobilityServiceVersionStructure):
             "name": "proposingServices",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,32 +1,29 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Optional
-from netex.car_pooling_service_ref import CarPoolingServiceRef
-from netex.chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from netex.online_service_ref import OnlineServiceRef
-from netex.taxi_service_ref import TaxiServiceRef
-from netex.transport_zone_use_enumeration import TransportZoneUseEnumeration
-from netex.vehicle_rental_service_ref import VehicleRentalServiceRef
-from netex.vehicle_sharing_service_ref import VehicleSharingServiceRef
-from netex.vehicle_type_zone_restrictions_rel_structure import VehicleTypeZoneRestrictionsRelStructure
-from netex.zone_rule_applicability_enumeration import ZoneRuleApplicabilityEnumeration
-from netex.zone_version_structure import ZoneVersionStructure
+from typing import Optional, Union
+from .car_pooling_service_ref import CarPoolingServiceRef
+from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
+from .online_service_ref import OnlineServiceRef
+from .taxi_service_ref import TaxiServiceRef
+from .transport_zone_use_enumeration import TransportZoneUseEnumeration
+from .vehicle_rental_service_ref import VehicleRentalServiceRef
+from .vehicle_sharing_service_ref import VehicleSharingServiceRef
+from .vehicle_type_zone_restrictions_rel_structure import (
+    VehicleTypeZoneRestrictionsRelStructure,
+)
+from .zone_rule_applicability_enumeration import (
+    ZoneRuleApplicabilityEnumeration,
+)
+from .zone_version_structure import ZoneVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MobilityServiceConstraintZoneVersionStructure(ZoneVersionStructure):
-    """
-    Type for MOBILITY SERVICE CONSTRAINT ZONE restricts id.
-
-    :ivar rule_applicability: Applicability of rule inside (defaut) or
-        outside of zone
-    :ivar zone_use: How ZONE may be used.
-    :ivar maximum_speed: Maximum speed  in  ZONE.
-    :ivar choice:
-    :ivar vehicle_restrictions: Vehclie restrictions in Zone
-    """
     class Meta:
         name = "MobilityServiceConstraintZone_VersionStructure"
 
@@ -36,7 +33,7 @@ class MobilityServiceConstraintZoneVersionStructure(ZoneVersionStructure):
             "name": "RuleApplicability",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     zone_use: Optional[TransportZoneUseEnumeration] = field(
         default=None,
@@ -44,7 +41,7 @@ class MobilityServiceConstraintZoneVersionStructure(ZoneVersionStructure):
             "name": "ZoneUse",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     maximum_speed: Optional[Decimal] = field(
         default=None,
@@ -52,9 +49,18 @@ class MobilityServiceConstraintZoneVersionStructure(ZoneVersionStructure):
             "name": "MaximumSpeed",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[
+        Union[
+            OnlineServiceRef,
+            VehicleRentalServiceRef,
+            VehicleSharingServiceRef,
+            ChauffeuredVehicleServiceRef,
+            TaxiServiceRef,
+            CarPoolingServiceRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -90,13 +96,15 @@ class MobilityServiceConstraintZoneVersionStructure(ZoneVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    vehicle_restrictions: Optional[VehicleTypeZoneRestrictionsRelStructure] = field(
+    vehicle_restrictions: Optional[
+        VehicleTypeZoneRestrictionsRelStructure
+    ] = field(
         default=None,
         metadata={
             "name": "vehicleRestrictions",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

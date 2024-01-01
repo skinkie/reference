@@ -1,27 +1,31 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type
-from netex.class_ref_structure import ClassRefStructure
-from netex.classes_in_repository_rel_structure import ClassesInRepositoryRelStructure
-from netex.layer_ref import LayerRef
-from netex.modification_set_enumeration import ModificationSetEnumeration
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.type_of_entity_refs_rel_structure import TypeOfEntityRefsRelStructure
-from netex.type_of_entity_version_structure import TypeOfEntityVersionStructure
-from netex.type_of_frame_ref import TypeOfFrameRef
-from netex.type_of_validity_ref import TypeOfValidityRef
+from typing import List, Optional, Type, Union
+from .class_ref_structure import ClassRefStructure
+from .classes_in_repository_rel_structure import (
+    ClassesInRepositoryRelStructure,
+)
+from .layer_ref import LayerRef
+from .modification_set_enumeration import ModificationSetEnumeration
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .type_of_entity_refs_rel_structure import TypeOfEntityRefsRelStructure
+from .type_of_entity_version_structure import TypeOfEntityVersionStructure
+from .type_of_frame_ref import TypeOfFrameRef
+from .type_of_validity_ref import TypeOfValidityRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypesOfFrameRelStructure(OneToManyRelationshipStructure):
-    """
-    A collection of one or more TYPEs OF VERSION FRAME.
-    """
     class Meta:
         name = "typesOfFrame_RelStructure"
 
-    type_of_frame_ref_or_type_of_frame: List[object] = field(
+    type_of_frame_ref_or_type_of_frame: List[
+        Union[TypeOfFrameRef, "TypeOfFrame"]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,27 +41,12 @@ class TypesOfFrameRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfFrameValueStructure(TypeOfEntityVersionStructure):
-    """
-    Type for a TYPE OF VERSION FRAME.
-
-    :ivar type_of_validity_ref:
-    :ivar frame_class_ref: Class of VERSION FRAME to contain classes.
-    :ivar classes: Classes that should  be present  in FRAME.
-    :ivar types_of_entity: TYPES OF ENTITY to include in frame.
-    :ivar includes: Types of frame included in frame.
-    :ivar locating_system_ref: Required spatial coordinate system
-        (srsName).  E.g.  WGS84 Value to use for   location elements
-        using coordinates if not specified on individual elements.
-    :ivar modification_set: Whether contained elements must be whole set
-        or can be just a Delta.
-    :ivar layer_ref:
-    """
     class Meta:
         name = "TypeOfFrame_ValueStructure"
 
@@ -67,7 +56,7 @@ class TypeOfFrameValueStructure(TypeOfEntityVersionStructure):
             "name": "TypeOfValidityRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     frame_class_ref: Optional[ClassRefStructure] = field(
         default=None,
@@ -75,14 +64,14 @@ class TypeOfFrameValueStructure(TypeOfEntityVersionStructure):
             "name": "FrameClassRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     classes: Optional[ClassesInRepositoryRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     types_of_entity: Optional[TypeOfEntityRefsRelStructure] = field(
         default=None,
@@ -90,14 +79,14 @@ class TypeOfFrameValueStructure(TypeOfEntityVersionStructure):
             "name": "typesOfEntity",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     includes: Optional[TypesOfFrameRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     locating_system_ref: Optional[str] = field(
         default=None,
@@ -105,7 +94,7 @@ class TypeOfFrameValueStructure(TypeOfEntityVersionStructure):
             "name": "LocatingSystemRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     modification_set: Optional[ModificationSetEnumeration] = field(
         default=None,
@@ -113,7 +102,7 @@ class TypeOfFrameValueStructure(TypeOfEntityVersionStructure):
             "name": "ModificationSet",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     layer_ref: Optional[LayerRef] = field(
         default=None,
@@ -121,33 +110,20 @@ class TypeOfFrameValueStructure(TypeOfEntityVersionStructure):
             "name": "LayerRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfFrame(TypeOfFrameValueStructure):
-    """
-    Classification of TYPE OF VERSION FRAME.
-
-    :ivar id: Reference to a TYPE OF FRAME.
-    :ivar name_of_classified_entity_class: Name of Class of the ENTITY.
-        Allows reflection. Fixed for each ENTITY type.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
     name_of_classified_entity_class: str = field(
         init=False,
         default="VersionFrame",
         metadata={
             "name": "nameOfClassifiedEntityClass",
             "type": "Attribute",
-        }
+        },
     )

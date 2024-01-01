@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.wheelchair_vehicle_ref_structure import WheelchairVehicleRefStructure
+from .wheelchair_vehicle_ref_structure import WheelchairVehicleRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class WheelchairVehicleRef(WheelchairVehicleRefStructure):
-    """
-    Reference to a WHEELCHAIR VEHICLE EQUIPMENT.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

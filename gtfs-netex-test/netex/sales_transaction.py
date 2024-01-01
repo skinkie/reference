@@ -1,20 +1,19 @@
-from dataclasses import dataclass, field
-from netex.sales_transaction_version_structure import SalesTransactionVersionStructure
+from dataclasses import dataclass
+from .sales_transaction_version_structure import (
+    SalesTransactionVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SalesTransaction(SalesTransactionVersionStructure):
-    """
-    A SALE OF a FIXED PACKAGE or a SALE OF a RELOADABLE PACKAGE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar

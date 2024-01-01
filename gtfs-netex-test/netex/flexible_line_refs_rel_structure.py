@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.flexible_line_ref import FlexibleLineRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .flexible_line_ref import FlexibleLineRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FlexibleLineRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a FLEXIBLE LINE.
-    """
     class Meta:
         name = "flexibleLineRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class FlexibleLineRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

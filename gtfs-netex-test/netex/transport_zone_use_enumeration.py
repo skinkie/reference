@@ -1,15 +1,17 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class TransportZoneUseEnumeration(Enum):
-    """
-    Allowed values for Zone Use.
-    """
     ALL_USES_ALLOWED = "allUsesAllowed"
     FORBIDDEN_ZONE = "forbiddenZone"
-    CANNOT_PICK_UP_AND_DROP_OFF_IN_SAME_ZONE = "cannotPickUpAndDropOffInSameZone"
+    CANNOT_PICK_UP_AND_DROP_OFF_IN_SAME_ZONE = (
+        "cannotPickUpAndDropOffInSameZone"
+    )
     CANNOT_PICK_UP_IN_ZONE = "cannotPickUpInZone"
     CANNOT_DROP_OFF_IN_ZONE = "cannotDropOffInZone"
     MUST_PICK_UP_IN_ZONE = "mustPickUpInZone"

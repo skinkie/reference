@@ -1,21 +1,22 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlDuration
-from netex.journey_timing_versioned_child_structure import JourneyTimingVersionedChildStructure
-from netex.service_journey_ref import ServiceJourneyRef
-from netex.template_service_journey_ref import TemplateServiceJourneyRef
+from .journey_timing_versioned_child_structure import (
+    JourneyTimingVersionedChildStructure,
+)
+from .service_journey_ref import ServiceJourneyRef
+from .template_service_journey_ref import TemplateServiceJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class DefaultServiceJourneyRunTimeVersionedChildStructure(JourneyTimingVersionedChildStructure):
-    """
-    Type for DEFAULT SERVICE JOURNEY / RUN TIME.
-
-    :ivar run_time: Run time as interval.
-    :ivar template_service_journey_ref_or_service_journey_ref:
-    """
+@dataclass(kw_only=True)
+class DefaultServiceJourneyRunTimeVersionedChildStructure(
+    JourneyTimingVersionedChildStructure
+):
     class Meta:
         name = "DefaultServiceJourneyRunTime_VersionedChildStructure"
 
@@ -27,7 +28,9 @@ class DefaultServiceJourneyRunTimeVersionedChildStructure(JourneyTimingVersioned
             "required": True,
         }
     )
-    template_service_journey_ref_or_service_journey_ref: Optional[object] = field(
+    service_journey_ref: Optional[
+        Union[TemplateServiceJourneyRef, ServiceJourneyRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -43,5 +46,5 @@ class DefaultServiceJourneyRunTimeVersionedChildStructure(JourneyTimingVersioned
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.flexible_stop_place_ref_structure import FlexibleStopPlaceRefStructure
+from .flexible_stop_place_ref_structure import FlexibleStopPlaceRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FlexibleStopPlaceRef(FlexibleStopPlaceRefStructure):
-    """
-    Reference to a FLEXIBLE STOP PLACE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

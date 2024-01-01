@@ -1,20 +1,15 @@
-from dataclasses import dataclass, field
-from netex.parking_entrance_for_vehicles_version_structure import ParkingEntranceForVehiclesVersionStructure
+from dataclasses import dataclass
+from .parking_entrance_for_vehicles_version_structure import (
+    ParkingEntranceForVehiclesVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingEntranceForVehicles(ParkingEntranceForVehiclesVersionStructure):
-    """
-    Designated Place within a PARKING for a VEHICLE to enter.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

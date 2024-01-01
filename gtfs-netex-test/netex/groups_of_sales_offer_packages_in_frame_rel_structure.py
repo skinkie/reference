@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.group_of_sales_offer_packages import GroupOfSalesOfferPackages
+from .frame_containment_structure import FrameContainmentStructure
+from .group_of_sales_offer_packages import GroupOfSalesOfferPackages
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupsOfSalesOfferPackagesInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of GROUPs OF SALES OFFER PACKAGEs.
-    """
     class Meta:
         name = "groupsOfSalesOfferPackagesInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class GroupsOfSalesOfferPackagesInFrameRelStructure(FrameContainmentStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

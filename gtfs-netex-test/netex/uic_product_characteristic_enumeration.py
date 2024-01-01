@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class UicProductCharacteristicEnumeration(Enum):
-    """
-    UIC Product Characteristic UIC 7139 Code list.
-    """
     TARIFF_COMMUN_VOYAGEURS = "tariffCommunVoyageurs"
     ALL_INCLUSIVE_PRICE = "allInclusivePrice"
     EAST_WEST_TARIFF = "eastWestTariff"

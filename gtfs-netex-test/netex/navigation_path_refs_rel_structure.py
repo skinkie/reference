@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.navigation_path_ref import NavigationPathRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .navigation_path_ref import NavigationPathRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NavigationPathRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a NAVIGATION PATH.
-    """
     class Meta:
         name = "navigationPathRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class NavigationPathRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

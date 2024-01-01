@@ -1,15 +1,24 @@
 from dataclasses import dataclass
-from netex.alternative_texts_rel_structure import ValidBetweenVersionStructure
+from .alternative_texts_rel_structure import ValidBetweenVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SimpleValidityCondition(ValidBetweenVersionStructure):
-    """OPTIMISATION Simple version of a VALIDITY CONDITION used in order to
-    characterise a given VERSION of a VERSION FRAME.
-
-    Comprises a simple period.Deprecated.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
+
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
+    key_list: RestrictedVar
+    extensions: RestrictedVar
+    branding_ref: RestrictedVar
+    name: RestrictedVar
+    description: RestrictedVar
+    conditioned_object_ref: RestrictedVar
+    with_condition_ref: RestrictedVar

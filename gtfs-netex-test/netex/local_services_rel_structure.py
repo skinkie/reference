@@ -1,48 +1,80 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.assistance_booking_service import AssistanceBookingService
-from netex.assistance_booking_service_ref import AssistanceBookingServiceRef
-from netex.assistance_service import AssistanceService
-from netex.assistance_service_ref import AssistanceServiceRef
-from netex.catering_service import CateringService
-from netex.catering_service_ref import CateringServiceRef
-from netex.communication_service import CommunicationService
-from netex.communication_service_ref import CommunicationServiceRef
-from netex.complaints_service import ComplaintsService
-from netex.complaints_service_ref import ComplaintsServiceRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.customer_service import CustomerService
-from netex.customer_service_ref import CustomerServiceRef
-from netex.hire_service import HireService
-from netex.hire_service_ref import HireServiceRef
-from netex.left_luggage_service import LeftLuggageService
-from netex.left_luggage_service_ref import LeftLuggageServiceRef
-from netex.local_service_ref import LocalServiceRef
-from netex.lost_property_service import LostPropertyService
-from netex.lost_property_service_ref import LostPropertyServiceRef
-from netex.luggage_service import LuggageService
-from netex.luggage_service_ref import LuggageServiceRef
-from netex.meeting_point_service import MeetingPointService
-from netex.meeting_point_service_ref import MeetingPointServiceRef
-from netex.money_service import MoneyService
-from netex.money_service_ref import MoneyServiceRef
-from netex.retail_service import RetailService
-from netex.retail_service_ref import RetailServiceRef
-from netex.ticketing_service import TicketingService
-from netex.ticketing_service_ref import TicketingServiceRef
+from typing import List, Union
+from .assistance_booking_service import AssistanceBookingService
+from .assistance_booking_service_ref import AssistanceBookingServiceRef
+from .assistance_service import AssistanceService
+from .assistance_service_ref import AssistanceServiceRef
+from .catering_service import CateringService
+from .catering_service_ref import CateringServiceRef
+from .communication_service import CommunicationService
+from .communication_service_ref import CommunicationServiceRef
+from .complaints_service import ComplaintsService
+from .complaints_service_ref import ComplaintsServiceRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .customer_service import CustomerService
+from .customer_service_ref import CustomerServiceRef
+from .hire_service import HireService
+from .hire_service_ref import HireServiceRef
+from .left_luggage_service import LeftLuggageService
+from .left_luggage_service_ref import LeftLuggageServiceRef
+from .local_service_ref import LocalServiceRef
+from .lost_property_service import LostPropertyService
+from .lost_property_service_ref import LostPropertyServiceRef
+from .luggage_service import LuggageService
+from .luggage_service_ref import LuggageServiceRef
+from .meeting_point_service import MeetingPointService
+from .meeting_point_service_ref import MeetingPointServiceRef
+from .money_service import MoneyService
+from .money_service_ref import MoneyServiceRef
+from .retail_service import RetailService
+from .retail_service_ref import RetailServiceRef
+from .ticketing_service import TicketingService
+from .ticketing_service_ref import TicketingServiceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LocalServicesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of LOCAL SERVICEs.
-    """
     class Meta:
         name = "localServices_RelStructure"
 
-    choice: List[object] = field(
+    local_service_ref_or_local_service_or_customer_service: List[
+        Union[
+            AssistanceBookingServiceRef,
+            CateringServiceRef,
+            RetailServiceRef,
+            MoneyServiceRef,
+            HireServiceRef,
+            CommunicationServiceRef,
+            MeetingPointServiceRef,
+            LeftLuggageServiceRef,
+            LuggageServiceRef,
+            LostPropertyServiceRef,
+            ComplaintsServiceRef,
+            CustomerServiceRef,
+            AssistanceServiceRef,
+            TicketingServiceRef,
+            LocalServiceRef,
+            AssistanceBookingService,
+            CateringService,
+            RetailService,
+            MoneyService,
+            HireService,
+            CommunicationService,
+            MeetingPointService,
+            LostPropertyService,
+            LeftLuggageService,
+            ComplaintsService,
+            CustomerService,
+            LuggageService,
+            AssistanceService,
+            TicketingService,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -193,5 +225,5 @@ class LocalServicesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

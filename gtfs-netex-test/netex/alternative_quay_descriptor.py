@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
-from netex.alternative_quay_descriptor_versioned_child_structure import AlternativeQuayDescriptorVersionedChildStructure
+from .alternative_quay_descriptor_versioned_child_structure import (
+    AlternativeQuayDescriptorVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class AlternativeQuayDescriptor(AlternativeQuayDescriptorVersionedChildStructure):
-    """
-    An element of a STOP PLACE describing part of its structure.
-
-    :ivar type_of_name: Type of Name.
-    """
+@dataclass(kw_only=True)
+class AlternativeQuayDescriptor(
+    AlternativeQuayDescriptorVersionedChildStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -21,3 +23,7 @@ class AlternativeQuayDescriptor(AlternativeQuayDescriptorVersionedChildStructure
             "required": True,
         }
     )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar
+    name_type: RestrictedVar

@@ -1,21 +1,17 @@
-from dataclasses import dataclass, field
-from netex.customer_purchase_parameter_assignment_version_structure import CustomerPurchaseParameterAssignmentVersionStructure
+from dataclasses import dataclass
+from .customer_purchase_parameter_assignment_version_structure import (
+    CustomerPurchaseParameterAssignmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class CustomerPurchaseParameterAssignment(CustomerPurchaseParameterAssignmentVersionStructure):
-    """
-    A VALIDITY PARAMETER ASSIGNMENT specifying practical parameters for use in a
-    CUSTOMER PURCHASE PACKAGE.
-    """
+@dataclass(kw_only=True)
+class CustomerPurchaseParameterAssignment(
+    CustomerPurchaseParameterAssignmentVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

@@ -1,36 +1,56 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_vehicle_equipment import AccessVehicleEquipment
-from netex.access_vehicle_equipment_ref import AccessVehicleEquipmentRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.help_point_equipment import HelpPointEquipment
-from netex.help_point_equipment_ref import HelpPointEquipmentRef
-from netex.passenger_equipment_ref import PassengerEquipmentRef
-from netex.passenger_information_equipment import PassengerInformationEquipment
-from netex.passenger_safety_equipment import PassengerSafetyEquipment
-from netex.passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
-from netex.rubbish_disposal_equipment import RubbishDisposalEquipment
-from netex.rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
-from netex.sanitary_equipment import SanitaryEquipment
-from netex.sanitary_equipment_ref import SanitaryEquipmentRef
-from netex.ticket_validator_equipment import TicketValidatorEquipment
-from netex.ticketing_equipment import TicketingEquipment
-from netex.vehicle_equipment_ref import VehicleEquipmentRef
-from netex.wheelchair_vehicle_equipment import WheelchairVehicleEquipment
-from netex.wheelchair_vehicle_ref import WheelchairVehicleRef
+from typing import List, Union
+from .access_vehicle_equipment import AccessVehicleEquipment
+from .access_vehicle_equipment_ref import AccessVehicleEquipmentRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .help_point_equipment import HelpPointEquipment
+from .help_point_equipment_ref import HelpPointEquipmentRef
+from .passenger_equipment_ref import PassengerEquipmentRef
+from .passenger_information_equipment import PassengerInformationEquipment
+from .passenger_safety_equipment import PassengerSafetyEquipment
+from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
+from .rubbish_disposal_equipment import RubbishDisposalEquipment
+from .rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
+from .sanitary_equipment import SanitaryEquipment
+from .sanitary_equipment_ref import SanitaryEquipmentRef
+from .ticket_validator_equipment import TicketValidatorEquipment
+from .ticketing_equipment import TicketingEquipment
+from .vehicle_equipment_ref import VehicleEquipmentRef
+from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+from .wheelchair_vehicle_ref import WheelchairVehicleRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PassengerEquipmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of LOCAL SERVICEs.
-    """
     class Meta:
         name = "passengerEquipments_RelStructure"
 
-    choice: List[object] = field(
+    passenger_equipment_ref_or_vehicle_equipment_ref_or_passenger_equipment: List[
+        Union[
+            RubbishDisposalEquipmentRef,
+            HelpPointEquipmentRef,
+            PassengerSafetyEquipmentRef,
+            SanitaryEquipmentRef,
+            WheelchairVehicleRef,
+            AccessVehicleEquipmentRef,
+            VehicleEquipmentRef,
+            PassengerEquipmentRef,
+            PassengerInformationEquipment,
+            RubbishDisposalEquipment,
+            HelpPointEquipment,
+            PassengerSafetyEquipment,
+            SanitaryEquipment,
+            TicketValidatorEquipment,
+            TicketingEquipment,
+            WheelchairVehicleEquipment,
+            AccessVehicleEquipment,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -121,5 +141,5 @@ class PassengerEquipmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

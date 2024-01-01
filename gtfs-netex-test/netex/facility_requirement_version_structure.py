@@ -1,18 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.service_facility_sets_rel_structure import ServiceFacilitySetsRelStructure
-from netex.vehicle_requirement_version_structure import VehicleRequirementVersionStructure
+from .service_facility_sets_rel_structure import (
+    ServiceFacilitySetsRelStructure,
+)
+from .vehicle_requirement_version_structure import (
+    VehicleRequirementVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FacilityRequirementVersionStructure(VehicleRequirementVersionStructure):
-    """
-    Type for a FACILITY REQUIREMENT.
-
-    :ivar facility_sets: Facilities required for VEHICLE.
-    """
     class Meta:
         name = "FacilityRequirement_VersionStructure"
 
@@ -22,5 +24,5 @@ class FacilityRequirementVersionStructure(VehicleRequirementVersionStructure):
             "name": "facilitySets",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

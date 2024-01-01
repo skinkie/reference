@@ -1,20 +1,15 @@
-from dataclasses import dataclass, field
-from netex.rubbish_disposal_equipment_version_structure import RubbishDisposalEquipmentVersionStructure
+from dataclasses import dataclass
+from .rubbish_disposal_equipment_version_structure import (
+    RubbishDisposalEquipmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RubbishDisposalEquipment(RubbishDisposalEquipmentVersionStructure):
-    """
-    Equipment for Passengers relating to a Rubbish disposal.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

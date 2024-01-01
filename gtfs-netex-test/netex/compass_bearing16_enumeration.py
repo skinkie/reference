@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class CompassBearing16Enumeration(Enum):
-    """
-    16 point compass.
-    """
     SW = "SW"
     SE = "SE"
     NW = "NW"

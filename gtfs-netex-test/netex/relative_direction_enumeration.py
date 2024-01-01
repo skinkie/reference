@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class RelativeDirectionEnumeration(Enum):
-    """
-    Allowed values for RELATIVE DIRECTIONS.
-    """
     BOTH = "both"
     FORWARDS = "forwards"
     BACKWARDS = "backwards"

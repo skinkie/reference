@@ -1,23 +1,30 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.operating_period import OperatingPeriod
-from netex.operating_period_ref import OperatingPeriodRef
-from netex.uic_operating_period import UicOperatingPeriod
-from netex.uic_operating_period_ref import UicOperatingPeriodRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .operating_period import OperatingPeriod
+from .operating_period_ref import OperatingPeriodRef
+from .uic_operating_period import UicOperatingPeriod
+from .uic_operating_period_ref import UicOperatingPeriodRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OperatingPeriodsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of OPERATING PERIODs.
-    """
     class Meta:
         name = "operatingPeriods_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            UicOperatingPeriodRef,
+            OperatingPeriodRef,
+            OperatingPeriod,
+            UicOperatingPeriod,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +50,5 @@ class OperatingPeriodsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,20 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.transfer_restriction import TransferRestriction
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .transfer_restriction import TransferRestriction
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransferRestrictionsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of TRANSFER RESTRICTION.
-
-    :ivar transfer_restriction: A CONSTRAINT that can be applied on a
-        CONNECTION or INTERCHANGE between two SCHEDULED STOP POINT,
-        preventing or forbidding the passenger to use it.
-    """
     class Meta:
         name = "transferRestrictionsInFrame_RelStructure"
 
@@ -25,5 +21,5 @@ class TransferRestrictionsInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

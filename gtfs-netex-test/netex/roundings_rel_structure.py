@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.rounding import Rounding
+from .frame_containment_structure import FrameContainmentStructure
+from .rounding import Rounding
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RoundingsRelStructure(FrameContainmentStructure):
-    """
-    Set of FARE ROUNDING parameters such as rounding steps.
-    """
     class Meta:
         name = "roundings_RelStructure"
 
@@ -21,5 +21,5 @@ class RoundingsRelStructure(FrameContainmentStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

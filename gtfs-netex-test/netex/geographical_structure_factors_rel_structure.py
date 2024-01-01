@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.geographical_structure_factor import GeographicalStructureFactor
-from netex.geographical_structure_factor_ref import GeographicalStructureFactorRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .geographical_structure_factor import GeographicalStructureFactor
+from .geographical_structure_factor_ref import GeographicalStructureFactorRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class GeographicalStructureFactorsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of GEOGRAPHICAL STRUCTURE FACTOR.
-    """
+@dataclass(kw_only=True)
+class GeographicalStructureFactorsRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "geographicalStructureFactors_RelStructure"
 
-    geographical_structure_factor_ref_or_geographical_structure_factor: List[object] = field(
+    geographical_structure_factor_ref_or_geographical_structure_factor: List[
+        Union[GeographicalStructureFactorRef, GeographicalStructureFactor]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class GeographicalStructureFactorsRelStructure(StrictContainmentAggregationStruc
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.destination_display_views_rel_structure import DestinationDisplayViewsRelStructure
-from netex.flexible_quay_version_structure import FlexibleQuayVersionStructure
+from .destination_display_views_rel_structure import (
+    DestinationDisplayViewsRelStructure,
+)
+from .flexible_quay_version_structure import FlexibleQuayVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FlexibleAreaVersionStructure(FlexibleQuayVersionStructure):
-    """
-    Type for a FLEXIBLE AREA.
-
-    :ivar destinations: Destination headings for FLEXIBLE AREa.
-    """
     class Meta:
         name = "FlexibleArea_VersionStructure"
 
@@ -21,5 +21,5 @@ class FlexibleAreaVersionStructure(FlexibleQuayVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

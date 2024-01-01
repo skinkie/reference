@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.fare_scheduled_stop_point import FareScheduledStopPoint
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.scheduled_stop_point import ScheduledStopPoint
+from typing import List, Union
+from .fare_scheduled_stop_point import FareScheduledStopPoint
+from .frame_containment_structure import FrameContainmentStructure
+from .scheduled_stop_point import ScheduledStopPoint
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareScheduledStopPointsInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of  FARE SCHEUDLED STOP POINT.
-    """
     class Meta:
         name = "fareScheduledStopPointsInFrame_RelStructure"
 
-    scheduled_stop_point_or_fare_scheduled_stop_point: List[object] = field(
+    scheduled_stop_point_or_fare_scheduled_stop_point: List[
+        Union[ScheduledStopPoint, FareScheduledStopPoint]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class FareScheduledStopPointsInFrameRelStructure(FrameContainmentStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

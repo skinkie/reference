@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.activation_point_ref_structure import ActivationPointRefStructure
+from .activation_point_ref_structure import ActivationPointRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BeaconPointRefStructure(ActivationPointRefStructure):
-    """
-    Type for a reference to a BEACON POINT.
-    """
+    value: RestrictedVar

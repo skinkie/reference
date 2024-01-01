@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.group_of_timing_links_ref_structure import GroupOfTimingLinksRefStructure
+from .group_of_timing_links_ref_structure import GroupOfTimingLinksRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfTimingLinksRef(GroupOfTimingLinksRefStructure):
-    """
-    Reference to a GROUP OF TIMING LINKs.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

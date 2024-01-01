@@ -1,25 +1,34 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.car_pooling_service import CarPoolingService
-from netex.chauffeured_vehicle_service import ChauffeuredVehicleService
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.online_service import OnlineService
-from netex.taxi_service import TaxiService
-from netex.vehicle_rental_service import VehicleRentalService
-from netex.vehicle_sharing_service import VehicleSharingService
+from typing import List, Union
+from .car_pooling_service import CarPoolingService
+from .chauffeured_vehicle_service import ChauffeuredVehicleService
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .online_service import OnlineService
+from .taxi_service import TaxiService
+from .vehicle_rental_service import VehicleRentalService
+from .vehicle_sharing_service import VehicleSharingService
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MobilityServicesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of MOBILITY SERVICEs.
-    """
     class Meta:
         name = "mobilityServices_RelStructure"
 
-    choice: List[object] = field(
+    mobility_service_or_common_vehicle_service_or_vehicle_pooling_service: List[
+        Union[
+            OnlineService,
+            VehicleRentalService,
+            VehicleSharingService,
+            ChauffeuredVehicleService,
+            CarPoolingService,
+            TaxiService,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -55,5 +64,5 @@ class MobilityServicesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

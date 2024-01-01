@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.travel_document import TravelDocument
+from .frame_containment_structure import FrameContainmentStructure
+from .travel_document import TravelDocument
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TravelDocumentsInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of TRAVEL DOCUMENT.
-    """
     class Meta:
         name = "travelDocumentsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class TravelDocumentsInFrameRelStructure(FrameContainmentStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

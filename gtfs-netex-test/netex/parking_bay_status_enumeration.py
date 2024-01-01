@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ParkingBayStatusEnumeration(Enum):
-    """
-    Allowed values for PARKING BAY STATUS.
-    """
     AVAILABLE = "available"
     IN_USE = "inUse"
     OUT_OF_SERVICE = "outOfService"

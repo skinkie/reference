@@ -1,24 +1,32 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.compound_train_ref import CompoundTrainRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.simple_vehicle_type_ref import SimpleVehicleTypeRef
-from netex.train_ref import TrainRef
-from netex.transport_type_ref import TransportTypeRef
-from netex.vehicle_type_ref import VehicleTypeRef
+from typing import List, Union
+from .compound_train_ref import CompoundTrainRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .simple_vehicle_type_ref import SimpleVehicleTypeRef
+from .train_ref import TrainRef
+from .transport_type_ref import TransportTypeRef
+from .vehicle_type_ref import VehicleTypeRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransportTypeRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of TRANSPORT TYPEs.
-    """
     class Meta:
         name = "transportTypeRefs_RelStructure"
 
-    choice: List[object] = field(
+    transport_type_ref_or_vehicle_type_ref: List[
+        Union[
+            SimpleVehicleTypeRef,
+            CompoundTrainRef,
+            TrainRef,
+            VehicleTypeRef,
+            TransportTypeRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -49,5 +57,5 @@ class TransportTypeRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

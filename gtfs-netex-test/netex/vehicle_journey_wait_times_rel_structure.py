@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.vehicle_journey_wait_time import VehicleJourneyWaitTime
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .vehicle_journey_wait_time import VehicleJourneyWaitTime
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleJourneyWaitTimesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of VEHICLE JOURNEY WAIT TIMEs.
-    """
+@dataclass(kw_only=True)
+class VehicleJourneyWaitTimesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "vehicleJourneyWaitTimes_RelStructure"
 
@@ -21,5 +25,5 @@ class VehicleJourneyWaitTimesRelStructure(StrictContainmentAggregationStructure)
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

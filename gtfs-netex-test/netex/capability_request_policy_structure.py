@@ -1,20 +1,15 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from netex.empty_type_1 import EmptyType1
+from typing import List, Optional, Union
+from .empty_type_1 import EmptyType1
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CapabilityRequestPolicyStructure:
-    """
-    Type for Common Request Policy capabilities.
-
-    :ivar national_language: National languages supported by service.
-    :ivar translations: Whether producer can provide multiple
-        translations of NL text elements  +SIRI 2.0
-    :ivar gml_coordinate_format_or_wgs_decimal_degrees:
-    """
     national_language: List[str] = field(
         default_factory=list,
         metadata={
@@ -22,7 +17,7 @@ class CapabilityRequestPolicyStructure:
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
             "min_occurs": 1,
-        }
+        },
     )
     translations: Optional[bool] = field(
         default=None,
@@ -30,9 +25,11 @@ class CapabilityRequestPolicyStructure:
             "name": "Translations",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
-    gml_coordinate_format_or_wgs_decimal_degrees: Optional[object] = field(
+    gml_coordinate_format_or_wgs_decimal_degrees: Optional[
+        Union[str, EmptyType1]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -48,5 +45,5 @@ class CapabilityRequestPolicyStructure:
                     "namespace": "http://www.siri.org.uk/siri",
                 },
             ),
-        }
+        },
     )

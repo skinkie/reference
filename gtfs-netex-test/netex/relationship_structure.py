@@ -1,16 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RelationshipStructure:
-    """
-    Abstract Type for a serialisation of a NeTEx relationship.
-
-    :ivar id: Identifier of the relationship.
-    """
     class Meta:
         name = "relationshipStructure"
 
@@ -18,5 +16,5 @@ class RelationshipStructure:
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )

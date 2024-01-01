@@ -1,22 +1,24 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.stop_place import StopPlace
-from netex.stop_place_ref import StopPlaceRef
-from netex.taxi_rank_ref import TaxiRankRef
+from typing import Optional, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .stop_place import StopPlace
+from .stop_place_ref import StopPlaceRef
+from .taxi_rank_ref import TaxiRankRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopPlacesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of STOP PLACEs.
-    """
     class Meta:
         name = "stopPlaces_RelStructure"
 
-    taxi_rank_ref_or_stop_place_ref_or_stop_place: Optional[object] = field(
+    taxi_rank_ref_or_stop_place_ref_or_stop_place: Optional[
+        Union[TaxiRankRef, StopPlaceRef, StopPlace]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -37,5 +39,5 @@ class StopPlacesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

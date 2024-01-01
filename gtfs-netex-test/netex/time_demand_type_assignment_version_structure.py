@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.assignment_version_structure_1 import AssignmentVersionStructure1
-from netex.group_of_timing_links_ref import GroupOfTimingLinksRef
-from netex.time_demand_type_ref import TimeDemandTypeRef
-from netex.timeband_ref import TimebandRef
+from .assignment_version_structure_1 import AssignmentVersionStructure1
+from .group_of_timing_links_ref import GroupOfTimingLinksRef
+from .time_demand_type_ref import TimeDemandTypeRef
+from .timeband_ref import TimebandRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimeDemandTypeAssignmentVersionStructure(AssignmentVersionStructure1):
-    """
-    Type for TIME DEMAND TYPE ASSIGNMENT.
-    """
     class Meta:
         name = "TimeDemandTypeAssignment_VersionStructure"
 
@@ -22,7 +22,7 @@ class TimeDemandTypeAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "TimeDemandTypeRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     timeband_ref: Optional[TimebandRef] = field(
         default=None,
@@ -30,7 +30,7 @@ class TimeDemandTypeAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "TimebandRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     group_of_timing_links_ref: Optional[GroupOfTimingLinksRef] = field(
         default=None,
@@ -38,5 +38,5 @@ class TimeDemandTypeAssignmentVersionStructure(AssignmentVersionStructure1):
             "name": "GroupOfTimingLinksRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

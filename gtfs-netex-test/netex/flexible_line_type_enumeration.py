@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class FlexibleLineTypeEnumeration(Enum):
-    """
-    Allowed values for FlexibleLINE  TYPE.
-    """
     CORRIDOR_SERVICE = "corridorService"
     MAIN_ROUTE_WITH_FLEXIBLE_ENDS = "mainRouteWithFlexibleEnds"
     FLEXIBLE_AREAS_ONLY = "flexibleAreasOnly"

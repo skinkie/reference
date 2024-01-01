@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ZoneUseEnumeration(Enum):
-    """
-    Allowed values for Zone Use.
-    """
     FORBIDDEN_ZONE = "forbiddenZone"
     CANNOT_BOARD_AND_ALIGHT_IN_SAME_ZONE = "cannotBoardAndAlightInSameZone"
     CANNOT_BOARD_IN_ZONE = "cannotBoardInZone"

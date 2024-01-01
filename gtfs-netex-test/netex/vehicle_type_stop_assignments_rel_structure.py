@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.vehicle_type_stop_assignment import VehicleTypeStopAssignment
-from netex.vehicle_type_stop_assignment_ref import VehicleTypeStopAssignmentRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .vehicle_type_stop_assignment import VehicleTypeStopAssignment
+from .vehicle_type_stop_assignment_ref import VehicleTypeStopAssignmentRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleTypeStopAssignmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment  of  VEHICLE TYPE STOP ASSIGNNMENTs.
-    """
     class Meta:
         name = "vehicleTypeStopAssignments_RelStructure"
 
-    vehicle_type_stop_assignment_ref_or_vehicle_type_stop_assignment: List[object] = field(
+    vehicle_type_stop_assignment_ref_or_vehicle_type_stop_assignment: List[
+        Union[VehicleTypeStopAssignmentRef, VehicleTypeStopAssignment]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class VehicleTypeStopAssignmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,22 +1,17 @@
-from dataclasses import dataclass, field
-from netex.passenger_carrying_requirement_version_structure import PassengerCarryingRequirementVersionStructure
+from dataclasses import dataclass
+from .passenger_carrying_requirement_version_structure import (
+    PassengerCarryingRequirementVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class PassengerCarryingRequirement(PassengerCarryingRequirementVersionStructure):
-    """
-    Requirements for carrying passengers on a service.
-
-    :ivar id: Identifier of PASSENGER CARRYING REQUIREMENT.
-    """
+@dataclass(kw_only=True)
+class PassengerCarryingRequirement(
+    PassengerCarryingRequirementVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

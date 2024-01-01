@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.air_submode_enumeration import AirSubmodeEnumeration
+from .air_submode_enumeration import AirSubmodeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AirSubmode:
-    """
-    TPEG pti08 Air submodes.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -16,5 +16,5 @@ class AirSubmode:
         default=AirSubmodeEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

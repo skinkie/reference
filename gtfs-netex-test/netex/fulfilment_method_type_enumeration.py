@@ -1,13 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class FulfilmentMethodTypeEnumeration(Enum):
-    """Allowed values for FULFILMENT METHOD.
-
-    Type.
-    """
     TICKET_OFFICE = "ticketOffice"
     TICKET_MACHINE = "ticketMachine"
     CONDUCTOR = "conductor"

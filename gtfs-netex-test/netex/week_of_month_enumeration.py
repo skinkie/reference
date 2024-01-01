@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class WeekOfMonthEnumeration(Enum):
-    """
-    Allowed values for Week of the Month.
-    """
     VALUE_1 = "1"
     VALUE_2 = "2"
     VALUE_3 = "3"

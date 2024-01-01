@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type
+from typing import List, Optional, Type, Union
 from xsdata.models.datatype import XmlDateTime
-from netex.alternative_texts_rel_structure import (
+from .alternative_texts_rel_structure import (
     AvailabilityCondition,
     SimpleAvailabilityCondition,
     ValidDuring,
@@ -9,35 +9,42 @@ from netex.alternative_texts_rel_structure import (
     ValidityRuleParameter,
     ValidityTrigger,
 )
-from netex.closed_timestamp_range_structure import ClosedTimestampRangeStructure
-from netex.composite_frame_ref import CompositeFrameRef
-from netex.driver_schedule_frame_ref import DriverScheduleFrameRef
-from netex.empty_type_2 import EmptyType2
-from netex.fare_frame_ref import FareFrameRef
-from netex.general_frame_ref import GeneralFrameRef
-from netex.infrastructure_frame_ref import InfrastructureFrameRef
-from netex.mobility_journey_frame_ref import MobilityJourneyFrameRef
-from netex.mobility_service_frame_ref import MobilityServiceFrameRef
-from netex.network_filter_by_value_structure import NetworkFilterByValueStructure
-from netex.resource_frame_ref import ResourceFrameRef
-from netex.sales_transaction_frame_ref import SalesTransactionFrameRef
-from netex.service_calendar_frame_ref import ServiceCalendarFrameRef
-from netex.service_frame_ref import ServiceFrameRef
-from netex.site_frame_ref import SiteFrameRef
-from netex.timetable_frame_ref import TimetableFrameRef
-from netex.topic_structure import TopicStructure
-from netex.type_of_frame_ref import TypeOfFrameRef
-from netex.vehicle_schedule_frame_ref import VehicleScheduleFrameRef
+from .closed_timestamp_range_structure import ClosedTimestampRangeStructure
+from .composite_frame_ref import CompositeFrameRef
+from .driver_schedule_frame_ref import DriverScheduleFrameRef
+from .empty_type_2 import EmptyType2
+from .fare_frame_ref import FareFrameRef
+from .general_frame_ref import GeneralFrameRef
+from .infrastructure_frame_ref import InfrastructureFrameRef
+from .mobility_journey_frame_ref import MobilityJourneyFrameRef
+from .mobility_service_frame_ref import MobilityServiceFrameRef
+from .network_filter_by_value_structure import NetworkFilterByValueStructure
+from .resource_frame_ref import ResourceFrameRef
+from .sales_transaction_frame_ref import SalesTransactionFrameRef
+from .service_calendar_frame_ref import ServiceCalendarFrameRef
+from .service_frame_ref import ServiceFrameRef
+from .site_frame_ref import SiteFrameRef
+from .timetable_frame_ref import TimetableFrameRef
+from .topic_structure import TopicStructure
+from .type_of_frame_ref import TypeOfFrameRef
+from .vehicle_schedule_frame_ref import VehicleScheduleFrameRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NetworkFrameTopicStructure(TopicStructure):
-    """
-    Type for a Data Object Filter Topic.
-    """
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            EmptyType2,
+            XmlDateTime,
+            ClosedTimestampRangeStructure,
+            "NetworkFrameTopicStructure.SelectionValidityConditions",
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -64,11 +71,13 @@ class NetworkFrameTopicStructure(TopicStructure):
                 },
                 {
                     "name": "selectionValidityConditions",
-                    "type": Type["NetworkFrameTopicStructure.SelectionValidityConditions"],
+                    "type": Type[
+                        "NetworkFrameTopicStructure.SelectionValidityConditions"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     type_of_frame_ref: Optional[TypeOfFrameRef] = field(
         default=None,
@@ -76,9 +85,27 @@ class NetworkFrameTopicStructure(TopicStructure):
             "name": "TypeOfFrameRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice_1: List[object] = field(
+    choice_1: List[
+        Union[
+            MobilityJourneyFrameRef,
+            MobilityServiceFrameRef,
+            SalesTransactionFrameRef,
+            FareFrameRef,
+            ServiceFrameRef,
+            DriverScheduleFrameRef,
+            VehicleScheduleFrameRef,
+            TimetableFrameRef,
+            SiteFrameRef,
+            InfrastructureFrameRef,
+            GeneralFrameRef,
+            ResourceFrameRef,
+            ServiceCalendarFrameRef,
+            CompositeFrameRef,
+            NetworkFilterByValueStructure,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -159,12 +186,21 @@ class NetworkFrameTopicStructure(TopicStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
 
-    @dataclass(unsafe_hash=True, kw_only=True)
+    @dataclass(kw_only=True)
     class SelectionValidityConditions:
-        choice: List[object] = field(
+        validity_condition: List[
+            Union[
+                SimpleAvailabilityCondition,
+                ValidDuring,
+                AvailabilityCondition,
+                ValidityRuleParameter,
+                ValidityTrigger,
+                ValidityCondition,
+            ]
+        ] = field(
             default_factory=list,
             metadata={
                 "type": "Elements",
@@ -200,5 +236,5 @@ class NetworkFrameTopicStructure(TopicStructure):
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                 ),
-            }
+            },
         )

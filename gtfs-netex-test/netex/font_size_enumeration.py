@@ -1,13 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class FontSizeEnumeration(Enum):
-    """Allowed values for size of font.
-
-    +v1.1
-    """
     VERY_SMALL = "verySmall"
     SMALL = "small"
     MEDIUM = "medium"

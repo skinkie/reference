@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ParkingPaymentProcessEnumeration(Enum):
-    """
-    Allowed values for PARKING payment process types.
-    """
     FREE = "free"
     PAY_AT_BAY = "payAtBay"
     PAY_AND_DISPLAY = "payAndDisplay"

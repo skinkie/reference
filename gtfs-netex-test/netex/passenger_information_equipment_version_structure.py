@@ -1,55 +1,64 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from netex.access_space_ref import AccessSpaceRef
-from netex.accessibility_info_facility_enumeration import AccessibilityInfoFacilityEnumeration
-from netex.boarding_position_ref import BoardingPositionRef
-from netex.entrance_ref import EntranceRef
-from netex.logical_display_ref import LogicalDisplayRef
-from netex.monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
-from netex.parking_area_ref import ParkingAreaRef
-from netex.parking_bay_ref import ParkingBayRef
-from netex.parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
-from netex.parking_entrance_ref import ParkingEntranceRef
-from netex.parking_passenger_entrance_ref import ParkingPassengerEntranceRef
-from netex.passenger_equipment_version_structure import PassengerEquipmentVersionStructure
-from netex.passenger_information_facility_enumeration import PassengerInformationFacilityEnumeration
-from netex.point_of_interest_entrance_ref import PointOfInterestEntranceRef
-from netex.point_of_interest_space_ref import PointOfInterestSpaceRef
-from netex.point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
-from netex.quay_ref import QuayRef
-from netex.site_component_ref import SiteComponentRef
-from netex.stop_place_entrance_ref import StopPlaceEntranceRef
-from netex.stop_place_ref import StopPlaceRef
-from netex.stop_place_space_ref import StopPlaceSpaceRef
-from netex.stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
-from netex.taxi_parking_area_ref import TaxiParkingAreaRef
-from netex.taxi_rank_ref import TaxiRankRef
-from netex.taxi_stand_ref import TaxiStandRef
-from netex.type_of_passenger_information_equipment_ref import TypeOfPassengerInformationEquipmentRef
-from netex.vehicle_entrance_ref import VehicleEntranceRef
-from netex.vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
-from netex.vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
-from netex.vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
-from netex.vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
-from netex.vehicle_stopping_place_ref import VehicleStoppingPlaceRef
-from netex.vehicle_stopping_position_ref import VehicleStoppingPositionRef
+from typing import List, Optional, Union
+from .access_space_ref import AccessSpaceRef
+from .accessibility_info_facility_enumeration import (
+    AccessibilityInfoFacilityEnumeration,
+)
+from .boarding_position_ref import BoardingPositionRef
+from .entrance_ref import EntranceRef
+from .logical_display_ref import LogicalDisplayRef
+from .monitored_vehicle_sharing_parking_bay_ref import (
+    MonitoredVehicleSharingParkingBayRef,
+)
+from .parking_area_ref import ParkingAreaRef
+from .parking_bay_ref import ParkingBayRef
+from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
+from .parking_entrance_ref import ParkingEntranceRef
+from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
+from .passenger_equipment_version_structure import (
+    PassengerEquipmentVersionStructure,
+)
+from .passenger_information_equipment_enumeration import (
+    PassengerInformationEquipmentEnumeration,
+)
+from .passenger_information_facility_enumeration import (
+    PassengerInformationFacilityEnumeration,
+)
+from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
+from .point_of_interest_space_ref import PointOfInterestSpaceRef
+from .point_of_interest_vehicle_entrance_ref import (
+    PointOfInterestVehicleEntranceRef,
+)
+from .quay_ref import QuayRef
+from .site_component_ref import SiteComponentRef
+from .stop_place_entrance_ref import StopPlaceEntranceRef
+from .stop_place_ref import StopPlaceRef
+from .stop_place_space_ref import StopPlaceSpaceRef
+from .stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
+from .taxi_parking_area_ref import TaxiParkingAreaRef
+from .taxi_rank_ref import TaxiRankRef
+from .taxi_stand_ref import TaxiStandRef
+from .type_of_passenger_information_equipment_ref import (
+    TypeOfPassengerInformationEquipmentRef,
+)
+from .vehicle_entrance_ref import VehicleEntranceRef
+from .vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
+from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
+from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
+from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+from .vehicle_stopping_place_ref import VehicleStoppingPlaceRef
+from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class PassengerInformationEquipmentVersionStructure(PassengerEquipmentVersionStructure):
-    """
-    Type for a PASSENGER INFORMATION EQUIPMENT.
-
-    :ivar logical_display_ref:
-    :ivar taxi_rank_ref_or_stop_place_ref:
-    :ivar choice:
-    :ivar type_of_passenger_information_equipment_ref:
-    :ivar passenger_information_facility_list: List of predefined
-        Passenger Info EQUIPMENT f.
-    :ivar accessibility_info_facility_list:
-    """
+@dataclass(kw_only=True)
+class PassengerInformationEquipmentVersionStructure(
+    PassengerEquipmentVersionStructure
+):
     class Meta:
         name = "PassengerInformationEquipment_VersionStructure"
 
@@ -59,9 +68,9 @@ class PassengerInformationEquipmentVersionStructure(PassengerEquipmentVersionStr
             "name": "LogicalDisplayRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    taxi_rank_ref_or_stop_place_ref: Optional[object] = field(
+    stop_place_ref: Optional[Union[TaxiRankRef, StopPlaceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -77,9 +86,38 @@ class PassengerInformationEquipmentVersionStructure(PassengerEquipmentVersionStr
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            VehicleStoppingPositionRef,
+            VehicleStoppingPlaceRef,
+            BoardingPositionRef,
+            AccessSpaceRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceSpaceRef,
+            VehiclePoolingParkingBayRef,
+            MonitoredVehicleSharingParkingBayRef,
+            VehicleSharingParkingBayRef,
+            ParkingBayRef,
+            VehiclePoolingParkingAreaRef,
+            VehicleSharingParkingAreaRef,
+            TaxiParkingAreaRef,
+            ParkingAreaRef,
+            PointOfInterestSpaceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
+            ParkingEntranceForVehiclesRef,
+            ParkingPassengerEntranceRef,
+            ParkingEntranceRef,
+            PointOfInterestVehicleEntranceRef,
+            PointOfInterestEntranceRef,
+            VehicleEntranceRef,
+            EntranceRef,
+            SiteComponentRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -215,31 +253,48 @@ class PassengerInformationEquipmentVersionStructure(PassengerEquipmentVersionStr
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    type_of_passenger_information_equipment_ref: Optional[TypeOfPassengerInformationEquipmentRef] = field(
+    passenger_information_equipment_list: List[
+        PassengerInformationEquipmentEnumeration
+    ] = field(
+        default_factory=list,
+        metadata={
+            "name": "PassengerInformationEquipmentList",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
+        },
+    )
+    type_of_passenger_information_equipment_ref: Optional[
+        TypeOfPassengerInformationEquipmentRef
+    ] = field(
         default=None,
         metadata={
             "name": "TypeOfPassengerInformationEquipmentRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    passenger_information_facility_list: List[PassengerInformationFacilityEnumeration] = field(
+    passenger_information_facility_list: List[
+        PassengerInformationFacilityEnumeration
+    ] = field(
         default_factory=list,
         metadata={
             "name": "PassengerInformationFacilityList",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "tokens": True,
-        }
+        },
     )
-    accessibility_info_facility_list: List[AccessibilityInfoFacilityEnumeration] = field(
+    accessibility_info_facility_list: List[
+        AccessibilityInfoFacilityEnumeration
+    ] = field(
         default_factory=list,
         metadata={
             "name": "AccessibilityInfoFacilityList",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "tokens": True,
-        }
+        },
     )

@@ -1,535 +1,1096 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_ref import AccessRef
-from netex.access_right_in_product_ref import AccessRightInProductRef
-from netex.access_space_ref import AccessSpaceRef
-from netex.access_zone_ref import AccessZoneRef
-from netex.accommodation_ref import AccommodationRef
-from netex.accountable_element_ref import AccountableElementRef
-from netex.activation_link_ref import ActivationLinkRef
-from netex.activation_point_ref import ActivationPointRef
-from netex.additional_driver_option_ref import AdditionalDriverOptionRef
-from netex.address_ref import AddressRef
-from netex.addressable_place_ref import AddressablePlaceRef
-from netex.administrative_zone_ref import AdministrativeZoneRef
-from netex.all_authorities_ref import AllAuthoritiesRef
-from netex.all_distribution_channels_ref import AllDistributionChannelsRef
-from netex.all_operators_ref import AllOperatorsRef
-from netex.all_organisations_ref import AllOrganisationsRef
-from netex.all_public_transport_organisations_ref import AllPublicTransportOrganisationsRef
-from netex.all_transport_organisations_ref import AllTransportOrganisationsRef
-from netex.allowed_line_direction_ref import AllowedLineDirectionRef
-from netex.alternative_name_ref import AlternativeNameRef
-from netex.alternative_text_ref import AlternativeTextRef
-from netex.amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
-from netex.authority_ref import AuthorityRef
-from netex.availability_condition_ref import AvailabilityConditionRef
-from netex.beacon_point_ref import BeaconPointRef
-from netex.blacklist_ref import BlacklistRef
-from netex.block_part_ref import BlockPartRef
-from netex.block_ref import BlockRef
-from netex.boarding_position_ref import BoardingPositionRef
-from netex.booking_policy_ref import BookingPolicyRef
-from netex.border_point_ref import BorderPointRef
-from netex.branding_ref import BrandingRef
-from netex.cancelling_ref import CancellingRef
-from netex.capped_discount_right_ref import CappedDiscountRightRef
-from netex.capping_rule_price_ref import CappingRulePriceRef
-from netex.capping_rule_ref import CappingRuleRef
-from netex.car_model_profile_ref import CarModelProfileRef
-from netex.cell_ref import CellRef
-from netex.charging_equipment_profile_ref import ChargingEquipmentProfileRef
-from netex.charging_moment_ref import ChargingMomentRef
-from netex.charging_policy_ref import ChargingPolicyRef
-from netex.class_of_use_ref import ClassOfUseRef
-from netex.commercial_profile_eligibility_ref import CommercialProfileEligibilityRef
-from netex.commercial_profile_ref import CommercialProfileRef
-from netex.common_section_ref import CommonSectionRef
-from netex.companion_profile_ref import CompanionProfileRef
-from netex.complex_feature_projection_ref import ComplexFeatureProjectionRef
-from netex.composite_frame_ref import CompositeFrameRef
-from netex.compound_block_ref import CompoundBlockRef
-from netex.compound_train_ref import CompoundTrainRef
-from netex.connection_ref import ConnectionRef
-from netex.contact_ref import ContactRef
-from netex.control_centre_ref import ControlCentreRef
-from netex.controllable_element_in_sequence_ref import ControllableElementInSequenceRef
-from netex.controllable_element_price_ref import ControllableElementPriceRef
-from netex.controllable_element_ref import ControllableElementRef
-from netex.coupled_journey_ref import CoupledJourneyRef
-from netex.course_of_journeys_ref import CourseOfJourneysRef
-from netex.crew_base_ref import CrewBaseRef
-from netex.customer_account_ref import CustomerAccountRef
-from netex.customer_account_security_listing_ref import CustomerAccountSecurityListingRef
-from netex.customer_account_status_ref import CustomerAccountStatusRef
-from netex.customer_payment_means_ref import CustomerPaymentMeansRef
-from netex.customer_purchase_package_element_ref import CustomerPurchasePackageElementRef
-from netex.customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
-from netex.customer_purchase_package_ref import CustomerPurchasePackageRef
-from netex.customer_ref import CustomerRef
-from netex.customer_security_listing_ref import CustomerSecurityListingRef
-from netex.cycle_model_profile_ref import CycleModelProfileRef
-from netex.data_source_ref import DataSourceRef
-from netex.dated_special_service_ref import DatedSpecialServiceRef
-from netex.dated_vehicle_journey_ref import DatedVehicleJourneyRef
-from netex.day_type_ref import DayTypeRef
-from netex.dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
-from netex.dead_run_ref import DeadRunRef
-from netex.default_connection_ref import DefaultConnectionRef
-from netex.default_dead_run_run_time_ref import DefaultDeadRunRunTimeRef
-from netex.default_interchange_ref import DefaultInterchangeRef
-from netex.default_service_journey_time_ref import DefaultServiceJourneyTimeRef
-from netex.delivery_variant_ref import DeliveryVariantRef
-from netex.department_ref import DepartmentRef
-from netex.destination_display_ref import DestinationDisplayRef
-from netex.destination_display_variant_ref import DestinationDisplayVariantRef
-from netex.direction_ref import DirectionRef
-from netex.discounting_rule_ref import DiscountingRuleRef
-from netex.distance_matrix_element_inverse_ref import DistanceMatrixElementInverseRef
-from netex.distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
-from netex.distance_matrix_element_ref import DistanceMatrixElementRef
-from netex.distribution_channel_ref import DistributionChannelRef
-from netex.driver_ref import DriverRef
-from netex.driver_schedule_frame_ref import DriverScheduleFrameRef
-from netex.driver_trip_ref import DriverTripRef
-from netex.driver_trip_time_ref import DriverTripTimeRef
-from netex.duty_part_ref import DutyPartRef
-from netex.duty_ref import DutyRef
-from netex.eligibility_change_policy_ref import EligibilityChangePolicyRef
-from netex.emv_card_ref import EmvCardRef
-from netex.entitlement_given_ref import EntitlementGivenRef
-from netex.entitlement_product_ref import EntitlementProductRef
-from netex.entitlement_required_ref import EntitlementRequiredRef
-from netex.entrance_ref import EntranceRef
-from netex.equipment_place_ref import EquipmentPlaceRef
-from netex.equipment_position_ref import EquipmentPositionRef
-from netex.estimated_passing_time_ref import EstimatedPassingTimeRef
-from netex.exchanging_ref import ExchangingRef
-from netex.facility_ref import FacilityRef
-from netex.facility_requirement_ref import FacilityRequirementRef
-from netex.facility_set_ref import FacilitySetRef
-from netex.fare_contract_entry_ref import FareContractEntryRef
-from netex.fare_contract_ref import FareContractRef
-from netex.fare_contract_security_listing_ref import FareContractSecurityListingRef
-from netex.fare_day_type_ref import FareDayTypeRef
-from netex.fare_demand_factor_ref import FareDemandFactorRef
-from netex.fare_frame_ref import FareFrameRef
-from netex.fare_price_ref import FarePriceRef
-from netex.fare_product_price_ref import FareProductPriceRef
-from netex.fare_product_ref import FareProductRef
-from netex.fare_quota_factor_ref import FareQuotaFactorRef
-from netex.fare_request_ref import FareRequestRef
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.fare_section_ref import FareSectionRef
-from netex.fare_structure_element_in_sequence_ref import FareStructureElementInSequenceRef
-from netex.fare_structure_element_price_ref import FareStructureElementPriceRef
-from netex.fare_structure_element_ref import FareStructureElementRef
-from netex.fare_table_column_ref import FareTableColumnRef
-from netex.fare_table_ref import FareTableRef
-from netex.fare_table_row_ref import FareTableRowRef
-from netex.fare_zone_ref import FareZoneRef
-from netex.fleet_ref import FleetRef
-from netex.flexible_area_ref import FlexibleAreaRef
-from netex.flexible_line_ref import FlexibleLineRef
-from netex.flexible_link_properties_ref import FlexibleLinkPropertiesRef
-from netex.flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from netex.flexible_point_properties_ref import FlexiblePointPropertiesRef
-from netex.flexible_quay_ref import FlexibleQuayRef
-from netex.flexible_service_properties_ref import FlexibleServicePropertiesRef
-from netex.flexible_stop_place_ref import FlexibleStopPlaceRef
-from netex.frequency_of_use_ref import FrequencyOfUseRef
-from netex.fulfilment_method_price_ref import FulfilmentMethodPriceRef
-from netex.fulfilment_method_ref import FulfilmentMethodRef
-from netex.garage_point_ref import GaragePointRef
-from netex.garage_ref import GarageRef
-from netex.general_frame_ref import GeneralFrameRef
-from netex.general_group_of_entities_ref import GeneralGroupOfEntitiesRef
-from netex.general_organisation_ref import GeneralOrganisationRef
-from netex.general_section_ref import GeneralSectionRef
-from netex.geographical_interval_price_ref import GeographicalIntervalPriceRef
-from netex.geographical_interval_ref import GeographicalIntervalRef
-from netex.geographical_structure_factor_ref import GeographicalStructureFactorRef
-from netex.geographical_unit_price_ref import GeographicalUnitPriceRef
-from netex.geographical_unit_ref import GeographicalUnitRef
-from netex.group_of_customer_purchase_packages_ref import GroupOfCustomerPurchasePackagesRef
-from netex.group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
-from netex.group_of_distribution_channels_ref import GroupOfDistributionChannelsRef
-from netex.group_of_lines_ref import GroupOfLinesRef
-from netex.group_of_operators_ref import GroupOfOperatorsRef
-from netex.group_of_places_ref import GroupOfPlacesRef
-from netex.group_of_sales_offer_packages_ref import GroupOfSalesOfferPackagesRef
-from netex.group_of_services_ref import GroupOfServicesRef
-from netex.group_of_single_journeys_ref import GroupOfSingleJourneysRef
-from netex.group_of_stop_places_ref import GroupOfStopPlacesRef
-from netex.group_of_timebands_ref import GroupOfTimebandsRef
-from netex.group_of_timing_links_ref import GroupOfTimingLinksRef
-from netex.group_ticket_ref import GroupTicketRef
-from netex.hail_and_ride_area_ref import HailAndRideAreaRef
-from netex.headway_journey_group_ref import HeadwayJourneyGroupRef
-from netex.individual_passenger_info_ref import IndividualPassengerInfoRef
-from netex.individual_traveller_ref import IndividualTravellerRef
-from netex.infrastructure_frame_ref import InfrastructureFrameRef
-from netex.interchange_ref import InterchangeRef
-from netex.interchange_rule_ref import InterchangeRuleRef
-from netex.interchange_rule_timing_ref import InterchangeRuleTimingRef
-from netex.interchanging_ref import InterchangingRef
-from netex.journey_frequency_group_ref import JourneyFrequencyGroupRef
-from netex.journey_meeting_ref import JourneyMeetingRef
-from netex.journey_part_couple_ref import JourneyPartCoupleRef
-from netex.journey_part_ref import JourneyPartRef
-from netex.journey_pattern_headway_ref import JourneyPatternHeadwayRef
-from netex.journey_pattern_layover_ref import JourneyPatternLayoverRef
-from netex.journey_pattern_ref import JourneyPatternRef
-from netex.journey_pattern_run_time_ref import JourneyPatternRunTimeRef
-from netex.journey_pattern_wait_time_ref import JourneyPatternWaitTimeRef
-from netex.journey_timing_ref import JourneyTimingRef
-from netex.layer_ref import LayerRef
-from netex.level_ref import LevelRef
-from netex.limiting_rule_ref import LimitingRuleRef
-from netex.line_link_ref import LineLinkRef
-from netex.line_network_ref import LineNetworkRef
-from netex.line_ref import LineRef
-from netex.line_section_ref import LineSectionRef
-from netex.link_projection_ref import LinkProjectionRef
-from netex.link_sequence_projection_ref import LinkSequenceProjectionRef
-from netex.link_sequence_ref import LinkSequenceRef
-from netex.log_entry_ref import LogEntryRef
-from netex.log_ref import LogRef
-from netex.logical_display_ref import LogicalDisplayRef
-from netex.luggage_allowance_ref import LuggageAllowanceRef
-from netex.management_agent_ref import ManagementAgentRef
-from netex.medium_access_device_security_listing_ref import MediumAccessDeviceSecurityListingRef
-from netex.medium_application_instance_ref import MediumApplicationInstanceRef
-from netex.minimum_stay_ref import MinimumStayRef
-from netex.mobile_device_ref import MobileDeviceRef
-from netex.mobility_journey_frame_ref import MobilityJourneyFrameRef
-from netex.mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
-from netex.mobility_service_frame_ref import MobilityServiceFrameRef
-from netex.mode_ref import ModeRef
-from netex.mode_restriction_assessment_ref import ModeRestrictionAssessmentRef
-from netex.monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
-from netex.month_validity_offset_ref import MonthValidityOffsetRef
-from netex.navigation_path_ref import NavigationPathRef
-from netex.network_ref import NetworkRef
-from netex.notice_ref import NoticeRef
-from netex.observed_passing_time_ref import ObservedPassingTimeRef
-from netex.offered_travel_specification_ref import OfferedTravelSpecificationRef
-from netex.onboard_stay_ref import OnboardStayRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.online_service_operator_ref import OnlineServiceOperatorRef
-from netex.onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
-from netex.open_transport_mode_ref import OpenTransportModeRef
-from netex.operating_day_ref import OperatingDayRef
-from netex.operating_department_ref import OperatingDepartmentRef
-from netex.operating_period_ref import OperatingPeriodRef
-from netex.operational_context_ref import OperationalContextRef
-from netex.operator_ref import OperatorRef
-from netex.organisation_part_ref import OrganisationPartRef
-from netex.organisation_ref import OrganisationRef
-from netex.organisational_unit_ref import OrganisationalUnitRef
-from netex.other_organisation_ref import OtherOrganisationRef
-from netex.parent_common_section_ref import ParentCommonSectionRef
-from netex.parent_section_ref import ParentSectionRef
-from netex.parking_area_ref import ParkingAreaRef
-from netex.parking_bay_condition_ref import ParkingBayConditionRef
-from netex.parking_bay_ref import ParkingBayRef
-from netex.parking_bay_status_ref import ParkingBayStatusRef
-from netex.parking_capacity_ref import ParkingCapacityRef
-from netex.parking_charge_band_ref import ParkingChargeBandRef
-from netex.parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
-from netex.parking_entrance_ref import ParkingEntranceRef
-from netex.parking_passenger_entrance_ref import ParkingPassengerEntranceRef
-from netex.parking_point_ref import ParkingPointRef
-from netex.parking_price_ref import ParkingPriceRef
-from netex.parking_properties_ref import ParkingPropertiesRef
-from netex.parking_ref import ParkingRef
-from netex.parking_tariff_ref import ParkingTariffRef
-from netex.passenger_capacity_ref import PassengerCapacityRef
-from netex.passenger_carrying_requirement_ref import PassengerCarryingRequirementRef
-from netex.passenger_seat_ref import PassengerSeatRef
-from netex.passing_time_ref import PassingTimeRef
-from netex.path_junction_ref import PathJunctionRef
-from netex.path_link_ref import PathLinkRef
-from netex.penalty_policy_ref import PenaltyPolicyRef
-from netex.personal_mode_of_operation_ref import PersonalModeOfOperationRef
-from netex.place_ref import PlaceRef
-from netex.point_of_interest_classification_ref import PointOfInterestClassificationRef
-from netex.point_of_interest_entrance_ref import PointOfInterestEntranceRef
-from netex.point_of_interest_hierarchy_ref import PointOfInterestHierarchyRef
-from netex.point_of_interest_ref import PointOfInterestRef
-from netex.point_of_interest_space_ref import PointOfInterestSpaceRef
-from netex.point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
-from netex.point_projection_ref import PointProjectionRef
-from netex.point_ref import PointRef
-from netex.pool_of_vehicles_ref import PoolOfVehiclesRef
-from netex.postal_address_ref import PostalAddressRef
-from netex.preassigned_fare_product_ref import PreassignedFareProductRef
-from netex.price_group_ref import PriceGroupRef
-from netex.price_unit_ref import PriceUnitRef
-from netex.priceable_object_ref import PriceableObjectRef
-from netex.pricing_parameter_set_ref import PricingParameterSetRef
-from netex.pricing_rule_ref import PricingRuleRef
-from netex.pricing_service_ref import PricingServiceRef
-from netex.profile_parameter_ref import ProfileParameterRef
-from netex.purchase_window_ref import PurchaseWindowRef
-from netex.purpose_of_equipment_profile_ref import PurposeOfEquipmentProfileRef
-from netex.purpose_of_grouping_ref import PurposeOfGroupingRef
-from netex.purpose_of_journey_partition_ref import PurposeOfJourneyPartitionRef
-from netex.quality_structure_factor_price_ref import QualityStructureFactorPriceRef
-from netex.quality_structure_factor_ref import QualityStructureFactorRef
-from netex.quay_ref import QuayRef
-from netex.railway_link_ref import RailwayLinkRef
-from netex.railway_point_ref import RailwayPointRef
-from netex.refunding_ref import RefundingRef
-from netex.relief_opportunity_ref import ReliefOpportunityRef
-from netex.relief_point_ref import ReliefPointRef
-from netex.rental_availability_ref import RentalAvailabilityRef
-from netex.rental_option_ref import RentalOptionRef
-from netex.rental_penalty_policy_ref import RentalPenaltyPolicyRef
-from netex.repeated_trip_fare_request_ref import RepeatedTripFareRequestRef
-from netex.replacing_ref import ReplacingRef
-from netex.requested_travel_specification_ref import RequestedTravelSpecificationRef
-from netex.reselling_ref import ResellingRef
-from netex.reserving_ref import ReservingRef
-from netex.residential_qualification_eligibility_ref import ResidentialQualificationEligibilityRef
-from netex.residential_qualification_ref import ResidentialQualificationRef
-from netex.resource_frame_ref import ResourceFrameRef
-from netex.responsibility_role_ref import ResponsibilityRoleRef
-from netex.responsibility_set_ref import ResponsibilitySetRef
-from netex.retail_consortium_ref import RetailConsortiumRef
-from netex.retail_device_security_listing_ref import RetailDeviceSecurityListingRef
-from netex.rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
-from netex.road_address_ref import RoadAddressRef
-from netex.road_link_ref import RoadLinkRef
-from netex.road_point_ref import RoadPointRef
-from netex.round_trip_ref import RoundTripRef
-from netex.rounding_ref import RoundingRef
-from netex.rounding_step_ref import RoundingStepRef
-from netex.route_instruction_ref import RouteInstructionRef
-from netex.route_link_ref import RouteLinkRef
-from netex.route_point_ref import RoutePointRef
-from netex.route_ref import RouteRef
-from netex.routing_constraint_zone_ref import RoutingConstraintZoneRef
-from netex.routing_ref import RoutingRef
-from netex.sale_discount_right_ref import SaleDiscountRightRef
-from netex.sales_offer_package_element_ref import SalesOfferPackageElementRef
-from netex.sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
-from netex.sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
-from netex.sales_offer_package_price_ref import SalesOfferPackagePriceRef
-from netex.sales_offer_package_ref import SalesOfferPackageRef
-from netex.sales_transaction_frame_ref import SalesTransactionFrameRef
-from netex.sales_transaction_ref import SalesTransactionRef
-from netex.schedule_request_ref import ScheduleRequestRef
-from netex.scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
-from netex.schematic_map_member_ref import SchematicMapMemberRef
-from netex.schematic_map_ref import SchematicMapRef
-from netex.section_ref import SectionRef
-from netex.series_constraint_price_ref import SeriesConstraintPriceRef
-from netex.series_constraint_ref import SeriesConstraintRef
-from netex.service_access_code_ref import ServiceAccessCodeRef
-from netex.service_access_right_ref import ServiceAccessRightRef
-from netex.service_calendar_frame_ref import ServiceCalendarFrameRef
-from netex.service_calendar_ref import ServiceCalendarRef
-from netex.service_facility_set_ref import ServiceFacilitySetRef
-from netex.service_frame_ref import ServiceFrameRef
-from netex.service_journey_interchange_ref import ServiceJourneyInterchangeRef
-from netex.service_journey_pattern_interchange_ref import ServiceJourneyPatternInterchangeRef
-from netex.service_journey_pattern_ref import ServiceJourneyPatternRef
-from netex.service_journey_ref import ServiceJourneyRef
-from netex.service_link_ref import ServiceLinkRef
-from netex.service_pattern_ref import ServicePatternRef
-from netex.service_site_ref import ServiceSiteRef
-from netex.serviced_organisation_ref import ServicedOrganisationRef
-from netex.simple_vehicle_type_ref import SimpleVehicleTypeRef
-from netex.single_journey_path_ref import SingleJourneyPathRef
-from netex.single_journey_ref import SingleJourneyRef
-from netex.single_trip_fare_request_ref import SingleTripFareRequestRef
-from netex.site_component_ref import SiteComponentRef
-from netex.site_connection_ref import SiteConnectionRef
-from netex.site_element_ref import SiteElementRef
-from netex.site_facility_set_ref import SiteFacilitySetRef
-from netex.site_frame_ref import SiteFrameRef
-from netex.site_ref import SiteRef
-from netex.smartcard_ref import SmartcardRef
-from netex.special_service_ref import SpecialServiceRef
-from netex.standard_fare_table_ref import StandardFareTableRef
-from netex.start_time_at_stop_point_ref import StartTimeAtStopPointRef
-from netex.step_limit_ref import StepLimitRef
-from netex.stop_area_ref import StopAreaRef
-from netex.stop_event_request_ref import StopEventRequestRef
-from netex.stop_finder_request_ref import StopFinderRequestRef
-from netex.stop_place_entrance_ref import StopPlaceEntranceRef
-from netex.stop_place_ref import StopPlaceRef
-from netex.stop_place_space_ref import StopPlaceSpaceRef
-from netex.stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
-from netex.submode_ref import SubmodeRef
-from netex.subscribing_ref import SubscribingRef
-from netex.supplement_product_ref import SupplementProductRef
-from netex.supply_contract_ref import SupplyContractRef
-from netex.suspending_ref import SuspendingRef
-from netex.target_passing_time_ref import TargetPassingTimeRef
-from netex.tariff_object_ref import TariffObjectRef
-from netex.tariff_ref import TariffRef
-from netex.tariff_zone_ref import TariffZoneRef
-from netex.taxi_parking_area_ref import TaxiParkingAreaRef
-from netex.taxi_rank_ref import TaxiRankRef
-from netex.taxi_stand_ref import TaxiStandRef
-from netex.template_service_journey_ref import TemplateServiceJourneyRef
-from netex.third_party_product_ref import ThirdPartyProductRef
-from netex.time_demand_profile_ref import TimeDemandProfileRef
-from netex.time_demand_type_ref import TimeDemandTypeRef
-from netex.time_interval_price_ref import TimeIntervalPriceRef
-from netex.time_interval_ref import TimeIntervalRef
-from netex.time_structure_factor_ref import TimeStructureFactorRef
-from netex.time_unit_price_ref import TimeUnitPriceRef
-from netex.time_unit_ref import TimeUnitRef
-from netex.timeband_ref import TimebandRef
-from netex.timetable_frame_ref import TimetableFrameRef
-from netex.timetabled_passing_time_ref import TimetabledPassingTimeRef
-from netex.timing_algorithm_type_ref import TimingAlgorithmTypeRef
-from netex.timing_link_ref import TimingLinkRef
-from netex.timing_pattern_ref import TimingPatternRef
-from netex.timing_point_ref import TimingPointRef
-from netex.topographic_place_ref import TopographicPlaceRef
-from netex.topographic_projection_ref import TopographicProjectionRef
-from netex.traffic_control_point_ref import TrafficControlPointRef
-from netex.train_block_part_ref import TrainBlockPartRef
-from netex.train_block_ref import TrainBlockRef
-from netex.train_component_ref import TrainComponentRef
-from netex.train_element_ref import TrainElementRef
-from netex.train_in_compound_train_ref import TrainInCompoundTrainRef
-from netex.train_number_ref import TrainNumberRef
-from netex.train_ref import TrainRef
-from netex.transferability_ref import TransferabilityRef
-from netex.transport_administrative_zone_ref import TransportAdministrativeZoneRef
-from netex.transport_type_ref import TransportTypeRef
-from netex.travel_agent_ref import TravelAgentRef
-from netex.travel_document_ref import TravelDocumentRef
-from netex.travel_document_security_listing_ref import TravelDocumentSecurityListingRef
-from netex.travel_specification_ref import TravelSpecificationRef
-from netex.trip_leg_ref import TripLegRef
-from netex.trip_pattern_trip_ref import TripPatternTripRef
-from netex.trip_plan_request_ref import TripPlanRequestRef
-from netex.trip_ref import TripRef
-from netex.turnaround_time_limit_time_ref import TurnaroundTimeLimitTimeRef
-from netex.type_of_access_right_assignment_ref import TypeOfAccessRightAssignmentRef
-from netex.type_of_activation_ref import TypeOfActivationRef
-from netex.type_of_battery_chemistry_ref import TypeOfBatteryChemistryRef
-from netex.type_of_codespace_assignment_ref import TypeOfCodespaceAssignmentRef
-from netex.type_of_concession_ref import TypeOfConcessionRef
-from netex.type_of_congestion_ref import TypeOfCongestionRef
-from netex.type_of_customer_account_ref import TypeOfCustomerAccountRef
-from netex.type_of_delivery_variant_ref import TypeOfDeliveryVariantRef
-from netex.type_of_equipment_ref import TypeOfEquipmentRef
-from netex.type_of_facility_ref import TypeOfFacilityRef
-from netex.type_of_fare_contract_entry_ref import TypeOfFareContractEntryRef
-from netex.type_of_fare_contract_ref import TypeOfFareContractRef
-from netex.type_of_fare_product_ref import TypeOfFareProductRef
-from netex.type_of_fare_structure_element_ref import TypeOfFareStructureElementRef
-from netex.type_of_fare_structure_factor_ref import TypeOfFareStructureFactorRef
-from netex.type_of_fare_table_ref import TypeOfFareTableRef
-from netex.type_of_feature_ref import TypeOfFeatureRef
-from netex.type_of_fleet_ref import TypeOfFleetRef
-from netex.type_of_flexible_service_ref import TypeOfFlexibleServiceRef
-from netex.type_of_frame_ref import TypeOfFrameRef
-from netex.type_of_journey_pattern_ref import TypeOfJourneyPatternRef
-from netex.type_of_line_ref import TypeOfLineRef
-from netex.type_of_link_ref import TypeOfLinkRef
-from netex.type_of_link_sequence_ref import TypeOfLinkSequenceRef
-from netex.type_of_machine_readability_ref import TypeOfMachineReadabilityRef
-from netex.type_of_medium_access_device_ref import TypeOfMediumAccessDeviceRef
-from netex.type_of_mobility_service_ref import TypeOfMobilityServiceRef
-from netex.type_of_mode_of_operation_ref import TypeOfModeOfOperationRef
-from netex.type_of_notice_ref import TypeOfNoticeRef
-from netex.type_of_operation_ref import TypeOfOperationRef
-from netex.type_of_organisation_part_ref import TypeOfOrganisationPartRef
-from netex.type_of_organisation_ref import TypeOfOrganisationRef
-from netex.type_of_parking_ref import TypeOfParkingRef
-from netex.type_of_passenger_information_equipment_ref import TypeOfPassengerInformationEquipmentRef
-from netex.type_of_payment_method_ref import TypeOfPaymentMethodRef
-from netex.type_of_place_ref import TypeOfPlaceRef
-from netex.type_of_plug_ref import TypeOfPlugRef
-from netex.type_of_point_ref import TypeOfPointRef
-from netex.type_of_pricing_rule_ref import TypeOfPricingRuleRef
-from netex.type_of_product_category_ref import TypeOfProductCategoryRef
-from netex.type_of_projection_ref import TypeOfProjectionRef
-from netex.type_of_proof_ref import TypeOfProofRef
-from netex.type_of_responsibility_role_ref import TypeOfResponsibilityRoleRef
-from netex.type_of_retail_device_ref import TypeOfRetailDeviceRef
-from netex.type_of_sales_offer_package_ref import TypeOfSalesOfferPackageRef
-from netex.type_of_security_list_ref import TypeOfSecurityListRef
-from netex.type_of_service_feature_ref import TypeOfServiceFeatureRef
-from netex.type_of_service_ref import TypeOfServiceRef
-from netex.type_of_tariff_ref import TypeOfTariffRef
-from netex.type_of_time_demand_type_ref import TypeOfTimeDemandTypeRef
-from netex.type_of_transfer_ref import TypeOfTransferRef
-from netex.type_of_travel_document_ref import TypeOfTravelDocumentRef
-from netex.type_of_usage_parameter_ref import TypeOfUsageParameterRef
-from netex.type_of_validity_ref import TypeOfValidityRef
-from netex.type_of_zone_ref import TypeOfZoneRef
-from netex.uic_operating_period_ref import UicOperatingPeriodRef
-from netex.usage_discount_right_ref import UsageDiscountRightRef
-from netex.usage_parameter_price_ref import UsageParameterPriceRef
-from netex.usage_validity_period_ref import UsageValidityPeriodRef
-from netex.user_profile_eligibility_ref import UserProfileEligibilityRef
-from netex.user_profile_ref import UserProfileRef
-from netex.validable_element_price_ref import ValidableElementPriceRef
-from netex.validable_element_ref import ValidableElementRef
-from netex.validity_condition_ref import ValidityConditionRef
-from netex.validity_rule_parameter_ref import ValidityRuleParameterRef
-from netex.validity_trigger_ref import ValidityTriggerRef
-from netex.vehicle_entrance_ref import VehicleEntranceRef
-from netex.vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
-from netex.vehicle_journey_ref import VehicleJourneyRef
-from netex.vehicle_manoeuvring_requirement_ref import VehicleManoeuvringRequirementRef
-from netex.vehicle_meeting_link_ref import VehicleMeetingLinkRef
-from netex.vehicle_meeting_place_ref import VehicleMeetingPlaceRef
-from netex.vehicle_meeting_point_ref import VehicleMeetingPointRef
-from netex.vehicle_model_ref import VehicleModelRef
-from netex.vehicle_pooler_profile_ref import VehiclePoolerProfileRef
-from netex.vehicle_pooling_driver_info_ref import VehiclePoolingDriverInfoRef
-from netex.vehicle_pooling_meeting_place_ref import VehiclePoolingMeetingPlaceRef
-from netex.vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
-from netex.vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
-from netex.vehicle_pooling_ref import VehiclePoolingRef
-from netex.vehicle_position_alignment_ref import VehiclePositionAlignmentRef
-from netex.vehicle_profile_ref import VehicleProfileRef
-from netex.vehicle_quay_alignment_ref import VehicleQuayAlignmentRef
-from netex.vehicle_ref import VehicleRef
-from netex.vehicle_rental_ref import VehicleRentalRef
-from netex.vehicle_requirement_ref import VehicleRequirementRef
-from netex.vehicle_schedule_frame_ref import VehicleScheduleFrameRef
-from netex.vehicle_service_part_ref import VehicleServicePartRef
-from netex.vehicle_service_ref import VehicleServiceRef
-from netex.vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
-from netex.vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
-from netex.vehicle_sharing_ref import VehicleSharingRef
-from netex.vehicle_stopping_place_ref import VehicleStoppingPlaceRef
-from netex.vehicle_stopping_position_ref import VehicleStoppingPositionRef
-from netex.vehicle_type_preference_ref import VehicleTypePreferenceRef
-from netex.vehicle_type_ref import VehicleTypeRef
-from netex.vehicle_type_zone_restriction_ref import VehicleTypeZoneRestrictionRef
-from netex.version_of_object_ref import VersionOfObjectRef
-from netex.version_ref import VersionRef
-from netex.whitelist_ref import WhitelistRef
-from netex.wire_link_ref import WireLinkRef
-from netex.wire_point_ref import WirePointRef
-from netex.zone_projection_ref import ZoneProjectionRef
-from netex.zone_ref import ZoneRef
+from typing import List, Union
+from .access_ref import AccessRef
+from .access_right_in_product_ref import AccessRightInProductRef
+from .access_space_ref import AccessSpaceRef
+from .access_zone_ref import AccessZoneRef
+from .accommodation_ref import AccommodationRef
+from .accountable_element_ref import AccountableElementRef
+from .activation_link_ref import ActivationLinkRef
+from .activation_point_ref import ActivationPointRef
+from .additional_driver_option_ref import AdditionalDriverOptionRef
+from .address_ref import AddressRef
+from .addressable_place_ref import AddressablePlaceRef
+from .administrative_zone_ref import AdministrativeZoneRef
+from .all_authorities_ref import AllAuthoritiesRef
+from .all_distribution_channels_ref import AllDistributionChannelsRef
+from .all_operators_ref import AllOperatorsRef
+from .all_organisations_ref import AllOrganisationsRef
+from .all_public_transport_organisations_ref import (
+    AllPublicTransportOrganisationsRef,
+)
+from .all_transport_organisations_ref import AllTransportOrganisationsRef
+from .allowed_line_direction_ref import AllowedLineDirectionRef
+from .alternative_name_ref import AlternativeNameRef
+from .alternative_text_ref import AlternativeTextRef
+from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
+from .authority_ref import AuthorityRef
+from .availability_condition_ref import AvailabilityConditionRef
+from .beacon_point_ref import BeaconPointRef
+from .blacklist_ref import BlacklistRef
+from .block_part_ref import BlockPartRef
+from .block_ref import BlockRef
+from .boarding_position_ref import BoardingPositionRef
+from .booking_policy_ref import BookingPolicyRef
+from .border_point_ref import BorderPointRef
+from .branding_ref import BrandingRef
+from .cancelling_ref import CancellingRef
+from .capped_discount_right_ref import CappedDiscountRightRef
+from .capping_rule_price_ref import CappingRulePriceRef
+from .capping_rule_ref import CappingRuleRef
+from .car_model_profile_ref import CarModelProfileRef
+from .cell_ref import CellRef
+from .charging_equipment_profile_ref import ChargingEquipmentProfileRef
+from .charging_moment_ref import ChargingMomentRef
+from .charging_policy_ref import ChargingPolicyRef
+from .class_of_use_ref import ClassOfUseRef
+from .commercial_profile_eligibility_ref import CommercialProfileEligibilityRef
+from .commercial_profile_ref import CommercialProfileRef
+from .common_section_ref import CommonSectionRef
+from .companion_profile_ref import CompanionProfileRef
+from .complex_feature_projection_ref import ComplexFeatureProjectionRef
+from .composite_frame_ref import CompositeFrameRef
+from .compound_block_ref import CompoundBlockRef
+from .compound_train_ref import CompoundTrainRef
+from .connection_ref import ConnectionRef
+from .contact_ref import ContactRef
+from .control_centre_ref import ControlCentreRef
+from .controllable_element_in_sequence_ref import (
+    ControllableElementInSequenceRef,
+)
+from .controllable_element_price_ref import ControllableElementPriceRef
+from .controllable_element_ref import ControllableElementRef
+from .coupled_journey_ref import CoupledJourneyRef
+from .course_of_journeys_ref import CourseOfJourneysRef
+from .crew_base_ref import CrewBaseRef
+from .customer_account_ref import CustomerAccountRef
+from .customer_account_security_listing_ref import (
+    CustomerAccountSecurityListingRef,
+)
+from .customer_account_status_ref import CustomerAccountStatusRef
+from .customer_payment_means_ref import CustomerPaymentMeansRef
+from .customer_purchase_package_element_ref import (
+    CustomerPurchasePackageElementRef,
+)
+from .customer_purchase_package_price_ref import (
+    CustomerPurchasePackagePriceRef,
+)
+from .customer_purchase_package_ref import CustomerPurchasePackageRef
+from .customer_ref import CustomerRef
+from .customer_security_listing_ref import CustomerSecurityListingRef
+from .cycle_model_profile_ref import CycleModelProfileRef
+from .data_source_ref import DataSourceRef
+from .dated_special_service_ref import DatedSpecialServiceRef
+from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
+from .day_type_ref import DayTypeRef
+from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
+from .dead_run_ref import DeadRunRef
+from .default_connection_ref import DefaultConnectionRef
+from .default_dead_run_run_time_ref import DefaultDeadRunRunTimeRef
+from .default_interchange_ref import DefaultInterchangeRef
+from .default_service_journey_time_ref import DefaultServiceJourneyTimeRef
+from .delivery_variant_ref import DeliveryVariantRef
+from .department_ref import DepartmentRef
+from .destination_display_ref import DestinationDisplayRef
+from .destination_display_variant_ref import DestinationDisplayVariantRef
+from .direction_ref import DirectionRef
+from .discounting_rule_ref import DiscountingRuleRef
+from .distance_matrix_element_inverse_ref import (
+    DistanceMatrixElementInverseRef,
+)
+from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
+from .distance_matrix_element_ref import DistanceMatrixElementRef
+from .distribution_channel_ref import DistributionChannelRef
+from .driver_ref import DriverRef
+from .driver_schedule_frame_ref import DriverScheduleFrameRef
+from .driver_trip_ref import DriverTripRef
+from .driver_trip_time_ref import DriverTripTimeRef
+from .duty_part_ref import DutyPartRef
+from .duty_ref import DutyRef
+from .eligibility_change_policy_ref import EligibilityChangePolicyRef
+from .emv_card_ref import EmvCardRef
+from .entitlement_given_ref import EntitlementGivenRef
+from .entitlement_product_ref import EntitlementProductRef
+from .entitlement_required_ref import EntitlementRequiredRef
+from .entrance_ref import EntranceRef
+from .equipment_place_ref import EquipmentPlaceRef
+from .equipment_position_ref import EquipmentPositionRef
+from .estimated_passing_time_ref import EstimatedPassingTimeRef
+from .exchanging_ref import ExchangingRef
+from .facility_ref import FacilityRef
+from .facility_requirement_ref import FacilityRequirementRef
+from .facility_set_ref import FacilitySetRef
+from .fare_contract_entry_ref import FareContractEntryRef
+from .fare_contract_ref import FareContractRef
+from .fare_contract_security_listing_ref import FareContractSecurityListingRef
+from .fare_day_type_ref import FareDayTypeRef
+from .fare_demand_factor_ref import FareDemandFactorRef
+from .fare_frame_ref import FareFrameRef
+from .fare_price_ref import FarePriceRef
+from .fare_product_price_ref import FareProductPriceRef
+from .fare_product_ref import FareProductRef
+from .fare_quota_factor_ref import FareQuotaFactorRef
+from .fare_request_ref import FareRequestRef
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .fare_section_ref import FareSectionRef
+from .fare_structure_element_in_sequence_ref import (
+    FareStructureElementInSequenceRef,
+)
+from .fare_structure_element_price_ref import FareStructureElementPriceRef
+from .fare_structure_element_ref import FareStructureElementRef
+from .fare_table_column_ref import FareTableColumnRef
+from .fare_table_ref import FareTableRef
+from .fare_table_row_ref import FareTableRowRef
+from .fare_zone_ref import FareZoneRef
+from .fleet_ref import FleetRef
+from .flexible_area_ref import FlexibleAreaRef
+from .flexible_line_ref import FlexibleLineRef
+from .flexible_link_properties_ref import FlexibleLinkPropertiesRef
+from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
+from .flexible_point_properties_ref import FlexiblePointPropertiesRef
+from .flexible_quay_ref import FlexibleQuayRef
+from .flexible_service_properties_ref import FlexibleServicePropertiesRef
+from .flexible_stop_place_ref import FlexibleStopPlaceRef
+from .frequency_of_use_ref import FrequencyOfUseRef
+from .fulfilment_method_price_ref import FulfilmentMethodPriceRef
+from .fulfilment_method_ref import FulfilmentMethodRef
+from .garage_point_ref import GaragePointRef
+from .garage_ref import GarageRef
+from .general_frame_ref import GeneralFrameRef
+from .general_group_of_entities_ref import GeneralGroupOfEntitiesRef
+from .general_organisation_ref import GeneralOrganisationRef
+from .general_section_ref import GeneralSectionRef
+from .geographical_interval_price_ref import GeographicalIntervalPriceRef
+from .geographical_interval_ref import GeographicalIntervalRef
+from .geographical_structure_factor_ref import GeographicalStructureFactorRef
+from .geographical_unit_price_ref import GeographicalUnitPriceRef
+from .geographical_unit_ref import GeographicalUnitRef
+from .group_of_customer_purchase_packages_ref import (
+    GroupOfCustomerPurchasePackagesRef,
+)
+from .group_of_distance_matrix_elements_ref import (
+    GroupOfDistanceMatrixElementsRef,
+)
+from .group_of_distribution_channels_ref import GroupOfDistributionChannelsRef
+from .group_of_lines_ref import GroupOfLinesRef
+from .group_of_operators_ref import GroupOfOperatorsRef
+from .group_of_places_ref import GroupOfPlacesRef
+from .group_of_sales_offer_packages_ref import GroupOfSalesOfferPackagesRef
+from .group_of_services_ref import GroupOfServicesRef
+from .group_of_single_journeys_ref import GroupOfSingleJourneysRef
+from .group_of_stop_places_ref import GroupOfStopPlacesRef
+from .group_of_timebands_ref import GroupOfTimebandsRef
+from .group_of_timing_links_ref import GroupOfTimingLinksRef
+from .group_ticket_ref import GroupTicketRef
+from .hail_and_ride_area_ref import HailAndRideAreaRef
+from .headway_journey_group_ref import HeadwayJourneyGroupRef
+from .individual_passenger_info_ref import IndividualPassengerInfoRef
+from .individual_traveller_ref import IndividualTravellerRef
+from .infrastructure_frame_ref import InfrastructureFrameRef
+from .interchange_ref import InterchangeRef
+from .interchange_rule_ref import InterchangeRuleRef
+from .interchange_rule_timing_ref import InterchangeRuleTimingRef
+from .interchanging_ref import InterchangingRef
+from .journey_frequency_group_ref import JourneyFrequencyGroupRef
+from .journey_meeting_ref import JourneyMeetingRef
+from .journey_part_couple_ref import JourneyPartCoupleRef
+from .journey_part_ref import JourneyPartRef
+from .journey_pattern_headway_ref import JourneyPatternHeadwayRef
+from .journey_pattern_layover_ref import JourneyPatternLayoverRef
+from .journey_pattern_ref import JourneyPatternRef
+from .journey_pattern_run_time_ref import JourneyPatternRunTimeRef
+from .journey_pattern_wait_time_ref import JourneyPatternWaitTimeRef
+from .journey_timing_ref import JourneyTimingRef
+from .layer_ref import LayerRef
+from .level_ref import LevelRef
+from .limiting_rule_ref import LimitingRuleRef
+from .line_link_ref import LineLinkRef
+from .line_network_ref import LineNetworkRef
+from .line_ref import LineRef
+from .line_section_ref import LineSectionRef
+from .link_projection_ref import LinkProjectionRef
+from .link_sequence_projection_ref import LinkSequenceProjectionRef
+from .link_sequence_ref import LinkSequenceRef
+from .log_entry_ref import LogEntryRef
+from .log_ref import LogRef
+from .logical_display_ref import LogicalDisplayRef
+from .luggage_allowance_ref import LuggageAllowanceRef
+from .management_agent_ref import ManagementAgentRef
+from .medium_access_device_security_listing_ref import (
+    MediumAccessDeviceSecurityListingRef,
+)
+from .medium_application_instance_ref import MediumApplicationInstanceRef
+from .minimum_stay_ref import MinimumStayRef
+from .mobile_device_ref import MobileDeviceRef
+from .mobility_journey_frame_ref import MobilityJourneyFrameRef
+from .mobility_service_constraint_zone_ref import (
+    MobilityServiceConstraintZoneRef,
+)
+from .mobility_service_frame_ref import MobilityServiceFrameRef
+from .mode_ref import ModeRef
+from .mode_restriction_assessment_ref import ModeRestrictionAssessmentRef
+from .monitored_vehicle_sharing_parking_bay_ref import (
+    MonitoredVehicleSharingParkingBayRef,
+)
+from .month_validity_offset_ref import MonthValidityOffsetRef
+from .navigation_path_ref import NavigationPathRef
+from .network_ref import NetworkRef
+from .notice_ref import NoticeRef
+from .observed_passing_time_ref import ObservedPassingTimeRef
+from .offered_travel_specification_ref import OfferedTravelSpecificationRef
+from .onboard_stay_ref import OnboardStayRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .online_service_operator_ref import OnlineServiceOperatorRef
+from .onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
+from .open_transport_mode_ref import OpenTransportModeRef
+from .operating_day_ref import OperatingDayRef
+from .operating_department_ref import OperatingDepartmentRef
+from .operating_period_ref import OperatingPeriodRef
+from .operational_context_ref import OperationalContextRef
+from .operator_ref import OperatorRef
+from .organisation_part_ref import OrganisationPartRef
+from .organisation_ref import OrganisationRef
+from .organisational_unit_ref import OrganisationalUnitRef
+from .other_organisation_ref import OtherOrganisationRef
+from .parent_common_section_ref import ParentCommonSectionRef
+from .parent_section_ref import ParentSectionRef
+from .parking_area_ref import ParkingAreaRef
+from .parking_bay_condition_ref import ParkingBayConditionRef
+from .parking_bay_ref import ParkingBayRef
+from .parking_bay_status_ref import ParkingBayStatusRef
+from .parking_capacity_ref import ParkingCapacityRef
+from .parking_charge_band_ref import ParkingChargeBandRef
+from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
+from .parking_entrance_ref import ParkingEntranceRef
+from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
+from .parking_point_ref import ParkingPointRef
+from .parking_price_ref import ParkingPriceRef
+from .parking_properties_ref import ParkingPropertiesRef
+from .parking_ref import ParkingRef
+from .parking_tariff_ref import ParkingTariffRef
+from .passenger_capacity_ref import PassengerCapacityRef
+from .passenger_carrying_requirement_ref import PassengerCarryingRequirementRef
+from .passenger_seat_ref import PassengerSeatRef
+from .passing_time_ref import PassingTimeRef
+from .path_junction_ref import PathJunctionRef
+from .path_link_ref import PathLinkRef
+from .penalty_policy_ref import PenaltyPolicyRef
+from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
+from .place_ref import PlaceRef
+from .point_of_interest_classification_ref import (
+    PointOfInterestClassificationRef,
+)
+from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
+from .point_of_interest_hierarchy_ref import PointOfInterestHierarchyRef
+from .point_of_interest_ref import PointOfInterestRef
+from .point_of_interest_space_ref import PointOfInterestSpaceRef
+from .point_of_interest_vehicle_entrance_ref import (
+    PointOfInterestVehicleEntranceRef,
+)
+from .point_projection_ref import PointProjectionRef
+from .point_ref import PointRef
+from .pool_of_vehicles_ref import PoolOfVehiclesRef
+from .postal_address_ref import PostalAddressRef
+from .preassigned_fare_product_ref import PreassignedFareProductRef
+from .price_group_ref import PriceGroupRef
+from .price_unit_ref import PriceUnitRef
+from .priceable_object_ref import PriceableObjectRef
+from .pricing_parameter_set_ref import PricingParameterSetRef
+from .pricing_rule_ref import PricingRuleRef
+from .pricing_service_ref import PricingServiceRef
+from .profile_parameter_ref import ProfileParameterRef
+from .purchase_window_ref import PurchaseWindowRef
+from .purpose_of_equipment_profile_ref import PurposeOfEquipmentProfileRef
+from .purpose_of_grouping_ref import PurposeOfGroupingRef
+from .purpose_of_journey_partition_ref import PurposeOfJourneyPartitionRef
+from .quality_structure_factor_price_ref import QualityStructureFactorPriceRef
+from .quality_structure_factor_ref import QualityStructureFactorRef
+from .quay_ref import QuayRef
+from .railway_link_ref import RailwayLinkRef
+from .railway_point_ref import RailwayPointRef
+from .refunding_ref import RefundingRef
+from .relief_opportunity_ref import ReliefOpportunityRef
+from .relief_point_ref import ReliefPointRef
+from .rental_availability_ref import RentalAvailabilityRef
+from .rental_option_ref import RentalOptionRef
+from .rental_penalty_policy_ref import RentalPenaltyPolicyRef
+from .repeated_trip_fare_request_ref import RepeatedTripFareRequestRef
+from .replacing_ref import ReplacingRef
+from .requested_travel_specification_ref import RequestedTravelSpecificationRef
+from .reselling_ref import ResellingRef
+from .reserving_ref import ReservingRef
+from .residential_qualification_eligibility_ref import (
+    ResidentialQualificationEligibilityRef,
+)
+from .residential_qualification_ref import ResidentialQualificationRef
+from .resource_frame_ref import ResourceFrameRef
+from .responsibility_role_ref import ResponsibilityRoleRef
+from .responsibility_set_ref import ResponsibilitySetRef
+from .retail_consortium_ref import RetailConsortiumRef
+from .retail_device_security_listing_ref import RetailDeviceSecurityListingRef
+from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
+from .road_address_ref import RoadAddressRef
+from .road_link_ref import RoadLinkRef
+from .road_point_ref import RoadPointRef
+from .round_trip_ref import RoundTripRef
+from .rounding_ref import RoundingRef
+from .rounding_step_ref import RoundingStepRef
+from .route_instruction_ref import RouteInstructionRef
+from .route_link_ref import RouteLinkRef
+from .route_point_ref import RoutePointRef
+from .route_ref import RouteRef
+from .routing_constraint_zone_ref import RoutingConstraintZoneRef
+from .routing_ref import RoutingRef
+from .sale_discount_right_ref import SaleDiscountRightRef
+from .sales_offer_package_element_ref import SalesOfferPackageElementRef
+from .sales_offer_package_entitlement_given_ref import (
+    SalesOfferPackageEntitlementGivenRef,
+)
+from .sales_offer_package_entitlement_required_ref import (
+    SalesOfferPackageEntitlementRequiredRef,
+)
+from .sales_offer_package_price_ref import SalesOfferPackagePriceRef
+from .sales_offer_package_ref import SalesOfferPackageRef
+from .sales_transaction_frame_ref import SalesTransactionFrameRef
+from .sales_transaction_ref import SalesTransactionRef
+from .schedule_request_ref import ScheduleRequestRef
+from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+from .schematic_map_member_ref import SchematicMapMemberRef
+from .schematic_map_ref import SchematicMapRef
+from .section_ref import SectionRef
+from .series_constraint_price_ref import SeriesConstraintPriceRef
+from .series_constraint_ref import SeriesConstraintRef
+from .service_access_code_ref import ServiceAccessCodeRef
+from .service_access_right_ref import ServiceAccessRightRef
+from .service_calendar_frame_ref import ServiceCalendarFrameRef
+from .service_calendar_ref import ServiceCalendarRef
+from .service_facility_set_ref import ServiceFacilitySetRef
+from .service_frame_ref import ServiceFrameRef
+from .service_journey_interchange_ref import ServiceJourneyInterchangeRef
+from .service_journey_pattern_interchange_ref import (
+    ServiceJourneyPatternInterchangeRef,
+)
+from .service_journey_pattern_ref import ServiceJourneyPatternRef
+from .service_journey_ref import ServiceJourneyRef
+from .service_link_ref import ServiceLinkRef
+from .service_pattern_ref import ServicePatternRef
+from .service_site_ref import ServiceSiteRef
+from .serviced_organisation_ref import ServicedOrganisationRef
+from .simple_vehicle_type_ref import SimpleVehicleTypeRef
+from .single_journey_path_ref import SingleJourneyPathRef
+from .single_journey_ref import SingleJourneyRef
+from .single_trip_fare_request_ref import SingleTripFareRequestRef
+from .site_component_ref import SiteComponentRef
+from .site_connection_ref import SiteConnectionRef
+from .site_element_ref import SiteElementRef
+from .site_facility_set_ref import SiteFacilitySetRef
+from .site_frame_ref import SiteFrameRef
+from .site_ref import SiteRef
+from .smartcard_ref import SmartcardRef
+from .special_service_ref import SpecialServiceRef
+from .standard_fare_table_ref import StandardFareTableRef
+from .start_time_at_stop_point_ref import StartTimeAtStopPointRef
+from .step_limit_ref import StepLimitRef
+from .stop_area_ref import StopAreaRef
+from .stop_event_request_ref import StopEventRequestRef
+from .stop_finder_request_ref import StopFinderRequestRef
+from .stop_place_entrance_ref import StopPlaceEntranceRef
+from .stop_place_ref import StopPlaceRef
+from .stop_place_space_ref import StopPlaceSpaceRef
+from .stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
+from .submode_ref import SubmodeRef
+from .subscribing_ref import SubscribingRef
+from .supplement_product_ref import SupplementProductRef
+from .supply_contract_ref import SupplyContractRef
+from .suspending_ref import SuspendingRef
+from .target_passing_time_ref import TargetPassingTimeRef
+from .tariff_object_ref import TariffObjectRef
+from .tariff_ref import TariffRef
+from .tariff_zone_ref import TariffZoneRef
+from .taxi_parking_area_ref import TaxiParkingAreaRef
+from .taxi_rank_ref import TaxiRankRef
+from .taxi_stand_ref import TaxiStandRef
+from .template_service_journey_ref import TemplateServiceJourneyRef
+from .third_party_product_ref import ThirdPartyProductRef
+from .time_demand_profile_ref import TimeDemandProfileRef
+from .time_demand_type_ref import TimeDemandTypeRef
+from .time_interval_price_ref import TimeIntervalPriceRef
+from .time_interval_ref import TimeIntervalRef
+from .time_structure_factor_ref import TimeStructureFactorRef
+from .time_unit_price_ref import TimeUnitPriceRef
+from .time_unit_ref import TimeUnitRef
+from .timeband_ref import TimebandRef
+from .timetable_frame_ref import TimetableFrameRef
+from .timetabled_passing_time_ref import TimetabledPassingTimeRef
+from .timing_algorithm_type_ref import TimingAlgorithmTypeRef
+from .timing_link_ref import TimingLinkRef
+from .timing_pattern_ref import TimingPatternRef
+from .timing_point_ref import TimingPointRef
+from .topographic_place_ref import TopographicPlaceRef
+from .topographic_projection_ref import TopographicProjectionRef
+from .traffic_control_point_ref import TrafficControlPointRef
+from .train_block_part_ref import TrainBlockPartRef
+from .train_block_ref import TrainBlockRef
+from .train_component_ref import TrainComponentRef
+from .train_element_ref import TrainElementRef
+from .train_in_compound_train_ref import TrainInCompoundTrainRef
+from .train_number_ref import TrainNumberRef
+from .train_ref import TrainRef
+from .transferability_ref import TransferabilityRef
+from .transport_administrative_zone_ref import TransportAdministrativeZoneRef
+from .transport_type_ref import TransportTypeRef
+from .travel_agent_ref import TravelAgentRef
+from .travel_document_ref import TravelDocumentRef
+from .travel_document_security_listing_ref import (
+    TravelDocumentSecurityListingRef,
+)
+from .travel_specification_ref import TravelSpecificationRef
+from .trip_leg_ref import TripLegRef
+from .trip_pattern_trip_ref import TripPatternTripRef
+from .trip_plan_request_ref import TripPlanRequestRef
+from .trip_ref import TripRef
+from .turnaround_time_limit_time_ref import TurnaroundTimeLimitTimeRef
+from .type_of_access_right_assignment_ref import TypeOfAccessRightAssignmentRef
+from .type_of_activation_ref import TypeOfActivationRef
+from .type_of_battery_chemistry_ref import TypeOfBatteryChemistryRef
+from .type_of_codespace_assignment_ref import TypeOfCodespaceAssignmentRef
+from .type_of_concession_ref import TypeOfConcessionRef
+from .type_of_congestion_ref import TypeOfCongestionRef
+from .type_of_customer_account_ref import TypeOfCustomerAccountRef
+from .type_of_delivery_variant_ref import TypeOfDeliveryVariantRef
+from .type_of_equipment_ref import TypeOfEquipmentRef
+from .type_of_facility_ref import TypeOfFacilityRef
+from .type_of_fare_contract_entry_ref import TypeOfFareContractEntryRef
+from .type_of_fare_contract_ref import TypeOfFareContractRef
+from .type_of_fare_product_ref import TypeOfFareProductRef
+from .type_of_fare_structure_element_ref import TypeOfFareStructureElementRef
+from .type_of_fare_structure_factor_ref import TypeOfFareStructureFactorRef
+from .type_of_fare_table_ref import TypeOfFareTableRef
+from .type_of_feature_ref import TypeOfFeatureRef
+from .type_of_fleet_ref import TypeOfFleetRef
+from .type_of_flexible_service_ref import TypeOfFlexibleServiceRef
+from .type_of_frame_ref import TypeOfFrameRef
+from .type_of_journey_pattern_ref import TypeOfJourneyPatternRef
+from .type_of_line_ref import TypeOfLineRef
+from .type_of_link_ref import TypeOfLinkRef
+from .type_of_link_sequence_ref import TypeOfLinkSequenceRef
+from .type_of_machine_readability_ref import TypeOfMachineReadabilityRef
+from .type_of_medium_access_device_ref import TypeOfMediumAccessDeviceRef
+from .type_of_mobility_service_ref import TypeOfMobilityServiceRef
+from .type_of_mode_of_operation_ref import TypeOfModeOfOperationRef
+from .type_of_notice_ref import TypeOfNoticeRef
+from .type_of_operation_ref import TypeOfOperationRef
+from .type_of_organisation_part_ref import TypeOfOrganisationPartRef
+from .type_of_organisation_ref import TypeOfOrganisationRef
+from .type_of_parking_ref import TypeOfParkingRef
+from .type_of_passenger_information_equipment_ref import (
+    TypeOfPassengerInformationEquipmentRef,
+)
+from .type_of_payment_method_ref import TypeOfPaymentMethodRef
+from .type_of_place_ref import TypeOfPlaceRef
+from .type_of_plug_ref import TypeOfPlugRef
+from .type_of_point_ref import TypeOfPointRef
+from .type_of_pricing_rule_ref import TypeOfPricingRuleRef
+from .type_of_product_category_ref import TypeOfProductCategoryRef
+from .type_of_projection_ref import TypeOfProjectionRef
+from .type_of_proof_ref import TypeOfProofRef
+from .type_of_responsibility_role_ref import TypeOfResponsibilityRoleRef
+from .type_of_retail_device_ref import TypeOfRetailDeviceRef
+from .type_of_sales_offer_package_ref import TypeOfSalesOfferPackageRef
+from .type_of_security_list_ref import TypeOfSecurityListRef
+from .type_of_service_feature_ref import TypeOfServiceFeatureRef
+from .type_of_service_ref import TypeOfServiceRef
+from .type_of_tariff_ref import TypeOfTariffRef
+from .type_of_time_demand_type_ref import TypeOfTimeDemandTypeRef
+from .type_of_transfer_ref import TypeOfTransferRef
+from .type_of_travel_document_ref import TypeOfTravelDocumentRef
+from .type_of_usage_parameter_ref import TypeOfUsageParameterRef
+from .type_of_validity_ref import TypeOfValidityRef
+from .type_of_zone_ref import TypeOfZoneRef
+from .uic_operating_period_ref import UicOperatingPeriodRef
+from .usage_discount_right_ref import UsageDiscountRightRef
+from .usage_parameter_price_ref import UsageParameterPriceRef
+from .usage_validity_period_ref import UsageValidityPeriodRef
+from .user_profile_eligibility_ref import UserProfileEligibilityRef
+from .user_profile_ref import UserProfileRef
+from .validable_element_price_ref import ValidableElementPriceRef
+from .validable_element_ref import ValidableElementRef
+from .validity_condition_ref import ValidityConditionRef
+from .validity_rule_parameter_ref import ValidityRuleParameterRef
+from .validity_trigger_ref import ValidityTriggerRef
+from .vehicle_entrance_ref import VehicleEntranceRef
+from .vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
+from .vehicle_journey_ref import VehicleJourneyRef
+from .vehicle_manoeuvring_requirement_ref import (
+    VehicleManoeuvringRequirementRef,
+)
+from .vehicle_meeting_link_ref import VehicleMeetingLinkRef
+from .vehicle_meeting_place_ref import VehicleMeetingPlaceRef
+from .vehicle_meeting_point_ref import VehicleMeetingPointRef
+from .vehicle_model_ref import VehicleModelRef
+from .vehicle_pooler_profile_ref import VehiclePoolerProfileRef
+from .vehicle_pooling_driver_info_ref import VehiclePoolingDriverInfoRef
+from .vehicle_pooling_meeting_place_ref import VehiclePoolingMeetingPlaceRef
+from .vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
+from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
+from .vehicle_pooling_ref import VehiclePoolingRef
+from .vehicle_position_alignment_ref import VehiclePositionAlignmentRef
+from .vehicle_profile_ref import VehicleProfileRef
+from .vehicle_quay_alignment_ref import VehicleQuayAlignmentRef
+from .vehicle_ref import VehicleRef
+from .vehicle_rental_ref import VehicleRentalRef
+from .vehicle_requirement_ref import VehicleRequirementRef
+from .vehicle_schedule_frame_ref import VehicleScheduleFrameRef
+from .vehicle_service_part_ref import VehicleServicePartRef
+from .vehicle_service_ref import VehicleServiceRef
+from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
+from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+from .vehicle_sharing_ref import VehicleSharingRef
+from .vehicle_stopping_place_ref import VehicleStoppingPlaceRef
+from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
+from .vehicle_type_preference_ref import VehicleTypePreferenceRef
+from .vehicle_type_ref import VehicleTypeRef
+from .vehicle_type_zone_restriction_ref import VehicleTypeZoneRestrictionRef
+from .version_of_object_ref import VersionOfObjectRef
+from .version_ref import VersionRef
+from .whitelist_ref import WhitelistRef
+from .wire_link_ref import WireLinkRef
+from .wire_point_ref import WirePointRef
+from .zone_projection_ref import ZoneProjectionRef
+from .zone_ref import ZoneRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ObjectRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to an  NeTEx Object.
-    """
     class Meta:
         name = "objectRefs_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            TripLegRef,
+            IndividualPassengerInfoRef,
+            VehiclePoolingDriverInfoRef,
+            IndividualTravellerRef,
+            ServiceAccessCodeRef,
+            TravelDocumentRef,
+            RepeatedTripFareRequestRef,
+            SingleTripFareRequestRef,
+            FareRequestRef,
+            StopFinderRequestRef,
+            StopEventRequestRef,
+            ScheduleRequestRef,
+            TripPlanRequestRef,
+            CustomerPaymentMeansRef,
+            MediumApplicationInstanceRef,
+            MobileDeviceRef,
+            EmvCardRef,
+            SmartcardRef,
+            ResidentialQualificationEligibilityRef,
+            CommercialProfileEligibilityRef,
+            UserProfileEligibilityRef,
+            CustomerAccountRef,
+            FareContractRef,
+            CustomerRef,
+            VehicleTypeZoneRestrictionRef,
+            StartTimeAtStopPointRef,
+            ResidentialQualificationRef,
+            TypeOfConcessionRef,
+            TypeOfUsageParameterRef,
+            TariffObjectRef,
+            ParkingTariffRef,
+            TariffRef,
+            TypeOfFareTableRef,
+            FareTableRowRef,
+            FareTableColumnRef,
+            TimeUnitRef,
+            GeographicalUnitRef,
+            ControllableElementInSequenceRef,
+            FareStructureElementInSequenceRef,
+            AccessRightInProductRef,
+            CellRef,
+            CustomerPurchasePackagePriceRef,
+            ParkingPriceRef,
+            TimeIntervalPriceRef,
+            TimeUnitPriceRef,
+            QualityStructureFactorPriceRef,
+            ControllableElementPriceRef,
+            ValidableElementPriceRef,
+            GeographicalIntervalPriceRef,
+            GeographicalUnitPriceRef,
+            UsageParameterPriceRef,
+            SeriesConstraintPriceRef,
+            SalesOfferPackagePriceRef,
+            DistanceMatrixElementPriceRef,
+            FareStructureElementPriceRef,
+            FulfilmentMethodPriceRef,
+            CappingRulePriceRef,
+            FareProductPriceRef,
+            FarePriceRef,
+            CustomerPurchasePackageElementRef,
+            CustomerPurchasePackageRef,
+            ControllableElementRef,
+            ValidableElementRef,
+            AdditionalDriverOptionRef,
+            RentalOptionRef,
+            RentalPenaltyPolicyRef,
+            SalesOfferPackageEntitlementGivenRef,
+            SalesOfferPackageEntitlementRequiredRef,
+            MinimumStayRef,
+            InterchangingRef,
+            FrequencyOfUseRef,
+            SuspendingRef,
+            UsageValidityPeriodRef,
+            StepLimitRef,
+            RoutingRef,
+            RoundTripRef,
+            LuggageAllowanceRef,
+            EntitlementGivenRef,
+            EntitlementRequiredRef,
+            EligibilityChangePolicyRef,
+            GroupTicketRef,
+            CommercialProfileRef,
+            VehiclePoolerProfileRef,
+            CompanionProfileRef,
+            UserProfileRef,
+            ProfileParameterRef,
+            SubscribingRef,
+            PenaltyPolicyRef,
+            ChargingPolicyRef,
+            TransferabilityRef,
+            ReplacingRef,
+            RefundingRef,
+            ExchangingRef,
+            ResellingRef,
+            CancellingRef,
+            ReservingRef,
+            BookingPolicyRef,
+            PurchaseWindowRef,
+            SeriesConstraintRef,
+            SalesOfferPackageElementRef,
+            SalesOfferPackageRef,
+            DistanceMatrixElementInverseRef,
+            DistanceMatrixElementRef,
+            FareStructureElementRef,
+            FulfilmentMethodRef,
+            CappingRuleRef,
+            EntitlementProductRef,
+            SupplementProductRef,
+            PreassignedFareProductRef,
+            AmountOfPriceUnitProductRef,
+            UsageDiscountRightRef,
+            ThirdPartyProductRef,
+            CappedDiscountRightRef,
+            SaleDiscountRightRef,
+            FareProductRef,
+            ServiceAccessRightRef,
+            TimeIntervalRef,
+            GeographicalIntervalRef,
+            ParkingChargeBandRef,
+            TimeStructureFactorRef,
+            FareQuotaFactorRef,
+            FareDemandFactorRef,
+            QualityStructureFactorRef,
+            GeographicalStructureFactorRef,
+            PriceableObjectRef,
+            MonthValidityOffsetRef,
+            LimitingRuleRef,
+            DiscountingRuleRef,
+            PricingRuleRef,
+            PricingServiceRef,
+            RoundingStepRef,
+            RoundingRef,
+            PricingParameterSetRef,
+            FlexibleServicePropertiesRef,
+            DriverTripTimeRef,
+            DriverTripRef,
+            DutyPartRef,
+            AccountableElementRef,
+            DutyRef,
+            ReliefOpportunityRef,
+            CourseOfJourneysRef,
+            DriverRef,
+            VehicleServicePartRef,
+            VehicleServiceRef,
+            CompoundBlockRef,
+            TrainBlockPartRef,
+            BlockPartRef,
+            TrainBlockRef,
+            BlockRef,
+            JourneyPartCoupleRef,
+            CoupledJourneyRef,
+            JourneyPartRef,
+            TimetabledPassingTimeRef,
+            EstimatedPassingTimeRef,
+            ObservedPassingTimeRef,
+            TargetPassingTimeRef,
+            PassingTimeRef,
+            InterchangeRuleTimingRef,
+            InterchangeRuleRef,
+            ServiceJourneyPatternInterchangeRef,
+            ServiceJourneyInterchangeRef,
+            DefaultInterchangeRef,
+            InterchangeRef,
+            JourneyMeetingRef,
+            SupplyContractRef,
+            TrainNumberRef,
+            RoutingConstraintZoneRef,
+            VehiclePositionAlignmentRef,
+            VehicleQuayAlignmentRef,
+            LogicalDisplayRef,
+            ParkingPropertiesRef,
+            ParkingCapacityRef,
+            LineNetworkRef,
+            RouteInstructionRef,
+            FlexiblePointPropertiesRef,
+            FlexibleLinkPropertiesRef,
+            TimeDemandProfileRef,
+            TimeDemandTypeRef,
+            VehicleTypePreferenceRef,
+            JourneyPatternHeadwayRef,
+            JourneyPatternLayoverRef,
+            JourneyPatternRunTimeRef,
+            JourneyPatternWaitTimeRef,
+            DefaultServiceJourneyTimeRef,
+            DefaultDeadRunRunTimeRef,
+            TurnaroundTimeLimitTimeRef,
+            JourneyTimingRef,
+            CrewBaseRef,
+            TrainComponentRef,
+            TrainElementRef,
+            TrainInCompoundTrainRef,
+            PassengerSeatRef,
+            TravelDocumentSecurityListingRef,
+            MediumAccessDeviceSecurityListingRef,
+            RetailDeviceSecurityListingRef,
+            CustomerAccountSecurityListingRef,
+            FareContractSecurityListingRef,
+            CustomerSecurityListingRef,
+            WhitelistRef,
+            BlacklistRef,
+            SchematicMapMemberRef,
+            SchematicMapRef,
+            CycleModelProfileRef,
+            CarModelProfileRef,
+            ModeRestrictionAssessmentRef,
+            DeliveryVariantRef,
+            NoticeRef,
+            VehicleProfileRef,
+            ChargingEquipmentProfileRef,
+            VehicleEquipmentProfileRef,
+            VehicleModelRef,
+            VehicleRef,
+            PassengerCapacityRef,
+            FacilityRequirementRef,
+            VehicleManoeuvringRequirementRef,
+            PassengerCarryingRequirementRef,
+            VehicleRequirementRef,
+            SimpleVehicleTypeRef,
+            CompoundTrainRef,
+            TrainRef,
+            VehicleTypeRef,
+            TransportTypeRef,
+            OnboardStayRef,
+            AccommodationRef,
+            ServiceFacilitySetRef,
+            SiteFacilitySetRef,
+            FacilitySetRef,
+            FacilityRef,
+            OperatingDepartmentRef,
+            OperationalContextRef,
+            LevelRef,
+            ModeRef,
+            SubmodeRef,
+            OpenTransportModeRef,
+            TopographicProjectionRef,
+            ComplexFeatureProjectionRef,
+            LinkSequenceProjectionRef,
+            ZoneProjectionRef,
+            LinkProjectionRef,
+            PointProjectionRef,
+            TripRef,
+            TripPatternTripRef,
+            SingleJourneyPathRef,
+            SingleJourneyRef,
+            DatedVehicleJourneyRef,
+            DatedSpecialServiceRef,
+            SpecialServiceRef,
+            TemplateServiceJourneyRef,
+            ServiceJourneyRef,
+            DeadRunRef,
+            VehicleJourneyRef,
+            ServiceJourneyPatternRef,
+            ServicePatternRef,
+            DeadRunJourneyPatternRef,
+            JourneyPatternRef,
+            TimingPatternRef,
+            NavigationPathRef,
+            RouteRef,
+            LinkSequenceRef,
+            ContactRef,
+            SalesTransactionRef,
+            OfferedTravelSpecificationRef,
+            RequestedTravelSpecificationRef,
+            TravelSpecificationRef,
+            FareContractEntryRef,
+            LogEntryRef,
+            AlternativeNameRef,
+            TimebandRef,
+            FareDayTypeRef,
+            DayTypeRef,
+            DefaultConnectionRef,
+            SiteConnectionRef,
+            ConnectionRef,
+            AccessRef,
+            HailAndRideAreaRef,
+            FlexibleAreaRef,
+            FlexibleQuayRef,
+            FlexibleStopPlaceRef,
+            PathJunctionRef,
+            EquipmentPlaceRef,
+            EquipmentPositionRef,
+            TopographicPlaceRef,
+            VehiclePoolingMeetingPlaceRef,
+            VehicleMeetingPlaceRef,
+            GarageRef,
+            VehicleStoppingPositionRef,
+            VehicleStoppingPlaceRef,
+            BoardingPositionRef,
+            AccessSpaceRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceSpaceRef,
+            VehiclePoolingParkingBayRef,
+            MonitoredVehicleSharingParkingBayRef,
+            VehicleSharingParkingBayRef,
+            ParkingBayRef,
+            VehiclePoolingParkingAreaRef,
+            VehicleSharingParkingAreaRef,
+            TaxiParkingAreaRef,
+            ParkingAreaRef,
+            PointOfInterestSpaceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
+            ParkingEntranceForVehiclesRef,
+            ParkingPassengerEntranceRef,
+            ParkingEntranceRef,
+            PointOfInterestVehicleEntranceRef,
+            PointOfInterestEntranceRef,
+            VehicleEntranceRef,
+            EntranceRef,
+            SiteComponentRef,
+            TaxiRankRef,
+            StopPlaceRef,
+            ParkingRef,
+            PointOfInterestRef,
+            ServiceSiteRef,
+            SiteRef,
+            SiteElementRef,
+            AddressablePlaceRef,
+            PostalAddressRef,
+            RoadAddressRef,
+            AddressRef,
+            OnwardVehicleMeetingLinkRef,
+            VehicleMeetingLinkRef,
+            ServiceLinkRef,
+            LineLinkRef,
+            TimingLinkRef,
+            WireLinkRef,
+            RoadLinkRef,
+            RailwayLinkRef,
+            ActivationLinkRef,
+            PathLinkRef,
+            RouteLinkRef,
+            VehicleMeetingPointRef,
+            WirePointRef,
+            RoadPointRef,
+            RailwayPointRef,
+            TrafficControlPointRef,
+            BeaconPointRef,
+            ActivationPointRef,
+            BorderPointRef,
+            FareScheduledStopPointRef,
+            ScheduledStopPointRef,
+            GaragePointRef,
+            ParkingPointRef,
+            ReliefPointRef,
+            TimingPointRef,
+            RoutePointRef,
+            PointRef,
+            UicOperatingPeriodRef,
+            OperatingPeriodRef,
+            OperatingDayRef,
+            ServiceCalendarRef,
+            AlternativeTextRef,
+            AvailabilityConditionRef,
+            ValidityRuleParameterRef,
+            ValidityTriggerRef,
+            ValidityConditionRef,
+            ResponsibilityRoleRef,
+            ControlCentreRef,
+            OrganisationalUnitRef,
+            DepartmentRef,
+            OrganisationPartRef,
+            AllAuthoritiesRef,
+            AllOperatorsRef,
+            AllPublicTransportOrganisationsRef,
+            AllTransportOrganisationsRef,
+            AllOrganisationsRef,
+            RetailConsortiumRef,
+            OnlineServiceOperatorRef,
+            GeneralOrganisationRef,
+            ManagementAgentRef,
+            ServicedOrganisationRef,
+            TravelAgentRef,
+            OtherOrganisationRef,
+            AuthorityRef,
+            OperatorRef,
+            OrganisationRef,
+            ResponsibilitySetRef,
+            DestinationDisplayVariantRef,
+            DestinationDisplayRef,
+            AllowedLineDirectionRef,
+            FlexibleLineRef,
+            LineRef,
+            GroupOfCustomerPurchasePackagesRef,
+            PoolOfVehiclesRef,
+            GroupOfSalesOfferPackagesRef,
+            GroupOfDistanceMatrixElementsRef,
+            GroupOfDistributionChannelsRef,
+            GroupOfSingleJourneysRef,
+            StandardFareTableRef,
+            FareTableRef,
+            PriceGroupRef,
+            RhythmicalJourneyGroupRef,
+            HeadwayJourneyGroupRef,
+            JourneyFrequencyGroupRef,
+            GroupOfServicesRef,
+            GroupOfStopPlacesRef,
+            PointOfInterestHierarchyRef,
+            GroupOfTimingLinksRef,
+            FleetRef,
+            GroupOfOperatorsRef,
+            GroupOfPlacesRef,
+            ParentSectionRef,
+            ParentCommonSectionRef,
+            CommonSectionRef,
+            LineSectionRef,
+            FareSectionRef,
+            GeneralSectionRef,
+            SectionRef,
+            LogRef,
+            GroupOfTimebandsRef,
+            PlaceRef,
+            MobilityServiceConstraintZoneRef,
+            StopAreaRef,
+            TransportAdministrativeZoneRef,
+            AccessZoneRef,
+            AdministrativeZoneRef,
+            FareZoneRef,
+            TariffZoneRef,
+            ZoneRef,
+            LayerRef,
+            NetworkRef,
+            GroupOfLinesRef,
+            GeneralGroupOfEntitiesRef,
+            MobilityJourneyFrameRef,
+            MobilityServiceFrameRef,
+            SalesTransactionFrameRef,
+            FareFrameRef,
+            ServiceFrameRef,
+            DriverScheduleFrameRef,
+            VehicleScheduleFrameRef,
+            TimetableFrameRef,
+            SiteFrameRef,
+            InfrastructureFrameRef,
+            GeneralFrameRef,
+            ResourceFrameRef,
+            ServiceCalendarFrameRef,
+            CompositeFrameRef,
+            ParkingBayConditionRef,
+            RentalAvailabilityRef,
+            ParkingBayStatusRef,
+            TypeOfMediumAccessDeviceRef,
+            TypeOfProofRef,
+            DistributionChannelRef,
+            ChargingMomentRef,
+            PriceUnitRef,
+            PurposeOfJourneyPartitionRef,
+            TimingAlgorithmTypeRef,
+            TypeOfParkingRef,
+            PointOfInterestClassificationRef,
+            TypeOfActivationRef,
+            TypeOfFleetRef,
+            DirectionRef,
+            PurposeOfEquipmentProfileRef,
+            TypeOfProductCategoryRef,
+            TypeOfPaymentMethodRef,
+            ClassOfUseRef,
+            TypeOfOperationRef,
+            TypeOfCodespaceAssignmentRef,
+            BrandingRef,
+            TypeOfResponsibilityRoleRef,
+            PurposeOfGroupingRef,
+            TypeOfRetailDeviceRef,
+            CustomerAccountStatusRef,
+            TypeOfCustomerAccountRef,
+            TypeOfFareContractEntryRef,
+            TypeOfFareContractRef,
+            TypeOfAccessRightAssignmentRef,
+            TypeOfSalesOfferPackageRef,
+            TypeOfFareStructureElementRef,
+            TypeOfTariffRef,
+            AllDistributionChannelsRef,
+            TypeOfMachineReadabilityRef,
+            TypeOfTravelDocumentRef,
+            TypeOfMobilityServiceRef,
+            TypeOfFareProductRef,
+            TypeOfFareStructureFactorRef,
+            TypeOfPricingRuleRef,
+            TypeOfFlexibleServiceRef,
+            TypeOfPassengerInformationEquipmentRef,
+            TypeOfTimeDemandTypeRef,
+            TypeOfJourneyPatternRef,
+            TypeOfSecurityListRef,
+            TypeOfPlugRef,
+            TypeOfBatteryChemistryRef,
+            TypeOfServiceFeatureRef,
+            TypeOfDeliveryVariantRef,
+            TypeOfNoticeRef,
+            TypeOfCongestionRef,
+            TypeOfServiceRef,
+            TypeOfFacilityRef,
+            TypeOfModeOfOperationRef,
+            PersonalModeOfOperationRef,
+            VehiclePoolingRef,
+            VehicleSharingRef,
+            VehicleRentalRef,
+            FlexibleModeOfOperationRef,
+            ScheduledModeOfOperationRef,
+            TypeOfEquipmentRef,
+            TypeOfProjectionRef,
+            TypeOfFeatureRef,
+            TypeOfLinkSequenceRef,
+            TypeOfOrganisationPartRef,
+            TypeOfOrganisationRef,
+            TypeOfPlaceRef,
+            TypeOfTransferRef,
+            TypeOfZoneRef,
+            TypeOfLinkRef,
+            TypeOfPointRef,
+            TypeOfLineRef,
+            TypeOfValidityRef,
+            TypeOfFrameRef,
+            DataSourceRef,
+            VersionRef,
+            VersionOfObjectRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -3115,5 +3676,5 @@ class ObjectRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

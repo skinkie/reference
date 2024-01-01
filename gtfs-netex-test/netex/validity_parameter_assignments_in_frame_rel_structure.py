@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.validity_parameter_assignment import ValidityParameterAssignment
+from .frame_containment_structure import FrameContainmentStructure
+from .validity_parameter_assignment import ValidityParameterAssignment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ValidityParameterAssignmentsInFrameRelStructure(FrameContainmentStructure):
-    """
-    The assignment of a fare collection parameter (referring to geography, time,
-    quality or usage) to an element of a fare system (access right, validated
-    access, control mean, etc.).
-    """
+@dataclass(kw_only=True)
+class ValidityParameterAssignmentsInFrameRelStructure(
+    FrameContainmentStructure
+):
     class Meta:
         name = "validityParameterAssignmentsInFrame_RelStructure"
 
@@ -23,5 +23,5 @@ class ValidityParameterAssignmentsInFrameRelStructure(FrameContainmentStructure)
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

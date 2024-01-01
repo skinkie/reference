@@ -1,28 +1,38 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.car_pooling_service_ref import CarPoolingServiceRef
-from netex.chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from netex.monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
-from netex.parking_bay_ref import ParkingBayRef
-from netex.taxi_service_ref import TaxiServiceRef
-from netex.vehicle_pooling_meeting_place_ref import VehiclePoolingMeetingPlaceRef
-from netex.vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
-from netex.vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
-from netex.vehicle_service_place_assignment_version_structure import VehicleServicePlaceAssignmentVersionStructure
-from netex.vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+from typing import Optional, Union
+from .car_pooling_service_ref import CarPoolingServiceRef
+from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
+from .monitored_vehicle_sharing_parking_bay_ref import (
+    MonitoredVehicleSharingParkingBayRef,
+)
+from .parking_bay_ref import ParkingBayRef
+from .taxi_service_ref import TaxiServiceRef
+from .vehicle_pooling_meeting_place_ref import VehiclePoolingMeetingPlaceRef
+from .vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
+from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
+from .vehicle_service_place_assignment_version_structure import (
+    VehicleServicePlaceAssignmentVersionStructure,
+)
+from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehiclePoolingPlaceAssignmentVersionStructure(VehicleServicePlaceAssignmentVersionStructure):
-    """
-    Type for VEHICLE POOLING PLACE ASSIGNMENT restricts id.
-    """
+@dataclass(kw_only=True)
+class VehiclePoolingPlaceAssignmentVersionStructure(
+    VehicleServicePlaceAssignmentVersionStructure
+):
     class Meta:
         name = "VehiclePoolingPlaceAssignment_VersionStructure"
 
-    chauffeured_vehicle_service_ref_or_taxi_service_ref_or_car_pooling_service_ref: Optional[object] = field(
+    vehicle_pooling_service_ref: Optional[
+        Union[
+            ChauffeuredVehicleServiceRef, TaxiServiceRef, CarPoolingServiceRef
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -43,9 +53,11 @@ class VehiclePoolingPlaceAssignmentVersionStructure(VehicleServicePlaceAssignmen
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    vehicle_pooling_meeting_place_ref_or_vehicle_pooling_parking_area_ref: Optional[object] = field(
+    vehicle_pooling_meeting_place_ref_or_vehicle_pooling_parking_area_ref: Optional[
+        Union[VehiclePoolingMeetingPlaceRef, VehiclePoolingParkingAreaRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -61,9 +73,16 @@ class VehiclePoolingPlaceAssignmentVersionStructure(VehicleServicePlaceAssignmen
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice: Optional[object] = field(
+    parking_bay_ref_or_vehicle_sharing_parking_bay_ref: Optional[
+        Union[
+            VehiclePoolingParkingBayRef,
+            MonitoredVehicleSharingParkingBayRef,
+            VehicleSharingParkingBayRef,
+            ParkingBayRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -89,5 +108,5 @@ class VehiclePoolingPlaceAssignmentVersionStructure(VehicleServicePlaceAssignmen
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

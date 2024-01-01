@@ -1,28 +1,28 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type
+from typing import List, Optional, Type, Union
 from xsdata.models.datatype import XmlDateTime
-from netex.access import Access
-from netex.access_right_in_product import AccessRightInProduct
-from netex.access_right_parameter_assignment import AccessRightParameterAssignment
-from netex.access_space import AccessSpace
-from netex.access_vehicle_equipment import AccessVehicleEquipment
-from netex.access_zone import AccessZone
-from netex.accessibility_assessment import AccessibilityAssessment
-from netex.accommodation import Accommodation
-from netex.accountable_element import AccountableElement
-from netex.activation_assignment import ActivationAssignment
-from netex.activation_link import ActivationLink
-from netex.activation_point import ActivationPoint
-from netex.additional_driver_option import AdditionalDriverOption
-from netex.addressable_place import AddressablePlace
-from netex.administrative_zone_version_structure import (
+from .access import Access
+from .access_right_in_product import AccessRightInProduct
+from .access_right_parameter_assignment import AccessRightParameterAssignment
+from .access_space import AccessSpace
+from .access_vehicle_equipment import AccessVehicleEquipment
+from .access_zone import AccessZone
+from .accessibility_assessment import AccessibilityAssessment
+from .accommodation import Accommodation
+from .accountable_element import AccountableElement
+from .activation_assignment import ActivationAssignment
+from .activation_link import ActivationLink
+from .activation_point import ActivationPoint
+from .additional_driver_option import AdditionalDriverOption
+from .addressable_place import AddressablePlace
+from .administrative_zone_version_structure import (
     AdministrativeZone,
     TransportAdministrativeZone,
 )
-from netex.allowed_line_direction import AllowedLineDirection
-from netex.alternative_mode_of_operation import AlternativeModeOfOperation
-from netex.alternative_name import AlternativeName
-from netex.alternative_texts_rel_structure import (
+from .allowed_line_direction import AllowedLineDirection
+from .alternative_mode_of_operation import AlternativeModeOfOperation
+from .alternative_name import AlternativeName
+from .alternative_texts_rel_structure import (
     AlternativeText,
     AvailabilityCondition,
     DayType,
@@ -35,26 +35,26 @@ from netex.alternative_texts_rel_structure import (
     ValidityRuleParameter,
     ValidityTrigger,
 )
-from netex.amount_of_price_unit_product import AmountOfPriceUnitProduct
-from netex.assistance_booking_service import AssistanceBookingService
-from netex.assistance_service import AssistanceService
-from netex.authority import Authority
-from netex.battery_equipment import BatteryEquipment
-from netex.beacon_point import BeaconPoint
-from netex.blacklist import Blacklist
-from netex.block import Block
-from netex.block_part import BlockPart
-from netex.boarding_position import BoardingPosition
-from netex.border_point import BorderPoint
-from netex.branding import Branding
-from netex.cancelling import Cancelling
-from netex.capped_discount_right import CappedDiscountRight
-from netex.capping_rule import CappingRule
-from netex.capping_rule_price import CappingRulePrice
-from netex.car_model_profile import CarModelProfile
-from netex.car_pooling_service import CarPoolingService
-from netex.catering_service import CateringService
-from netex.cell_versioned_child_structure import (
+from .amount_of_price_unit_product import AmountOfPriceUnitProduct
+from .assistance_booking_service import AssistanceBookingService
+from .assistance_service import AssistanceService
+from .authority import Authority
+from .battery_equipment import BatteryEquipment
+from .beacon_point import BeaconPoint
+from .blacklist import Blacklist
+from .block import Block
+from .block_part import BlockPart
+from .boarding_position import BoardingPosition
+from .border_point import BorderPoint
+from .branding import Branding
+from .cancelling import Cancelling
+from .capped_discount_right import CappedDiscountRight
+from .capping_rule import CappingRule
+from .capping_rule_price import CappingRulePrice
+from .car_model_profile import CarModelProfile
+from .car_pooling_service import CarPoolingService
+from .catering_service import CateringService
+from .cell_versioned_child_structure import (
     Cell,
     FareTable,
     FareTableInContext,
@@ -62,578 +62,1217 @@ from netex.cell_versioned_child_structure import (
     ParkingPrice,
     PriceGroup,
 )
-from netex.charging_equipment_profile import ChargingEquipmentProfile
-from netex.charging_moment import ChargingMoment
-from netex.charging_policy import ChargingPolicy
-from netex.chauffeured_vehicle_service import ChauffeuredVehicleService
-from netex.check_constraint import CheckConstraint
-from netex.check_constraint_delay import CheckConstraintDelay
-from netex.check_constraint_throughput import CheckConstraintThroughput
-from netex.class_of_use import ClassOfUse
-from netex.codespace_assignment import CodespaceAssignment
-from netex.commercial_profile import CommercialProfile
-from netex.commercial_profile_eligibility import CommercialProfileEligibility
-from netex.common_version_frame_structure import CommonVersionFrameStructure
-from netex.communication_service import CommunicationService
-from netex.companion_profile import CompanionProfile
-from netex.complaints_service import ComplaintsService
-from netex.complex_feature import ComplexFeature
-from netex.complex_feature_projection import ComplexFeatureProjection
-from netex.compound_block import CompoundBlock
-from netex.compound_train import CompoundTrain
-from netex.connection import Connection
-from netex.contact import Contact
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.control_centre import ControlCentre
-from netex.controllable_element import ControllableElement
-from netex.controllable_element_in_sequence import ControllableElementInSequence
-from netex.controllable_element_price import ControllableElementPrice
-from netex.country import Country
-from netex.coupled_journey import CoupledJourney
-from netex.course_of_journeys import CourseOfJourneys
-from netex.crew_base import CrewBase
-from netex.crossing_equipment import CrossingEquipment
-from netex.customer import Customer
-from netex.customer_account import CustomerAccount
-from netex.customer_account_security_listing import CustomerAccountSecurityListing
-from netex.customer_account_status import CustomerAccountStatus
-from netex.customer_payment_means import CustomerPaymentMeans
-from netex.customer_purchase_package import CustomerPurchasePackage
-from netex.customer_purchase_package_element import CustomerPurchasePackageElement
-from netex.customer_purchase_package_price import CustomerPurchasePackagePrice
-from netex.customer_purchase_parameter_assignment import CustomerPurchaseParameterAssignment
-from netex.customer_security_listing import CustomerSecurityListing
-from netex.customer_service import CustomerService
-from netex.cycle_model_profile import CycleModelProfile
-from netex.cycle_storage_equipment import CycleStorageEquipment
-from netex.data_source import DataSource
-from netex.dated_passing_time import DatedPassingTime
-from netex.dated_service_journey import DatedServiceJourney
-from netex.dated_special_service import DatedSpecialService
-from netex.dated_vehicle_journey import DatedVehicleJourney
-from netex.day_type_assignment import DayTypeAssignment
-from netex.dead_run import DeadRun
-from netex.dead_run_journey_pattern import DeadRunJourneyPattern
-from netex.default_connection import DefaultConnection
-from netex.default_dead_run_run_time import DefaultDeadRunRunTime
-from netex.default_interchange import DefaultInterchange
-from netex.default_service_journey_run_time import DefaultServiceJourneyRunTime
-from netex.delivery_variant import DeliveryVariant
-from netex.department import Department
-from netex.destination_display import DestinationDisplay
-from netex.destination_display_variant import DestinationDisplayVariant
-from netex.direction import Direction
-from netex.discounting_rule import DiscountingRule
-from netex.display_assignment import DisplayAssignment
-from netex.distance_matrix_element import DistanceMatrixElement
-from netex.distance_matrix_element_price import DistanceMatrixElementPrice
-from netex.distribution_assignment import DistributionAssignment
-from netex.distribution_channel import DistributionChannel
-from netex.driver_schedule_frame import DriverScheduleFrame
-from netex.driver_trip import DriverTrip
-from netex.driver_trip_time import DriverTripTime
-from netex.duty import Duty
-from netex.duty_part import DutyPart
-from netex.dynamic_stop_assignment import DynamicStopAssignment
-from netex.dynamic_vehicle_meeting_point_assignment import DynamicVehicleMeetingPointAssignment
-from netex.eligibility_change_policy import EligibilityChangePolicy
-from netex.emv_card import EmvCard
-from netex.entitlement_given import EntitlementGiven
-from netex.entitlement_product import EntitlementProduct
-from netex.entitlement_required import EntitlementRequired
-from netex.entity_structure import EntityStructure
-from netex.entrance import Entrance
-from netex.entrance_equipment import EntranceEquipment
-from netex.equipment_place import EquipmentPlace
-from netex.equipment_position import EquipmentPosition
-from netex.escalator_equipment import EscalatorEquipment
-from netex.estimated_passing_time import EstimatedPassingTime
-from netex.exchanging import Exchanging
-from netex.facility_requirement import FacilityRequirement
-from netex.fare_contract import FareContract
-from netex.fare_contract_entry import FareContractEntry
-from netex.fare_contract_security_listing import FareContractSecurityListing
-from netex.fare_demand_factor import FareDemandFactor
-from netex.fare_element_in_sequence import FareElementInSequence
-from netex.fare_frame import FareFrame
-from netex.fare_interval import FareInterval
-from netex.fare_point_in_pattern import FarePointInPattern
-from netex.fare_product_price import FareProductPrice
-from netex.fare_quota_factor import FareQuotaFactor
-from netex.fare_scheduled_stop_point import FareScheduledStopPoint
-from netex.fare_structure_element import FareStructureElement
-from netex.fare_structure_element_in_sequence import FareStructureElementInSequence
-from netex.fare_structure_element_price import FareStructureElementPrice
-from netex.fare_structure_factor import FareStructureFactor
-from netex.fare_unit import FareUnit
-from netex.fare_zone import FareZone
-from netex.fleet import Fleet
-from netex.flexible_area import FlexibleArea
-from netex.flexible_line import FlexibleLine
-from netex.flexible_link_properties import FlexibleLinkProperties
-from netex.flexible_operation import FlexibleOperation
-from netex.flexible_point_properties import FlexiblePointProperties
-from netex.flexible_quay import FlexibleQuay
-from netex.flexible_route import FlexibleRoute
-from netex.flexible_service_properties import FlexibleServiceProperties
-from netex.flexible_stop_assignment import FlexibleStopAssignment
-from netex.flexible_stop_place import FlexibleStopPlace
-from netex.frequency_of_use import FrequencyOfUse
-from netex.fulfilment_method import FulfilmentMethod
-from netex.fulfilment_method_price import FulfilmentMethodPrice
-from netex.garage import Garage
-from netex.garage_point import GaragePoint
-from netex.general_frame_member import GeneralFrameMember
-from netex.general_group_of_entities import GeneralGroupOfEntities
-from netex.general_organisation import GeneralOrganisation
-from netex.general_sign import GeneralSign
-from netex.general_zone import GeneralZone
-from netex.generic_parameter_assignment_version_structure import (
+from .charging_equipment_profile import ChargingEquipmentProfile
+from .charging_moment import ChargingMoment
+from .charging_policy import ChargingPolicy
+from .chauffeured_vehicle_service import ChauffeuredVehicleService
+from .check_constraint import CheckConstraint
+from .check_constraint_delay import CheckConstraintDelay
+from .check_constraint_throughput import CheckConstraintThroughput
+from .class_of_use import ClassOfUse
+from .codespace_assignment import CodespaceAssignment
+from .commercial_profile import CommercialProfile
+from .commercial_profile_eligibility import CommercialProfileEligibility
+from .common_version_frame_structure import CommonVersionFrameStructure
+from .communication_service import CommunicationService
+from .companion_profile import CompanionProfile
+from .complaints_service import ComplaintsService
+from .complex_feature import ComplexFeature
+from .complex_feature_projection import ComplexFeatureProjection
+from .compound_block import CompoundBlock
+from .compound_train import CompoundTrain
+from .connection import Connection
+from .contact import Contact
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .control_centre import ControlCentre
+from .controllable_element import ControllableElement
+from .controllable_element_in_sequence import ControllableElementInSequence
+from .controllable_element_price import ControllableElementPrice
+from .country import Country
+from .coupled_journey import CoupledJourney
+from .course_of_journeys import CourseOfJourneys
+from .crew_base import CrewBase
+from .crossing_equipment import CrossingEquipment
+from .customer import Customer
+from .customer_account import CustomerAccount
+from .customer_account_security_listing import CustomerAccountSecurityListing
+from .customer_account_status import CustomerAccountStatus
+from .customer_payment_means import CustomerPaymentMeans
+from .customer_purchase_package import CustomerPurchasePackage
+from .customer_purchase_package_element import CustomerPurchasePackageElement
+from .customer_purchase_package_price import CustomerPurchasePackagePrice
+from .customer_purchase_parameter_assignment import (
+    CustomerPurchaseParameterAssignment,
+)
+from .customer_security_listing import CustomerSecurityListing
+from .customer_service import CustomerService
+from .cycle_model_profile import CycleModelProfile
+from .cycle_storage_equipment import CycleStorageEquipment
+from .data_source import DataSource
+from .dated_passing_time import DatedPassingTime
+from .dated_service_journey import DatedServiceJourney
+from .dated_special_service import DatedSpecialService
+from .dated_vehicle_journey import DatedVehicleJourney
+from .day_type_assignment import DayTypeAssignment
+from .dead_run import DeadRun
+from .dead_run_journey_pattern import DeadRunJourneyPattern
+from .default_connection import DefaultConnection
+from .default_dead_run_run_time import DefaultDeadRunRunTime
+from .default_interchange import DefaultInterchange
+from .default_service_journey_run_time import DefaultServiceJourneyRunTime
+from .delivery_variant import DeliveryVariant
+from .department import Department
+from .destination_display import DestinationDisplay
+from .destination_display_variant import DestinationDisplayVariant
+from .direction import Direction
+from .discounting_rule import DiscountingRule
+from .display_assignment import DisplayAssignment
+from .distance_matrix_element import DistanceMatrixElement
+from .distance_matrix_element_price import DistanceMatrixElementPrice
+from .distribution_assignment import DistributionAssignment
+from .distribution_channel import DistributionChannel
+from .driver_schedule_frame import DriverScheduleFrame
+from .driver_trip import DriverTrip
+from .driver_trip_time import DriverTripTime
+from .duty import Duty
+from .duty_part import DutyPart
+from .dynamic_stop_assignment import DynamicStopAssignment
+from .dynamic_vehicle_meeting_point_assignment import (
+    DynamicVehicleMeetingPointAssignment,
+)
+from .eligibility_change_policy import EligibilityChangePolicy
+from .emv_card import EmvCard
+from .entitlement_given import EntitlementGiven
+from .entitlement_product import EntitlementProduct
+from .entitlement_required import EntitlementRequired
+from .entity_structure import EntityStructure
+from .entrance import Entrance
+from .entrance_equipment import EntranceEquipment
+from .equipment_place import EquipmentPlace
+from .equipment_position import EquipmentPosition
+from .escalator_equipment import EscalatorEquipment
+from .estimated_passing_time import EstimatedPassingTime
+from .exchanging import Exchanging
+from .facility_requirement import FacilityRequirement
+from .fare_contract import FareContract
+from .fare_contract_entry import FareContractEntry
+from .fare_contract_security_listing import FareContractSecurityListing
+from .fare_demand_factor import FareDemandFactor
+from .fare_element_in_sequence import FareElementInSequence
+from .fare_frame import FareFrame
+from .fare_interval import FareInterval
+from .fare_point_in_pattern import FarePointInPattern
+from .fare_product_price import FareProductPrice
+from .fare_quota_factor import FareQuotaFactor
+from .fare_scheduled_stop_point import FareScheduledStopPoint
+from .fare_structure_element import FareStructureElement
+from .fare_structure_element_in_sequence import FareStructureElementInSequence
+from .fare_structure_element_price import FareStructureElementPrice
+from .fare_structure_factor import FareStructureFactor
+from .fare_unit import FareUnit
+from .fare_zone import FareZone
+from .fleet import Fleet
+from .flexible_area import FlexibleArea
+from .flexible_line import FlexibleLine
+from .flexible_link_properties import FlexibleLinkProperties
+from .flexible_operation import FlexibleOperation
+from .flexible_point_properties import FlexiblePointProperties
+from .flexible_quay import FlexibleQuay
+from .flexible_route import FlexibleRoute
+from .flexible_service_properties import FlexibleServiceProperties
+from .flexible_stop_assignment import FlexibleStopAssignment
+from .flexible_stop_place import FlexibleStopPlace
+from .frequency_of_use import FrequencyOfUse
+from .fulfilment_method import FulfilmentMethod
+from .fulfilment_method_price import FulfilmentMethodPrice
+from .garage import Garage
+from .garage_point import GaragePoint
+from .general_frame_member import GeneralFrameMember
+from .general_group_of_entities import GeneralGroupOfEntities
+from .general_organisation import GeneralOrganisation
+from .general_sign import GeneralSign
+from .general_zone import GeneralZone
+from .generic_parameter_assignment_version_structure import (
     GenericParameterAssignment,
     GenericParameterAssignmentInContext,
 )
-from netex.geographical_interval import GeographicalInterval
-from netex.geographical_interval_price import GeographicalIntervalPrice
-from netex.geographical_structure_factor import GeographicalStructureFactor
-from netex.geographical_unit import GeographicalUnit
-from netex.geographical_unit_price import GeographicalUnitPrice
-from netex.group_constraint_member import GroupConstraintMember
-from netex.group_of_distance_matrix_elements import GroupOfDistanceMatrixElements
-from netex.group_of_distribution_channels import GroupOfDistributionChannels
-from netex.group_of_lines import GroupOfLines
-from netex.group_of_link_sequences import GroupOfLinkSequences
-from netex.group_of_links import GroupOfLinks
-from netex.group_of_operators import GroupOfOperators
-from netex.group_of_places import GroupOfPlaces
-from netex.group_of_points import GroupOfPoints
-from netex.group_of_sales_offer_packages import GroupOfSalesOfferPackages
-from netex.group_of_services import GroupOfServices
-from netex.group_of_single_journeys import GroupOfSingleJourneys
-from netex.group_of_timebands import GroupOfTimebands
-from netex.group_of_timing_links import GroupOfTimingLinks
-from netex.group_ticket import GroupTicket
-from netex.hail_and_ride_area import HailAndRideArea
-from netex.heading_sign import HeadingSign
-from netex.headway_journey_group import HeadwayJourneyGroup
-from netex.help_point_equipment import HelpPointEquipment
-from netex.hire_service import HireService
-from netex.individual_passenger_info import IndividualPassengerInfo
-from netex.individual_traveller import IndividualTraveller
-from netex.infrastructure_frame import InfrastructureFrame
-from netex.interchange_rule import InterchangeRule
-from netex.interchange_rule_timing import InterchangeRuleTiming
-from netex.interchanging import Interchanging
-from netex.journey_accounting import JourneyAccounting
-from netex.journey_headway import JourneyHeadway
-from netex.journey_layover import JourneyLayover
-from netex.journey_meeting import JourneyMeeting
-from netex.journey_part import JourneyPart
-from netex.journey_part_couple import JourneyPartCouple
-from netex.journey_part_position import JourneyPartPosition
-from netex.journey_pattern_headway import JourneyPatternHeadway
-from netex.journey_pattern_layover import JourneyPatternLayover
-from netex.journey_pattern_run_time import JourneyPatternRunTime
-from netex.journey_pattern_wait_time import JourneyPatternWaitTime
-from netex.journey_run_time import JourneyRunTime
-from netex.journey_wait_time import JourneyWaitTime
-from netex.layer import Layer
-from netex.left_luggage_service import LeftLuggageService
-from netex.level import Level
-from netex.lift_equipment import LiftEquipment
-from netex.limiting_rule import LimitingRule
-from netex.limiting_rule_in_context import LimitingRuleInContext
-from netex.line import Line
-from netex.line_network import LineNetwork
-from netex.line_shape import LineShape
-from netex.link_in_journey_pattern import LinkInJourneyPattern
-from netex.link_on_section import LinkOnSection
-from netex.link_projection import LinkProjection
-from netex.link_sequence_projection import LinkSequenceProjection
-from netex.logical_display import LogicalDisplay
-from netex.lost_property_service import LostPropertyService
-from netex.luggage_allowance import LuggageAllowance
-from netex.luggage_service import LuggageService
-from netex.management_agent import ManagementAgent
-from netex.medium_access_device import MediumAccessDevice
-from netex.medium_access_device_security_listing import MediumAccessDeviceSecurityListing
-from netex.medium_application_instance import MediumApplicationInstance
-from netex.meeting_point_service import MeetingPointService
-from netex.meeting_restriction import MeetingRestriction
-from netex.minimum_stay import MinimumStay
-from netex.mobile_device import MobileDevice
-from netex.mobility_journey_frame import MobilityJourneyFrame
-from netex.mobility_service_constraint_zone import MobilityServiceConstraintZone
-from netex.mobility_service_frame import MobilityServiceFrame
-from netex.mode_restriction_assessment import ModeRestrictionAssessment
-from netex.money_service import MoneyService
-from netex.monitored_vehicle_sharing_parking_bay import MonitoredVehicleSharingParkingBay
-from netex.month_validity_offset import MonthValidityOffset
-from netex.navigation_path import NavigationPath
-from netex.navigation_path_assignment import NavigationPathAssignment
-from netex.network import Network
-from netex.normal_dated_vehicle_journey import NormalDatedVehicleJourney
-from netex.notice import Notice
-from netex.notice_assignment import NoticeAssignment
-from netex.observed_passing_time import ObservedPassingTime
-from netex.offered_travel_specification import OfferedTravelSpecification
-from netex.onboard_stay import OnboardStay
-from netex.online_service import OnlineService
-from netex.online_service_operator import OnlineServiceOperator
-from netex.open_transport_mode import OpenTransportMode
-from netex.operating_department import OperatingDepartment
-from netex.operating_period import OperatingPeriod
-from netex.operational_context import OperationalContext
-from netex.operator import Operator
-from netex.organisation_part import OrganisationPart
-from netex.organisational_unit import OrganisationalUnit
-from netex.other_organisation import OtherOrganisation
-from netex.overtaking_possibility import OvertakingPossibility
-from netex.parking import Parking
-from netex.parking_area import ParkingArea
-from netex.parking_bay import ParkingBay
-from netex.parking_bay_condition import ParkingBayCondition
-from netex.parking_bay_status import ParkingBayStatus
-from netex.parking_capacity import ParkingCapacity
-from netex.parking_component import ParkingComponent
-from netex.parking_entrance_for_vehicles import ParkingEntranceForVehicles
-from netex.parking_passenger_entrance import ParkingPassengerEntrance
-from netex.parking_point import ParkingPoint
-from netex.parking_properties import ParkingProperties
-from netex.parking_tariff import ParkingTariff
-from netex.passenger_carrying_requirement import PassengerCarryingRequirement
-from netex.passenger_carrying_requirements_view import PassengerCarryingRequirementsView
-from netex.passenger_information_equipment import PassengerInformationEquipment
-from netex.passenger_safety_equipment import PassengerSafetyEquipment
-from netex.passenger_stop_assignment import PassengerStopAssignment
-from netex.passing_time import PassingTime
-from netex.passing_time_view import PassingTimeView
-from netex.path_junction import PathJunction
-from netex.path_link import PathLink
-from netex.path_link_in_sequence import PathLinkInSequence
-from netex.penalty_policy import PenaltyPolicy
-from netex.personal_mode_of_operation import PersonalModeOfOperation
-from netex.place_in_sequence import PlaceInSequence
-from netex.place_lighting import PlaceLighting
-from netex.place_sign import PlaceSign
-from netex.point_2 import Point2
-from netex.point_in_journey_pattern import PointInJourneyPattern
-from netex.point_of_interest import PointOfInterest
-from netex.point_of_interest_classification import PointOfInterestClassification
-from netex.point_of_interest_classification_hierarchy import PointOfInterestClassificationHierarchy
-from netex.point_of_interest_entrance import PointOfInterestEntrance
-from netex.point_of_interest_space import PointOfInterestSpace
-from netex.point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
-from netex.point_on_line_section import PointOnLineSection
-from netex.point_on_link import PointOnLink
-from netex.point_on_route import PointOnRoute
-from netex.point_on_section import PointOnSection
-from netex.point_projection import PointProjection
-from netex.pool_of_vehicles import PoolOfVehicles
-from netex.postal_address import PostalAddress
-from netex.preassigned_fare_product import PreassignedFareProduct
-from netex.price_unit import PriceUnit
-from netex.pricing_parameter_set import PricingParameterSet
-from netex.pricing_rule import PricingRule
-from netex.pricing_service import PricingService
-from netex.purchase_window import PurchaseWindow
-from netex.purpose_of_equipment_profile import PurposeOfEquipmentProfile
-from netex.purpose_of_grouping import PurposeOfGrouping
-from netex.purpose_of_journey_partition import PurposeOfJourneyPartition
-from netex.quality_structure_factor import QualityStructureFactor
-from netex.quality_structure_factor_price import QualityStructureFactorPrice
-from netex.quay import Quay
-from netex.queueing_equipment import QueueingEquipment
-from netex.railway_element import RailwayElement
-from netex.railway_junction import RailwayJunction
-from netex.ramp_equipment import RampEquipment
-from netex.refuelling_equipment import RefuellingEquipment
-from netex.refunding import Refunding
-from netex.related_organisation import RelatedOrganisation
-from netex.relief_opportunity import ReliefOpportunity
-from netex.relief_point import ReliefPoint
-from netex.rental_availability import RentalAvailability
-from netex.rental_option import RentalOption
-from netex.rental_penalty_policy import RentalPenaltyPolicy
-from netex.replacing import Replacing
-from netex.requested_travel_specification import RequestedTravelSpecification
-from netex.reselling import Reselling
-from netex.reserving import Reserving
-from netex.residential_qualification import ResidentialQualification
-from netex.residential_qualification_eligibility import ResidentialQualificationEligibility
-from netex.resource_frame import ResourceFrame
-from netex.responsibility_set import ResponsibilitySet
-from netex.restricted_manoeuvre import RestrictedManoeuvre
-from netex.retail_consortium import RetailConsortium
-from netex.retail_device import RetailDevice
-from netex.retail_device_security_listing import RetailDeviceSecurityListing
-from netex.retail_service import RetailService
-from netex.rhythmical_journey_group import RhythmicalJourneyGroup
-from netex.road_address import RoadAddress
-from netex.road_element import RoadElement
-from netex.road_junction import RoadJunction
-from netex.rough_surface import RoughSurface
-from netex.round_trip import RoundTrip
-from netex.rounding import Rounding
-from netex.route import Route
-from netex.route_instruction import RouteInstruction
-from netex.route_link import RouteLink
-from netex.route_point import RoutePoint
-from netex.routing import Routing
-from netex.routing_constraint_zone import RoutingConstraintZone
-from netex.rubbish_disposal_equipment import RubbishDisposalEquipment
-from netex.sale_discount_right import SaleDiscountRight
-from netex.sales_notice_assignment import SalesNoticeAssignment
-from netex.sales_offer_package import SalesOfferPackage
-from netex.sales_offer_package_element import SalesOfferPackageElement
-from netex.sales_offer_package_entitlement_given import SalesOfferPackageEntitlementGiven
-from netex.sales_offer_package_entitlement_required import SalesOfferPackageEntitlementRequired
-from netex.sales_offer_package_price import SalesOfferPackagePrice
-from netex.sales_offer_package_substitution import SalesOfferPackageSubstitution
-from netex.sales_transaction import SalesTransaction
-from netex.sales_transaction_frame import SalesTransactionFrame
-from netex.sanitary_equipment import SanitaryEquipment
-from netex.scheduled_operation import ScheduledOperation
-from netex.scheduled_stop_point import ScheduledStopPoint
-from netex.schematic_map import SchematicMap
-from netex.seating_equipment import SeatingEquipment
-from netex.section_in_sequence_versioned_child_structure import (
+from .geographical_interval import GeographicalInterval
+from .geographical_interval_price import GeographicalIntervalPrice
+from .geographical_structure_factor import GeographicalStructureFactor
+from .geographical_unit import GeographicalUnit
+from .geographical_unit_price import GeographicalUnitPrice
+from .group_constraint_member import GroupConstraintMember
+from .group_of_distance_matrix_elements import GroupOfDistanceMatrixElements
+from .group_of_distribution_channels import GroupOfDistributionChannels
+from .group_of_lines import GroupOfLines
+from .group_of_link_sequences import GroupOfLinkSequences
+from .group_of_links import GroupOfLinks
+from .group_of_operators import GroupOfOperators
+from .group_of_places import GroupOfPlaces
+from .group_of_points import GroupOfPoints
+from .group_of_sales_offer_packages import GroupOfSalesOfferPackages
+from .group_of_services import GroupOfServices
+from .group_of_single_journeys import GroupOfSingleJourneys
+from .group_of_timebands import GroupOfTimebands
+from .group_of_timing_links import GroupOfTimingLinks
+from .group_ticket import GroupTicket
+from .hail_and_ride_area import HailAndRideArea
+from .heading_sign import HeadingSign
+from .headway_journey_group import HeadwayJourneyGroup
+from .help_point_equipment import HelpPointEquipment
+from .hire_service import HireService
+from .individual_passenger_info import IndividualPassengerInfo
+from .individual_traveller import IndividualTraveller
+from .infrastructure_frame import InfrastructureFrame
+from .interchange_rule import InterchangeRule
+from .interchange_rule_timing import InterchangeRuleTiming
+from .interchanging import Interchanging
+from .journey_accounting import JourneyAccounting
+from .journey_headway import JourneyHeadway
+from .journey_layover import JourneyLayover
+from .journey_meeting import JourneyMeeting
+from .journey_part import JourneyPart
+from .journey_part_couple import JourneyPartCouple
+from .journey_part_position import JourneyPartPosition
+from .journey_pattern_headway import JourneyPatternHeadway
+from .journey_pattern_layover import JourneyPatternLayover
+from .journey_pattern_run_time import JourneyPatternRunTime
+from .journey_pattern_wait_time import JourneyPatternWaitTime
+from .journey_run_time import JourneyRunTime
+from .journey_wait_time import JourneyWaitTime
+from .layer import Layer
+from .left_luggage_service import LeftLuggageService
+from .level import Level
+from .lift_equipment import LiftEquipment
+from .limiting_rule import LimitingRule
+from .limiting_rule_in_context import LimitingRuleInContext
+from .line import Line
+from .line_network import LineNetwork
+from .line_shape import LineShape
+from .link_in_journey_pattern import LinkInJourneyPattern
+from .link_on_section import LinkOnSection
+from .link_projection import LinkProjection
+from .link_sequence_projection import LinkSequenceProjection
+from .logical_display import LogicalDisplay
+from .lost_property_service import LostPropertyService
+from .luggage_allowance import LuggageAllowance
+from .luggage_service import LuggageService
+from .management_agent import ManagementAgent
+from .medium_access_device import MediumAccessDevice
+from .medium_access_device_security_listing import (
+    MediumAccessDeviceSecurityListing,
+)
+from .medium_application_instance import MediumApplicationInstance
+from .meeting_point_service import MeetingPointService
+from .meeting_restriction import MeetingRestriction
+from .minimum_stay import MinimumStay
+from .mobile_device import MobileDevice
+from .mobility_journey_frame import MobilityJourneyFrame
+from .mobility_service_constraint_zone import MobilityServiceConstraintZone
+from .mobility_service_frame import MobilityServiceFrame
+from .mode_restriction_assessment import ModeRestrictionAssessment
+from .money_service import MoneyService
+from .monitored_vehicle_sharing_parking_bay import (
+    MonitoredVehicleSharingParkingBay,
+)
+from .month_validity_offset import MonthValidityOffset
+from .navigation_path import NavigationPath
+from .navigation_path_assignment import NavigationPathAssignment
+from .network import Network
+from .normal_dated_vehicle_journey import NormalDatedVehicleJourney
+from .notice import Notice
+from .notice_assignment import NoticeAssignment
+from .observed_passing_time import ObservedPassingTime
+from .offered_travel_specification import OfferedTravelSpecification
+from .onboard_stay import OnboardStay
+from .online_service import OnlineService
+from .online_service_operator import OnlineServiceOperator
+from .open_transport_mode import OpenTransportMode
+from .operating_department import OperatingDepartment
+from .operating_period import OperatingPeriod
+from .operational_context import OperationalContext
+from .operator import Operator
+from .organisation_part import OrganisationPart
+from .organisational_unit import OrganisationalUnit
+from .other_organisation import OtherOrganisation
+from .overtaking_possibility import OvertakingPossibility
+from .parking import Parking
+from .parking_area import ParkingArea
+from .parking_bay import ParkingBay
+from .parking_bay_condition import ParkingBayCondition
+from .parking_bay_status import ParkingBayStatus
+from .parking_capacity import ParkingCapacity
+from .parking_component import ParkingComponent
+from .parking_entrance_for_vehicles import ParkingEntranceForVehicles
+from .parking_passenger_entrance import ParkingPassengerEntrance
+from .parking_point import ParkingPoint
+from .parking_properties import ParkingProperties
+from .parking_tariff import ParkingTariff
+from .passenger_carrying_requirement import PassengerCarryingRequirement
+from .passenger_carrying_requirements_view import (
+    PassengerCarryingRequirementsView,
+)
+from .passenger_information_equipment import PassengerInformationEquipment
+from .passenger_safety_equipment import PassengerSafetyEquipment
+from .passenger_stop_assignment import PassengerStopAssignment
+from .passing_time import PassingTime
+from .passing_time_view import PassingTimeView
+from .path_junction import PathJunction
+from .path_link import PathLink
+from .path_link_in_sequence import PathLinkInSequence
+from .penalty_policy import PenaltyPolicy
+from .personal_mode_of_operation import PersonalModeOfOperation
+from .place_in_sequence import PlaceInSequence
+from .place_lighting import PlaceLighting
+from .place_sign import PlaceSign
+from .point_2 import Point2
+from .point_in_journey_pattern import PointInJourneyPattern
+from .point_of_interest import PointOfInterest
+from .point_of_interest_classification import PointOfInterestClassification
+from .point_of_interest_classification_hierarchy import (
+    PointOfInterestClassificationHierarchy,
+)
+from .point_of_interest_entrance import PointOfInterestEntrance
+from .point_of_interest_space import PointOfInterestSpace
+from .point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
+from .point_on_line_section import PointOnLineSection
+from .point_on_link import PointOnLink
+from .point_on_route import PointOnRoute
+from .point_on_section import PointOnSection
+from .point_projection import PointProjection
+from .pool_of_vehicles import PoolOfVehicles
+from .postal_address import PostalAddress
+from .preassigned_fare_product import PreassignedFareProduct
+from .price_unit import PriceUnit
+from .pricing_parameter_set import PricingParameterSet
+from .pricing_rule import PricingRule
+from .pricing_service import PricingService
+from .purchase_window import PurchaseWindow
+from .purpose_of_equipment_profile import PurposeOfEquipmentProfile
+from .purpose_of_grouping import PurposeOfGrouping
+from .purpose_of_journey_partition import PurposeOfJourneyPartition
+from .quality_structure_factor import QualityStructureFactor
+from .quality_structure_factor_price import QualityStructureFactorPrice
+from .quay import Quay
+from .queueing_equipment import QueueingEquipment
+from .railway_element import RailwayElement
+from .railway_junction import RailwayJunction
+from .ramp_equipment import RampEquipment
+from .refuelling_equipment import RefuellingEquipment
+from .refunding import Refunding
+from .related_organisation import RelatedOrganisation
+from .relief_opportunity import ReliefOpportunity
+from .relief_point import ReliefPoint
+from .rental_availability import RentalAvailability
+from .rental_option import RentalOption
+from .rental_penalty_policy import RentalPenaltyPolicy
+from .replacing import Replacing
+from .requested_travel_specification import RequestedTravelSpecification
+from .reselling import Reselling
+from .reserving import Reserving
+from .residential_qualification import ResidentialQualification
+from .residential_qualification_eligibility import (
+    ResidentialQualificationEligibility,
+)
+from .resource_frame import ResourceFrame
+from .responsibility_set import ResponsibilitySet
+from .restricted_manoeuvre import RestrictedManoeuvre
+from .retail_consortium import RetailConsortium
+from .retail_device import RetailDevice
+from .retail_device_security_listing import RetailDeviceSecurityListing
+from .retail_service import RetailService
+from .rhythmical_journey_group import RhythmicalJourneyGroup
+from .road_address import RoadAddress
+from .road_element import RoadElement
+from .road_junction import RoadJunction
+from .rough_surface import RoughSurface
+from .round_trip import RoundTrip
+from .rounding import Rounding
+from .route import Route
+from .route_instruction import RouteInstruction
+from .route_link import RouteLink
+from .route_point import RoutePoint
+from .routing import Routing
+from .routing_constraint_zone import RoutingConstraintZone
+from .rubbish_disposal_equipment import RubbishDisposalEquipment
+from .sale_discount_right import SaleDiscountRight
+from .sales_notice_assignment import SalesNoticeAssignment
+from .sales_offer_package import SalesOfferPackage
+from .sales_offer_package_element import SalesOfferPackageElement
+from .sales_offer_package_entitlement_given import (
+    SalesOfferPackageEntitlementGiven,
+)
+from .sales_offer_package_entitlement_required import (
+    SalesOfferPackageEntitlementRequired,
+)
+from .sales_offer_package_price import SalesOfferPackagePrice
+from .sales_offer_package_substitution import SalesOfferPackageSubstitution
+from .sales_transaction import SalesTransaction
+from .sales_transaction_frame import SalesTransactionFrame
+from .sanitary_equipment import SanitaryEquipment
+from .scheduled_operation import ScheduledOperation
+from .scheduled_stop_point import ScheduledStopPoint
+from .schematic_map import SchematicMap
+from .seating_equipment import SeatingEquipment
+from .section_in_sequence_versioned_child_structure import (
     JourneyPattern,
     SectionInSequence,
 )
-from netex.series_constraint import SeriesConstraint
-from netex.series_constraint_price import SeriesConstraintPrice
-from netex.service_access_code import ServiceAccessCode
-from netex.service_access_right_1 import ServiceAccessRight1
-from netex.service_access_right_2 import ServiceAccessRight2
-from netex.service_calendar import ServiceCalendar
-from netex.service_calendar_frame import ServiceCalendarFrame
-from netex.service_exclusion import ServiceExclusion
-from netex.service_frame import ServiceFrame
-from netex.service_journey import ServiceJourney
-from netex.service_journey_interchange import ServiceJourneyInterchange
-from netex.service_journey_pattern import ServiceJourneyPattern
-from netex.service_journey_pattern_interchange import ServiceJourneyPatternInterchange
-from netex.service_link import ServiceLink
-from netex.service_link_in_journey_pattern import ServiceLinkInJourneyPattern
-from netex.service_pattern import ServicePattern
-from netex.service_site import ServiceSite
-from netex.serviced_organisation import ServicedOrganisation
-from netex.shelter_equipment import ShelterEquipment
-from netex.sign_equipment import SignEquipment
-from netex.simple_feature import SimpleFeature
-from netex.simple_vehicle_type import SimpleVehicleType
-from netex.single_journey import SingleJourney
-from netex.single_journey_path import SingleJourneyPath
-from netex.site_connection import SiteConnection
-from netex.site_frame import SiteFrame
-from netex.site_path_link import SitePathLink
-from netex.smartcard import Smartcard
-from netex.special_service import SpecialService
-from netex.specific_parameter_assignment_version_structure import SpecificParameterAssignment
-from netex.stair_flight import StairFlight
-from netex.staircase_equipment import StaircaseEquipment
-from netex.standard_fare_table import StandardFareTable
-from netex.start_time_at_stop_point import StartTimeAtStopPoint
-from netex.step_limit import StepLimit
-from netex.stop_area import StopArea
-from netex.stop_place import StopPlace
-from netex.stop_place_entrance import StopPlaceEntrance
-from netex.stop_place_vehicle_entrance import StopPlaceVehicleEntrance
-from netex.stop_point_in_journey_pattern import StopPointInJourneyPattern
-from netex.submode import Submode
-from netex.subscribing import Subscribing
-from netex.supplement_product import SupplementProduct
-from netex.suspending import Suspending
-from netex.target_passing_time import TargetPassingTime
-from netex.tariff import Tariff
-from netex.tariff_zone import TariffZone
-from netex.taxi_parking_area import TaxiParkingArea
-from netex.taxi_rank import TaxiRank
-from netex.taxi_service import TaxiService
-from netex.taxi_service_place_assignment import TaxiServicePlaceAssignment
-from netex.taxi_stand import TaxiStand
-from netex.template_service_journey import TemplateServiceJourney
-from netex.template_vehicle_journey import TemplateVehicleJourney
-from netex.third_party_product import ThirdPartyProduct
-from netex.ticket_validator_equipment import TicketValidatorEquipment
-from netex.ticketing_equipment import TicketingEquipment
-from netex.ticketing_service import TicketingService
-from netex.time_demand_profile import TimeDemandProfile
-from netex.time_demand_profile_member import TimeDemandProfileMember
-from netex.time_demand_type import TimeDemandType
-from netex.time_demand_type_assignment import TimeDemandTypeAssignment
-from netex.time_interval import TimeInterval
-from netex.time_interval_price import TimeIntervalPrice
-from netex.time_structure_factor import TimeStructureFactor
-from netex.time_unit import TimeUnit
-from netex.time_unit_price import TimeUnitPrice
-from netex.timeband import Timeband
-from netex.timetable_frame import TimetableFrame
-from netex.timetabled_passing_time import TimetabledPassingTime
-from netex.timing_algorithm_type import TimingAlgorithmType
-from netex.timing_link import TimingLink
-from netex.timing_link_in_journey_pattern import TimingLinkInJourneyPattern
-from netex.timing_pattern import TimingPattern
-from netex.timing_point import TimingPoint
-from netex.timing_point_in_journey_pattern import TimingPointInJourneyPattern
-from netex.topographic_place import TopographicPlace
-from netex.topographic_projection import TopographicProjection
-from netex.traffic_control_point import TrafficControlPoint
-from netex.train import Train
-from netex.train_block import TrainBlock
-from netex.train_block_part import TrainBlockPart
-from netex.train_component import TrainComponent
-from netex.train_component_label_assignment import TrainComponentLabelAssignment
-from netex.train_element import TrainElement
-from netex.train_number import TrainNumber
-from netex.train_stop_assignment import TrainStopAssignment
-from netex.transfer_restriction import TransferRestriction
-from netex.transferability import Transferability
-from netex.transport_type import TransportType
-from netex.travel_agent import TravelAgent
-from netex.travel_document import TravelDocument
-from netex.travel_document_security_listing import TravelDocumentSecurityListing
-from netex.travel_specification_1 import TravelSpecification1
-from netex.travel_specification_2 import TravelSpecification2
-from netex.travelator_equipment import TravelatorEquipment
-from netex.trolley_stand_equipment import TrolleyStandEquipment
-from netex.turnaround_time_limit_time import TurnaroundTimeLimitTime
-from netex.type_of_access_right_assignment import TypeOfAccessRightAssignment
-from netex.type_of_activation import TypeOfActivation
-from netex.type_of_battery_chemistry import TypeOfBatteryChemistry
-from netex.type_of_codespace_assignment import TypeOfCodespaceAssignment
-from netex.type_of_concession import TypeOfConcession
-from netex.type_of_congestion import TypeOfCongestion
-from netex.type_of_customer_account import TypeOfCustomerAccount
-from netex.type_of_delivery_variant import TypeOfDeliveryVariant
-from netex.type_of_entity import TypeOfEntity
-from netex.type_of_equipment import TypeOfEquipment
-from netex.type_of_facility import TypeOfFacility
-from netex.type_of_fare_contract import TypeOfFareContract
-from netex.type_of_fare_contract_entry import TypeOfFareContractEntry
-from netex.type_of_fare_product import TypeOfFareProduct
-from netex.type_of_fare_structure_element import TypeOfFareStructureElement
-from netex.type_of_fare_structure_factor import TypeOfFareStructureFactor
-from netex.type_of_fare_table import TypeOfFareTable
-from netex.type_of_feature import TypeOfFeature
-from netex.type_of_fleet import TypeOfFleet
-from netex.type_of_flexible_service import TypeOfFlexibleService
-from netex.type_of_journey_pattern import TypeOfJourneyPattern
-from netex.type_of_line import TypeOfLine
-from netex.type_of_link import TypeOfLink
-from netex.type_of_link_sequence import TypeOfLinkSequence
-from netex.type_of_machine_readability import TypeOfMachineReadability
-from netex.type_of_medium_access_device import TypeOfMediumAccessDevice
-from netex.type_of_mobility_service import TypeOfMobilityService
-from netex.type_of_mode_of_operation import TypeOfModeOfOperation
-from netex.type_of_notice import TypeOfNotice
-from netex.type_of_operation import TypeOfOperation
-from netex.type_of_organisation import TypeOfOrganisation
-from netex.type_of_organisation_part import TypeOfOrganisationPart
-from netex.type_of_parking import TypeOfParking
-from netex.type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
-from netex.type_of_payment_method import TypeOfPaymentMethod
-from netex.type_of_place import TypeOfPlace
-from netex.type_of_plug import TypeOfPlug
-from netex.type_of_point import TypeOfPoint
-from netex.type_of_pricing_rule import TypeOfPricingRule
-from netex.type_of_product_category import TypeOfProductCategory
-from netex.type_of_projection import TypeOfProjection
-from netex.type_of_proof import TypeOfProof
-from netex.type_of_responsibility_role import TypeOfResponsibilityRole
-from netex.type_of_retail_device import TypeOfRetailDevice
-from netex.type_of_sales_offer_package import TypeOfSalesOfferPackage
-from netex.type_of_security_list import TypeOfSecurityList
-from netex.type_of_service import TypeOfService
-from netex.type_of_service_feature import TypeOfServiceFeature
-from netex.type_of_tariff import TypeOfTariff
-from netex.type_of_time_demand_type import TypeOfTimeDemandType
-from netex.type_of_transfer import TypeOfTransfer
-from netex.type_of_travel_document import TypeOfTravelDocument
-from netex.type_of_usage_parameter import TypeOfUsageParameter
-from netex.type_of_validity import TypeOfValidity
-from netex.type_of_version import TypeOfVersion
-from netex.type_of_zone import TypeOfZone
-from netex.types_of_frame_rel_structure import TypeOfFrame
-from netex.uic_operating_period import UicOperatingPeriod
-from netex.usage_discount_right import UsageDiscountRight
-from netex.usage_parameter_price import UsageParameterPrice
-from netex.usage_validity_period import UsageValidityPeriod
-from netex.user_profile import UserProfile
-from netex.user_profile_eligibility import UserProfileEligibility
-from netex.validable_element import ValidableElement
-from netex.validable_element_price import ValidableElementPrice
-from netex.validity_parameter_assignment import ValidityParameterAssignment
-from netex.value_set import ValueSet
-from netex.vehicle import Vehicle
-from netex.vehicle_access_credentials_assignment import VehicleAccessCredentialsAssignment
-from netex.vehicle_charging_equipment import VehicleChargingEquipment
-from netex.vehicle_equipment_profile import VehicleEquipmentProfile
-from netex.vehicle_journey import VehicleJourney
-from netex.vehicle_journey_headway import VehicleJourneyHeadway
-from netex.vehicle_journey_layover import VehicleJourneyLayover
-from netex.vehicle_journey_run_time import VehicleJourneyRunTime
-from netex.vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
-from netex.vehicle_journey_wait_time import VehicleJourneyWaitTime
-from netex.vehicle_manoeuvring_requirement import VehicleManoeuvringRequirement
-from netex.vehicle_meeting_link import VehicleMeetingLink
-from netex.vehicle_meeting_place_1 import VehicleMeetingPlace1
-from netex.vehicle_meeting_place_2 import VehicleMeetingPlace2
-from netex.vehicle_meeting_point import VehicleMeetingPoint
-from netex.vehicle_meeting_point_assignment_1 import VehicleMeetingPointAssignment1
-from netex.vehicle_meeting_point_assignment_2 import VehicleMeetingPointAssignment2
-from netex.vehicle_meeting_point_in_path import VehicleMeetingPointInPath
-from netex.vehicle_model import VehicleModel
-from netex.vehicle_pooler_profile import VehiclePoolerProfile
-from netex.vehicle_pooling import VehiclePooling
-from netex.vehicle_pooling_driver_info import VehiclePoolingDriverInfo
-from netex.vehicle_pooling_meeting_place import VehiclePoolingMeetingPlace
-from netex.vehicle_pooling_parking_area import VehiclePoolingParkingArea
-from netex.vehicle_pooling_parking_bay import VehiclePoolingParkingBay
-from netex.vehicle_pooling_place_assignment import VehiclePoolingPlaceAssignment
-from netex.vehicle_position_alignment import VehiclePositionAlignment
-from netex.vehicle_quay_alignment import VehicleQuayAlignment
-from netex.vehicle_release_equipment import VehicleReleaseEquipment
-from netex.vehicle_rental import VehicleRental
-from netex.vehicle_rental_service import VehicleRentalService
-from netex.vehicle_schedule_frame import VehicleScheduleFrame
-from netex.vehicle_service import VehicleService
-from netex.vehicle_service_part import VehicleServicePart
-from netex.vehicle_service_place_assignment_1 import VehicleServicePlaceAssignment1
-from netex.vehicle_service_place_assignment_2 import VehicleServicePlaceAssignment2
-from netex.vehicle_sharing import VehicleSharing
-from netex.vehicle_sharing_parking_area import VehicleSharingParkingArea
-from netex.vehicle_sharing_parking_bay import VehicleSharingParkingBay
-from netex.vehicle_sharing_place_assignment import VehicleSharingPlaceAssignment
-from netex.vehicle_sharing_service import VehicleSharingService
-from netex.vehicle_stopping_place import VehicleStoppingPlace
-from netex.vehicle_stopping_position import VehicleStoppingPosition
-from netex.vehicle_type import VehicleType
-from netex.vehicle_type_at_point import VehicleTypeAtPoint
-from netex.vehicle_type_preference import VehicleTypePreference
-from netex.vehicle_type_stop_assignment import VehicleTypeStopAssignment
-from netex.vehicle_type_zone_restriction import VehicleTypeZoneRestriction
-from netex.version import Version
-from netex.waiting_room_equipment import WaitingRoomEquipment
-from netex.wheelchair_vehicle_equipment import WheelchairVehicleEquipment
-from netex.whitelist import Whitelist
-from netex.wire_element import WireElement
-from netex.wire_junction import WireJunction
-from netex.zone import Zone
-from netex.zone_projection import ZoneProjection
+from .series_constraint import SeriesConstraint
+from .series_constraint_price import SeriesConstraintPrice
+from .service_access_code import ServiceAccessCode
+from .service_access_right_1 import ServiceAccessRight1
+from .service_access_right_2 import ServiceAccessRight2
+from .service_calendar import ServiceCalendar
+from .service_calendar_frame import ServiceCalendarFrame
+from .service_exclusion import ServiceExclusion
+from .service_frame import ServiceFrame
+from .service_journey import ServiceJourney
+from .service_journey_interchange import ServiceJourneyInterchange
+from .service_journey_pattern import ServiceJourneyPattern
+from .service_journey_pattern_interchange import (
+    ServiceJourneyPatternInterchange,
+)
+from .service_link import ServiceLink
+from .service_link_in_journey_pattern import ServiceLinkInJourneyPattern
+from .service_pattern import ServicePattern
+from .service_site import ServiceSite
+from .serviced_organisation import ServicedOrganisation
+from .shelter_equipment import ShelterEquipment
+from .sign_equipment import SignEquipment
+from .simple_feature import SimpleFeature
+from .simple_vehicle_type import SimpleVehicleType
+from .single_journey import SingleJourney
+from .single_journey_path import SingleJourneyPath
+from .site_connection import SiteConnection
+from .site_frame import SiteFrame
+from .site_path_link import SitePathLink
+from .smartcard import Smartcard
+from .spatial_feature import SpatialFeature
+from .special_service import SpecialService
+from .specific_parameter_assignment_version_structure import (
+    SpecificParameterAssignment,
+)
+from .stair_flight import StairFlight
+from .staircase_equipment import StaircaseEquipment
+from .standard_fare_table import StandardFareTable
+from .start_time_at_stop_point import StartTimeAtStopPoint
+from .step_limit import StepLimit
+from .stop_area import StopArea
+from .stop_place import StopPlace
+from .stop_place_entrance import StopPlaceEntrance
+from .stop_place_vehicle_entrance import StopPlaceVehicleEntrance
+from .stop_point_in_journey_pattern import StopPointInJourneyPattern
+from .submode import Submode
+from .subscribing import Subscribing
+from .supplement_product import SupplementProduct
+from .suspending import Suspending
+from .target_passing_time import TargetPassingTime
+from .tariff import Tariff
+from .tariff_zone import TariffZone
+from .taxi_parking_area import TaxiParkingArea
+from .taxi_rank import TaxiRank
+from .taxi_service import TaxiService
+from .taxi_service_place_assignment import TaxiServicePlaceAssignment
+from .taxi_stand import TaxiStand
+from .template_service_journey import TemplateServiceJourney
+from .template_vehicle_journey import TemplateVehicleJourney
+from .third_party_product import ThirdPartyProduct
+from .ticket_validator_equipment import TicketValidatorEquipment
+from .ticketing_equipment import TicketingEquipment
+from .ticketing_service import TicketingService
+from .time_demand_profile import TimeDemandProfile
+from .time_demand_profile_member import TimeDemandProfileMember
+from .time_demand_type import TimeDemandType
+from .time_demand_type_assignment import TimeDemandTypeAssignment
+from .time_interval import TimeInterval
+from .time_interval_price import TimeIntervalPrice
+from .time_structure_factor import TimeStructureFactor
+from .time_unit import TimeUnit
+from .time_unit_price import TimeUnitPrice
+from .timeband import Timeband
+from .timetable_frame import TimetableFrame
+from .timetabled_passing_time import TimetabledPassingTime
+from .timing_algorithm_type import TimingAlgorithmType
+from .timing_link import TimingLink
+from .timing_link_in_journey_pattern import TimingLinkInJourneyPattern
+from .timing_pattern import TimingPattern
+from .timing_point import TimingPoint
+from .timing_point_in_journey_pattern import TimingPointInJourneyPattern
+from .topographic_place import TopographicPlace
+from .topographic_projection import TopographicProjection
+from .traffic_control_point import TrafficControlPoint
+from .train import Train
+from .train_block import TrainBlock
+from .train_block_part import TrainBlockPart
+from .train_component import TrainComponent
+from .train_component_label_assignment import TrainComponentLabelAssignment
+from .train_element import TrainElement
+from .train_number import TrainNumber
+from .train_stop_assignment import TrainStopAssignment
+from .transfer_restriction import TransferRestriction
+from .transferability import Transferability
+from .transport_type import TransportType
+from .travel_agent import TravelAgent
+from .travel_document import TravelDocument
+from .travel_document_security_listing import TravelDocumentSecurityListing
+from .travel_specification_1 import TravelSpecification1
+from .travel_specification_2 import TravelSpecification2
+from .travelator_equipment import TravelatorEquipment
+from .trolley_stand_equipment import TrolleyStandEquipment
+from .turnaround_time_limit_time import TurnaroundTimeLimitTime
+from .type_of_access_right_assignment import TypeOfAccessRightAssignment
+from .type_of_activation import TypeOfActivation
+from .type_of_battery_chemistry import TypeOfBatteryChemistry
+from .type_of_codespace_assignment import TypeOfCodespaceAssignment
+from .type_of_concession import TypeOfConcession
+from .type_of_congestion import TypeOfCongestion
+from .type_of_customer_account import TypeOfCustomerAccount
+from .type_of_delivery_variant import TypeOfDeliveryVariant
+from .type_of_entity import TypeOfEntity
+from .type_of_equipment import TypeOfEquipment
+from .type_of_facility import TypeOfFacility
+from .type_of_fare_contract import TypeOfFareContract
+from .type_of_fare_contract_entry import TypeOfFareContractEntry
+from .type_of_fare_product import TypeOfFareProduct
+from .type_of_fare_structure_element import TypeOfFareStructureElement
+from .type_of_fare_structure_factor import TypeOfFareStructureFactor
+from .type_of_fare_table import TypeOfFareTable
+from .type_of_feature import TypeOfFeature
+from .type_of_fleet import TypeOfFleet
+from .type_of_flexible_service import TypeOfFlexibleService
+from .type_of_journey_pattern import TypeOfJourneyPattern
+from .type_of_line import TypeOfLine
+from .type_of_link import TypeOfLink
+from .type_of_link_sequence import TypeOfLinkSequence
+from .type_of_machine_readability import TypeOfMachineReadability
+from .type_of_medium_access_device import TypeOfMediumAccessDevice
+from .type_of_mobility_service import TypeOfMobilityService
+from .type_of_mode_of_operation import TypeOfModeOfOperation
+from .type_of_notice import TypeOfNotice
+from .type_of_operation import TypeOfOperation
+from .type_of_organisation import TypeOfOrganisation
+from .type_of_organisation_part import TypeOfOrganisationPart
+from .type_of_parking import TypeOfParking
+from .type_of_passenger_information_equipment import (
+    TypeOfPassengerInformationEquipment,
+)
+from .type_of_payment_method import TypeOfPaymentMethod
+from .type_of_place import TypeOfPlace
+from .type_of_plug import TypeOfPlug
+from .type_of_point import TypeOfPoint
+from .type_of_pricing_rule import TypeOfPricingRule
+from .type_of_product_category import TypeOfProductCategory
+from .type_of_projection import TypeOfProjection
+from .type_of_proof import TypeOfProof
+from .type_of_responsibility_role import TypeOfResponsibilityRole
+from .type_of_retail_device import TypeOfRetailDevice
+from .type_of_sales_offer_package import TypeOfSalesOfferPackage
+from .type_of_security_list import TypeOfSecurityList
+from .type_of_service import TypeOfService
+from .type_of_service_feature import TypeOfServiceFeature
+from .type_of_tariff import TypeOfTariff
+from .type_of_time_demand_type import TypeOfTimeDemandType
+from .type_of_transfer import TypeOfTransfer
+from .type_of_travel_document import TypeOfTravelDocument
+from .type_of_usage_parameter import TypeOfUsageParameter
+from .type_of_validity import TypeOfValidity
+from .type_of_version import TypeOfVersion
+from .type_of_zone import TypeOfZone
+from .types_of_frame_rel_structure import TypeOfFrame
+from .uic_operating_period import UicOperatingPeriod
+from .usage_discount_right import UsageDiscountRight
+from .usage_parameter_price import UsageParameterPrice
+from .usage_validity_period import UsageValidityPeriod
+from .user_profile import UserProfile
+from .user_profile_eligibility import UserProfileEligibility
+from .validable_element import ValidableElement
+from .validable_element_price import ValidableElementPrice
+from .validity_parameter_assignment import ValidityParameterAssignment
+from .value_set import ValueSet
+from .vehicle import Vehicle
+from .vehicle_access_credentials_assignment import (
+    VehicleAccessCredentialsAssignment,
+)
+from .vehicle_charging_equipment import VehicleChargingEquipment
+from .vehicle_equipment_profile import VehicleEquipmentProfile
+from .vehicle_journey import VehicleJourney
+from .vehicle_journey_headway import VehicleJourneyHeadway
+from .vehicle_journey_layover import VehicleJourneyLayover
+from .vehicle_journey_run_time import VehicleJourneyRunTime
+from .vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
+from .vehicle_journey_wait_time import VehicleJourneyWaitTime
+from .vehicle_manoeuvring_requirement import VehicleManoeuvringRequirement
+from .vehicle_meeting_link import VehicleMeetingLink
+from .vehicle_meeting_place_1 import VehicleMeetingPlace1
+from .vehicle_meeting_place_2 import VehicleMeetingPlace2
+from .vehicle_meeting_point import VehicleMeetingPoint
+from .vehicle_meeting_point_assignment_1 import VehicleMeetingPointAssignment1
+from .vehicle_meeting_point_assignment_2 import VehicleMeetingPointAssignment2
+from .vehicle_meeting_point_in_path import VehicleMeetingPointInPath
+from .vehicle_model import VehicleModel
+from .vehicle_pooler_profile import VehiclePoolerProfile
+from .vehicle_pooling import VehiclePooling
+from .vehicle_pooling_driver_info import VehiclePoolingDriverInfo
+from .vehicle_pooling_meeting_place import VehiclePoolingMeetingPlace
+from .vehicle_pooling_parking_area import VehiclePoolingParkingArea
+from .vehicle_pooling_parking_bay import VehiclePoolingParkingBay
+from .vehicle_pooling_place_assignment import VehiclePoolingPlaceAssignment
+from .vehicle_position_alignment import VehiclePositionAlignment
+from .vehicle_quay_alignment import VehicleQuayAlignment
+from .vehicle_release_equipment import VehicleReleaseEquipment
+from .vehicle_rental import VehicleRental
+from .vehicle_rental_service import VehicleRentalService
+from .vehicle_schedule_frame import VehicleScheduleFrame
+from .vehicle_service import VehicleService
+from .vehicle_service_part import VehicleServicePart
+from .vehicle_service_place_assignment_1 import VehicleServicePlaceAssignment1
+from .vehicle_service_place_assignment_2 import VehicleServicePlaceAssignment2
+from .vehicle_sharing import VehicleSharing
+from .vehicle_sharing_parking_area import VehicleSharingParkingArea
+from .vehicle_sharing_parking_bay import VehicleSharingParkingBay
+from .vehicle_sharing_place_assignment import VehicleSharingPlaceAssignment
+from .vehicle_sharing_service import VehicleSharingService
+from .vehicle_stopping_place import VehicleStoppingPlace
+from .vehicle_stopping_position import VehicleStoppingPosition
+from .vehicle_type import VehicleType
+from .vehicle_type_at_point import VehicleTypeAtPoint
+from .vehicle_type_preference import VehicleTypePreference
+from .vehicle_type_stop_assignment import VehicleTypeStopAssignment
+from .vehicle_type_zone_restriction import VehicleTypeZoneRestriction
+from .version import Version
+from .waiting_room_equipment import WaitingRoomEquipment
+from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+from .whitelist import Whitelist
+from .wire_element import WireElement
+from .wire_junction import WireJunction
+from .zone import Zone
+from .zone_projection import ZoneProjection
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class EntitiesInVersionRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in ENTITY of ENTITY In VERSION.
-    """
     class Meta:
         name = "entitiesInVersion_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            VehicleTypeZoneRestriction,
+            MediumApplicationInstance,
+            CustomerPaymentMeans,
+            ResidentialQualificationEligibility,
+            CommercialProfileEligibility,
+            UserProfileEligibility,
+            ResidentialQualification,
+            AccessRightInProduct,
+            FareStructureElementInSequence,
+            StartTimeAtStopPoint,
+            ControllableElementInSequence,
+            FareElementInSequence,
+            Cell,
+            CustomerPurchasePackagePrice,
+            ParkingPrice,
+            SalesOfferPackagePrice,
+            FulfilmentMethodPrice,
+            CappingRulePrice,
+            FareProductPrice,
+            FareStructureElementPrice,
+            TimeIntervalPrice,
+            TimeUnitPrice,
+            QualityStructureFactorPrice,
+            ControllableElementPrice,
+            ValidableElementPrice,
+            UsageParameterPrice,
+            DistanceMatrixElementPrice,
+            GeographicalIntervalPrice,
+            GeographicalUnitPrice,
+            SeriesConstraintPrice,
+            DefaultDeadRunRunTime,
+            DefaultServiceJourneyRunTime,
+            TimeDemandProfileMember,
+            JourneyPartPosition,
+            EstimatedPassingTime,
+            ObservedPassingTime,
+            TargetPassingTime,
+            DatedPassingTime,
+            TimetabledPassingTime,
+            PassingTime,
+            InterchangeRuleTiming,
+            ParkingCapacity,
+            ParkingProperties,
+            VehicleTypePreference,
+            VehiclePositionAlignment,
+            VehicleQuayAlignment,
+            FlexiblePointProperties,
+            FlexibleLinkProperties,
+            JourneyPatternHeadway,
+            JourneyPatternLayover,
+            JourneyPatternRunTime,
+            JourneyPatternWaitTime,
+            TurnaroundTimeLimitTime,
+            VehicleJourneyLayover,
+            VehicleJourneyRunTime,
+            VehicleJourneyWaitTime,
+            VehicleJourneyHeadway,
+            JourneyHeadway,
+            JourneyLayover,
+            JourneyRunTime,
+            JourneyWaitTime,
+            MediumAccessDeviceSecurityListing,
+            TravelDocumentSecurityListing,
+            RetailDeviceSecurityListing,
+            FareContractSecurityListing,
+            CustomerSecurityListing,
+            CustomerAccountSecurityListing,
+            StairFlight,
+            OnboardStay,
+            Accommodation,
+            ServiceLinkInJourneyPattern,
+            PathLinkInSequence,
+            LinkInJourneyPattern,
+            TimingLinkInJourneyPattern,
+            VehicleMeetingPointInPath,
+            FarePointInPattern,
+            StopPointInJourneyPattern,
+            PlaceInSequence,
+            PointInJourneyPattern,
+            PointOnRoute,
+            TimingPointInJourneyPattern,
+            PointOnLineSection,
+            PointOnSection,
+            SectionInSequence,
+            LinkOnSection,
+            CodespaceAssignment,
+            RelatedOrganisation,
+            PointOnLink,
+            AccessibilityAssessment,
+            AlternativeName,
+            GroupConstraintMember,
+            AlternativeText,
+            Fleet,
+            IndividualPassengerInfo,
+            VehiclePoolingDriverInfo,
+            IndividualTraveller,
+            ParkingBayCondition,
+            RentalAvailability,
+            Smartcard,
+            EmvCard,
+            MobileDevice,
+            MediumAccessDevice,
+            ServiceAccessCode,
+            TravelDocument,
+            CustomerAccount,
+            SalesTransaction,
+            OfferedTravelSpecification,
+            RequestedTravelSpecification,
+            TravelSpecification1,
+            TravelSpecification2,
+            FareContractEntry,
+            FareContract,
+            Customer,
+            ParkingTariff,
+            GroupOfSalesOfferPackages,
+            DistributionChannel,
+            Tariff,
+            CustomerPurchasePackage,
+            SalesOfferPackage,
+            FulfilmentMethod,
+            CappingRule,
+            EntitlementProduct,
+            SupplementProduct,
+            PreassignedFareProduct,
+            AmountOfPriceUnitProduct,
+            CappedDiscountRight,
+            UsageDiscountRight,
+            ThirdPartyProduct,
+            SaleDiscountRight,
+            ServiceAccessRight1,
+            ServiceAccessRight2,
+            TimeInterval,
+            FareQuotaFactor,
+            FareDemandFactor,
+            QualityStructureFactor,
+            ControllableElement,
+            ValidableElement,
+            AdditionalDriverOption,
+            RentalOption,
+            RentalPenaltyPolicy,
+            VehiclePoolerProfile,
+            SalesOfferPackageEntitlementRequired,
+            SalesOfferPackageEntitlementGiven,
+            MinimumStay,
+            Interchanging,
+            Suspending,
+            UsageValidityPeriod,
+            FrequencyOfUse,
+            StepLimit,
+            Routing,
+            RoundTrip,
+            LuggageAllowance,
+            EntitlementRequired,
+            EntitlementGiven,
+            EligibilityChangePolicy,
+            CompanionProfile,
+            GroupTicket,
+            CommercialProfile,
+            UserProfile,
+            Subscribing,
+            PenaltyPolicy,
+            ChargingPolicy,
+            Cancelling,
+            Reserving,
+            PurchaseWindow,
+            Transferability,
+            Replacing,
+            Refunding,
+            Exchanging,
+            Reselling,
+            GeographicalInterval,
+            SeriesConstraint,
+            CustomerPurchasePackageElement,
+            ParkingChargeBand,
+            SalesOfferPackageElement,
+            FareStructureElement,
+            TimeStructureFactor,
+            TimeUnit,
+            DistanceMatrixElement,
+            GeographicalStructureFactor,
+            GeographicalUnit,
+            FareUnit,
+            FareInterval,
+            FareStructureFactor,
+            PricingService,
+            LimitingRuleInContext,
+            LimitingRule,
+            DiscountingRule,
+            PricingRule,
+            MonthValidityOffset,
+            Rounding,
+            PricingParameterSet,
+            ReliefOpportunity,
+            CourseOfJourneys,
+            VehicleServicePart,
+            VehicleService,
+            TrainBlockPart,
+            CompoundBlock,
+            BlockPart,
+            TrainBlock,
+            Block,
+            DriverTripTime,
+            DriverTrip,
+            DutyPart,
+            AccountableElement,
+            Duty,
+            TimeDemandProfile,
+            VehicleTypeStopAssignment,
+            TrainComponentLabelAssignment,
+            TrainNumber,
+            FlexibleServiceProperties,
+            JourneyPartCouple,
+            CoupledJourney,
+            JourneyPart,
+            InterchangeRule,
+            ServiceJourneyPatternInterchange,
+            ServiceJourneyInterchange,
+            DefaultInterchange,
+            JourneyMeeting,
+            SingleJourney,
+            DatedSpecialService,
+            NormalDatedVehicleJourney,
+            DatedVehicleJourney,
+            SpecialService,
+            DeadRun,
+            ServiceJourney,
+            DatedServiceJourney,
+            TemplateServiceJourney,
+            TemplateVehicleJourney,
+            VehicleJourney,
+            PointOfInterestClassificationHierarchy,
+            TimeDemandType,
+            VehicleJourneyStopAssignment,
+            FlexibleStopAssignment,
+            NavigationPathAssignment,
+            TrainStopAssignment,
+            DynamicStopAssignment,
+            PassengerStopAssignment,
+            LogicalDisplay,
+            LineNetwork,
+            ModeRestrictionAssessment,
+            RouteInstruction,
+            TrainComponent,
+            TrainElement,
+            CompoundTrain,
+            Train,
+            CycleModelProfile,
+            CarModelProfile,
+            Whitelist,
+            Blacklist,
+            SchematicMap,
+            PersonalModeOfOperation,
+            AlternativeModeOfOperation,
+            VehiclePooling,
+            VehicleSharing,
+            VehicleRental,
+            FlexibleOperation,
+            ScheduledOperation,
+            ChargingEquipmentProfile,
+            VehicleEquipmentProfile,
+            VehicleModel,
+            Vehicle,
+            PassengerCarryingRequirementsView,
+            FacilityRequirement,
+            VehicleManoeuvringRequirement,
+            PassengerCarryingRequirement,
+            SimpleVehicleType,
+            VehicleType,
+            TransportType,
+            EquipmentPosition,
+            Level,
+            AllowedLineDirection,
+            DestinationDisplayVariant,
+            DestinationDisplay,
+            FlexibleLine,
+            Line,
+            DeliveryVariant,
+            Notice,
+            OperationalContext,
+            OnlineService,
+            VehicleRentalService,
+            VehicleSharingService,
+            ChauffeuredVehicleService,
+            CarPoolingService,
+            TaxiService,
+            AssistanceBookingService,
+            CateringService,
+            RetailService,
+            MoneyService,
+            HireService,
+            CommunicationService,
+            MeetingPointService,
+            LostPropertyService,
+            LeftLuggageService,
+            ComplaintsService,
+            CustomerService,
+            LuggageService,
+            AssistanceService,
+            TicketingService,
+            RetailDevice,
+            BatteryEquipment,
+            VehicleReleaseEquipment,
+            RefuellingEquipment,
+            VehicleChargingEquipment,
+            CycleStorageEquipment,
+            SeatingEquipment,
+            ShelterEquipment,
+            TrolleyStandEquipment,
+            WaitingRoomEquipment,
+            CrossingEquipment,
+            QueueingEquipment,
+            EntranceEquipment,
+            RampEquipment,
+            LiftEquipment,
+            TravelatorEquipment,
+            StaircaseEquipment,
+            EscalatorEquipment,
+            PlaceLighting,
+            RoughSurface,
+            GeneralSign,
+            HeadingSign,
+            PlaceSign,
+            SignEquipment,
+            PassengerInformationEquipment,
+            RubbishDisposalEquipment,
+            HelpPointEquipment,
+            PassengerSafetyEquipment,
+            SanitaryEquipment,
+            TicketValidatorEquipment,
+            TicketingEquipment,
+            WheelchairVehicleEquipment,
+            AccessVehicleEquipment,
+            ComplexFeature,
+            SimpleFeature,
+            SpatialFeature,
+            SingleJourneyPath,
+            ServicePattern,
+            NavigationPath,
+            ServiceJourneyPattern,
+            DeadRunJourneyPattern,
+            JourneyPattern,
+            FlexibleRoute,
+            Route,
+            TimingPattern,
+            Connection,
+            DefaultConnection,
+            SiteConnection,
+            Access,
+            Contact,
+            ControlCentre,
+            OperatingDepartment,
+            OrganisationalUnit,
+            Department,
+            OrganisationPart,
+            RetailConsortium,
+            ServicedOrganisation,
+            GeneralOrganisation,
+            ManagementAgent,
+            TravelAgent,
+            OtherOrganisation,
+            OnlineServiceOperator,
+            Authority,
+            Operator,
+            VehicleMeetingLink,
+            ServiceLink,
+            SitePathLink,
+            PathLink,
+            RouteLink,
+            TimingLink,
+            WireElement,
+            RoadElement,
+            RailwayElement,
+            ActivationLink,
+            VehicleMeetingPoint,
+            BorderPoint,
+            FareScheduledStopPoint,
+            ScheduledStopPoint,
+            PathJunction,
+            RoutePoint,
+            ParkingPoint,
+            GaragePoint,
+            ReliefPoint,
+            TimingPoint,
+            WireJunction,
+            RoadJunction,
+            RailwayJunction,
+            TrafficControlPoint,
+            BeaconPoint,
+            ActivationPoint,
+            Point2,
+            LineShape,
+            TopographicProjection,
+            ZoneProjection,
+            ComplexFeatureProjection,
+            LinkSequenceProjection,
+            LinkProjection,
+            PointProjection,
+            "CompositeFrame",
+            MobilityJourneyFrame,
+            MobilityServiceFrame,
+            SalesTransactionFrame,
+            FareFrame,
+            DriverScheduleFrame,
+            VehicleScheduleFrame,
+            ServiceFrame,
+            TimetableFrame,
+            SiteFrame,
+            InfrastructureFrame,
+            "GeneralFrame",
+            ResourceFrame,
+            ServiceCalendarFrame,
+            UicOperatingPeriod,
+            OperatingPeriod,
+            OperatingDay,
+            ServiceCalendar,
+            VehicleSharingPlaceAssignment,
+            VehiclePoolingPlaceAssignment,
+            TaxiServicePlaceAssignment,
+            VehicleServicePlaceAssignment1,
+            VehicleServicePlaceAssignment2,
+            DynamicVehicleMeetingPointAssignment,
+            VehicleMeetingPointAssignment1,
+            VehicleMeetingPointAssignment2,
+            VehicleAccessCredentialsAssignment,
+            DistributionAssignment,
+            SalesOfferPackageSubstitution,
+            CustomerPurchaseParameterAssignment,
+            SpecificParameterAssignment,
+            GenericParameterAssignmentInContext,
+            GenericParameterAssignment,
+            ValidityParameterAssignment,
+            AccessRightParameterAssignment,
+            JourneyAccounting,
+            TimeDemandTypeAssignment,
+            TransferRestriction,
+            ServiceExclusion,
+            DisplayAssignment,
+            OvertakingPossibility,
+            MeetingRestriction,
+            RestrictedManoeuvre,
+            VehicleTypeAtPoint,
+            ActivationAssignment,
+            SalesNoticeAssignment,
+            NoticeAssignment,
+            CheckConstraintThroughput,
+            CheckConstraintDelay,
+            CheckConstraint,
+            DayTypeAssignment,
+            GroupOfTimebands,
+            Timeband,
+            FareDayType,
+            OrganisationDayType,
+            DayType,
+            PoolOfVehicles,
+            GroupOfSingleJourneys,
+            GroupOfDistributionChannels,
+            GroupOfDistanceMatrixElements,
+            PriceGroup,
+            StandardFareTable,
+            FareTableInContext,
+            FareTable,
+            GroupOfServices,
+            RhythmicalJourneyGroup,
+            HeadwayJourneyGroup,
+            CrewBase,
+            GroupOfTimingLinks,
+            Network,
+            GroupOfLines,
+            GroupOfOperators,
+            GroupOfPlaces,
+            GroupOfLinkSequences,
+            MobilityServiceConstraintZone,
+            RoutingConstraintZone,
+            StopArea,
+            AccessZone,
+            VehicleMeetingPlace1,
+            VehiclePoolingMeetingPlace,
+            VehicleMeetingPlace2,
+            HailAndRideArea,
+            FlexibleArea,
+            FlexibleQuay,
+            FlexibleStopPlace,
+            Garage,
+            EquipmentPlace,
+            TaxiStand,
+            VehicleStoppingPlace,
+            BoardingPosition,
+            AccessSpace,
+            Quay,
+            PointOfInterestSpace,
+            ParkingComponent,
+            VehicleStoppingPosition,
+            VehiclePoolingParkingArea,
+            VehicleSharingParkingArea,
+            TaxiParkingArea,
+            ParkingArea,
+            MonitoredVehicleSharingParkingBay,
+            VehiclePoolingParkingBay,
+            VehicleSharingParkingBay,
+            ParkingBay,
+            PointOfInterestVehicleEntrance,
+            PointOfInterestEntrance,
+            ParkingPassengerEntrance,
+            ParkingEntranceForVehicles,
+            StopPlaceVehicleEntrance,
+            StopPlaceEntrance,
+            Entrance,
+            PointOfInterest,
+            Parking,
+            TaxiRank,
+            StopPlace,
+            ServiceSite,
+            TopographicPlace,
+            Country,
+            AddressablePlace,
+            PostalAddress,
+            RoadAddress,
+            TransportAdministrativeZone,
+            AdministrativeZone,
+            FareZone,
+            TariffZone,
+            GeneralZone,
+            Zone,
+            GroupOfLinks,
+            GroupOfPoints,
+            Layer,
+            GeneralGroupOfEntities,
+            ResponsibilitySet,
+            ValueSet,
+            TypeOfFleet,
+            ParkingBayStatus,
+            TypeOfMediumAccessDevice,
+            TypeOfMachineReadability,
+            TypeOfProof,
+            TypeOfConcession,
+            ChargingMoment,
+            TypeOfUsageParameter,
+            TypeOfFareTable,
+            TypeOfPricingRule,
+            PriceUnit,
+            TimingAlgorithmType,
+            PurposeOfJourneyPartition,
+            PointOfInterestClassification,
+            TypeOfParking,
+            TypeOfServiceFeature,
+            Direction,
+            TypeOfSecurityList,
+            PurposeOfEquipmentProfile,
+            TypeOfProductCategory,
+            TypeOfPaymentMethod,
+            ClassOfUse,
+            Submode,
+            OpenTransportMode,
+            TypeOfCodespaceAssignment,
+            TypeOfValidity,
+            PurposeOfGrouping,
+            Branding,
+            DataSource,
+            TypeOfMobilityService,
+            TypeOfRetailDevice,
+            CustomerAccountStatus,
+            TypeOfCustomerAccount,
+            TypeOfFareContractEntry,
+            TypeOfFareContract,
+            TypeOfTravelDocument,
+            TypeOfSalesOfferPackage,
+            TypeOfFareProduct,
+            TypeOfFareStructureElement,
+            TypeOfTariff,
+            TypeOfAccessRightAssignment,
+            TypeOfFareStructureFactor,
+            TypeOfFlexibleService,
+            TypeOfTimeDemandType,
+            TypeOfPassengerInformationEquipment,
+            TypeOfJourneyPattern,
+            TypeOfActivation,
+            TypeOfModeOfOperation,
+            TypeOfPlug,
+            TypeOfBatteryChemistry,
+            TypeOfLine,
+            TypeOfDeliveryVariant,
+            TypeOfNotice,
+            TypeOfCongestion,
+            TypeOfFacility,
+            TypeOfService,
+            TypeOfEquipment,
+            TypeOfFeature,
+            TypeOfLinkSequence,
+            TypeOfPlace,
+            TypeOfTransfer,
+            TypeOfOperation,
+            TypeOfOrganisationPart,
+            TypeOfOrganisation,
+            TypeOfZone,
+            TypeOfLink,
+            TypeOfPoint,
+            TypeOfProjection,
+            TypeOfFrame,
+            TypeOfResponsibilityRole,
+            TypeOfEntity,
+            TypeOfVersion,
+            PassingTimeView,
+            SimpleAvailabilityCondition,
+            ValidDuring,
+            AvailabilityCondition,
+            ValidityRuleParameter,
+            ValidityTrigger,
+            ValidityCondition,
+            Version,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -2309,6 +2948,11 @@ class EntitiesInVersionRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "SpatialFeature",
+                    "type": SpatialFeature,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "SingleJourneyPath",
                     "type": SingleJourneyPath,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3679,21 +4323,12 @@ class EntitiesInVersionRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class EntityEntityStructure(EntityStructure):
-    """Type for a ENTITY.
-
-    Will contain one or more versions of the appropriate ENTITY IN
-    VERSION.
-
-    :ivar versions: Versions of the ENTITY.
-    :ivar created: Date ENTITY was first created.
-    :ivar changed: Date ENTITY or version was last changed.
-    """
     class Meta:
         name = "Entity_EntityStructure"
 
@@ -3708,54 +4343,551 @@ class EntityEntityStructure(EntityStructure):
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     changed: Optional[XmlDateTime] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class EntityEntity(EntityEntityStructure):
-    """ENTITY.
-
-    Will contain one or more ENTITY IN VERSIONs.
-
-    :ivar id: Identifier of ENTITY.
-    :ivar name_of_class: Name of Class of the ENTITY. Allows reflection.
-        Fixed for each ENTITY type.
-    """
     class Meta:
         name = "Entity_Entity"
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
-    name_of_class: Optional[str] = field(
-        default=None,
-        metadata={
-            "name": "nameOfClass",
-            "type": "Attribute",
-        }
-    )
 
-
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GeneralFrameMembersRelStructure(ContainmentAggregationStructure):
-    """
-    A collection of one or more VERSION FRAME MEMBERS.
-    """
     class Meta:
         name = "generalFrameMembers_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            GeneralFrameMember,
+            Fleet,
+            IndividualPassengerInfo,
+            VehiclePoolingDriverInfo,
+            IndividualTraveller,
+            ParkingBayCondition,
+            RentalAvailability,
+            Smartcard,
+            EmvCard,
+            MobileDevice,
+            MediumAccessDevice,
+            ServiceAccessCode,
+            TravelDocument,
+            CustomerAccount,
+            SalesTransaction,
+            OfferedTravelSpecification,
+            RequestedTravelSpecification,
+            TravelSpecification1,
+            TravelSpecification2,
+            FareContractEntry,
+            FareContract,
+            Customer,
+            ParkingTariff,
+            GroupOfSalesOfferPackages,
+            DistributionChannel,
+            Tariff,
+            CustomerPurchasePackage,
+            SalesOfferPackage,
+            FulfilmentMethod,
+            CappingRule,
+            EntitlementProduct,
+            SupplementProduct,
+            PreassignedFareProduct,
+            AmountOfPriceUnitProduct,
+            CappedDiscountRight,
+            UsageDiscountRight,
+            ThirdPartyProduct,
+            SaleDiscountRight,
+            ServiceAccessRight1,
+            ServiceAccessRight2,
+            TimeInterval,
+            FareQuotaFactor,
+            FareDemandFactor,
+            QualityStructureFactor,
+            ControllableElement,
+            ValidableElement,
+            AdditionalDriverOption,
+            RentalOption,
+            RentalPenaltyPolicy,
+            VehiclePoolerProfile,
+            SalesOfferPackageEntitlementRequired,
+            SalesOfferPackageEntitlementGiven,
+            MinimumStay,
+            Interchanging,
+            Suspending,
+            UsageValidityPeriod,
+            FrequencyOfUse,
+            StepLimit,
+            Routing,
+            RoundTrip,
+            LuggageAllowance,
+            EntitlementRequired,
+            EntitlementGiven,
+            EligibilityChangePolicy,
+            CompanionProfile,
+            GroupTicket,
+            CommercialProfile,
+            UserProfile,
+            Subscribing,
+            PenaltyPolicy,
+            ChargingPolicy,
+            Cancelling,
+            Reserving,
+            PurchaseWindow,
+            Transferability,
+            Replacing,
+            Refunding,
+            Exchanging,
+            Reselling,
+            GeographicalInterval,
+            SeriesConstraint,
+            CustomerPurchasePackageElement,
+            ParkingChargeBand,
+            SalesOfferPackageElement,
+            FareStructureElement,
+            TimeStructureFactor,
+            TimeUnit,
+            DistanceMatrixElement,
+            GeographicalStructureFactor,
+            GeographicalUnit,
+            FareUnit,
+            FareInterval,
+            FareStructureFactor,
+            PricingService,
+            LimitingRuleInContext,
+            LimitingRule,
+            DiscountingRule,
+            PricingRule,
+            MonthValidityOffset,
+            Rounding,
+            PricingParameterSet,
+            ReliefOpportunity,
+            CourseOfJourneys,
+            VehicleServicePart,
+            VehicleService,
+            TrainBlockPart,
+            CompoundBlock,
+            BlockPart,
+            TrainBlock,
+            Block,
+            DriverTripTime,
+            DriverTrip,
+            DutyPart,
+            AccountableElement,
+            Duty,
+            TimeDemandProfile,
+            VehicleTypeStopAssignment,
+            TrainComponentLabelAssignment,
+            TrainNumber,
+            FlexibleServiceProperties,
+            JourneyPartCouple,
+            CoupledJourney,
+            JourneyPart,
+            InterchangeRule,
+            ServiceJourneyPatternInterchange,
+            ServiceJourneyInterchange,
+            DefaultInterchange,
+            JourneyMeeting,
+            SingleJourney,
+            DatedSpecialService,
+            NormalDatedVehicleJourney,
+            DatedVehicleJourney,
+            SpecialService,
+            DeadRun,
+            ServiceJourney,
+            DatedServiceJourney,
+            TemplateServiceJourney,
+            TemplateVehicleJourney,
+            VehicleJourney,
+            PointOfInterestClassificationHierarchy,
+            TimeDemandType,
+            VehicleJourneyStopAssignment,
+            FlexibleStopAssignment,
+            NavigationPathAssignment,
+            TrainStopAssignment,
+            DynamicStopAssignment,
+            PassengerStopAssignment,
+            LogicalDisplay,
+            LineNetwork,
+            ModeRestrictionAssessment,
+            RouteInstruction,
+            TrainComponent,
+            TrainElement,
+            CompoundTrain,
+            Train,
+            CycleModelProfile,
+            CarModelProfile,
+            Whitelist,
+            Blacklist,
+            SchematicMap,
+            PersonalModeOfOperation,
+            AlternativeModeOfOperation,
+            VehiclePooling,
+            VehicleSharing,
+            VehicleRental,
+            FlexibleOperation,
+            ScheduledOperation,
+            ChargingEquipmentProfile,
+            VehicleEquipmentProfile,
+            VehicleModel,
+            Vehicle,
+            PassengerCarryingRequirementsView,
+            FacilityRequirement,
+            VehicleManoeuvringRequirement,
+            PassengerCarryingRequirement,
+            SimpleVehicleType,
+            VehicleType,
+            TransportType,
+            EquipmentPosition,
+            Level,
+            AllowedLineDirection,
+            DestinationDisplayVariant,
+            DestinationDisplay,
+            FlexibleLine,
+            Line,
+            DeliveryVariant,
+            Notice,
+            OperationalContext,
+            OnlineService,
+            VehicleRentalService,
+            VehicleSharingService,
+            ChauffeuredVehicleService,
+            CarPoolingService,
+            TaxiService,
+            AssistanceBookingService,
+            CateringService,
+            RetailService,
+            MoneyService,
+            HireService,
+            CommunicationService,
+            MeetingPointService,
+            LostPropertyService,
+            LeftLuggageService,
+            ComplaintsService,
+            CustomerService,
+            LuggageService,
+            AssistanceService,
+            TicketingService,
+            RetailDevice,
+            BatteryEquipment,
+            VehicleReleaseEquipment,
+            RefuellingEquipment,
+            VehicleChargingEquipment,
+            CycleStorageEquipment,
+            SeatingEquipment,
+            ShelterEquipment,
+            TrolleyStandEquipment,
+            WaitingRoomEquipment,
+            CrossingEquipment,
+            QueueingEquipment,
+            EntranceEquipment,
+            RampEquipment,
+            LiftEquipment,
+            TravelatorEquipment,
+            StaircaseEquipment,
+            EscalatorEquipment,
+            PlaceLighting,
+            RoughSurface,
+            GeneralSign,
+            HeadingSign,
+            PlaceSign,
+            SignEquipment,
+            PassengerInformationEquipment,
+            RubbishDisposalEquipment,
+            HelpPointEquipment,
+            PassengerSafetyEquipment,
+            SanitaryEquipment,
+            TicketValidatorEquipment,
+            TicketingEquipment,
+            WheelchairVehicleEquipment,
+            AccessVehicleEquipment,
+            ComplexFeature,
+            SimpleFeature,
+            SpatialFeature,
+            SingleJourneyPath,
+            ServicePattern,
+            NavigationPath,
+            ServiceJourneyPattern,
+            DeadRunJourneyPattern,
+            JourneyPattern,
+            FlexibleRoute,
+            Route,
+            TimingPattern,
+            Connection,
+            DefaultConnection,
+            SiteConnection,
+            Access,
+            Contact,
+            ControlCentre,
+            OperatingDepartment,
+            OrganisationalUnit,
+            Department,
+            OrganisationPart,
+            RetailConsortium,
+            ServicedOrganisation,
+            GeneralOrganisation,
+            ManagementAgent,
+            TravelAgent,
+            OtherOrganisation,
+            OnlineServiceOperator,
+            Authority,
+            Operator,
+            VehicleMeetingLink,
+            ServiceLink,
+            SitePathLink,
+            PathLink,
+            RouteLink,
+            TimingLink,
+            WireElement,
+            RoadElement,
+            RailwayElement,
+            ActivationLink,
+            VehicleMeetingPoint,
+            BorderPoint,
+            FareScheduledStopPoint,
+            ScheduledStopPoint,
+            PathJunction,
+            RoutePoint,
+            ParkingPoint,
+            GaragePoint,
+            ReliefPoint,
+            TimingPoint,
+            WireJunction,
+            RoadJunction,
+            RailwayJunction,
+            TrafficControlPoint,
+            BeaconPoint,
+            ActivationPoint,
+            Point2,
+            LineShape,
+            TopographicProjection,
+            ZoneProjection,
+            ComplexFeatureProjection,
+            LinkSequenceProjection,
+            LinkProjection,
+            PointProjection,
+            "CompositeFrame",
+            MobilityJourneyFrame,
+            MobilityServiceFrame,
+            SalesTransactionFrame,
+            FareFrame,
+            DriverScheduleFrame,
+            VehicleScheduleFrame,
+            ServiceFrame,
+            TimetableFrame,
+            SiteFrame,
+            InfrastructureFrame,
+            "GeneralFrame",
+            ResourceFrame,
+            ServiceCalendarFrame,
+            UicOperatingPeriod,
+            OperatingPeriod,
+            OperatingDay,
+            ServiceCalendar,
+            VehicleSharingPlaceAssignment,
+            VehiclePoolingPlaceAssignment,
+            TaxiServicePlaceAssignment,
+            VehicleServicePlaceAssignment1,
+            VehicleServicePlaceAssignment2,
+            DynamicVehicleMeetingPointAssignment,
+            VehicleMeetingPointAssignment1,
+            VehicleMeetingPointAssignment2,
+            VehicleAccessCredentialsAssignment,
+            DistributionAssignment,
+            SalesOfferPackageSubstitution,
+            CustomerPurchaseParameterAssignment,
+            SpecificParameterAssignment,
+            GenericParameterAssignmentInContext,
+            GenericParameterAssignment,
+            ValidityParameterAssignment,
+            AccessRightParameterAssignment,
+            JourneyAccounting,
+            TimeDemandTypeAssignment,
+            TransferRestriction,
+            ServiceExclusion,
+            DisplayAssignment,
+            OvertakingPossibility,
+            MeetingRestriction,
+            RestrictedManoeuvre,
+            VehicleTypeAtPoint,
+            ActivationAssignment,
+            SalesNoticeAssignment,
+            NoticeAssignment,
+            CheckConstraintThroughput,
+            CheckConstraintDelay,
+            CheckConstraint,
+            DayTypeAssignment,
+            GroupOfTimebands,
+            Timeband,
+            FareDayType,
+            OrganisationDayType,
+            DayType,
+            PoolOfVehicles,
+            GroupOfSingleJourneys,
+            GroupOfDistributionChannels,
+            GroupOfDistanceMatrixElements,
+            PriceGroup,
+            StandardFareTable,
+            FareTableInContext,
+            FareTable,
+            GroupOfServices,
+            RhythmicalJourneyGroup,
+            HeadwayJourneyGroup,
+            CrewBase,
+            GroupOfTimingLinks,
+            Network,
+            GroupOfLines,
+            GroupOfOperators,
+            GroupOfPlaces,
+            GroupOfLinkSequences,
+            MobilityServiceConstraintZone,
+            RoutingConstraintZone,
+            StopArea,
+            AccessZone,
+            VehicleMeetingPlace1,
+            VehiclePoolingMeetingPlace,
+            VehicleMeetingPlace2,
+            HailAndRideArea,
+            FlexibleArea,
+            FlexibleQuay,
+            FlexibleStopPlace,
+            Garage,
+            EquipmentPlace,
+            TaxiStand,
+            VehicleStoppingPlace,
+            BoardingPosition,
+            AccessSpace,
+            Quay,
+            PointOfInterestSpace,
+            ParkingComponent,
+            VehicleStoppingPosition,
+            VehiclePoolingParkingArea,
+            VehicleSharingParkingArea,
+            TaxiParkingArea,
+            ParkingArea,
+            MonitoredVehicleSharingParkingBay,
+            VehiclePoolingParkingBay,
+            VehicleSharingParkingBay,
+            ParkingBay,
+            PointOfInterestVehicleEntrance,
+            PointOfInterestEntrance,
+            ParkingPassengerEntrance,
+            ParkingEntranceForVehicles,
+            StopPlaceVehicleEntrance,
+            StopPlaceEntrance,
+            Entrance,
+            PointOfInterest,
+            Parking,
+            TaxiRank,
+            StopPlace,
+            ServiceSite,
+            TopographicPlace,
+            Country,
+            AddressablePlace,
+            PostalAddress,
+            RoadAddress,
+            TransportAdministrativeZone,
+            AdministrativeZone,
+            FareZone,
+            TariffZone,
+            GeneralZone,
+            Zone,
+            GroupOfLinks,
+            GroupOfPoints,
+            Layer,
+            GeneralGroupOfEntities,
+            ResponsibilitySet,
+            ValueSet,
+            TypeOfFleet,
+            ParkingBayStatus,
+            TypeOfMediumAccessDevice,
+            TypeOfMachineReadability,
+            TypeOfProof,
+            TypeOfConcession,
+            ChargingMoment,
+            TypeOfUsageParameter,
+            TypeOfFareTable,
+            TypeOfPricingRule,
+            PriceUnit,
+            TimingAlgorithmType,
+            PurposeOfJourneyPartition,
+            PointOfInterestClassification,
+            TypeOfParking,
+            TypeOfServiceFeature,
+            Direction,
+            TypeOfSecurityList,
+            PurposeOfEquipmentProfile,
+            TypeOfProductCategory,
+            TypeOfPaymentMethod,
+            ClassOfUse,
+            Submode,
+            OpenTransportMode,
+            TypeOfCodespaceAssignment,
+            TypeOfValidity,
+            PurposeOfGrouping,
+            Branding,
+            DataSource,
+            TypeOfMobilityService,
+            TypeOfRetailDevice,
+            CustomerAccountStatus,
+            TypeOfCustomerAccount,
+            TypeOfFareContractEntry,
+            TypeOfFareContract,
+            TypeOfTravelDocument,
+            TypeOfSalesOfferPackage,
+            TypeOfFareProduct,
+            TypeOfFareStructureElement,
+            TypeOfTariff,
+            TypeOfAccessRightAssignment,
+            TypeOfFareStructureFactor,
+            TypeOfFlexibleService,
+            TypeOfTimeDemandType,
+            TypeOfPassengerInformationEquipment,
+            TypeOfJourneyPattern,
+            TypeOfActivation,
+            TypeOfModeOfOperation,
+            TypeOfPlug,
+            TypeOfBatteryChemistry,
+            TypeOfLine,
+            TypeOfDeliveryVariant,
+            TypeOfNotice,
+            TypeOfCongestion,
+            TypeOfFacility,
+            TypeOfService,
+            TypeOfEquipment,
+            TypeOfFeature,
+            TypeOfLinkSequence,
+            TypeOfPlace,
+            TypeOfTransfer,
+            TypeOfOperation,
+            TypeOfOrganisationPart,
+            TypeOfOrganisation,
+            TypeOfZone,
+            TypeOfLink,
+            TypeOfPoint,
+            TypeOfProjection,
+            TypeOfFrame,
+            TypeOfResponsibilityRole,
+            TypeOfEntity,
+            TypeOfVersion,
+            PassingTimeView,
+            SimpleAvailabilityCondition,
+            ValidDuring,
+            AvailabilityCondition,
+            ValidityRuleParameter,
+            ValidityTrigger,
+            ValidityCondition,
+            Version,
+            EntityEntity,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -4973,6 +6105,11 @@ class GeneralFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "SimpleFeature",
                     "type": SimpleFeature,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpatialFeature",
+                    "type": SpatialFeature,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -6351,17 +7488,12 @@ class GeneralFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GeneralVersionFrameStructure(CommonVersionFrameStructure):
-    """
-    Type for a GENERAL FRAME.
-
-    :ivar members: Entities in GENERAL FRAME.
-    """
     class Meta:
         name = "General_VersionFrameStructure"
 
@@ -6370,36 +7502,38 @@ class GeneralVersionFrameStructure(CommonVersionFrameStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GeneralFrame(GeneralVersionFrameStructure):
-    """A General purpose frame that can be used to exchange any NeTEx element.
-
-    Does not impose any structure.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
 
-
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FramesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a collection of FRAMEs.
-    """
     class Meta:
         name = "frames_RelStructure"
 
-    choice: List[object] = field(
+    common_frame: List[
+        Union[
+            MobilityJourneyFrame,
+            MobilityServiceFrame,
+            SalesTransactionFrame,
+            FareFrame,
+            DriverScheduleFrame,
+            VehicleScheduleFrame,
+            ServiceFrame,
+            TimetableFrame,
+            SiteFrame,
+            InfrastructureFrame,
+            GeneralFrame,
+            ResourceFrame,
+            ServiceCalendarFrame,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -6470,17 +7604,12 @@ class FramesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CompositeVersionFrameStructure(CommonVersionFrameStructure):
-    """
-    Type for a COMPOSITE FRAME.
-
-    :ivar frames: Content frames in COMPOSITE FRAME.
-    """
     class Meta:
         name = "Composite_VersionFrameStructure"
 
@@ -6489,24 +7618,11 @@ class CompositeVersionFrameStructure(CommonVersionFrameStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CompositeFrame(CompositeVersionFrameStructure):
-    """
-    A container VERSION FRAME that groups a set of content VERSION FRAMsE to which
-    the same VALIDITY CONDITIONs have been assigned.
-
-    :ivar id: identifier of Frame.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

@@ -1,35 +1,33 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.addressable_place_version_structure import AddressablePlaceVersionStructure
-from netex.authority_ref import AuthorityRef
-from netex.contact_structure import ContactStructure
-from netex.crew_base_refs_rel_structure import CrewBaseRefsRelStructure
-from netex.garage_points_rel_structure import GaragePointsRelStructure
-from netex.general_organisation_ref import GeneralOrganisationRef
-from netex.management_agent_ref import ManagementAgentRef
-from netex.online_service_operator_ref import OnlineServiceOperatorRef
-from netex.operator_ref import OperatorRef
-from netex.organisation_ref import OrganisationRef
-from netex.other_organisation_ref import OtherOrganisationRef
-from netex.retail_consortium_ref import RetailConsortiumRef
-from netex.serviced_organisation_ref import ServicedOrganisationRef
-from netex.transport_organisation_refs_rel_structure import TransportOrganisationRefsRelStructure
-from netex.travel_agent_ref import TravelAgentRef
+from typing import Optional, Union
+from .addressable_place_version_structure import (
+    AddressablePlaceVersionStructure,
+)
+from .authority_ref import AuthorityRef
+from .contact_structure import ContactStructure
+from .crew_base_refs_rel_structure import CrewBaseRefsRelStructure
+from .garage_points_rel_structure import GaragePointsRelStructure
+from .general_organisation_ref import GeneralOrganisationRef
+from .management_agent_ref import ManagementAgentRef
+from .online_service_operator_ref import OnlineServiceOperatorRef
+from .operator_ref import OperatorRef
+from .organisation_ref import OrganisationRef
+from .other_organisation_ref import OtherOrganisationRef
+from .retail_consortium_ref import RetailConsortiumRef
+from .serviced_organisation_ref import ServicedOrganisationRef
+from .transport_organisation_refs_rel_structure import (
+    TransportOrganisationRefsRelStructure,
+)
+from .travel_agent_ref import TravelAgentRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GarageVersionStructure(AddressablePlaceVersionStructure):
-    """
-    Type for GARAGE.
-
-    :ivar contact_details: Contact details for GARAGE.
-    :ivar choice:
-    :ivar operators: OPERATORs assoicated with GARAGE.
-    :ivar garage_points: GARAGE POINTsin GARAGE
-    :ivar crew_bases: CREW BASEs asspicated with GARAGE.
-    """
     class Meta:
         name = "Garage_VersionStructure"
 
@@ -39,9 +37,22 @@ class GarageVersionStructure(AddressablePlaceVersionStructure):
             "name": "ContactDetails",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
+        Union[
+            RetailConsortiumRef,
+            OnlineServiceOperatorRef,
+            GeneralOrganisationRef,
+            ManagementAgentRef,
+            ServicedOrganisationRef,
+            TravelAgentRef,
+            OtherOrganisationRef,
+            AuthorityRef,
+            OperatorRef,
+            OrganisationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -97,14 +108,14 @@ class GarageVersionStructure(AddressablePlaceVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     operators: Optional[TransportOrganisationRefsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     garage_points: Optional[GaragePointsRelStructure] = field(
         default=None,
@@ -112,7 +123,7 @@ class GarageVersionStructure(AddressablePlaceVersionStructure):
             "name": "garagePoints",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     crew_bases: Optional[CrewBaseRefsRelStructure] = field(
         default=None,
@@ -120,5 +131,5 @@ class GarageVersionStructure(AddressablePlaceVersionStructure):
             "name": "crewBases",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

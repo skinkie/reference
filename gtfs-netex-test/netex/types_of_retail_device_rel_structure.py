@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.type_of_retail_device import TypeOfRetailDevice
-from netex.type_of_retail_device_ref import TypeOfRetailDeviceRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .type_of_retail_device import TypeOfRetailDevice
+from .type_of_retail_device_ref import TypeOfRetailDeviceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypesOfRetailDeviceRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of TYPE OF RETAIL DEVICEs.
-    """
     class Meta:
         name = "typesOfRetailDevice_RelStructure"
 
-    type_of_retail_device_ref_or_type_of_retail_device: List[object] = field(
+    type_of_retail_device_ref_or_type_of_retail_device: List[
+        Union[TypeOfRetailDeviceRef, TypeOfRetailDevice]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class TypesOfRetailDeviceRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

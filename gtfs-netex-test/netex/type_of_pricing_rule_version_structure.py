@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.tax_category_enumeration import TaxCategoryEnumeration
-from netex.type_of_value_version_structure import TypeOfValueVersionStructure
+from .tax_category_enumeration import TaxCategoryEnumeration
+from .type_of_value_version_structure import TypeOfValueVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfPricingRuleVersionStructure(TypeOfValueVersionStructure):
-    """
-    Type for TYPE OF PRICING RULE.
-
-    :ivar tax_category: Tax category associated with pricing rule.
-    """
     class Meta:
         name = "TypeOfPricingRule_VersionStructure"
 
@@ -22,5 +20,5 @@ class TypeOfPricingRuleVersionStructure(TypeOfValueVersionStructure):
             "name": "TaxCategory",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

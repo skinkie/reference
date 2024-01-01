@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.timeband_ref_structure import TimebandRefStructure
+from .timeband_ref_structure import TimebandRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimebandRef(TimebandRefStructure):
-    """
-    Reference to a TIME BAND.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

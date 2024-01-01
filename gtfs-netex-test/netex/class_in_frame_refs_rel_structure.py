@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.class_in_frame_ref import ClassInFrameRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .class_in_frame_ref import ClassInFrameRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ClassInFrameRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of Class Filter references.
-    """
     class Meta:
         name = "ClassInFrameRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class ClassInFrameRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

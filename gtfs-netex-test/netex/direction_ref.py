@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.direction_ref_structure import DirectionRefStructure
+from .direction_ref_structure import DirectionRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DirectionRef(DirectionRefStructure):
-    """
-    Reference to a DIRECTION.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

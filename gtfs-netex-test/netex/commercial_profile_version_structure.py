@@ -1,23 +1,18 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from netex.general_group_of_entities_ref import GeneralGroupOfEntitiesRef
-from netex.type_of_concession_ref import TypeOfConcessionRef
-from netex.usage_parameter_version_structure import UsageParameterVersionStructure
+from .general_group_of_entities_ref import GeneralGroupOfEntitiesRef
+from .type_of_concession_ref import TypeOfConcessionRef
+from .usage_parameter_version_structure import UsageParameterVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CommercialProfileVersionStructure(UsageParameterVersionStructure):
-    """
-    Type for COMMERCIAL PROFILE.
-
-    :ivar type_of_concession_ref:
-    :ivar consumption_amount: Financial Factor.
-    :ivar consumption_units: Consumption Factor.
-    :ivar general_group_of_entities_ref:
-    """
     class Meta:
         name = "CommercialProfile_VersionStructure"
 
@@ -27,7 +22,7 @@ class CommercialProfileVersionStructure(UsageParameterVersionStructure):
             "name": "TypeOfConcessionRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     consumption_amount: Optional[Decimal] = field(
         default=None,
@@ -35,7 +30,7 @@ class CommercialProfileVersionStructure(UsageParameterVersionStructure):
             "name": "ConsumptionAmount",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     consumption_units: Optional[Decimal] = field(
         default=None,
@@ -43,7 +38,7 @@ class CommercialProfileVersionStructure(UsageParameterVersionStructure):
             "name": "ConsumptionUnits",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     general_group_of_entities_ref: Optional[GeneralGroupOfEntitiesRef] = field(
         default=None,
@@ -51,5 +46,5 @@ class CommercialProfileVersionStructure(UsageParameterVersionStructure):
             "name": "GeneralGroupOfEntitiesRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

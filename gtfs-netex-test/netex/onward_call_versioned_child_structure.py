@@ -1,17 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.call_versioned_child_structure import CallVersionedChildStructure
-from netex.estimated_passing_time_view import EstimatedPassingTimeView
-from netex.target_passing_time_view import TargetPassingTimeView
+from .call_versioned_child_structure import CallVersionedChildStructure
+from .estimated_passing_time_view import EstimatedPassingTimeView
+from .target_passing_time_view import TargetPassingTimeView
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OnwardCallVersionedChildStructure(CallVersionedChildStructure):
-    """
-    Data type for Onward  CALL.
-    """
     class Meta:
         name = "OnwardCall_VersionedChildStructure"
 
@@ -21,7 +21,7 @@ class OnwardCallVersionedChildStructure(CallVersionedChildStructure):
             "name": "TargetPassingTimeView",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     estimated_passing_time_view: Optional[EstimatedPassingTimeView] = field(
         default=None,
@@ -29,5 +29,5 @@ class OnwardCallVersionedChildStructure(CallVersionedChildStructure):
             "name": "EstimatedPassingTimeView",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,13 +1,18 @@
 from dataclasses import dataclass
-from netex.onward_timing_link_derived_view_structure import OnwardTimingLinkDerivedViewStructure
+from .onward_timing_link_derived_view_structure import (
+    OnwardTimingLinkDerivedViewStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OnwardTimingLinkView(OnwardTimingLinkDerivedViewStructure):
-    """
-    Information about onwards TIMING LINK.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
+
+    branding_ref: RestrictedVar
+    timing_link_in_journey_pattern_ref: RestrictedVar

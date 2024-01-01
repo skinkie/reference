@@ -1,23 +1,32 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.parking_bay_ref import ParkingBayRef
-from netex.vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
-from netex.vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+from typing import List, Union
+from .monitored_vehicle_sharing_parking_bay_ref import (
+    MonitoredVehicleSharingParkingBayRef,
+)
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .parking_bay_ref import ParkingBayRef
+from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
+from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingBayRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a collection of one or more a references to a PARKING BAY.
-    """
     class Meta:
         name = "parkingBayRefs_RelStructure"
 
-    choice: List[object] = field(
+    parking_bay_ref_or_vehicle_sharing_parking_bay_ref: List[
+        Union[
+            VehiclePoolingParkingBayRef,
+            MonitoredVehicleSharingParkingBayRef,
+            VehicleSharingParkingBayRef,
+            ParkingBayRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +52,5 @@ class ParkingBayRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

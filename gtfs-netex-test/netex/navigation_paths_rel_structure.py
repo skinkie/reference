@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.navigation_path import NavigationPath
-from netex.navigation_path_ref import NavigationPathRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .navigation_path import NavigationPath
+from .navigation_path_ref import NavigationPathRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NavigationPathsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of NAVIGATION PATHs.
-    """
     class Meta:
         name = "navigationPaths_RelStructure"
 
-    navigation_path_ref_or_navigation_path: List[object] = field(
+    navigation_path_ref_or_navigation_path: List[
+        Union[NavigationPathRef, NavigationPath]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class NavigationPathsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

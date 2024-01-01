@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class DirectionOfUseEnumeration(Enum):
-    """
-    Allowed values for direction of use.
-    """
     UP = "up"
     DOWN = "down"
     BOTH = "both"

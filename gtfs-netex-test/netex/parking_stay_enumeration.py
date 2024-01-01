@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ParkingStayEnumeration(Enum):
-    """
-    Allowed values for PARKING Stay Term types.
-    """
     SHORT_STAY = "shortStay"
     MID_TERM = "midTerm"
     LONG_TERM = "longTerm"

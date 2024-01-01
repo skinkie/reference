@@ -1,51 +1,63 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.activation_point_ref import ActivationPointRef
-from netex.beacon_point_ref import BeaconPointRef
-from netex.border_point_ref import BorderPointRef
-from netex.destination_display_ref import DestinationDisplayRef
-from netex.destination_display_view import DestinationDisplayView
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.flexible_point_properties import FlexiblePointProperties
-from netex.garage_point_ref import GaragePointRef
-from netex.notice_assignments_rel_structure import NoticeAssignmentsRelStructure
-from netex.parking_point_ref import ParkingPointRef
-from netex.point_in_link_sequence_versioned_child_structure import PointInLinkSequenceVersionedChildStructure
-from netex.point_ref import PointRef
-from netex.railway_point_ref import RailwayPointRef
-from netex.relief_point_ref import ReliefPointRef
-from netex.road_point_ref import RoadPointRef
-from netex.route_point_ref import RoutePointRef
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
-from netex.timing_point_ref import TimingPointRef
-from netex.traffic_control_point_ref import TrafficControlPointRef
-from netex.vehicle_meeting_point_ref import VehicleMeetingPointRef
-from netex.vias_rel_structure import ViasRelStructure
-from netex.wire_point_ref import WirePointRef
+from typing import Optional, Union
+from .activation_point_ref import ActivationPointRef
+from .beacon_point_ref import BeaconPointRef
+from .border_point_ref import BorderPointRef
+from .destination_display_ref import DestinationDisplayRef
+from .destination_display_view import DestinationDisplayView
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .flexible_point_properties import FlexiblePointProperties
+from .garage_point_ref import GaragePointRef
+from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
+from .parking_point_ref import ParkingPointRef
+from .point_in_link_sequence_versioned_child_structure import (
+    PointInLinkSequenceVersionedChildStructure,
+)
+from .point_ref import PointRef
+from .railway_point_ref import RailwayPointRef
+from .relief_point_ref import ReliefPointRef
+from .road_point_ref import RoadPointRef
+from .route_point_ref import RoutePointRef
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+from .timing_point_ref import TimingPointRef
+from .traffic_control_point_ref import TrafficControlPointRef
+from .vehicle_meeting_point_ref import VehicleMeetingPointRef
+from .vias_rel_structure import ViasRelStructure
+from .wire_point_ref import WirePointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class PointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersionedChildStructure):
-    """
-    Type for POINT IN JOURNEY PATTERN.
-
-    :ivar choice_1:
-    :ivar destination_display_ref_or_destination_display_view:
-    :ivar vias: Destinations that the SERVICE goes via.
-    :ivar flexible_point_properties:
-    :ivar change_of_destination_display: Whether DESTINATION DISPLAY
-        should be updated at this point. If DESTINATION NAME value is
-        different from Previous stop this is implicit.
-    :ivar change_of_service_requirements: Whether Service Requirements
-        Change at this point.
-    :ivar notice_assignments: NOTICEs for POINT IN JOURNEY PATTERN.
-    """
+@dataclass(kw_only=True)
+class PointInJourneyPatternVersionedChildStructure(
+    PointInLinkSequenceVersionedChildStructure
+):
     class Meta:
         name = "PointInJourneyPattern_VersionedChildStructure"
 
-    choice_1: Optional[object] = field(
+    choice_1: Optional[
+        Union[
+            VehicleMeetingPointRef,
+            WirePointRef,
+            RoadPointRef,
+            RailwayPointRef,
+            TrafficControlPointRef,
+            BeaconPointRef,
+            ActivationPointRef,
+            BorderPointRef,
+            FareScheduledStopPointRef,
+            ScheduledStopPointRef,
+            GaragePointRef,
+            ParkingPointRef,
+            ReliefPointRef,
+            TimingPointRef,
+            RoutePointRef,
+            PointRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -131,9 +143,11 @@ class PointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersionedC
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    destination_display_ref_or_destination_display_view: Optional[object] = field(
+    destination_display_ref_or_destination_display_view: Optional[
+        Union[DestinationDisplayRef, DestinationDisplayView]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -149,14 +163,14 @@ class PointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersionedC
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     vias: Optional[ViasRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     flexible_point_properties: Optional[FlexiblePointProperties] = field(
         default=None,
@@ -164,7 +178,7 @@ class PointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersionedC
             "name": "FlexiblePointProperties",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     change_of_destination_display: Optional[bool] = field(
         default=None,
@@ -172,7 +186,7 @@ class PointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersionedC
             "name": "ChangeOfDestinationDisplay",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     change_of_service_requirements: Optional[bool] = field(
         default=None,
@@ -180,7 +194,7 @@ class PointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersionedC
             "name": "ChangeOfServiceRequirements",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     notice_assignments: Optional[NoticeAssignmentsRelStructure] = field(
         default=None,
@@ -188,5 +202,5 @@ class PointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersionedC
             "name": "noticeAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

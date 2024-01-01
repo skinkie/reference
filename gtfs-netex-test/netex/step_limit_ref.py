@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.step_limit_ref_structure import StepLimitRefStructure
+from .step_limit_ref_structure import StepLimitRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StepLimitRef(StepLimitRefStructure):
-    """
-    Reference to a STEP LIMIT PARAMETER.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -1,39 +1,48 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from netex.address_ref import AddressRef
-from netex.boarding_position_ref import BoardingPositionRef
-from netex.parking_ref import ParkingRef
-from netex.point_of_interest_ref import PointOfInterestRef
-from netex.postal_address_ref import PostalAddressRef
-from netex.quay_ref import QuayRef
-from netex.road_address_ref import RoadAddressRef
-from netex.scheduled_stop_point_view import ScheduledStopPointView
-from netex.service_site_ref import ServiceSiteRef
-from netex.site_ref import SiteRef
-from netex.stop_place_ref import StopPlaceRef
-from netex.tariff_zone_ref import TariffZoneRef
-from netex.taxi_rank_ref import TaxiRankRef
-from netex.taxi_stand_ref import TaxiStandRef
-from netex.topographic_place_view import TopographicPlaceView
-from netex.vehicle_meeting_point_ref import VehicleMeetingPointRef
+from typing import List, Optional, Union
+from .address_ref import AddressRef
+from .boarding_position_ref import BoardingPositionRef
+from .parking_ref import ParkingRef
+from .point_of_interest_ref import PointOfInterestRef
+from .postal_address_ref import PostalAddressRef
+from .quay_ref import QuayRef
+from .road_address_ref import RoadAddressRef
+from .scheduled_stop_point_view import ScheduledStopPointView
+from .service_site_ref import ServiceSiteRef
+from .site_ref import SiteRef
+from .stop_place_ref import StopPlaceRef
+from .tariff_zone_ref import TariffZoneRef
+from .taxi_rank_ref import TaxiRankRef
+from .taxi_stand_ref import TaxiStandRef
+from .topographic_place_view import TopographicPlaceView
+from .vehicle_meeting_point_ref import VehicleMeetingPointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TravelSpecificationSummaryEndpointStructure:
-    """
-    Origin or destnation elements for TRAVEL SPECIFICATION Summary View.
-    """
     topographic_place_view: Optional[TopographicPlaceView] = field(
         default=None,
         metadata={
             "name": "TopographicPlaceView",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    stop_place_ref_or_site_ref: Optional[
+        Union[
+            TaxiRankRef,
+            StopPlaceRef,
+            ParkingRef,
+            PointOfInterestRef,
+            ServiceSiteRef,
+            SiteRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -69,9 +78,11 @@ class TravelSpecificationSummaryEndpointStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    postal_address_ref_or_road_address_ref_or_address_ref: Optional[object] = field(
+    address_ref: Optional[
+        Union[PostalAddressRef, RoadAddressRef, AddressRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -92,7 +103,7 @@ class TravelSpecificationSummaryEndpointStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     scheduled_stop_point_view: Optional[ScheduledStopPointView] = field(
         default=None,
@@ -100,7 +111,7 @@ class TravelSpecificationSummaryEndpointStructure:
             "name": "ScheduledStopPointView",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     vehicle_meeting_point_ref: Optional[VehicleMeetingPointRef] = field(
         default=None,
@@ -108,9 +119,9 @@ class TravelSpecificationSummaryEndpointStructure:
             "name": "VehicleMeetingPointRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    taxi_stand_ref_or_quay_ref: Optional[object] = field(
+    quay_ref: Optional[Union[TaxiStandRef, QuayRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -126,7 +137,7 @@ class TravelSpecificationSummaryEndpointStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     boarding_position_ref: Optional[BoardingPositionRef] = field(
         default=None,
@@ -134,7 +145,7 @@ class TravelSpecificationSummaryEndpointStructure:
             "name": "BoardingPositionRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     tariff_zone_ref: List[TariffZoneRef] = field(
         default_factory=list,
@@ -142,5 +153,5 @@ class TravelSpecificationSummaryEndpointStructure:
             "name": "TariffZoneRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

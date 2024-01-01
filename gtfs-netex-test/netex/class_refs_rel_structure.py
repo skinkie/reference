@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.class_in_frame_ref import ClassInFrameRef
-from netex.class_ref import ClassRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from typing import List, Union
+from .class_in_frame_ref import ClassInFrameRef
+from .class_ref import ClassRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ClassRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of Classes.
-    """
     class Meta:
         name = "classRefs_RelStructure"
 
-    class_in_frame_ref_or_class_ref: List[object] = field(
+    class_ref: List[Union[ClassInFrameRef, ClassRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class ClassRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

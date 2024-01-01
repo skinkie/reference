@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.individual_traveller import IndividualTraveller
+from .frame_containment_structure import FrameContainmentStructure
+from .individual_traveller import IndividualTraveller
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class IndividualTravellersInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of INDIVIDUAL TRAVELLERs.
-    """
     class Meta:
         name = "individualTravellersInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class IndividualTravellersInFrameRelStructure(FrameContainmentStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

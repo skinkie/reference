@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.cell_versioned_child_structure import PriceGroup
-from netex.frame_containment_structure import FrameContainmentStructure
+from .cell_versioned_child_structure import PriceGroup
+from .frame_containment_structure import FrameContainmentStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FarePricesInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of FARE Prices.
-    """
     class Meta:
         name = "farePricesInFrame_RelStructure"
 
@@ -20,5 +20,5 @@ class FarePricesInFrameRelStructure(FrameContainmentStructure):
             "name": "PriceGroup",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

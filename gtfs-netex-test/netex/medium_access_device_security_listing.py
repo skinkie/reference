@@ -1,23 +1,17 @@
-from dataclasses import dataclass, field
-from netex.medium_access_device_security_listing_versioned_child_structure import MediumAccessDeviceSecurityListingVersionedChildStructure
+from dataclasses import dataclass
+from .medium_access_device_security_listing_versioned_child_structure import (
+    MediumAccessDeviceSecurityListingVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class MediumAccessDeviceSecurityListing(MediumAccessDeviceSecurityListingVersionedChildStructure):
-    """A listing of a MEDIUM ACCESS DEVICE on a SECURITY LIST.
-
-    +v1.2.2
-
-    :ivar id: Identifier of ENTITY.
-    """
+@dataclass(kw_only=True)
+class MediumAccessDeviceSecurityListing(
+    MediumAccessDeviceSecurityListingVersionedChildStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

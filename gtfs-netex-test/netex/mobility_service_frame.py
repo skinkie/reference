@@ -1,22 +1,15 @@
-from dataclasses import dataclass, field
-from netex.mobility_service_version_frame_structure import MobilityServiceVersionFrameStructure
+from dataclasses import dataclass
+from .mobility_service_version_frame_structure import (
+    MobilityServiceVersionFrameStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MobilityServiceFrame(MobilityServiceVersionFrameStructure):
-    """A coherent set of MOBILITY SERVICE data to which the same frame VALIDITY
-    CONDITIONs have been assigned.
-
-    +v1.2.2
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

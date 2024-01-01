@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.entrance_ref_structure import EntranceRefStructure
+from .entrance_ref_structure import EntranceRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingEntranceRefStructure(EntranceRefStructure):
-    """
-    Type for reference to a PARKING ENTRANCE.
-    """
+    value: RestrictedVar

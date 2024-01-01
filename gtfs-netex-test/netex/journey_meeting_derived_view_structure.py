@@ -1,69 +1,35 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Union
 from xsdata.models.datatype import XmlDuration, XmlTime
-from netex.connecting_journey_view import ConnectingJourneyView
-from netex.connection_certainty_enumeration import ConnectionCertaintyEnumeration
-from netex.connection_ref_structure import ConnectionRefStructure
-from netex.dated_special_service_ref import DatedSpecialServiceRef
-from netex.dated_vehicle_journey_ref import DatedVehicleJourneyRef
-from netex.dead_run_ref import DeadRunRef
-from netex.derived_view_structure import DerivedViewStructure
-from netex.flexible_line_ref import FlexibleLineRef
-from netex.journey_meeting_ref import JourneyMeetingRef
-from netex.line_derived_view_structure import LineDerivedViewStructure
-from netex.line_ref import LineRef
-from netex.multilingual_string import MultilingualString
-from netex.reason_for_meeting_enumeration import ReasonForMeetingEnumeration
-from netex.scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
-from netex.service_journey_ref import ServiceJourneyRef
-from netex.single_journey_ref import SingleJourneyRef
-from netex.special_service_ref import SpecialServiceRef
-from netex.template_service_journey_ref import TemplateServiceJourneyRef
-from netex.transfer_duration_structure import TransferDurationStructure
-from netex.vehicle_journey_ref import VehicleJourneyRef
+from .connecting_journey_view import ConnectingJourneyView
+from .connection_certainty_enumeration import ConnectionCertaintyEnumeration
+from .connection_ref_structure import ConnectionRefStructure
+from .dated_special_service_ref import DatedSpecialServiceRef
+from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
+from .dead_run_ref import DeadRunRef
+from .derived_view_structure import DerivedViewStructure
+from .flexible_line_ref import FlexibleLineRef
+from .journey_meeting_ref import JourneyMeetingRef
+from .line_derived_view_structure import LineDerivedViewStructure
+from .line_ref import LineRef
+from .multilingual_string import MultilingualString
+from .reason_for_meeting_enumeration import ReasonForMeetingEnumeration
+from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
+from .service_journey_ref import ServiceJourneyRef
+from .single_journey_ref import SingleJourneyRef
+from .special_service_ref import SpecialServiceRef
+from .template_service_journey_ref import TemplateServiceJourneyRef
+from .transfer_duration_structure import TransferDurationStructure
+from .vehicle_journey_ref import VehicleJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
-    """
-    Type for JOURNEY MEETING VIEW.
-
-    :ivar journey_meeting_ref:
-    :ivar description: Description of JOURNEY MEETING.
-    :ivar earliest_time: Earliest time for JOURNEY MEETING.
-    :ivar earliest_time_day_offset: Earliest time Day Offset from start
-        of FROM JOURNEY.
-    :ivar latest_time: Latest time for JOURNEY MEETING.
-    :ivar latest_time_day_offset: Latest time Day Offset from start of
-        FROM JOURNEY.
-    :ivar reason: Reason for JOURNEY MEETING.
-    :ivar maximum_wait_time: Maximum wait time for JOURNEY MEETING.
-    :ivar connection_ref: Reference to CONNECTION at which JOURNEY
-        MEETING takes place.
-    :ivar connecting_stop_point_ref: SCHEDULED STOP POINT  to which
-        JOURNEY MEETING connects if different from current stop
-        interchange.
-    :ivar connecting_stop_point_name: Name of CONNETCING STOP POINT.
-    :ivar choice:
-    :ivar flexible_line_ref_or_line_ref_or_connecting_line_view:
-    :ivar stay_seated: Whether the passenger can remain in vehicle (i.e.
-        block linking). Default is false: the passenger must change
-        vehicles for this INTERCHANGE. Default is false.
-    :ivar cross_border: Whether INTERCHANGE  involves crossing an
-        international border. Default is false.
-    :ivar planned: Whether INTERCHANGE is planned in a timetable.
-        Default is true.
-    :ivar guaranteed: Whether INTERCHANGE is guaranteed. Default is
-        false.
-    :ivar advertised: Whether INTERCHANGE is advertised as an
-        interchange. Default is true.
-    :ivar controlled: Whether INTERCHANGE  is controlled in real-time.
-        Default is true.
-    :ivar connection_certainty: Nature of gurantee to  conenction.
-    :ivar transfer_duration: Timings for the transfer.
-    """
     class Meta:
         name = "JourneyMeeting_DerivedViewStructure"
 
@@ -73,7 +39,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "JourneyMeetingRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -81,7 +47,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     earliest_time: Optional[XmlTime] = field(
         default=None,
@@ -89,7 +55,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "EarliestTime",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     earliest_time_day_offset: Optional[int] = field(
         default=None,
@@ -97,7 +63,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "EarliestTimeDayOffset",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     latest_time: Optional[XmlTime] = field(
         default=None,
@@ -105,7 +71,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "LatestTime",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     latest_time_day_offset: Optional[int] = field(
         default=None,
@@ -113,7 +79,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "LatestTimeDayOffset",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     reason: Optional[ReasonForMeetingEnumeration] = field(
         default=None,
@@ -121,7 +87,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "Reason",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     maximum_wait_time: Optional[XmlDuration] = field(
         default=None,
@@ -129,7 +95,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "MaximumWaitTime",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     connection_ref: Optional[ConnectionRefStructure] = field(
         default=None,
@@ -137,7 +103,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "ConnectionRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     connecting_stop_point_ref: List[ScheduledStopPointRefStructure] = field(
         default_factory=list,
@@ -145,7 +111,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "ConnectingStopPointRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     connecting_stop_point_name: List[MultilingualString] = field(
         default_factory=list,
@@ -153,9 +119,21 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "ConnectingStopPointName",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            SingleJourneyRef,
+            DatedVehicleJourneyRef,
+            DatedSpecialServiceRef,
+            SpecialServiceRef,
+            TemplateServiceJourneyRef,
+            ServiceJourneyRef,
+            DeadRunRef,
+            VehicleJourneyRef,
+            ConnectingJourneyView,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -206,9 +184,11 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    flexible_line_ref_or_line_ref_or_connecting_line_view: Optional[object] = field(
+    flexible_line_ref_or_line_ref_or_connecting_line_view: Optional[
+        Union[FlexibleLineRef, LineRef, LineDerivedViewStructure]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -229,7 +209,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     stay_seated: Optional[bool] = field(
         default=None,
@@ -237,7 +217,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "StaySeated",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     cross_border: Optional[bool] = field(
         default=None,
@@ -245,7 +225,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "CrossBorder",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     planned: Optional[bool] = field(
         default=None,
@@ -253,7 +233,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "Planned",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     guaranteed: Optional[bool] = field(
         default=None,
@@ -261,7 +241,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "Guaranteed",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     advertised: Optional[bool] = field(
         default=None,
@@ -269,7 +249,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "Advertised",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     controlled: Optional[bool] = field(
         default=None,
@@ -277,7 +257,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "Controlled",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     connection_certainty: Optional[ConnectionCertaintyEnumeration] = field(
         default=None,
@@ -285,7 +265,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "ConnectionCertainty",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     transfer_duration: Optional[TransferDurationStructure] = field(
         default=None,
@@ -293,5 +273,5 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "name": "TransferDuration",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

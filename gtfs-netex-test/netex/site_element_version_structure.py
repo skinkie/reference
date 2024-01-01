@@ -1,50 +1,27 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
-from netex.access_mode_enumeration import AccessModeEnumeration
-from netex.accessibility_assessment import AccessibilityAssessment
-from netex.addressable_place_version_structure import AddressablePlaceVersionStructure
-from netex.alternative_names_rel_structure import AlternativeNamesRelStructure
-from netex.covered_enumeration import CoveredEnumeration
-from netex.gated_enumeration import GatedEnumeration
-from netex.lighting_enumeration import LightingEnumeration
-from netex.multilingual_string import MultilingualString
-from netex.presentation_structure import PresentationStructure
-from netex.public_use_enumeration import PublicUseEnumeration
-from netex.site_facility_sets_rel_structure import SiteFacilitySetsRelStructure
+from .access_mode_enumeration import AccessModeEnumeration
+from .accessibility_assessment import AccessibilityAssessment
+from .addressable_place_version_structure import (
+    AddressablePlaceVersionStructure,
+)
+from .alternative_names_rel_structure import AlternativeNamesRelStructure
+from .covered_enumeration import CoveredEnumeration
+from .gated_enumeration import GatedEnumeration
+from .lighting_enumeration import LightingEnumeration
+from .multilingual_string import MultilingualString
+from .presentation_structure import PresentationStructure
+from .public_use_enumeration import PublicUseEnumeration
+from .site_facility_sets_rel_structure import SiteFacilitySetsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SiteElementVersionStructure(AddressablePlaceVersionStructure):
-    """
-    Type for a SITE ELEMENT.
-
-    :ivar accessibility_assessment:
-    :ivar access_modes: Allowed MODEs to access SITE ELEMENT.
-    :ivar name_suffix: Further suffix to name that may be used in some
-        contexts.
-    :ivar alternative_names: Alternative names.
-    :ivar cross_road: Name of a Road that crosses the Road the street
-        near the SITE ELEMENT that can be used to describe its relative
-        location.
-    :ivar landmark: Name of a Landmark near the SITE ELEMENT that can be
-        used to describe its relative location.
-    :ivar public_use: Whether the component is available for public use
-        or is restricted.
-    :ivar covered: Whether the component is Indoors or outdoors. Default
-        is Indoors.
-    :ivar gated: Whether the component is within a gated area or freely
-        accessible without a pass or ticket.
-    :ivar lighting: Whether the component is lit or not. Default is well
-        Lit.
-    :ivar all_areas_wheelchair_accessible: Whether all areas of the
-        component are wheelchair accessible.
-    :ivar person_capacity: Total number of people that component can
-        contain.
-    :ivar presentation: Presentation defaults for SITE ELEMENT. +V1.2.2
-    :ivar facilities: Facilities available at SITe.
-    """
     class Meta:
         name = "SiteElement_VersionStructure"
 
@@ -54,7 +31,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "AccessibilityAssessment",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     access_modes: List[AccessModeEnumeration] = field(
         default_factory=list,
@@ -63,7 +40,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "tokens": True,
-        }
+        },
     )
     name_suffix: Optional[MultilingualString] = field(
         default=None,
@@ -71,7 +48,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "NameSuffix",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     alternative_names: Optional[AlternativeNamesRelStructure] = field(
         default=None,
@@ -79,7 +56,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "alternativeNames",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     cross_road: Optional[MultilingualString] = field(
         default=None,
@@ -87,7 +64,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "CrossRoad",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     landmark: Optional[MultilingualString] = field(
         default=None,
@@ -95,7 +72,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "Landmark",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     public_use: Optional[PublicUseEnumeration] = field(
         default=None,
@@ -103,7 +80,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "PublicUse",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     covered: Optional[CoveredEnumeration] = field(
         default=None,
@@ -111,7 +88,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "Covered",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     gated: Optional[GatedEnumeration] = field(
         default=None,
@@ -119,7 +96,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "Gated",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     lighting: Optional[LightingEnumeration] = field(
         default=None,
@@ -127,7 +104,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "Lighting",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     all_areas_wheelchair_accessible: Optional[bool] = field(
         default=None,
@@ -135,7 +112,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "AllAreasWheelchairAccessible",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     person_capacity: Optional[int] = field(
         default=None,
@@ -143,7 +120,7 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "PersonCapacity",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     presentation: Optional[PresentationStructure] = field(
         default=None,
@@ -151,12 +128,12 @@ class SiteElementVersionStructure(AddressablePlaceVersionStructure):
             "name": "Presentation",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     facilities: Optional[SiteFacilitySetsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

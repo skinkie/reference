@@ -1,42 +1,57 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.abstract_group_member_versioned_child_structure import AbstractGroupMemberVersionedChildStructure
-from netex.dated_special_service_ref import DatedSpecialServiceRef
-from netex.dated_vehicle_journey_ref import DatedVehicleJourneyRef
-from netex.dead_run_ref import DeadRunRef
-from netex.group_of_services_ref_structure import GroupOfServicesRefStructure
-from netex.journey_designator import JourneyDesignator
-from netex.notice_assignment_views_rel_structure import NoticeAssignmentViewsRelStructure
-from netex.service_designator import ServiceDesignator
-from netex.service_journey_ref import ServiceJourneyRef
-from netex.single_journey_ref import SingleJourneyRef
-from netex.special_service_ref import SpecialServiceRef
-from netex.template_service_journey_ref import TemplateServiceJourneyRef
-from netex.train_number_ref import TrainNumberRef
-from netex.vehicle_journey_ref import VehicleJourneyRef
+from typing import Optional, Union
+from .abstract_group_member_versioned_child_structure import (
+    AbstractGroupMemberVersionedChildStructure,
+)
+from .dated_special_service_ref import DatedSpecialServiceRef
+from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
+from .dead_run_ref import DeadRunRef
+from .group_of_services_ref_structure import GroupOfServicesRefStructure
+from .journey_designator import JourneyDesignator
+from .notice_assignment_views_rel_structure import (
+    NoticeAssignmentViewsRelStructure,
+)
+from .service_designator import ServiceDesignator
+from .service_journey_ref import ServiceJourneyRef
+from .single_journey_ref import SingleJourneyRef
+from .special_service_ref import SpecialServiceRef
+from .template_service_journey_ref import TemplateServiceJourneyRef
+from .train_number_ref import TrainNumberRef
+from .vehicle_journey_ref import VehicleJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class GroupOfServicesMemberStructure(AbstractGroupMemberVersionedChildStructure):
-    """
-    Type for a Member of GROUP OF SERVICE Member.
-
-    :ivar group_of_services_ref: Parent  GROUP OF SERVICEs to which this
-        GROUP OF SERVICEs MEMBER assigns a JOURNEY.
-    :ivar choice:
-    :ivar notice_assignments: NOTICEs  Relevant for this grouping.
-    """
+@dataclass(kw_only=True)
+class GroupOfServicesMemberStructure(
+    AbstractGroupMemberVersionedChildStructure
+):
     group_of_services_ref: Optional[GroupOfServicesRefStructure] = field(
         default=None,
         metadata={
             "name": "GroupOfServicesRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            SingleJourneyRef,
+            DatedVehicleJourneyRef,
+            DatedSpecialServiceRef,
+            SpecialServiceRef,
+            TemplateServiceJourneyRef,
+            ServiceJourneyRef,
+            DeadRunRef,
+            VehicleJourneyRef,
+            TrainNumberRef,
+            JourneyDesignator,
+            ServiceDesignator,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -97,7 +112,7 @@ class GroupOfServicesMemberStructure(AbstractGroupMemberVersionedChildStructure)
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     notice_assignments: Optional[NoticeAssignmentViewsRelStructure] = field(
         default=None,
@@ -105,5 +120,5 @@ class GroupOfServicesMemberStructure(AbstractGroupMemberVersionedChildStructure)
             "name": "noticeAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

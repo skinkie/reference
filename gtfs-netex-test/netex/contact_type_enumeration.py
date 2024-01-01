@@ -1,13 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ContactTypeEnumeration(Enum):
-    """Allowed values for CONTACT role.
-
-    +v1.2.2
-    """
     ANY = "any"
     INFORMATION = "information"
     RESERVATIONS = "reservations"

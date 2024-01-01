@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.display_assignment import DisplayAssignment
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .display_assignment import DisplayAssignment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DisplayAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in DISPLAY ASSIGNMENTs.
-    """
     class Meta:
         name = "displayAssignmentsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class DisplayAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

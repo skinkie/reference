@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.accessibility_assessment import AccessibilityAssessment
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .accessibility_assessment import AccessibilityAssessment
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class AccessibilityAssessmentsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of ACCESSIBILITY ASSESSMENTs.
-
-    :ivar accessibility_assessment: Assessment of the accessibility of a
-        SITE.
-    """
+@dataclass(kw_only=True)
+class AccessibilityAssessmentsRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "accessibilityAssessments_RelStructure"
 
@@ -24,5 +25,5 @@ class AccessibilityAssessmentsRelStructure(StrictContainmentAggregationStructure
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

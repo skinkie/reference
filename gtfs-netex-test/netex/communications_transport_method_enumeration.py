@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
 class CommunicationsTransportMethodEnumeration(Enum):
-    """
-    Enumeration of communications transport method usage.
-    """
     HTTP_POST = "httpPost"
     OTHER = "other"
     WSDL_SOAP = "wsdlSoap"

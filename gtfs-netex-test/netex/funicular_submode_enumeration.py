@@ -1,10 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class FunicularSubmodeEnumeration(Enum):
-    """Values for Funicular MODEs of TRANSPORT: TPEG pti_table_10."""
     UNKNOWN = "unknown"
     FUNICULAR = "funicular"
     STREET_CABLE_CAR = "streetCableCar"

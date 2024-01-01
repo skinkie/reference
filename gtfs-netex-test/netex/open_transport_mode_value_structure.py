@@ -1,33 +1,29 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.air_submode_enumeration import AirSubmodeEnumeration
-from netex.all_modes_enumeration import AllModesEnumeration
-from netex.bus_submode_enumeration import BusSubmodeEnumeration
-from netex.coach_submode_enumeration import CoachSubmodeEnumeration
-from netex.funicular_submode_enumeration import FunicularSubmodeEnumeration
-from netex.metro_submode_enumeration import MetroSubmodeEnumeration
-from netex.rail_submode_enumeration import RailSubmodeEnumeration
-from netex.self_drive_submode_enumeration import SelfDriveSubmodeEnumeration
-from netex.snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
-from netex.submode_ref import SubmodeRef
-from netex.taxi_submode_enumeration import TaxiSubmodeEnumeration
-from netex.telecabin_submode_enumeration import TelecabinSubmodeEnumeration
-from netex.tram_submode_enumeration import TramSubmodeEnumeration
-from netex.type_of_value_version_structure import TypeOfValueVersionStructure
-from netex.water_submode_enumeration import WaterSubmodeEnumeration
+from typing import Optional, Union
+from .air_submode_enumeration import AirSubmodeEnumeration
+from .all_modes_enumeration import AllModesEnumeration
+from .bus_submode_enumeration import BusSubmodeEnumeration
+from .coach_submode_enumeration import CoachSubmodeEnumeration
+from .funicular_submode_enumeration import FunicularSubmodeEnumeration
+from .metro_submode_enumeration import MetroSubmodeEnumeration
+from .rail_submode_enumeration import RailSubmodeEnumeration
+from .self_drive_submode_enumeration import SelfDriveSubmodeEnumeration
+from .snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
+from .submode_ref import SubmodeRef
+from .taxi_submode_enumeration import TaxiSubmodeEnumeration
+from .telecabin_submode_enumeration import TelecabinSubmodeEnumeration
+from .tram_submode_enumeration import TramSubmodeEnumeration
+from .type_of_value_version_structure import TypeOfValueVersionStructure
+from .water_submode_enumeration import WaterSubmodeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OpenTransportModeValueStructure(TypeOfValueVersionStructure):
-    """
-    Type for a TRANSPORT MODE.
-
-    :ivar transport_mode: Categorisation of mode.
-    :ivar choice:
-    :ivar submode_ref:
-    """
     class Meta:
         name = "OpenTransportMode_ValueStructure"
 
@@ -39,7 +35,22 @@ class OpenTransportModeValueStructure(TypeOfValueVersionStructure):
             "required": True,
         }
     )
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            AirSubmodeEnumeration,
+            BusSubmodeEnumeration,
+            CoachSubmodeEnumeration,
+            FunicularSubmodeEnumeration,
+            MetroSubmodeEnumeration,
+            TramSubmodeEnumeration,
+            TelecabinSubmodeEnumeration,
+            RailSubmodeEnumeration,
+            WaterSubmodeEnumeration,
+            SnowAndIceSubmodeEnumeration,
+            TaxiSubmodeEnumeration,
+            SelfDriveSubmodeEnumeration,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -105,7 +116,7 @@ class OpenTransportModeValueStructure(TypeOfValueVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     submode_ref: Optional[SubmodeRef] = field(
         default=None,
@@ -113,5 +124,5 @@ class OpenTransportModeValueStructure(TypeOfValueVersionStructure):
             "name": "SubmodeRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

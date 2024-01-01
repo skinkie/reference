@@ -1,21 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.distance_matrix_element_inverse_ref import DistanceMatrixElementInverseRef
-from netex.distance_matrix_element_ref import DistanceMatrixElementRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from typing import List, Union
+from .distance_matrix_element_inverse_ref import (
+    DistanceMatrixElementInverseRef,
+)
+from .distance_matrix_element_ref import DistanceMatrixElementRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DistanceMatrixElementRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of DISTANCE MATRIX ELEMENTs.
-    """
     class Meta:
         name = "distanceMatrixElementRefs_RelStructure"
 
-    distance_matrix_element_ref_or_distance_matrix_element_inverse_ref: List[object] = field(
+    distance_matrix_element_ref_or_distance_matrix_element_inverse_ref: List[
+        Union[DistanceMatrixElementRef, DistanceMatrixElementInverseRef]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +35,5 @@ class DistanceMatrixElementRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

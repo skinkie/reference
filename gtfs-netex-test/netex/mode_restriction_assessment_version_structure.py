@@ -1,28 +1,24 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.data_managed_object_view_structure import DataManagedObjectViewStructure
-from netex.flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from netex.personal_mode_of_operation_ref import PersonalModeOfOperationRef
-from netex.scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
-from netex.transport_modes_rel_structure import TransportModesRelStructure
-from netex.vehicle_pooling_ref import VehiclePoolingRef
-from netex.vehicle_rental_ref import VehicleRentalRef
-from netex.vehicle_sharing_ref import VehicleSharingRef
+from typing import Optional, Union
+from .data_managed_object_view_structure import DataManagedObjectViewStructure
+from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
+from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
+from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .transport_modes_rel_structure import TransportModesRelStructure
+from .vehicle_pooling_ref import VehiclePoolingRef
+from .vehicle_rental_ref import VehicleRentalRef
+from .vehicle_sharing_ref import VehicleSharingRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ModeRestrictionAssessmentVersionStructure(DataManagedObjectViewStructure):
-    """
-    Type for MODE RESTRICTION ASSESSMENT.
-
-    :ivar exclude: Whether modes is to be excluded. Default is true.
-    :ivar transport_modes: Transport MODES to which restriction applies
-    :ivar choice:
-    :ivar minimum_number_of_passengers: Minimum number of passengers to
-        be able to use.
-    """
+@dataclass(kw_only=True)
+class ModeRestrictionAssessmentVersionStructure(
+    DataManagedObjectViewStructure
+):
     class Meta:
         name = "ModeRestrictionAssessment_VersionStructure"
 
@@ -32,7 +28,7 @@ class ModeRestrictionAssessmentVersionStructure(DataManagedObjectViewStructure):
             "name": "Exclude",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     transport_modes: Optional[TransportModesRelStructure] = field(
         default=None,
@@ -40,9 +36,18 @@ class ModeRestrictionAssessmentVersionStructure(DataManagedObjectViewStructure):
             "name": "transportModes",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
+        Union[
+            PersonalModeOfOperationRef,
+            VehiclePoolingRef,
+            VehicleSharingRef,
+            VehicleRentalRef,
+            FlexibleModeOfOperationRef,
+            ScheduledModeOfOperationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -78,7 +83,7 @@ class ModeRestrictionAssessmentVersionStructure(DataManagedObjectViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     minimum_number_of_passengers: Optional[int] = field(
         default=None,
@@ -86,5 +91,5 @@ class ModeRestrictionAssessmentVersionStructure(DataManagedObjectViewStructure):
             "name": "MinimumNumberOfPassengers",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

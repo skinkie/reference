@@ -1,13 +1,17 @@
 from dataclasses import dataclass
-from netex.requested_travel_specification_ref_structure import RequestedTravelSpecificationRefStructure
+from .requested_travel_specification_ref_structure import (
+    RequestedTravelSpecificationRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class RequestedTravelSpecificationRef(RequestedTravelSpecificationRefStructure):
-    """
-    Reference to a REQUESTED TRAVEL SPECIFICATION.
-    """
+@dataclass(kw_only=True)
+class RequestedTravelSpecificationRef(
+    RequestedTravelSpecificationRefStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

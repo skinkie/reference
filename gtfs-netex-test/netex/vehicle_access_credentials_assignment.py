@@ -1,25 +1,17 @@
-from dataclasses import dataclass, field
-from netex.vehicle_access_credentials_assignment_version_structure import VehicleAccessCredentialsAssignmentVersionStructure
+from dataclasses import dataclass
+from .vehicle_access_credentials_assignment_version_structure import (
+    VehicleAccessCredentialsAssignmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleAccessCredentialsAssignment(VehicleAccessCredentialsAssignmentVersionStructure):
-    """The allocation of a MEDIUM ACCESS DEVICE to a specific VEHICLE, to allow the
-    user (TRANSPORT CUSTOMER) to access the vehicle (tyically for VEHICLE SHARING
-    or VEHICLE RENTAL).
-
-    This allocation may have validity limitations. +V1.2.2
-
-    :ivar id: Identifier of ENTITY.
-    """
+@dataclass(kw_only=True)
+class VehicleAccessCredentialsAssignment(
+    VehicleAccessCredentialsAssignmentVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

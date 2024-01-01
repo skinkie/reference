@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.equipment_version_structure import EquipmentVersionStructure
+from .equipment_version_structure import EquipmentVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class InstalledEquipmentVersionStructure(EquipmentVersionStructure):
-    """
-    Type for INSTALLED EQUIPMENT.
-    """
     class Meta:
         name = "InstalledEquipment_VersionStructure"

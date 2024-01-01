@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
-from netex.catering_facility_enumeration import CateringFacilityEnumeration
+from .catering_facility_enumeration import CateringFacilityEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CateringFacility:
-    """Classification of CATERING FACILITY type - TPEG pti23."""
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -14,5 +16,5 @@ class CateringFacility:
         default=CateringFacilityEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

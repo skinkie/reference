@@ -1,22 +1,24 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.block import Block
-from netex.compound_block import CompoundBlock
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.train_block import TrainBlock
+from typing import List, Union
+from .block import Block
+from .compound_block import CompoundBlock
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .train_block import TrainBlock
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BlocksInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of BLOCKS.
-    """
     class Meta:
         name = "blocksInFrame_RelStructure"
 
-    block_or_compound_block_or_train_block: List[object] = field(
+    block_or_compound_block_or_train_block: List[
+        Union[Block, CompoundBlock, TrainBlock]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +39,5 @@ class BlocksInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

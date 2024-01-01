@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.group_of_services_member_structure import GroupOfServicesMemberStructure
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .group_of_services_member_structure import GroupOfServicesMemberStructure
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class GroupOfServicesMembersRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of Member of GROUP OF SERVICE Member.
-
-    :ivar group_of_services_member: Member of GROUP OF SERVICE Garage
-        Member.
-    """
+@dataclass(kw_only=True)
+class GroupOfServicesMembersRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "groupOfServicesMembers_RelStructure"
 
@@ -24,5 +25,5 @@ class GroupOfServicesMembersRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

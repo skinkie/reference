@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class NavigationTypeEnumeration(Enum):
-    """
-    Allowed values for Navigation type.
-    """
     HALL_TO_QUAY = "hallToQuay"
     HALL_TO_STREET = "hallToStreet"
     QUAY_TO_HALL = "quayToHall"

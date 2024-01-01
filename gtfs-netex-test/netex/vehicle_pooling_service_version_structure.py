@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.common_vehicle_service_version_structure import CommonVehicleServiceVersionStructure
-from netex.vehicle_pooling_ref import VehiclePoolingRef
+from .common_vehicle_service_version_structure import (
+    CommonVehicleServiceVersionStructure,
+)
+from .vehicle_pooling_ref import VehiclePoolingRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehiclePoolingServiceVersionStructure(CommonVehicleServiceVersionStructure):
-    """
-    Type for VEHICLE POOLING SERVICE.
-
-    :ivar vehicle_pooling_ref:
-    :ivar pooling_policy_url: URL for info on Pooling policy.
-    """
+@dataclass(kw_only=True)
+class VehiclePoolingServiceVersionStructure(
+    CommonVehicleServiceVersionStructure
+):
     class Meta:
         name = "VehiclePoolingService_VersionStructure"
 
@@ -31,5 +32,5 @@ class VehiclePoolingServiceVersionStructure(CommonVehicleServiceVersionStructure
             "name": "PoolingPolicyUrl",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

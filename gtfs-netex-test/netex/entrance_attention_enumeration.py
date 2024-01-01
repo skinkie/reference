@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class EntranceAttentionEnumeration(Enum):
-    """
-    Allowed values for entrance attention device.
-    """
     NONE = "none"
     DOORBELL = "doorbell"
     HELP_POINT = "helpPoint"

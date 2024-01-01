@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.responsibility_role_assignment import ResponsibilityRoleAssignment
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .responsibility_role_assignment import ResponsibilityRoleAssignment
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ResponsibilityRoleAssignmentsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of RESPONSIBILITY ROLE ASSIGNMENTs.
-    """
+@dataclass(kw_only=True)
+class ResponsibilityRoleAssignmentsRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "responsibilityRoleAssignments_RelStructure"
 
@@ -21,5 +25,5 @@ class ResponsibilityRoleAssignmentsRelStructure(StrictContainmentAggregationStru
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

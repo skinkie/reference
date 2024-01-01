@@ -1,20 +1,19 @@
-from dataclasses import dataclass, field
-from netex.observed_passing_time_versioned_child_structure import ObservedPassingTimeVersionedChildStructure
+from dataclasses import dataclass
+from .observed_passing_time_versioned_child_structure import (
+    ObservedPassingTimeVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ObservedPassingTime(ObservedPassingTimeVersionedChildStructure):
-    """
-    OBSERVED PASSING TIME.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar

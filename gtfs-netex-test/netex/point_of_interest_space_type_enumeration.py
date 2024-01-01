@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class PointOfInterestSpaceTypeEnumeration(Enum):
-    """
-    Allowed values for POINT OF INTEREST TYPE.
-    """
     ARENA = "arena"
     ARCHERY_ARENA = "archeryArena"
     ATHLETE_AREA = "athleteArea"

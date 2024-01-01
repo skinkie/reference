@@ -1,14 +1,16 @@
 from dataclasses import dataclass, field
-from netex.luggage_locker_facility_enumeration import LuggageLockerFacilityEnumeration
+from .luggage_locker_facility_enumeration import (
+    LuggageLockerFacilityEnumeration,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LuggageLockerFacility:
-    """
-    Classification of LUGGAGE LOCKER FACILITY type.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 

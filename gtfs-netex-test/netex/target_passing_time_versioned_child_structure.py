@@ -1,24 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Union
 from xsdata.models.datatype import XmlDuration, XmlTime
-from netex.dated_passing_time_versioned_child_structure import DatedPassingTimeVersionedChildStructure
-from netex.headway_interval_structure import HeadwayIntervalStructure
+from .dated_passing_time_versioned_child_structure import (
+    DatedPassingTimeVersionedChildStructure,
+)
+from .headway_interval_structure import HeadwayIntervalStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TargetPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildStructure):
-    """
-    Type for TARGET PASSING TIME.
-
-    :ivar choice_2:
-    :ivar aimed_headway: Aimed Frequency of service.
-    """
+@dataclass(kw_only=True)
+class TargetPassingTimeVersionedChildStructure(
+    DatedPassingTimeVersionedChildStructure
+):
     class Meta:
         name = "TargetPassingTime_VersionedChildStructure"
 
-    choice_2: List[object] = field(
+    choice_1: List[Union[XmlTime, int, XmlDuration]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -60,7 +61,7 @@ class TargetPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildStr
                 },
             ),
             "max_occurs": 5,
-        }
+        },
     )
     aimed_headway: Optional[HeadwayIntervalStructure] = field(
         default=None,
@@ -68,5 +69,5 @@ class TargetPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildStr
             "name": "AimedHeadway",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

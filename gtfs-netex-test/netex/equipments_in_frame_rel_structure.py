@@ -1,72 +1,128 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_vehicle_equipment import AccessVehicleEquipment
-from netex.assistance_booking_service import AssistanceBookingService
-from netex.assistance_service import AssistanceService
-from netex.battery_equipment import BatteryEquipment
-from netex.car_pooling_service import CarPoolingService
-from netex.catering_service import CateringService
-from netex.chauffeured_vehicle_service import ChauffeuredVehicleService
-from netex.communication_service import CommunicationService
-from netex.complaints_service import ComplaintsService
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.crossing_equipment import CrossingEquipment
-from netex.customer_service import CustomerService
-from netex.cycle_storage_equipment import CycleStorageEquipment
-from netex.entrance_equipment import EntranceEquipment
-from netex.escalator_equipment import EscalatorEquipment
-from netex.general_sign import GeneralSign
-from netex.heading_sign import HeadingSign
-from netex.help_point_equipment import HelpPointEquipment
-from netex.hire_service import HireService
-from netex.left_luggage_service import LeftLuggageService
-from netex.lift_equipment import LiftEquipment
-from netex.lost_property_service import LostPropertyService
-from netex.luggage_service import LuggageService
-from netex.meeting_point_service import MeetingPointService
-from netex.money_service import MoneyService
-from netex.online_service import OnlineService
-from netex.passenger_information_equipment import PassengerInformationEquipment
-from netex.passenger_safety_equipment import PassengerSafetyEquipment
-from netex.place_lighting import PlaceLighting
-from netex.place_sign import PlaceSign
-from netex.queueing_equipment import QueueingEquipment
-from netex.ramp_equipment import RampEquipment
-from netex.refuelling_equipment import RefuellingEquipment
-from netex.retail_device import RetailDevice
-from netex.retail_service import RetailService
-from netex.rough_surface import RoughSurface
-from netex.rubbish_disposal_equipment import RubbishDisposalEquipment
-from netex.sanitary_equipment import SanitaryEquipment
-from netex.seating_equipment import SeatingEquipment
-from netex.shelter_equipment import ShelterEquipment
-from netex.sign_equipment import SignEquipment
-from netex.staircase_equipment import StaircaseEquipment
-from netex.taxi_service import TaxiService
-from netex.ticket_validator_equipment import TicketValidatorEquipment
-from netex.ticketing_equipment import TicketingEquipment
-from netex.ticketing_service import TicketingService
-from netex.travelator_equipment import TravelatorEquipment
-from netex.trolley_stand_equipment import TrolleyStandEquipment
-from netex.vehicle_charging_equipment import VehicleChargingEquipment
-from netex.vehicle_release_equipment import VehicleReleaseEquipment
-from netex.vehicle_rental_service import VehicleRentalService
-from netex.vehicle_sharing_service import VehicleSharingService
-from netex.waiting_room_equipment import WaitingRoomEquipment
-from netex.wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+from typing import List, Union
+from .access_vehicle_equipment import AccessVehicleEquipment
+from .assistance_booking_service import AssistanceBookingService
+from .assistance_service import AssistanceService
+from .battery_equipment import BatteryEquipment
+from .car_pooling_service import CarPoolingService
+from .catering_service import CateringService
+from .chauffeured_vehicle_service import ChauffeuredVehicleService
+from .communication_service import CommunicationService
+from .complaints_service import ComplaintsService
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .crossing_equipment import CrossingEquipment
+from .customer_service import CustomerService
+from .cycle_storage_equipment import CycleStorageEquipment
+from .entrance_equipment import EntranceEquipment
+from .escalator_equipment import EscalatorEquipment
+from .general_sign import GeneralSign
+from .heading_sign import HeadingSign
+from .help_point_equipment import HelpPointEquipment
+from .hire_service import HireService
+from .left_luggage_service import LeftLuggageService
+from .lift_equipment import LiftEquipment
+from .lost_property_service import LostPropertyService
+from .luggage_service import LuggageService
+from .meeting_point_service import MeetingPointService
+from .money_service import MoneyService
+from .online_service import OnlineService
+from .passenger_information_equipment import PassengerInformationEquipment
+from .passenger_safety_equipment import PassengerSafetyEquipment
+from .place_lighting import PlaceLighting
+from .place_sign import PlaceSign
+from .queueing_equipment import QueueingEquipment
+from .ramp_equipment import RampEquipment
+from .refuelling_equipment import RefuellingEquipment
+from .retail_device import RetailDevice
+from .retail_service import RetailService
+from .rough_surface import RoughSurface
+from .rubbish_disposal_equipment import RubbishDisposalEquipment
+from .sanitary_equipment import SanitaryEquipment
+from .seating_equipment import SeatingEquipment
+from .shelter_equipment import ShelterEquipment
+from .sign_equipment import SignEquipment
+from .staircase_equipment import StaircaseEquipment
+from .taxi_service import TaxiService
+from .ticket_validator_equipment import TicketValidatorEquipment
+from .ticketing_equipment import TicketingEquipment
+from .ticketing_service import TicketingService
+from .travelator_equipment import TravelatorEquipment
+from .trolley_stand_equipment import TrolleyStandEquipment
+from .vehicle_charging_equipment import VehicleChargingEquipment
+from .vehicle_release_equipment import VehicleReleaseEquipment
+from .vehicle_rental_service import VehicleRentalService
+from .vehicle_sharing_service import VehicleSharingService
+from .waiting_room_equipment import WaitingRoomEquipment
+from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of EQUIPMENT.
-    """
     class Meta:
         name = "equipmentsInFrame_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            OnlineService,
+            VehicleRentalService,
+            VehicleSharingService,
+            ChauffeuredVehicleService,
+            CarPoolingService,
+            TaxiService,
+            AssistanceBookingService,
+            CateringService,
+            RetailService,
+            MoneyService,
+            HireService,
+            CommunicationService,
+            MeetingPointService,
+            LostPropertyService,
+            LeftLuggageService,
+            ComplaintsService,
+            CustomerService,
+            LuggageService,
+            AssistanceService,
+            TicketingService,
+            RetailDevice,
+            BatteryEquipment,
+            VehicleReleaseEquipment,
+            RefuellingEquipment,
+            VehicleChargingEquipment,
+            CycleStorageEquipment,
+            SeatingEquipment,
+            ShelterEquipment,
+            TrolleyStandEquipment,
+            WaitingRoomEquipment,
+            CrossingEquipment,
+            QueueingEquipment,
+            EntranceEquipment,
+            RampEquipment,
+            LiftEquipment,
+            TravelatorEquipment,
+            StaircaseEquipment,
+            EscalatorEquipment,
+            PlaceLighting,
+            RoughSurface,
+            GeneralSign,
+            HeadingSign,
+            PlaceSign,
+            SignEquipment,
+            PassengerInformationEquipment,
+            RubbishDisposalEquipment,
+            HelpPointEquipment,
+            PassengerSafetyEquipment,
+            SanitaryEquipment,
+            TicketValidatorEquipment,
+            TicketingEquipment,
+            WheelchairVehicleEquipment,
+            AccessVehicleEquipment,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -337,5 +393,5 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

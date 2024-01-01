@@ -1,23 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.discounting_rule import DiscountingRule
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.limiting_rule import LimitingRule
-from netex.limiting_rule_in_context import LimitingRuleInContext
-from netex.pricing_rule import PricingRule
+from typing import List, Union
+from .discounting_rule import DiscountingRule
+from .frame_containment_structure import FrameContainmentStructure
+from .limiting_rule import LimitingRule
+from .limiting_rule_in_context import LimitingRuleInContext
+from .pricing_rule import PricingRule
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PricingRulesRelStructure(FrameContainmentStructure):
-    """
-    Ser of PRICING RULEs such for Frame.
-    """
     class Meta:
         name = "pricingRules_RelStructure"
 
-    choice: List[object] = field(
+    pricing_rule: List[
+        Union[
+            LimitingRuleInContext, LimitingRule, DiscountingRule, PricingRule
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +47,5 @@ class PricingRulesRelStructure(FrameContainmentStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,22 +1,28 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.companion_profile_ref import CompanionProfileRef
-from netex.customer_eligibility_versioned_child_structure import CustomerEligibilityVersionedChildStructure
-from netex.user_profile_ref import UserProfileRef
-from netex.vehicle_pooler_profile_ref import VehiclePoolerProfileRef
+from typing import Optional, Union
+from .companion_profile_ref import CompanionProfileRef
+from .customer_eligibility_versioned_child_structure import (
+    CustomerEligibilityVersionedChildStructure,
+)
+from .user_profile_ref import UserProfileRef
+from .vehicle_pooler_profile_ref import VehiclePoolerProfileRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class UserProfileEligibilityVersionedChildStructure(CustomerEligibilityVersionedChildStructure):
-    """
-    Type for USER PROFILE ELIGIBILITY.
-    """
+@dataclass(kw_only=True)
+class UserProfileEligibilityVersionedChildStructure(
+    CustomerEligibilityVersionedChildStructure
+):
     class Meta:
         name = "UserProfileEligibility_VersionedChildStructure"
 
-    vehicle_pooler_profile_ref_or_companion_profile_ref_or_user_profile_ref: Optional[object] = field(
+    user_profile_ref: Optional[
+        Union[VehiclePoolerProfileRef, CompanionProfileRef, UserProfileRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -37,5 +43,5 @@ class UserProfileEligibilityVersionedChildStructure(CustomerEligibilityVersioned
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

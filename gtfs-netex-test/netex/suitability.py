@@ -1,20 +1,19 @@
-from dataclasses import dataclass, field
-from netex.suitability_versioned_child_structure import SuitabilityVersionedChildStructure
+from dataclasses import dataclass
+from .suitability_versioned_child_structure import (
+    SuitabilityVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class Suitability(SuitabilityVersionedChildStructure):
-    """
-    The SUITABILTY of a component to meet a specific USER NEED.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    validity_conditions: RestrictedVar
+    valid_between: RestrictedVar
+    alternative_texts: RestrictedVar

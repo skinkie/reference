@@ -1,28 +1,40 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.control_centre import ControlCentre
-from netex.control_centre_ref import ControlCentreRef
-from netex.department import Department
-from netex.department_ref import DepartmentRef
-from netex.operating_department import OperatingDepartment
-from netex.organisation_part import OrganisationPart
-from netex.organisation_part_ref import OrganisationPartRef
-from netex.organisational_unit import OrganisationalUnit
-from netex.organisational_unit_ref import OrganisationalUnitRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .control_centre import ControlCentre
+from .control_centre_ref import ControlCentreRef
+from .department import Department
+from .department_ref import DepartmentRef
+from .operating_department import OperatingDepartment
+from .organisation_part import OrganisationPart
+from .organisation_part_ref import OrganisationPartRef
+from .organisational_unit import OrganisationalUnit
+from .organisational_unit_ref import OrganisationalUnitRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OrganisationPartsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of ORGANISATION PARTs.
-    """
     class Meta:
         name = "organisationParts_RelStructure"
 
-    choice: List[object] = field(
+    organisation_part_ref_or_organisation_part: List[
+        Union[
+            ControlCentreRef,
+            OrganisationalUnitRef,
+            DepartmentRef,
+            OrganisationPartRef,
+            ControlCentre,
+            OperatingDepartment,
+            OrganisationalUnit,
+            Department,
+            OrganisationPart,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -73,5 +85,5 @@ class OrganisationPartsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

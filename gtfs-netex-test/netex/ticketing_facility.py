@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
-from netex.ticketing_facility_enumeration import TicketingFacilityEnumeration
+from .ticketing_facility_enumeration import TicketingFacilityEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TicketingFacility:
-    """Classification of TICKETING FACILITY type - eg TicketOffice, Machine, etc."""
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -14,5 +16,5 @@ class TicketingFacility:
         default=TicketingFacilityEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

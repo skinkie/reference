@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.destination_display_ref import DestinationDisplayRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .destination_display_ref import DestinationDisplayRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DestinationDisplayRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a DESTINATION DISPLAY.
-    """
     class Meta:
         name = "destinationDisplayRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class DestinationDisplayRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

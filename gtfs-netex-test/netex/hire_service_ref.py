@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.hire_service_ref_structure import HireServiceRefStructure
+from .hire_service_ref_structure import HireServiceRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class HireServiceRef(HireServiceRefStructure):
-    """
-    Identifier of an HIRE SERVICE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

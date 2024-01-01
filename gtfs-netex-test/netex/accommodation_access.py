@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.accommodation_access_enumeration import AccommodationAccessEnumeration
+from .accommodation_access_enumeration import AccommodationAccessEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AccommodationAccess:
-    """
-    Classification of ACCOMMODATION ACCESS type -
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 

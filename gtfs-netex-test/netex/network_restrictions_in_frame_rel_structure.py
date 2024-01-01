@@ -1,23 +1,30 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.meeting_restriction import MeetingRestriction
-from netex.overtaking_possibility import OvertakingPossibility
-from netex.restricted_manoeuvre import RestrictedManoeuvre
-from netex.vehicle_type_at_point import VehicleTypeAtPoint
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .meeting_restriction import MeetingRestriction
+from .overtaking_possibility import OvertakingPossibility
+from .restricted_manoeuvre import RestrictedManoeuvre
+from .vehicle_type_at_point import VehicleTypeAtPoint
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NetworkRestrictionsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of NETWORK RESTRICTION.
-    """
     class Meta:
         name = "networkRestrictionsInFrame_RelStructure"
 
-    choice: List[object] = field(
+    network_restriction: List[
+        Union[
+            OvertakingPossibility,
+            MeetingRestriction,
+            RestrictedManoeuvre,
+            VehicleTypeAtPoint,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +50,5 @@ class NetworkRestrictionsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

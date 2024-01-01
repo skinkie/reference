@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.observed_passing_time import ObservedPassingTime
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .observed_passing_time import ObservedPassingTime
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ObservedPassingTimesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of OBSERVED PASSING TIME.
-    """
     class Meta:
         name = "observedPassingTimes_RelStructure"
 
@@ -21,5 +23,5 @@ class ObservedPassingTimesRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

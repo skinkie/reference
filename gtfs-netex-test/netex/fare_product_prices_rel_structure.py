@@ -1,22 +1,26 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.cell_ref import CellRef
-from netex.fare_product_price import FareProductPrice
-from netex.fare_product_price_ref import FareProductPriceRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .cell_ref import CellRef
+from .fare_product_price import FareProductPrice
+from .fare_product_price_ref import FareProductPriceRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareProductPricesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of FARE PRODUCT PRICEs.
-    """
     class Meta:
         name = "fareProductPrices_RelStructure"
 
-    fare_product_price_ref_or_cell_ref_or_fare_product_price: List[object] = field(
+    fare_product_price_ref_or_cell_ref_or_fare_product_price: List[
+        Union[FareProductPriceRef, CellRef, FareProductPrice]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +41,5 @@ class FareProductPricesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

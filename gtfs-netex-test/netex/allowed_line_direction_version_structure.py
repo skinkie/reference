@@ -1,27 +1,23 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.direction_ref import DirectionRef
-from netex.flexible_line_ref import FlexibleLineRef
-from netex.line_ref import LineRef
-from netex.presentation_structure import PresentationStructure
+from typing import Optional, Union
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .direction_ref import DirectionRef
+from .flexible_line_ref import FlexibleLineRef
+from .line_ref import LineRef
+from .presentation_structure import PresentationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AllowedLineDirectionVersionStructure(DataManagedObjectStructure):
-    """
-    Type for an ALLOWED LINE DIRECTION.
-
-    :ivar flexible_line_ref_or_line_ref:
-    :ivar direction_ref:
-    :ivar presentation: Pesentation to use for DIRECTION. +v1.1..
-    """
     class Meta:
         name = "AllowedLineDirection_VersionStructure"
 
-    flexible_line_ref_or_line_ref: Optional[object] = field(
+    line_ref: Optional[Union[FlexibleLineRef, LineRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -37,7 +33,7 @@ class AllowedLineDirectionVersionStructure(DataManagedObjectStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     direction_ref: DirectionRef = field(
         metadata={
@@ -53,5 +49,5 @@ class AllowedLineDirectionVersionStructure(DataManagedObjectStructure):
             "name": "Presentation",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

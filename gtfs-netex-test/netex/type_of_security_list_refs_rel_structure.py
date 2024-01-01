@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.type_of_security_list_ref import TypeOfSecurityListRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .type_of_security_list_ref import TypeOfSecurityListRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfSecurityListRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of TYPEs OF SECURITY LIST.
-    """
     class Meta:
         name = "typeOfSecurityListRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class TypeOfSecurityListRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.single_journey_path import SingleJourneyPath
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .single_journey_path import SingleJourneyPath
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SingleJourneyPathsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of references to a SINGLE JOURNEY PATH.
-    """
     class Meta:
         name = "singleJourneyPaths_RelStructure"
 
@@ -20,5 +20,5 @@ class SingleJourneyPathsRelStructure(ContainmentAggregationStructure):
             "name": "SingleJourneyPath",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

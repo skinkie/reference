@@ -1,22 +1,32 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.cell_ref import CellRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.time_interval_price_ref import TimeIntervalPriceRef
-from netex.time_interval_price_versioned_child_structure import TimeIntervalPriceVersionedChildStructure
+from typing import List, Union
+from .cell_ref import CellRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .time_interval_price_ref import TimeIntervalPriceRef
+from .time_interval_price_versioned_child_structure import (
+    TimeIntervalPriceVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimeIntervalPricesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of TIME INTERVAL PRICEs.
-    """
     class Meta:
         name = "timeIntervalPrices_RelStructure"
 
-    time_interval_price_ref_or_time_interval_price_or_cell_ref: List[object] = field(
+    time_interval_price_ref_or_time_interval_price_or_cell_ref: List[
+        Union[
+            TimeIntervalPriceRef,
+            TimeIntervalPriceVersionedChildStructure,
+            CellRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +47,5 @@ class TimeIntervalPricesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

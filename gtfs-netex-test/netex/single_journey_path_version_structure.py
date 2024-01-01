@@ -1,18 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.route_ref import RouteRef
-from netex.section_in_sequence_versioned_child_structure import LinkSequenceVersionStructure
-from netex.vehicle_meeting_points_in_sequence_rel_structure import VehicleMeetingPointsInSequenceRelStructure
+from .route_ref import RouteRef
+from .section_in_sequence_versioned_child_structure import (
+    LinkSequenceVersionStructure,
+)
+from .vehicle_meeting_points_in_sequence_rel_structure import (
+    VehicleMeetingPointsInSequenceRelStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SingleJourneyPathVersionStructure(LinkSequenceVersionStructure):
-    """Type for SINGLE JOURNEY PATH.
-
-    +v1.2.2
-    """
     class Meta:
         name = "SingleJourneyPath_VersionStructure"
 
@@ -22,13 +25,15 @@ class SingleJourneyPathVersionStructure(LinkSequenceVersionStructure):
             "name": "RouteRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    points_in_sequence: Optional[VehicleMeetingPointsInSequenceRelStructure] = field(
+    points_in_sequence: Optional[
+        VehicleMeetingPointsInSequenceRelStructure
+    ] = field(
         default=None,
         metadata={
             "name": "pointsInSequence",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

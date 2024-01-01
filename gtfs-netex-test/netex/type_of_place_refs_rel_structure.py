@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.type_of_place_ref import TypeOfPlaceRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .type_of_place_ref import TypeOfPlaceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfPlaceRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of TYPE OF PLACEs.
-    """
     class Meta:
         name = "typeOfPlaceRefs_RelStructure"
 
@@ -20,5 +20,5 @@ class TypeOfPlaceRefsRelStructure(OneToManyRelationshipStructure):
             "name": "TypeOfPlaceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

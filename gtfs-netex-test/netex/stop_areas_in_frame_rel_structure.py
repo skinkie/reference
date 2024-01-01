@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.stop_area import StopArea
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .stop_area import StopArea
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopAreasInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of STOP AREAs.
-    """
     class Meta:
         name = "stopAreasInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class StopAreasInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

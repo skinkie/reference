@@ -1,11 +1,14 @@
 from dataclasses import dataclass
-from netex.network_restriction_ref_structure import NetworkRestrictionRefStructure
+from .network_restriction_ref_structure import NetworkRestrictionRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class InfrastructureLinkRestrictionRefStructure(NetworkRestrictionRefStructure):
-    """
-    Type for Reference to a an INFRASTRUCTURE LINK RESTRICTION.
-    """
+@dataclass(kw_only=True)
+class InfrastructureLinkRestrictionRefStructure(
+    NetworkRestrictionRefStructure
+):
+    value: RestrictedVar

@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.group_of_distribution_channels import GroupOfDistributionChannels
+from .frame_containment_structure import FrameContainmentStructure
+from .group_of_distribution_channels import GroupOfDistributionChannels
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class GroupsOfDistributionChannelsInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of DISTRIBUTION CHANNEL.
-    """
+@dataclass(kw_only=True)
+class GroupsOfDistributionChannelsInFrameRelStructure(
+    FrameContainmentStructure
+):
     class Meta:
         name = "groupsOfDistributionChannelsInFrame_RelStructure"
 
@@ -21,5 +23,5 @@ class GroupsOfDistributionChannelsInFrameRelStructure(FrameContainmentStructure)
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,22 +1,22 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.journey_run_times_rel_structure import JourneyRunTimesRelStructure
-from netex.link_in_link_sequence_versioned_child_structure import LinkInLinkSequenceVersionedChildStructure
-from netex.service_link_ref import ServiceLinkRef
-from netex.timing_link_ref import TimingLinkRef
+from .journey_run_times_rel_structure import JourneyRunTimesRelStructure
+from .link_in_link_sequence_versioned_child_structure import (
+    LinkInLinkSequenceVersionedChildStructure,
+)
+from .service_link_ref import ServiceLinkRef
+from .timing_link_ref import TimingLinkRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ServiceLinkInJourneyPatternVersionedChildStructure(LinkInLinkSequenceVersionedChildStructure):
-    """
-    Type for a SERVICE LINK IN JOURNEY PATTERN.
-
-    :ivar timing_link_ref:
-    :ivar run_times: run times for this TIMING LINK.
-    :ivar service_link_ref:
-    """
+@dataclass(kw_only=True)
+class ServiceLinkInJourneyPatternVersionedChildStructure(
+    LinkInLinkSequenceVersionedChildStructure
+):
     class Meta:
         name = "ServiceLinkInJourneyPattern_VersionedChildStructure"
 
@@ -26,7 +26,7 @@ class ServiceLinkInJourneyPatternVersionedChildStructure(LinkInLinkSequenceVersi
             "name": "TimingLinkRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     run_times: Optional[JourneyRunTimesRelStructure] = field(
         default=None,
@@ -34,7 +34,7 @@ class ServiceLinkInJourneyPatternVersionedChildStructure(LinkInLinkSequenceVersi
             "name": "runTimes",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     service_link_ref: ServiceLinkRef = field(
         metadata={

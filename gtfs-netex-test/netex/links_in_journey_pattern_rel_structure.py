@@ -1,21 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.service_link_in_journey_pattern import ServiceLinkInJourneyPattern
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.timing_link_in_journey_pattern import TimingLinkInJourneyPattern
+from typing import List, Union
+from .service_link_in_journey_pattern import ServiceLinkInJourneyPattern
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .timing_link_in_journey_pattern import TimingLinkInJourneyPattern
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinksInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for LINK IN JOURNEY PATTERN.
-    """
     class Meta:
         name = "linksInJourneyPattern_RelStructure"
 
-    service_link_in_journey_pattern_or_timing_link_in_journey_pattern: List[object] = field(
+    service_link_in_journey_pattern_or_timing_link_in_journey_pattern: List[
+        Union[ServiceLinkInJourneyPattern, TimingLinkInJourneyPattern]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +35,5 @@ class LinksInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

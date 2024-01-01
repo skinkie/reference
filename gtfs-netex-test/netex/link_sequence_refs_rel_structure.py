@@ -1,38 +1,60 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.dated_special_service_ref import DatedSpecialServiceRef
-from netex.dated_vehicle_journey_ref import DatedVehicleJourneyRef
-from netex.dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
-from netex.dead_run_ref import DeadRunRef
-from netex.journey_pattern_ref import JourneyPatternRef
-from netex.link_sequence_ref import LinkSequenceRef
-from netex.navigation_path_ref import NavigationPathRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.route_ref import RouteRef
-from netex.service_journey_pattern_ref import ServiceJourneyPatternRef
-from netex.service_journey_ref import ServiceJourneyRef
-from netex.service_pattern_ref import ServicePatternRef
-from netex.single_journey_path_ref import SingleJourneyPathRef
-from netex.single_journey_ref import SingleJourneyRef
-from netex.special_service_ref import SpecialServiceRef
-from netex.template_service_journey_ref import TemplateServiceJourneyRef
-from netex.timing_pattern_ref import TimingPatternRef
-from netex.trip_pattern_trip_ref import TripPatternTripRef
-from netex.trip_ref import TripRef
-from netex.vehicle_journey_ref import VehicleJourneyRef
+from typing import List, Union
+from .dated_special_service_ref import DatedSpecialServiceRef
+from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
+from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
+from .dead_run_ref import DeadRunRef
+from .journey_pattern_ref import JourneyPatternRef
+from .link_sequence_ref import LinkSequenceRef
+from .navigation_path_ref import NavigationPathRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .route_ref import RouteRef
+from .service_journey_pattern_ref import ServiceJourneyPatternRef
+from .service_journey_ref import ServiceJourneyRef
+from .service_pattern_ref import ServicePatternRef
+from .single_journey_path_ref import SingleJourneyPathRef
+from .single_journey_ref import SingleJourneyRef
+from .special_service_ref import SpecialServiceRef
+from .template_service_journey_ref import TemplateServiceJourneyRef
+from .timing_pattern_ref import TimingPatternRef
+from .trip_pattern_trip_ref import TripPatternTripRef
+from .trip_ref import TripRef
+from .vehicle_journey_ref import VehicleJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinkSequenceRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of LINK SEQUENCEs.
-    """
     class Meta:
         name = "linkSequenceRefs_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            TripRef,
+            TripPatternTripRef,
+            SingleJourneyPathRef,
+            SingleJourneyRef,
+            DatedVehicleJourneyRef,
+            DatedSpecialServiceRef,
+            SpecialServiceRef,
+            TemplateServiceJourneyRef,
+            ServiceJourneyRef,
+            DeadRunRef,
+            VehicleJourneyRef,
+            ServiceJourneyPatternRef,
+            ServicePatternRef,
+            DeadRunJourneyPatternRef,
+            JourneyPatternRef,
+            TimingPatternRef,
+            NavigationPathRef,
+            RouteRef,
+            LinkSequenceRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -133,5 +155,5 @@ class LinkSequenceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

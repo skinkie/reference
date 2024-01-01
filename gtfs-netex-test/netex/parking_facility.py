@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.parking_facility_enumeration import ParkingFacilityEnumeration
+from .parking_facility_enumeration import ParkingFacilityEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ParkingFacility:
-    """
-    Classification of PARKING FACILITY.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 

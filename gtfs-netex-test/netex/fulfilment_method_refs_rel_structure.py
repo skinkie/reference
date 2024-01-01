@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.fulfilment_method_ref import FulfilmentMethodRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .fulfilment_method_ref import FulfilmentMethodRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FulfilmentMethodRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a collection of one or more references to a FULFILMENT METHOD.
-    """
     class Meta:
         name = "fulfilmentMethodRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class FulfilmentMethodRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

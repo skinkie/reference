@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.default_interchange import DefaultInterchange
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .default_interchange import DefaultInterchange
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DefaultInterchangseInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of  DEFAULT INTERCHANGEs.
-    """
     class Meta:
         name = "defaultInterchangseInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class DefaultInterchangseInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

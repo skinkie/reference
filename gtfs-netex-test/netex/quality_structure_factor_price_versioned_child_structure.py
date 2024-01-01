@@ -1,22 +1,30 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.fare_demand_factor_ref import FareDemandFactorRef
-from netex.fare_price_versioned_child_structure import FarePriceVersionedChildStructure
-from netex.fare_quota_factor_ref import FareQuotaFactorRef
-from netex.quality_structure_factor_ref import QualityStructureFactorRef
+from typing import Optional, Union
+from .fare_demand_factor_ref import FareDemandFactorRef
+from .fare_price_versioned_child_structure import (
+    FarePriceVersionedChildStructure,
+)
+from .fare_quota_factor_ref import FareQuotaFactorRef
+from .quality_structure_factor_ref import QualityStructureFactorRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class QualityStructureFactorPriceVersionedChildStructure(FarePriceVersionedChildStructure):
-    """
-    Type for a QUALITY STRUCTURE FACTOR PRICEs.
-    """
+@dataclass(kw_only=True)
+class QualityStructureFactorPriceVersionedChildStructure(
+    FarePriceVersionedChildStructure
+):
     class Meta:
         name = "QualityStructureFactorPrice_VersionedChildStructure"
 
-    fare_quota_factor_ref_or_fare_demand_factor_ref_or_quality_structure_factor_ref: Optional[object] = field(
+    quality_structure_factor_ref: Optional[
+        Union[
+            FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -37,5 +45,5 @@ class QualityStructureFactorPriceVersionedChildStructure(FarePriceVersionedChild
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

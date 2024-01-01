@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.timeband import Timeband
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .timeband import Timeband
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimebandsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of TIME BANDs.
-    """
     class Meta:
         name = "timebandsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class TimebandsInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.type_of_fare_product import TypeOfFareProduct
-from netex.type_of_fare_product_ref import TypeOfFareProductRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .type_of_fare_product import TypeOfFareProduct
+from .type_of_fare_product_ref import TypeOfFareProductRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfFareProductsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of TYPE OF FARE PRODUCTs.
-    """
     class Meta:
         name = "typeOfFareProducts_RelStructure"
 
-    type_of_fare_product_ref_or_type_of_fare_product: List[object] = field(
+    type_of_fare_product_ref_or_type_of_fare_product: List[
+        Union[TypeOfFareProductRef, TypeOfFareProduct]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class TypeOfFareProductsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

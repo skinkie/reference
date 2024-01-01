@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.general_sign_ref_structure import GeneralSignRefStructure
+from .general_sign_ref_structure import GeneralSignRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GeneralSignRef(GeneralSignRefStructure):
-    """
-    Identifier of an GENERAL SIGN.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

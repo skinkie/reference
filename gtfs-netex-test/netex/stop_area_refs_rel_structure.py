@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.stop_area_ref_structure import StopAreaRefStructure
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .stop_area_ref_structure import StopAreaRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopAreaRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of STOP AREAs.
-
-    :ivar stop_area_ref: Reference to the identifier of a stop area.
-    """
     class Meta:
         name = "stopAreaRefs_RelStructure"
 
@@ -23,5 +21,5 @@ class StopAreaRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

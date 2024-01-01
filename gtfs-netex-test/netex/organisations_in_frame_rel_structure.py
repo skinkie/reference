@@ -1,28 +1,40 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.authority import Authority
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.general_organisation import GeneralOrganisation
-from netex.management_agent import ManagementAgent
-from netex.online_service_operator import OnlineServiceOperator
-from netex.operator import Operator
-from netex.other_organisation import OtherOrganisation
-from netex.retail_consortium import RetailConsortium
-from netex.serviced_organisation import ServicedOrganisation
-from netex.travel_agent import TravelAgent
+from typing import List, Union
+from .authority import Authority
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .general_organisation import GeneralOrganisation
+from .management_agent import ManagementAgent
+from .online_service_operator import OnlineServiceOperator
+from .operator import Operator
+from .other_organisation import OtherOrganisation
+from .retail_consortium import RetailConsortium
+from .serviced_organisation import ServicedOrganisation
+from .travel_agent import TravelAgent
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OrganisationsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of ORGANISATION.
-    """
     class Meta:
         name = "organisationsInFrame_RelStructure"
 
-    choice: List[object] = field(
+    organisation_or_transport_organisation: List[
+        Union[
+            RetailConsortium,
+            ServicedOrganisation,
+            GeneralOrganisation,
+            ManagementAgent,
+            TravelAgent,
+            OtherOrganisation,
+            OnlineServiceOperator,
+            Authority,
+            Operator,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -73,5 +85,5 @@ class OrganisationsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

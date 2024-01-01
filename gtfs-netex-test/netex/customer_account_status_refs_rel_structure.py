@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.customer_account_status_ref import CustomerAccountStatusRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .customer_account_status_ref import CustomerAccountStatusRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CustomerAccountStatusRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of CUSTOMER ACCOUNT STATUSES.
-    """
     class Meta:
         name = "customerAccountStatusRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class CustomerAccountStatusRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

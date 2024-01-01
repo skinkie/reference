@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class TrainElementTypeEnumeration(Enum):
-    """
-    Allowed values for TYPE OF TRAIIN ELEMENT.
-    """
     BUFFET_CAR = "buffetCar"
     CARRIAGE = "carriage"
     ENGINE = "engine"

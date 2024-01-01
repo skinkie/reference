@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class EntitlementTypeEnumeration(Enum):
-    """
-    Allowed values for ENTITLEMENT TYPE Type.
-    """
     NONE = "none"
     PURCHASE = "purchase"
     PURCHASE_AT_DISCOUNT = "purchaseAtDiscount"

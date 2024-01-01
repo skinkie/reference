@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.submode import Submode
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .submode import Submode
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SubmodesRelStructure(ContainmentAggregationStructure):
-    """
-    SUBMODEs  associated with entity.
-    """
     class Meta:
         name = "submodes_RelStructure"
 
@@ -21,5 +21,5 @@ class SubmodesRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

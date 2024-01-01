@@ -1,22 +1,28 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.cell_ref import CellRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.time_unit_price_ref import TimeUnitPriceRef
-from netex.time_unit_price_versioned_child_structure import TimeUnitPriceVersionedChildStructure
+from typing import List, Union
+from .cell_ref import CellRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .time_unit_price_ref import TimeUnitPriceRef
+from .time_unit_price_versioned_child_structure import (
+    TimeUnitPriceVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TimeUnitPricesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of TIME UNIT PRICEs.
-    """
     class Meta:
         name = "timeUnitPrices_RelStructure"
 
-    time_unit_price_ref_or_time_unit_price_or_cell_ref: List[object] = field(
+    time_unit_price_ref_or_time_unit_price_or_cell_ref: List[
+        Union[TimeUnitPriceRef, TimeUnitPriceVersionedChildStructure, CellRef]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -37,5 +43,5 @@ class TimeUnitPricesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class RentalPenaltyPolicyTypeEnumeration(Enum):
-    """
-    Allowed values for RENTAL PENALTY POLICY Type.
-    """
     REFUELLING = "refuelling"
     VEHICLE_TRANSFER = "vehicleTransfer"
     LATE_VEHICLE_RETURN = "lateVehicleReturn"

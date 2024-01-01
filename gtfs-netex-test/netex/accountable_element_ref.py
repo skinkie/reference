@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.accountable_element_ref_structure import AccountableElementRefStructure
+from .accountable_element_ref_structure import AccountableElementRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AccountableElementRef(AccountableElementRefStructure):
-    """
-    Reference to an ACCOUNTABLE ELEMENT.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

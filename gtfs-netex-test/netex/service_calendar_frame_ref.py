@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from netex.service_calendar_frame_ref_structure import ServiceCalendarFrameRefStructure
+from .service_calendar_frame_ref_structure import (
+    ServiceCalendarFrameRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ServiceCalendarFrameRef(ServiceCalendarFrameRefStructure):
-    """
-    Reference to a SERVICE CALENDAR FRAME.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class RefundPolicyEnumeration(Enum):
-    """
-    Allowed values for Refund Policy.
-    """
     ANY = "any"
     ILLNESS = "illness"
     DEATH = "death"

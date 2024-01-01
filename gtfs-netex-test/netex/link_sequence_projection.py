@@ -1,20 +1,15 @@
-from dataclasses import dataclass, field
-from netex.link_sequence_projection_version_structure import LinkSequenceProjectionVersionStructure
+from dataclasses import dataclass
+from .link_sequence_projection_version_structure import (
+    LinkSequenceProjectionVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinkSequenceProjection(LinkSequenceProjectionVersionStructure):
-    """
-    A Projection of a whole LINK SEQUENCE as an ordered series of POINTs.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

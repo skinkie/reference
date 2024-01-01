@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.passenger_capacity_ref_structure import PassengerCapacityRefStructure
+from .passenger_capacity_ref_structure import PassengerCapacityRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PassengerCapacityRef(PassengerCapacityRefStructure):
-    """
-    Reference to a PASSENGER CAPACITY.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

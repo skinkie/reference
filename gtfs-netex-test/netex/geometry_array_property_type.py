@@ -1,23 +1,20 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.line_string import LineString
-from netex.point_1 import Point1
-from netex.polygon import Polygon
+from typing import List, Union
+from .line_string import LineString
+from .point_1 import Point1
+from .polygon import Polygon
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GeometryArrayPropertyType:
-    """If a feature has a property which takes an array of geometry elements as its
-    value, this is called a geometry array property.
-
-    A generic type for such a geometry property is
-    GeometryArrayPropertyType. The elements are always contained inline
-    in the array property, referencing geometry elements or arrays of
-    geometry elements via XLinks is not supported.
-    """
-    polygon_or_line_string_or_point: List[object] = field(
+    abstract_surface_or_abstract_curve_or_abstract_geometric_primitive: List[
+        Union[Polygon, LineString, Point1]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -38,11 +35,11 @@ class GeometryArrayPropertyType:
                     "namespace": "http://www.opengis.net/gml/3.2",
                 },
             ),
-        }
+        },
     )
     owns: bool = field(
         default=False,
         metadata={
             "type": "Attribute",
-        }
+        },
     )

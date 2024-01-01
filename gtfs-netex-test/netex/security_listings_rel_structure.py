@@ -1,25 +1,36 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.customer_account_security_listing import CustomerAccountSecurityListing
-from netex.customer_security_listing import CustomerSecurityListing
-from netex.fare_contract_security_listing import FareContractSecurityListing
-from netex.medium_access_device_security_listing import MediumAccessDeviceSecurityListing
-from netex.retail_device_security_listing import RetailDeviceSecurityListing
-from netex.travel_document_security_listing import TravelDocumentSecurityListing
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .customer_account_security_listing import CustomerAccountSecurityListing
+from .customer_security_listing import CustomerSecurityListing
+from .fare_contract_security_listing import FareContractSecurityListing
+from .medium_access_device_security_listing import (
+    MediumAccessDeviceSecurityListing,
+)
+from .retail_device_security_listing import RetailDeviceSecurityListing
+from .travel_document_security_listing import TravelDocumentSecurityListing
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SecurityListingsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of SECURITY LISTINGs.
-    """
     class Meta:
         name = "securityListings_RelStructure"
 
-    choice: List[object] = field(
+    security_listing: List[
+        Union[
+            MediumAccessDeviceSecurityListing,
+            TravelDocumentSecurityListing,
+            RetailDeviceSecurityListing,
+            FareContractSecurityListing,
+            CustomerSecurityListing,
+            CustomerAccountSecurityListing,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -55,5 +66,5 @@ class SecurityListingsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.discounting_rule_ref_structure import DiscountingRuleRefStructure
+from .discounting_rule_ref_structure import DiscountingRuleRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DiscountingRuleRef(DiscountingRuleRefStructure):
-    """
-    Reference to a DISCOUNTING RULE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

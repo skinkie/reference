@@ -1,21 +1,25 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.fare_quota_factor import FareQuotaFactor
-from netex.fare_quota_factor_ref import FareQuotaFactorRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .fare_quota_factor import FareQuotaFactor
+from .fare_quota_factor_ref import FareQuotaFactorRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareQuotaFactorsRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of FARE QUOTA FACTOR.
-    """
     class Meta:
         name = "fareQuotaFactors_RelStructure"
 
-    fare_quota_factor_ref_or_fare_quota_factor: List[object] = field(
+    fare_quota_factor_ref_or_fare_quota_factor: List[
+        Union[FareQuotaFactorRef, FareQuotaFactor]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +35,5 @@ class FareQuotaFactorsRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

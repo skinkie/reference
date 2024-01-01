@@ -1,11 +1,14 @@
 from dataclasses import dataclass
-from netex.version_of_object_ref_structure import VersionOfObjectRefStructure
+from .version_of_object_ref_structure import VersionOfObjectRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class CustomerPurchasePackageElementAccessRefStructure(VersionOfObjectRefStructure):
-    """
-    Type for Reference to a CUSTOMER PURCHASE PACKAGE ELEMENT ACCESS.
-    """
+@dataclass(kw_only=True)
+class CustomerPurchasePackageElementAccessRefStructure(
+    VersionOfObjectRefStructure
+):
+    value: RestrictedVar

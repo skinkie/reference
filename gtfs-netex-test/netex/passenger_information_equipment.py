@@ -1,22 +1,17 @@
-from dataclasses import dataclass, field
-from netex.passenger_information_equipment_version_structure import PassengerInformationEquipmentVersionStructure
+from dataclasses import dataclass
+from .passenger_information_equipment_version_structure import (
+    PassengerInformationEquipmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class PassengerInformationEquipment(PassengerInformationEquipmentVersionStructure):
-    """
-    A public transport information facility, as for instance terminals (on street,
-    at information desks, telematic, ...) or printed material (leaflets displayed
-    at stops, booklets, ...).
-    """
+@dataclass(kw_only=True)
+class PassengerInformationEquipment(
+    PassengerInformationEquipmentVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.route_link import RouteLink
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .route_link import RouteLink
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RouteLinksInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of ROUTE LINK.
-    """
     class Meta:
         name = "routeLinksInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class RouteLinksInFrameRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

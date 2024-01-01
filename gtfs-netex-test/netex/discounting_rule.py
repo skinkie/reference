@@ -1,22 +1,15 @@
-from dataclasses import dataclass, field
-from netex.discounting_rule_versioned_structure import DiscountingRuleVersionedStructure
+from dataclasses import dataclass
+from .discounting_rule_versioned_structure import (
+    DiscountingRuleVersionedStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DiscountingRule(DiscountingRuleVersionedStructure):
-    """
-    A price for which a discount can be offered.
-
-    :ivar id: Identifier of ENTITY.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

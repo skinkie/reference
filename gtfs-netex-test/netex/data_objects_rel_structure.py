@@ -1,34 +1,51 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.driver_schedule_frame import DriverScheduleFrame
-from netex.entities_in_version_rel_structure import (
+from typing import List, Union
+from .driver_schedule_frame import DriverScheduleFrame
+from .entities_in_version_rel_structure import (
     CompositeFrame,
     GeneralFrame,
 )
-from netex.fare_frame import FareFrame
-from netex.infrastructure_frame import InfrastructureFrame
-from netex.mobility_journey_frame import MobilityJourneyFrame
-from netex.mobility_service_frame import MobilityServiceFrame
-from netex.resource_frame import ResourceFrame
-from netex.sales_transaction_frame import SalesTransactionFrame
-from netex.service_calendar_frame import ServiceCalendarFrame
-from netex.service_frame import ServiceFrame
-from netex.site_frame import SiteFrame
-from netex.timetable_frame import TimetableFrame
-from netex.vehicle_schedule_frame import VehicleScheduleFrame
+from .fare_frame import FareFrame
+from .infrastructure_frame import InfrastructureFrame
+from .mobility_journey_frame import MobilityJourneyFrame
+from .mobility_service_frame import MobilityServiceFrame
+from .resource_frame import ResourceFrame
+from .sales_transaction_frame import SalesTransactionFrame
+from .service_calendar_frame import ServiceCalendarFrame
+from .service_frame import ServiceFrame
+from .site_frame import SiteFrame
+from .timetable_frame import TimetableFrame
+from .vehicle_schedule_frame import VehicleScheduleFrame
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DataObjectsRelStructure:
-    """
-    Type for a list of objects.
-    """
     class Meta:
         name = "dataObjects_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            CompositeFrame,
+            MobilityJourneyFrame,
+            MobilityServiceFrame,
+            SalesTransactionFrame,
+            FareFrame,
+            DriverScheduleFrame,
+            VehicleScheduleFrame,
+            ServiceFrame,
+            TimetableFrame,
+            SiteFrame,
+            InfrastructureFrame,
+            GeneralFrame,
+            ResourceFrame,
+            ServiceCalendarFrame,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -104,5 +121,5 @@ class DataObjectsRelStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

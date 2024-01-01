@@ -1,22 +1,21 @@
-from dataclasses import dataclass, field
-from netex.vehicle_stopping_position_version_structure import VehicleStoppingPositionVersionStructure
+from dataclasses import dataclass
+from .vehicle_stopping_position_version_structure import (
+    VehicleStoppingPositionVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleStoppingPosition(VehicleStoppingPositionVersionStructure):
-    """
-    Designated Position within a VEHICLE STOPPING PLACE for a Vehicle to stop.
-
-    :ivar id: Identifier of VEHICLE STOPPING POSITION.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
+    members: RestrictedVar
+    url: RestrictedVar
+    image: RestrictedVar
+    postal_address: RestrictedVar
+    road_address: RestrictedVar

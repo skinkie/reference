@@ -1,21 +1,29 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.distance_matrix_element_ref import DistanceMatrixElementRef
-from netex.fare_price_versioned_child_structure import FarePriceVersionedChildStructure
-from netex.group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
+from typing import Optional, Union
+from .distance_matrix_element_ref import DistanceMatrixElementRef
+from .fare_price_versioned_child_structure import (
+    FarePriceVersionedChildStructure,
+)
+from .group_of_distance_matrix_elements_ref import (
+    GroupOfDistanceMatrixElementsRef,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class DistanceMatrixElementPriceVersionedChildStructure(FarePriceVersionedChildStructure):
-    """
-    Type for a DISTANCE MATRIX ELEMENT PRICEs.
-    """
+@dataclass(kw_only=True)
+class DistanceMatrixElementPriceVersionedChildStructure(
+    FarePriceVersionedChildStructure
+):
     class Meta:
         name = "DistanceMatrixElementPrice_VersionedChildStructure"
 
-    distance_matrix_element_ref_or_group_of_distance_matrix_elements_ref: Optional[object] = field(
+    distance_matrix_element_ref_or_group_of_distance_matrix_elements_ref: Optional[
+        Union[DistanceMatrixElementRef, GroupOfDistanceMatrixElementsRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -31,5 +39,5 @@ class DistanceMatrixElementPriceVersionedChildStructure(FarePriceVersionedChildS
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

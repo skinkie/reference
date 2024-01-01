@@ -1,14 +1,17 @@
 from dataclasses import dataclass
-from netex.mobility_service_constraint_zone_ref_structure import MobilityServiceConstraintZoneRefStructure
+from .mobility_service_constraint_zone_ref_structure import (
+    MobilityServiceConstraintZoneRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class MobilityServiceConstraintZoneRef(MobilityServiceConstraintZoneRefStructure):
-    """Reference to an MOBILITY SERVICE CONSTRAINT ZONE.
-
-    +v1.2.2
-    """
+@dataclass(kw_only=True)
+class MobilityServiceConstraintZoneRef(
+    MobilityServiceConstraintZoneRefStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -1,35 +1,28 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
-from netex.derived_view_structure import DerivedViewStructure
-from netex.flexible_line_ref import FlexibleLineRef
-from netex.line_ref import LineRef
-from netex.multilingual_string import MultilingualString
-from netex.operator_ref import OperatorRef
-from netex.transport_submode import TransportSubmode
-from netex.type_of_line_ref import TypeOfLineRef
+from typing import Optional, Union
+from .all_vehicle_modes_of_transport_enumeration import (
+    AllVehicleModesOfTransportEnumeration,
+)
+from .derived_view_structure import DerivedViewStructure
+from .flexible_line_ref import FlexibleLineRef
+from .line_ref import LineRef
+from .multilingual_string import MultilingualString
+from .operator_ref import OperatorRef
+from .transport_submode import TransportSubmode
+from .type_of_line_ref import TypeOfLineRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LineDerivedViewStructure(DerivedViewStructure):
-    """
-    Type for a LINE VIEW.
-
-    :ivar flexible_line_ref_or_line_ref:
-    :ivar public_code: Identifier of LINE.
-    :ivar name: Name of LINE.
-    :ivar short_name: Short name of LINE.
-    :ivar transport_mode: TRANSPORT MODE of LINE.
-    :ivar transport_submode:
-    :ivar operator_ref:
-    :ivar type_of_line_ref:
-    """
     class Meta:
         name = "Line_DerivedViewStructure"
 
-    flexible_line_ref_or_line_ref: Optional[object] = field(
+    line_ref: Optional[Union[FlexibleLineRef, LineRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -45,7 +38,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     public_code: Optional[str] = field(
         default=None,
@@ -53,7 +46,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
             "name": "PublicCode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     name: Optional[MultilingualString] = field(
         default=None,
@@ -61,7 +54,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     short_name: Optional[MultilingualString] = field(
         default=None,
@@ -69,7 +62,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
             "name": "ShortName",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     transport_mode: Optional[AllVehicleModesOfTransportEnumeration] = field(
         default=None,
@@ -77,7 +70,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
             "name": "TransportMode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     transport_submode: Optional[TransportSubmode] = field(
         default=None,
@@ -85,7 +78,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
             "name": "TransportSubmode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     operator_ref: Optional[OperatorRef] = field(
         default=None,
@@ -93,7 +86,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
             "name": "OperatorRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     type_of_line_ref: Optional[TypeOfLineRef] = field(
         default=None,
@@ -101,5 +94,5 @@ class LineDerivedViewStructure(DerivedViewStructure):
             "name": "TypeOfLineRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

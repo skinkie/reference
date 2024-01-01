@@ -1,25 +1,34 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.parking_ref import ParkingRef
-from netex.point_of_interest_ref import PointOfInterestRef
-from netex.service_site_ref import ServiceSiteRef
-from netex.site_ref import SiteRef
-from netex.stop_place_ref import StopPlaceRef
-from netex.taxi_rank_ref import TaxiRankRef
+from typing import List, Union
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .parking_ref import ParkingRef
+from .point_of_interest_ref import PointOfInterestRef
+from .service_site_ref import ServiceSiteRef
+from .site_ref import SiteRef
+from .stop_place_ref import StopPlaceRef
+from .taxi_rank_ref import TaxiRankRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SiteRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a collection of one or more SITEs.
-    """
     class Meta:
         name = "siteRefs_RelStructure"
 
-    choice: List[object] = field(
+    stop_place_ref_or_site_ref: List[
+        Union[
+            TaxiRankRef,
+            StopPlaceRef,
+            ParkingRef,
+            PointOfInterestRef,
+            ServiceSiteRef,
+            SiteRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -55,5 +64,5 @@ class SiteRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

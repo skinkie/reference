@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class QuayTypeEnumeration(Enum):
-    """
-    Allowed values for QUAY Component Types.
-    """
     AIRLINE_GATE = "airlineGate"
     RAIL_PLATFORM = "railPlatform"
     METRO_PLATFORM = "metroPlatform"

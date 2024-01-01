@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.booking_method_enumeration import BookingMethodEnumeration
-from netex.usage_parameter_version_structure import UsageParameterVersionStructure
+from .booking_method_enumeration import BookingMethodEnumeration
+from .usage_parameter_version_structure import UsageParameterVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BookingPolicyVersionStructure(UsageParameterVersionStructure):
-    """
-    Type for BOOKING POLICY.
-
-    :ivar booking_methods: Booking methods allowed
-    """
     class Meta:
         name = "BookingPolicy_VersionStructure"
 
@@ -23,5 +21,5 @@ class BookingPolicyVersionStructure(UsageParameterVersionStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "tokens": True,
-        }
+        },
     )

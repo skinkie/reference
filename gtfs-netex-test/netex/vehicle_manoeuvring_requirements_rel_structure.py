@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.vehicle_manoeuvring_requirement import VehicleManoeuvringRequirement
-from netex.vehicle_manoeuvring_requirement_ref import VehicleManoeuvringRequirementRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .vehicle_manoeuvring_requirement import VehicleManoeuvringRequirement
+from .vehicle_manoeuvring_requirement_ref import (
+    VehicleManoeuvringRequirementRef,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleManoeuvringRequirementsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of PASSENGER CARRYING REQUIREMENTs.
-    """
+@dataclass(kw_only=True)
+class VehicleManoeuvringRequirementsRelStructure(
+    ContainmentAggregationStructure
+):
     class Meta:
         name = "vehicleManoeuvringRequirements_RelStructure"
 
-    vehicle_manoeuvring_requirement_ref_or_vehicle_manoeuvring_requirement: List[object] = field(
+    vehicle_manoeuvring_requirement_ref_or_vehicle_manoeuvring_requirement: List[
+        Union[VehicleManoeuvringRequirementRef, VehicleManoeuvringRequirement]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class VehicleManoeuvringRequirementsRelStructure(ContainmentAggregationStructure
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

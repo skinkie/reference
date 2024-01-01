@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.journey_pattern_layover import JourneyPatternLayover
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .journey_pattern_layover import JourneyPatternLayover
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class JourneyPatternLayoversRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of JOURNEY PATTERN LAYOVERs.
-
-    :ivar journey_pattern_layover: JOURNEY PATTERN LAYOVER for a
-        specified TIME DEMAND TYPE.
-    """
+@dataclass(kw_only=True)
+class JourneyPatternLayoversRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "journeyPatternLayovers_RelStructure"
 
@@ -24,5 +25,5 @@ class JourneyPatternLayoversRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,72 +1,52 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlDate
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.capping_rule_price_ref import CappingRulePriceRef
-from netex.controllable_element_price_ref import ControllableElementPriceRef
-from netex.customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
-from netex.discounting_rule import DiscountingRule
-from netex.discounting_rule_ref import DiscountingRuleRef
-from netex.distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
-from netex.fare_price_ref import FarePriceRef
-from netex.fare_product_price_ref import FareProductPriceRef
-from netex.fare_structure_element_price_ref import FareStructureElementPriceRef
-from netex.fulfilment_method_price_ref import FulfilmentMethodPriceRef
-from netex.geographical_interval_price_ref import GeographicalIntervalPriceRef
-from netex.geographical_unit_price_ref import GeographicalUnitPriceRef
-from netex.limiting_rule import LimitingRule
-from netex.limiting_rule_in_context import LimitingRuleInContext
-from netex.limiting_rule_ref import LimitingRuleRef
-from netex.multilingual_string import MultilingualString
-from netex.parking_price_ref import ParkingPriceRef
-from netex.price_rule_step_results_rel_structure import PriceRuleStepResultsRelStructure
-from netex.price_unit_ref import PriceUnitRef
-from netex.pricing_rule import PricingRule
-from netex.pricing_rule_ref import PricingRuleRef
-from netex.pricing_service_ref import PricingServiceRef
-from netex.private_code import PrivateCode
-from netex.quality_structure_factor_price_ref import QualityStructureFactorPriceRef
-from netex.rounding_ref import RoundingRef
-from netex.sales_offer_package_price_ref import SalesOfferPackagePriceRef
-from netex.series_constraint_price_ref import SeriesConstraintPriceRef
-from netex.time_interval_price_ref import TimeIntervalPriceRef
-from netex.time_unit_price_ref import TimeUnitPriceRef
-from netex.usage_parameter_price_ref import UsageParameterPriceRef
-from netex.validable_element_price_ref import ValidableElementPriceRef
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .capping_rule_price_ref import CappingRulePriceRef
+from .controllable_element_price_ref import ControllableElementPriceRef
+from .customer_purchase_package_price_ref import (
+    CustomerPurchasePackagePriceRef,
+)
+from .discounting_rule import DiscountingRule
+from .discounting_rule_ref import DiscountingRuleRef
+from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
+from .fare_price_ref import FarePriceRef
+from .fare_product_price_ref import FareProductPriceRef
+from .fare_structure_element_price_ref import FareStructureElementPriceRef
+from .fulfilment_method_price_ref import FulfilmentMethodPriceRef
+from .geographical_interval_price_ref import GeographicalIntervalPriceRef
+from .geographical_unit_price_ref import GeographicalUnitPriceRef
+from .limiting_rule import LimitingRule
+from .limiting_rule_in_context import LimitingRuleInContext
+from .limiting_rule_ref import LimitingRuleRef
+from .multilingual_string import MultilingualString
+from .parking_price_ref import ParkingPriceRef
+from .price_rule_step_results_rel_structure import (
+    PriceRuleStepResultsRelStructure,
+)
+from .price_unit_ref import PriceUnitRef
+from .pricing_rule import PricingRule
+from .pricing_rule_ref import PricingRuleRef
+from .pricing_service_ref import PricingServiceRef
+from .private_code import PrivateCode
+from .quality_structure_factor_price_ref import QualityStructureFactorPriceRef
+from .rounding_ref import RoundingRef
+from .sales_offer_package_price_ref import SalesOfferPackagePriceRef
+from .series_constraint_price_ref import SeriesConstraintPriceRef
+from .time_interval_price_ref import TimeIntervalPriceRef
+from .time_unit_price_ref import TimeUnitPriceRef
+from .usage_parameter_price_ref import UsageParameterPriceRef
+from .validable_element_price_ref import ValidableElementPriceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FarePriceVersionedChildStructure(VersionedChildStructure):
-    """
-    Type for FARE PRICE.
-
-    :ivar name: Name of FARE PRICE.
-    :ivar description: Description of FARE PRICE.
-    :ivar private_code:
-    :ivar start_date: Start date for selling product or service at the
-        PRICE.
-    :ivar end_date: End date for selling product or services at the
-        PRICE.
-    :ivar amount: PRICE amount. in specified currency.
-    :ivar currency: Currency of Price ISO 4217.
-    :ivar price_unit_ref:
-    :ivar units: Other units for PRICE (If not in a currency).
-    :ivar rule_step_results: Interim amounts for any pricing rules
-        applied to derive price , for example VAT amount  charged.
-        +v1.1
-    :ivar is_allowed: Whether the PRICE is allowed.
-    :ivar pricing_service_ref:
-    :ivar choice:
-    :ivar choice_1:
-    :ivar can_be_cumulative: Whether this discount can be used
-        cumulatively with other discounts.
-    :ivar rounding_ref:
-    :ivar ranking: Ranking to give this discount relatove to other
-        applicable discounts.
-    """
     class Meta:
         name = "FarePrice_VersionedChildStructure"
 
@@ -76,7 +56,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -84,7 +64,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     private_code: Optional[PrivateCode] = field(
         default=None,
@@ -92,7 +72,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "PrivateCode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     start_date: Optional[XmlDate] = field(
         default=None,
@@ -100,7 +80,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "StartDate",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     end_date: Optional[XmlDate] = field(
         default=None,
@@ -108,7 +88,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "EndDate",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     amount: Optional[Decimal] = field(
         default=None,
@@ -116,7 +96,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "Amount",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     currency: Optional[str] = field(
         default=None,
@@ -127,7 +107,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "min_length": 3,
             "max_length": 3,
             "pattern": r"[A-Z][A-Z][A-Z]",
-        }
+        },
     )
     price_unit_ref: Optional[PriceUnitRef] = field(
         default=None,
@@ -135,7 +115,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "PriceUnitRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     units: Optional[Decimal] = field(
         default=None,
@@ -143,7 +123,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "Units",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     rule_step_results: Optional[PriceRuleStepResultsRelStructure] = field(
         default=None,
@@ -151,7 +131,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "ruleStepResults",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     is_allowed: Optional[bool] = field(
         default=None,
@@ -159,7 +139,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "IsAllowed",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     pricing_service_ref: Optional[PricingServiceRef] = field(
         default=None,
@@ -167,9 +147,30 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "PricingServiceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    fare_price_ref: Optional[
+        Union[
+            CustomerPurchasePackagePriceRef,
+            ParkingPriceRef,
+            TimeIntervalPriceRef,
+            TimeUnitPriceRef,
+            QualityStructureFactorPriceRef,
+            ControllableElementPriceRef,
+            ValidableElementPriceRef,
+            GeographicalIntervalPriceRef,
+            GeographicalUnitPriceRef,
+            UsageParameterPriceRef,
+            SeriesConstraintPriceRef,
+            SalesOfferPackagePriceRef,
+            DistanceMatrixElementPriceRef,
+            FareStructureElementPriceRef,
+            FulfilmentMethodPriceRef,
+            CappingRulePriceRef,
+            FareProductPriceRef,
+            FarePriceRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -265,9 +266,19 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    choice_1: Optional[object] = field(
+    discounting_rule_ref_or_pricing_rule_ref_or_pricing_rule: Optional[
+        Union[
+            LimitingRuleRef,
+            DiscountingRuleRef,
+            PricingRuleRef,
+            LimitingRuleInContext,
+            LimitingRule,
+            DiscountingRule,
+            PricingRule,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -308,7 +319,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     can_be_cumulative: Optional[bool] = field(
         default=None,
@@ -316,7 +327,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "CanBeCumulative",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     rounding_ref: Optional[RoundingRef] = field(
         default=None,
@@ -324,7 +335,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "RoundingRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     ranking: Optional[int] = field(
         default=None,
@@ -332,5 +343,5 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             "name": "Ranking",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

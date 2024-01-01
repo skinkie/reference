@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class PassageTypeEnumeration(Enum):
-    """
-    Allowed values for Passage Types.
-    """
     NONE = "none"
     PATHWAY = "pathway"
     CORRIDOR = "corridor"

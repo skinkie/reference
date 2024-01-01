@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.group_of_entities_version_structure import GroupOfEntitiesVersionStructure
-from netex.timeband_refs_rel_structure import TimebandRefsRelStructure
+from .group_of_entities_version_structure import (
+    GroupOfEntitiesVersionStructure,
+)
+from .timeband_refs_rel_structure import TimebandRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfTimebandsVersionedChildStructure(GroupOfEntitiesVersionStructure):
-    """
-    Type for a GROUP OF TIMEBANDS.
-
-    :ivar timebands: The (inclusive) start time.
-    """
     class Meta:
         name = "GroupOfTimebands_VersionedChildStructure"
 
@@ -21,5 +21,5 @@ class GroupOfTimebandsVersionedChildStructure(GroupOfEntitiesVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

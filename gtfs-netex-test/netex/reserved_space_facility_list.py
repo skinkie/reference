@@ -1,15 +1,17 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.reserved_space_facility_enumeration import ReservedSpaceFacilityEnumeration
+from .reserved_space_facility_enumeration import (
+    ReservedSpaceFacilityEnumeration,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ReservedSpaceFacilityList:
-    """
-    List of RESERVED SPACE FACILITies.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -17,5 +19,5 @@ class ReservedSpaceFacilityList:
         default_factory=list,
         metadata={
             "tokens": True,
-        }
+        },
     )

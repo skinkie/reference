@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.supplement_product_ref_structure import SupplementProductRefStructure
+from .supplement_product_ref_structure import SupplementProductRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SupplementProductRef(SupplementProductRefStructure):
-    """
-    Reference to a SUPPLEMENT PRODUCT.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

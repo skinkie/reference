@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.geographical_unit import GeographicalUnit
-from netex.geographical_unit_ref import GeographicalUnitRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .geographical_unit import GeographicalUnit
+from .geographical_unit_ref import GeographicalUnitRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GeographicalUnitsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of GEOGRAPHICAL UNITs.
-    """
     class Meta:
         name = "geographicalUnits_RelStructure"
 
-    geographical_unit_ref_or_geographical_unit: List[object] = field(
+    geographical_unit_ref_or_geographical_unit: List[
+        Union[GeographicalUnitRef, GeographicalUnit]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class GeographicalUnitsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,11 +1,16 @@
 from dataclasses import dataclass
-from netex.capability_request_policy_structure import CapabilityRequestPolicyStructure
+from .capability_request_policy_structure import (
+    CapabilityRequestPolicyStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class DataObjectCapabilityRequestPolicyStructure(CapabilityRequestPolicyStructure):
-    """
-    Type for Monitoring Service Capability Request Policy.
-    """
+@dataclass(kw_only=True)
+class DataObjectCapabilityRequestPolicyStructure(
+    CapabilityRequestPolicyStructure
+):
+    pass

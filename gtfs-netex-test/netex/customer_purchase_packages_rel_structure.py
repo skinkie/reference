@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.customer_purchase_package import CustomerPurchasePackage
-from netex.customer_purchase_package_ref import CustomerPurchasePackageRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
+from typing import List, Union
+from .customer_purchase_package import CustomerPurchasePackage
+from .customer_purchase_package_ref import CustomerPurchasePackageRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CustomerPurchasePackagesRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for containment in frame of CUSTOMER PURCHASE PACKAGE.
-    """
     class Meta:
         name = "customerPurchasePackages_RelStructure"
 
-    customer_purchase_package_or_customer_purchase_package_ref: List[object] = field(
+    customer_purchase_package_or_customer_purchase_package_ref: List[
+        Union[CustomerPurchasePackage, CustomerPurchasePackageRef]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class CustomerPurchasePackagesRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,24 +1,18 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.stop_area_ref_structure import StopAreaRefStructure
-from netex.topographic_place_ref import TopographicPlaceRef
-from netex.topographic_place_view import TopographicPlaceView
-from netex.zone_version_structure import ZoneVersionStructure
+from typing import Optional, Union
+from .stop_area_ref_structure import StopAreaRefStructure
+from .topographic_place_ref import TopographicPlaceRef
+from .topographic_place_view import TopographicPlaceView
+from .zone_version_structure import ZoneVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StopAreaVersionStructure(ZoneVersionStructure):
-    """
-    Type for a STOP AREA.
-
-    :ivar public_code: Alternative public facing Code that uniquely
-        identifies the STOP AREA.
-    :ivar parent_stop_area_ref: Reference to any parent STOP AREA of the
-        STOP AREA.
-    :ivar topographic_place_ref_or_topographic_place_view:
-    """
     class Meta:
         name = "StopArea_VersionStructure"
 
@@ -28,7 +22,7 @@ class StopAreaVersionStructure(ZoneVersionStructure):
             "name": "PublicCode",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     parent_stop_area_ref: Optional[StopAreaRefStructure] = field(
         default=None,
@@ -36,9 +30,11 @@ class StopAreaVersionStructure(ZoneVersionStructure):
             "name": "ParentStopAreaRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    topographic_place_ref_or_topographic_place_view: Optional[object] = field(
+    topographic_place_ref_or_topographic_place_view: Optional[
+        Union[TopographicPlaceRef, TopographicPlaceView]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -54,5 +50,5 @@ class StopAreaVersionStructure(ZoneVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

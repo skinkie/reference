@@ -1,20 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.customer_service_version_structure import CustomerServiceVersionStructure
-from netex.meeting_point_enumeration import MeetingPointEnumeration
-from netex.multilingual_string import MultilingualString
+from .customer_service_version_structure import CustomerServiceVersionStructure
+from .meeting_point_enumeration import MeetingPointEnumeration
+from .multilingual_string import MultilingualString
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class MeetingPointServiceVersionStructure(CustomerServiceVersionStructure):
-    """
-    Type for a MEETING POINT SERVICE.
-
-    :ivar meeting_point_service_type: Type of MEETING POINT.
-    :ivar label: Label of meeting point.
-    """
     class Meta:
         name = "MeetingPointService_VersionStructure"
 
@@ -32,5 +29,5 @@ class MeetingPointServiceVersionStructure(CustomerServiceVersionStructure):
             "name": "Label",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from netex.transport_administrative_zone_ref_structure import TransportAdministrativeZoneRefStructure
+from .transport_administrative_zone_ref_structure import (
+    TransportAdministrativeZoneRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TransportAdministrativeZoneRef(TransportAdministrativeZoneRefStructure):
-    """
-    Reference to a TRANSPORT ADMINISTRATIVE ZONE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

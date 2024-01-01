@@ -1,23 +1,15 @@
-from dataclasses import dataclass, field
-from netex.accessibility_assessment_versioned_child_structure import AccessibilityAssessmentVersionedChildStructure
+from dataclasses import dataclass
+from .accessibility_assessment_versioned_child_structure import (
+    AccessibilityAssessmentVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AccessibilityAssessment(AccessibilityAssessmentVersionedChildStructure):
-    """The accessibility characteristics of an entity used by passengers such as a
-    STOP PLACE, or a STOP PLACE COMPONENT.
-
-    Described by ACCESSIBILITY LIMITATIONs, and/or a set of
-    SUITABILITies.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

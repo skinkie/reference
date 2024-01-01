@@ -1,27 +1,38 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
-from netex.capped_discount_right_ref import CappedDiscountRightRef
-from netex.fare_product_ref import FareProductRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.preassigned_fare_product_ref import PreassignedFareProductRef
-from netex.sale_discount_right_ref import SaleDiscountRightRef
-from netex.supplement_product_ref import SupplementProductRef
-from netex.third_party_product_ref import ThirdPartyProductRef
-from netex.usage_discount_right_ref import UsageDiscountRightRef
+from typing import List, Union
+from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
+from .capped_discount_right_ref import CappedDiscountRightRef
+from .fare_product_ref import FareProductRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .preassigned_fare_product_ref import PreassignedFareProductRef
+from .sale_discount_right_ref import SaleDiscountRightRef
+from .supplement_product_ref import SupplementProductRef
+from .third_party_product_ref import ThirdPartyProductRef
+from .usage_discount_right_ref import UsageDiscountRightRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareProductRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for references to a FARE PRODUCT.
-    """
     class Meta:
         name = "fareProductRefs_RelStructure"
 
-    choice: List[object] = field(
+    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: List[
+        Union[
+            SupplementProductRef,
+            PreassignedFareProductRef,
+            AmountOfPriceUnitProductRef,
+            UsageDiscountRightRef,
+            ThirdPartyProductRef,
+            CappedDiscountRightRef,
+            SaleDiscountRightRef,
+            FareProductRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -67,5 +78,5 @@ class FareProductRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.train_block_part_ref_structure import TrainBlockPartRefStructure
+from .train_block_part_ref_structure import TrainBlockPartRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TrainBlockPartRef(TrainBlockPartRefStructure):
-    """
-    Reference to a TRAIN BLOCK PART.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

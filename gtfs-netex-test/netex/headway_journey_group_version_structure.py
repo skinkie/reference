@@ -1,23 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDuration
-from netex.headway_use_enumeration import HeadwayUseEnumeration
-from netex.journey_frequency_group_version_structure import JourneyFrequencyGroupVersionStructure
+from .headway_use_enumeration import HeadwayUseEnumeration
+from .journey_frequency_group_version_structure import (
+    JourneyFrequencyGroupVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class HeadwayJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructure):
-    """
-    Type for   HEADWAY JOURNEY GROUP.
-
-    :ivar scheduled_headway_interval: Scheduled normal headway interval.
-    :ivar minimum_headway_interval: Minimum headway interval.
-    :ivar maximum_headway_interval: Maximum headway interval.
-    :ivar headway_display: How headway value should be displayed to
-        public.
-    """
+@dataclass(kw_only=True)
+class HeadwayJourneyGroupVersionStructure(
+    JourneyFrequencyGroupVersionStructure
+):
     class Meta:
         name = "HeadwayJourneyGroup_VersionStructure"
 
@@ -27,7 +25,7 @@ class HeadwayJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructure)
             "name": "ScheduledHeadwayInterval",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     minimum_headway_interval: Optional[XmlDuration] = field(
         default=None,
@@ -35,7 +33,7 @@ class HeadwayJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructure)
             "name": "MinimumHeadwayInterval",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     maximum_headway_interval: Optional[XmlDuration] = field(
         default=None,
@@ -43,7 +41,7 @@ class HeadwayJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructure)
             "name": "MaximumHeadwayInterval",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     headway_display: Optional[HeadwayUseEnumeration] = field(
         default=None,
@@ -51,5 +49,5 @@ class HeadwayJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructure)
             "name": "HeadwayDisplay",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

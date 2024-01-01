@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class FuelTypeEnumeration(Enum):
-    """
-    Allowed values for type of fuel.
-    """
     BATTERY = "battery"
     BIODIESEL = "biodiesel"
     DIESEL = "diesel"

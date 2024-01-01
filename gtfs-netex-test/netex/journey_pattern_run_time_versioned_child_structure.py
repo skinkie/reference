@@ -1,23 +1,34 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
-from netex.journey_pattern_ref import JourneyPatternRef
-from netex.journey_run_time_versioned_child_structure import JourneyRunTimeVersionedChildStructure
-from netex.service_journey_pattern_ref import ServiceJourneyPatternRef
-from netex.service_pattern_ref import ServicePatternRef
+from typing import Optional, Union
+from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
+from .journey_pattern_ref import JourneyPatternRef
+from .journey_run_time_versioned_child_structure import (
+    JourneyRunTimeVersionedChildStructure,
+)
+from .service_journey_pattern_ref import ServiceJourneyPatternRef
+from .service_pattern_ref import ServicePatternRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class JourneyPatternRunTimeVersionedChildStructure(JourneyRunTimeVersionedChildStructure):
-    """
-    Type for JOURNEY PATTERN RUN TIME.
-    """
+@dataclass(kw_only=True)
+class JourneyPatternRunTimeVersionedChildStructure(
+    JourneyRunTimeVersionedChildStructure
+):
     class Meta:
         name = "JourneyPatternRunTime_VersionedChildStructure"
 
-    choice: Optional[object] = field(
+    journey_pattern_ref: Optional[
+        Union[
+            ServiceJourneyPatternRef,
+            ServicePatternRef,
+            DeadRunJourneyPatternRef,
+            JourneyPatternRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -43,5 +54,5 @@ class JourneyPatternRunTimeVersionedChildStructure(JourneyRunTimeVersionedChildS
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

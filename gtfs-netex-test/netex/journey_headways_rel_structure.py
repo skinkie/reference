@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.journey_headway import JourneyHeadway
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .journey_headway import JourneyHeadway
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyHeadwaysRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of JOURNEY HEADWAY Interval.
-    """
     class Meta:
         name = "journeyHeadways_RelStructure"
 
@@ -21,5 +23,5 @@ class JourneyHeadwaysRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

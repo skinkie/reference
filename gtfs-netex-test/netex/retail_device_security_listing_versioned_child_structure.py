@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.retail_device_ref import RetailDeviceRef
-from netex.security_listing_versioned_child_structure import SecurityListingVersionedChildStructure
+from .retail_device_ref import RetailDeviceRef
+from .security_listing_versioned_child_structure import (
+    SecurityListingVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class RetailDeviceSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
-    """
-    Type for  RETAIL DEVICE SECURITY LISTING.
-    """
+@dataclass(kw_only=True)
+class RetailDeviceSecurityListingVersionedChildStructure(
+    SecurityListingVersionedChildStructure
+):
     class Meta:
         name = "RetailDeviceSecurityListing_VersionedChildStructure"
 
@@ -20,5 +24,5 @@ class RetailDeviceSecurityListingVersionedChildStructure(SecurityListingVersione
             "name": "RetailDeviceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,20 +1,15 @@
-from dataclasses import dataclass, field
-from netex.sanitary_equipment_version_structure import SanitaryEquipmentVersionStructure
+from dataclasses import dataclass
+from .sanitary_equipment_version_structure import (
+    SanitaryEquipmentVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SanitaryEquipment(SanitaryEquipmentVersionStructure):
-    """
-    A SANITARY FACILITY , e.g. WC, Shower, baby change.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

@@ -1,13 +1,17 @@
 from dataclasses import dataclass
-from netex.sales_offer_package_entitlement_given_ref_structure import SalesOfferPackageEntitlementGivenRefStructure
+from .sales_offer_package_entitlement_given_ref_structure import (
+    SalesOfferPackageEntitlementGivenRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class SalesOfferPackageEntitlementGivenRef(SalesOfferPackageEntitlementGivenRefStructure):
-    """
-    Reference to a SALES OFFER  ENTITLEMENT GIVEN PARAMETER parameter.
-    """
+@dataclass(kw_only=True)
+class SalesOfferPackageEntitlementGivenRef(
+    SalesOfferPackageEntitlementGivenRefStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

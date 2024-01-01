@@ -1,22 +1,15 @@
-from dataclasses import dataclass, field
-from netex.journey_pattern_wait_time_versioned_child_structure import JourneyPatternWaitTimeVersionedChildStructure
+from dataclasses import dataclass
+from .journey_pattern_wait_time_versioned_child_structure import (
+    JourneyPatternWaitTimeVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyPatternWaitTime(JourneyPatternWaitTimeVersionedChildStructure):
-    """The time a vehicle has to wait at a specific TIMING POINT IN JOURNEY
-    PATTERN, for a specified TIME DEMAND TYPE.
-
-    This wait time can be superseded by a VEHICLE JOURNEY WAIT TIME.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

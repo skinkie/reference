@@ -1,11 +1,11 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ScheduledOperationTypeEnumeration(Enum):
-    """
-    Allowed values for ScheduledOperationModeOfOperation.
-    """
     SCHEDULED_SERVICE = "scheduledService"
     EVENT_BASED_SERVICE = "eventBasedService"

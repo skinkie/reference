@@ -1,22 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.country_ref import CountryRef
-from netex.group_of_entities_version_structure import GroupOfEntitiesVersionStructure
-from netex.place_ref_structure import PlaceRefStructure
-from netex.place_refs_rel_structure import PlaceRefsRelStructure
+from .country_ref import CountryRef
+from .group_of_entities_version_structure import (
+    GroupOfEntitiesVersionStructure,
+)
+from .place_ref_structure import PlaceRefStructure
+from .place_refs_rel_structure import PlaceRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GroupOfPlacesVersionStructure(GroupOfEntitiesVersionStructure):
-    """
-    Type for GROUP OF PLACES.
-
-    :ivar members: PLACEs in GROUP OF PLACEs.
-    :ivar country_ref:
-    :ivar main_place_ref: Primary PLACE in GROUP OF PLACEs, if relevant.
-    """
     class Meta:
         name = "GroupOfPlaces_VersionStructure"
 
@@ -25,7 +23,7 @@ class GroupOfPlacesVersionStructure(GroupOfEntitiesVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     country_ref: Optional[CountryRef] = field(
         default=None,
@@ -33,7 +31,7 @@ class GroupOfPlacesVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "CountryRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     main_place_ref: Optional[PlaceRefStructure] = field(
         default=None,
@@ -41,5 +39,5 @@ class GroupOfPlacesVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "MainPlaceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

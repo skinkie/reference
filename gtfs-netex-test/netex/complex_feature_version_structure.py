@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.complex_feature_members_rel_structure import ComplexFeatureMembersRelStructure
-from netex.group_of_points_version_structure import GroupOfPointsVersionStructure
+from .complex_feature_members_rel_structure import (
+    ComplexFeatureMembersRelStructure,
+)
+from .group_of_points_version_structure import GroupOfPointsVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ComplexFeatureVersionStructure(GroupOfPointsVersionStructure):
-    """
-    Type for a COMPLEX FEATURE.
-
-    :ivar feature_members: Simple features making up COMPLEX FEATURE.
-    """
     class Meta:
         name = "ComplexFeature_VersionStructure"
 
@@ -22,5 +22,5 @@ class ComplexFeatureVersionStructure(GroupOfPointsVersionStructure):
             "name": "featureMembers",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

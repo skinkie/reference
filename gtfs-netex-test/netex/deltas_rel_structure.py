@@ -1,15 +1,15 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.delta import Delta
+from .delta import Delta
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DeltasRelStructure:
-    """
-    A collection of one or more DELTAs.
-    """
     class Meta:
         name = "deltas_RelStructure"
 
@@ -20,5 +20,5 @@ class DeltasRelStructure:
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

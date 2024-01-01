@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.dead_run_ref import DeadRunRef
-from netex.journey_run_time_versioned_child_structure import JourneyRunTimeVersionedChildStructure
-from netex.vehicle_journey_ref import VehicleJourneyRef
+from typing import Optional, Union
+from .dead_run_ref import DeadRunRef
+from .journey_run_time_versioned_child_structure import (
+    JourneyRunTimeVersionedChildStructure,
+)
+from .vehicle_journey_ref import VehicleJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleJourneyRunTimeVersionedChildStructure(JourneyRunTimeVersionedChildStructure):
-    """
-    Type for VEHICLE JOURNEY RUN TIME.
-    """
+@dataclass(kw_only=True)
+class VehicleJourneyRunTimeVersionedChildStructure(
+    JourneyRunTimeVersionedChildStructure
+):
     class Meta:
         name = "VehicleJourneyRunTime_VersionedChildStructure"
 
-    dead_run_ref_or_vehicle_journey_ref: Optional[object] = field(
+    vehicle_journey_ref: Optional[
+        Union[DeadRunRef, VehicleJourneyRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class VehicleJourneyRunTimeVersionedChildStructure(JourneyRunTimeVersionedChildS
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,14 +1,13 @@
 from dataclasses import dataclass, field
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class Status:
-    """Whether the request was processed successfully or not.
-
-    Default is 'true'.
-    """
     class Meta:
         namespace = "http://www.siri.org.uk/siri"
 
@@ -16,5 +15,5 @@ class Status:
         default=True,
         metadata={
             "required": True,
-        }
+        },
     )

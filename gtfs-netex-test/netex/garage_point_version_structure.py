@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.parking_point_version_structure import ParkingPointVersionStructure
+from .parking_point_version_structure import ParkingPointVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GaragePointVersionStructure(ParkingPointVersionStructure):
-    """
-    Type for GARAGE POINT.
-    """
     class Meta:
         name = "GaragePoint_VersionStructure"

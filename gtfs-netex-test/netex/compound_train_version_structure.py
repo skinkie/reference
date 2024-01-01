@@ -1,19 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.trains_in_compound_train_rel_structure import TrainsInCompoundTrainRelStructure
-from netex.vehicle_type_version_structure import VehicleTypeVersionStructure
+from .trains_in_compound_train_rel_structure import (
+    TrainsInCompoundTrainRelStructure,
+)
+from .vehicle_type_version_structure import VehicleTypeVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CompoundTrainVersionStructure(VehicleTypeVersionStructure):
-    """
-    Type for COMPOUND TRAIN.
-
-    :ivar components: Ordered collection of TRAIN in COMPOUND TRAINs
-        making up COMPOUND TRAIN. Each references a TRAIN.
-    """
     class Meta:
         name = "CompoundTrain_VersionStructure"
 
@@ -22,5 +21,5 @@ class CompoundTrainVersionStructure(VehicleTypeVersionStructure):
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

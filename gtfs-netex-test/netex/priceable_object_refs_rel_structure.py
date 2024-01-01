@@ -1,85 +1,162 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.additional_driver_option_ref import AdditionalDriverOptionRef
-from netex.amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
-from netex.booking_policy_ref import BookingPolicyRef
-from netex.cancelling_ref import CancellingRef
-from netex.capped_discount_right_ref import CappedDiscountRightRef
-from netex.capping_rule_ref import CappingRuleRef
-from netex.charging_policy_ref import ChargingPolicyRef
-from netex.commercial_profile_ref import CommercialProfileRef
-from netex.companion_profile_ref import CompanionProfileRef
-from netex.controllable_element_ref import ControllableElementRef
-from netex.customer_purchase_package_element_ref import CustomerPurchasePackageElementRef
-from netex.customer_purchase_package_ref import CustomerPurchasePackageRef
-from netex.distance_matrix_element_inverse_ref import DistanceMatrixElementInverseRef
-from netex.distance_matrix_element_ref import DistanceMatrixElementRef
-from netex.eligibility_change_policy_ref import EligibilityChangePolicyRef
-from netex.entitlement_given_ref import EntitlementGivenRef
-from netex.entitlement_product_ref import EntitlementProductRef
-from netex.entitlement_required_ref import EntitlementRequiredRef
-from netex.exchanging_ref import ExchangingRef
-from netex.fare_demand_factor_ref import FareDemandFactorRef
-from netex.fare_product_ref import FareProductRef
-from netex.fare_quota_factor_ref import FareQuotaFactorRef
-from netex.fare_structure_element_ref import FareStructureElementRef
-from netex.frequency_of_use_ref import FrequencyOfUseRef
-from netex.fulfilment_method_ref import FulfilmentMethodRef
-from netex.geographical_interval_ref import GeographicalIntervalRef
-from netex.geographical_structure_factor_ref import GeographicalStructureFactorRef
-from netex.group_ticket_ref import GroupTicketRef
-from netex.interchanging_ref import InterchangingRef
-from netex.luggage_allowance_ref import LuggageAllowanceRef
-from netex.minimum_stay_ref import MinimumStayRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.parking_charge_band_ref import ParkingChargeBandRef
-from netex.penalty_policy_ref import PenaltyPolicyRef
-from netex.preassigned_fare_product_ref import PreassignedFareProductRef
-from netex.priceable_object_ref import PriceableObjectRef
-from netex.profile_parameter_ref import ProfileParameterRef
-from netex.purchase_window_ref import PurchaseWindowRef
-from netex.quality_structure_factor_ref import QualityStructureFactorRef
-from netex.refunding_ref import RefundingRef
-from netex.rental_option_ref import RentalOptionRef
-from netex.rental_penalty_policy_ref import RentalPenaltyPolicyRef
-from netex.replacing_ref import ReplacingRef
-from netex.reselling_ref import ResellingRef
-from netex.reserving_ref import ReservingRef
-from netex.round_trip_ref import RoundTripRef
-from netex.routing_ref import RoutingRef
-from netex.sale_discount_right_ref import SaleDiscountRightRef
-from netex.sales_offer_package_element_ref import SalesOfferPackageElementRef
-from netex.sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
-from netex.sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
-from netex.sales_offer_package_ref import SalesOfferPackageRef
-from netex.series_constraint_ref import SeriesConstraintRef
-from netex.service_access_right_ref import ServiceAccessRightRef
-from netex.step_limit_ref import StepLimitRef
-from netex.subscribing_ref import SubscribingRef
-from netex.supplement_product_ref import SupplementProductRef
-from netex.suspending_ref import SuspendingRef
-from netex.third_party_product_ref import ThirdPartyProductRef
-from netex.time_interval_ref import TimeIntervalRef
-from netex.time_structure_factor_ref import TimeStructureFactorRef
-from netex.transferability_ref import TransferabilityRef
-from netex.usage_discount_right_ref import UsageDiscountRightRef
-from netex.usage_validity_period_ref import UsageValidityPeriodRef
-from netex.user_profile_ref import UserProfileRef
-from netex.validable_element_ref import ValidableElementRef
-from netex.vehicle_pooler_profile_ref import VehiclePoolerProfileRef
+from typing import List, Union
+from .additional_driver_option_ref import AdditionalDriverOptionRef
+from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
+from .booking_policy_ref import BookingPolicyRef
+from .cancelling_ref import CancellingRef
+from .capped_discount_right_ref import CappedDiscountRightRef
+from .capping_rule_ref import CappingRuleRef
+from .charging_policy_ref import ChargingPolicyRef
+from .commercial_profile_ref import CommercialProfileRef
+from .companion_profile_ref import CompanionProfileRef
+from .controllable_element_ref import ControllableElementRef
+from .customer_purchase_package_element_ref import (
+    CustomerPurchasePackageElementRef,
+)
+from .customer_purchase_package_ref import CustomerPurchasePackageRef
+from .distance_matrix_element_inverse_ref import (
+    DistanceMatrixElementInverseRef,
+)
+from .distance_matrix_element_ref import DistanceMatrixElementRef
+from .eligibility_change_policy_ref import EligibilityChangePolicyRef
+from .entitlement_given_ref import EntitlementGivenRef
+from .entitlement_product_ref import EntitlementProductRef
+from .entitlement_required_ref import EntitlementRequiredRef
+from .exchanging_ref import ExchangingRef
+from .fare_demand_factor_ref import FareDemandFactorRef
+from .fare_product_ref import FareProductRef
+from .fare_quota_factor_ref import FareQuotaFactorRef
+from .fare_structure_element_ref import FareStructureElementRef
+from .frequency_of_use_ref import FrequencyOfUseRef
+from .fulfilment_method_ref import FulfilmentMethodRef
+from .geographical_interval_ref import GeographicalIntervalRef
+from .geographical_structure_factor_ref import GeographicalStructureFactorRef
+from .group_ticket_ref import GroupTicketRef
+from .interchanging_ref import InterchangingRef
+from .luggage_allowance_ref import LuggageAllowanceRef
+from .minimum_stay_ref import MinimumStayRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .parking_charge_band_ref import ParkingChargeBandRef
+from .penalty_policy_ref import PenaltyPolicyRef
+from .preassigned_fare_product_ref import PreassignedFareProductRef
+from .priceable_object_ref import PriceableObjectRef
+from .profile_parameter_ref import ProfileParameterRef
+from .purchase_window_ref import PurchaseWindowRef
+from .quality_structure_factor_ref import QualityStructureFactorRef
+from .refunding_ref import RefundingRef
+from .rental_option_ref import RentalOptionRef
+from .rental_penalty_policy_ref import RentalPenaltyPolicyRef
+from .replacing_ref import ReplacingRef
+from .reselling_ref import ResellingRef
+from .reserving_ref import ReservingRef
+from .round_trip_ref import RoundTripRef
+from .routing_ref import RoutingRef
+from .sale_discount_right_ref import SaleDiscountRightRef
+from .sales_offer_package_element_ref import SalesOfferPackageElementRef
+from .sales_offer_package_entitlement_given_ref import (
+    SalesOfferPackageEntitlementGivenRef,
+)
+from .sales_offer_package_entitlement_required_ref import (
+    SalesOfferPackageEntitlementRequiredRef,
+)
+from .sales_offer_package_ref import SalesOfferPackageRef
+from .series_constraint_ref import SeriesConstraintRef
+from .service_access_right_ref import ServiceAccessRightRef
+from .step_limit_ref import StepLimitRef
+from .subscribing_ref import SubscribingRef
+from .supplement_product_ref import SupplementProductRef
+from .suspending_ref import SuspendingRef
+from .third_party_product_ref import ThirdPartyProductRef
+from .time_interval_ref import TimeIntervalRef
+from .time_structure_factor_ref import TimeStructureFactorRef
+from .transferability_ref import TransferabilityRef
+from .usage_discount_right_ref import UsageDiscountRightRef
+from .usage_validity_period_ref import UsageValidityPeriodRef
+from .user_profile_ref import UserProfileRef
+from .validable_element_ref import ValidableElementRef
+from .vehicle_pooler_profile_ref import VehiclePoolerProfileRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PriceableObjectRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of PRICEABLE ELEMENTs.
-    """
     class Meta:
         name = "priceableObjectRefs_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            CustomerPurchasePackageElementRef,
+            CustomerPurchasePackageRef,
+            ControllableElementRef,
+            ValidableElementRef,
+            AdditionalDriverOptionRef,
+            RentalOptionRef,
+            RentalPenaltyPolicyRef,
+            SalesOfferPackageEntitlementGivenRef,
+            SalesOfferPackageEntitlementRequiredRef,
+            MinimumStayRef,
+            InterchangingRef,
+            FrequencyOfUseRef,
+            SuspendingRef,
+            UsageValidityPeriodRef,
+            StepLimitRef,
+            RoutingRef,
+            RoundTripRef,
+            LuggageAllowanceRef,
+            EntitlementGivenRef,
+            EntitlementRequiredRef,
+            EligibilityChangePolicyRef,
+            GroupTicketRef,
+            CommercialProfileRef,
+            VehiclePoolerProfileRef,
+            CompanionProfileRef,
+            UserProfileRef,
+            ProfileParameterRef,
+            SubscribingRef,
+            PenaltyPolicyRef,
+            ChargingPolicyRef,
+            TransferabilityRef,
+            ReplacingRef,
+            RefundingRef,
+            ExchangingRef,
+            ResellingRef,
+            CancellingRef,
+            ReservingRef,
+            BookingPolicyRef,
+            PurchaseWindowRef,
+            SeriesConstraintRef,
+            SalesOfferPackageElementRef,
+            SalesOfferPackageRef,
+            DistanceMatrixElementInverseRef,
+            DistanceMatrixElementRef,
+            FareStructureElementRef,
+            FulfilmentMethodRef,
+            CappingRuleRef,
+            EntitlementProductRef,
+            SupplementProductRef,
+            PreassignedFareProductRef,
+            AmountOfPriceUnitProductRef,
+            UsageDiscountRightRef,
+            ThirdPartyProductRef,
+            CappedDiscountRightRef,
+            SaleDiscountRightRef,
+            FareProductRef,
+            ServiceAccessRightRef,
+            TimeIntervalRef,
+            GeographicalIntervalRef,
+            ParkingChargeBandRef,
+            TimeStructureFactorRef,
+            FareQuotaFactorRef,
+            FareDemandFactorRef,
+            QualityStructureFactorRef,
+            GeographicalStructureFactorRef,
+            PriceableObjectRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -415,5 +492,5 @@ class PriceableObjectRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

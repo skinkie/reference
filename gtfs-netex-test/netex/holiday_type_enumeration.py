@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class HolidayTypeEnumeration(Enum):
-    """
-    Allowed values for Holiday types.
-    """
     ANY_DAY = "AnyDay"
     WORKING_DAY = "WorkingDay"
     SCHOOL_DAY = "SchoolDay"

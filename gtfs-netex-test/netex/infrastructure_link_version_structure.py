@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.link_version_structure import LinkVersionStructure
+from .link_version_structure import LinkVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class InfrastructureLinkVersionStructure(LinkVersionStructure):
-    """
-    Type for INFRASTRUCTURE LINK.
-    """
     class Meta:
         name = "InfrastructureLink_VersionStructure"

@@ -1,33 +1,51 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.activation_point_ref import ActivationPointRef
-from netex.beacon_point_ref import BeaconPointRef
-from netex.border_point_ref import BorderPointRef
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.garage_point_ref import GaragePointRef
-from netex.parking_point_ref import ParkingPointRef
-from netex.point_ref import PointRef
-from netex.railway_point_ref import RailwayPointRef
-from netex.relief_point_ref import ReliefPointRef
-from netex.road_point_ref import RoadPointRef
-from netex.route_point_ref import RoutePointRef
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
-from netex.timing_point_ref import TimingPointRef
-from netex.traffic_control_point_ref import TrafficControlPointRef
-from netex.type_of_point_ref import TypeOfPointRef
-from netex.vehicle_meeting_point_ref import VehicleMeetingPointRef
-from netex.wire_point_ref import WirePointRef
+from typing import Optional, Union
+from .activation_point_ref import ActivationPointRef
+from .beacon_point_ref import BeaconPointRef
+from .border_point_ref import BorderPointRef
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .garage_point_ref import GaragePointRef
+from .parking_point_ref import ParkingPointRef
+from .point_ref import PointRef
+from .railway_point_ref import RailwayPointRef
+from .relief_point_ref import ReliefPointRef
+from .road_point_ref import RoadPointRef
+from .route_point_ref import RoutePointRef
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+from .timing_point_ref import TimingPointRef
+from .traffic_control_point_ref import TrafficControlPointRef
+from .type_of_point_ref import TypeOfPointRef
+from .vehicle_meeting_point_ref import VehicleMeetingPointRef
+from .wire_point_ref import WirePointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DeadRunEndpointStructure:
-    """Type for  DEAD RUN ENDPOINT (Production Timetable Service).
-
-    Should not Contradict EDEAD RUN JOURNEY PATTERN.
-    """
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            VehicleMeetingPointRef,
+            WirePointRef,
+            RoadPointRef,
+            RailwayPointRef,
+            TrafficControlPointRef,
+            BeaconPointRef,
+            ActivationPointRef,
+            BorderPointRef,
+            FareScheduledStopPointRef,
+            ScheduledStopPointRef,
+            GaragePointRef,
+            ParkingPointRef,
+            ReliefPointRef,
+            TimingPointRef,
+            RoutePointRef,
+            PointRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -113,7 +131,7 @@ class DeadRunEndpointStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     type_of_point_ref: Optional[TypeOfPointRef] = field(
         default=None,
@@ -121,5 +139,5 @@ class DeadRunEndpointStructure:
             "name": "TypeOfPointRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

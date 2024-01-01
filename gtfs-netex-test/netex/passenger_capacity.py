@@ -1,13 +1,20 @@
-from dataclasses import dataclass
-from netex.passenger_capacity_structure import PassengerCapacityStructure
+from dataclasses import dataclass, field
+from .passenger_capacity_structure import PassengerCapacityStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PassengerCapacity(PassengerCapacityStructure):
-    """
-    Capacity for a VEHICLE TYPE and Class.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
+
+    id: str = field(
+        metadata={
+            "type": "Attribute",
+            "required": True,
+        }
+    )

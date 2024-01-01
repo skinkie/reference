@@ -1,14 +1,15 @@
 from dataclasses import dataclass
-from netex.type_of_codespace_assignment_ref_structure import TypeOfCodespaceAssignmentRefStructure
+from .type_of_codespace_assignment_ref_structure import (
+    TypeOfCodespaceAssignmentRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfCodespaceAssignmentRef(TypeOfCodespaceAssignmentRefStructure):
-    """Reference to a TYPE OF CODESPACE ASSIGNMENT.
-
-    +v1.1
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from netex.assignment_version_structure_1 import AssignmentVersionStructure1
+from .assignment_version_structure_1 import AssignmentVersionStructure1
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleServicePlaceAssignmentVersionStructure(AssignmentVersionStructure1):
-    """
-    Type for VEHICLE SERVICE PLACE ASSIGNMENT restricts id.
-    """
+@dataclass(kw_only=True)
+class VehicleServicePlaceAssignmentVersionStructure(
+    AssignmentVersionStructure1
+):
     class Meta:
         name = "VehicleServicePlaceAssignment_VersionStructure"

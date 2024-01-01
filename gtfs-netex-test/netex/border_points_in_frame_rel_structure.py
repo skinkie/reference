@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.border_point import BorderPoint
-from netex.frame_containment_structure import FrameContainmentStructure
+from .border_point import BorderPoint
+from .frame_containment_structure import FrameContainmentStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BorderPointsInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of BORDER POINT.
-    """
     class Meta:
         name = "borderPointsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class BorderPointsInFrameRelStructure(FrameContainmentStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

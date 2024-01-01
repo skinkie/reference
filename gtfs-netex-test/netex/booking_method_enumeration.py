@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class BookingMethodEnumeration(Enum):
-    """
-    Allowed values for Flexible Booking method.
-    """
     CALL_DRIVER = "callDriver"
     CALL_OFFICE = "callOffice"
     ONLINE = "online"

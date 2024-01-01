@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.time_demand_type_assignment import TimeDemandTypeAssignment
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .time_demand_type_assignment import TimeDemandTypeAssignment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TimeDemandTypeAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of TIME DEMAND TYPE ASSIGNMENTs.
-    """
+@dataclass(kw_only=True)
+class TimeDemandTypeAssignmentsInFrameRelStructure(
+    ContainmentAggregationStructure
+):
     class Meta:
         name = "timeDemandTypeAssignmentsInFrame_RelStructure"
 
@@ -21,5 +23,5 @@ class TimeDemandTypeAssignmentsInFrameRelStructure(ContainmentAggregationStructu
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

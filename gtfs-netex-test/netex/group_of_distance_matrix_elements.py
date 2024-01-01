@@ -1,21 +1,17 @@
-from dataclasses import dataclass, field
-from netex.group_of_distance_matrix_elements_version_structure import GroupOfDistanceMatrixElementsVersionStructure
+from dataclasses import dataclass
+from .group_of_distance_matrix_elements_version_structure import (
+    GroupOfDistanceMatrixElementsVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class GroupOfDistanceMatrixElements(GroupOfDistanceMatrixElementsVersionStructure):
-    """
-    A group of DISTANCE MATRIX ELEMENTs; may set common properties for a given set
-    of origin and destination pairs.
-    """
+@dataclass(kw_only=True)
+class GroupOfDistanceMatrixElements(
+    GroupOfDistanceMatrixElementsVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

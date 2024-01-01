@@ -1,23 +1,30 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.headway_journey_group import HeadwayJourneyGroup
-from netex.headway_journey_group_ref import HeadwayJourneyGroupRef
-from netex.rhythmical_journey_group import RhythmicalJourneyGroup
-from netex.rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .headway_journey_group import HeadwayJourneyGroup
+from .headway_journey_group_ref import HeadwayJourneyGroupRef
+from .rhythmical_journey_group import RhythmicalJourneyGroup
+from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FrequencyGroupsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of a VEHICLE JOURNEY FREQUENCies.
-    """
     class Meta:
         name = "frequencyGroups_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            HeadwayJourneyGroupRef,
+            HeadwayJourneyGroup,
+            RhythmicalJourneyGroupRef,
+            RhythmicalJourneyGroup,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -43,5 +50,5 @@ class FrequencyGroupsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

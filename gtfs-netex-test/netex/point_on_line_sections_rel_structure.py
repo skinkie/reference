@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.point_on_line_section import PointOnLineSection
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .point_on_line_section import PointOnLineSection
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointOnLineSectionsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of POINTS ON LINE SECTIONs.
-    """
     class Meta:
         name = "pointOnLineSections_RelStructure"
 
@@ -21,5 +21,5 @@ class PointOnLineSectionsRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

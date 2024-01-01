@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class SameStopEnumeration(Enum):
-    """
-    Allowed values for Stop ENTITLEMENT CONSTRAINT.
-    """
     ANY = "any"
     SAME_AS_ORIGIN = "sameAsOrigin"
     SAME_AS_DESTINATION = "sameAsDestination"

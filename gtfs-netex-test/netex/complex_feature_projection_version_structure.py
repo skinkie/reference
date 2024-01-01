@@ -1,40 +1,33 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from netex.activation_point_ref import ActivationPointRef
-from netex.beacon_point_ref import BeaconPointRef
-from netex.border_point_ref import BorderPointRef
-from netex.complex_feature_ref_structure import ComplexFeatureRefStructure
-from netex.complex_feature_refs_rel_structure import ComplexFeatureRefsRelStructure
-from netex.fare_scheduled_stop_point_ref import FareScheduledStopPointRef
-from netex.garage_point_ref import GaragePointRef
-from netex.parking_point_ref import ParkingPointRef
-from netex.point_ref import PointRef
-from netex.projection_version_structure import ProjectionVersionStructure
-from netex.railway_point_ref import RailwayPointRef
-from netex.relief_point_ref import ReliefPointRef
-from netex.road_point_ref import RoadPointRef
-from netex.route_point_ref import RoutePointRef
-from netex.scheduled_stop_point_ref import ScheduledStopPointRef
-from netex.timing_point_ref import TimingPointRef
-from netex.traffic_control_point_ref import TrafficControlPointRef
-from netex.vehicle_meeting_point_ref import VehicleMeetingPointRef
-from netex.wire_point_ref import WirePointRef
+from typing import List, Optional, Union
+from .activation_point_ref import ActivationPointRef
+from .beacon_point_ref import BeaconPointRef
+from .border_point_ref import BorderPointRef
+from .complex_feature_ref_structure import ComplexFeatureRefStructure
+from .complex_feature_refs_rel_structure import ComplexFeatureRefsRelStructure
+from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
+from .garage_point_ref import GaragePointRef
+from .parking_point_ref import ParkingPointRef
+from .point_ref import PointRef
+from .projection_version_structure import ProjectionVersionStructure
+from .railway_point_ref import RailwayPointRef
+from .relief_point_ref import ReliefPointRef
+from .road_point_ref import RoadPointRef
+from .route_point_ref import RoutePointRef
+from .scheduled_stop_point_ref import ScheduledStopPointRef
+from .timing_point_ref import TimingPointRef
+from .traffic_control_point_ref import TrafficControlPointRef
+from .vehicle_meeting_point_ref import VehicleMeetingPointRef
+from .wire_point_ref import WirePointRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ComplexFeatureProjectionVersionStructure(ProjectionVersionStructure):
-    """
-    Type for a COMPLEX FEATURE PROJECTION.
-
-    :ivar projected_fearture_ref: COMPLEX FEATURE which is being
-        projetced.
-    :ivar onto_feature_ref: COMPLEX FEATURE onto which projection is
-        being made.
-    :ivar choice:
-    :ivar features: COMPLEX FEATURES in PROJECTION.
-    """
     class Meta:
         name = "ComplexFeatureProjection_VersionStructure"
 
@@ -44,7 +37,7 @@ class ComplexFeatureProjectionVersionStructure(ProjectionVersionStructure):
             "name": "ProjectedFeartureRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     onto_feature_ref: Optional[ComplexFeatureRefStructure] = field(
         default=None,
@@ -52,9 +45,28 @@ class ComplexFeatureProjectionVersionStructure(ProjectionVersionStructure):
             "name": "OntoFeatureRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            VehicleMeetingPointRef,
+            WirePointRef,
+            RoadPointRef,
+            RailwayPointRef,
+            TrafficControlPointRef,
+            BeaconPointRef,
+            ActivationPointRef,
+            BorderPointRef,
+            FareScheduledStopPointRef,
+            ScheduledStopPointRef,
+            GaragePointRef,
+            ParkingPointRef,
+            ReliefPointRef,
+            TimingPointRef,
+            RoutePointRef,
+            PointRef,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -140,12 +152,12 @@ class ComplexFeatureProjectionVersionStructure(ProjectionVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     features: Optional[ComplexFeatureRefsRelStructure] = field(
         default=None,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

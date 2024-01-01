@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.path_link_ref import PathLinkRef
-from netex.path_link_ref_by_value import PathLinkRefByValue
+from typing import List, Union
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .path_link_ref import PathLinkRef
+from .path_link_ref_by_value import PathLinkRefByValue
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PathLinkRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a PATH LINK.
-    """
     class Meta:
         name = "pathLinkRefs_RelStructure"
 
-    path_link_ref_or_path_link_ref_by_value: List[object] = field(
+    path_link_ref_or_path_link_ref_by_value: List[
+        Union[PathLinkRef, PathLinkRefByValue]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class PathLinkRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

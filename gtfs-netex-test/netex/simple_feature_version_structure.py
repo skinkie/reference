@@ -1,27 +1,40 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.access_zone_ref import AccessZoneRef
-from netex.administrative_zone_ref import AdministrativeZoneRef
-from netex.fare_zone_ref import FareZoneRef
-from netex.group_of_points_version_structure import GroupOfPointsVersionStructure
-from netex.mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
-from netex.stop_area_ref import StopAreaRef
-from netex.tariff_zone_ref import TariffZoneRef
-from netex.transport_administrative_zone_ref import TransportAdministrativeZoneRef
-from netex.zone_ref import ZoneRef
+from typing import Optional, Union
+from .access_zone_ref import AccessZoneRef
+from .administrative_zone_ref import AdministrativeZoneRef
+from .fare_zone_ref import FareZoneRef
+from .group_of_points_version_structure import GroupOfPointsVersionStructure
+from .mobility_service_constraint_zone_ref import (
+    MobilityServiceConstraintZoneRef,
+)
+from .stop_area_ref import StopAreaRef
+from .tariff_zone_ref import TariffZoneRef
+from .transport_administrative_zone_ref import TransportAdministrativeZoneRef
+from .zone_ref import ZoneRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SimpleFeatureVersionStructure(GroupOfPointsVersionStructure):
-    """
-    Type for SIMPLE FEATURE.
-    """
     class Meta:
         name = "SimpleFeature_VersionStructure"
 
-    choice: Optional[object] = field(
+    zone_ref_or_tariff_zone_ref: Optional[
+        Union[
+            MobilityServiceConstraintZoneRef,
+            StopAreaRef,
+            TransportAdministrativeZoneRef,
+            AccessZoneRef,
+            AdministrativeZoneRef,
+            FareZoneRef,
+            TariffZoneRef,
+            ZoneRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -67,5 +80,5 @@ class SimpleFeatureVersionStructure(GroupOfPointsVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

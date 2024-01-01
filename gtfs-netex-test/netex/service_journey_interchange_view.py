@@ -1,13 +1,17 @@
 from dataclasses import dataclass
-from netex.service_journey_interchange_derived_view_structure import ServiceJourneyInterchangeDerivedViewStructure
+from .service_journey_interchange_derived_view_structure import (
+    ServiceJourneyInterchangeDerivedViewStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ServiceJourneyInterchangeView(ServiceJourneyInterchangeDerivedViewStructure):
-    """
-    Simplified  view of SERVICE JOURNEY INTERCHANGE.
-    """
+@dataclass(kw_only=True)
+class ServiceJourneyInterchangeView(
+    ServiceJourneyInterchangeDerivedViewStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

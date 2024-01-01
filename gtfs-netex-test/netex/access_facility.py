@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.access_facility_enumeration import AccessFacilityEnumeration
+from .access_facility_enumeration import AccessFacilityEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AccessFacility:
-    """
-    Classification of SITE  ACCESS FACILITY.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -16,5 +16,5 @@ class AccessFacility:
         default=AccessFacilityEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

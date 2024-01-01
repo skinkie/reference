@@ -1,14 +1,17 @@
 from dataclasses import dataclass
-from netex.vehicle_access_credentials_assignment_ref_structure import VehicleAccessCredentialsAssignmentRefStructure
+from .vehicle_access_credentials_assignment_ref_structure import (
+    VehicleAccessCredentialsAssignmentRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleAccessCredentialsAssignmentRef(VehicleAccessCredentialsAssignmentRefStructure):
-    """Reference to a VEHICLE ACCESS CREDENTIALS ASSIGNMENT.
-
-    +v1.2.2
-    """
+@dataclass(kw_only=True)
+class VehicleAccessCredentialsAssignmentRef(
+    VehicleAccessCredentialsAssignmentRefStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

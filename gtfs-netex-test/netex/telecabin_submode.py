@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.telecabin_submode_enumeration import TelecabinSubmodeEnumeration
+from .telecabin_submode_enumeration import TelecabinSubmodeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TelecabinSubmode:
-    """
-    TPEG pti09 Telecabin submodes.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -16,5 +16,5 @@ class TelecabinSubmode:
         default=TelecabinSubmodeEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

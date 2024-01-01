@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class MediaTypeEnumeration(Enum):
-    """
-    Allowed values for ResellType.
-    """
     NONE = "none"
     PAPER_TICKET = "paperTicket"
     PAPER_TICKET_WITH_COUPONS = "paperTicketWithCoupons"

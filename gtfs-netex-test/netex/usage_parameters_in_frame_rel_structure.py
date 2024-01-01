@@ -1,52 +1,92 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.additional_driver_option import AdditionalDriverOption
-from netex.cancelling import Cancelling
-from netex.charging_policy import ChargingPolicy
-from netex.commercial_profile import CommercialProfile
-from netex.companion_profile import CompanionProfile
-from netex.eligibility_change_policy import EligibilityChangePolicy
-from netex.entitlement_given import EntitlementGiven
-from netex.entitlement_required import EntitlementRequired
-from netex.exchanging import Exchanging
-from netex.frame_containment_structure import FrameContainmentStructure
-from netex.frequency_of_use import FrequencyOfUse
-from netex.group_ticket import GroupTicket
-from netex.interchanging import Interchanging
-from netex.luggage_allowance import LuggageAllowance
-from netex.minimum_stay import MinimumStay
-from netex.penalty_policy import PenaltyPolicy
-from netex.purchase_window import PurchaseWindow
-from netex.refunding import Refunding
-from netex.rental_option import RentalOption
-from netex.rental_penalty_policy import RentalPenaltyPolicy
-from netex.replacing import Replacing
-from netex.reselling import Reselling
-from netex.reserving import Reserving
-from netex.round_trip import RoundTrip
-from netex.routing import Routing
-from netex.sales_offer_package_entitlement_given import SalesOfferPackageEntitlementGiven
-from netex.sales_offer_package_entitlement_required import SalesOfferPackageEntitlementRequired
-from netex.step_limit import StepLimit
-from netex.subscribing import Subscribing
-from netex.suspending import Suspending
-from netex.transferability import Transferability
-from netex.usage_validity_period import UsageValidityPeriod
-from netex.user_profile import UserProfile
-from netex.vehicle_pooler_profile import VehiclePoolerProfile
+from typing import List, Union
+from .additional_driver_option import AdditionalDriverOption
+from .cancelling import Cancelling
+from .charging_policy import ChargingPolicy
+from .commercial_profile import CommercialProfile
+from .companion_profile import CompanionProfile
+from .eligibility_change_policy import EligibilityChangePolicy
+from .entitlement_given import EntitlementGiven
+from .entitlement_required import EntitlementRequired
+from .exchanging import Exchanging
+from .frame_containment_structure import FrameContainmentStructure
+from .frequency_of_use import FrequencyOfUse
+from .group_ticket import GroupTicket
+from .interchanging import Interchanging
+from .luggage_allowance import LuggageAllowance
+from .minimum_stay import MinimumStay
+from .penalty_policy import PenaltyPolicy
+from .purchase_window import PurchaseWindow
+from .refunding import Refunding
+from .rental_option import RentalOption
+from .rental_penalty_policy import RentalPenaltyPolicy
+from .replacing import Replacing
+from .reselling import Reselling
+from .reserving import Reserving
+from .round_trip import RoundTrip
+from .routing import Routing
+from .sales_offer_package_entitlement_given import (
+    SalesOfferPackageEntitlementGiven,
+)
+from .sales_offer_package_entitlement_required import (
+    SalesOfferPackageEntitlementRequired,
+)
+from .step_limit import StepLimit
+from .subscribing import Subscribing
+from .suspending import Suspending
+from .transferability import Transferability
+from .usage_validity_period import UsageValidityPeriod
+from .user_profile import UserProfile
+from .vehicle_pooler_profile import VehiclePoolerProfile
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class UsageParametersInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of USAGE PARAMETER.
-    """
     class Meta:
         name = "usageParametersInFrame_RelStructure"
 
-    choice: List[object] = field(
+    usage_parameter: List[
+        Union[
+            AdditionalDriverOption,
+            RentalOption,
+            RentalPenaltyPolicy,
+            VehiclePoolerProfile,
+            SalesOfferPackageEntitlementRequired,
+            SalesOfferPackageEntitlementGiven,
+            MinimumStay,
+            Interchanging,
+            Suspending,
+            UsageValidityPeriod,
+            FrequencyOfUse,
+            StepLimit,
+            Routing,
+            RoundTrip,
+            LuggageAllowance,
+            EntitlementRequired,
+            EntitlementGiven,
+            EligibilityChangePolicy,
+            CompanionProfile,
+            GroupTicket,
+            CommercialProfile,
+            UserProfile,
+            Subscribing,
+            PenaltyPolicy,
+            ChargingPolicy,
+            Cancelling,
+            Reserving,
+            PurchaseWindow,
+            Transferability,
+            Replacing,
+            Refunding,
+            Exchanging,
+            Reselling,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -217,5 +257,5 @@ class UsageParametersInFrameRelStructure(FrameContainmentStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

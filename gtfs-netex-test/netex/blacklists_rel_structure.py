@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.blacklist import Blacklist
-from netex.blacklist_ref import BlacklistRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from typing import List, Union
+from .blacklist import Blacklist
+from .blacklist_ref import BlacklistRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class BlacklistsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of BLACKLISTs.
-    """
     class Meta:
         name = "blacklists_RelStructure"
 
-    blacklist_ref_or_blacklist: List[object] = field(
+    blacklist_ref_or_blacklist: List[Union[BlacklistRef, Blacklist]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class BlacklistsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

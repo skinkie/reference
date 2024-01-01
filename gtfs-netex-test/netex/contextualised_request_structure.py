@@ -1,45 +1,23 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDateTime
-from netex.service_request_context_structure import ServiceRequestContextStructure
+from .service_request_context_structure import ServiceRequestContextStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ContextualisedRequestStructure:
-    """
-    Type for General SIRI Request.
-
-    :ivar service_request_context: General request properties -
-        typically configured rather than repeated on request.
-    :ivar request_timestamp:
-    :ivar account_id: Account Identifier. May be used to attribute
-        requests to a particular application provider and authentication
-        key. The account  may be common to all users of an application,
-        or to an individual user. Note that to identify an individual
-        user the  RequestorRef can be used with an anonymised token.  .
-        +SIRI v2.0
-    :ivar account_key: Authentication key for request. May be used to
-        authenticate requests from a particular account. +SIRI v2.0
-    :ivar address: Address to which response is to be sent. This may
-        also be determined from RequestorRef and preconfigured data.
-    :ivar requestor_ref:
-    :ivar message_identifier: Arbitrary unique identifier that can be
-        used to reference this message in subsequent interactions.
-    :ivar delegator_address: Address of original Consumer, i.e.
-        requesting system to which delegating response is to be
-        returned. +SIRI 2.0
-    :ivar delegator_ref: Identifier of delegating system that originated
-        message. +SIRI 2.0
-    """
     service_request_context: Optional[ServiceRequestContextStructure] = field(
         default=None,
         metadata={
             "name": "ServiceRequestContext",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     request_timestamp: XmlDateTime = field(
         metadata={
@@ -55,7 +33,7 @@ class ContextualisedRequestStructure:
             "name": "AccountId",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     account_key: Optional[str] = field(
         default=None,
@@ -63,7 +41,7 @@ class ContextualisedRequestStructure:
             "name": "AccountKey",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     address: Optional[str] = field(
         default=None,
@@ -71,7 +49,7 @@ class ContextualisedRequestStructure:
             "name": "Address",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     requestor_ref: str = field(
         metadata={
@@ -87,7 +65,7 @@ class ContextualisedRequestStructure:
             "name": "MessageIdentifier",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     delegator_address: Optional[str] = field(
         default=None,
@@ -95,7 +73,7 @@ class ContextualisedRequestStructure:
             "name": "DelegatorAddress",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )
     delegator_ref: Optional[str] = field(
         default=None,
@@ -103,5 +81,5 @@ class ContextualisedRequestStructure:
             "name": "DelegatorRef",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )

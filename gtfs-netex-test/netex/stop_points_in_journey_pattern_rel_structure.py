@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.stop_point_in_journey_pattern import StopPointInJourneyPattern
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .stop_point_in_journey_pattern import StopPointInJourneyPattern
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class StopPointsInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of STOP POINTs IN JOURNEY PATTERN.
-    """
+@dataclass(kw_only=True)
+class StopPointsInJourneyPatternRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "stopPointsInJourneyPattern_RelStructure"
 
@@ -21,5 +25,5 @@ class StopPointsInJourneyPatternRelStructure(StrictContainmentAggregationStructu
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 2,
-        }
+        },
     )

@@ -1,33 +1,27 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.activation_link_ref import ActivationLinkRef
-from netex.alternative_texts_rel_structure import DataManagedObjectStructure
-from netex.line_link_ref import LineLinkRef
-from netex.multilingual_string import MultilingualString
-from netex.onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
-from netex.path_link_ref import PathLinkRef
-from netex.railway_link_ref import RailwayLinkRef
-from netex.road_link_ref import RoadLinkRef
-from netex.route_link_ref import RouteLinkRef
-from netex.service_link_ref import ServiceLinkRef
-from netex.timing_link_ref import TimingLinkRef
-from netex.vehicle_meeting_link_ref import VehicleMeetingLinkRef
-from netex.wire_link_ref import WireLinkRef
+from typing import Optional, Union
+from .activation_link_ref import ActivationLinkRef
+from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .line_link_ref import LineLinkRef
+from .multilingual_string import MultilingualString
+from .onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
+from .path_link_ref import PathLinkRef
+from .railway_link_ref import RailwayLinkRef
+from .road_link_ref import RoadLinkRef
+from .route_link_ref import RouteLinkRef
+from .service_link_ref import ServiceLinkRef
+from .timing_link_ref import TimingLinkRef
+from .vehicle_meeting_link_ref import VehicleMeetingLinkRef
+from .wire_link_ref import WireLinkRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LineShapeStructure2(DataManagedObjectStructure):
-    """
-    Type for a LINE SHAPE.
-
-    :ivar formula: Formula for calculating line.
-    :ivar name: Name of LINE SHAPE.
-    :ivar choice:
-    :ivar locating_system_ref: Name of locating system under which line
-        is specified.
-    """
     class Meta:
         name = "LineShapeStructure"
 
@@ -37,7 +31,7 @@ class LineShapeStructure2(DataManagedObjectStructure):
             "name": "Formula",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     name: Optional[MultilingualString] = field(
         default=None,
@@ -45,9 +39,23 @@ class LineShapeStructure2(DataManagedObjectStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    link_ref_or_infrastructure_link_ref: Optional[
+        Union[
+            OnwardVehicleMeetingLinkRef,
+            VehicleMeetingLinkRef,
+            ServiceLinkRef,
+            LineLinkRef,
+            TimingLinkRef,
+            WireLinkRef,
+            RoadLinkRef,
+            RailwayLinkRef,
+            ActivationLinkRef,
+            PathLinkRef,
+            RouteLinkRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -108,7 +116,7 @@ class LineShapeStructure2(DataManagedObjectStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     locating_system_ref: Optional[str] = field(
         default=None,
@@ -116,5 +124,5 @@ class LineShapeStructure2(DataManagedObjectStructure):
             "name": "LocatingSystemRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

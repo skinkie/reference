@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.route_ref import RouteRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .route_ref import RouteRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RouteRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of references to a ROUTE.
-    """
     class Meta:
         name = "routeRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class RouteRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

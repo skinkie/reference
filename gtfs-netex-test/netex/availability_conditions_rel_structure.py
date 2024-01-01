@@ -1,25 +1,32 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.alternative_texts_rel_structure import (
+from typing import List, Union
+from .alternative_texts_rel_structure import (
     AvailabilityCondition,
     ValidBetween,
     ValidDuring,
 )
-from netex.availability_condition_ref import AvailabilityConditionRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from .availability_condition_ref import AvailabilityConditionRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AvailabilityConditionsRelStructure(ContainmentAggregationStructure):
-    """
-    A collection of one or more AVAILABILITY CONDITIONs.
-    """
     class Meta:
         name = "availabilityConditions_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            AvailabilityConditionRef,
+            AvailabilityCondition,
+            ValidDuring,
+            ValidBetween,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -45,5 +52,5 @@ class AvailabilityConditionsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

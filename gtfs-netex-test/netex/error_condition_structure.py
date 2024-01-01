@@ -1,29 +1,41 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.access_not_allowed_error import AccessNotAllowedError
-from netex.allowed_resource_usage_exceeded_error import AllowedResourceUsageExceededError
-from netex.beyond_data_horizon import BeyondDataHorizon
-from netex.capability_not_supported_error import CapabilityNotSupportedError
-from netex.invalid_data_references_error import InvalidDataReferencesError
-from netex.natural_language_string_structure import NaturalLanguageStringStructure
-from netex.no_info_for_topic_error import NoInfoForTopicError
-from netex.other_error import OtherError
-from netex.parameters_ignored_error import ParametersIgnoredError
-from netex.service_not_available_error import ServiceNotAvailableError
-from netex.unknown_extensions_error import UnknownExtensionsError
+from typing import Optional, Union
+from .access_not_allowed_error import AccessNotAllowedError
+from .allowed_resource_usage_exceeded_error import (
+    AllowedResourceUsageExceededError,
+)
+from .beyond_data_horizon import BeyondDataHorizon
+from .capability_not_supported_error import CapabilityNotSupportedError
+from .invalid_data_references_error import InvalidDataReferencesError
+from .natural_language_string_structure import NaturalLanguageStringStructure
+from .no_info_for_topic_error import NoInfoForTopicError
+from .other_error import OtherError
+from .parameters_ignored_error import ParametersIgnoredError
+from .service_not_available_error import ServiceNotAvailableError
+from .unknown_extensions_error import UnknownExtensionsError
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ErrorConditionStructure:
-    """
-    Type for RequestErrorCondition.
-
-    :ivar choice:
-    :ivar description: Text description of error.
-    """
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            ServiceNotAvailableError,
+            CapabilityNotSupportedError,
+            AccessNotAllowedError,
+            InvalidDataReferencesError,
+            BeyondDataHorizon,
+            NoInfoForTopicError,
+            ParametersIgnoredError,
+            UnknownExtensionsError,
+            AllowedResourceUsageExceededError,
+            OtherError,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -79,7 +91,7 @@ class ErrorConditionStructure:
                     "namespace": "http://www.siri.org.uk/siri",
                 },
             ),
-        }
+        },
     )
     description: Optional[NaturalLanguageStringStructure] = field(
         default=None,
@@ -87,5 +99,5 @@ class ErrorConditionStructure:
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.siri.org.uk/siri",
-        }
+        },
     )

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.online_service import OnlineService
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .online_service import OnlineService
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OnlineServicesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of MOBILITY SERVICEs.
-    """
     class Meta:
         name = "onlineServices_RelStructure"
 
@@ -21,5 +21,5 @@ class OnlineServicesRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

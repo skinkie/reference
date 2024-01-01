@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.transport_organisation_version_structure import TransportOrganisationVersionStructure
-from netex.type_of_organisation_refs_rel_structure import TypeOfOrganisationRefsRelStructure
+from .transport_organisation_version_structure import (
+    TransportOrganisationVersionStructure,
+)
+from .type_of_organisation_refs_rel_structure import (
+    TypeOfOrganisationRefsRelStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AuthorityVersionStructure(TransportOrganisationVersionStructure):
-    """
-    Type for an AUTHORITY.
-
-    :ivar authority_types: Classification of Zone. Used for arbitrary
-        documentation -.
-    """
     class Meta:
         name = "Authority_VersionStructure"
 
@@ -23,5 +24,5 @@ class AuthorityVersionStructure(TransportOrganisationVersionStructure):
             "name": "authorityTypes",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

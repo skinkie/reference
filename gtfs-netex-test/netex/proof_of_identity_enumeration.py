@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ProofOfIdentityEnumeration(Enum):
-    """
-    Allowed values for PROOF REQUIIRED Type.
-    """
     NONE_REQUIRED = "noneRequired"
     CREDIT_CARD = "creditCard"
     PASSPORT = "passport"

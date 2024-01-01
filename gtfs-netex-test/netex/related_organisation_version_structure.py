@@ -1,34 +1,28 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.authority_ref import AuthorityRef
-from netex.general_organisation_ref import GeneralOrganisationRef
-from netex.management_agent_ref import ManagementAgentRef
-from netex.multilingual_string import MultilingualString
-from netex.online_service_operator_ref import OnlineServiceOperatorRef
-from netex.operator_ref import OperatorRef
-from netex.organisation_ref import OrganisationRef
-from netex.organisation_role_enumeration import OrganisationRoleEnumeration
-from netex.other_organisation_ref import OtherOrganisationRef
-from netex.responsibility_role_ref import ResponsibilityRoleRef
-from netex.retail_consortium_ref import RetailConsortiumRef
-from netex.serviced_organisation_ref import ServicedOrganisationRef
-from netex.travel_agent_ref import TravelAgentRef
+from typing import Optional, Union
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .authority_ref import AuthorityRef
+from .general_organisation_ref import GeneralOrganisationRef
+from .management_agent_ref import ManagementAgentRef
+from .multilingual_string import MultilingualString
+from .online_service_operator_ref import OnlineServiceOperatorRef
+from .operator_ref import OperatorRef
+from .organisation_ref import OrganisationRef
+from .organisation_role_enumeration import OrganisationRoleEnumeration
+from .other_organisation_ref import OtherOrganisationRef
+from .responsibility_role_ref import ResponsibilityRoleRef
+from .retail_consortium_ref import RetailConsortiumRef
+from .serviced_organisation_ref import ServicedOrganisationRef
+from .travel_agent_ref import TravelAgentRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RelatedOrganisationVersionStructure(VersionedChildStructure):
-    """
-    Type for an RELATED ORGANISATION.
-
-    :ivar name: Name of RELATED ORGANISATION.
-    :ivar description: Description of the nature pf the  Relationship.
-    :ivar choice:
-    :ivar organisation_role_type: Role of the related Organbisation
-    :ivar responsibility_role_ref:
-    """
     class Meta:
         name = "RelatedOrganisation_VersionStructure"
 
@@ -38,7 +32,7 @@ class RelatedOrganisationVersionStructure(VersionedChildStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -46,9 +40,22 @@ class RelatedOrganisationVersionStructure(VersionedChildStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
+        Union[
+            RetailConsortiumRef,
+            OnlineServiceOperatorRef,
+            GeneralOrganisationRef,
+            ManagementAgentRef,
+            ServicedOrganisationRef,
+            TravelAgentRef,
+            OtherOrganisationRef,
+            AuthorityRef,
+            OperatorRef,
+            OrganisationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -104,7 +111,7 @@ class RelatedOrganisationVersionStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     organisation_role_type: Optional[OrganisationRoleEnumeration] = field(
         default=None,
@@ -112,7 +119,7 @@ class RelatedOrganisationVersionStructure(VersionedChildStructure):
             "name": "OrganisationRoleType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     responsibility_role_ref: Optional[ResponsibilityRoleRef] = field(
         default=None,
@@ -120,5 +127,5 @@ class RelatedOrganisationVersionStructure(VersionedChildStructure):
             "name": "ResponsibilityRoleRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.access_mode_enumeration import AccessModeEnumeration
+from .access_mode_enumeration import AccessModeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AccessMode:
-    """
-    Access MODE for SITEs.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 

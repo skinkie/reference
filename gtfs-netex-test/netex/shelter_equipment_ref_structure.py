@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from netex.site_equipment_ref_structure import SiteEquipmentRefStructure
+from .site_equipment_ref_structure import SiteEquipmentRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ShelterEquipmentRefStructure(SiteEquipmentRefStructure):
-    """
-    Type for a reference to an SHELTER EQUIPMENT.
-    """
+    value: RestrictedVar

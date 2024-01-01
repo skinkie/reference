@@ -1,27 +1,20 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.fare_table_column_ref_structure import FareTableColumnRefStructure
-from netex.fare_table_ref import FareTableRef
-from netex.fare_table_row_ref_structure import FareTableRowRefStructure
-from netex.multilingual_string import MultilingualString
-from netex.standard_fare_table_ref import StandardFareTableRef
+from typing import Optional, Union
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .fare_table_column_ref_structure import FareTableColumnRefStructure
+from .fare_table_ref import FareTableRef
+from .fare_table_row_ref_structure import FareTableRowRefStructure
+from .multilingual_string import MultilingualString
+from .standard_fare_table_ref import StandardFareTableRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CommonCellVersionedChildStructure(VersionedChildStructure):
-    """
-    Type for a CELL.
-
-    :ivar name: Name of CELL.
-    :ivar description: Description of CELL.
-    :ivar standard_fare_table_ref_or_fare_table_ref:
-    :ivar column_ref: Column for CELL.
-    :ivar row_ref: Row for CELL.
-    :ivar order: Order in which cell is to appear.
-    """
     class Meta:
         name = "CommonCell_VersionedChildStructure"
 
@@ -31,7 +24,7 @@ class CommonCellVersionedChildStructure(VersionedChildStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -39,9 +32,11 @@ class CommonCellVersionedChildStructure(VersionedChildStructure):
             "name": "Description",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    standard_fare_table_ref_or_fare_table_ref: Optional[object] = field(
+    fare_table_ref: Optional[
+        Union[StandardFareTableRef, FareTableRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -57,7 +52,7 @@ class CommonCellVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     column_ref: Optional[FareTableColumnRefStructure] = field(
         default=None,
@@ -65,7 +60,7 @@ class CommonCellVersionedChildStructure(VersionedChildStructure):
             "name": "ColumnRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     row_ref: Optional[FareTableRowRefStructure] = field(
         default=None,
@@ -73,11 +68,11 @@ class CommonCellVersionedChildStructure(VersionedChildStructure):
             "name": "RowRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     order: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )

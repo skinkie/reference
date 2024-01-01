@@ -1,19 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.common_section_point_member import CommonSectionPointMember
-from netex.line_section_point_member import LineSectionPointMember
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .common_section_point_member import CommonSectionPointMember
+from .line_section_point_member import LineSectionPointMember
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class CommonSectionPointMembersRelStructure(StrictContainmentAggregationStructure):
-    """DEPRECATED - Type for a list of COMMON SECTION POINT MEMBERs."""
+@dataclass(kw_only=True)
+class CommonSectionPointMembersRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "commonSectionPointMembers_RelStructure"
 
-    line_section_point_member_or_common_section_point_member: List[object] = field(
+    common_section_point_member: List[
+        Union[LineSectionPointMember, CommonSectionPointMember]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -29,5 +37,5 @@ class CommonSectionPointMembersRelStructure(StrictContainmentAggregationStructur
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

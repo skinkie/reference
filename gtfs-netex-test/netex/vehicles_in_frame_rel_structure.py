@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.train_element import TrainElement
-from netex.vehicle import Vehicle
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .train_element import TrainElement
+from .vehicle import Vehicle
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehiclesInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of VEHICLE TYPEs.
-    """
     class Meta:
         name = "vehiclesInFrame_RelStructure"
 
-    train_element_or_vehicle: List[object] = field(
+    train_element_or_vehicle: List[Union[TrainElement, Vehicle]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class VehiclesInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

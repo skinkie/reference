@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.offered_travel_specification import OfferedTravelSpecification
-from netex.offered_travel_specification_ref import OfferedTravelSpecificationRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .offered_travel_specification import OfferedTravelSpecification
+from .offered_travel_specification_ref import OfferedTravelSpecificationRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class OfferedTravelSpecificationsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of TRAVEL SPECIFICATIONs.
-    """
     class Meta:
         name = "offeredTravelSpecifications_RelStructure"
 
-    offered_travel_specification_ref_or_offered_travel_specification: List[object] = field(
+    offered_travel_specification_ref_or_offered_travel_specification: List[
+        Union[OfferedTravelSpecificationRef, OfferedTravelSpecification]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class OfferedTravelSpecificationsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

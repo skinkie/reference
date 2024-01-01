@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ResellWhenEnumeration(Enum):
-    """
-    Allowed values for Resell When.
-    """
     NEVER = "never"
     WITHIN_PURCHASE_GRACE_PERIOD = "withinPurchaseGracePeriod"
     BEFORE_START_OF_VALIDITY = "beforeStartOfValidity"

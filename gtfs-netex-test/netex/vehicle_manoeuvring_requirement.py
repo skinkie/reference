@@ -1,22 +1,17 @@
-from dataclasses import dataclass, field
-from netex.vehicle_manoeuvring_requirement_version_structure import VehicleManoeuvringRequirementVersionStructure
+from dataclasses import dataclass
+from .vehicle_manoeuvring_requirement_version_structure import (
+    VehicleManoeuvringRequirementVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleManoeuvringRequirement(VehicleManoeuvringRequirementVersionStructure):
-    """
-    Requirements for carrying passengers.
-
-    :ivar id: Identifier of VEHICLE MANOEVRING REQUIREMENT.
-    """
+@dataclass(kw_only=True)
+class VehicleManoeuvringRequirement(
+    VehicleManoeuvringRequirementVersionStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

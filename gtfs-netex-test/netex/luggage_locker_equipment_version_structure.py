@@ -1,29 +1,18 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from netex.locker_type_enumeration import LockerTypeEnumeration
-from netex.locking_type_enumeration import LockingTypeEnumeration
-from netex.site_equipment_version_structure import SiteEquipmentVersionStructure
+from .locker_type_enumeration import LockerTypeEnumeration
+from .locking_type_enumeration import LockingTypeEnumeration
+from .site_equipment_version_structure import SiteEquipmentVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
-    """
-    Type for a Luggage Locker.
-
-    :ivar number_of_lockers: Number of LOCKERs.
-    :ivar locker_width: Width of Locker.
-    :ivar locker_height: Height of Locker.
-    :ivar locker_depth: Depth of Locker.
-    :ivar locker_type: Type of Locker.
-    :ivar locking_type: Type of lock. +v1.1
-    :ivar wheelchair_accepted: Whether a wheelchair may be stored in the
-        locker. +v1.1
-    :ivar blind_accessible: Whether a visually impaired person may use
-        the mechanism. +v1.
-    """
     class Meta:
         name = "LuggageLockerEquipment_VersionStructure"
 
@@ -33,7 +22,7 @@ class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "NumberOfLockers",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     locker_width: Optional[Decimal] = field(
         default=None,
@@ -41,7 +30,7 @@ class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "LockerWidth",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     locker_height: Optional[Decimal] = field(
         default=None,
@@ -49,7 +38,7 @@ class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "LockerHeight",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     locker_depth: Optional[Decimal] = field(
         default=None,
@@ -57,7 +46,7 @@ class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "LockerDepth",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     locker_type: Optional[LockerTypeEnumeration] = field(
         default=None,
@@ -65,7 +54,7 @@ class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "LockerType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     locking_type: Optional[LockingTypeEnumeration] = field(
         default=None,
@@ -73,7 +62,7 @@ class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "LockingType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     wheelchair_accepted: Optional[bool] = field(
         default=None,
@@ -81,7 +70,7 @@ class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "WheelchairAccepted",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     blind_accessible: Optional[bool] = field(
         default=None,
@@ -89,5 +78,5 @@ class LuggageLockerEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "name": "BlindAccessible",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

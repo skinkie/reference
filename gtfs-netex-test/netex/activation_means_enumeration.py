@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class ActivationMeansEnumeration(Enum):
-    """
-    Allowed values for Activation Means.
-    """
     NONE_REQUIRED = "noneRequired"
     CHECK_IN = "checkIn"
     USE_OF_VALIDATOR = "useOfValidator"

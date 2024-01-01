@@ -1,45 +1,35 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlDate
-from netex.authority_ref import AuthorityRef
-from netex.general_organisation_ref import GeneralOrganisationRef
-from netex.group_of_entities_version_structure import GroupOfEntitiesVersionStructure
-from netex.management_agent_ref import ManagementAgentRef
-from netex.online_service_operator_ref import OnlineServiceOperatorRef
-from netex.operator_ref import OperatorRef
-from netex.organisation_ref import OrganisationRef
-from netex.other_organisation_ref import OtherOrganisationRef
-from netex.priceable_object_refs_rel_structure import PriceableObjectRefsRelStructure
-from netex.retail_consortium_ref import RetailConsortiumRef
-from netex.rounding_ref import RoundingRef
-from netex.serviced_organisation_ref import ServicedOrganisationRef
-from netex.travel_agent_ref import TravelAgentRef
-from netex.type_of_fare_table_ref import TypeOfFareTableRef
-from netex.used_in_refs_rel_structure import UsedInRefsRelStructure
+from .authority_ref import AuthorityRef
+from .general_organisation_ref import GeneralOrganisationRef
+from .group_of_entities_version_structure import (
+    GroupOfEntitiesVersionStructure,
+)
+from .management_agent_ref import ManagementAgentRef
+from .online_service_operator_ref import OnlineServiceOperatorRef
+from .operator_ref import OperatorRef
+from .organisation_ref import OrganisationRef
+from .other_organisation_ref import OtherOrganisationRef
+from .priceable_object_refs_rel_structure import (
+    PriceableObjectRefsRelStructure,
+)
+from .retail_consortium_ref import RetailConsortiumRef
+from .rounding_ref import RoundingRef
+from .serviced_organisation_ref import ServicedOrganisationRef
+from .travel_agent_ref import TravelAgentRef
+from .type_of_fare_table_ref import TypeOfFareTableRef
+from .used_in_refs_rel_structure import UsedInRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
-    """
-    Type for a STANDARD FARE TABLE PRICE GROUP.
-
-    :ivar start_date: Start date for PRICE GROUP.
-    :ivar end_date: End date for PRICE GROUP.
-    :ivar rounding_ref:
-    :ivar type_of_fare_table_ref:
-    :ivar prices_for: Combination of Elements for which this table
-        provides PRICEs.
-    :ivar used_in: Elements that use FARE TABLE that are not PRICEABLE
-        OBJECTs.
-    :ivar choice:
-    :ivar first_class_single: Price for a first class single  fare.
-    :ivar second_class_single: Price for a second class  single fare.
-    :ivar first_class_return: Price for a first class return fare.
-    :ivar second_class_return: Price for a second class return fare.
-    """
     class Meta:
         name = "StandardFareTable_VersionStructure"
 
@@ -49,7 +39,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "StartDate",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     end_date: Optional[XmlDate] = field(
         default=None,
@@ -57,7 +47,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "EndDate",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     rounding_ref: Optional[RoundingRef] = field(
         default=None,
@@ -65,7 +55,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "RoundingRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     type_of_fare_table_ref: Optional[TypeOfFareTableRef] = field(
         default=None,
@@ -73,7 +63,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "TypeOfFareTableRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     prices_for: Optional[PriceableObjectRefsRelStructure] = field(
         default=None,
@@ -81,7 +71,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "pricesFor",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     used_in: Optional[UsedInRefsRelStructure] = field(
         default=None,
@@ -89,9 +79,22 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "usedIn",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    choice: Optional[object] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
+        Union[
+            RetailConsortiumRef,
+            OnlineServiceOperatorRef,
+            GeneralOrganisationRef,
+            ManagementAgentRef,
+            ServicedOrganisationRef,
+            TravelAgentRef,
+            OtherOrganisationRef,
+            AuthorityRef,
+            OperatorRef,
+            OrganisationRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -147,7 +150,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     first_class_single: Optional[Decimal] = field(
         default=None,
@@ -155,7 +158,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "FirstClassSingle",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     second_class_single: Decimal = field(
         metadata={
@@ -171,7 +174,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "FirstClassReturn",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     second_class_return: Optional[Decimal] = field(
         default=None,
@@ -179,5 +182,5 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "name": "SecondClassReturn",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

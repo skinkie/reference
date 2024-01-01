@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class AccessibilityInfoFacilityEnumeration(Enum):
-    """
-    Allowed values for Accessibility Info.
-    """
     AUDIO_INFORMATION = "audioInformation"
     AUDIO_FOR_HEARING_IMPAIRED = "audioForHearingImpaired"
     VISUAL_DISPLAYS = "visualDisplays"

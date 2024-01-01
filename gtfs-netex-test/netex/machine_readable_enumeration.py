@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class MachineReadableEnumeration(Enum):
-    """
-    Allowed values for ResellType.
-    """
     NONE = "none"
     MAGNETIC_STRIP = "magneticStrip"
     CHIP = "chip"

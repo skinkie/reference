@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.route import Route
-from netex.route_ref import RouteRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .route import Route
+from .route_ref import RouteRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RoutesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of ROUTEs.
-    """
     class Meta:
         name = "routes_RelStructure"
 
-    route_ref_or_route: List[object] = field(
+    route_ref_or_route: List[Union[RouteRef, Route]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class RoutesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

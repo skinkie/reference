@@ -1,25 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.multilingual_string import MultilingualString
-from netex.vehicle_model_profile_version_structure import VehicleModelProfileVersionStructure
+from .multilingual_string import MultilingualString
+from .vehicle_model_profile_version_structure import (
+    VehicleModelProfileVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
-    """
-    Type for a CYCLE MODEL PROFILE.
-
-    :ivar gear_type_descriotion: Description of gearing.
-    :ivar battery: Whether there is a Battery
-    :ivar lamps: Whether there are lights.
-    :ivar helmet: Whether there is a helmet.
-    :ivar pump: Whether there is a pump.
-    :ivar locker: Whether there is a lockable luggafe container.
-    :ivar basket: Whether there is a basket.
-    :ivar lock: Whether there is a lock,
-    """
     class Meta:
         name = "CycleModelProfile_VersionStructure"
 
@@ -29,7 +22,7 @@ class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
             "name": "GearTypeDescriotion",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     battery: Optional[bool] = field(
         default=None,
@@ -37,7 +30,7 @@ class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
             "name": "Battery",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     lamps: Optional[bool] = field(
         default=None,
@@ -45,7 +38,7 @@ class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
             "name": "Lamps",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     helmet: Optional[bool] = field(
         default=None,
@@ -53,7 +46,7 @@ class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
             "name": "Helmet",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     pump: Optional[bool] = field(
         default=None,
@@ -61,7 +54,7 @@ class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
             "name": "Pump",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     locker: Optional[bool] = field(
         default=None,
@@ -69,7 +62,7 @@ class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
             "name": "Locker",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     basket: Optional[bool] = field(
         default=None,
@@ -77,7 +70,7 @@ class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
             "name": "Basket",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     lock: Optional[bool] = field(
         default=None,
@@ -85,5 +78,5 @@ class CycleModelProfileVersionStructure(VehicleModelProfileVersionStructure):
             "name": "Lock",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

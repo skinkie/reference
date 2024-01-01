@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.place_equipment_ref_structure import PlaceEquipmentRefStructure
+from .place_equipment_ref_structure import PlaceEquipmentRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SignEquipmentRef(PlaceEquipmentRefStructure):
-    """
-    Identifier of an SIGN EQUIPMENT.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.default_dead_run_run_time import DefaultDeadRunRunTime
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .default_dead_run_run_time import DefaultDeadRunRunTime
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class DefaultDeadRunRunTimesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of properties of DEFAULT DEAD RUN / RUN TIME.
-    """
+@dataclass(kw_only=True)
+class DefaultDeadRunRunTimesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "defaultDeadRunRunTimes_RelStructure"
 
@@ -21,5 +25,5 @@ class DefaultDeadRunRunTimesRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.related_organisation import RelatedOrganisation
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .related_organisation import RelatedOrganisation
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RelatedOrganisationsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of RELATED ORGANISATIONs.
-    """
     class Meta:
         name = "relatedOrganisations_RelStructure"
 
@@ -21,5 +21,5 @@ class RelatedOrganisationsRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

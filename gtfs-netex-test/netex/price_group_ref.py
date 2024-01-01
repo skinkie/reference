@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.price_group_ref_structure import PriceGroupRefStructure
+from .price_group_ref_structure import PriceGroupRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PriceGroupRef(PriceGroupRefStructure):
-    """
-    Reference to a PRICE GROUP.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

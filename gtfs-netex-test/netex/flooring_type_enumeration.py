@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class FlooringTypeEnumeration(Enum):
-    """
-    Allowed values for flooring.
-    """
     CARPET = "carpet"
     CONCRETE = "concrete"
     ASPHALT = "asphalt"

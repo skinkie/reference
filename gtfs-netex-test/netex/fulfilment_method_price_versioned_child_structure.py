@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.fare_price_versioned_child_structure import FarePriceVersionedChildStructure
-from netex.fulfilment_method_ref import FulfilmentMethodRef
+from .fare_price_versioned_child_structure import (
+    FarePriceVersionedChildStructure,
+)
+from .fulfilment_method_ref import FulfilmentMethodRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class FulfilmentMethodPriceVersionedChildStructure(FarePriceVersionedChildStructure):
-    """
-    Type for a FULFILMENT METHOD PRICE.
-    """
+@dataclass(kw_only=True)
+class FulfilmentMethodPriceVersionedChildStructure(
+    FarePriceVersionedChildStructure
+):
     class Meta:
         name = "FulfilmentMethodPrice_VersionedChildStructure"
 
@@ -20,5 +24,5 @@ class FulfilmentMethodPriceVersionedChildStructure(FarePriceVersionedChildStruct
             "name": "FulfilmentMethodRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

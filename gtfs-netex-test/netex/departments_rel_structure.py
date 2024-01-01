@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.department import Department
-from netex.department_ref import DepartmentRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .department import Department
+from .department_ref import DepartmentRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class DepartmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of DEPARTMENTs.
-    """
     class Meta:
         name = "departments_RelStructure"
 
-    department_ref_or_department: List[object] = field(
+    department_ref_or_department: List[
+        Union[DepartmentRef, Department]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class DepartmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

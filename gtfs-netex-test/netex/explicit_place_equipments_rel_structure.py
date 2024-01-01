@@ -1,39 +1,62 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.crossing_equipment import CrossingEquipment
-from netex.entrance_equipment import EntranceEquipment
-from netex.escalator_equipment import EscalatorEquipment
-from netex.general_sign_structure import GeneralSignStructure
-from netex.heading_sign_structure import HeadingSignStructure
-from netex.help_point_equipment import HelpPointEquipment
-from netex.lift_equipment import LiftEquipment
-from netex.other_place_equipment import OtherPlaceEquipment
-from netex.passenger_safety_equipment import PassengerSafetyEquipment
-from netex.place_lighting import PlaceLighting
-from netex.place_sign_structure import PlaceSignStructure
-from netex.queueing_equipment import QueueingEquipment
-from netex.ramp_equipment import RampEquipment
-from netex.rough_surface import RoughSurface
-from netex.rubbish_disposal_equipment import RubbishDisposalEquipment
-from netex.sanitary_equipment import SanitaryEquipment
-from netex.staircase_equipment import StaircaseEquipment
-from netex.ticket_validator_equipment import TicketValidatorEquipment
-from netex.ticketing_equipment import TicketingEquipment
-from netex.travelator_equipment import TravelatorEquipment
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .crossing_equipment import CrossingEquipment
+from .entrance_equipment import EntranceEquipment
+from .escalator_equipment import EscalatorEquipment
+from .general_sign_structure import GeneralSignStructure
+from .heading_sign_structure import HeadingSignStructure
+from .help_point_equipment import HelpPointEquipment
+from .lift_equipment import LiftEquipment
+from .other_place_equipment import OtherPlaceEquipment
+from .passenger_safety_equipment import PassengerSafetyEquipment
+from .place_lighting import PlaceLighting
+from .place_sign_structure import PlaceSignStructure
+from .queueing_equipment import QueueingEquipment
+from .ramp_equipment import RampEquipment
+from .rough_surface import RoughSurface
+from .rubbish_disposal_equipment import RubbishDisposalEquipment
+from .sanitary_equipment import SanitaryEquipment
+from .staircase_equipment import StaircaseEquipment
+from .ticket_validator_equipment import TicketValidatorEquipment
+from .ticketing_equipment import TicketingEquipment
+from .travelator_equipment import TravelatorEquipment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ExplicitPlaceEquipmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Items of fixed EQUIPMENT that may be located in places within the STOP PLACE.
-    """
     class Meta:
         name = "explicitPlaceEquipments_RelStructure"
 
-    choice: List[object] = field(
+    choice: List[
+        Union[
+            OtherPlaceEquipment,
+            RoughSurface,
+            EntranceEquipment,
+            StaircaseEquipment,
+            LiftEquipment,
+            EscalatorEquipment,
+            TravelatorEquipment,
+            RampEquipment,
+            QueueingEquipment,
+            CrossingEquipment,
+            PlaceLighting,
+            PlaceSignStructure,
+            HeadingSignStructure,
+            GeneralSignStructure,
+            HelpPointEquipment,
+            PassengerSafetyEquipment,
+            RubbishDisposalEquipment,
+            SanitaryEquipment,
+            TicketingEquipment,
+            TicketValidatorEquipment,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -139,5 +162,5 @@ class ExplicitPlaceEquipmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

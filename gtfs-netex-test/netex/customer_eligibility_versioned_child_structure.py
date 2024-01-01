@@ -1,20 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.customer_ref import CustomerRef
-from netex.multilingual_string import MultilingualString
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .customer_ref import CustomerRef
+from .multilingual_string import MultilingualString
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CustomerEligibilityVersionedChildStructure(VersionedChildStructure):
-    """
-    Type for CUSTOMER ELIGIBILITY.
-
-    :ivar name: Name of CUSTOMER ELIGIBILITY.
-    :ivar customer_ref:
-    """
     class Meta:
         name = "CustomerEligibility_VersionedChildStructure"
 
@@ -24,7 +21,7 @@ class CustomerEligibilityVersionedChildStructure(VersionedChildStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     customer_ref: Optional[CustomerRef] = field(
         default=None,
@@ -32,5 +29,5 @@ class CustomerEligibilityVersionedChildStructure(VersionedChildStructure):
             "name": "CustomerRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,27 +1,33 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.access_right_parameter_assignment_version_structure import AccessRightParameterAssignmentVersionStructure
-from netex.fare_demand_factor_ref import FareDemandFactorRef
-from netex.fare_quota_factor_ref import FareQuotaFactorRef
-from netex.geographical_interval_ref import GeographicalIntervalRef
-from netex.geographical_structure_factor_ref import GeographicalStructureFactorRef
-from netex.parking_charge_band_ref import ParkingChargeBandRef
-from netex.quality_structure_factor_ref import QualityStructureFactorRef
-from netex.time_interval_ref import TimeIntervalRef
-from netex.time_structure_factor_ref import TimeStructureFactorRef
+from typing import Optional, Union
+from .access_right_parameter_assignment_version_structure import (
+    AccessRightParameterAssignmentVersionStructure,
+)
+from .fare_demand_factor_ref import FareDemandFactorRef
+from .fare_quota_factor_ref import FareQuotaFactorRef
+from .geographical_interval_ref import GeographicalIntervalRef
+from .geographical_structure_factor_ref import GeographicalStructureFactorRef
+from .parking_charge_band_ref import ParkingChargeBandRef
+from .quality_structure_factor_ref import QualityStructureFactorRef
+from .time_interval_ref import TimeIntervalRef
+from .time_structure_factor_ref import TimeStructureFactorRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ValidityParameterAssignmentVersionStructure(AccessRightParameterAssignmentVersionStructure):
-    """
-    Type for VALIDITY PARAMETER ASSIGNMENT.
-    """
+@dataclass(kw_only=True)
+class ValidityParameterAssignmentVersionStructure(
+    AccessRightParameterAssignmentVersionStructure
+):
     class Meta:
         name = "ValidityParameterAssignment_VersionStructure"
 
-    time_interval_ref_or_parking_charge_band_ref_or_time_structure_factor_ref: Optional[object] = field(
+    time_interval_ref_or_parking_charge_band_ref_or_time_structure_factor_ref: Optional[
+        Union[TimeIntervalRef, ParkingChargeBandRef, TimeStructureFactorRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -42,9 +48,11 @@ class ValidityParameterAssignmentVersionStructure(AccessRightParameterAssignment
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    geographical_interval_ref_or_geographical_structure_factor_ref: Optional[object] = field(
+    geographical_interval_ref_or_geographical_structure_factor_ref: Optional[
+        Union[GeographicalIntervalRef, GeographicalStructureFactorRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -60,9 +68,13 @@ class ValidityParameterAssignmentVersionStructure(AccessRightParameterAssignment
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
-    fare_quota_factor_ref_or_fare_demand_factor_ref_or_quality_structure_factor_ref: Optional[object] = field(
+    quality_structure_factor_ref: Optional[
+        Union[
+            FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -83,5 +95,5 @@ class ValidityParameterAssignmentVersionStructure(AccessRightParameterAssignment
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

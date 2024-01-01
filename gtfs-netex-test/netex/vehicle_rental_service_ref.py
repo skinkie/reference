@@ -1,14 +1,15 @@
 from dataclasses import dataclass
-from netex.vehicle_rental_service_ref_structure import VehicleRentalServiceRefStructure
+from .vehicle_rental_service_ref_structure import (
+    VehicleRentalServiceRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleRentalServiceRef(VehicleRentalServiceRefStructure):
-    """Identifier of an VEHICLE RENTAL SERVICE.
-
-    +v1.2.2
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

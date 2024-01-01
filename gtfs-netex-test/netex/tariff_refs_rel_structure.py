@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.parking_tariff_ref import ParkingTariffRef
-from netex.tariff_ref import TariffRef
+from typing import List, Union
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .parking_tariff_ref import ParkingTariffRef
+from .tariff_ref import TariffRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TariffRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a collection of one or more references to a TARIFF.
-    """
     class Meta:
         name = "tariffRefs_RelStructure"
 
-    parking_tariff_ref_or_tariff_ref: List[object] = field(
+    tariff_ref: List[Union[ParkingTariffRef, TariffRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class TariffRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

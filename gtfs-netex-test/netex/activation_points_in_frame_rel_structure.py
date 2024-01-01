@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.activation_point import ActivationPoint
-from netex.beacon_point import BeaconPoint
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from typing import List, Union
+from .activation_point import ActivationPoint
+from .beacon_point import BeaconPoint
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ActivationPointsInFrameRelStructure(ContainmentAggregationStructure):
-    """
-    Type for containment in frame of ACTIVATION POINTs.
-    """
     class Meta:
         name = "activationPointsInFrame_RelStructure"
 
-    beacon_point_or_activation_point: List[object] = field(
+    activation_point: List[Union[BeaconPoint, ActivationPoint]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class ActivationPointsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

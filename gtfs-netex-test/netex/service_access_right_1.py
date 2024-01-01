@@ -1,21 +1,16 @@
-from dataclasses import dataclass, field
-from netex.service_access_right_version_structure import ServiceAccessRightVersionStructure
+from dataclasses import dataclass
+from .service_access_right_version_structure import (
+    ServiceAccessRightVersionStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ServiceAccessRight1(ServiceAccessRightVersionStructure):
-    """
-    An immaterial marketable element dedicated to accessing some services.
-    """
     class Meta:
         name = "ServiceAccessRight"
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

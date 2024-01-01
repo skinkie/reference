@@ -1,22 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.access_equipment_version_structure import AccessEquipmentVersionStructure
-from netex.lighting_enumeration import LightingEnumeration
-from netex.lighting_on_method_enumeration import LightingOnMethodEnumeration
+from .access_equipment_version_structure import AccessEquipmentVersionStructure
+from .lighting_enumeration import LightingEnumeration
+from .lighting_on_method_enumeration import LightingOnMethodEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PlaceLightingVersionStructure(AccessEquipmentVersionStructure):
-    """
-    Type for a PLACE LIGHTING EQUIPMENT.
-
-    :ivar lighting: Nature of Lighting.
-    :ivar always_lit: Whether Place is always lit.
-    :ivar lighting_on_method: Method by which lighting is switched on.
-        v1.1
-    """
     class Meta:
         name = "PlaceLighting_VersionStructure"
 
@@ -26,7 +21,7 @@ class PlaceLightingVersionStructure(AccessEquipmentVersionStructure):
             "name": "Lighting",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     always_lit: Optional[bool] = field(
         default=None,
@@ -34,7 +29,7 @@ class PlaceLightingVersionStructure(AccessEquipmentVersionStructure):
             "name": "AlwaysLit",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     lighting_on_method: Optional[LightingOnMethodEnumeration] = field(
         default=None,
@@ -42,5 +37,5 @@ class PlaceLightingVersionStructure(AccessEquipmentVersionStructure):
             "name": "LightingOnMethod",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.fare_contract import FareContract
-from netex.frame_containment_structure import FrameContainmentStructure
+from .fare_contract import FareContract
+from .frame_containment_structure import FrameContainmentStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FareContractsInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of SALES FARE CONTRACTs.
-    """
     class Meta:
         name = "fareContractsInFrame_RelStructure"
 
@@ -21,5 +21,5 @@ class FareContractsInFrameRelStructure(FrameContainmentStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

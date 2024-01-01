@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.control_centre import ControlCentre
-from netex.control_centre_ref import ControlCentreRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .control_centre import ControlCentre
+from .control_centre_ref import ControlCentreRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class ControlCentresRelStructure(ContainmentAggregationStructure):
-    """
-    A list of CONTROL CENTREs.
-    """
     class Meta:
         name = "ControlCentres_RelStructure"
 
-    control_centre_ref_or_control_centre: List[object] = field(
+    control_centre_ref_or_control_centre: List[
+        Union[ControlCentreRef, ControlCentre]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class ControlCentresRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

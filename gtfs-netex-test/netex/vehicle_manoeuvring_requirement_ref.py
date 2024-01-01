@@ -1,13 +1,17 @@
 from dataclasses import dataclass
-from netex.vehicle_manoeuvring_requirement_ref_structure import VehicleManoeuvringRequirementRefStructure
+from .vehicle_manoeuvring_requirement_ref_structure import (
+    VehicleManoeuvringRequirementRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class VehicleManoeuvringRequirementRef(VehicleManoeuvringRequirementRefStructure):
-    """
-    Reference to a VEHICLE MANOEUVRING REQUIREMENT.
-    """
+@dataclass(kw_only=True)
+class VehicleManoeuvringRequirementRef(
+    VehicleManoeuvringRequirementRefStructure
+):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -1,39 +1,45 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlDuration
-from netex.amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
-from netex.capped_discount_right_ref import CappedDiscountRightRef
-from netex.entitlement_constraint_structure import EntitlementConstraintStructure
-from netex.entitlement_product_ref import EntitlementProductRef
-from netex.entitlement_type_enumeration import EntitlementTypeEnumeration
-from netex.fare_product_ref import FareProductRef
-from netex.preassigned_fare_product_ref import PreassignedFareProductRef
-from netex.sale_discount_right_ref import SaleDiscountRightRef
-from netex.service_access_right_ref import ServiceAccessRightRef
-from netex.supplement_product_ref import SupplementProductRef
-from netex.third_party_product_ref import ThirdPartyProductRef
-from netex.usage_discount_right_ref import UsageDiscountRightRef
-from netex.usage_parameter_version_structure import UsageParameterVersionStructure
+from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
+from .capped_discount_right_ref import CappedDiscountRightRef
+from .entitlement_constraint_structure import EntitlementConstraintStructure
+from .entitlement_product_ref import EntitlementProductRef
+from .entitlement_type_enumeration import EntitlementTypeEnumeration
+from .fare_product_ref import FareProductRef
+from .preassigned_fare_product_ref import PreassignedFareProductRef
+from .sale_discount_right_ref import SaleDiscountRightRef
+from .service_access_right_ref import ServiceAccessRightRef
+from .supplement_product_ref import SupplementProductRef
+from .third_party_product_ref import ThirdPartyProductRef
+from .usage_discount_right_ref import UsageDiscountRightRef
+from .usage_parameter_version_structure import UsageParameterVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class EntitlementGivenVersionStructure(UsageParameterVersionStructure):
-    """
-    Type for ENTITLEMENT GIVEN.
-
-    :ivar choice:
-    :ivar minimum_qualification_period: Minimum duration  that required
-        product must be held to be eligible.
-    :ivar entitlement_constraint: Limits on choices associated with
-        entitlement +v1.1
-    :ivar entitlement_type: Type of Entitlement given.
-    """
     class Meta:
         name = "EntitlementGiven_VersionStructure"
 
-    choice: Optional[object] = field(
+    choice: Optional[
+        Union[
+            EntitlementProductRef,
+            SupplementProductRef,
+            PreassignedFareProductRef,
+            AmountOfPriceUnitProductRef,
+            UsageDiscountRightRef,
+            ThirdPartyProductRef,
+            CappedDiscountRightRef,
+            SaleDiscountRightRef,
+            FareProductRef,
+            ServiceAccessRightRef,
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -89,7 +95,7 @@ class EntitlementGivenVersionStructure(UsageParameterVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     minimum_qualification_period: Optional[XmlDuration] = field(
         default=None,
@@ -97,7 +103,7 @@ class EntitlementGivenVersionStructure(UsageParameterVersionStructure):
             "name": "MinimumQualificationPeriod",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     entitlement_constraint: Optional[EntitlementConstraintStructure] = field(
         default=None,
@@ -105,7 +111,7 @@ class EntitlementGivenVersionStructure(UsageParameterVersionStructure):
             "name": "EntitlementConstraint",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     entitlement_type: Optional[EntitlementTypeEnumeration] = field(
         default=None,
@@ -113,5 +119,5 @@ class EntitlementGivenVersionStructure(UsageParameterVersionStructure):
             "name": "EntitlementType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

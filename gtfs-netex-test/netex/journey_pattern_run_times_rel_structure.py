@@ -1,21 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.journey_pattern_run_time import JourneyPatternRunTime
-from netex.journey_pattern_run_time_ref import JourneyPatternRunTimeRef
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from typing import List, Union
+from .journey_pattern_run_time import JourneyPatternRunTime
+from .journey_pattern_run_time_ref import JourneyPatternRunTimeRef
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class JourneyPatternRunTimesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of JOURNEY PATTERN RUN TIMEs.
-    """
+@dataclass(kw_only=True)
+class JourneyPatternRunTimesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "journeyPatternRunTimes_RelStructure"
 
-    journey_pattern_run_time_ref_or_journey_pattern_run_time: List[object] = field(
+    journey_pattern_run_time_ref_or_journey_pattern_run_time: List[
+        Union[JourneyPatternRunTimeRef, JourneyPatternRunTime]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +37,5 @@ class JourneyPatternRunTimesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.coupled_journey_ref import CoupledJourneyRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .coupled_journey_ref import CoupledJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CoupledJourneysRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of COUPLED JOURNEYS.
-    """
     class Meta:
         name = "coupledJourneys_RelStructure"
 
@@ -21,5 +21,5 @@ class CoupledJourneysRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

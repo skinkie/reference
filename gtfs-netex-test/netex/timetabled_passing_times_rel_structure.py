@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
-from netex.timetabled_passing_time import TimetabledPassingTime
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+from .timetabled_passing_time import TimetabledPassingTime
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class TimetabledPassingTimesRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of TIMETABLED PASSING TIME.
-    """
+@dataclass(kw_only=True)
+class TimetabledPassingTimesRelStructure(
+    StrictContainmentAggregationStructure
+):
     class Meta:
         name = "timetabledPassingTimes_RelStructure"
 
@@ -21,5 +25,5 @@ class TimetabledPassingTimesRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

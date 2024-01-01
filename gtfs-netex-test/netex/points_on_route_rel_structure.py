@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.point_on_route import PointOnRoute
-from netex.strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .point_on_route import PointOnRoute
+from .strict_containment_aggregation_structure import (
+    StrictContainmentAggregationStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class PointsOnRouteRelStructure(StrictContainmentAggregationStructure):
-    """
-    Type for a list of POINTs ON ROUTE.
-    """
     class Meta:
         name = "pointsOnRoute_RelStructure"
 
@@ -21,5 +23,5 @@ class PointsOnRouteRelStructure(StrictContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 2,
-        }
+        },
     )

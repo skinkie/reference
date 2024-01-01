@@ -1,21 +1,13 @@
-from dataclasses import dataclass, field
-from netex.general_zone_version_structure import GeneralZoneVersionStructure
+from dataclasses import dataclass
+from .general_zone_version_structure import GeneralZoneVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class GeneralZone(GeneralZoneVersionStructure):
-    """
-    A GENERAL ZONE used to define a zonal fare structure in a zone-counting or
-    zone-matrix system.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    id: str = field(
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )

@@ -1,21 +1,21 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.dead_run_ref import DeadRunRef
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.vehicle_journey_ref import VehicleJourneyRef
+from typing import List, Union
+from .dead_run_ref import DeadRunRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .vehicle_journey_ref import VehicleJourneyRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleJourneyRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of VEHICLE JOURNEYs.
-    """
     class Meta:
         name = "vehicleJourneyRefs_RelStructure"
 
-    dead_run_ref_or_vehicle_journey_ref: List[object] = field(
+    vehicle_journey_ref: List[Union[DeadRunRef, VehicleJourneyRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +31,5 @@ class VehicleJourneyRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,18 +1,17 @@
 from dataclasses import dataclass, field
-from netex.infrastructure_link_version_structure import InfrastructureLinkVersionStructure
-from netex.railway_point_ref_structure import RailwayPointRefStructure
+from .infrastructure_link_version_structure import (
+    InfrastructureLinkVersionStructure,
+)
+from .railway_point_ref_structure import RailwayPointRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class RailwayElementVersionStructure(InfrastructureLinkVersionStructure):
-    """
-    Type for RAILWAY ELEMENT.
-
-    :ivar from_point_ref: Identifier of POINT from which Link starts.
-    :ivar to_point_ref: Identifier of POINT at which Link ends.
-    """
     class Meta:
         name = "RailwayElement_VersionStructure"
 

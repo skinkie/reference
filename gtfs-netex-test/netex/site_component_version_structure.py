@@ -1,33 +1,22 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.check_constraints_rel_structure import CheckConstraintsRelStructure
-from netex.class_of_use_ref import ClassOfUseRef
-from netex.equipment_places_rel_structure import EquipmentPlacesRelStructure
-from netex.level_ref import LevelRef
-from netex.local_services_rel_structure import LocalServicesRelStructure
-from netex.place_equipments_rel_structure import PlaceEquipmentsRelStructure
-from netex.site_element_version_structure import SiteElementVersionStructure
-from netex.site_ref_structure import SiteRefStructure
+from .check_constraints_rel_structure import CheckConstraintsRelStructure
+from .class_of_use_ref import ClassOfUseRef
+from .equipment_places_rel_structure import EquipmentPlacesRelStructure
+from .level_ref import LevelRef
+from .local_services_rel_structure import LocalServicesRelStructure
+from .place_equipments_rel_structure import PlaceEquipmentsRelStructure
+from .site_element_version_structure import SiteElementVersionStructure
+from .site_ref_structure import SiteRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class SiteComponentVersionStructure(SiteElementVersionStructure):
-    """
-    A component of a SITE COMPONENT.
-
-    :ivar site_ref: Reference to parent of SITE, if any.
-    :ivar level_ref:
-    :ivar class_of_use_ref:
-    :ivar check_constraints: Impediments to navigation from processes or
-        barriers. For example security, check in etc.
-    :ivar equipment_places: EQUIPMENT PLACEs within SITE COMPONENT.
-    :ivar place_equipments: Items of fixed EQUIPMENT that may be located
-        in places within the SITE  ELEMENT.
-    :ivar local_services: LOCAL SERVICEs that may be located in PLACEs
-        within the SITE ELEMENT.
-    """
     class Meta:
         name = "SiteComponent_VersionStructure"
 
@@ -37,7 +26,7 @@ class SiteComponentVersionStructure(SiteElementVersionStructure):
             "name": "SiteRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     level_ref: Optional[LevelRef] = field(
         default=None,
@@ -45,7 +34,7 @@ class SiteComponentVersionStructure(SiteElementVersionStructure):
             "name": "LevelRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     class_of_use_ref: Optional[ClassOfUseRef] = field(
         default=None,
@@ -53,7 +42,7 @@ class SiteComponentVersionStructure(SiteElementVersionStructure):
             "name": "ClassOfUseRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     check_constraints: Optional[CheckConstraintsRelStructure] = field(
         default=None,
@@ -61,7 +50,7 @@ class SiteComponentVersionStructure(SiteElementVersionStructure):
             "name": "checkConstraints",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     equipment_places: Optional[EquipmentPlacesRelStructure] = field(
         default=None,
@@ -69,7 +58,7 @@ class SiteComponentVersionStructure(SiteElementVersionStructure):
             "name": "equipmentPlaces",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     place_equipments: Optional[PlaceEquipmentsRelStructure] = field(
         default=None,
@@ -77,7 +66,7 @@ class SiteComponentVersionStructure(SiteElementVersionStructure):
             "name": "placeEquipments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     local_services: Optional[LocalServicesRelStructure] = field(
         default=None,
@@ -85,5 +74,5 @@ class SiteComponentVersionStructure(SiteElementVersionStructure):
             "name": "localServices",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.type_of_product_category_ref import TypeOfProductCategoryRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .type_of_product_category_ref import TypeOfProductCategoryRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfProductCategoryRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of TYPEs OF PRODUCT CATEGORY.
-    """
     class Meta:
         name = "typeOfProductCategoryRefs_RelStructure"
 
@@ -20,5 +20,5 @@ class TypeOfProductCategoryRefsRelStructure(OneToManyRelationshipStructure):
             "name": "TypeOfProductCategoryRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

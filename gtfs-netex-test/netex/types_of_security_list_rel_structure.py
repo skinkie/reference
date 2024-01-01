@@ -1,22 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.type_of_security_list import TypeOfSecurityList
-from netex.type_of_security_list_ref import TypeOfSecurityListRef
+from typing import List, Union
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .type_of_security_list import TypeOfSecurityList
+from .type_of_security_list_ref import TypeOfSecurityListRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypesOfSecurityListRelStructure(ContainmentAggregationStructure):
-    """Type for a list of TYPE OF SECURITY LISTs.
-
-    +v1.1
-    """
     class Meta:
         name = "typesOfSecurityList_RelStructure"
 
-    type_of_security_list_ref_or_type_of_security_list: List[object] = field(
+    type_of_security_list_ref_or_type_of_security_list: List[
+        Union[TypeOfSecurityListRef, TypeOfSecurityList]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -32,5 +33,5 @@ class TypesOfSecurityListRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

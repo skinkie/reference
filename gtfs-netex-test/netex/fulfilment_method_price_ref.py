@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from netex.fulfilment_method_price_ref_structure import FulfilmentMethodPriceRefStructure
+from .fulfilment_method_price_ref_structure import (
+    FulfilmentMethodPriceRefStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class FulfilmentMethodPriceRef(FulfilmentMethodPriceRefStructure):
-    """
-    Reference to a FULFILMENT METHOD PRICE.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

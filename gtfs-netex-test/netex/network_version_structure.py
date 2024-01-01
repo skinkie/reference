@@ -1,30 +1,30 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.authority_ref import AuthorityRef
-from netex.group_of_lines_version_structure import GroupOfLinesVersionStructure
-from netex.groups_of_lines_in_frame_rel_structure import GroupsOfLinesInFrameRelStructure
-from netex.groups_of_operators_refs_rel_structure import GroupsOfOperatorsRefsRelStructure
-from netex.operator_ref import OperatorRef
-from netex.tariff_zone_refs_rel_structure import TariffZoneRefsRelStructure
+from typing import Optional, Union
+from .authority_ref import AuthorityRef
+from .group_of_lines_version_structure import GroupOfLinesVersionStructure
+from .groups_of_lines_in_frame_rel_structure import (
+    GroupsOfLinesInFrameRelStructure,
+)
+from .groups_of_operators_refs_rel_structure import (
+    GroupsOfOperatorsRefsRelStructure,
+)
+from .operator_ref import OperatorRef
+from .tariff_zone_refs_rel_structure import TariffZoneRefsRelStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NetworkVersionStructure(GroupOfLinesVersionStructure):
-    """
-    Type for a NETWORK.
-
-    :ivar authority_ref_or_operator_ref:
-    :ivar groups_of_operators: Groups of OPERATORs  AUTHORTies or
-        OPERATORS) (in NETWORK.
-    :ivar groups_of_lines: Groups of LINEs in NETWORK.
-    :ivar tariff_zones: TARIFF ZONEs in NETWORK.
-    """
     class Meta:
         name = "Network_VersionStructure"
 
-    authority_ref_or_operator_ref: Optional[object] = field(
+    transport_organisation_ref: Optional[
+        Union[AuthorityRef, OperatorRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -40,7 +40,7 @@ class NetworkVersionStructure(GroupOfLinesVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     groups_of_operators: Optional[GroupsOfOperatorsRefsRelStructure] = field(
         default=None,
@@ -48,7 +48,7 @@ class NetworkVersionStructure(GroupOfLinesVersionStructure):
             "name": "groupsOfOperators",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     groups_of_lines: Optional[GroupsOfLinesInFrameRelStructure] = field(
         default=None,
@@ -56,7 +56,7 @@ class NetworkVersionStructure(GroupOfLinesVersionStructure):
             "name": "groupsOfLines",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     tariff_zones: Optional[TariffZoneRefsRelStructure] = field(
         default=None,
@@ -64,5 +64,5 @@ class NetworkVersionStructure(GroupOfLinesVersionStructure):
             "name": "tariffZones",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

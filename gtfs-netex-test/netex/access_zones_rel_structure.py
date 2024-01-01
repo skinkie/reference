@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
-from typing import List
-from netex.access_zone import AccessZone
-from netex.access_zone_ref import AccessZoneRef
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
+from typing import List, Union
+from .access_zone import AccessZone
+from .access_zone_ref import AccessZoneRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class AccessZonesRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of ACCESS ZONEs.
-    """
     class Meta:
         name = "accessZones_RelStructure"
 
-    access_zone_ref_or_access_zone: List[object] = field(
+    access_zone_ref_or_access_zone: List[
+        Union[AccessZoneRef, AccessZone]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -31,5 +33,5 @@ class AccessZonesRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.one_to_many_relationship_structure import OneToManyRelationshipStructure
-from netex.type_of_fare_contract_ref import TypeOfFareContractRef
+from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .type_of_fare_contract_ref import TypeOfFareContractRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class TypeOfFareContractRefsRelStructure(OneToManyRelationshipStructure):
-    """
-    Type for a list of TYPEs OF FARE CONTRACT.
-    """
     class Meta:
         name = "typeOfFareContractRefs_RelStructure"
 
@@ -21,5 +21,5 @@ class TypeOfFareContractRefsRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

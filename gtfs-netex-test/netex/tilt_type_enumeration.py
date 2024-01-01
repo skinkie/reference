@@ -1,13 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class TiltTypeEnumeration(Enum):
-    """Allowed values for tilt.
-
-    +v1.1
-    """
     STRONG_LEFT_TILT = "strongLeftTilt"
     MEDIUM_LEFT_TILT = "mediumLeftTilt"
     NEARLY_FLAT = "nearlyFlat"

@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.distance_matrix_element import DistanceMatrixElement
-from netex.frame_containment_structure import FrameContainmentStructure
+from .distance_matrix_element import DistanceMatrixElement
+from .frame_containment_structure import FrameContainmentStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class GroupsOfDistanceMatrixElementsInFrameRelStructure(FrameContainmentStructure):
-    """
-    Type for containment in frame of GROUPS OF DISTANCE MATRIX ELEMENTs.
-    """
+@dataclass(kw_only=True)
+class GroupsOfDistanceMatrixElementsInFrameRelStructure(
+    FrameContainmentStructure
+):
     class Meta:
         name = "groupsOfDistanceMatrixElementsInFrame_RelStructure"
 
@@ -21,5 +23,5 @@ class GroupsOfDistanceMatrixElementsInFrameRelStructure(FrameContainmentStructur
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

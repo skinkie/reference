@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from netex.capping_rule_ref import CappingRuleRef
-from netex.fare_price_versioned_child_structure import FarePriceVersionedChildStructure
+from .capping_rule_ref import CappingRuleRef
+from .fare_price_versioned_child_structure import (
+    FarePriceVersionedChildStructure,
+)
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class CappingRulePriceVersionedChildStructure(FarePriceVersionedChildStructure):
-    """
-    Type for a CAPPING RULE PRICE.
-    """
+@dataclass(kw_only=True)
+class CappingRulePriceVersionedChildStructure(
+    FarePriceVersionedChildStructure
+):
     class Meta:
         name = "CappingRulePrice_VersionedChildStructure"
 
@@ -20,5 +24,5 @@ class CappingRulePriceVersionedChildStructure(FarePriceVersionedChildStructure):
             "name": "CappingRuleRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

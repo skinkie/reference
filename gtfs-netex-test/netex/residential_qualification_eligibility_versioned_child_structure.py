@@ -1,33 +1,34 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDate
-from netex.customer_eligibility_versioned_child_structure import CustomerEligibilityVersionedChildStructure
-from netex.residence_type_enumeration import ResidenceTypeEnumeration
-from netex.residential_qualification_ref import ResidentialQualificationRef
+from .customer_eligibility_versioned_child_structure import (
+    CustomerEligibilityVersionedChildStructure,
+)
+from .residence_type_enumeration import ResidenceTypeEnumeration
+from .residential_qualification_ref import ResidentialQualificationRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
-class ResidentialQualificationEligibilityVersionedChildStructure(CustomerEligibilityVersionedChildStructure):
-    """
-    Type for RESIDENTIAL QUALIFICATION ELIGIBILITY.
-
-    :ivar residential_qualification_ref:
-    :ivar residency_type: Type of Residency. +v1.1
-    :ivar start_date: Date residence started. +v1.1
-    :ivar end_date: Date residence started +v1.1.
-    """
+@dataclass(kw_only=True)
+class ResidentialQualificationEligibilityVersionedChildStructure(
+    CustomerEligibilityVersionedChildStructure
+):
     class Meta:
         name = "ResidentialQualificationEligibility_VersionedChildStructure"
 
-    residential_qualification_ref: Optional[ResidentialQualificationRef] = field(
+    residential_qualification_ref: Optional[
+        ResidentialQualificationRef
+    ] = field(
         default=None,
         metadata={
             "name": "ResidentialQualificationRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     residency_type: Optional[ResidenceTypeEnumeration] = field(
         default=None,
@@ -35,7 +36,7 @@ class ResidentialQualificationEligibilityVersionedChildStructure(CustomerEligibi
             "name": "ResidencyType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     start_date: Optional[XmlDate] = field(
         default=None,
@@ -43,7 +44,7 @@ class ResidentialQualificationEligibilityVersionedChildStructure(CustomerEligibi
             "name": "StartDate",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     end_date: Optional[XmlDate] = field(
         default=None,
@@ -51,5 +52,5 @@ class ResidentialQualificationEligibilityVersionedChildStructure(CustomerEligibi
             "name": "EndDate",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

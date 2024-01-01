@@ -1,24 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from xsdata.models.datatype import XmlDuration
-from netex.assignment_version_structure_1 import AssignmentVersionStructure1
-from netex.check_constraint_ref import CheckConstraintRef
+from .assignment_version_structure_1 import AssignmentVersionStructure1
+from .check_constraint_ref import CheckConstraintRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CheckConstraintThroughputVersionStructure(AssignmentVersionStructure1):
-    """
-    Type for a CHECK CONSTRAINT THROUGHPUT.
-
-    :ivar check_constraint_ref:
-    :ivar period: Interval for measurement.
-    :ivar maximum_passengers: Maximum number of passengers.
-    :ivar average_passengers: Average number of passengers.
-    :ivar wheelchair_passengers: Maximum number of wheelchair
-        passengers.
-    """
     class Meta:
         name = "CheckConstraintThroughput_VersionStructure"
 
@@ -28,7 +21,7 @@ class CheckConstraintThroughputVersionStructure(AssignmentVersionStructure1):
             "name": "CheckConstraintRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     period: Optional[XmlDuration] = field(
         default=None,
@@ -36,7 +29,7 @@ class CheckConstraintThroughputVersionStructure(AssignmentVersionStructure1):
             "name": "Period",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     maximum_passengers: Optional[int] = field(
         default=None,
@@ -44,7 +37,7 @@ class CheckConstraintThroughputVersionStructure(AssignmentVersionStructure1):
             "name": "MaximumPassengers",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     average_passengers: Optional[int] = field(
         default=None,
@@ -52,7 +45,7 @@ class CheckConstraintThroughputVersionStructure(AssignmentVersionStructure1):
             "name": "AveragePassengers",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     wheelchair_passengers: Optional[int] = field(
         default=None,
@@ -60,5 +53,5 @@ class CheckConstraintThroughputVersionStructure(AssignmentVersionStructure1):
             "name": "WheelchairPassengers",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

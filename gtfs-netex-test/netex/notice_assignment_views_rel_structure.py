@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.notice_assignment_view import NoticeAssignmentView
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .notice_assignment_view import NoticeAssignmentView
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class NoticeAssignmentViewsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of NOTICE ASSIGNMENT VIEWs.
-    """
     class Meta:
         name = "noticeAssignmentViews_RelStructure"
 
@@ -21,5 +21,5 @@ class NoticeAssignmentViewsRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

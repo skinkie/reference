@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
-from netex.water_submode_enumeration import WaterSubmodeEnumeration
+from .water_submode_enumeration import WaterSubmodeEnumeration
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class WaterSubmode:
-    """
-    TPEG pti07 Water submodes.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
@@ -16,5 +16,5 @@ class WaterSubmode:
         default=WaterSubmodeEnumeration.UNKNOWN,
         metadata={
             "required": True,
-        }
+        },
     )

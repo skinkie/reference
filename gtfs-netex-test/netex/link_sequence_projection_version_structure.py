@@ -1,24 +1,19 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Optional
-from netex.line_string import LineString
-from netex.link_sequence_ref_structure import LinkSequenceRefStructure
-from netex.point_refs_rel_structure import PointRefsRelStructure
-from netex.projection_version_structure import ProjectionVersionStructure
+from typing import Optional, Union
+from .line_string import LineString
+from .link_sequence_ref_structure import LinkSequenceRefStructure
+from .point_refs_rel_structure import PointRefsRelStructure
+from .projection_version_structure import ProjectionVersionStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class LinkSequenceProjectionVersionStructure(ProjectionVersionStructure):
-    """
-    Type for a LINK SEQUENCE PROJECTION.
-
-    :ivar projected_link_sequence_ref: LINK SEQUENCE that is being
-        projected. Can be omitted if given by context.
-    :ivar distance: Distance Travelled.
-    :ivar points_or_line_string:
-    """
     class Meta:
         name = "LinkSequenceProjection_VersionStructure"
 
@@ -28,7 +23,7 @@ class LinkSequenceProjectionVersionStructure(ProjectionVersionStructure):
             "name": "ProjectedLinkSequenceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     distance: Optional[Decimal] = field(
         default=None,
@@ -36,9 +31,11 @@ class LinkSequenceProjectionVersionStructure(ProjectionVersionStructure):
             "name": "Distance",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    points_or_line_string: Optional[object] = field(
+    points_or_line_string: Optional[
+        Union[PointRefsRelStructure, LineString]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -54,5 +51,5 @@ class LinkSequenceProjectionVersionStructure(ProjectionVersionStructure):
                     "namespace": "http://www.opengis.net/gml/3.2",
                 },
             ),
-        }
+        },
     )

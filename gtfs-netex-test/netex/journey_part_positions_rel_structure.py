@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.journey_part_position import JourneyPartPosition
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .journey_part_position import JourneyPartPosition
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class JourneyPartPositionsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of JOURNEY PART POSITIONs.
-    """
     class Meta:
         name = "journeyPartPositions_RelStructure"
 
@@ -21,5 +21,5 @@ class JourneyPartPositionsRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

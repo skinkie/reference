@@ -1,31 +1,23 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 from xsdata.models.datatype import XmlDateTime
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.customer_account_ref import CustomerAccountRef
-from netex.emv_card_ref import EmvCardRef
-from netex.mobile_device_ref import MobileDeviceRef
-from netex.multilingual_string import MultilingualString
-from netex.payment_method_enumeration import PaymentMethodEnumeration
-from netex.smartcard_ref import SmartcardRef
-from netex.type_of_payment_method_ref import TypeOfPaymentMethodRef
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .customer_account_ref import CustomerAccountRef
+from .emv_card_ref import EmvCardRef
+from .mobile_device_ref import MobileDeviceRef
+from .multilingual_string import MultilingualString
+from .payment_method_enumeration import PaymentMethodEnumeration
+from .smartcard_ref import SmartcardRef
+from .type_of_payment_method_ref import TypeOfPaymentMethodRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class CustomerPaymentMeansVersionedChildStructure(VersionedChildStructure):
-    """
-    Type for CUSTOMER PAYMENT MEANS restricts id.
-
-    :ivar name: Name of PAYMENT MEANS.
-    :ivar customer_account_ref:
-    :ivar mobile_device_ref_or_emv_card_ref_or_smartcard_ref:
-    :ivar payment_method: Method of payment used,
-    :ivar type_of_payment_method_ref:
-    :ivar last_verified_date: Dat that means was last verified by an
-        authentication process.
-    """
     class Meta:
         name = "CustomerPaymentMeans_VersionedChildStructure"
 
@@ -35,7 +27,7 @@ class CustomerPaymentMeansVersionedChildStructure(VersionedChildStructure):
             "name": "Name",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     customer_account_ref: Optional[CustomerAccountRef] = field(
         default=None,
@@ -43,9 +35,11 @@ class CustomerPaymentMeansVersionedChildStructure(VersionedChildStructure):
             "name": "CustomerAccountRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    mobile_device_ref_or_emv_card_ref_or_smartcard_ref: Optional[object] = field(
+    medium_access_device_ref: Optional[
+        Union[MobileDeviceRef, EmvCardRef, SmartcardRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -66,7 +60,7 @@ class CustomerPaymentMeansVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     payment_method: Optional[PaymentMethodEnumeration] = field(
         default=None,
@@ -74,7 +68,7 @@ class CustomerPaymentMeansVersionedChildStructure(VersionedChildStructure):
             "name": "PaymentMethod",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     type_of_payment_method_ref: Optional[TypeOfPaymentMethodRef] = field(
         default=None,
@@ -82,7 +76,7 @@ class CustomerPaymentMeansVersionedChildStructure(VersionedChildStructure):
             "name": "TypeOfPaymentMethodRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
     last_verified_date: Optional[XmlDateTime] = field(
         default=None,
@@ -90,5 +84,5 @@ class CustomerPaymentMeansVersionedChildStructure(VersionedChildStructure):
             "name": "LastVerifiedDate",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )

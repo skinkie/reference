@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import List
-from netex.containment_aggregation_structure import ContainmentAggregationStructure
-from netex.vehicle_position_alignment import VehiclePositionAlignment
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .vehicle_position_alignment import VehiclePositionAlignment
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehiclePositionAlignmentsRelStructure(ContainmentAggregationStructure):
-    """
-    Type for a list of VEHICLE POSTION ALIGNMENTs.
-    """
     class Meta:
         name = "vehiclePositionAlignments_RelStructure"
 
@@ -21,5 +21,5 @@ class VehiclePositionAlignmentsRelStructure(ContainmentAggregationStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,
-        }
+        },
     )

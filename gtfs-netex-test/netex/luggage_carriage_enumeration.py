@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class LuggageCarriageEnumeration(Enum):
-    """
-    Allowed values for Luggage Carriage Facility.
-    """
     UNKNOWN = "unknown"
     NO_BAGGAGE_STORAGE = "noBaggageStorage"
     BAGGAGE_STORAGE = "baggageStorage"

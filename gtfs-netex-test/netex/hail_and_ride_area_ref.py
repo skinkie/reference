@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.hail_and_ride_area_ref_structure import HailAndRideAreaRefStructure
+from .hail_and_ride_area_ref_structure import HailAndRideAreaRefStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class HailAndRideAreaRef(HailAndRideAreaRefStructure):
-    """
-    Reference to a HAIL AND RIDE AREA.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

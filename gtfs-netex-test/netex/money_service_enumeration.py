@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class MoneyServiceEnumeration(Enum):
-    """
-    Allowed values for MONEY SERVICE.
-    """
     CASH_MACHINE = "cashMachine"
     BANK = "bank"
     INSURANCE = "insurance"

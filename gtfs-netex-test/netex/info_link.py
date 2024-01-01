@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from netex.info_link_structure import InfoLinkStructure
+from .info_link_structure import InfoLinkStructure
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class InfoLink(InfoLinkStructure):
-    """
-    A hyperlink to an external web resource.
-    """
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

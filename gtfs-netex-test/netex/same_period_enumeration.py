@@ -1,12 +1,12 @@
 from enum import Enum
 
+
+from typing import ClassVar as RestrictedVar
+
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class SamePeriodEnumeration(Enum):
-    """
-    Allowed values for Period ENTITLEMENT CONSTRAINT.
-    """
     ANY = "any"
     SAME_PERIOD = "samePeriod"
     WITHIN_SAME_PERIOD = "withinSamePeriod"

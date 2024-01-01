@@ -1,22 +1,18 @@
 from dataclasses import dataclass, field
-from typing import Optional
-from netex.alternative_texts_rel_structure import VersionedChildStructure
-from netex.quay_ref import QuayRef
-from netex.taxi_stand_ref import TaxiStandRef
-from netex.vehicle_stopping_place_ref import VehicleStoppingPlaceRef
+from typing import Optional, Union
+from .alternative_texts_rel_structure import VersionedChildStructure
+from .quay_ref import QuayRef
+from .taxi_stand_ref import TaxiStandRef
+from .vehicle_stopping_place_ref import VehicleStoppingPlaceRef
+
+
+from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(unsafe_hash=True, kw_only=True)
+@dataclass(kw_only=True)
 class VehicleQuayAlignmentVersionStructure(VersionedChildStructure):
-    """
-    Type for a VEHICLE QUAY ALIGNMENT.
-
-    :ivar vehicle_stopping_place_ref:
-    :ivar taxi_stand_ref_or_quay_ref:
-    :ivar order: Order of element.
-    """
     class Meta:
         name = "VehicleQuayAlignment_VersionStructure"
 
@@ -26,9 +22,9 @@ class VehicleQuayAlignmentVersionStructure(VersionedChildStructure):
             "name": "VehicleStoppingPlaceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-        }
+        },
     )
-    taxi_stand_ref_or_quay_ref: Optional[object] = field(
+    quay_ref: Optional[Union[TaxiStandRef, QuayRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -44,11 +40,11 @@ class VehicleQuayAlignmentVersionStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
-        }
+        },
     )
     order: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
