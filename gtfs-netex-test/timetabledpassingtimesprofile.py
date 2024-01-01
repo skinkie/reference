@@ -123,7 +123,7 @@ class TimetablePassingTimesProfile:
                 for call in sj.calls.call:
                     # TODO: do something with the different elements of the choice (Call, CallZ, DatedCall, DatedCallZ)
                     pis = pattern[call.order]
-                    if pis.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref.ref != call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref: # TODO: make sure we get the right one
+                    if pis.scheduled_stop_point_ref.ref != call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref: # TODO: make sure we get the right one
                         print("{} order does not match {} order ({} vs {})".format(service_journey_pattern.id, sj.id,
                                                                                    call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view,
                                                                                    pis.scheduled_stop_point_ref),
