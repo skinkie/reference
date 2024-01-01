@@ -69,7 +69,7 @@ def conversion(input_filename: str, output_filename: str):
     service_frame: ServiceFrame
     service_frame = parser.parse(tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
     if not has_servicejourney_patterns:
-        service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(choice=service_journey_patterns)
+        service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
 
     # for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPoint"):
     #    scheduled_stop_point: ScheduledStopPoint
@@ -77,7 +77,7 @@ def conversion(input_filename: str, output_filename: str):
     #     scheduled_stop_points.append(scheduled_stop_point)
 
     service_frame.stop_assignments = StopAssignmentsInFrameRelStructure(
-        choice=SiteFrameEPIP.getPassengerStopAssignments(service_frame.scheduled_stop_points.scheduled_stop_point))
+        stop_assignment=SiteFrameEPIP.getPassengerStopAssignments(service_frame.scheduled_stop_points.scheduled_stop_point))
 
     site_frame_epip = SiteFrameEPIP(codespace)
     site_frame = site_frame_epip.getSiteFrame(service_frame.scheduled_stop_points.scheduled_stop_point)
