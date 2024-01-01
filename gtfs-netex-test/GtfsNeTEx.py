@@ -824,7 +824,7 @@ class GtfsNeTexProfile(CallsProfile):
         composite_frame.frame_defaults = self.frame_defaults
         composite_frame.codespaces = CodespacesRelStructure(codespace_ref_or_codespace=[self.codespace])
         composite_frame.versions = VersionsRelStructure(version_ref_or_version=[self.version])
-        composite_frame.frames = FramesRelStructure(choice=[self.getResourceFrame(operators)] + [self.getServiceFrame(lines, stop_areas, scheduled_stop_points)] + [self.getTimetableFrame(availability_conditions, service_journeys)])
+        composite_frame.frames = FramesRelStructure(common_frame=[self.getResourceFrame(operators)] + [self.getServiceFrame(lines, stop_areas, scheduled_stop_points)] + [self.getTimetableFrame(availability_conditions, service_journeys)])
         return composite_frame
 
     def getPublicationDelivery(self, operators, lines, stop_areas, scheduled_stop_points, service_journeys, availability_conditions) -> PublicationDelivery:
