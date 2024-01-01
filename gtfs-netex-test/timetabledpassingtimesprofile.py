@@ -81,59 +81,58 @@ class TimetablePassingTimesProfile:
                 if not sj.journey_pattern_ref:
                     if len(sj.calls.call) <= 1:
                         print(f"{sj.id} has not enough calls.")
-                        continue
 
-                    call: Call
-                    spijps = PointsInJourneyPatternRelStructure(
-                        point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[self.mapCallToStopPointInJourneyPattern(call) for call in sj.calls.call])
-                    spijp_hash = TimetablePassingTimesProfile.sjp_hash(spijps)
+                    else:
+                        call: Call
+                        spijps = PointsInJourneyPatternRelStructure(
+                            point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[self.mapCallToStopPointInJourneyPattern(call) for call in sj.calls.call])
+                        spijp_hash = TimetablePassingTimesProfile.sjp_hash(spijps)
 
-                    """
-                    spijp_hash = str(hash(
-                        tuple([(spijp.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref.ref, spijp.for_alighting, spijp.for_boarding,
-                                spijp.onward_timing_link_ref, spijp.onward_service_link_ref,
-                                spijp.destination_display_ref_or_destination_display_view)
-                               for spijp in spijps])))
-                    """
+                        """
+                        spijp_hash = str(hash(
+                            tuple([(spijp.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref.ref, spijp.for_alighting, spijp.for_boarding,
+                                    spijp.onward_timing_link_ref, spijp.onward_service_link_ref,
+                                    spijp.destination_display_ref_or_destination_display_view)
+                                   for spijp in spijps])))
+                        """
 
-                    service_journey_pattern = sjps.get(spijp_hash, None)
-                    if len(spijps.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern) > 0 and service_journey_pattern is None:
-                        service_journey_pattern = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, self.codespace, spijp_hash),
-                                                                        version=sj.version,
-                                                                        route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.choice),
-                                                                        name=MultilingualString(value=spijp_hash),
-                                                                        derived_from_object_ref = sj.id,
-                                                                        derived_from_version_ref_attribute = sj.version,
-                                                                        points_in_sequence = spijps)
+                        service_journey_pattern = sjps.get(spijp_hash, None)
+                        if len(spijps.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern) > 0 and service_journey_pattern is None:
+                            service_journey_pattern = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, self.codespace, spijp_hash),
+                                                                            version=sj.version,
+                                                                            route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.choice),
+                                                                            name=MultilingualString(value=spijp_hash),
+                                                                            derived_from_object_ref = sj.id,
+                                                                            derived_from_version_ref_attribute = sj.version,
+                                                                            points_in_sequence = spijps)
 
-                        sjps[spijp_hash] = service_journey_pattern
+                            sjps[spijp_hash] = service_journey_pattern
 
-                    sj.choice = getRef(service_journey_pattern, ServiceJourneyPatternRef)
-                    # existing_sjps[service_journey_pattern.id] = service_journey_pattern
+                        sj.journey_pattern_ref = getRef(service_journey_pattern, ServiceJourneyPatternRef)
+                        # existing_sjps[service_journey_pattern.id] = service_journey_pattern
 
                 if not service_journey_pattern:
                     if sj.journey_pattern_ref:
                         service_journey_pattern = existing_sjps[sj.journey_pattern_ref.ref]
-                    else:
-                        continue
 
-                pattern = {x.order: x for x in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern}
+                if service_journey_pattern:
+                    pattern = {x.order: x for x in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern}
 
-                ttpt = []
-                for call in sj.calls.call:
-                    # TODO: do something with the different elements of the choice (Call, CallZ, DatedCall, DatedCallZ)
-                    pis = pattern[call.order]
-                    if pis.scheduled_stop_point_ref.ref != call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref: # TODO: make sure we get the right one
-                        print("{} order does not match {} order ({} vs {})".format(service_journey_pattern.id, sj.id,
-                                                                                   call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view,
-                                                                                   pis.scheduled_stop_point_ref),
-                              file=sys.stderr)
+                    ttpt = []
+                    for call in sj.calls.call:
+                        # TODO: do something with the different elements of the choice (Call, CallZ, DatedCall, DatedCallZ)
+                        pis = pattern[call.order]
+                        if pis.scheduled_stop_point_ref.ref != call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref: # TODO: make sure we get the right one
+                            print("{} order does not match {} order ({} vs {})".format(service_journey_pattern.id, sj.id,
+                                                                                       call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view,
+                                                                                       pis.scheduled_stop_point_ref),
+                                  file=sys.stderr)
 
-                    else:
-                        ttpt.append(self.mapCallToTimetabledPassingTime(call, pattern))
+                        else:
+                            ttpt.append(self.mapCallToTimetabledPassingTime(call, pattern))
 
-                if len(ttpt) > 0:
-                    sj.passing_times = TimetabledPassingTimesRelStructure(timetabled_passing_time=ttpt)
+                    if len(ttpt) > 0:
+                        sj.passing_times = TimetabledPassingTimesRelStructure(timetabled_passing_time=ttpt)
 
             # if there is a servicejourneypattern, departure time, timedemandtype it can be expanded
             elif sj.choice and sj.departure_time and sj.time_demand_type_ref:

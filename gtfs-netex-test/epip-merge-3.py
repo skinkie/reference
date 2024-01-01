@@ -105,6 +105,7 @@ with (open('/tmp/test.xml', 'w') as f):
     service_calendar_frame = ServiceCalendarFrame(id="OPENOV:ServiceCalendarFrame:Aggregated", version="1",
                                                   type_of_frame_ref=TypeOfFrameRef(ref="epip:EU_PI_CALENDAR", version_ref="epip:1.0"),
                                                   service_calendar=ServiceCalendar(id="1",
+                                                                                   version="1",
                                                                                    from_date=from_date,
                                                                                    to_date=to_date,
                                                                                    day_types=DayTypesRelStructure(day_type_ref_or_day_type=generate_from_duckdb(con, QUERY_DT, DayType)),
