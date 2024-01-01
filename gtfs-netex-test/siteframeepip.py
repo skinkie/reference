@@ -56,7 +56,7 @@ class SiteFrameEPIP:
     def getSiteFrame(self, scheduled_stop_points: List[ScheduledStopPoint]):
         site_frame = SiteFrame(id=getId(SiteFrame, self.codespace, "SiteFrame"),
                                version=scheduled_stop_points[0].version,
-                               stop_places=StopPlacesInFrameRelStructure(taxi_rank_or_stop_place=SiteFrameEPIP.getStopPlaces(scheduled_stop_points)))
+                               stop_places=StopPlacesInFrameRelStructure(stop_place=SiteFrameEPIP.getStopPlaces(scheduled_stop_points)))
         return site_frame
 
 
