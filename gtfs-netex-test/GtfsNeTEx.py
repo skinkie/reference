@@ -802,7 +802,7 @@ class GtfsNeTexProfile(CallsProfile):
                              request_stop=bool(pickup_types[i] == 2 or pickup_types[i] == 3 or drop_off_types[i] == 2 or drop_off_types[i] == 3),
                              order=prev_order) # stop_sequence is non-negative integer
 
-                service_journey.calls.choice.append(call)
+                service_journey.calls.call.append(call)
 
                 prev_call = call
                 prev_shape_traveled = shape_dist_traveled
@@ -834,7 +834,7 @@ class GtfsNeTexProfile(CallsProfile):
             publication_timestamp=XmlDateTime.from_datetime(datetime.datetime.now()),
             version = "ntx:1.1",
             participant_ref = "NDOV",
-            description = "NeTEx export"
+            description = MultilingualString(value="NeTEx export")
         )
         publication_delivery.data_objects = DataObjectsRelStructure(choice=[composite_frame])
 
