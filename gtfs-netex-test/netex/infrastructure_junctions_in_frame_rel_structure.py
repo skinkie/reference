@@ -5,9 +5,6 @@ from .railway_junction import RailwayJunction
 from .road_junction import RoadJunction
 from .wire_junction import WireJunction
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

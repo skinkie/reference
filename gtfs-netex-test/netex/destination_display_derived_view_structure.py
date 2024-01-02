@@ -6,9 +6,6 @@ from .key_list import KeyList
 from .multilingual_string import MultilingualString
 from .private_code import PrivateCode
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

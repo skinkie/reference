@@ -3,9 +3,6 @@ from .communication_service_ref_structure import (
     CommunicationServiceRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

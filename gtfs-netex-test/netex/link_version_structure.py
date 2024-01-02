@@ -8,9 +8,6 @@ from .multilingual_string import MultilingualString
 from .points_on_link_rel_structure import PointsOnLinkRelStructure
 from .projections_rel_structure import ProjectionsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -564,9 +564,6 @@ from .wire_point_ref import WirePointRef
 from .zone_projection_ref import ZoneProjectionRef
 from .zone_ref import ZoneRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

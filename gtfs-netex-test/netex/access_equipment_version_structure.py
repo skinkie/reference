@@ -4,9 +4,6 @@ from typing import Optional
 from .direction_of_use_enumeration import DirectionOfUseEnumeration
 from .place_equipment_version_structure import PlaceEquipmentVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -4,9 +4,6 @@ from typing import Optional
 from .alternative_texts_rel_structure import VersionedChildStructure
 from .rounding_step_ref import RoundingStepRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

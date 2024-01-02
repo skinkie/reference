@@ -10,9 +10,6 @@ from .line_ref import LineRef
 from .operator_ref import OperatorRef
 from .timing_point_ref_structure import TimingPointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

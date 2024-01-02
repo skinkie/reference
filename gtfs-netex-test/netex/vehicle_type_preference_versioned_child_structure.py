@@ -7,9 +7,6 @@ from .journey_timing_versioned_child_structure import (
 )
 from .vehicle_type_preference_ref import VehicleTypePreferenceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -8,9 +8,6 @@ from .fare_class_enumeration import FareClassEnumeration
 from .multilingual_string import MultilingualString
 from .service_facility_set_ref import ServiceFacilitySetRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

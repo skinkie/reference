@@ -5,9 +5,6 @@ from .general_group_of_entities import GeneralGroupOfEntities
 from .general_group_of_entities_ref import GeneralGroupOfEntitiesRef
 from .sale_discount_right_enumeration import SaleDiscountRightEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

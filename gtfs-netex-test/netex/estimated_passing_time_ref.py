@@ -3,9 +3,6 @@ from .estimated_passing_time_ref_structure import (
     EstimatedPassingTimeRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

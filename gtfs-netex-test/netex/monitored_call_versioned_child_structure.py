@@ -7,9 +7,6 @@ from .onward_calls_rel_structure import OnwardCallsRelStructure
 from .previous_calls_rel_structure import PreviousCallsRelStructure
 from .target_passing_time_view import TargetPassingTimeView
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

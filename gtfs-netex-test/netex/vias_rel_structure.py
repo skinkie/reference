@@ -6,9 +6,6 @@ from .strict_containment_aggregation_structure import (
 )
 from .via_versioned_child_structure import ViaVersionedChildStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

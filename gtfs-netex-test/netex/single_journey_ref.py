@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .single_journey_ref_structure import SingleJourneyRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

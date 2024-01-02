@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .tariff_zone_ref_structure import TariffZoneRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

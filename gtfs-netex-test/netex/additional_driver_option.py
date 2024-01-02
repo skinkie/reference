@@ -3,9 +3,6 @@ from .additional_driver_option_version_structure import (
     AdditionalDriverOptionVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

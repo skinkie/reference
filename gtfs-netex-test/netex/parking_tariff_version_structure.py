@@ -37,9 +37,6 @@ from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
 from .travel_agent_ref import TravelAgentRef
 from .type_of_tariff_ref import TypeOfTariffRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -4,9 +4,6 @@ from .alternative_texts_rel_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
 from .type_of_responsibility_role_ref import TypeOfResponsibilityRoleRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

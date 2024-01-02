@@ -13,9 +13,6 @@ from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
 from .vehicle_type_ref import VehicleTypeRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

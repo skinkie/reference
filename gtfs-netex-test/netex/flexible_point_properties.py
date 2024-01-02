@@ -3,9 +3,6 @@ from .flexible_point_properties_versioned_child_structure import (
     FlexiblePointPropertiesVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

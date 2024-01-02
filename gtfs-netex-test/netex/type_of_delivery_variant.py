@@ -3,9 +3,6 @@ from .type_of_delivery_variant_value_structure import (
     TypeOfDeliveryVariantValueStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

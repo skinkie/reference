@@ -11,9 +11,6 @@ from .scheduled_stop_point_version_structure import (
 from .site_facility_set import SiteFacilitySet
 from .site_facility_set_ref import SiteFacilitySetRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

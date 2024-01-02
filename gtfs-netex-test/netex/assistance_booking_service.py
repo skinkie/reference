@@ -3,9 +3,6 @@ from .assistance_booking_service_version_structure import (
     AssistanceBookingServiceVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

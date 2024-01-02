@@ -11,9 +11,6 @@ from .stakeholder_role_type_enumeration import StakeholderRoleTypeEnumeration
 from .type_of_responsibility_role_ref import TypeOfResponsibilityRoleRef
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .road_address_ref_structure import RoadAddressRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

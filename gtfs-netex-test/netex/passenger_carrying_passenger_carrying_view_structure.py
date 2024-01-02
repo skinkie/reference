@@ -4,9 +4,6 @@ from typing import Optional
 from .derived_view_structure import DerivedViewStructure
 from .passenger_capacity import PassengerCapacity
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

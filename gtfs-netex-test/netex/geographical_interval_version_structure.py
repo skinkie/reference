@@ -8,9 +8,6 @@ from .geographical_interval_prices_rel_structure import (
 from .geographical_unit_ref import GeographicalUnitRef
 from .interval_type_enumeration import IntervalTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

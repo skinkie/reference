@@ -7,9 +7,6 @@ from .security_listing_versioned_child_structure import (
 )
 from .smartcard_ref import SmartcardRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

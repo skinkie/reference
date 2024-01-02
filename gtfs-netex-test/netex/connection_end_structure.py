@@ -7,9 +7,6 @@ from .point_ref_structure import PointRefStructure
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 from .submode import Submode
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

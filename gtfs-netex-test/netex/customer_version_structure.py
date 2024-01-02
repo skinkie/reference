@@ -13,9 +13,6 @@ from .postal_address import PostalAddress
 from .private_code_structure import PrivateCodeStructure
 from .telephone_contact_structure import TelephoneContactStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

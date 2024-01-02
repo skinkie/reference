@@ -16,9 +16,6 @@ from .target_passing_times_rel_structure import TargetPassingTimesRelStructure
 from .template_service_journey_ref import TemplateServiceJourneyRef
 from .vehicle_journey_ref import VehicleJourneyRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

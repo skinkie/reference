@@ -17,9 +17,6 @@ from .timeband_ref import TimebandRef
 from .timing_point_in_journey_pattern_ref import TimingPointInJourneyPatternRef
 from .timing_point_status_enumeration import TimingPointStatusEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

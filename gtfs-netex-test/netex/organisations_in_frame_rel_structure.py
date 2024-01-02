@@ -11,9 +11,6 @@ from .retail_consortium import RetailConsortium
 from .serviced_organisation import ServicedOrganisation
 from .travel_agent import TravelAgent
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

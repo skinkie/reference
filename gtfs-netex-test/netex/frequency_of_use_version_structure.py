@@ -6,9 +6,6 @@ from .frequency_of_use_type_enumeration import FrequencyOfUseTypeEnumeration
 from .time_interval_ref import TimeIntervalRef
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

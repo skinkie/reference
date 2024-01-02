@@ -3,9 +3,6 @@ from typing import Optional
 from .extensions_1 import Extensions1
 from .request_structure import RequestStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

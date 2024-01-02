@@ -7,9 +7,6 @@ from .train_element_ref import TrainElementRef
 from .train_ref import TrainRef
 from .vehicle_orientation_enumeration import VehicleOrientationEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

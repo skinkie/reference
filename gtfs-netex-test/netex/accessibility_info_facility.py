@@ -3,9 +3,6 @@ from .accessibility_info_facility_enumeration import (
     AccessibilityInfoFacilityEnumeration,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

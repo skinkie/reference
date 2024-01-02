@@ -3,9 +3,6 @@ from typing import List, Optional
 from .extensions_1 import Extensions1
 from .producer_response_structure import ProducerResponseStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

@@ -14,9 +14,6 @@ from .version_frame_refs_rel_structure import VersionFrameRefsRelStructure
 from .version_ref_structure import VersionRefStructure
 from .versions_rel_structure import VersionsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

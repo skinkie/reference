@@ -5,9 +5,6 @@ from .operating_day_ref import OperatingDayRef
 from .service_journey_version_structure import ServiceJourneyVersionStructure
 from .uic_operating_period import UicOperatingPeriod
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

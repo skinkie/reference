@@ -48,9 +48,6 @@ from .wire_junction import WireJunction
 from .wire_link_ref import WireLinkRef
 from .wire_point_ref import WirePointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

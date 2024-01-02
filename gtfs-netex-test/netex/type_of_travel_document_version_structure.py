@@ -8,9 +8,6 @@ from .types_of_machine_readabilities_rel_structure import (
     TypesOfMachineReadabilitiesRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

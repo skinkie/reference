@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .simple_vehicle_type_ref_structure import SimpleVehicleTypeRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

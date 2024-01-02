@@ -3,9 +3,6 @@ from .topographic_place_version_structure import (
     TopographicPlaceVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

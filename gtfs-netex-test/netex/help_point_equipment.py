@@ -3,9 +3,6 @@ from .help_point_equipment_version_structure import (
     HelpPointEquipmentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

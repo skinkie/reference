@@ -4,9 +4,6 @@ from .activation_assignment import ActivationAssignment
 from .activation_assignment_ref import ActivationAssignmentRef
 from .containment_aggregation_structure import ContainmentAggregationStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

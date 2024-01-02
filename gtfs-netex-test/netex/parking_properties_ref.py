@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .parking_properties_ref_structure import ParkingPropertiesRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

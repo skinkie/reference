@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .distribution_assignment import DistributionAssignment
 from .distribution_assignment_ref import DistributionAssignmentRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

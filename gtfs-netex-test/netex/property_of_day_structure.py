@@ -11,9 +11,6 @@ from .season_enumeration import SeasonEnumeration
 from .tide_enumeration import TideEnumeration
 from .week_of_month_enumeration import WeekOfMonthEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

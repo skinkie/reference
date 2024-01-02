@@ -3,9 +3,6 @@ from .single_trip_fare_request_ref_structure import (
     SingleTripFareRequestRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

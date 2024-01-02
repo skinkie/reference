@@ -10,9 +10,6 @@ from .points_in_journey_pattern_rel_structure import (
 from .zone_use_enumeration import ZoneUseEnumeration
 from .zone_version_structure import ZoneVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

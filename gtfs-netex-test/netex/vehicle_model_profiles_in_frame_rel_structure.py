@@ -4,9 +4,6 @@ from .car_model_profile import CarModelProfile
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .cycle_model_profile import CycleModelProfile
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

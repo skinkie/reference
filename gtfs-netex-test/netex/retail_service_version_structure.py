@@ -3,9 +3,6 @@ from typing import List
 from .local_service_version_structure import LocalServiceVersionStructure
 from .retail_service_enumeration import RetailServiceEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

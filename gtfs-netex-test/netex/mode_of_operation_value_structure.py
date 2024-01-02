@@ -4,9 +4,6 @@ from .submodes_rel_structure import SubmodesRelStructure
 from .type_of_mode_of_operation_ref import TypeOfModeOfOperationRef
 from .type_of_value_version_structure import TypeOfValueVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

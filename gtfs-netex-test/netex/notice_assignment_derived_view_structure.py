@@ -7,9 +7,6 @@ from .private_code import PrivateCode
 from .publicity_channel_enumeration import PublicityChannelEnumeration
 from .type_of_notice_ref import TypeOfNoticeRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

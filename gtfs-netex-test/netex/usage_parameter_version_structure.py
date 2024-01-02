@@ -6,9 +6,6 @@ from .usage_parameter_prices_rel_structure import (
     UsageParameterPricesRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

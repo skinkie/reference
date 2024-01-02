@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .type_of_security_list import TypeOfSecurityList
 from .type_of_security_list_ref import TypeOfSecurityListRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

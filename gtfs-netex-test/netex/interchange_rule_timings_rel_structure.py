@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .interchange_rule_timing import InterchangeRuleTiming
 from .interchange_rule_timing_ref import InterchangeRuleTimingRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

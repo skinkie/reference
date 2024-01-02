@@ -3,9 +3,6 @@ from .type_of_service_feature_ref_structure import (
     TypeOfServiceFeatureRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

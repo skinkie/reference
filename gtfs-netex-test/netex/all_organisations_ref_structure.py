@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -17,4 +14,3 @@ class AllOrganisationsRefStructure(VersionOfObjectRefStructure):
             "required": True,
         },
     )
-    value: RestrictedVar

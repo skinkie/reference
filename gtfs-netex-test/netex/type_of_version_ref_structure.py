@@ -3,9 +3,6 @@ from typing import Optional
 from xsdata.models.datatype import XmlDateTime
 from .modification_enumeration import ModificationEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

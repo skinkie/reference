@@ -7,9 +7,6 @@ from .journey_pattern_run_time import JourneyPatternRunTime
 from .multilingual_string import MultilingualString
 from .time_demand_type_ref import TimeDemandTypeRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

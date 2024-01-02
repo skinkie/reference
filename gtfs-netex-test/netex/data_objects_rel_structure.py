@@ -17,9 +17,6 @@ from .site_frame import SiteFrame
 from .timetable_frame import TimetableFrame
 from .vehicle_schedule_frame import VehicleScheduleFrame
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

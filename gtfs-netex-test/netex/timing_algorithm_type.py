@@ -3,9 +3,6 @@ from .timing_algorithm_type_value_structure import (
     TimingAlgorithmTypeValueStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

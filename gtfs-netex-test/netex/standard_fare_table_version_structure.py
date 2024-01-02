@@ -22,9 +22,6 @@ from .travel_agent_ref import TravelAgentRef
 from .type_of_fare_table_ref import TypeOfFareTableRef
 from .used_in_refs_rel_structure import UsedInRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

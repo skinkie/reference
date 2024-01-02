@@ -5,9 +5,6 @@ from .termination_response_status_structure import (
     TerminationResponseStatusStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

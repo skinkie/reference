@@ -8,9 +8,6 @@ from .passenger_stop_assignment import PassengerStopAssignment
 from .train_stop_assignment import TrainStopAssignment
 from .vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

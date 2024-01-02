@@ -9,9 +9,6 @@ from .group_of_entities_version_structure import (
 )
 from .time_demand_type_refs_rel_structure import TimeDemandTypeRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

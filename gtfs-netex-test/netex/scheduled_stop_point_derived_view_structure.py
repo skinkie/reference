@@ -11,9 +11,6 @@ from .scheduled_stop_point_ref import ScheduledStopPointRef
 from .stop_type_enumeration import StopTypeEnumeration
 from .type_of_point_ref import TypeOfPointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

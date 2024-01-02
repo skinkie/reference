@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from .medium_application_instance_ref import MediumApplicationInstanceRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

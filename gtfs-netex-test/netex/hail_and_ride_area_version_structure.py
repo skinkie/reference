@@ -7,9 +7,6 @@ from .destination_display_views_rel_structure import (
 from .flexible_quay_version_structure import FlexibleQuayVersionStructure
 from .point_ref_structure import PointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -6,9 +6,6 @@ from .locale_structure import LocaleStructure
 from .responsibility_set_ref_structure import ResponsibilitySetRefStructure
 from .system_of_units import SystemOfUnits
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

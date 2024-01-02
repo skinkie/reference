@@ -3,9 +3,6 @@ from .traffic_control_point_version_structure import (
     TrafficControlPointVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

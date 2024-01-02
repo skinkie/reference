@@ -9,9 +9,6 @@ from .price_unit_ref import PriceUnitRef
 from .pricing_rule_ref import PricingRuleRef
 from .type_of_pricing_rule_ref import TypeOfPricingRuleRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

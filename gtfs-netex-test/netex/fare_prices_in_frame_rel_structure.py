@@ -3,9 +3,6 @@ from typing import List
 from .cell_versioned_child_structure import PriceGroup
 from .frame_containment_structure import FrameContainmentStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

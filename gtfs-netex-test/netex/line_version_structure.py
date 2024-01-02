@@ -36,9 +36,6 @@ from .type_of_payment_method_value_structure import (
 from .type_of_product_category_ref import TypeOfProductCategoryRef
 from .type_of_service_ref import TypeOfServiceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

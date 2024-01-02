@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .booking_process_enumeration import BookingProcessEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

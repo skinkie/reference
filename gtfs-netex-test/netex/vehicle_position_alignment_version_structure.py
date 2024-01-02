@@ -5,9 +5,6 @@ from .boarding_position_ref import BoardingPositionRef
 from .stop_place_entrance_ref import StopPlaceEntranceRef
 from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

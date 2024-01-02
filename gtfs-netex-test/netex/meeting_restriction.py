@@ -3,9 +3,6 @@ from .meeting_restriction_version_structure import (
     MeetingRestrictionVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

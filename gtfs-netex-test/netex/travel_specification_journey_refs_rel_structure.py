@@ -6,9 +6,6 @@ from .single_journey_ref import SingleJourneyRef
 from .template_service_journey_ref import TemplateServiceJourneyRef
 from .train_number_ref import TrainNumberRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

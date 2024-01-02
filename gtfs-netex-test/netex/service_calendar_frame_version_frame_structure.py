@@ -17,9 +17,6 @@ from .operating_periods_in_frame_rel_structure import (
 from .service_calendar import ServiceCalendar
 from .timebands_in_frame_rel_structure import TimebandsInFrameRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

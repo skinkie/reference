@@ -3,9 +3,6 @@ from .time_demand_type_assignment_ref_structure import (
     TimeDemandTypeAssignmentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -13,9 +13,6 @@ from .vehicle_type_preferences_rel_structure import (
     VehicleTypePreferencesRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

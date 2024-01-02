@@ -5,9 +5,6 @@ from .garage_point_ref_structure import GaragePointRefStructure
 from .multilingual_string import MultilingualString
 from .vehicle_service_ref import VehicleServiceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

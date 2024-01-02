@@ -4,9 +4,6 @@ from xsdata.models.datatype import XmlDuration
 from .headway_use_enumeration import HeadwayUseEnumeration
 from .multilingual_string import MultilingualString
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

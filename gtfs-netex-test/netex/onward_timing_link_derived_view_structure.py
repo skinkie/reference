@@ -7,9 +7,6 @@ from .timing_link_in_journey_pattern_ref import TimingLinkInJourneyPatternRef
 from .timing_link_ref import TimingLinkRef
 from .timing_point_ref_structure import TimingPointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

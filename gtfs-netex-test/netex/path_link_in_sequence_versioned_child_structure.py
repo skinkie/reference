@@ -9,9 +9,6 @@ from .path_link_ref import PathLinkRef
 from .path_link_view import PathLinkView
 from .transition_enumeration import TransitionEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

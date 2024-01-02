@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .branding_ref_structure import BrandingRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

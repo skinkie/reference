@@ -5,9 +5,6 @@ from .strict_containment_aggregation_structure import (
 )
 from .timetabled_passing_time import TimetabledPassingTime
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

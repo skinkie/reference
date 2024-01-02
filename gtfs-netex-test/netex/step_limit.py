@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .step_limit_version_structure import StepLimitVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

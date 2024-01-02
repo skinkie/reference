@@ -4,9 +4,6 @@ from .interchange_version_structure import InterchangeVersionStructure
 from .journey_pattern_ref_structure import JourneyPatternRefStructure
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

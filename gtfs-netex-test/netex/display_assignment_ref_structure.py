@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .assignment_ref_structure import AssignmentRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -15,4 +12,3 @@ class DisplayAssignmentRefStructure(AssignmentRefStructure):
             "type": "Attribute",
         },
     )
-    value: RestrictedVar

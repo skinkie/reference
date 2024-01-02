@@ -3,9 +3,6 @@ from .medium_access_device_security_listing_ref_structure import (
     MediumAccessDeviceSecurityListingRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

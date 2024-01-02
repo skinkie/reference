@@ -3,9 +3,6 @@ from .check_constraint_throughput_ref_structure import (
     CheckConstraintThroughputRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

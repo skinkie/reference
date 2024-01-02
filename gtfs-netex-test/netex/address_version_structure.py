@@ -4,9 +4,6 @@ from .country_ref import CountryRef
 from .multilingual_string import MultilingualString
 from .place_version_structure import PlaceVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

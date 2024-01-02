@@ -7,9 +7,6 @@ from .simple_feature_ref import SimpleFeatureRef
 from .spatial_feature_ref import SpatialFeatureRef
 from .type_of_projection_ref_structure import TypeOfProjectionRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

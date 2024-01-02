@@ -5,9 +5,6 @@ from .blacklist_ref import BlacklistRef
 from .multilingual_string import MultilingualString
 from .whitelist_ref import WhitelistRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

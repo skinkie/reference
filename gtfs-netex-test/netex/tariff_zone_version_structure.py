@@ -4,9 +4,6 @@ from .presentation_structure import PresentationStructure
 from .print_presentation_structure import PrintPresentationStructure
 from .zone_version_structure import ZoneVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

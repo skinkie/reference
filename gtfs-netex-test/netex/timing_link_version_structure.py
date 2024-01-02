@@ -5,9 +5,6 @@ from .link_version_structure import LinkVersionStructure
 from .operational_context_ref import OperationalContextRef
 from .timing_point_ref_structure import TimingPointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

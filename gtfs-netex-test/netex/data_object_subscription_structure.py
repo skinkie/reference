@@ -7,9 +7,6 @@ from .network_frame_subscription_policy_structure import (
     NetworkFrameSubscriptionPolicyStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

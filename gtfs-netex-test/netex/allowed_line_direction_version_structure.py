@@ -6,9 +6,6 @@ from .flexible_line_ref import FlexibleLineRef
 from .line_ref import LineRef
 from .presentation_structure import PresentationStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

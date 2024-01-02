@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import List, Optional, Type, Union, Any
 from xsdata.models.datatype import XmlDate, XmlDateTime, XmlDuration
 from .access_vehicle_equipment_ref import AccessVehicleEquipmentRef
 from .activated_equipment_ref import ActivatedEquipmentRef
@@ -278,9 +278,6 @@ from .vehicle_type_ref import VehicleTypeRef
 from .waiting_equipment_ref import WaitingEquipmentRef
 from .waiting_room_equipment_ref import WaitingRoomEquipmentRef
 from .wheelchair_vehicle_ref import WheelchairVehicleRef
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -1805,9 +1802,18 @@ class Cell(CellVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    validity_conditions: RestrictedVar
-    valid_between: RestrictedVar
-    alternative_texts: RestrictedVar
+    validity_conditions_or_valid_between: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    alternative_texts: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
 
 
 @dataclass(kw_only=True)
@@ -2063,9 +2069,18 @@ class CellsRelStructure(StrictContainmentAggregationStructure):
 
     @dataclass(kw_only=True)
     class CellInContext(CellVersionedChildStructure):
-        validity_conditions: RestrictedVar
-        valid_between: RestrictedVar
-        alternative_texts: RestrictedVar
+        validity_conditions_or_valid_between: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        alternative_texts: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
 
 
 @dataclass(kw_only=True)

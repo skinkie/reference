@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .self_drive_submode_enumeration import SelfDriveSubmodeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

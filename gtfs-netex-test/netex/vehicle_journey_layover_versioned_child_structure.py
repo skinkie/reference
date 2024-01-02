@@ -4,9 +4,6 @@ from .dead_run_ref import DeadRunRef
 from .journey_layover_structure import JourneyLayoverStructure
 from .vehicle_journey_ref import VehicleJourneyRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

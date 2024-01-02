@@ -74,9 +74,6 @@ from .type_of_tariff_ref import TypeOfTariffRef
 from .vehicle_rental_service_ref import VehicleRentalServiceRef
 from .vehicle_sharing_service_ref import VehicleSharingServiceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

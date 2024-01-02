@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .postal_address_version_structure import PostalAddressVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

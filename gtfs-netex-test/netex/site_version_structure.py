@@ -30,9 +30,6 @@ from .topographic_place_refs_rel_structure import (
 from .topographic_place_view import TopographicPlaceView
 from .travel_agent_ref import TravelAgentRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

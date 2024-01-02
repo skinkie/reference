@@ -1,12 +1,9 @@
 from dataclasses import dataclass
 from .direct_position_type import DirectPositionType
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
 @dataclass(kw_only=True)
 class VectorType(DirectPositionType):
-    value: RestrictedVar
+    pass

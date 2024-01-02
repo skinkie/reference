@@ -4,9 +4,6 @@ from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .passenger_capacity import PassengerCapacity
 from .passenger_capacity_ref import PassengerCapacityRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

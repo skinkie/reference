@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from xsdata.models.datatype import XmlTime
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

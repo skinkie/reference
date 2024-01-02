@@ -5,9 +5,6 @@ from .travel_document_security_listing_ref import (
     TravelDocumentSecurityListingRef,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

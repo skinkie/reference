@@ -6,9 +6,6 @@ from .flexible_stop_place_ref import FlexibleStopPlaceRef
 from .hail_and_ride_area_ref import HailAndRideAreaRef
 from .stop_assignment_version_structure import StopAssignmentVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

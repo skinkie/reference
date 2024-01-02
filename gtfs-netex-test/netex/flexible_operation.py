@@ -3,9 +3,6 @@ from .flexible_mode_of_operation_value_structure import (
     FlexibleModeOfOperationValueStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

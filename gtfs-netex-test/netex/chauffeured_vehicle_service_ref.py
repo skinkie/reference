@@ -3,9 +3,6 @@ from .chauffeured_vehicle_service_ref_structure import (
     ChauffeuredVehicleServiceRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

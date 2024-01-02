@@ -3,9 +3,6 @@ from .related_organisation_version_structure import (
     RelatedOrganisationVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

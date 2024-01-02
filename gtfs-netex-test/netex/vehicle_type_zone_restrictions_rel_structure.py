@@ -3,9 +3,6 @@ from typing import List
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .vehicle_type_zone_restriction import VehicleTypeZoneRestriction
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

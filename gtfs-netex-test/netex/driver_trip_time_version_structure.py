@@ -8,9 +8,6 @@ from .alternative_texts_rel_structure import DataManagedObjectStructure
 from .driver_trip_ref import DriverTripRef
 from .multilingual_string import MultilingualString
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

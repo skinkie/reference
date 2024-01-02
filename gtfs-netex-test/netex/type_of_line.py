@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .type_of_line_value_structure import TypeOfLineValueStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .vehicle_pooling_parking_area_version_structure import (
     VehiclePoolingParkingAreaVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

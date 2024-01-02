@@ -5,9 +5,6 @@ from .direction_type_enumeration import DirectionTypeEnumeration
 from .external_object_ref_structure import ExternalObjectRefStructure
 from .type_of_value_version_structure import TypeOfValueVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

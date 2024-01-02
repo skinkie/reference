@@ -19,9 +19,6 @@ from .traffic_control_point_ref import TrafficControlPointRef
 from .vehicle_meeting_point_ref import VehicleMeetingPointRef
 from .wire_point_ref import WirePointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

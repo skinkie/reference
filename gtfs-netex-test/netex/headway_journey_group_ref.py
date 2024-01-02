@@ -3,9 +3,6 @@ from .headway_journey_group_ref_structure import (
     HeadwayJourneyGroupRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

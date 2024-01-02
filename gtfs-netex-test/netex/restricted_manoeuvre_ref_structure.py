@@ -3,9 +3,6 @@ from .infrastructure_link_restriction_ref_structure import (
     InfrastructureLinkRestrictionRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -13,4 +10,4 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 class RestrictedManoeuvreRefStructure(
     InfrastructureLinkRestrictionRefStructure
 ):
-    value: RestrictedVar
+    pass

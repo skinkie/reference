@@ -3,9 +3,6 @@ from typing import List
 from .booking_method_enumeration import BookingMethodEnumeration
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

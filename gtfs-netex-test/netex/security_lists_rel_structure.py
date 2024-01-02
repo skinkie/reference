@@ -4,9 +4,6 @@ from .blacklist_ref import BlacklistRef
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .whitelist_ref import WhitelistRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

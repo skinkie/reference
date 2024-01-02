@@ -14,9 +14,6 @@ from .specific_parameter_assignment_version_structure import (
 )
 from .validity_parameter_assignment import ValidityParameterAssignment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

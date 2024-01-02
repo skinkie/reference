@@ -6,9 +6,6 @@ from .distance_matrix_element_inverse_ref import (
 from .distance_matrix_element_ref import DistanceMatrixElementRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

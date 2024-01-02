@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .limiting_rule_versioned_structure import LimitingRuleVersionedStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

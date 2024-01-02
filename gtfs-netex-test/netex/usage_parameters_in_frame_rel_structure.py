@@ -39,9 +39,6 @@ from .usage_validity_period import UsageValidityPeriod
 from .user_profile import UserProfile
 from .vehicle_pooler_profile import VehiclePoolerProfile
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

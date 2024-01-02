@@ -56,9 +56,6 @@ from .vehicles_in_frame_rel_structure import VehiclesInFrameRelStructure
 from .whitelists_in_frame_rel_structure import WhitelistsInFrameRelStructure
 from .zones_in_frame_rel_structure import ZonesInFrameRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

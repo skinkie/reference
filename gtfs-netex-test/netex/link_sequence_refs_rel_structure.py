@@ -21,9 +21,6 @@ from .trip_pattern_trip_ref import TripPatternTripRef
 from .trip_ref import TripRef
 from .vehicle_journey_ref import VehicleJourneyRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

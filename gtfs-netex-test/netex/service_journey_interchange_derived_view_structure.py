@@ -10,9 +10,6 @@ from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .service_journey_interchange_ref import ServiceJourneyInterchangeRef
 from .vehicle_journey_ref_structure import VehicleJourneyRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

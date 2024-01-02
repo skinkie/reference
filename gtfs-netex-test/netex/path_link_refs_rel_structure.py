@@ -4,9 +4,6 @@ from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .path_link_ref import PathLinkRef
 from .path_link_ref_by_value import PathLinkRefByValue
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

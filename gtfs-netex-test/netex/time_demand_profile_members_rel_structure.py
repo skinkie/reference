@@ -5,9 +5,6 @@ from .strict_containment_aggregation_structure import (
 )
 from .time_demand_profile_member import TimeDemandProfileMember
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

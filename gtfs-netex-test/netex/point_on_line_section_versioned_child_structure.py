@@ -8,9 +8,6 @@ from .point_on_section_versioned_child_structure import (
 )
 from .vehicle_mode_enumeration import VehicleModeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from typing import Optional
 from .mobility_service_version_structure import MobilityServiceVersionStructure
 from .online_service_refs_rel_structure import OnlineServiceRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -13,9 +13,6 @@ from .vehicle_services_in_frame_rel_structure import (
     VehicleServicesInFrameRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

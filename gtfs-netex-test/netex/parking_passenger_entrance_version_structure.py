@@ -3,9 +3,6 @@ from typing import Optional
 from .parking_area_refs_rel_structure import ParkingAreaRefsRelStructure
 from .site_entrance_version_structure import SiteEntranceVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -7,9 +7,6 @@ from .fare_table_row_ref_structure import FareTableRowRefStructure
 from .multilingual_string import MultilingualString
 from .standard_fare_table_ref import StandardFareTableRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

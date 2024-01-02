@@ -10,9 +10,6 @@ from .stop_type_enumeration import StopTypeEnumeration
 from .taxi_rank_ref import TaxiRankRef
 from .type_of_place_refs_rel_structure import TypeOfPlaceRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

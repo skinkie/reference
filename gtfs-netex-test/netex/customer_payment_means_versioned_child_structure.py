@@ -10,9 +10,6 @@ from .payment_method_enumeration import PaymentMethodEnumeration
 from .smartcard_ref import SmartcardRef
 from .type_of_payment_method_ref import TypeOfPaymentMethodRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

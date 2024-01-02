@@ -14,9 +14,6 @@ from .pricing_services_rel_structure import PricingServicesRelStructure
 from .rounding_ref import RoundingRef
 from .roundings_rel_structure import RoundingsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

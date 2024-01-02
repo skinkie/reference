@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .price_group_ref_structure import PriceGroupRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

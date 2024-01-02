@@ -19,9 +19,6 @@ from .series_constraint_refs_rel_structure import (
 )
 from .series_type_enumeration import SeriesTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

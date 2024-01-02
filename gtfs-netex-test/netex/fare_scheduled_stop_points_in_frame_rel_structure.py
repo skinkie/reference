@@ -4,9 +4,6 @@ from .fare_scheduled_stop_point import FareScheduledStopPoint
 from .frame_containment_structure import FrameContainmentStructure
 from .scheduled_stop_point import ScheduledStopPoint
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

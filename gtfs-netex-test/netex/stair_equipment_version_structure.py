@@ -5,9 +5,6 @@ from .access_equipment_version_structure import AccessEquipmentVersionStructure
 from .handrail_enumeration import HandrailEnumeration
 from .stair_end_structure import StairEndStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

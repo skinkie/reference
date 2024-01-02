@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .rough_surface_ref_structure import RoughSurfaceRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

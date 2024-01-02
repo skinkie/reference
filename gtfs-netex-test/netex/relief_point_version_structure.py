@@ -3,9 +3,6 @@ from typing import Optional
 from .crew_base_ref import CrewBaseRef
 from .timing_point_version_structure import TimingPointVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

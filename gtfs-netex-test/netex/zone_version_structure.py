@@ -7,9 +7,6 @@ from .simple_point_version_structure import SimplePointVersionStructure
 from .type_of_zone_refs_rel_structure import TypeOfZoneRefsRelStructure
 from .zone_ref_structure import ZoneRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

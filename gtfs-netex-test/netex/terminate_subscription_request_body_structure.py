@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union
 from .empty_type_1 import EmptyType1
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

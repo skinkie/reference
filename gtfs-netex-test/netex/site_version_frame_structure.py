@@ -45,9 +45,6 @@ from .topographic_places_in_frame_rel_structure import (
     TopographicPlacesInFrameRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

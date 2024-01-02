@@ -6,9 +6,6 @@ from .parking_bay_condition_ref import ParkingBayConditionRef
 from .rental_availability import RentalAvailability
 from .rental_availability_ref import RentalAvailabilityRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

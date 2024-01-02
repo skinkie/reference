@@ -6,9 +6,6 @@ from .validity_condition_ref import ValidityConditionRef
 from .validity_rule_parameter_ref import ValidityRuleParameterRef
 from .validity_trigger_ref import ValidityTriggerRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

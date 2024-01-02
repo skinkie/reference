@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 

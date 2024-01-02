@@ -91,9 +91,6 @@ from .waiting_equipment_ref import WaitingEquipmentRef
 from .waiting_room_equipment_ref import WaitingRoomEquipmentRef
 from .wheelchair_vehicle_ref import WheelchairVehicleRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

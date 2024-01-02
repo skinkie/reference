@@ -3,9 +3,6 @@ from .passenger_comms_facility_enumeration import (
     PassengerCommsFacilityEnumeration,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

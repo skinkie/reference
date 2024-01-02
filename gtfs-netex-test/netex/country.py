@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .country_version_structure import CountryVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

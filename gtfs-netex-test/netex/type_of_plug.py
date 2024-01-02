@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .type_of_plug_value_structure import TypeOfPlugValueStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

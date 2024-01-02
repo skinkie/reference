@@ -22,9 +22,6 @@ from .site_facility_sets_rel_structure import SiteFacilitySetsRelStructure
 from .transfer_duration_structure import TransferDurationStructure
 from .transfer_refs_rel_structure import TransferRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

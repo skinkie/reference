@@ -8,9 +8,6 @@ from .vehicle_meeting_points_in_sequence_rel_structure import (
     VehicleMeetingPointsInSequenceRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

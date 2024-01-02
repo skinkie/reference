@@ -10,9 +10,6 @@ from .usage_parameter_version_structure import UsageParameterVersionStructure
 from .user_profile_ref import UserProfileRef
 from .vehicle_pooler_profile_ref import VehiclePoolerProfileRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

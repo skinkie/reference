@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .operating_day_ref_structure import OperatingDayRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

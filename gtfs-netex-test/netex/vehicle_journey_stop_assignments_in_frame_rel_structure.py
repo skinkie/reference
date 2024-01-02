@@ -3,9 +3,6 @@ from typing import List
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -10,9 +10,6 @@ from .fare_contract_entries_rel_structure import (
 from .multilingual_string import MultilingualString
 from .type_of_fare_contract_ref import TypeOfFareContractRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

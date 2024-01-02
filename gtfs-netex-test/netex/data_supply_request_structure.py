@@ -4,9 +4,6 @@ from .consumer_request_endpoint_structure import (
     ConsumerRequestEndpointStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

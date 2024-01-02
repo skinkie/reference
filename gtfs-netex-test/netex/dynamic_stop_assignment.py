@@ -3,9 +3,6 @@ from .dynamic_stop_assignment_version_structure import (
     DynamicStopAssignmentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -5,9 +5,6 @@ from .multilingual_string import MultilingualString
 from .point_of_interest_ref import PointOfInterestRef
 from .type_of_place_refs_rel_structure import TypeOfPlaceRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

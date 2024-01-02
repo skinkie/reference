@@ -3,9 +3,6 @@ from .passenger_stop_assignment_ref_structure import (
     PassengerStopAssignmentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -13,4 +10,4 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 class VehicleJourneyStopAssignmentRefStructure(
     PassengerStopAssignmentRefStructure
 ):
-    value: RestrictedVar
+    pass

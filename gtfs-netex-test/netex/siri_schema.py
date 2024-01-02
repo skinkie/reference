@@ -17,9 +17,6 @@ from .subscription_response import SubscriptionResponse
 from .terminate_subscription_request import TerminateSubscriptionRequest
 from .terminate_subscription_response import TerminateSubscriptionResponse
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

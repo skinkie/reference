@@ -7,9 +7,6 @@ from .service_journey_pattern_type_enumeration import (
     ServiceJourneyPatternTypeEnumeration,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

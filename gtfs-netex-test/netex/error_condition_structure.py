@@ -14,9 +14,6 @@ from .parameters_ignored_error import ParametersIgnoredError
 from .service_not_available_error import ServiceNotAvailableError
 from .unknown_extensions_error import UnknownExtensionsError
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

@@ -7,9 +7,6 @@ from .customer_eligibility_versioned_child_structure import (
 from .residence_type_enumeration import ResidenceTypeEnumeration
 from .residential_qualification_ref import ResidentialQualificationRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

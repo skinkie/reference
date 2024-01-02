@@ -5,9 +5,6 @@ from .all_vehicle_modes_of_transport_enumeration import (
 )
 from .operator_view import OperatorView
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

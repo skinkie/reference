@@ -19,9 +19,6 @@ from .third_party_product_ref import ThirdPartyProductRef
 from .type_of_travel_document_ref import TypeOfTravelDocumentRef
 from .usage_discount_right_ref import UsageDiscountRightRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

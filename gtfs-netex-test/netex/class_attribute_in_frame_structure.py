@@ -3,9 +3,6 @@ from typing import Optional
 from xml.etree.ElementTree import QName
 from .mandatory_enumeration import MandatoryEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

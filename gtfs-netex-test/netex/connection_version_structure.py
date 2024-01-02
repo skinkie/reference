@@ -4,9 +4,6 @@ from .connection_end_structure import ConnectionEndStructure
 from .external_object_ref_structure import ExternalObjectRefStructure
 from .transfer_version_structure import TransferVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

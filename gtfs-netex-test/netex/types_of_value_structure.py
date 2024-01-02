@@ -78,9 +78,6 @@ from .type_of_version import TypeOfVersion
 from .type_of_zone import TypeOfZone
 from .types_of_frame_rel_structure import TypeOfFrame
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .onboard_stay_ref_structure import OnboardStayRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

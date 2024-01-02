@@ -10,9 +10,6 @@ from .smartcard_ref import SmartcardRef
 from .travel_document_ref import TravelDocumentRef
 from .type_of_travel_document_ref import TypeOfTravelDocumentRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

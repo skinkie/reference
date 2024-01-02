@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .vehicle_meeting_point import VehicleMeetingPoint
 from .vehicle_meeting_point_ref import VehicleMeetingPointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

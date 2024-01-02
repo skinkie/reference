@@ -55,9 +55,6 @@ from .vehicle_sharing_service import VehicleSharingService
 from .waiting_room_equipment import WaitingRoomEquipment
 from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

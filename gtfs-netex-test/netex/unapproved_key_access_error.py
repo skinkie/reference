@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .unapproved_key_access_structure import UnapprovedKeyAccessStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

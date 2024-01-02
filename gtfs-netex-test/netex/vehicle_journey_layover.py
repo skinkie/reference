@@ -3,9 +3,6 @@ from .vehicle_journey_layover_versioned_child_structure import (
     VehicleJourneyLayoverVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

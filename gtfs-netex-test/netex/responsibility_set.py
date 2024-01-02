@@ -3,9 +3,6 @@ from .responsibility_set_version_structure import (
     ResponsibilitySetVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

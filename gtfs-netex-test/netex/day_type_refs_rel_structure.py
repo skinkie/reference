@@ -4,9 +4,6 @@ from .day_type_ref import DayTypeRef
 from .fare_day_type_ref import FareDayTypeRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

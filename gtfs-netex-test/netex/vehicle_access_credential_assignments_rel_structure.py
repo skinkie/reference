@@ -5,9 +5,6 @@ from .vehicle_access_credentials_assignment import (
     VehicleAccessCredentialsAssignment,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

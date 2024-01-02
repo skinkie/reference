@@ -13,9 +13,6 @@ from .retail_consortium_ref import RetailConsortiumRef
 from .serviced_organisation_ref import ServicedOrganisationRef
 from .travel_agent_ref import TravelAgentRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

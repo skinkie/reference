@@ -10,9 +10,6 @@ from .path_link_version_structure import PathLinkVersionStructure
 from .place_equipments_rel_structure import PlaceEquipmentsRelStructure
 from .site_ref_structure import SiteRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

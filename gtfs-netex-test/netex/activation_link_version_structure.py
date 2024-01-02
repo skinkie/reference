@@ -4,9 +4,6 @@ from .activation_point_ref_structure import ActivationPointRefStructure
 from .link_version_structure import LinkVersionStructure
 from .type_of_activation_ref import TypeOfActivationRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

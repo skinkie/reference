@@ -11,9 +11,6 @@ from .tariff_zone_refs_rel_structure import TariffZoneRefsRelStructure
 from .tariff_zone_version_structure import TariffZoneVersionStructure
 from .zone_topology_enumeration import ZoneTopologyEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

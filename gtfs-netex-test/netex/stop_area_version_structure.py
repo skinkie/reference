@@ -5,9 +5,6 @@ from .topographic_place_ref import TopographicPlaceRef
 from .topographic_place_view import TopographicPlaceView
 from .zone_version_structure import ZoneVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

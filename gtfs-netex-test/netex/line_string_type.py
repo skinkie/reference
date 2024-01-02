@@ -5,9 +5,6 @@ from .point_property import PointProperty
 from .pos import Pos
 from .pos_list import PosList
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 

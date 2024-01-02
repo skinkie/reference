@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .assistance_service_ref_structure import AssistanceServiceRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

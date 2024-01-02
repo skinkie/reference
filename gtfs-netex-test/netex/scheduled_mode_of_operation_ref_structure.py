@@ -3,9 +3,6 @@ from .conventional_mode_of_operation_ref_structure import (
     ConventionalModeOfOperationRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -13,4 +10,4 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 class ScheduledModeOfOperationRefStructure(
     ConventionalModeOfOperationRefStructure
 ):
-    value: RestrictedVar
+    pass

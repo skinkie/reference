@@ -4,9 +4,6 @@ from xsdata.models.datatype import XmlDuration
 from .stop_place_version_structure import StopPlaceVersionStructure
 from .taxi_stands_rel_structure import TaxiStandsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

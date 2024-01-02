@@ -12,9 +12,6 @@ from .type_of_entity_version_structure import TypeOfEntityVersionStructure
 from .type_of_frame_ref import TypeOfFrameRef
 from .type_of_validity_ref import TypeOfValidityRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

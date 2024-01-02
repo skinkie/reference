@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .sanitary_facility_enumeration import SanitaryFacilityEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -5,9 +5,6 @@ from .complex_feature_members_rel_structure import (
 )
 from .group_of_points_version_structure import GroupOfPointsVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .type_of_journey_pattern_ref_structure import (
     TypeOfJourneyPatternRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

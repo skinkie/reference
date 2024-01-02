@@ -5,9 +5,6 @@ from .dated_vehicle_journey_version_structure import (
 )
 from .service_alteration_enumeration import ServiceAlterationEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

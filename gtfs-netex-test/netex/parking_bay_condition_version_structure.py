@@ -10,9 +10,6 @@ from .parking_bay_status_ref import ParkingBayStatusRef
 from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
 from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

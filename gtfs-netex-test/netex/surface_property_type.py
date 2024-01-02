@@ -3,9 +3,6 @@ from typing import Optional, Union
 from .nil_reason_enumeration_value import NilReasonEnumerationValue
 from .polygon import Polygon
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 

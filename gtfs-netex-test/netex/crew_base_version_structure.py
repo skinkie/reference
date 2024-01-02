@@ -8,9 +8,6 @@ from .group_of_entities_version_structure import (
 from .parking_point_ref import ParkingPointRef
 from .relief_point_ref import ReliefPointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

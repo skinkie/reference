@@ -4,9 +4,6 @@ from .train_components_rel_structure import TrainComponentsRelStructure
 from .train_size import TrainSize
 from .vehicle_type_version_structure import VehicleTypeVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

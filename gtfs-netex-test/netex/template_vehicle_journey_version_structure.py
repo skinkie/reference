@@ -6,9 +6,6 @@ from .template_vehicle_journey_type_enumeration import (
     TemplateVehicleJourneyTypeEnumeration,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -16,9 +16,6 @@ from .vehicle_access_credential_assignments_rel_structure import (
     VehicleAccessCredentialAssignmentsRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

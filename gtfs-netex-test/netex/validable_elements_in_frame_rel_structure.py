@@ -3,9 +3,6 @@ from typing import List
 from .frame_containment_structure import FrameContainmentStructure
 from .validable_element import ValidableElement
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

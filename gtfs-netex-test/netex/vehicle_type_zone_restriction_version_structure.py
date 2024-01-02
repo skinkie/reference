@@ -9,9 +9,6 @@ from .transport_type_ref import TransportTypeRef
 from .transport_zone_use_enumeration import TransportZoneUseEnumeration
 from .vehicle_type_ref import VehicleTypeRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

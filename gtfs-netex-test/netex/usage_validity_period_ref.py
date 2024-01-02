@@ -3,9 +3,6 @@ from .usage_validity_period_ref_structure import (
     UsageValidityPeriodRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

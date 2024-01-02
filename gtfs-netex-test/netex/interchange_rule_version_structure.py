@@ -10,9 +10,6 @@ from .interchange_rule_timings_rel_structure import (
 from .interchange_version_structure import InterchangeVersionStructure
 from .zone_ref_structure import ZoneRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

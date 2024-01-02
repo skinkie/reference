@@ -3,9 +3,6 @@ from .purpose_of_equipment_profile_value_structure import (
     PurposeOfEquipmentProfileValueStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

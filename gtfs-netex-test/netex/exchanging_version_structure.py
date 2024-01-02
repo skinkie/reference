@@ -5,9 +5,6 @@ from .exchangable_to_enumeration import ExchangableToEnumeration
 from .fare_class_enumeration import FareClassEnumeration
 from .reselling_version_structure import ResellingVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from typing import List, Optional
 from xsdata.models.datatype import XmlDateTime
 from .response_status import ResponseStatus
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

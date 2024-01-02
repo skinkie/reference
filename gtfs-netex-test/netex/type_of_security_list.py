@@ -3,9 +3,6 @@ from .type_of_security_list_version_structure import (
     TypeOfSecurityListVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

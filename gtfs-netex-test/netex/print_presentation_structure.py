@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import Optional
 from .font_size_enumeration import FontSizeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -6,9 +6,6 @@ from .headway_journey_group_ref import HeadwayJourneyGroupRef
 from .rhythmical_journey_group import RhythmicalJourneyGroup
 from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

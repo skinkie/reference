@@ -40,9 +40,6 @@ from .type_of_fare_product_refs_rel_structure import (
 from .usage_discount_right_ref import UsageDiscountRightRef
 from .validable_elements_rel_structure import ValidableElementsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

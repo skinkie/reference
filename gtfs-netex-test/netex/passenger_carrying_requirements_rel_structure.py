@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .passenger_carrying_requirement import PassengerCarryingRequirement
 from .passenger_carrying_requirement_ref import PassengerCarryingRequirementRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

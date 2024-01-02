@@ -5,9 +5,6 @@ from .abstract_subscription_request_structure import (
 )
 from .data_object_subscription_request import DataObjectSubscriptionRequest
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

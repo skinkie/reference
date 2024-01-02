@@ -4,9 +4,6 @@ from typing import Optional
 from .multilingual_string import MultilingualString
 from .site_component_version_structure import SiteComponentVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

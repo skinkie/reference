@@ -3,9 +3,6 @@ from typing import Optional
 from xsdata.models.datatype import XmlDateTime
 from .service_request_context_structure import ServiceRequestContextStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

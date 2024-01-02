@@ -5,9 +5,6 @@ from .common_vehicle_service_version_structure import (
 )
 from .vehicle_pooling_ref import VehiclePoolingRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

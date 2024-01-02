@@ -5,9 +5,6 @@ from .customer_purchase_parameter_assignment import (
     CustomerPurchaseParameterAssignment,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

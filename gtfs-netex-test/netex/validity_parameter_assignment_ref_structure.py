@@ -3,9 +3,6 @@ from .access_right_parameter_assignment_ref_structure import (
     AccessRightParameterAssignmentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -13,4 +10,4 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 class ValidityParameterAssignmentRefStructure(
     AccessRightParameterAssignmentRefStructure
 ):
-    value: RestrictedVar
+    pass

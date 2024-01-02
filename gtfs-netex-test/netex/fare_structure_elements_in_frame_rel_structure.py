@@ -3,9 +3,6 @@ from typing import List
 from .fare_structure_element import FareStructureElement
 from .frame_containment_structure import FrameContainmentStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

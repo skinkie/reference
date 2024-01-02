@@ -3,9 +3,6 @@ from .amount_of_price_unit_product_ref_structure import (
     AmountOfPriceUnitProductRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

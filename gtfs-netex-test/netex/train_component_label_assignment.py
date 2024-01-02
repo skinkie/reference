@@ -3,9 +3,6 @@ from .train_component_label_assignment_version_structure import (
     TrainComponentLabelAssignmentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

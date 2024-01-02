@@ -14,9 +14,6 @@ from .preassigned_fare_product_ref import PreassignedFareProductRef
 from .supplement_product_ref import SupplementProductRef
 from .validable_element_ref import ValidableElementRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

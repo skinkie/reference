@@ -1,10 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 from .passenger_carrying_requirement_version_structure import (
     PassengerCarryingRequirementVersionStructure,
 )
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -16,6 +14,15 @@ class PassengerCarryingRequirementsView(
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    validity_conditions: RestrictedVar
-    valid_between: RestrictedVar
-    alternative_texts: RestrictedVar
+    validity_conditions_or_valid_between: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    alternative_texts: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )

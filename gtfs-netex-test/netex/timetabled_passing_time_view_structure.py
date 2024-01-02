@@ -4,9 +4,6 @@ from xsdata.models.datatype import XmlDuration, XmlTime
 from .headway_interval_structure import HeadwayIntervalStructure
 from .passing_time_view_structure import PassingTimeViewStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

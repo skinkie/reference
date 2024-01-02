@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .control_centre_ref_structure import ControlCentreRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

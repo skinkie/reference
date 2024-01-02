@@ -3,9 +3,6 @@ from .customer_security_listing_ref_structure import (
     CustomerSecurityListingRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

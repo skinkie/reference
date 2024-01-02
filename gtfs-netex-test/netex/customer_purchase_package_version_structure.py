@@ -35,9 +35,6 @@ from .travel_specifications_rel_structure import (
     TravelSpecificationsRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

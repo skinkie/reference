@@ -3,9 +3,6 @@ from .scheduled_stop_point_version_structure import (
     ScheduledStopPointVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

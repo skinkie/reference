@@ -15,9 +15,6 @@ from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_pattern_ref import ServicePatternRef
 from .timing_point_ref import TimingPointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

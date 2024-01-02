@@ -8,9 +8,6 @@ from .limitation_status_enumeration import LimitationStatusEnumeration
 from .multilingual_string import MultilingualString
 from .suitabilities_rel_structure import SuitabilitiesRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

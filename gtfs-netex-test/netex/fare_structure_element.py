@@ -3,9 +3,6 @@ from .fare_structure_element_version_structure import (
     FareStructureElementVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

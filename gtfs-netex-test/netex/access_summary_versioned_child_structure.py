@@ -4,9 +4,6 @@ from .access_feature_enumeration import AccessFeatureEnumeration
 from .alternative_texts_rel_structure import VersionedChildStructure
 from .transition_enumeration import TransitionEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

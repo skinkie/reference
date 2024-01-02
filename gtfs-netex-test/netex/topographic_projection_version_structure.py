@@ -5,9 +5,6 @@ from .projection_version_structure import ProjectionVersionStructure
 from .topographic_place_ref import TopographicPlaceRef
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

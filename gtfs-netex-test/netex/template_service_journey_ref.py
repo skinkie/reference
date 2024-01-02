@@ -3,9 +3,6 @@ from .template_service_journey_ref_structure import (
     TemplateServiceJourneyRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

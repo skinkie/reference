@@ -14,9 +14,6 @@ from .timing_link_ref import TimingLinkRef
 from .vehicle_meeting_link_ref import VehicleMeetingLinkRef
 from .wire_link_ref import WireLinkRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -19,9 +19,6 @@ from .vehicle_equipment_ref import VehicleEquipmentRef
 from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
 from .wheelchair_vehicle_ref import WheelchairVehicleRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

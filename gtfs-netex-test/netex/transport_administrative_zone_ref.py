@@ -3,9 +3,6 @@ from .transport_administrative_zone_ref_structure import (
     TransportAdministrativeZoneRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

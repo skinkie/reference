@@ -6,9 +6,6 @@ from .parking_point import ParkingPoint
 from .relief_point import ReliefPoint
 from .timing_point import TimingPoint
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

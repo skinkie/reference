@@ -6,9 +6,6 @@ from .delivery_method_enumeration import DeliveryMethodEnumeration
 from .empty_type_1 import EmptyType1
 from .predictors_enumeration import PredictorsEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

@@ -4,9 +4,6 @@ from .access_equipment_version_structure import AccessEquipmentVersionStructure
 from .crossing_type_enumeration import CrossingTypeEnumeration
 from .tactile_warning_strip_enumeration import TactileWarningStripEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -17,9 +17,6 @@ from .passenger_comms_facility_enumeration import (
 from .sanitary_facility_enumeration import SanitaryFacilityEnumeration
 from .service_facility_set_ref import ServiceFacilitySetRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

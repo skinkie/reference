@@ -5,9 +5,6 @@ from .frame_containment_structure import FrameContainmentStructure
 from .mobile_device import MobileDevice
 from .smartcard import Smartcard
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

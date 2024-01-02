@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .point_on_link_ref_structure_2 import PointOnLinkRefStructure2
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -11,5 +8,3 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 class PointOnLinkRefStructure1(PointOnLinkRefStructure2):
     class Meta:
         name = "PointOnLinkRefStructure"
-
-    value: RestrictedVar

@@ -8,9 +8,6 @@ from .strict_containment_aggregation_structure import (
     StrictContainmentAggregationStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

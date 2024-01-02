@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .management_agent_version_structure import ManagementAgentVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

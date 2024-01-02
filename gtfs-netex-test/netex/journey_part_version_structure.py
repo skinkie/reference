@@ -18,9 +18,6 @@ from .train_block_part_ref import TrainBlockPartRef
 from .train_number_ref import TrainNumberRef
 from .vehicle_journey_ref_structure import VehicleJourneyRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -7,9 +7,6 @@ from .equipment_version_structure import EquipmentVersionStructure
 from .traffic_control_point_ref import TrafficControlPointRef
 from .type_of_activation_ref import TypeOfActivationRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

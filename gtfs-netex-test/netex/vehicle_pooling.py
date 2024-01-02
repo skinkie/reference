@@ -3,9 +3,6 @@ from .vehicle_pooling_mode_of_operation_value_structure import (
     VehiclePoolingModeOfOperationValueStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

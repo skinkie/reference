@@ -5,9 +5,6 @@ from .journey_pattern_ref_structure import JourneyPatternRefStructure
 from .journey_pattern_refs_rel_structure import JourneyPatternRefsRelStructure
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

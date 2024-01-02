@@ -13,9 +13,6 @@ from .timing_points_in_journey_pattern_rel_structure import (
 )
 from .timing_points_rel_structure import TimingPointsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

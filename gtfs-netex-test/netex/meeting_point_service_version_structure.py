@@ -4,9 +4,6 @@ from .customer_service_version_structure import CustomerServiceVersionStructure
 from .meeting_point_enumeration import MeetingPointEnumeration
 from .multilingual_string import MultilingualString
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

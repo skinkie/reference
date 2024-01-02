@@ -3,9 +3,6 @@ from .travelator_equipment_version_structure import (
     TravelatorEquipmentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -4,9 +4,6 @@ from .cell_versioned_child_structure import ParkingChargeBand
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .parking_charge_band_ref import ParkingChargeBandRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -4,9 +4,6 @@ from .activation_point import ActivationPoint
 from .beacon_point import BeaconPoint
 from .containment_aggregation_structure import ContainmentAggregationStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

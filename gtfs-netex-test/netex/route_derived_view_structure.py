@@ -12,9 +12,6 @@ from .link_sequence_projection_ref import LinkSequenceProjectionRef
 from .multilingual_string import MultilingualString
 from .route_ref import RouteRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

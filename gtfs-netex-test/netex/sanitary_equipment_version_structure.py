@@ -10,9 +10,6 @@ from .payment_method_enumeration import PaymentMethodEnumeration
 from .sanitary_facility_enumeration import SanitaryFacilityEnumeration
 from .staffing_enumeration import StaffingEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

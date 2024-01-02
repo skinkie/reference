@@ -5,9 +5,6 @@ from .data_sources_rel_structure import DataSourcesRelStructure
 from .multilingual_string import MultilingualString
 from .responsibility_role_assignment import ResponsibilityRoleAssignment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

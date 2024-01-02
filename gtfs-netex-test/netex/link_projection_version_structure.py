@@ -5,9 +5,6 @@ from .point_on_link_by_value_structure import PointOnLinkByValueStructure
 from .point_on_link_ref_structure_1 import PointOnLinkRefStructure1
 from .projection_version_structure import ProjectionVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .parking_entrance_for_vehicles_ref_structure import (
     ParkingEntranceForVehiclesRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

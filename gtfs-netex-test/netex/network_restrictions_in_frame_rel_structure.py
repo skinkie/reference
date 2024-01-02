@@ -6,9 +6,6 @@ from .overtaking_possibility import OvertakingPossibility
 from .restricted_manoeuvre import RestrictedManoeuvre
 from .vehicle_type_at_point import VehicleTypeAtPoint
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

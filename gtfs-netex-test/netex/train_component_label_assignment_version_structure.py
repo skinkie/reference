@@ -6,9 +6,6 @@ from .multilingual_string import MultilingualString
 from .train_component_ref import TrainComponentRef
 from .vehicle_journey_ref import VehicleJourneyRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

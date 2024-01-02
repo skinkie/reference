@@ -6,9 +6,6 @@ from .fare_demand_factor_ref import FareDemandFactorRef
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .scheduled_stop_point_ref import ScheduledStopPointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

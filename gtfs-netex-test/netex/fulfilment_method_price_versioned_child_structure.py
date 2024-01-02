@@ -5,9 +5,6 @@ from .fare_price_versioned_child_structure import (
 )
 from .fulfilment_method_ref import FulfilmentMethodRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

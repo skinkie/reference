@@ -7,9 +7,6 @@ from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 from .service_link_in_journey_pattern import ServiceLinkInJourneyPattern
 from .service_link_ref import ServiceLinkRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

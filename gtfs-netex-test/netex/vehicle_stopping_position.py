@@ -1,10 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 from .vehicle_stopping_position_version_structure import (
     VehicleStoppingPositionVersionStructure,
 )
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -14,8 +12,33 @@ class VehicleStoppingPosition(VehicleStoppingPositionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    members: RestrictedVar
-    url: RestrictedVar
-    image: RestrictedVar
-    postal_address: RestrictedVar
-    road_address: RestrictedVar
+    members: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    url: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    image: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    postal_address: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    road_address: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )

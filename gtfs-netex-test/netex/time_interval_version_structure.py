@@ -7,9 +7,6 @@ from .time_structure_factors_rel_structure import (
     TimeStructureFactorsRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

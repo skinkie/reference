@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional, Union
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

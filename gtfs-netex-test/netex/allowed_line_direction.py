@@ -3,9 +3,6 @@ from .allowed_line_direction_version_structure import (
     AllowedLineDirectionVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

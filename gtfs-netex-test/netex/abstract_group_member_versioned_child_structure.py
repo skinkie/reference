@@ -3,9 +3,6 @@ from typing import Optional
 from .alternative_texts_rel_structure import VersionedChildStructure
 from .multilingual_string import MultilingualString
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

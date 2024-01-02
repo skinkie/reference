@@ -13,9 +13,6 @@ from .parking_vehicle_enumeration import ParkingVehicleEnumeration
 from .parking_visibility_enumeration import ParkingVisibilityEnumeration
 from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

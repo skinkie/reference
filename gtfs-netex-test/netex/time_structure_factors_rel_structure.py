@@ -7,9 +7,6 @@ from .strict_containment_aggregation_structure import (
 from .time_structure_factor import TimeStructureFactor
 from .time_structure_factor_ref import TimeStructureFactorRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

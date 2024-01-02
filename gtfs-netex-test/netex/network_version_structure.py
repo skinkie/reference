@@ -11,9 +11,6 @@ from .groups_of_operators_refs_rel_structure import (
 from .operator_ref import OperatorRef
 from .tariff_zone_refs_rel_structure import TariffZoneRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

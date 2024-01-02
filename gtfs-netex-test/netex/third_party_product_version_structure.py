@@ -4,9 +4,6 @@ from .fare_product_version_structure import FareProductVersionStructure
 from .general_group_of_entities import GeneralGroupOfEntities
 from .general_group_of_entities_ref import GeneralGroupOfEntitiesRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

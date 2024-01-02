@@ -7,9 +7,6 @@ from .individual_traveller_ref import IndividualTravellerRef
 from .multilingual_string import MultilingualString
 from .vehicle_ref import VehicleRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -14,9 +14,6 @@ from .fare_structure_element_ref import FareStructureElementRef
 from .marked_as_enumeration import MarkedAsEnumeration
 from .validable_element_ref import ValidableElementRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .capping_rule_price_versioned_child_structure import (
     CappingRulePriceVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

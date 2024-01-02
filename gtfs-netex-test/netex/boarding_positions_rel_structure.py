@@ -4,9 +4,6 @@ from .boarding_position import BoardingPosition
 from .boarding_position_ref import BoardingPositionRef
 from .containment_aggregation_structure import ContainmentAggregationStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

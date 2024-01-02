@@ -3,9 +3,6 @@ from .point_on_link_versioned_child_structure import (
     PointOnLinkVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

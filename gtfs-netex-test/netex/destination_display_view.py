@@ -3,9 +3,6 @@ from .destination_display_derived_view_structure import (
     DestinationDisplayDerivedViewStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -7,9 +7,6 @@ from .customer_eligibility_versioned_child_structure import (
 from .user_profile_ref import UserProfileRef
 from .vehicle_pooler_profile_ref import VehiclePoolerProfileRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

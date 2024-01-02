@@ -4,9 +4,6 @@ from .charging_equipment_profile_ref import ChargingEquipmentProfileRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

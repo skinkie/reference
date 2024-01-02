@@ -3,9 +3,6 @@ from .type_of_customer_account_ref_structure import (
     TypeOfCustomerAccountRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

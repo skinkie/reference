@@ -3,9 +3,6 @@ from typing import Optional
 from .access_equipment_version_structure import AccessEquipmentVersionStructure
 from .surface_type_enumeration import SurfaceTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

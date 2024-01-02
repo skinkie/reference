@@ -1,10 +1,8 @@
 from dataclasses import dataclass, field
+from typing import Any
 from .type_of_link_sequence_value_structure import (
     TypeOfLinkSequenceValueStructure,
 )
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -14,6 +12,18 @@ class TypeOfLinkSequence(TypeOfLinkSequenceValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
+    validity_conditions_or_valid_between: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    alternative_texts: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
     name_of_classified_entity_class: str = field(
         init=False,
         default="LinkSequence",
@@ -22,6 +32,3 @@ class TypeOfLinkSequence(TypeOfLinkSequenceValueStructure):
             "type": "Attribute",
         },
     )
-    validity_conditions: RestrictedVar
-    valid_between: RestrictedVar
-    alternative_texts: RestrictedVar

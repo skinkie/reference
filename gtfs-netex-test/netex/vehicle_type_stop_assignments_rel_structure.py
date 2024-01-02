@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .vehicle_type_stop_assignment import VehicleTypeStopAssignment
 from .vehicle_type_stop_assignment_ref import VehicleTypeStopAssignmentRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

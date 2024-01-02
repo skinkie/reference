@@ -3,9 +3,6 @@ from typing import List
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .vehicle_pooling_driver_info import VehiclePoolingDriverInfo
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

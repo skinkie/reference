@@ -8,9 +8,6 @@ from .operating_day_ref_structure import OperatingDayRefStructure
 from .season_enumeration import SeasonEnumeration
 from .service_calendar_ref import ServiceCalendarRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

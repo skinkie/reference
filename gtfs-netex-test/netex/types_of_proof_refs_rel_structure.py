@@ -3,9 +3,6 @@ from typing import List
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .type_of_proof_ref import TypeOfProofRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

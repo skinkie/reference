@@ -5,9 +5,6 @@ from .multilingual_string import MultilingualString
 from .name_type_enumeration import NameTypeEnumeration
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

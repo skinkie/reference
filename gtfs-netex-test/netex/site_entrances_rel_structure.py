@@ -20,9 +20,6 @@ from .stop_place_vehicle_entrance import StopPlaceVehicleEntrance
 from .stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
 from .vehicle_entrance_ref import VehicleEntranceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

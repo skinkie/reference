@@ -3,9 +3,6 @@ from .default_dead_run_run_time_ref_structure import (
     DefaultDeadRunRunTimeRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

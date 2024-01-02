@@ -14,9 +14,6 @@ from .customer_purchase_parameter_assignments_rel_structure import (
 from .marked_as_enumeration import MarkedAsEnumeration
 from .sales_offer_package_element_ref import SalesOfferPackageElementRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

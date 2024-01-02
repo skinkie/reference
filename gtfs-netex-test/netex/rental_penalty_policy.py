@@ -3,9 +3,6 @@ from .rental_penalty_policy_version_structure import (
     RentalPenaltyPolicyVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

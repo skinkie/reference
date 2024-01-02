@@ -3,9 +3,6 @@ from .vehicle_manoeuvring_requirement_version_structure import (
     VehicleManoeuvringRequirementVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

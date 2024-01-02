@@ -3,9 +3,6 @@ from .taxi_parking_area_version_structure import (
     TaxiParkingAreaVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

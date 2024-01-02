@@ -5,9 +5,6 @@ from .derived_view_structure import DerivedViewStructure
 from .multilingual_string import MultilingualString
 from .operator_ref import OperatorRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

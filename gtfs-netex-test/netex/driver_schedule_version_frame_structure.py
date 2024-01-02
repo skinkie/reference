@@ -5,9 +5,6 @@ from .driver_trips_in_frame_rel_structure import DriverTripsInFrameRelStructure
 from .duties_in_frame_rel_structure import DutiesInFrameRelStructure
 from .duty_parts_in_frame_rel_structure import DutyPartsInFrameRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

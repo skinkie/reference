@@ -7,9 +7,6 @@ from .luggage_allowance_type_enumeration import LuggageAllowanceTypeEnumeration
 from .luggage_charging_basis_enumeration import LuggageChargingBasisEnumeration
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

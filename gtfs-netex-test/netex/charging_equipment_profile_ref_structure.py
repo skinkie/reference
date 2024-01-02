@@ -3,9 +3,6 @@ from .vehicle_equipment_profile_ref_structure import (
     VehicleEquipmentProfileRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -13,4 +10,4 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 class ChargingEquipmentProfileRefStructure(
     VehicleEquipmentProfileRefStructure
 ):
-    value: RestrictedVar
+    pass

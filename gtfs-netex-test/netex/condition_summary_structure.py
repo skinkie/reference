@@ -6,9 +6,6 @@ from .tariff_basis_enumeration import TariffBasisEnumeration
 from .train_restrictions_enumeration import TrainRestrictionsEnumeration
 from .vehicle_collection_enumeration import VehicleCollectionEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

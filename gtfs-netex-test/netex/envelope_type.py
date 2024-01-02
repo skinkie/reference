@@ -3,9 +3,6 @@ from typing import List, Optional, Union
 from .direct_position_type import DirectPositionType
 from .pos import Pos
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 

@@ -22,9 +22,6 @@ from .tariff_refs_rel_structure import TariffRefsRelStructure
 from .tariff_zone_ref_structure import TariffZoneRefStructure
 from .zone_derived_view_structure import ZoneDerivedViewStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

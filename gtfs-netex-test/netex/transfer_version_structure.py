@@ -7,9 +7,6 @@ from .multilingual_string import MultilingualString
 from .transfer_duration_structure import TransferDurationStructure
 from .type_of_transfer_ref import TypeOfTransferRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

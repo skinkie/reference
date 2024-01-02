@@ -4,9 +4,6 @@ from xsdata.models.datatype import XmlDate
 from .call_versioned_child_structure import CallVersionedChildStructure
 from .driver_ref import DriverRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

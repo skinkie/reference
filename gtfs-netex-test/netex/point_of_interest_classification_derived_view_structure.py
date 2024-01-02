@@ -6,9 +6,6 @@ from .point_of_interest_classification_ref import (
     PointOfInterestClassificationRef,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

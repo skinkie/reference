@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .left_luggage_service_ref_structure import LeftLuggageServiceRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

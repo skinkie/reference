@@ -6,9 +6,6 @@ from .infrastructure_link_restriction_version_structure import (
 from .transport_type_ref_structure import TransportTypeRefStructure
 from .vehicle_type_ref_structure import VehicleTypeRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

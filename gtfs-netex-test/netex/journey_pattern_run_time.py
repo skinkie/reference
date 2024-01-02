@@ -3,9 +3,6 @@ from .journey_pattern_run_time_versioned_child_structure import (
     JourneyPatternRunTimeVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

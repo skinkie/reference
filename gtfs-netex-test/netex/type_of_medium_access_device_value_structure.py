@@ -3,9 +3,6 @@ from typing import Optional
 from .type_of_machine_readability_ref import TypeOfMachineReadabilityRef
 from .type_of_value_version_structure import TypeOfValueVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

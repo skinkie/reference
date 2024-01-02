@@ -4,9 +4,6 @@ from .navigation_paths_rel_structure import NavigationPathsRelStructure
 from .site_connection_end_structure import SiteConnectionEndStructure
 from .transfer_version_structure import TransferVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

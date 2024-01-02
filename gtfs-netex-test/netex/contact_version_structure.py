@@ -5,9 +5,6 @@ from .contact_details_structure import ContactDetailsStructure
 from .contact_type_enumeration import ContactTypeEnumeration
 from .multilingual_string import MultilingualString
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

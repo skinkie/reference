@@ -14,9 +14,6 @@ from .vehicle_stopping_positions_rel_structure import (
 from .wire_link_ref import WireLinkRef
 from .wire_point_ref import WirePointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

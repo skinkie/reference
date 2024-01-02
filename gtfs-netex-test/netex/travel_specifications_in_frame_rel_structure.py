@@ -3,9 +3,6 @@ from typing import List
 from .frame_containment_structure import FrameContainmentStructure
 from .travel_specification_1 import TravelSpecification1
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

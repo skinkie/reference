@@ -23,9 +23,6 @@ from .travel_specifications_rel_structure import (
 )
 from .type_of_payment_method_ref import TypeOfPaymentMethodRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

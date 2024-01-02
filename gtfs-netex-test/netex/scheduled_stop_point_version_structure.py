@@ -15,9 +15,6 @@ from .topographic_place_ref import TopographicPlaceRef
 from .topographic_place_view import TopographicPlaceView
 from .vehicle_mode_enumeration import VehicleModeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

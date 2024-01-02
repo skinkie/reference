@@ -4,9 +4,6 @@ from .overtaking_possibility_version_structure import (
 )
 from .point_ref_structure import PointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

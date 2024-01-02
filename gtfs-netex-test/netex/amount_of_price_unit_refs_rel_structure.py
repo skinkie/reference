@@ -3,9 +3,6 @@ from typing import List
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

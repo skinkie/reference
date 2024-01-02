@@ -8,9 +8,6 @@ from .parking_component_version_structure import (
 from .parking_properties import ParkingProperties
 from .parking_properties_rel_structure import ParkingPropertiesRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

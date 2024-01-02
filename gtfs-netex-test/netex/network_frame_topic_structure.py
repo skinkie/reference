@@ -29,9 +29,6 @@ from .topic_structure import TopicStructure
 from .type_of_frame_ref import TypeOfFrameRef
 from .vehicle_schedule_frame_ref import VehicleScheduleFrameRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

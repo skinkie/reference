@@ -6,9 +6,6 @@ from .duty_parts_rel_structure import DutyPartsRelStructure
 from .multilingual_string import MultilingualString
 from .timetable_frame_ref import TimetableFrameRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

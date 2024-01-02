@@ -4,9 +4,6 @@ from xsdata.models.datatype import XmlDuration
 from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .check_constraint_ref import CheckConstraintRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

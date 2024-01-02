@@ -7,9 +7,6 @@ from .group_of_entities_version_structure import (
     GroupOfEntitiesVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

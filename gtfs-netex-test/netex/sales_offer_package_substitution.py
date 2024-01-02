@@ -3,9 +3,6 @@ from .sales_offer_package_substitution_version_structure import (
     SalesOfferPackageSubstitutionVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

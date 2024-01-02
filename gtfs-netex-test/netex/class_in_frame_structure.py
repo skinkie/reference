@@ -5,9 +5,6 @@ from .class_ref_type_enumeration import ClassRefTypeEnumeration
 from .class_relationship_in_frame import ClassRelationshipInFrame
 from .mandatory_enumeration import MandatoryEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

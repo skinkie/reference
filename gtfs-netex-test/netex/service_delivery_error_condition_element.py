@@ -3,9 +3,6 @@ from .service_delivery_error_condition_structure import (
     ServiceDeliveryErrorConditionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

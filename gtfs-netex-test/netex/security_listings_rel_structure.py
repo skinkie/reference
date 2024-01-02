@@ -10,9 +10,6 @@ from .medium_access_device_security_listing import (
 from .retail_device_security_listing import RetailDeviceSecurityListing
 from .travel_document_security_listing import TravelDocumentSecurityListing
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

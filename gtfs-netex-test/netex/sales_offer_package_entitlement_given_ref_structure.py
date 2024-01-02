@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .usage_parameter_ref_structure import UsageParameterRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -11,4 +8,4 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 class SalesOfferPackageEntitlementGivenRefStructure(
     UsageParameterRefStructure
 ):
-    value: RestrictedVar
+    pass

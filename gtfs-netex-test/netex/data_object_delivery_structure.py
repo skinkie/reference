@@ -7,9 +7,6 @@ from .data_object_request import DataObjectRequest
 from .data_objects_rel_structure import DataObjectsRelStructure
 from .extensions_2 import Extensions2
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

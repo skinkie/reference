@@ -3,9 +3,6 @@ from .access_right_in_product_versioned_child_structure import (
     AccessRightInProductVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

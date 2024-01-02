@@ -9,9 +9,6 @@ from .point_on_route_ref import PointOnRouteRef
 from .simple_feature_ref import SimpleFeatureRef
 from .transition_enumeration import TransitionEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

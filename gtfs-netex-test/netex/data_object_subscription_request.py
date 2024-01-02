@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .data_object_subscription_structure import DataObjectSubscriptionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

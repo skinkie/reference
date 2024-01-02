@@ -12,9 +12,6 @@ from .type_of_payment_method_refs_rel_structure import (
 )
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

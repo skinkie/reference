@@ -3,9 +3,6 @@ from typing import List
 from .frame_containment_structure import FrameContainmentStructure
 from .group_of_distribution_channels import GroupOfDistributionChannels
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

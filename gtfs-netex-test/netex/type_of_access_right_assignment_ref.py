@@ -3,9 +3,6 @@ from .type_of_access_right_assignment_ref_structure import (
     TypeOfAccessRightAssignmentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -78,9 +78,6 @@ from .user_profile_ref import UserProfileRef
 from .vehicle_pooler_profile import VehiclePoolerProfile
 from .vehicle_pooler_profile_ref import VehiclePoolerProfileRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

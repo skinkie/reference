@@ -5,9 +5,6 @@ from .quay_ref import QuayRef
 from .taxi_stand_ref import TaxiStandRef
 from .vehicle_stopping_place_ref import VehicleStoppingPlaceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

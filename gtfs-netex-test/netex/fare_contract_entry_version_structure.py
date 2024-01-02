@@ -4,9 +4,6 @@ from .fare_contract_ref import FareContractRef
 from .log_entry_version_structure import LogEntryVersionStructure
 from .type_of_fare_contract_entry_ref import TypeOfFareContractEntryRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

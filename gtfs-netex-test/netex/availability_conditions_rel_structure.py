@@ -8,9 +8,6 @@ from .alternative_texts_rel_structure import (
 from .availability_condition_ref import AvailabilityConditionRef
 from .containment_aggregation_structure import ContainmentAggregationStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .check_constraint_delay_version_structure import (
     CheckConstraintDelayVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

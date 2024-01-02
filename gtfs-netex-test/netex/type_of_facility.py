@@ -1,8 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 from .type_of_facility_version_structure import TypeOfFacilityVersionStructure
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -12,6 +10,15 @@ class TypeOfFacility(TypeOfFacilityVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    validity_conditions: RestrictedVar
-    valid_between: RestrictedVar
-    alternative_texts: RestrictedVar
+    validity_conditions_or_valid_between: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    alternative_texts: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )

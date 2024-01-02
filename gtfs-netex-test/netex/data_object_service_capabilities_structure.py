@@ -5,9 +5,6 @@ from .data_object_capability_request_policy_structure import (
     DataObjectCapabilityRequestPolicyStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

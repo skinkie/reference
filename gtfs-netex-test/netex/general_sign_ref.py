@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .general_sign_ref_structure import GeneralSignRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

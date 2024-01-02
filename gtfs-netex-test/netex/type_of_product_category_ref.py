@@ -3,9 +3,6 @@ from .type_of_product_category_ref_structure import (
     TypeOfProductCategoryRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -4,9 +4,6 @@ from xsdata.models.datatype import XmlDateTime, XmlDuration
 from .other_error import OtherError
 from .service_not_available_error import ServiceNotAvailableError
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

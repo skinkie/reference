@@ -6,9 +6,6 @@ from .passenger_equipment_version_structure import (
 )
 from .ticket_validator_enumeration import TicketValidatorEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

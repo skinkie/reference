@@ -3,9 +3,6 @@ from .travel_specification_summary_view_structure import (
     TravelSpecificationSummaryViewStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

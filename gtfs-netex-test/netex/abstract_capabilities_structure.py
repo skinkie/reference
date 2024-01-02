@@ -5,9 +5,6 @@ from .capability_general_interaction_structure import (
 )
 from .transport_description_structure import TransportDescriptionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

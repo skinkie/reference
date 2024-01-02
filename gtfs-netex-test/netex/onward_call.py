@@ -3,9 +3,6 @@ from .onward_call_versioned_child_structure import (
     OnwardCallVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -14,9 +14,6 @@ from .transport_administrative_zone_ref import TransportAdministrativeZoneRef
 from .type_of_zone_ref import TypeOfZoneRef
 from .zone_ref import ZoneRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

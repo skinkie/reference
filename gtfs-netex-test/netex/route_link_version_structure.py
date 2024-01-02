@@ -7,9 +7,6 @@ from .mode_restriction_assessments_rel_structure import (
 from .operational_context_ref import OperationalContextRef
 from .route_point_ref_structure import RoutePointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -7,9 +7,6 @@ from .postal_address import PostalAddress
 from .retail_devices_rel_structure import RetailDevicesRelStructure
 from .whitelist_refs_rel_structure import WhitelistRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

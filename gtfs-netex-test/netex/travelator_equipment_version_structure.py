@@ -3,9 +3,6 @@ from decimal import Decimal
 from typing import Optional
 from .access_equipment_version_structure import AccessEquipmentVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

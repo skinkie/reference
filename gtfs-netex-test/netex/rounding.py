@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .rounding_versioned_structure import RoundingVersionedStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

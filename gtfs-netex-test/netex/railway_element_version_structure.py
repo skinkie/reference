@@ -4,9 +4,6 @@ from .infrastructure_link_version_structure import (
 )
 from .railway_point_ref_structure import RailwayPointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

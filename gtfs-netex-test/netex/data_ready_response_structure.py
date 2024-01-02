@@ -6,9 +6,6 @@ from .consumer_response_endpoint_structure import (
 from .other_error import OtherError
 from .unknown_subscription_error import UnknownSubscriptionError
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

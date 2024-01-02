@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import List
 from .location_structure_1 import LocationStructure1
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

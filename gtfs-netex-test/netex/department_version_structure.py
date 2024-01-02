@@ -8,9 +8,6 @@ from .organisational_unit_refs_rel_structure import (
 )
 from .type_of_operation_ref import TypeOfOperationRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

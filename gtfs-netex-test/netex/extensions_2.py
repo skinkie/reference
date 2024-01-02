@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .extensions_structure_2 import ExtensionsStructure2
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -11,9 +11,6 @@ from .day_type_assignments_rel_structure import DayTypeAssignmentsRelStructure
 from .multilingual_string import MultilingualString
 from .operating_periods_rel_structure import OperatingPeriodsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

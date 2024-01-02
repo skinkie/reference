@@ -4,9 +4,6 @@ from typing import Optional
 from .place_equipment_version_structure import PlaceEquipmentVersionStructure
 from .type_of_battery_chemistry_ref import TypeOfBatteryChemistryRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

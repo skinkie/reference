@@ -5,9 +5,6 @@ from .railway_element import RailwayElement
 from .road_element import RoadElement
 from .wire_element import WireElement
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

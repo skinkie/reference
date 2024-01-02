@@ -3,9 +3,6 @@ from .distance_matrix_element_version_structure import (
     DistanceMatrixElementVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

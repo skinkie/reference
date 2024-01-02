@@ -8,9 +8,6 @@ from .taxi_service import TaxiService
 from .vehicle_rental_service import VehicleRentalService
 from .vehicle_sharing_service import VehicleSharingService
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .activation_link_ref_structure import ActivationLinkRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

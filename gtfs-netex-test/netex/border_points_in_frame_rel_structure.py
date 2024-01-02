@@ -3,9 +3,6 @@ from typing import List
 from .border_point import BorderPoint
 from .frame_containment_structure import FrameContainmentStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

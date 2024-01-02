@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .train_size_structure import TrainSizeStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

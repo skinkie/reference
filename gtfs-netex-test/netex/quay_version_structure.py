@@ -9,9 +9,6 @@ from .quay_ref_structure import QuayRefStructure
 from .quay_type_enumeration import QuayTypeEnumeration
 from .stop_place_space_version_structure import StopPlaceSpaceVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

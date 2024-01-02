@@ -6,9 +6,6 @@ from .train_component_label_assignment_ref import (
     TrainComponentLabelAssignmentRef,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

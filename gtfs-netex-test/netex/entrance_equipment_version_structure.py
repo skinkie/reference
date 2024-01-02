@@ -5,9 +5,6 @@ from .entrance_attention_enumeration import EntranceAttentionEnumeration
 from .necessary_force_enumeration import NecessaryForceEnumeration
 from .staffing_enumeration import StaffingEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

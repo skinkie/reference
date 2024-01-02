@@ -3,9 +3,6 @@ from .hail_and_ride_area_version_structure import (
     HailAndRideAreaVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

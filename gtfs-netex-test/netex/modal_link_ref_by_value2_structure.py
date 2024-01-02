@@ -5,9 +5,6 @@ from .all_modes_enumeration import AllModesEnumeration
 from .point_ref_structure import PointRefStructure
 from .type_of_link_ref import TypeOfLinkRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

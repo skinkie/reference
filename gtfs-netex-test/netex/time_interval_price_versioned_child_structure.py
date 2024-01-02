@@ -5,9 +5,6 @@ from .fare_price_versioned_child_structure import (
 )
 from .time_interval_ref import TimeIntervalRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

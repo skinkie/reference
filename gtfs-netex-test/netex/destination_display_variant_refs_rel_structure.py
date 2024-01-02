@@ -3,9 +3,6 @@ from typing import List
 from .destination_display_variant_ref import DestinationDisplayVariantRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

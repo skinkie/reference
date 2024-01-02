@@ -14,9 +14,6 @@ from .third_party_product_ref import ThirdPartyProductRef
 from .usage_discount_right_ref import UsageDiscountRightRef
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

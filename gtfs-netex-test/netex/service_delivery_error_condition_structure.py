@@ -20,9 +20,6 @@ from .unknown_endpoint_error import UnknownEndpointError
 from .unknown_extensions_error import UnknownExtensionsError
 from .unknown_participant_error import UnknownParticipantError
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

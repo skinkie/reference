@@ -11,9 +11,6 @@ from .site_component_ref_structure import SiteComponentRefStructure
 from .site_facility_sets_rel_structure import SiteFacilitySetsRelStructure
 from .zone_ref_structure import ZoneRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

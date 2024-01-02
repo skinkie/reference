@@ -5,9 +5,6 @@ from .garage_point import GaragePoint
 from .parking_point import ParkingPoint
 from .relief_point import ReliefPoint
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

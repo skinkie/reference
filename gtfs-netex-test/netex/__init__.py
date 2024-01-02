@@ -6547,9 +6547,6 @@ from .zone_version_structure import ZoneVersionStructure
 from .zone_view import ZoneView
 from .zones_in_frame_rel_structure import ZonesInFrameRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __all__ = [
     "AbstractCapabilitiesStructure",
     "AbstractCurveType",

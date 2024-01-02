@@ -7,9 +7,6 @@ from .fare_price_versioned_child_structure import (
 from .fare_quota_factor_ref import FareQuotaFactorRef
 from .quality_structure_factor_ref import QualityStructureFactorRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

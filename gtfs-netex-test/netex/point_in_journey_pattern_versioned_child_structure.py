@@ -25,9 +25,6 @@ from .vehicle_meeting_point_ref import VehicleMeetingPointRef
 from .vias_rel_structure import ViasRelStructure
 from .wire_point_ref import WirePointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .rubbish_disposal_equipment_ref_structure import (
     RubbishDisposalEquipmentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

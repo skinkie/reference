@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import List, Optional, Type, Union, Any
 from .air_submode_enumeration import AirSubmodeEnumeration
 from .all_modes_enumeration import AllModesEnumeration
 from .bus_submode_enumeration import BusSubmodeEnumeration
@@ -28,9 +28,6 @@ from .vehicle_pooling_ref import VehiclePoolingRef
 from .vehicle_rental_ref import VehicleRentalRef
 from .vehicle_sharing_ref import VehicleSharingRef
 from .water_submode_enumeration import WaterSubmodeEnumeration
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -252,10 +249,39 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
 
     @dataclass(kw_only=True)
     class Address(PostalAddressVersionStructure):
-        validity_conditions: RestrictedVar
-        valid_between: RestrictedVar
-        alternative_texts: RestrictedVar
-        key_list: RestrictedVar
-        extensions: RestrictedVar
-        branding_ref: RestrictedVar
-        members: RestrictedVar
+        validity_conditions_or_valid_between: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        alternative_texts: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        key_list: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        extensions: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        branding_ref: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        members: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )

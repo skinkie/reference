@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .timing_link_version_structure import TimingLinkVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

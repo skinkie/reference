@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import List
 from .delta_value import DeltaValue
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -4,9 +4,6 @@ from .flexible_service_properties import FlexibleServiceProperties
 from .flexible_service_properties_ref import FlexibleServicePropertiesRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

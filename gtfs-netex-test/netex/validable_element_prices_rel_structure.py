@@ -7,9 +7,6 @@ from .strict_containment_aggregation_structure import (
 from .validable_element_price import ValidableElementPrice
 from .validable_element_price_ref import ValidableElementPriceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

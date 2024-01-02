@@ -11,9 +11,6 @@ from .operator_ref import OperatorRef
 from .transport_submode import TransportSubmode
 from .type_of_line_ref import TypeOfLineRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

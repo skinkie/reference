@@ -3,9 +3,6 @@ from .customer_payment_means_ref_structure import (
     CustomerPaymentMeansRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

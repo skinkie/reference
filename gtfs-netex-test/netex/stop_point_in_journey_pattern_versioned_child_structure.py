@@ -24,9 +24,6 @@ from .stop_use_enumeration import StopUseEnumeration
 from .timing_link_ref_structure import TimingLinkRefStructure
 from .vias_rel_structure import ViasRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

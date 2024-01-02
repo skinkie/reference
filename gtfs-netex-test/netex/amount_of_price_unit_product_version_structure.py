@@ -5,9 +5,6 @@ from .amount_of_price_unit_enumeration import AmountOfPriceUnitEnumeration
 from .fare_product_version_structure import FareProductVersionStructure
 from .price_unit_ref import PriceUnitRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

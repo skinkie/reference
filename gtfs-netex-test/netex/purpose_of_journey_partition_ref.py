@@ -3,9 +3,6 @@ from .purpose_of_journey_partition_ref_structure import (
     PurposeOfJourneyPartitionRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

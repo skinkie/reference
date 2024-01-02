@@ -22,9 +22,6 @@ from .template_service_journey_ref import TemplateServiceJourneyRef
 from .transfer_duration_structure import TransferDurationStructure
 from .vehicle_journey_ref import VehicleJourneyRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -5,9 +5,6 @@ from .fare_price_versioned_child_structure import (
 )
 from .geographical_interval_ref import GeographicalIntervalRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

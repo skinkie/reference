@@ -10,9 +10,6 @@ from .local_service_version_structure import LocalServiceVersionStructure
 from .safety_facility_enumeration import SafetyFacilityEnumeration
 from .staffing_enumeration import StaffingEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

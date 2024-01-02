@@ -3,9 +3,6 @@ from .day_type_assignment_version_structure import (
     DayTypeAssignmentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

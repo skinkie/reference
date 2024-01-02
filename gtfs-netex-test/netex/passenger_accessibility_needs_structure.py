@@ -3,9 +3,6 @@ from typing import List, Optional
 from .suitability import Suitability
 from .user_need import UserNeed
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

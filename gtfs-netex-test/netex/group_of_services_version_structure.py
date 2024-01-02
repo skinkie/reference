@@ -18,9 +18,6 @@ from .group_of_services_members_rel_structure import (
 )
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

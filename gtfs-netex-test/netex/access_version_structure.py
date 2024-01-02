@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from .access_end_structure import AccessEndStructure
 from .transfer_version_structure import TransferVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

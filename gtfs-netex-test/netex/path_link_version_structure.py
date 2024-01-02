@@ -24,9 +24,6 @@ from .tilt_type_enumeration import TiltTypeEnumeration
 from .transfer_duration_structure import TransferDurationStructure
 from .transition_enumeration import TransitionEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

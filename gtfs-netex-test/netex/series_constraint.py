@@ -3,9 +3,6 @@ from .series_constraint_version_structure import (
     SeriesConstraintVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

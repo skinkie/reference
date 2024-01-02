@@ -3,9 +3,6 @@ from .type_of_responsibility_role_ref_structure import (
     TypeOfResponsibilityRoleRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

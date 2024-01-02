@@ -4,9 +4,6 @@ from .boarding_position_type_enumeration import BoardingPositionTypeEnumeration
 from .entrance_refs_rel_structure import EntranceRefsRelStructure
 from .stop_place_space_version_structure import StopPlaceSpaceVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

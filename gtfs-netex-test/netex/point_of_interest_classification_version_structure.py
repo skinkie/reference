@@ -5,9 +5,6 @@ from .classification_descriptors_rel_structure import (
 )
 from .type_of_value_version_structure import TypeOfValueVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

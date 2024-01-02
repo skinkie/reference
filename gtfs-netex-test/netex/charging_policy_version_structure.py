@@ -6,9 +6,6 @@ from .travel_billing_policy_enumeration import TravelBillingPolicyEnumeration
 from .travel_credit_policy_enumeration import TravelCreditPolicyEnumeration
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

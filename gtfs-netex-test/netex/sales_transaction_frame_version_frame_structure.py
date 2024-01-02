@@ -35,9 +35,6 @@ from .types_of_travel_document_in_frame_rel_structure import (
 )
 from .whitelists_in_frame_rel_structure import WhitelistsInFrameRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

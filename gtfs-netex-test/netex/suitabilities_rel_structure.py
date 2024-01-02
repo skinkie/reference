@@ -5,9 +5,6 @@ from .strict_containment_aggregation_structure import (
 )
 from .suitability import Suitability
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

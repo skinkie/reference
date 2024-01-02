@@ -6,9 +6,6 @@ from .simple_vehicle_type import SimpleVehicleType
 from .train import Train
 from .vehicle_type import VehicleType
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

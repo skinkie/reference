@@ -4,9 +4,6 @@ from .line_string import LineString
 from .point_1 import Point1
 from .polygon import Polygon
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 

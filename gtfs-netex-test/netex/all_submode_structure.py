@@ -13,9 +13,6 @@ from .telecabin_submode_enumeration import TelecabinSubmodeEnumeration
 from .tram_submode_enumeration import TramSubmodeEnumeration
 from .water_submode_enumeration import WaterSubmodeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

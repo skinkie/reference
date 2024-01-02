@@ -12,9 +12,6 @@ from .organisational_unit_ref import OrganisationalUnitRef
 from .private_code import PrivateCode
 from .transport_submode import TransportSubmode
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

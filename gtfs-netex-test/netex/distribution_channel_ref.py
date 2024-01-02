@@ -3,9 +3,6 @@ from .distribution_channel_ref_structure_element import (
     DistributionChannelRefStructureElement,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

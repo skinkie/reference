@@ -19,9 +19,6 @@ from .topographic_place_ref import TopographicPlaceRef
 from .travel_agent_ref import TravelAgentRef
 from .type_of_mobility_service_ref import TypeOfMobilityServiceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

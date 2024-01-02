@@ -10,9 +10,6 @@ from .multilingual_string import MultilingualString
 from .private_code import PrivateCode
 from .train_block_ref import TrainBlockRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

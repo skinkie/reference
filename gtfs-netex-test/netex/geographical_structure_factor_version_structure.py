@@ -8,9 +8,6 @@ from .geographical_unit_ref import GeographicalUnitRef
 from .parking_tariff_ref import ParkingTariffRef
 from .tariff_ref import TariffRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

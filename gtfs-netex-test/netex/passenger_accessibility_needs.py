@@ -3,9 +3,6 @@ from .passenger_accessibility_needs_structure import (
     PassengerAccessibilityNeedsStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

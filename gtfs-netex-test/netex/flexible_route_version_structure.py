@@ -3,9 +3,6 @@ from typing import Optional
 from .flexible_route_type_enumeration import FlexibleRouteTypeEnumeration
 from .route_version_structure import RouteVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

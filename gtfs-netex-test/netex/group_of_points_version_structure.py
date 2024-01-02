@@ -5,9 +5,6 @@ from .group_of_entities_version_structure import (
 )
 from .point_refs_rel_structure import PointRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

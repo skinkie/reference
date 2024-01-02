@@ -10,9 +10,6 @@ from .multilingual_string import MultilingualString
 from .purchase_moment_enumeration import PurchaseMomentEnumeration
 from .purchase_when_enumeration import PurchaseWhenEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

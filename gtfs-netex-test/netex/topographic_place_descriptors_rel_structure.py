@@ -7,9 +7,6 @@ from .topographic_place_descriptor_versioned_child_structure import (
     TopographicPlaceDescriptorVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

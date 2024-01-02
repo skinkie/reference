@@ -4,9 +4,6 @@ from .cell_versioned_child_structure import PriceableObjectVersionStructure
 from .info_links_rel_structure import InfoLinksRelStructure
 from .private_code import PrivateCode
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

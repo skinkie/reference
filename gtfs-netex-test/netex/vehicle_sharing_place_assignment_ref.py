@@ -3,9 +3,6 @@ from .vehicle_sharing_place_assignment_ref_structure import (
     VehicleSharingPlaceAssignmentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

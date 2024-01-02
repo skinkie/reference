@@ -4,9 +4,6 @@ from .place_version_structure import PlaceVersionStructure
 from .postal_address import PostalAddress
 from .road_address import RoadAddress
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

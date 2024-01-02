@@ -8,9 +8,6 @@ from .network_restriction_version_structure import (
 from .point_ref_structure import PointRefStructure
 from .transport_type_ref_structure import TransportTypeRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

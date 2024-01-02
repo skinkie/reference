@@ -3,9 +3,6 @@ from .distribution_channel_version_structure import (
     DistributionChannelVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

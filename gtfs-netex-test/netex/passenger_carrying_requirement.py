@@ -3,9 +3,6 @@ from .passenger_carrying_requirement_version_structure import (
     PassengerCarryingRequirementVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import List
 from .key_value_structure import KeyValueStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

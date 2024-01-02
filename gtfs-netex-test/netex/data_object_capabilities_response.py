@@ -3,9 +3,6 @@ from .data_object_capabilities_response_structure import (
     DataObjectCapabilitiesResponseStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

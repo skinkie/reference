@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .tariff_version_structure import TariffVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

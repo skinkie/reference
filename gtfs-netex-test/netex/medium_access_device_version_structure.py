@@ -8,9 +8,6 @@ from .medium_application_instance_rel_structure import (
 from .multilingual_string import MultilingualString
 from .type_of_medium_access_device_ref import TypeOfMediumAccessDeviceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

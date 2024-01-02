@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .key_list_structure import KeyListStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

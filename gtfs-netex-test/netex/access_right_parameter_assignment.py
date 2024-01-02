@@ -3,9 +3,6 @@ from .access_right_parameter_assignment_version_structure import (
     AccessRightParameterAssignmentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -7,9 +7,6 @@ from .multilingual_string import MultilingualString
 from .private_code import PrivateCode
 from .type_of_travel_document_ref import TypeOfTravelDocumentRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

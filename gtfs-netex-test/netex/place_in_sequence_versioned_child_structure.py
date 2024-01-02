@@ -8,9 +8,6 @@ from .point_in_link_sequence_versioned_child_structure import (
     PointInLinkSequenceVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

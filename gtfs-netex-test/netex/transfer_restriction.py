@@ -3,9 +3,6 @@ from .transfer_restriction_version_structure import (
     TransferRestrictionVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

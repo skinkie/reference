@@ -25,9 +25,6 @@ from .vehicle_service_place_assignments_rel_structure import (
     VehicleServicePlaceAssignmentsRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

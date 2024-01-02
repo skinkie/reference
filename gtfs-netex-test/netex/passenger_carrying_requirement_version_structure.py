@@ -6,9 +6,6 @@ from .vehicle_requirement_version_structure import (
     VehicleRequirementVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

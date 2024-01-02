@@ -5,9 +5,6 @@ from .compound_block import CompoundBlock
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .train_block import TrainBlock
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .offered_travel_specification import OfferedTravelSpecification
 from .offered_travel_specification_ref import OfferedTravelSpecificationRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

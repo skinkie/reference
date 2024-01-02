@@ -40,9 +40,6 @@ from .vehicle_stopping_places_rel_structure import (
 )
 from .water_submode_enumeration import WaterSubmodeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -8,9 +8,6 @@ from .version_ref_structure import VersionRefStructure
 from .version_status_enumeration import VersionStatusEnumeration
 from .version_type_enumeration import VersionTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

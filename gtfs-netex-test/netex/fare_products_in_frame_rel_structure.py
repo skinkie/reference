@@ -9,9 +9,6 @@ from .supplement_product import SupplementProduct
 from .third_party_product import ThirdPartyProduct
 from .usage_discount_right import UsageDiscountRight
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

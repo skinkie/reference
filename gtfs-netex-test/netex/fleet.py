@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .fleet_version_structure import FleetVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .connecting_journey_derived_view_structure import (
     ConnectingJourneyDerivedViewStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

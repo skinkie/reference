@@ -6,9 +6,6 @@ from .default_connection_ref import DefaultConnectionRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .site_connection_ref import SiteConnectionRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

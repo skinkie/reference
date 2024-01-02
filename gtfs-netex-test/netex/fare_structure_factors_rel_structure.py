@@ -9,9 +9,6 @@ from .parking_charge_band_ref import ParkingChargeBandRef
 from .quality_structure_factor_ref import QualityStructureFactorRef
 from .time_structure_factor_ref import TimeStructureFactorRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

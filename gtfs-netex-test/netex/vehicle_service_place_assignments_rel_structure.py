@@ -5,9 +5,6 @@ from .taxi_service_place_assignment import TaxiServicePlaceAssignment
 from .vehicle_pooling_place_assignment import VehiclePoolingPlaceAssignment
 from .vehicle_sharing_place_assignment import VehicleSharingPlaceAssignment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

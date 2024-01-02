@@ -3,9 +3,6 @@ from typing import Optional
 from .cycle_storage_enumeration import CycleStorageEnumeration
 from .place_equipment_version_structure import PlaceEquipmentVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

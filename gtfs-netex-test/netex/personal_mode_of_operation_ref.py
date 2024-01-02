@@ -3,9 +3,6 @@ from .personal_mode_of_operation_ref_structure import (
     PersonalModeOfOperationRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

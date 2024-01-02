@@ -7,9 +7,6 @@ from .purchase_when_enumeration import PurchaseWhenEnumeration
 from .time_interval_ref_structure import TimeIntervalRefStructure
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

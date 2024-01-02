@@ -4,9 +4,6 @@ from .abstract_surface_type import AbstractSurfaceType
 from .exterior import Exterior
 from .interior import Interior
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 

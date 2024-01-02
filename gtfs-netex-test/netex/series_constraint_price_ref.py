@@ -3,9 +3,6 @@ from .series_constraint_price_ref_structure import (
     SeriesConstraintPriceRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

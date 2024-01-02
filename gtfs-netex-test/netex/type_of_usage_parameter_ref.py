@@ -3,9 +3,6 @@ from .type_of_usage_parameter_ref_structure import (
     TypeOfUsageParameterRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

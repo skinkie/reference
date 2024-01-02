@@ -13,9 +13,6 @@ from .usage_start_constraint_type_enumeration import (
 from .usage_trigger_enumeration import UsageTriggerEnumeration
 from .usage_validity_type_enumeration import UsageValidityTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

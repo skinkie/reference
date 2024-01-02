@@ -3,9 +3,6 @@ from .controllable_element_in_sequence_versioned_child_structure import (
     ControllableElementInSequenceVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

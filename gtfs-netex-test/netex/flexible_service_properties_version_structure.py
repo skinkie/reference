@@ -19,9 +19,6 @@ from .template_service_journey_ref import TemplateServiceJourneyRef
 from .type_of_flexible_service_ref import TypeOfFlexibleServiceRef
 from .vehicle_journey_ref import VehicleJourneyRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

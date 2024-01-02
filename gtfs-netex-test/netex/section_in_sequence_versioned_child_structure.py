@@ -68,9 +68,6 @@ from .strict_containment_aggregation_structure import (
 from .timing_pattern_ref import TimingPatternRef
 from .type_of_journey_pattern_ref import TypeOfJourneyPatternRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

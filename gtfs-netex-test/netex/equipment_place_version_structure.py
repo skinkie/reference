@@ -4,9 +4,6 @@ from .equipment_positions_rel_structure import EquipmentPositionsRelStructure
 from .equipments_rel_structure import EquipmentsRelStructure
 from .site_element_version_structure import SiteElementVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

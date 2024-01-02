@@ -3,9 +3,6 @@ from .rhythmical_journey_group_ref_structure import (
     RhythmicalJourneyGroupRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

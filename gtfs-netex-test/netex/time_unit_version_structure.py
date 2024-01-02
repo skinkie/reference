@@ -4,9 +4,6 @@ from xsdata.models.datatype import XmlDuration
 from .fare_unit_version_structure import FareUnitVersionStructure
 from .time_unit_prices_rel_structure import TimeUnitPricesRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

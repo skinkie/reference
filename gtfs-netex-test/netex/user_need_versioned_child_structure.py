@@ -6,9 +6,6 @@ from .medical_need_enumeration import MedicalNeedEnumeration
 from .mobility_enumeration import MobilityEnumeration
 from .pyschosensory_need_enumeration import PyschosensoryNeedEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

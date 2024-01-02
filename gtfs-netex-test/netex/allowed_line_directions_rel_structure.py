@@ -4,9 +4,6 @@ from .allowed_line_direction import AllowedLineDirection
 from .allowed_line_direction_ref import AllowedLineDirectionRef
 from .containment_aggregation_structure import ContainmentAggregationStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -4,9 +4,6 @@ from .call_versioned_child_structure import CallVersionedChildStructure
 from .estimated_passing_time_view import EstimatedPassingTimeView
 from .target_passing_time_view import TargetPassingTimeView
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

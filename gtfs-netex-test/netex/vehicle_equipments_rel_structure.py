@@ -4,9 +4,6 @@ from .access_vehicle_equipment import AccessVehicleEquipment
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

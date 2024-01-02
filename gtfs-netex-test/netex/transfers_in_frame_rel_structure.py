@@ -6,9 +6,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .default_connection import DefaultConnection
 from .site_connection import SiteConnection
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

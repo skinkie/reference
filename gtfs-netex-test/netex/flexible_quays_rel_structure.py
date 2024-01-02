@@ -6,9 +6,6 @@ from .flexible_quay import FlexibleQuay
 from .flexible_quay_ref import FlexibleQuayRef
 from .hail_and_ride_area_ref import HailAndRideAreaRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

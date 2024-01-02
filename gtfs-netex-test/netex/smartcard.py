@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .smartcard_version_structure import SmartcardVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

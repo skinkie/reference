@@ -3,9 +3,6 @@ from typing import Optional
 from .request_structure import RequestStructure
 from .subscription_context_structure import SubscriptionContextStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

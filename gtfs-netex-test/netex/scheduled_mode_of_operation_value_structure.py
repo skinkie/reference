@@ -7,9 +7,6 @@ from .scheduled_operation_type_enumeration import (
     ScheduledOperationTypeEnumeration,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

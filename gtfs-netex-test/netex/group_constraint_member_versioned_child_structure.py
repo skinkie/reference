@@ -5,9 +5,6 @@ from .class_ref_structure import ClassRefStructure
 from .purpose_of_grouping_ref_structure import PurposeOfGroupingRefStructure
 from .type_of_value_ref_structure import TypeOfValueRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

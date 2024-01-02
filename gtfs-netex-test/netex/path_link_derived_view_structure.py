@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import Optional
 from .derived_view_structure import DerivedViewStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

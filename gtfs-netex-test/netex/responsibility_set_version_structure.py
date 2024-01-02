@@ -7,9 +7,6 @@ from .responsibility_role_assignments_rel_structure import (
     ResponsibilityRoleAssignmentsRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

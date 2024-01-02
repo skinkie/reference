@@ -3,9 +3,6 @@ from .link_sequence_projection_ref_structure import (
     LinkSequenceProjectionRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

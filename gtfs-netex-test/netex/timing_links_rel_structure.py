@@ -5,9 +5,6 @@ from .strict_containment_aggregation_structure import (
 )
 from .timing_link import TimingLink
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

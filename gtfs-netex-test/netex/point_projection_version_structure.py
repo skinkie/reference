@@ -5,9 +5,6 @@ from .link_ref_structure import LinkRefStructure
 from .point_ref_structure import PointRefStructure
 from .projection_version_structure import ProjectionVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

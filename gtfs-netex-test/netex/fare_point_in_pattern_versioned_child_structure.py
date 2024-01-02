@@ -6,9 +6,6 @@ from .point_in_journey_pattern_versioned_child_structure import (
 from .scheduled_stop_point_view import ScheduledStopPointView
 from .series_presentation_enumeration import SeriesPresentationEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

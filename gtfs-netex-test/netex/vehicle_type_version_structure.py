@@ -18,9 +18,6 @@ from .vehicle_manoeuvring_requirements_rel_structure import (
 from .vehicle_model_ref_structure import VehicleModelRefStructure
 from .vehicle_type_ref_structure import VehicleTypeRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

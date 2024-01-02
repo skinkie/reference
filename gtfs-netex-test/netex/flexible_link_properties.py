@@ -3,9 +3,6 @@ from .flexible_link_properties_versioned_child_structure import (
     FlexibleLinkPropertiesVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

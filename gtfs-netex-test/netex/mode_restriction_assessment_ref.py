@@ -3,9 +3,6 @@ from .mode_restriction_assessment_ref_structure import (
     ModeRestrictionAssessmentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -5,9 +5,6 @@ from .quay import Quay
 from .quay_ref import QuayRef
 from .taxi_stand_ref import TaxiStandRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

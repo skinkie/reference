@@ -5,9 +5,6 @@ from .mobile_device_ref import MobileDeviceRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .smartcard_ref import SmartcardRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

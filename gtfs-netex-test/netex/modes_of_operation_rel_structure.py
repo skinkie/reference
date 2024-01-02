@@ -9,9 +9,6 @@ from .vehicle_pooling import VehiclePooling
 from .vehicle_rental import VehicleRental
 from .vehicle_sharing import VehicleSharing
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

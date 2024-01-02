@@ -1,10 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 from .notice_assignment_derived_view_structure import (
     NoticeAssignmentDerivedViewStructure,
 )
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -14,4 +12,9 @@ class NoticeAssignmentView(NoticeAssignmentDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    name: RestrictedVar
+    name: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )

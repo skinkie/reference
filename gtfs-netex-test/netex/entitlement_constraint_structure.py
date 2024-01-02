@@ -16,9 +16,6 @@ from .same_user_enumeration import SameUserEnumeration
 from .same_zone_enumeration import SameZoneEnumeration
 from .user_profile_refs_rel_structure import UserProfileRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

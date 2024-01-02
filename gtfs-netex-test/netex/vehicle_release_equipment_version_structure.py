@@ -5,9 +5,6 @@ from .installed_equipment_version_structure import (
 )
 from .locking_mechanism_enumeration import LockingMechanismEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

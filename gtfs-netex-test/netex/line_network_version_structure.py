@@ -8,9 +8,6 @@ from .line_sections_rel_structure import LineSectionsRelStructure
 from .multilingual_string import MultilingualString
 from .network_ref import NetworkRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

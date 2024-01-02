@@ -4,9 +4,6 @@ from .all_vehicle_modes_of_transport_enumeration import (
 )
 from .submode_ref_structure import SubmodeRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

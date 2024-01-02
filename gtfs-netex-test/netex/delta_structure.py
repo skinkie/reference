@@ -6,9 +6,6 @@ from .modification_enumeration import ModificationEnumeration
 from .simple_object_ref import SimpleObjectRef
 from .simple_object_ref_structure import SimpleObjectRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -22,7 +19,7 @@ class DeltaStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    from_version_ref: Optional["DeltaStructure.FromVersionRef"] = field(
+    from_version_ref: Optional[SimpleObjectRefStructure] = field(
         default=None,
         metadata={
             "name": "FromVersionRef",
@@ -30,7 +27,7 @@ class DeltaStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    to_version_ref: "DeltaStructure.ToVersionRef" = field(
+    to_version_ref: SimpleObjectRefStructure = field(
         metadata={
             "name": "ToVersionRef",
             "type": "Element",
@@ -66,11 +63,3 @@ class DeltaStructure:
             "type": "Attribute",
         },
     )
-
-    @dataclass(kw_only=True)
-    class FromVersionRef(SimpleObjectRefStructure):
-        value: RestrictedVar
-
-    @dataclass(kw_only=True)
-    class ToVersionRef(SimpleObjectRefStructure):
-        value: RestrictedVar

@@ -22,9 +22,6 @@ from .ticket_validator_equipment import TicketValidatorEquipment
 from .ticketing_equipment import TicketingEquipment
 from .travelator_equipment import TravelatorEquipment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -11,9 +11,6 @@ from .controllable_elements_in_sequence_rel_structure import (
     ControllableElementsInSequenceRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

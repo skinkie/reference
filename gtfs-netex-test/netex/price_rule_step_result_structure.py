@@ -29,9 +29,6 @@ from .time_unit_price_ref import TimeUnitPriceRef
 from .usage_parameter_price_ref import UsageParameterPriceRef
 from .validable_element_price_ref import ValidableElementPriceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

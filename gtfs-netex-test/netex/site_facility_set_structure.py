@@ -14,9 +14,6 @@ from .money_facility_enumeration import MoneyFacilityEnumeration
 from .parking_facility_enumeration import ParkingFacilityEnumeration
 from .staffing_enumeration import StaffingEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

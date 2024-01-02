@@ -10,9 +10,6 @@ from .multilingual_string import MultilingualString
 from .presentation_structure import PresentationStructure
 from .vias_rel_structure import ViasRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .discounting_rule_versioned_structure import (
     DiscountingRuleVersionedStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

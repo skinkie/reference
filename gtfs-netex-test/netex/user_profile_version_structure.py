@@ -15,9 +15,6 @@ from .usage_parameter_version_structure import UsageParameterVersionStructure
 from .user_profile_ref_structure import UserProfileRefStructure
 from .user_type_enumeration import UserTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

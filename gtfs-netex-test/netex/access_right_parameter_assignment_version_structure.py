@@ -42,9 +42,6 @@ from .usage_parameters_rel_structure import UsageParametersRelStructure
 from .validable_element_ref import ValidableElementRef
 from .validity_parameters_rel_structure import ValidityParametersRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .type_of_payment_method_value_structure import (
     TypeOfPaymentMethodValueStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

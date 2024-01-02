@@ -4,9 +4,6 @@ from .derived_view_structure import DerivedViewStructure
 from .direction_ref import DirectionRef
 from .multilingual_string import MultilingualString
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

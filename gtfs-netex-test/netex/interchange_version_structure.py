@@ -10,9 +10,6 @@ from .multilingual_string import MultilingualString
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .private_code import PrivateCode
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

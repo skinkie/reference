@@ -16,9 +16,6 @@ from .topographic_place_refs_rel_structure import (
 )
 from .topographic_place_type_enumeration import TopographicPlaceTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

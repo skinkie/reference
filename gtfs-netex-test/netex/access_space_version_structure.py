@@ -5,9 +5,6 @@ from .access_space_type_enumeration import AccessSpaceTypeEnumeration
 from .passage_type_enumeration import PassageTypeEnumeration
 from .stop_place_space_version_structure import StopPlaceSpaceVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

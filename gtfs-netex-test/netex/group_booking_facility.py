@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .group_booking_enumeration import GroupBookingEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

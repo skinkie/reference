@@ -13,9 +13,6 @@ from .train_stop_assignments_rel_structure import (
     TrainStopAssignmentsRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

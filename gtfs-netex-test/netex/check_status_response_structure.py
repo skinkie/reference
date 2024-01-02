@@ -6,9 +6,6 @@ from .other_error import OtherError
 from .producer_response_structure import ProducerResponseStructure
 from .service_not_available_error import ServiceNotAvailableError
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

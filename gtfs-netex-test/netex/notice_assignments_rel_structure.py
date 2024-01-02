@@ -5,9 +5,6 @@ from .notice_assignment import NoticeAssignment
 from .notice_assignment_view import NoticeAssignmentView
 from .sales_notice_assignment import SalesNoticeAssignment
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

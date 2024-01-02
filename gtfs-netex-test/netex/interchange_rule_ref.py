@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .interchange_rule_ref_structure import InterchangeRuleRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

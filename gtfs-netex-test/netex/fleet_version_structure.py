@@ -9,9 +9,6 @@ from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
 from .type_of_fleet_ref import TypeOfFleetRef
 from .vehicles_rel_structure import VehiclesRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

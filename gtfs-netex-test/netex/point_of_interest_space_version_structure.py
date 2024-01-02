@@ -17,9 +17,6 @@ from .point_of_interest_space_version_structure_access_space_type import (
     PointOfInterestSpaceVersionStructureAccessSpaceType,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

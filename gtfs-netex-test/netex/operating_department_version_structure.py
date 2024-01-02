@@ -5,9 +5,6 @@ from .operational_contex_refs_rel_structure import (
     OperationalContexRefsRelStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

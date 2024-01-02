@@ -5,9 +5,6 @@ from .abstract_group_member_versioned_child_structure import (
 )
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

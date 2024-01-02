@@ -3,9 +3,6 @@ from .producer_request_endpoint_structure import (
     ProducerRequestEndpointStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

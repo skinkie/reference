@@ -5,9 +5,6 @@ from .personal_operation_type_enumeration import (
     PersonalOperationTypeEnumeration,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

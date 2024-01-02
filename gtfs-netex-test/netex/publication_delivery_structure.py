@@ -5,9 +5,6 @@ from .data_objects_rel_structure import DataObjectsRelStructure
 from .multilingual_string import MultilingualString
 from .publication_request_structure import PublicationRequestStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -7,9 +7,6 @@ from .preassigned_fare_product_version_structure import (
 )
 from .supplement_product_enumeration import SupplementProductEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

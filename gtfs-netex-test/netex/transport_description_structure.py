@@ -4,9 +4,6 @@ from .communications_transport_method_enumeration import (
 )
 from .compression_method_enumeration import CompressionMethodEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

@@ -6,9 +6,6 @@ from .limiting_rule import LimitingRule
 from .limiting_rule_in_context import LimitingRuleInContext
 from .pricing_rule import PricingRule
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

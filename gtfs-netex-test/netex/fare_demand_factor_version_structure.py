@@ -10,9 +10,6 @@ from .start_time_at_stop_points_rel_structure import (
 from .stop_use_constraint_enumeration import StopUseConstraintEnumeration
 from .time_demand_type_ref import TimeDemandTypeRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -33,9 +33,6 @@ from .train_size import TrainSize
 from .vehicle_equipments_rel_structure import VehicleEquipmentsRelStructure
 from .vias_rel_structure import ViasRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

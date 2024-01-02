@@ -3,9 +3,6 @@ from .type_of_flexible_service_value_structure import (
     TypeOfFlexibleServiceValueStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

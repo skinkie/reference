@@ -6,9 +6,6 @@ from .stop_place_component_version_structure import (
     StopPlaceComponentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -7,9 +7,6 @@ from .service_journey_pattern_interchange_ref import (
 )
 from .vehicle_journey_ref_structure import VehicleJourneyRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

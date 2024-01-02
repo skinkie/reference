@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .stop_area_ref_structure import StopAreaRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

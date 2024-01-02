@@ -14,9 +14,6 @@ from .time_demand_type_ref import TimeDemandTypeRef
 from .timeband_ref import TimebandRef
 from .vehicle_journey_ref import VehicleJourneyRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

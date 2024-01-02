@@ -3,9 +3,6 @@ from .subscription_terminated_notification_structure import (
     SubscriptionTerminatedNotificationStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

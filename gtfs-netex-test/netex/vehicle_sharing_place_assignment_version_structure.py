@@ -16,9 +16,6 @@ from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
 from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
 from .vehicle_sharing_service_ref import VehicleSharingServiceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -31,9 +31,6 @@ from .retail_service_ref import RetailServiceRef
 from .ticketing_service import TicketingService
 from .ticketing_service_ref import TicketingServiceRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .group_of_stop_places_structure import GroupOfStopPlacesStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

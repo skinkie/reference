@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .type_of_congestion_value_structure import TypeOfCongestionValueStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

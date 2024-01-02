@@ -3,9 +3,6 @@ from .type_of_travel_document_ref_structure import (
     TypeOfTravelDocumentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

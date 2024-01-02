@@ -6,9 +6,6 @@ from .taxi_parking_area_ref import TaxiParkingAreaRef
 from .vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
 from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

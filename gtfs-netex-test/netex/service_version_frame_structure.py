@@ -88,9 +88,6 @@ from .transfer_restrictions_in_frame_rel_structure import (
 )
 from .transfers_in_frame_rel_structure import TransfersInFrameRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

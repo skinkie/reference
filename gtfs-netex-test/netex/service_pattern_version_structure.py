@@ -34,9 +34,6 @@ from .stop_points_in_journey_pattern_rel_structure import (
 from .timing_pattern_ref import TimingPatternRef
 from .type_of_journey_pattern_ref import TypeOfJourneyPatternRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

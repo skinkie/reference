@@ -7,9 +7,6 @@ from .notice_assignment_version_structure import (
 )
 from .sales_offer_package_ref import SalesOfferPackageRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

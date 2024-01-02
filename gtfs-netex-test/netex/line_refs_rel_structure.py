@@ -4,9 +4,6 @@ from .flexible_line_ref import FlexibleLineRef
 from .line_ref import LineRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

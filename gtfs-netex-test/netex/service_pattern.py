@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .service_pattern_version_structure import ServicePatternVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -12,9 +12,6 @@ from .line_refs_rel_structure import LineRefsRelStructure
 from .multilingual_string import MultilingualString
 from .place_version_structure import PlaceVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

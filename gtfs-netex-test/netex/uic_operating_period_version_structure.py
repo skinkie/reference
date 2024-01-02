@@ -3,9 +3,6 @@ from typing import List
 from .day_of_week_enumeration import DayOfWeekEnumeration
 from .operating_period_version_structure import OperatingPeriodVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

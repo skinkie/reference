@@ -6,9 +6,6 @@ from .operating_period_ref import OperatingPeriodRef
 from .uic_operating_period import UicOperatingPeriod
 from .uic_operating_period_ref import UicOperatingPeriodRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

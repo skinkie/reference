@@ -3,9 +3,6 @@ from .type_of_fare_contract_entry_ref_structure import (
     TypeOfFareContractEntryRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

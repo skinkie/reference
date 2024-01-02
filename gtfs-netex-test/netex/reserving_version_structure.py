@@ -10,9 +10,6 @@ from .reservation_charge_type_enumeration import (
 from .reservation_enumeration import ReservationEnumeration
 from .seat_allocation_method_enumeration import SeatAllocationMethodEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

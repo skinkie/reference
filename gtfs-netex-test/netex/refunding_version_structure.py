@@ -6,9 +6,6 @@ from .refund_policy_enumeration import RefundPolicyEnumeration
 from .refund_type_enumeration import RefundTypeEnumeration
 from .reselling_version_structure import ResellingVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

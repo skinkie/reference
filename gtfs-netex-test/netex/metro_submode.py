@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .metro_submode_enumeration import MetroSubmodeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

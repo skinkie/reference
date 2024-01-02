@@ -7,9 +7,6 @@ from .residence_type_enumeration import ResidenceTypeEnumeration
 from .topographic_place_ref import TopographicPlaceRef
 from .usage_parameter_ref_structure import UsageParameterRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

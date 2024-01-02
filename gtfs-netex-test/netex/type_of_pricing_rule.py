@@ -3,9 +3,6 @@ from .type_of_pricing_rule_version_structure import (
     TypeOfPricingRuleVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

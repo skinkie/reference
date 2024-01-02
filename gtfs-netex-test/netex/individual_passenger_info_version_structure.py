@@ -5,9 +5,6 @@ from .alternative_texts_rel_structure import DataManagedObjectStructure
 from .individual_traveller_ref import IndividualTravellerRef
 from .multilingual_string import MultilingualString
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

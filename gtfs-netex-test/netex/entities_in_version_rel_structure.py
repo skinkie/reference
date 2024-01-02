@@ -649,9 +649,6 @@ from .wire_junction import WireJunction
 from .zone import Zone
 from .zone_projection import ZoneProjection
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

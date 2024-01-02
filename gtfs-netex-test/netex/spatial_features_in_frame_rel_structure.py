@@ -4,9 +4,6 @@ from .complex_feature import ComplexFeature
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .simple_feature import SimpleFeature
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -1,8 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 from .stop_place_derived_view_structure import StopPlaceDerivedViewStructure
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -12,4 +10,9 @@ class StopPlaceView(StopPlaceDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    branding_ref: RestrictedVar
+    branding_ref: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )

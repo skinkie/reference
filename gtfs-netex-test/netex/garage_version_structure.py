@@ -20,9 +20,6 @@ from .transport_organisation_refs_rel_structure import (
 )
 from .travel_agent_ref import TravelAgentRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

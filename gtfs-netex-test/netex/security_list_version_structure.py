@@ -15,9 +15,6 @@ from .serviced_organisation_ref import ServicedOrganisationRef
 from .travel_agent_ref import TravelAgentRef
 from .type_of_security_list_ref import TypeOfSecurityListRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

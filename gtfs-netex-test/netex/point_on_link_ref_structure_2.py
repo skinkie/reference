@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import Optional
 from .point_ref_structure import PointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

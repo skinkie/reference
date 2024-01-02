@@ -1,14 +1,11 @@
 from dataclasses import dataclass, field
-from typing import Optional, Type, Union
+from typing import Optional, Type, Union, Any
 from .country_ref import CountryRef
 from .online_service_refs_rel_structure import OnlineServiceRefsRelStructure
 from .organisation_version_structure import OrganisationVersionStructure
 from .postal_address import PostalAddress
 from .postal_address_version_structure import PostalAddressVersionStructure
 from .road_address import RoadAddress
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -67,10 +64,39 @@ class OnlineServiceOperatorVersionStructure(OrganisationVersionStructure):
 
     @dataclass(kw_only=True)
     class Address(PostalAddressVersionStructure):
-        validity_conditions: RestrictedVar
-        valid_between: RestrictedVar
-        alternative_texts: RestrictedVar
-        key_list: RestrictedVar
-        extensions: RestrictedVar
-        branding_ref: RestrictedVar
-        members: RestrictedVar
+        validity_conditions_or_valid_between: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        alternative_texts: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        key_list: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        extensions: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        branding_ref: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        members: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )

@@ -13,9 +13,6 @@ from .travel_specification_1 import TravelSpecification1
 from .travel_specification_2 import TravelSpecification2
 from .travel_specification_ref import TravelSpecificationRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -5,9 +5,6 @@ from .general_group_of_entities_ref import GeneralGroupOfEntitiesRef
 from .type_of_concession_ref import TypeOfConcessionRef
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

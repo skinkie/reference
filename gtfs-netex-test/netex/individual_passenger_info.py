@@ -3,9 +3,6 @@ from .individual_passenger_info_version_structure import (
     IndividualPassengerInfoVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

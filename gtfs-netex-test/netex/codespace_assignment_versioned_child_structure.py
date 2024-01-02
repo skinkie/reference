@@ -8,9 +8,6 @@ from .codespace_ref import CodespaceRef
 from .multilingual_string import MultilingualString
 from .type_of_codespace_assignment_ref import TypeOfCodespaceAssignmentRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

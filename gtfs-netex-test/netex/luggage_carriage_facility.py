@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .luggage_carriage_enumeration import LuggageCarriageEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import List, Optional, Union
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .authority_ref import AuthorityRef
 from .contact_structure import ContactStructure
@@ -25,9 +25,6 @@ from .type_of_payment_method_refs_rel_structure import (
     TypeOfPaymentMethodRefsRelStructure,
 )
 from .type_of_value_version_structure import TypeOfValueVersionStructure
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -179,10 +176,7 @@ class DistributionChannelVersionStructure(TypeOfValueVersionStructure):
         },
     )
     distribution_points_or_distribution_group_ref: Optional[
-        Union[
-            PointRefsRelStructure,
-            "DistributionChannelVersionStructure.DistributionGroupRef",
-        ]
+        Union[PointRefsRelStructure, GeneralGroupOfEntitiesRefStructure]
     ] = field(
         default=None,
         metadata={
@@ -195,15 +189,9 @@ class DistributionChannelVersionStructure(TypeOfValueVersionStructure):
                 },
                 {
                     "name": "DistributionGroupRef",
-                    "type": Type[
-                        "DistributionChannelVersionStructure.DistributionGroupRef"
-                    ],
+                    "type": GeneralGroupOfEntitiesRefStructure,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
         },
     )
-
-    @dataclass(kw_only=True)
-    class DistributionGroupRef(GeneralGroupOfEntitiesRefStructure):
-        value: RestrictedVar

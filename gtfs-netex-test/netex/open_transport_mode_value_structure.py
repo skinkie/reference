@@ -16,9 +16,6 @@ from .tram_submode_enumeration import TramSubmodeEnumeration
 from .type_of_value_version_structure import TypeOfValueVersionStructure
 from .water_submode_enumeration import WaterSubmodeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

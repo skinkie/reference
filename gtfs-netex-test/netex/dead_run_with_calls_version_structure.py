@@ -3,9 +3,6 @@ from typing import Optional
 from .dead_run_calls_rel_structure import DeadRunCallsRelStructure
 from .dead_run_version_structure import DeadRunVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

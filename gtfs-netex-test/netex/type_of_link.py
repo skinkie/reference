@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .type_of_link_value_structure import TypeOfLinkValueStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

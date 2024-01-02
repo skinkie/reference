@@ -7,9 +7,6 @@ from .residential_qualification_eligibility_ref import (
 )
 from .user_profile_eligibility_ref import UserProfileEligibilityRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

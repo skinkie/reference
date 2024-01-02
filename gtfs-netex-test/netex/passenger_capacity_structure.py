@@ -3,9 +3,6 @@ from typing import Optional
 from .alternative_texts_rel_structure import DataManagedObjectStructure
 from .fare_class_enumeration import FareClassEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

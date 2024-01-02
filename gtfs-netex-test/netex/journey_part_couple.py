@@ -3,9 +3,6 @@ from .journey_part_couple_version_structure import (
     JourneyPartCoupleVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

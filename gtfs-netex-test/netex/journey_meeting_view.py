@@ -3,9 +3,6 @@ from .journey_meeting_derived_view_structure import (
     JourneyMeetingDerivedViewStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

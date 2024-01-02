@@ -5,9 +5,6 @@ from .multilingual_string import MultilingualString
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 from .tariff_zone_ref_structure import TariffZoneRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

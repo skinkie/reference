@@ -5,9 +5,6 @@ from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .requested_travel_specification_ref import RequestedTravelSpecificationRef
 from .travel_specification_ref import TravelSpecificationRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

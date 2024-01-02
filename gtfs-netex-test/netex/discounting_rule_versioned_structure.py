@@ -3,9 +3,6 @@ from decimal import Decimal
 from typing import Optional
 from .pricing_rule_versioned_structure import PricingRuleVersionedStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

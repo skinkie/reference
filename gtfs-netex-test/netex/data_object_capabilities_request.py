@@ -3,9 +3,6 @@ from .service_capabilities_request_structure import (
     ServiceCapabilitiesRequestStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .accessibility_assessment_ref_structure import (
     AccessibilityAssessmentRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

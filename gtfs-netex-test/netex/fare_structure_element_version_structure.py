@@ -41,9 +41,6 @@ from .time_structure_factors_rel_structure import (
 )
 from .type_of_fare_structure_element_ref import TypeOfFareStructureElementRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

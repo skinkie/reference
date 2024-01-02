@@ -3,9 +3,6 @@ from .service_journey_interchange_derived_view_structure import (
     ServiceJourneyInterchangeDerivedViewStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -9,9 +9,6 @@ from .network_frame_request_policy_structure import (
 )
 from .network_frame_topic import NetworkFrameTopic
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

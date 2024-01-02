@@ -6,9 +6,6 @@ from .service_journey import ServiceJourney
 from .special_service import SpecialService
 from .template_service_journey import TemplateServiceJourney
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

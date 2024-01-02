@@ -13,9 +13,6 @@ from .vehicle_journey_stop_assignment_ref import (
     VehicleJourneyStopAssignmentRef,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

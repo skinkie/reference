@@ -3,9 +3,6 @@ from .invalid_data_references_error_structure import (
     InvalidDataReferencesErrorStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

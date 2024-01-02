@@ -3,9 +3,6 @@ from .sales_transaction_frame_version_frame_structure import (
     SalesTransactionFrameVersionFrameStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

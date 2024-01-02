@@ -4,9 +4,6 @@ from xsdata.models.datatype import XmlDuration
 from .booking_arrangements_structure import BookingArrangementsStructure
 from .booking_charge_type_enumeration import BookingChargeTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

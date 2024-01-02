@@ -58,9 +58,6 @@ from .vehicle_stopping_place import VehicleStoppingPlace
 from .vehicle_stopping_position import VehicleStoppingPosition
 from .zone import Zone
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

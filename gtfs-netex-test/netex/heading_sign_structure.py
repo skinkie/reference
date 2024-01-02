@@ -11,9 +11,6 @@ from .multilingual_string import MultilingualString
 from .sign_equipment_version_structure import SignEquipmentVersionStructure
 from .transport_submode import TransportSubmode
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

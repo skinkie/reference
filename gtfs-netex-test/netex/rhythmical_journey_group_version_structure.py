@@ -5,9 +5,6 @@ from .journey_frequency_group_version_structure import (
 )
 from .timeband_refs_rel_structure import TimebandRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

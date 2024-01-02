@@ -3,9 +3,6 @@ from .turnaround_time_limit_time_ref_structure import (
     TurnaroundTimeLimitTimeRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from typing import Optional
 from .data_object_capabilities_request import DataObjectCapabilitiesRequest
 from .request_structure import RequestStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .dead_run_ref_structure import DeadRunRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import Optional
 from .iana_country_tld_enumeration import IanaCountryTldEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

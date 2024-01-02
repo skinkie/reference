@@ -1,9 +1,6 @@
 from dataclasses import dataclass, field
 from .type_of_value_ref_structure import TypeOfValueRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
@@ -17,4 +14,3 @@ class AllCountriesRefStructure(TypeOfValueRefStructure):
             "required": True,
         },
     )
-    value: RestrictedVar

@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .sales_offer_package_element import SalesOfferPackageElement
 from .sales_offer_package_element_ref import SalesOfferPackageElementRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

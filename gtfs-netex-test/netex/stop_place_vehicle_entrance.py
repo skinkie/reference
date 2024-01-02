@@ -1,10 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 from .stop_place_vehicle_entrance_version_structure import (
     StopPlaceVehicleEntranceVersionStructure,
 )
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -14,4 +12,9 @@ class StopPlaceVehicleEntrance(StopPlaceVehicleEntranceVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    members: RestrictedVar
+    members: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )

@@ -5,9 +5,6 @@ from .waiting_equipment_version_structure import (
     WaitingEquipmentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

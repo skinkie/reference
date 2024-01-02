@@ -8,9 +8,6 @@ from .validity_parameter_assignment_version_structure import (
 )
 from .vehicle_pooling_driver_info_ref import VehiclePoolingDriverInfoRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

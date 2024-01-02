@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Any
 from .alternative_texts_rel_structure import VersionedChildStructure
 from .fare_table_ref import FareTableRef
 from .multilingual_string import MultilingualString
@@ -9,9 +9,6 @@ from .standard_fare_table_ref import StandardFareTableRef
 from .strict_containment_aggregation_structure import (
     StrictContainmentAggregationStructure,
 )
-
-
-from typing import ClassVar as RestrictedVar
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -92,9 +89,18 @@ class FareTableColumn(FareTableColumnVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    validity_conditions: RestrictedVar
-    valid_between: RestrictedVar
-    alternative_texts: RestrictedVar
+    validity_conditions_or_valid_between: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
+    alternative_texts: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
 
 
 @dataclass(kw_only=True)

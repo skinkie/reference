@@ -3,9 +3,6 @@ from typing import Optional
 from .log_entry_version_structure import LogEntryVersionStructure
 from .parking_ref import ParkingRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

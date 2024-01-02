@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from typing import List
 from .ticketing_facility_enumeration import TicketingFacilityEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

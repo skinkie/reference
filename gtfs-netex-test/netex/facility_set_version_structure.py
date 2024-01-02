@@ -36,9 +36,6 @@ from .ticketing_service_facility_enumeration import (
 from .type_of_facility_ref import TypeOfFacilityRef
 from .types_of_equipment_rel_structure import TypesOfEquipmentRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

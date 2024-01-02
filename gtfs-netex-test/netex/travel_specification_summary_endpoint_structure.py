@@ -17,9 +17,6 @@ from .taxi_stand_ref import TaxiStandRef
 from .topographic_place_view import TopographicPlaceView
 from .vehicle_meeting_point_ref import VehicleMeetingPointRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

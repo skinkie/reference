@@ -4,9 +4,6 @@ from .access_zone import AccessZone
 from .access_zone_ref import AccessZoneRef
 from .containment_aggregation_structure import ContainmentAggregationStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

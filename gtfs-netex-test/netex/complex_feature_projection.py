@@ -3,9 +3,6 @@ from .complex_feature_projection_version_structure import (
     ComplexFeatureProjectionVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

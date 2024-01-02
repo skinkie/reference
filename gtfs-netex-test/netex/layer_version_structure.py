@@ -6,9 +6,6 @@ from .group_of_entities_version_structure import (
 from .object_refs_rel_structure import ObjectRefsRelStructure
 from .version_frame_refs_rel_structure import VersionFrameRefsRelStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

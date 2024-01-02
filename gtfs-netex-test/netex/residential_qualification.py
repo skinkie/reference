@@ -3,9 +3,6 @@ from .residential_qualification_version_structure import (
     ResidentialQualificationVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

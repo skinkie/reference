@@ -11,9 +11,6 @@ from .passenger_capacity_structure import PassengerCapacityStructure
 from .private_code import PrivateCode
 from .propulsion_type_enumeration import PropulsionTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

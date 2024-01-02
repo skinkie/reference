@@ -10,9 +10,6 @@ from .assisted_boarding_location_enumeration import (
 )
 from .mobility_enumeration import MobilityEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

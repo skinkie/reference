@@ -7,9 +7,6 @@ from .cell_versioned_child_structure import (
 from .frame_containment_structure import FrameContainmentStructure
 from .standard_fare_table import StandardFareTable
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

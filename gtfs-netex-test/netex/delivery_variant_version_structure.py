@@ -6,9 +6,6 @@ from .multilingual_string import MultilingualString
 from .type_of_delivery_variant_ref import TypeOfDeliveryVariantRef
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

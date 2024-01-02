@@ -7,9 +7,6 @@ from .train_component_ref import TrainComponentRef
 from .train_element_ref import TrainElementRef
 from .train_element_type_enumeration import TrainElementTypeEnumeration
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

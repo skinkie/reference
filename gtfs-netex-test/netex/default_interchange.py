@@ -3,9 +3,6 @@ from .default_interchange_version_structure import (
     DefaultInterchangeVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -12,9 +12,6 @@ from .operator_ref import OperatorRef
 from .train_number_refs_rel_structure import TrainNumberRefsRelStructure
 from .vehicle_journey_version_structure import VehicleJourneyVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

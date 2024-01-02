@@ -4,9 +4,6 @@ from .passenger_information_facility_enumeration import (
     PassengerInformationFacilityEnumeration,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

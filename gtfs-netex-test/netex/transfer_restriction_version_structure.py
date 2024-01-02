@@ -7,9 +7,6 @@ from .transfer_constraint_type_enumeration import (
 )
 from .type_of_transfer_ref import TypeOfTransferRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

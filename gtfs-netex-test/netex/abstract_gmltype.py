@@ -4,9 +4,6 @@ from .description_reference import DescriptionReference
 from .identifier import Identifier
 from .name import Name
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 

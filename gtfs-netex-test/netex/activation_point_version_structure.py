@@ -5,9 +5,6 @@ from .point_version_structure import PointVersionStructure
 from .private_code import PrivateCode
 from .type_of_activation_ref import TypeOfActivationRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -6,9 +6,6 @@ from .mobility_service_constraint_zone_ref import (
     MobilityServiceConstraintZoneRef,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

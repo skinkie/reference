@@ -6,9 +6,6 @@ from .fare_price_versioned_child_structure import (
 from .sales_offer_package_element_ref import SalesOfferPackageElementRef
 from .sales_offer_package_ref import SalesOfferPackageRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

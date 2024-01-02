@@ -3,9 +3,6 @@ from .pricing_parameter_set_ref_structure import (
     PricingParameterSetRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

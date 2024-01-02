@@ -2,9 +2,6 @@ from dataclasses import dataclass, field
 from .abstract_geometric_primitive_type import AbstractGeometricPrimitiveType
 from .pos import Pos
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 

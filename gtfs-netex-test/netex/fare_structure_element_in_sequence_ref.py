@@ -3,9 +3,6 @@ from .fare_structure_element_in_sequence_ref_structure import (
     FareStructureElementInSequenceRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

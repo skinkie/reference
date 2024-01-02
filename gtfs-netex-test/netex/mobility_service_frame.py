@@ -3,9 +3,6 @@ from .mobility_service_version_frame_structure import (
     MobilityServiceVersionFrameStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .vehicle_pooling_driver_info_ref_structure import (
     VehiclePoolingDriverInfoRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

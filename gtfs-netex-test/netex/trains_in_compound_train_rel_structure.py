@@ -7,9 +7,6 @@ from .train_in_compound_train_versioned_child_structure import (
     TrainInCompoundTrainVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

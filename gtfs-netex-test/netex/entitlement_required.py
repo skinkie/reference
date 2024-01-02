@@ -3,9 +3,6 @@ from .entitlement_required_version_structure import (
     EntitlementRequiredVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

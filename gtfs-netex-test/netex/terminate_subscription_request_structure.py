@@ -4,9 +4,6 @@ from .authenticated_request_structure import AuthenticatedRequestStructure
 from .empty_type_1 import EmptyType1
 from .extensions_1 import Extensions1
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

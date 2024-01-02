@@ -7,9 +7,6 @@ from .data_object_permissions import DataObjectPermissions
 from .data_object_service_capabilities import DataObjectServiceCapabilities
 from .extensions_2 import Extensions2
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

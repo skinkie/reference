@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .block_part_ref_structure import BlockPartRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -3,9 +3,6 @@ from .unknown_participant_error_structure import (
     UnknownParticipantErrorStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

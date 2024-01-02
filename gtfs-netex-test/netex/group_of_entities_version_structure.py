@@ -6,9 +6,6 @@ from .multilingual_string import MultilingualString
 from .private_code import PrivateCode
 from .purpose_of_grouping_ref import PurposeOfGroupingRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

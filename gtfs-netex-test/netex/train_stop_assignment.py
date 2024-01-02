@@ -3,9 +3,6 @@ from .train_stop_assignment_version_structure import (
     TrainStopAssignmentVersionStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .service_journey_version_structure import ServiceJourneyVersionStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

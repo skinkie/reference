@@ -3,9 +3,6 @@ from .geographical_unit_price_ref_structure import (
     GeographicalUnitPriceRefStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

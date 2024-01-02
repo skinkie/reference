@@ -3,9 +3,6 @@ from .group_constraint_member_versioned_child_structure import (
     GroupConstraintMemberVersionedChildStructure,
 )
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

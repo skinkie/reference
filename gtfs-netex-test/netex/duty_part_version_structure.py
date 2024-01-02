@@ -5,9 +5,6 @@ from .accountable_element_structure import AccountableElementStructure
 from .duty_ref import DutyRef
 from .timing_point_ref_structure import TimingPointRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

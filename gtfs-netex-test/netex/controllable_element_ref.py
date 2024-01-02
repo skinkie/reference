@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .controllable_element_ref_structure import ControllableElementRefStructure
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

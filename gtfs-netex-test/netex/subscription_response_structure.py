@@ -5,9 +5,6 @@ from .extensions_1 import Extensions1
 from .response_endpoint_structure import ResponseEndpointStructure
 from .response_status import ResponseStatus
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 

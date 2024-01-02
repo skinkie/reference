@@ -13,9 +13,6 @@ from .vehicle_equipment_profile_refs_rel_structure import (
 )
 from .vehicle_type_ref import VehicleTypeRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 

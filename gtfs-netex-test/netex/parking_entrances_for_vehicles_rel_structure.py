@@ -4,9 +4,6 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .parking_entrance_for_vehicles import ParkingEntranceForVehicles
 from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
 
-
-from typing import ClassVar as RestrictedVar
-
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
