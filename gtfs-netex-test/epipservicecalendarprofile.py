@@ -35,7 +35,7 @@ class CallsProfile:
                 parts.append(tuple([run_time, wait_time, tl, ssp]))
                 parts2.append(tuple([run_time, wait_time, tl.ref, ssp.ref]))
 
-            tdt_hash = hash(tuple(parts2))
+            tdt_hash = hash(tuple(parts2)) # TODO: replace with hashlib.sha256
             if tdt_hash not in tdts:
                 run_times = []
                 part = 0

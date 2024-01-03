@@ -46,7 +46,7 @@ class SimpleTimetable:
 
         for key, operating_dates in simple_timetable.items():
             from_ssp, to_ssp, time, duration, vessel = key.split('_')
-            ac_hash = hash(tuple(operating_dates))
+            ac_hash = hash(tuple(operating_dates)) # TODO replace with hashlib.sha256
             ac_hash = ("%0.2X" % (ac_hash**2))[0:8]
             ac = availability_conditions.get(ac_hash, None)
             if ac is None:

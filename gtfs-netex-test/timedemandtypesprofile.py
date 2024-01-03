@@ -59,6 +59,7 @@ class TimeDemandTypesProfile:
 
     @staticmethod
     def getTimeDemandTypeHash(tdt: TimeDemandType):
+        # TODO: REVIEW and replace with hashlib.sha256 digest!!
         # TODO: Check if the output of this code is the same as inline
         l = [(x.run_time, x.timing_link_ref.ref) for x in tdt.run_times.journey_run_time] + [(x.wait_time, x.choice.ref) for x in tdt.wait_times.journey_wait_time]
         return hash(l)

@@ -1,8 +1,9 @@
 from netex import ServiceJourney, ServiceJourneyPattern, StopPointInJourneyPattern, TimetabledPassingTime, \
     PointsInJourneyPatternRelStructure, Codespace, TimetabledPassingTimesRelStructure, \
-    PointInJourneyPatternRef, ServiceJourneyPatternRef, Call, MultilingualString, RouteView
+    PointInJourneyPatternRef, ServiceJourneyPatternRef, Call, MultilingualString, RouteView, DestinationDisplayView
 from refs import getRef, getIndex, getId
 import sys
+import hashlib
 
 class TimetablePassingTimesProfile:
     codespace: Codespace
@@ -13,10 +14,10 @@ class TimetablePassingTimesProfile:
         self.service_journeys = service_journeys
         self.service_journey_patterns = service_journey_patterns
 
-    @staticmethod
-    def mapCallToStopPointInJourneyPattern(call: Call) -> StopPointInJourneyPattern:
+
+    def mapCallToStopPointInJourneyPattern(self, call: Call) -> StopPointInJourneyPattern:
         stop_point_in_journey_pattern = StopPointInJourneyPattern(
-            id=call.id.replace(":Call:", ":StopPointInJourneyPattern:"),
+            id=getId(StopPointInJourneyPattern, self.codespace, f"-XXX-{call.order}"),
             version=call.version,
             order=call.order,
             derived_from_object_ref=call.id,
@@ -47,8 +48,39 @@ class TimetablePassingTimesProfile:
         return timetabled_passing_time
 
     @staticmethod
+    def getDestination(destination_name):
+        if destination_name is not None:
+            if hasattr(destination_name, 'ref'):
+                return destination_name.ref
+            else:
+                return destination_name.name
+        else:
+            return ''
+
+    @staticmethod
+    def getProperty(obj, attr):
+        if obj is None:
+            return ''
+        return str(getattr(obj, attr, ''))
+
+    @staticmethod
     def sjp_hash(points_in_sequence: PointsInJourneyPatternRelStructure):
         spijp: StopPointInJourneyPattern
+        m = hashlib.sha256()
+
+        # TODO: RouteView/LineRef may be different, and should therefore create a different SJP
+
+        key = ('\n'.join([(TimetablePassingTimesProfile.getProperty(spijp.scheduled_stop_point_ref, 'ref') + ',' +
+                           str(spijp.for_alighting) + ',' + str(spijp.for_boarding) + ',' +
+                           TimetablePassingTimesProfile.getProperty(spijp.onward_timing_link_ref, 'ref') + ',' +
+                           TimetablePassingTimesProfile.getProperty(spijp.onward_service_link_ref, 'ref') + ',' +
+                           TimetablePassingTimesProfile.getDestination(spijp.destination_display_ref_or_destination_display_view))
+                   for spijp in points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern])).encode('utf-8')
+
+        m.update(key)
+        return m.hexdigest()[0:8].upper()
+
+        """
         spijp_hash = hash(
             tuple([(spijp.scheduled_stop_point_ref.ref, spijp.for_alighting,
                     spijp.for_boarding,
@@ -56,6 +88,7 @@ class TimetablePassingTimesProfile:
                     spijp.destination_display_ref_or_destination_display_view)
                    for spijp in points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern]))
         return ("%0.2X" % (spijp_hash**2))[0:8]
+        """
 
     def getTimetabledPassingTimes(self, force=False, clean=False):
         sjps = {TimetablePassingTimesProfile.sjp_hash(sjp.points_in_sequence): sjp for sjp in self.service_journey_patterns}
@@ -83,10 +116,13 @@ class TimetablePassingTimesProfile:
                         print(f"{sj.id} has not enough calls.")
 
                     else:
+                        # TODO: replace with a function that can compute the hash of a service journey pattern without creating it first
                         call: Call
                         spijps = PointsInJourneyPatternRelStructure(
                             point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[self.mapCallToStopPointInJourneyPattern(call) for call in sj.calls.call])
                         spijp_hash = TimetablePassingTimesProfile.sjp_hash(spijps)
+                        for x in spijps.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
+                            x.id = x.id.replace('-XXX-', spijp_hash + '-')
 
                         """
                         spijp_hash = str(hash(
@@ -107,9 +143,12 @@ class TimetablePassingTimesProfile:
                                                                             points_in_sequence = spijps)
 
                             sjps[spijp_hash] = service_journey_pattern
+                            existing_sjps[service_journey_pattern.id] = service_journey_pattern
+                        else:
+                            print("exists")
 
                         sj.journey_pattern_ref = getRef(service_journey_pattern, ServiceJourneyPatternRef)
-                        # existing_sjps[service_journey_pattern.id] = service_journey_pattern
+
 
                 if not service_journey_pattern:
                     if sj.journey_pattern_ref:
