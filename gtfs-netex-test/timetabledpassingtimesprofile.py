@@ -37,7 +37,7 @@ class TimetablePassingTimesProfile:
                                                         derived_from_object_ref=call.id,
                                                         derived_from_version_ref_attribute=call.version
                                                         )
-        timetabled_passing_time.choice_1 = getRef(pattern[call.order])
+        timetabled_passing_time.point_in_journey_pattern_ref = getRef(pattern[call.order])
         timetabled_passing_time.derived_from_object_ref = call.id
         timetabled_passing_time.derived_from_version_ref_attribute = call.version
         timetabled_passing_time.arrival_time = call.arrival.time
