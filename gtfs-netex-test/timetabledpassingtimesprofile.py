@@ -144,8 +144,6 @@ class TimetablePassingTimesProfile:
 
                             sjps[spijp_hash] = service_journey_pattern
                             existing_sjps[service_journey_pattern.id] = service_journey_pattern
-                        else:
-                            print("exists")
 
                         sj.journey_pattern_ref = getRef(service_journey_pattern, ServiceJourneyPatternRef)
 
