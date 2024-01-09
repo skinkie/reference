@@ -40,7 +40,7 @@ class DutchProfile:
             responsibility_sets = ResponsibilitySetsInFrameRelStructure(responsibility_set=responsibility_sets)
 
         if organisations is not None and len(organisations) > 0:
-            organisations = OrganisationsInFrameRelStructure(choice=organisations)
+            organisations = OrganisationsInFrameRelStructure(organisation_or_transport_organisation=organisations)
 
         if operational_contexts is not None and len(operational_contexts) > 0:
             operational_contexts = OperationalContextsInFrameRelStructure(operational_context=operational_contexts)
@@ -91,10 +91,10 @@ class DutchProfile:
             route_links = RouteLinksInFrameRelStructure(route_link=route_links)
 
         if routes is not None and len(routes) > 0:
-            routes = RoutesInFrameRelStructure(flexible_route_or_route=routes)
+            routes = RoutesInFrameRelStructure(route=routes)
 
         if lines is not None and len(lines) > 0:
-            lines = LinesInFrameRelStructure(flexible_line_or_line=lines)
+            lines = LinesInFrameRelStructure(line=lines)
 
         if destination_displays is not None and len(destination_displays) > 0:
             destination_displays = DestinationDisplaysInFrameRelStructure(destination_display=destination_displays)
@@ -106,7 +106,7 @@ class DutchProfile:
             stop_areas = StopAreasInFrameRelStructure(stop_area=stop_areas)
 
         if stop_assignments is not None and len(stop_assignments) > 0:
-            stop_assignments = StopAssignmentsInFrameRelStructure(choice=stop_assignments)
+            stop_assignments = StopAssignmentsInFrameRelStructure(stop_assignment=stop_assignments)
 
         if timing_points is not None and len(timing_points) > 0:
             timing_points = TimingPointsInFrameRelStructure(timing_point=timing_points)
@@ -115,7 +115,7 @@ class DutchProfile:
             timing_links = TimingLinksInFrameRelStructure(timing_link=timing_links)
 
         if service_journey_patterns is not None and len(service_journey_patterns) > 0:
-            service_journey_patterns = JourneyPatternsInFrameRelStructure(choice=service_journey_patterns)
+            service_journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
 
         if time_demand_types is not None and len(time_demand_types) > 0:
             time_demand_types = TimeDemandTypesInFrameRelStructure(time_demand_type=time_demand_types)
@@ -124,7 +124,7 @@ class DutchProfile:
             notices = NoticesInFrameRelStructure(notice=notices)
 
         if notice_assignments is not None and len(notice_assignments) > 0:
-            notice_assignments = NoticeAssignmentsInFrameRelStructure(sales_notice_assignment_or_notice_assignment=notice_assignments)
+            notice_assignments = NoticeAssignmentsInFrameRelStructure(notice_assignment=notice_assignments)
 
         if route_points is not None or \
             route_links is not None or \
@@ -194,7 +194,7 @@ class DutchProfile:
                                  day_type_assignments: List[DayTypeAssignment]=None
                                  ) -> List[ServiceCalendarFrame]:
         if day_types is not None:
-            day_types = DayTypesInFrameRelStructure(fare_day_type_or_organisation_day_type_or_day_type=day_types)
+            day_types = DayTypesInFrameRelStructure(day_type=day_types)
 
         if day_type_assignments is not None:
             day_type_assignments = DayTypeAssignmentsInFrameRelStructure(day_type_assignment=day_type_assignments)
@@ -257,7 +257,7 @@ class DutchProfile:
             ),
             versions=versions,
             codespaces=codespaces,
-            frames=FramesRelStructure(choice=resource_frames + service_frames +
+            frames=FramesRelStructure(common_frame=resource_frames + service_frames +
                                               timetable_frames + service_calendar_frames +
                                               vehicle_schedule_frames)
         )

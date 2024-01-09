@@ -24,9 +24,11 @@ date_range = response.json()
 
 departures = {'V_B': [], 'B_V': []}
 
+print(date_range)
 for operational_date in date_range:
     response = session.get(f"https://tickets.westerscheldeferry.nl/api/v1/1ca871fc-2bb9-4326-acb6-7244d0b5b90d/03035ad3-94d3-4665-9d59-3d814687cabc/pricetypes/{operational_date}/nl-NL")
     price_keys = response.json()
+    print(price_keys)
 
     directions = [x for x in price_keys if x['category']['id'] == 1 and x['externalPriceTypeId'] == 'V' and ' jr ' not in x['priceTypeTicketName']] + [x for x in price_keys if x['category']['id'] == 2 and x['externalPriceTypeId'] == 'V' and ' jr ' not in x['priceTypeTicketName']]
 

@@ -48,7 +48,7 @@ version = Version(id=getId(Version, codespace, str(1)),
                   version_type=VersionTypeEnumeration.BASELINE)
 
 stt = SimpleTimetable(codespace, version)
-service_journeys, availability_conditions = stt.simple_timetable('../wsf/scrape-output/wsf-20231206.csv')
+service_journeys, availability_conditions = stt.simple_timetable('../wsf/scrape-output/wsf-20240109.csv')
 
 version.start_date = availability_conditions[0].from_date
 version.end_date = availability_conditions[0].to_date
@@ -63,7 +63,7 @@ transport_administrative_zone = TransportAdministrativeZone(id=getId(TransportAd
                                                             version="any",
                                                             name=MultilingualString(value="Fast Ferry Vlissingen-Breskens"),
                                                             short_name=MultilingualString(value="FFVB"),
-                                                            vehicle_modes=[AllModesEnumeration.FERRY])
+                                                            vehicle_modes=[AllModesEnumeration.WATER])
 
 operator = Operator(id=getId(Operator, codespace, "WSF"), version=version.version,
                         company_number="61547336",
@@ -71,7 +71,7 @@ operator = Operator(id=getId(Operator, codespace, "WSF"), version=version.versio
                         short_name=MultilingualString(value="WSF"),
                         legal_name=MultilingualString(value="Westerschelde Ferry B.V."),
                         organisation_type=[OrganisationTypeEnumeration.OPERATOR],
-                        primary_mode=AllModesEnumeration.FERRY,
+                        primary_mode=AllModesEnumeration.WATER,
                         contact_details=ContactStructure(url="https://westerscheldeferry.nl/"),
                         customer_service_contact_details=ContactStructure(email="info@westerscheldeferry.nl", phone="+31850401800", url="https://westerscheldeferry.nl/"),
                         operator_activities=[OperatorActivitiesEnumeration.PASSENGER])
@@ -85,14 +85,10 @@ responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, sh
                                            ResponsibilityRoleAssignment(
                                                id=getId(ResponsibilityRoleAssignment, codespace, "ZLD"),
                                                version=version.version,
-                                               data_role_type=None,
-                                               stakeholder_role_type=None,
                                                type_of_responsibility_role_ref_or_responsibility_role_ref=TypeOfResponsibilityRoleRef(ref="BISON:TypeOfResponsibilityRole:financing", version="any"),
                                                responsible_organisation_ref=getRef(authority, OrganisationRefStructure)),
                                            ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "FFVB"),
                                                                         version=version.version,
-                                                                        data_role_type=None,
-                                                                        stakeholder_role_type=None,
                                                                         responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
                                        ]))
 
@@ -106,8 +102,8 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "PMPWA"), version=ve
                            description=MultilingualString(value="Prinses Maxima en Prins Willem Alexander"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "PMPWA"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=186)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "PMPWA"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=186, seating_capacity=186)]),
                            length=Decimal(value='37.71'), width=Decimal(value='17.31'), height=Decimal(value='4.20'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -167,7 +163,7 @@ route_links = [rl_vb, rl_bv]
 
 route_vb = Route(id=getId(Route, codespace, "V-B"), version=version.version,
                  distance=Decimal('5803'),
-                 flexible_line_ref_or_line_ref=getRef(line),
+                 line_ref=getRef(line),
                    direction_type=DirectionTypeEnumeration.INBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
                        PointOnRoute(id=getId(PointOnRoute, codespace, "V-B-V"), version=version.version, order=1, choice_1=getRef(rp_v), onward_route_link_ref=getRef(rl_vb, RouteLinkRefStructure)),
@@ -177,7 +173,7 @@ route_vb = Route(id=getId(Route, codespace, "V-B"), version=version.version,
 
 route_bv = Route(id=getId(Route, codespace, "B-V"), version=version.version,
                  distance=Decimal('5803'),
-                 flexible_line_ref_or_line_ref=getRef(line),
+                 line_ref=getRef(line),
                    direction_type=DirectionTypeEnumeration.OUTBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
                        PointOnRoute(id=getId(PointOnRoute, codespace, "B-V-B"), version=version.version, order=1, choice_1=getRef(rp_b), onward_route_link_ref=getRef(rl_bv, RouteLinkRefStructure)),
@@ -226,7 +222,7 @@ stop_areas=[sa_v, sa_b]
 ssp_v = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "V"), version=version.version,
                               name=MultilingualString(value="Vlissingen, Westerhavenweg"),
                               location=LocationStructure2(pos=Pos(value=[30576, 385411], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "V"), version=version.version, project_to_point_ref=getRef(rp_v, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "V"), version=version.version, project_to_point_ref=getRef(rp_v, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_v)]),
                               private_code=PrivateCode(value="76600001", type_value="UserStopCode"))
@@ -234,7 +230,7 @@ ssp_v = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "V"), version
 ssp_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "B"), version=version.version,
                               name=MultilingualString(value="Breskens, Veerhaven"),
                               location=LocationStructure2(pos=Pos(value=[27072, 380785], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "B"), version=version.version, project_to_point_ref=getRef(rp_b, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "B"), version=version.version, project_to_point_ref=getRef(rp_b, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_b)]),
                               private_code=PrivateCode(value="79600001", type_value="UserStopCode"))
@@ -269,13 +265,13 @@ sjp_dhtx = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "V-B
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "V-B-V"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_v),
+                                                                   scheduled_stop_point_ref=getRef(ssp_v),
                                                                    onward_timing_link_ref=getRef(tl_vb, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "V-B-B"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_b)),
+                                             scheduled_stop_point_ref=getRef(ssp_b)),
                                      ]
                                     )
                                  )
@@ -287,13 +283,13 @@ sjp_txdh = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "B-V
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "B-V-B"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_b),
+                                                                   scheduled_stop_point_ref=getRef(ssp_b),
                                                                    onward_timing_link_ref=getRef(tl_bv, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "B-V-V"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_v)),
+                                             scheduled_stop_point_ref=getRef(ssp_v)),
                                      ]
                                     )
                                  )

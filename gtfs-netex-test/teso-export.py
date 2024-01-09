@@ -55,7 +55,7 @@ transport_administrative_zone = TransportAdministrativeZone(id=getId(TransportAd
                                                             name=MultilingualString(value="TESO"),
                                                             short_name=MultilingualString(value="TESO"),
                                                             description=[MultilingualString(value="TESO")],
-                                                            vehicle_modes=[AllModesEnumeration.FERRY])
+                                                            vehicle_modes=[AllModesEnumeration.WATER])
 
 responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
                                        version=version.version,
@@ -63,8 +63,6 @@ responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, sh
                                        roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
                                            ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "TESO"),
                                                                         version=version.version,
-                                                                        data_role_type=None,
-                                                                        stakeholder_role_type=None,
                                                                         responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
                                        ]))
 
@@ -74,22 +72,22 @@ operator = Operator(id=getId(Operator, codespace, "TESO"), version=version.versi
                         short_name=MultilingualString(value="TESO"),
                         legal_name=MultilingualString(value="Koninklijke N.V. Texels Eigen Stoomboot Onderneming"),
                         organisation_type=[OrganisationTypeEnumeration.OPERATOR],
-                        primary_mode=AllModesEnumeration.FERRY,
+                        primary_mode=AllModesEnumeration.WATER,
                         contact_details=ContactStructure(url="https://teso.nl/"),
                         customer_service_contact_details=ContactStructure(email="info@teso.nl", phone="+31222369600", url="https://teso.nl/"),
                         operator_activities=[OperatorActivitiesEnumeration.PASSENGER])
 
 operational_context = OperationalContext(id=getId(OperationalContext, codespace, "WATER"), version=version.version,
                                        name=MultilingualString(value="WATER"), short_name=MultilingualString(value="WATER"),
-                                         vehicle_mode=AllVehicleModesOfTransportEnumeration.FERRY)
+                                         vehicle_mode=AllVehicleModesOfTransportEnumeration.WATER)
 
 vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), version=version.version,
                            name=MultilingualString(value="Texelstroom (2)"),
                            description=MultilingualString(value="Hybride CNG/diesel-elektrische Ro-Ro ferry"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.NATURAL_GAS,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=[
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "Texelstroom2"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=1750)),
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=1750, seating_capacity=1750)]),
                            length=Decimal(value='135'), width=Decimal(value='27.90'), height=Decimal(value='7.18'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -149,7 +147,7 @@ route_links = [rl_dhtx, rl_txdh]
 
 route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
                    distance=Decimal('4000'),
-                   flexible_line_ref_or_line_ref=getRef(line),
+                   line_ref=getRef(line),
                    direction_type=DirectionTypeEnumeration.INBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
                        PointOnRoute(id=getId(PointOnRoute, codespace, "DH-TX-DH"), version=version.version, order=1, choice_1=getRef(rp_dh), onward_route_link_ref=getRef(rl_dhtx, RouteLinkRefStructure)),
@@ -159,7 +157,7 @@ route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
 
 route_txdh = Route(id=getId(Route, codespace, "TX-DH"), version=version.version,
                    distance=Decimal('4000'),
-                   flexible_line_ref_or_line_ref=getRef(line),
+                   line_ref=getRef(line),
                    direction_type=DirectionTypeEnumeration.OUTBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
                        PointOnRoute(id=getId(PointOnRoute, codespace, "TX-DH-TX"), version=version.version, order=1, choice_1=getRef(rp_tx), onward_route_link_ref=getRef(rl_txdh, RouteLinkRefStructure)),
@@ -208,7 +206,7 @@ stop_areas=[sa_dh, sa_tx]
 ssp_dh_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-B"), version=version.version,
                               name=MultilingualString(value="Den Helder"),
                               location=LocationStructure2(pos=Pos(value=[114066, 553040], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "DH-B-1"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-B-1"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
                               for_alighting=False, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dh)]),
                               private_code=PrivateCode(value="34000001", type_value="UserStopCode"))
@@ -216,7 +214,7 @@ ssp_dh_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-B"), v
 ssp_dh_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-A"), version=version.version,
                               name=MultilingualString(value="Den Helder"),
                               location=LocationStructure2(pos=Pos(value=[114066, 553040], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "DH-A-3"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-A-3"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
                               for_alighting=True, for_boarding=False,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dh)]),
                               private_code=PrivateCode(value="34000003", type_value="UserStopCode"))
@@ -224,7 +222,7 @@ ssp_dh_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-A"), v
 ssp_tx_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-B"), version=version.version,
                               name=MultilingualString(value="Texel"),
                               location=LocationStructure2(pos=Pos(value=[114311, 557575], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "DH-B-2"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-B-2"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
                               for_alighting=False, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_tx)]),
                               private_code=PrivateCode(value="34130002", type_value="UserStopCode"))
@@ -232,7 +230,7 @@ ssp_tx_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-B"), v
 ssp_tx_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-A"), version=version.version,
                               name=MultilingualString(value="Texel"),
                               location=LocationStructure2(pos=Pos(value=[114311, 557575], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "DH-A-4"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-A-4"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
                               for_alighting=True, for_boarding=False,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_tx)]),
                               private_code=PrivateCode(value="34130004", type_value="UserStopCode"))
@@ -254,16 +252,16 @@ timing_links = [tl_dhtx, tl_txdh]
 
 stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "DH-B"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_dh_b),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:34000001", QuayRef, "any")),
+                                          taxi_rank_ref_or_stop_place_ref_or_stop_place=getFakeRef("NL:CHB:Quay:34000001", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "DH-A"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_tx_a),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:34000003", QuayRef, "any")),
+                                          taxi_rank_ref_or_stop_place_ref_or_stop_place=getFakeRef("NL:CHB:Quay:34000003", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TX-B"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_tx_b),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:34130002", QuayRef, "any")),
+                                          taxi_rank_ref_or_stop_place_ref_or_stop_place=getFakeRef("NL:CHB:Quay:34130002", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TX-A"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_dh_a),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:34130004", QuayRef, "any"))]
+                                          taxi_rank_ref_or_stop_place_ref_or_stop_place=getFakeRef("NL:CHB:Quay:34130004", QuayRef, "any"))]
 
 sjp_dhtx = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "DH-TX"), version=version.version,
                                  route_ref_or_route_view=getRef(route_dhtx),
@@ -272,13 +270,13 @@ sjp_dhtx = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "DH-
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "DH-TX-DH"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_dh_b),
+                                                                   scheduled_stop_point_ref=getRef(ssp_dh_b),
                                                                    onward_timing_link_ref=getRef(tl_dhtx, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "DH-TX-TX"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_tx_a)),
+                                             scheduled_stop_point_ref=getRef(ssp_tx_a)),
                                      ]
                                     )
                                  )
@@ -290,13 +288,13 @@ sjp_txdh = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "TX-
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "TX-DH-TX"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_tx_b),
+                                                                   scheduled_stop_point_ref=getRef(ssp_tx_b),
                                                                    onward_timing_link_ref=getRef(tl_txdh, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "TX-DH-DH"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_dh_a)),
+                                             scheduled_stop_point_ref=getRef(ssp_dh_a)),
                                      ]
                                     )
                                  )
@@ -318,7 +316,7 @@ service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_
                                               notices=None, notice_assignments=None)
 
 stt = SimpleTimetable(codespace, version)
-service_journeys, availability_conditions = stt.simple_timetable('../teso/scrape-output/teso-20231129.csv')
+service_journeys, availability_conditions = stt.simple_timetable('/tmp/teso-20240105.csv')
 
 sj: ServiceJourney
 for sj in service_journeys:
