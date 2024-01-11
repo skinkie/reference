@@ -10,7 +10,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime
 
 from vdv453 import StatusAnfrageType, StatusAntwortType, DatenBereitAnfrageType, DatenBereitAntwortType, AboAnfrageType, \
-    AboAntwortType
+    AboAntwortType, AboAustype, DatenAbrufenAnfrageType, DatenAbrufenAntwortType
 
 BASE_URL = "http://127.0.0.1:8000/test"
 
@@ -41,8 +41,17 @@ async def get_daten_bereit(session):
         daten_bereit_antwort_type = parser.from_bytes(antwort, DatenBereitAntwortType)
         print(daten_bereit_antwort_type)
 
+async def get_daten_afrufen(session):
+    daten_afrufen_anfrage_type = DatenAbrufenAnfrageType(sender="test", zst=XmlDateTime.now())
+    anfrage = serializer.render(daten_afrufen_anfrage_type)
+    async with session.post(f"{BASE_URL}/aus/datenabrufen.xml", data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
+        print(resp.status)
+        antwort = await resp.read()
+        daten_abrufen_antwort_type = parser.from_bytes(antwort, DatenAbrufenAntwortType)
+        print(daten_abrufen_antwort_type)
+
 async def get_abo_anfrage(session):
-    abo_anfrage_type = AboAnfrageType(sender="test", zst=XmlDateTime.now(), choice=[True])
+    abo_anfrage_type = AboAnfrageType(sender="test", zst=XmlDateTime.now(), choice=[AboAustype(abo_id=1, verfall_zst=XmlDateTime.now(), hysterese=30, vorschauzeit=600)])
     anfrage = serializer.render(abo_anfrage_type)
     async with session.post(f"{BASE_URL}/aus/aboverwalten.xml", data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
         print(resp.status)
@@ -54,6 +63,7 @@ async def main():
     async with aiohttp.ClientSession() as session:
         # await get_status(session)
         # await get_daten_bereit(session)
-        await get_abo_anfrage(session)
+        # await get_abo_anfrage(session)
+        await get_daten_afrufen(session)
 
 asyncio.run(main())
