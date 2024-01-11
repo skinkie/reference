@@ -12,7 +12,7 @@ from xsdata.models.datatype import XmlDateTime
 from vdv453 import StatusAnfrageType, StatusAntwortType, DatenBereitAnfrageType, DatenBereitAntwortType, AboAnfrageType, \
     AboAntwortType, AboAustype, DatenAbrufenAnfrageType, DatenAbrufenAntwortType
 
-BASE_URL = "http://127.0.0.1:8000/test"
+BASE_URL = "http://127.0.0.1:8081/test"
 
 context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
@@ -59,11 +59,22 @@ async def get_abo_anfrage(session):
         abo_antwort_type = parser.from_bytes(antwort, AboAntwortType)
         print(abo_antwort_type)
 
+async def create_sender(session):
+    async with session.post(f"{BASE_URL}/anfrage", data="http://127.0.0.1:8082") as resp:
+        print(resp.status)
+        antwort = await resp.read()
+        status_antwort_type = parser.from_bytes(antwort, StatusAntwortType)
+        print(status_antwort_type)
+
+
 async def main():
     async with aiohttp.ClientSession() as session:
         # await get_status(session)
+        # await create_sender(session)
+        await get_abo_anfrage(session)
+
         # await get_daten_bereit(session)
-        # await get_abo_anfrage(session)
-        await get_daten_afrufen(session)
+        # await get_daten_afrufen(session)
+
 
 asyncio.run(main())
