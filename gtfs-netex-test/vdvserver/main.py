@@ -51,10 +51,9 @@ async def checkOrCreateTables():
 
 async def dropSender(sender: str):
     cursor = db.cursor()
-    cursor.execute("""DELETE FROM linien_filter WHERE sender = ?;
-                            DELETE FROM umlauf_filter WHERE sender = ?;
-                            DELETE FROM abo WHERE sender = ?;
-                            DELETE FROM sender WHERE sender = ?;""", (sender, sender, sender, sender,))
+    cursor.execute("""DELETE FROM linien_filter WHERE sender = ?;""", (sender,))
+    cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ?;""", (sender,))
+    cursor.execute("""DELETE FROM abo WHERE sender = ?;""", (sender,))
 
 async def checkSender(sender):
     cursor = db.cursor()
@@ -167,15 +166,15 @@ async def aus_datenabrufen(request):
 
 async def abo_loeschen_alle(sender: str):
     cursor = db.cursor()
-    cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ?;
-                            DELETE FROM linien_filter WHERE sender = ?;
-                            DELETE FROM abo WHERE sender = ?;""", (sender, sender, sender,))
+    cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ?;""", (sender,))
+    cursor.execute("""DELETE FROM linien_filter WHERE sender = ?;""", (sender,))
+    cursor.execute("""DELETE FROM abo WHERE sender = ?;""", (sender,))
 
 async def abo_loeschen(sender: str, abo_id: int):
     cursor = db.cursor()
-    cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ? AND abo_id = ?;
-                            DELETE FROM linien_filter WHERE sender = ? AND abo_id = ?;
-                            DELETE FROM abo WHERE sender = ? AND abo_id = ?;""", (sender, abo_id, sender, abo_id, sender, abo_id))
+    cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ? AND abo_id = ?;""", (sender, abo_id,))
+    cursor.execute("""DELETE FROM linien_filter WHERE sender = ? AND abo_id = ?;""", (sender, abo_id,))
+    cursor.execute("""DELETE FROM abo WHERE sender = ? AND abo_id = ?;""", (sender, abo_id,))
 
 async def abo_aus(sender: str, abo_aus_type: AboAustype):
     umlauf_filter = [(sender, abo_aus_type.abo_id, umlauf_id,) for umlauf_id in abo_aus_type.umlauf_id]
