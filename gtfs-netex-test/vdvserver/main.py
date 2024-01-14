@@ -2,7 +2,7 @@ import asyncio
 import logging
 from typing import List, Tuple
 import time
-import aioduckdb
+import duckdb
 import aiohttp
 from aiohttp import web
 from xsdata.formats.dataclass.context import XmlContext
@@ -39,63 +39,52 @@ serializer_db = XmlSerializer(serializer_config)
 DUCKDB_DATABASE = "vdv453.duckdb"
 SENDER_ID = "NDOV"
 
+db = duckdb.connect(DUCKDB_DATABASE)
+
 async def checkOrCreateTables():
-    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-        await db.execute("CREATE TABLE IF NOT EXISTS sender (sender TEXT, epoch INTEGER, uri TEXT, PRIMARY KEY (sender));")
-        await db.execute("CREATE TABLE IF NOT EXISTS abo (sender TEXT, abo_id INTEGER, linien_filter BOOLEAN, umlauf_filter BOOLEAN, hysterese INTEGER, vorschauzeit INTEGER, verfall_zst INTEGER, PRIMARY KEY (sender, abo_id), FOREIGN KEY(sender) REFERENCES sender (sender));")
-        await db.execute("CREATE TABLE IF NOT EXISTS linien_filter (sender TEXT, abo_id INTEGER, linien_id TEXT, richtungs_id TEXT, PRIMARY KEY (sender, abo_id, linien_id), FOREIGN KEY(sender, abo_id) REFERENCES abo (sender, abo_id));")
-        await db.execute("CREATE TABLE IF NOT EXISTS umlauf_filter (sender TEXT, abo_id INTEGER, umlauf_id TEXT, PRIMARY KEY (sender, abo_id, umlauf_id), FOREIGN KEY(sender, abo_id) REFERENCES abo (sender, abo_id));")
-        await db.execute("CREATE TABLE IF NOT EXISTS queue (journeyref TEXT, linien_id TEXT, richtungs_id TEXT, umlauf_id TEXT, expiry INTEGER, epoch INTEGER, message TEXT, PRIMARY KEY (journeyref));")
+    cursor = db.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS sender (sender TEXT, epoch INTEGER, uri TEXT, PRIMARY KEY (sender));
+                        CREATE TABLE IF NOT EXISTS abo (sender TEXT, abo_id INTEGER, linien_filter BOOLEAN, umlauf_filter BOOLEAN, hysterese INTEGER, vorschauzeit INTEGER, verfall_zst INTEGER, PRIMARY KEY (sender, abo_id), FOREIGN KEY(sender) REFERENCES sender (sender));
+                        CREATE TABLE IF NOT EXISTS linien_filter (sender TEXT, abo_id INTEGER, linien_id TEXT, richtungs_id TEXT, PRIMARY KEY (sender, abo_id, linien_id), FOREIGN KEY(sender, abo_id) REFERENCES abo (sender, abo_id));
+                        CREATE TABLE IF NOT EXISTS umlauf_filter (sender TEXT, abo_id INTEGER, umlauf_id TEXT, PRIMARY KEY (sender, abo_id, umlauf_id), FOREIGN KEY(sender, abo_id) REFERENCES abo (sender, abo_id));
+                        CREATE TABLE IF NOT EXISTS queue (journeyref TEXT, linien_id TEXT, richtungs_id TEXT, umlauf_id TEXT, expiry INTEGER, epoch INTEGER, message TEXT, PRIMARY KEY (journeyref));""")
 
 async def dropSender(sender: str):
-    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-        await db.execute("DELETE FROM linien_filter WHERE sender = ?;")
-        await db.execute("DELETE FROM umlauf_filter WHERE sender = ?;")
-        await db.execute("DELETE FROM abo WHERE sender = ?;")
-        await db.execute("DELETE FROM sender WHERE sender = ?;")
+    cursor = db.cursor()
+    cursor.execute("""DELETE FROM linien_filter WHERE sender = ?;
+                            DELETE FROM umlauf_filter WHERE sender = ?;
+                            DELETE FROM abo WHERE sender = ?;
+                            DELETE FROM sender WHERE sender = ?;""", (sender, sender, sender, sender,))
 
-
-"""
 async def checkSender(sender):
-    db = await aioduckdb.connect(DUCKDB_DATABASE)
-    cursor = await db.execute("SELECT uri FROM sender WHERE sender = ? LIMIT 1;", (sender,))
-    results = await cursor.fetchall()
+    cursor = db.cursor()
+    cursor.execute("SELECT uri FROM sender WHERE sender = ? LIMIT 1;", (sender,))
+    results = cursor.fetchall()
     if len(results) >= 1:
         return results[0]
 
     return None
-"""
-
-async def checkSender(sender):
-    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-        async with db.execute("SELECT uri FROM sender WHERE sender = ? LIMIT 1;", (sender,)) as cursor:
-            results = await cursor.fetchall()
-            if len(results) >= 1:
-                return results[0]
-
-    return None
-
 
 async def checkDataAvailable(epoch):
-    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-        async with db.execute("SELECT COUNT(*) FROM messages WHERE epoch < ?;", (epoch,)) as cursor:
-            results = cursor.fetchall()
-            if results[0][0] > 0:
-                return True
+    cursor = db.cursor()
+    cursor.execute("SELECT COUNT(*) FROM messages WHERE epoch < ?;", (epoch,))
+    results = cursor.fetchall()
+    if results[0][0] > 0:
+        return True
 
 # Should be sent with every incoming update matching the subscription.
-async def sendDatenBereit():
-    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-        async with db.execute("SELECT sender, uri FROM subscription;") as cursor:
-            async with aiohttp.ClientSession() as session:
-                async for result in cursor:
-                    sender, epoch, uri = result
-                    daten_bereit_anfrage_type = DatenBereitAnfrageType(sender=sender, zst=XmlDateTime.now())
-                    anfrage = serializer.render(daten_bereit_anfrage_type)
-                    async with session.post(f"{uri}/aus/datenbereit.xml", data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
-                        antwort = await resp.read()
-                        daten_bereit_antwort_type = parser.from_bytes(antwort, DatenBereitAntwortType)
-                        print(daten_bereit_antwort_type)
+async def sendDatenBereit(sender):
+    cursor = db.cursor()
+    cursor.execute("SELECT sender, uri FROM abo WHERE sender = ?;", (sender,))
+    async with aiohttp.ClientSession() as session:
+        for result in cursor.fetchone():
+            sender, epoch, uri = result
+            daten_bereit_anfrage_type = DatenBereitAnfrageType(sender=sender, zst=XmlDateTime.now())
+            anfrage = serializer.render(daten_bereit_anfrage_type)
+            async with session.post(f"{uri}/aus/datenbereit.xml", data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
+                antwort = await resp.read()
+                daten_bereit_antwort_type = parser.from_bytes(antwort, DatenBereitAntwortType)
+                print(daten_bereit_antwort_type)
 
 
 def unknown_sender(request) -> BestaetigungType:
@@ -110,8 +99,8 @@ async def sender_create(request):
     try:
         result = urlparse(uri)
         if request.remote == socket.gethostbyname(result.netloc.decode('utf-8').split(':')[0]):
-            async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-                await db.execute("INSERT OR REPLACE INTO sender VALUES (?, 0, ?);", (request.match_info['sender'], uri))
+            cursor = db.cursor()
+            cursor.execute("INSERT OR REPLACE INTO sender VALUES (?, 0, ?);", (request.match_info['sender'], uri))
 
             antwort = StatusAntwortType(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.OK), daten_bereit=True,
                                         start_dienst_zst=XmlDateTime.now().replace(hour=4, minute=0, second=0))
@@ -144,61 +133,21 @@ async def aus_status(request):
     return web.Response(text=serializer.render(antwort), content_type="application/xml")
 
 async def aus_nachrichten(sender: str) -> List[AusnachrichtType]:
-    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-        """
-        epoch: int = 0
-        async with db.execute("SELECT epoch FROM sender WHERE sender = ? LIMIT 1;", (sender,)) as cursor:
-            results = await cursor.fetchall()
-            if len(results) >= 1:
-                epoch = results[0]
-
-        abos = {}
-
-        async with db.execute("SELECT abo_id, hysterese, vorschauzeit FROM abo WHERE sender = ?;", (sender,)) as cursor:
-            async for result in cursor:
-                abo_id, line_filter, umlauf_filter, hysterese, vorschauzeit = result
-                abos[abo_id] = {'abo_id': abo_id, 'hysterese': hysterese, 'vorschauzeit': vorschauzeit, 'linien_filter': [], 'umlauf_filter': []}
-
-        async with db.execute("SELECT abo_id, linien_id, richtungs_id FROM linien_filter WHERE sender = ?;", (sender,)) as cursor:
-            async for result in cursor:
-                abo_id, linien_id, richtungs_id = result
-                abos[abo_id]['linien_filter'].append({'linien_id': linien_id, 'richtungs_id': richtungs_id})
-
-        async with db.execute("SELECT abo_id, umlauf_id FROM umlauf_filter WHERE sender = ?;", (sender,)) as cursor:
-            async for result in cursor:
-                abo_id, umlauf_id = result
-                abos[abo_id]['umlauf_filter'].append({'umlauf_id': umlauf_id})
-
-        unfiltered = len([abo for abo in abos.values() if len(abo['linien_filter']) == 0 and len(abo['umlauf_filter']) == 0]) > 0
-        """
-
-        """
-        if unfiltered:
-            async with db.execute("SELECT message FROM queue WHERE epoch > ?;", (epoch,)) as cursor:
-                async for result in cursor:
-                    pass
+    epoch = int(time.time())
+    results: List[AusnachrichtType] = []
+    cursor = db.cursor()
+    cursor.execute("""select abo.abo_id, message from sender JOIN abo USING (sender) LEFT JOIN linien_filter USING (abo_id) LEFT JOIN umlauf_filter USING (abo_id), queue where sender = ? and sender.epoch < queue.epoch and (linien_filter = false OR linien_filter.linien_id = queue.linien_id and (linien_filter.richtungs_id IS NULL OR linien_filter.richtungs_id = queue.richtungs_id)) and (umlauf_filter = false OR umlauf_filter.umlauf_id = queue.umlauf_id) order by abo_id;""", (sender,))
+    for result in cursor.fetchall():
+        abo_id, message = result
+        ist_fahrt_type: IstFahrtType = IstFahrtType(fahrt_ref=FahrtRefType(fahrt_id=FahrtIdtype(fahrt_bezeichner="1", betriebstag=XmlDate.today())), linien_id="1", richtungs_id="1", komplettfahrt=True) # parser.from_bytes(message, IstFahrtType)
+        if len(results) == 0 or results[-1].abo_id != abo_id:
+            results.append(AusnachrichtType(abo_id=abo_id, choice=[ist_fahrt_type]))
         else:
-            SELECT abo_id, message FROM sender, queue, abo, linien_filter WHERE
-            sender.sender = ? AND sender.epoch > queue.epoch AND
-            sender.sender = abo.sender AND
-            (line_filter.linien_id IS NULL OR line_filter.linien_id = queue.linien_id) AND
-            (line_filter.richtungs_id IS NULL OR line_filter.richtungs_id = queue.richtungs_id)
-        """
+            results[-1].choice.append(ist_fahrt_type)
 
-        epoch = int(time.time())
-        results: List[AusnachrichtType] = []
-        async with db.execute("""select abo.abo_id, message from sender JOIN abo USING (sender) LEFT JOIN linien_filter USING (abo_id) LEFT JOIN umlauf_filter USING (abo_id), queue where sender = ? and sender.epoch < queue.epoch and (linien_filter = false OR linien_filter.linien_id = queue.linien_id and (linien_filter.richtungs_id IS NULL OR linien_filter.richtungs_id = queue.richtungs_id)) and (umlauf_filter = false OR umlauf_filter.umlauf_id = queue.umlauf_id) order by abo_id;""", (sender,)) as cursor:
-            async for result in cursor:
-                abo_id, message = result
-                ist_fahrt_type: IstFahrtType = IstFahrtType(fahrt_ref=FahrtRefType(fahrt_id=FahrtIdtype(fahrt_bezeichner="1", betriebstag=XmlDate.today())), linien_id="1", richtungs_id="1", komplettfahrt=True) # parser.from_bytes(message, IstFahrtType)
-                if len(results) == 0 or results[-1].abo_id != abo_id:
-                    results.append(AusnachrichtType(abo_id=abo_id, choice=[ist_fahrt_type]))
-                else:
-                    results[-1].choice.append(ist_fahrt_type)
+    cursor.execute("""update sender set epoch = ? where sender = ?""", (epoch, sender,))
 
-        await db.execute("""update sender set epoch = ? where sender = ?""", (epoch, sender,))
-
-        return results
+    return results
 
 @routes.post('/{sender}/aus/datenabrufen.xml')
 async def aus_datenabrufen(request):
@@ -217,28 +166,28 @@ async def aus_datenabrufen(request):
     return web.Response(text=serializer.render(antwort), content_type="application/xml")
 
 async def abo_loeschen_alle(sender: str):
-    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-        await db.execute("DELETE FROM umlauf_filter WHERE sender = ?", (sender,))
-        await db.execute("DELETE FROM linien_filter WHERE sender = ?", (sender,))
-        await db.execute("DELETE FROM abo WHERE sender = ?;", (sender,))
+    cursor = db.cursor()
+    cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ?;
+                            DELETE FROM linien_filter WHERE sender = ?;
+                            DELETE FROM abo WHERE sender = ?;""", (sender, sender, sender,))
 
 async def abo_loeschen(sender: str, abo_id: int):
-    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-        await db.execute("DELETE FROM umlauf_filter WHERE sender = ? AND abo_id = ?", (sender, abo_id,))
-        await db.execute("DELETE FROM linien_filter WHERE sender = ? AND abo_id = ?", (sender, abo_id,))
-        await db.execute("DELETE FROM abo WHERE sender = ? AND abo_id = ?;", (sender, abo_id,))
+    cursor = db.cursor()
+    cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ? AND abo_id = ?;
+                            DELETE FROM linien_filter WHERE sender = ? AND abo_id = ?;
+                            DELETE FROM abo WHERE sender = ? AND abo_id = ?;""", (sender, abo_id, sender, abo_id, sender, abo_id))
 
 async def abo_aus(sender: str, abo_aus_type: AboAustype):
     umlauf_filter = [(sender, abo_aus_type.abo_id, umlauf_id,) for umlauf_id in abo_aus_type.umlauf_id]
     linien_filter = [(sender, abo_aus_type.abo_id, linien_filter_type.linien_id, linien_filter_type.richtungs_id) for
                      linien_filter_type in abo_aus_type.linien_filter]
 
-    await abo_loeschen(sender, abo_aus_type.abo_id)
-    async with (aioduckdb.connect(DUCKDB_DATABASE) as db):
-        await db.executemany("INSERT INTO umlauf_filter (sender, abo_id, umlauf_id) VALUES (?, ?, ?);", umlauf_filter)
-        await db.executemany("INSERT INTO linien_filter (sender, abo_id, linien_id, richtungs_id) VALUES (?, ?, ?, ?);", linien_filter)
-        await db.execute("INSERT INTO abo (sender, abo_id, linien_filter, umlauf_filter, hysterese, vorschauzeit, verfall_zst) VALUES (?, ?, ?, ?, ?, ?, ?);",
+    cursor = db.cursor()
+    cursor.executemany("INSERT INTO umlauf_filter (sender, abo_id, umlauf_id) VALUES (?, ?, ?);", umlauf_filter)
+    cursor.executemany("INSERT INTO linien_filter (sender, abo_id, linien_id, richtungs_id) VALUES (?, ?, ?, ?);", linien_filter)
+    cursor.execute("INSERT INTO abo (sender, abo_id, linien_filter, umlauf_filter, hysterese, vorschauzeit, verfall_zst) VALUES (?, ?, ?, ?, ?, ?, ?);",
                              (sender, abo_aus_type.abo_id, len(linien_filter) > 0, len(umlauf_filter) > 0, abo_aus_type.hysterese, abo_aus_type.vorschauzeit, int(abo_aus_type.verfall_zst.to_datetime().timestamp())))
+    await abo_loeschen(sender, abo_aus_type.abo_id)
 
 @routes.post('/{sender}/aus/aboverwalten.xml')
 async def aus_aboverwalten(request):
@@ -293,15 +242,20 @@ async def aus_status(request):
 
 
 import aiomqtt
+from gzip import GzipFile
+from io import BytesIO
 
 async def mqtt_subscriber():
+    cursor = db.cursor()
+    # i = 0
     async with aiomqtt.Client("127.0.0.1", username="stat", password="stat") as client:
         async with client.messages() as messages:
             await client.subscribe("/VDV454/#")
             async for message in messages:
                 daten_abrufen_antwort = None
                 try:
-                    daten_abrufen_antwort = parser.from_bytes(message.payload, DatenAbrufenAntwortType)
+                    content = GzipFile('','r',0,BytesIO(message.payload)).read()
+                    daten_abrufen_antwort = parser.from_bytes(content, DatenAbrufenAntwortType)
                 except:
                     pass
 
@@ -313,39 +267,48 @@ async def mqtt_subscriber():
                                 if isinstance(istfahrt, IstFahrtType):
                                     l.append((istfahrt.fahrt_ref.fahrt_id.fahrt_bezeichner, istfahrt.linien_id, istfahrt.richtungs_id, istfahrt.umlauf_id, istfahrt.fahrt_ref.fahrt_start_ende[0].endzeit.to_datetime().timestamp(), int(time.time()), serializer_db.render(istfahrt),))
 
-                    async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-                        await db.executemany("""INSERT OR REPLACE INTO queue VALUES (?, ?, ?, ?, ?, ?, ?);""", l)
+                    if len(l) > 0:
+                        cursor.executemany("""INSERT OR REPLACE INTO queue VALUES (?, ?, ?, ?, ?, ?, ?);""", l)
+                        # cursor.close()
+
+                    # i += 1
+                    # if i == 100000:
+                    #    raise Exception('Stop this thing')
 
                 # print(message.payload)
 
 async def queue_garbage_collector():
+    cursor = db.cursor()
     while True:
-        async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-            await db.execute("""DELETE FROM queue WHERE (expiry + 600) > epoch(now()::TIMESTAMP)::INTEGER;""")
+
+        cursor.execute("""BEGIN TRANSACTION; DELETE FROM queue WHERE (expiry + 600) > epoch(now()::TIMESTAMP)::INTEGER; COMMIT;""")
         await asyncio.sleep(600)
+
+    cursor.close()
 
 import logging
 logging.basicConfig(filename='vdv453.log', level=logging.INFO)
 
 async def queue_daten_bereit():
+    cursor = db.cursor()
     async with aiohttp.ClientSession() as session:
         while True:
-            async with aioduckdb.connect(DUCKDB_DATABASE) as db:
-                async with db.execute("""select sender.sender, sender.uri from sender JOIN abo USING (sender) LEFT JOIN linien_filter USING (abo_id) LEFT JOIN umlauf_filter USING (abo_id), queue where sender.epoch < queue.epoch and (linien_filter = false OR linien_filter.linien_id = queue.linien_id and (linien_filter.richtungs_id IS NULL OR linien_filter.richtungs_id = queue.richtungs_id)) and (umlauf_filter = false OR umlauf_filter.umlauf_id = queue.umlauf_id) group by sender.sender, sender.uri having count(*) > 0;""") as cursor:
-                    async for sender_uri in cursor:
-                        daten_bereit_anfrage_type = DatenBereitAnfrageType(sender=SENDER_ID, zst=XmlDateTime.now())
-                        anfrage = serializer.render(daten_bereit_anfrage_type)
-                        try:
-                            logging.info(f"Notify {sender_uri[0]} via {sender_uri[1]}.")
-                            async with session.post(f"{sender_uri[1]}/aus/datenbereit.xml", data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
-                                print(resp.status)
-                                antwort = await resp.read()
-                                daten_bereit_antwort_type = parser.from_bytes(antwort, DatenBereitAntwortType)
-                                print(daten_bereit_antwort_type)
-                        except:
-                            pass
+            cursor.execute("""select sender.sender, sender.uri from sender JOIN abo USING (sender) LEFT JOIN linien_filter USING (abo_id) LEFT JOIN umlauf_filter USING (abo_id), queue where sender.epoch < queue.epoch and (linien_filter = false OR linien_filter.linien_id = queue.linien_id and (linien_filter.richtungs_id IS NULL OR linien_filter.richtungs_id = queue.richtungs_id)) and (umlauf_filter = false OR umlauf_filter.umlauf_id = queue.umlauf_id) group by sender.sender, sender.uri having count(*) > 0;""")
+            for sender_uri in cursor.fetchall():
+                daten_bereit_anfrage_type = DatenBereitAnfrageType(sender=SENDER_ID, zst=XmlDateTime.now())
+                anfrage = serializer.render(daten_bereit_anfrage_type)
+                try:
+                    logging.info(f"Notify {sender_uri[0]} via {sender_uri[1]}.")
+                    async with session.post(f"{sender_uri[1]}/aus/datenbereit.xml", data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
+                        print(resp.status)
+                        antwort = await resp.read()
+                        daten_bereit_antwort_type = parser.from_bytes(antwort, DatenBereitAntwortType)
+                        print(daten_bereit_antwort_type)
+                except:
+                    pass
 
             await asyncio.sleep(60)
+    cursor.close()
 
 app = web.Application()
 app.add_routes(routes)
