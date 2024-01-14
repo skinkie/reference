@@ -22,7 +22,8 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     PointsInJourneyPatternRelStructure, StopPointInJourneyPattern, JourneyRunTimesRelStructure, JourneyRunTime, \
     TimingLinkRefStructure, PointRefStructure, RoutePointRefStructure, TimingPointRefStructure, LineString, PosList, \
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
-    ContactStructure, Authority, TypeOfResponsibilityRoleRef, AuthorityRef, OrganisationRefStructure, ServiceJourney
+    ContactStructure, Authority, TypeOfResponsibilityRoleRef, AuthorityRef, OrganisationRefStructure, ServiceJourney, \
+    AlternativeText
 import datetime
 
 from refs import getId, getRef, getFakeRef
@@ -95,7 +96,9 @@ responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, sh
 
 operational_context = OperationalContext(id=getId(OperationalContext, codespace, "WATER"), version=version.version,
                                        name=MultilingualString(value="WATER"), short_name=MultilingualString(value="WATER"),
-                                         vehicle_mode=AllVehicleModesOfTransportEnumeration.FERRY)
+                                         vehicle_mode=AllVehicleModesOfTransportEnumeration.WATER)
+
+AlternativeText()
 
 vehicle_type = VehicleType(id=getId(VehicleType, codespace, "PMPWA"), version=version.version,
                            name=MultilingualString(value="Prinses Maxima en Prins Willem Alexander"),

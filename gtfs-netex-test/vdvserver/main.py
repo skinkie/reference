@@ -139,13 +139,13 @@ async def aus_nachrichten(sender: str) -> List[AusnachrichtType]:
     cursor.execute("""select abo.abo_id, message from sender JOIN abo USING (sender) LEFT JOIN linien_filter USING (abo_id) LEFT JOIN umlauf_filter USING (abo_id), queue where sender = ? and sender.epoch < queue.epoch and (linien_filter = false OR linien_filter.linien_id = queue.linien_id and (linien_filter.richtungs_id IS NULL OR linien_filter.richtungs_id = queue.richtungs_id)) and (umlauf_filter = false OR umlauf_filter.umlauf_id = queue.umlauf_id) order by abo_id;""", (sender,))
     for result in cursor.fetchall():
         abo_id, message = result
-        ist_fahrt_type: IstFahrtType = IstFahrtType(fahrt_ref=FahrtRefType(fahrt_id=FahrtIdtype(fahrt_bezeichner="1", betriebstag=XmlDate.today())), linien_id="1", richtungs_id="1", komplettfahrt=True) # parser.from_bytes(message, IstFahrtType)
+        ist_fahrt_type = parser.from_bytes(message, IstFahrtType)
         if len(results) == 0 or results[-1].abo_id != abo_id:
             results.append(AusnachrichtType(abo_id=abo_id, choice=[ist_fahrt_type]))
         else:
             results[-1].choice.append(ist_fahrt_type)
 
-    cursor.execute("""update sender set epoch = ? where sender = ?""", (epoch, sender,))
+    cursor.execute("""UPDATE sender SET epoch = ? WHERE sender = ?""", (epoch, sender,))
 
     return results
 
