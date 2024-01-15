@@ -8,7 +8,8 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime
 
 from storage import check_daten_bereit
-from vdv453 import StatusAnfrageType, StatusAntwortType, StatusType, ErgebnisType, BestaetigungType
+from vdv453 import StatusType, ErgebnisType, BestaetigungType, StatusAnfrage, \
+    StatusAntwort
 
 context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
@@ -25,18 +26,19 @@ def unknown_sender(request) -> BestaetigungType:
 
 async def aus_status(request):
     anfrage = await request.read()
-    status_anfrage_type = parser.from_bytes(anfrage, StatusAnfrageType)
-    if status_anfrage_type.sender == request.match_info['sender']:
-        daten_bereit = await check_daten_bereit(status_anfrage_type.sender)
+    status_anfrage = parser.from_bytes(anfrage, StatusAnfrage)
+    if status_anfrage.sender == request.match_info['sender']:
+        daten_bereit = await check_daten_bereit(status_anfrage.sender)
         if daten_bereit is not None:
-            antwort = StatusAntwortType(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.OK), daten_bereit=daten_bereit,
+            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.OK), daten_bereit=daten_bereit,
                                         start_dienst_zst=XmlDateTime.now().replace(hour=4, minute=0, second=0))
 
         else:
-            antwort = StatusAntwortType(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
+            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
                                         start_dienst_zst=XmlDateTime.now().replace(hour=4, minute=0, second=0))
     else:
-        antwort = StatusAntwortType(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
+        antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
                                     start_dienst_zst=XmlDateTime.now().replace(hour=4, minute=0, second=0))
 
+    print(antwort)
     return web.Response(text=serializer.render(antwort), content_type="application/xml")
