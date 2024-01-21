@@ -57,7 +57,7 @@ async def aus_datenabrufen(sender):
         return
 
     async with aiohttp.ClientSession() as session:
-        daten_afrufen_anfrage_type = DatenAbrufenAnfrageType(sender=SENDER_ID, zst=XmlDateTime.now(), datensatz_alle=False)
+        daten_afrufen_anfrage_type = DatenAbrufenAnfrageType(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0), datensatz_alle=False)
         anfrage = serializer.render(daten_afrufen_anfrage_type)
         async with session.post(f"{url}/{SENDER_ID}/aus/datenabrufen.xml", data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
             print(resp.status)

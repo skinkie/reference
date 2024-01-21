@@ -19,8 +19,8 @@ from xml_imports import parser, serializer
 async def abo_anfrage(BASE_URL, TIMEOUT=3600):
     async with aiohttp.ClientSession() as session:
         while True:
-            verfall_zst = datetime.datetime.now() + datetime.timedelta(seconds=TIMEOUT)
-            abo_anfrage = AboAnfrage(sender=SENDER_ID, zst=XmlDateTime.now(), choice=[AboAustype(abo_id=1, verfall_zst=XmlDateTime.from_datetime(verfall_zst), hysterese=10, vorschauzeit=3600)])
+            verfall_zst = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=TIMEOUT)
+            abo_anfrage = AboAnfrage(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0), choice=[AboAustype(abo_id=1, verfall_zst=XmlDateTime.from_datetime(verfall_zst).replace(fractional_second=0, offset=60), hysterese=10, vorschauzeit=3600)])
             anfrage = serializer.render(abo_anfrage)
             url = f"{BASE_URL}/aus/aboverwalten.xml"
             print(url)
@@ -45,7 +45,7 @@ async def aus_datenbereit(request):
     if daten_bereit_anfrage.sender == request.match_info['sender']:
         uri = await check_sender(daten_bereit_anfrage.sender)
         if uri:
-            antwort = DatenBereitAntwort(bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.OK, zst=XmlDateTime.now()))
+            antwort = DatenBereitAntwort(bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
         else:
             antwort = DatenBereitAntwort(bestaetigung=unknown_sender(request))
     else:

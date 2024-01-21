@@ -21,7 +21,7 @@ serializer_config.xml_declaration = True
 serializer = XmlSerializer(serializer_config)
 
 def unknown_sender(request) -> BestaetigungType:
-    return BestaetigungType(fehlernummer="1", ergebnis=ErgebnisType.NOTOK, zst=XmlDateTime.now(),
+    return BestaetigungType(fehlernummer="1", ergebnis=ErgebnisType.NOTOK, zst=XmlDateTime.utcnow().replace(fractional_second=0),
                      fehlertext=f"I'm sorry, your sender {request.match_info['sender']} is not (yet) configured.")
 
 async def aus_status(request):
@@ -30,15 +30,17 @@ async def aus_status(request):
     if status_anfrage.sender == request.match_info['sender']:
         daten_bereit = await check_daten_bereit(status_anfrage.sender)
         if daten_bereit is not None:
-            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.OK), daten_bereit=daten_bereit,
-                                        start_dienst_zst=XmlDateTime.now().replace(hour=4, minute=0, second=0))
+            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), daten_bereit=daten_bereit,
+                                        start_dienst_zst=XmlDateTime.utcnow().replace(fractional_second=0).replace(hour=4, minute=0, second=0))
 
         else:
-            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
-                                        start_dienst_zst=XmlDateTime.now().replace(hour=4, minute=0, second=0))
+            print("Sender not OK", status_anfrage.sender, request.match_info['sender'])
+            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), daten_bereit=False,
+                                        start_dienst_zst=XmlDateTime.utcnow().replace(fractional_second=0).replace(hour=4, minute=0, second=0))
     else:
-        antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.now(), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
-                                    start_dienst_zst=XmlDateTime.now().replace(hour=4, minute=0, second=0))
+        print("Can't parse")
+        antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
+                                    start_dienst_zst=XmlDateTime.utcnow().replace(fractional_second=0).replace(hour=4, minute=0, second=0))
 
     print(antwort)
     return web.Response(text=serializer.render(antwort), content_type="application/xml")
