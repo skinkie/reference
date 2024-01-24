@@ -42,7 +42,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 import lxml
 
 from netex import AvailabilityCondition, ServiceJourney, ServiceJourneyPattern, Codespace, Version, \
-    ServiceCalendarFrame, TypeOfFrameRef, Line
+    ServiceCalendarFrame, TypeOfFrameRef, Line, DeadRunJourneyPattern, JourneyPattern
 from nordicprofile import NordicProfile
 from refs import getId
 from servicecalendarepip import ServiceCalendarEPIPFrame
@@ -61,7 +61,7 @@ def conversion(input_filename: str, output_filename: str):
     parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
 
     service_journeys = []
-    service_journey_patterns = []
+    journey_patterns = []
     availability_conditions = []
     lines = []
 
@@ -82,9 +82,18 @@ def conversion(input_filename: str, output_filename: str):
         service_journeys.append(service_journey)
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourneyPattern"):
-        service_journey_pattern: ServiceJourneyPattern
-        service_journey_pattern = parser.parse(element, ServiceJourneyPattern)
-        service_journey_patterns.append(service_journey_pattern)
+        service_journey_pattern: ServiceJourneyPattern = parser.parse(element, ServiceJourneyPattern)
+        journey_pattern = NordicProfile.projectServiceJourneyPattern(service_journey_pattern)
+        journey_patterns.append(journey_pattern)
+
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}DeadRunJourneyPattern"):
+        dead_run_journey_pattern: DeadRunJourneyPattern = parser.parse(element, DeadRunJourneyPattern)
+        journey_pattern = NordicProfile.projectDeadRunJourneyPattern(dead_run_journey_pattern)
+        journey_patterns.append(journey_pattern)
+
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}JourneyPattern"):
+        journey_pattern: JourneyPattern = parser.parse(element, JourneyPattern)
+        journey_patterns.append(journey_pattern)
 
     if len(service_journeys) == 0:
         return

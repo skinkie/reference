@@ -2,9 +2,10 @@ from typing import List
 
 from xsdata.models.datatype import XmlDateTime
 
+import utils
 from netex import Codespace, DataSource, Version, VehicleJourney, TimetableFrame, ServiceJourney, ServiceJourneyPattern, \
     ServiceFrame, ResourceFrame, PublicationDelivery, Line, MultilingualString, DataObjectsRelStructure, \
-    JourneysInFrameRelStructure
+    JourneysInFrameRelStructure, JourneyPattern, DeadRunJourneyPattern
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 
 
@@ -17,6 +18,17 @@ class NordicProfile:
         self.codespace = codespace
         self.data_source = data_source
         self.version = version
+
+    @staticmethod
+    def projectServiceJourneyPattern(service_journey_pattern: ServiceJourneyPattern) -> JourneyPattern:
+        journey_pattern: JourneyPattern = utils.project(service_journey_pattern, JourneyPattern)
+        return journey_pattern
+
+    @staticmethod
+    def projectDeadRunJourneyPattern(dead_run_journey_pattern: DeadRunJourneyPattern) -> JourneyPattern:
+        journey_pattern: JourneyPattern = utils.project(dead_run_journey_pattern, JourneyPattern)
+        return journey_pattern
+
 
     def getDataSources(self, data_sources: List[DataSource]) -> List[DataSource]:
         return data_sources
