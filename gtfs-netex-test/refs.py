@@ -52,7 +52,7 @@ def getIdByRef(obj: object, codespace: Codespace, ref: str):
 
 from operator import attrgetter
 
-def getIndex(l, attr=None):
+def getIndex(l, attr=None) -> dict:
     if not attr:
         return {x.id:x for x in l }
 
