@@ -1,6 +1,7 @@
+from datetime import timedelta
 from typing import List, Dict
 
-from xsdata.models.datatype import XmlDateTime
+from xsdata.models.datatype import XmlDateTime, XmlDate
 
 import utils
 from netex import Codespace, DataSource, Version, VehicleJourney, TimetableFrame, ServiceJourney, ServiceJourneyPattern, \
@@ -12,10 +13,11 @@ from netex import Codespace, DataSource, Version, VehicleJourney, TimetableFrame
     DayTypeAssignmentsInFrameRelStructure, RoutePointsInFrameRelStructure, DestinationDisplaysInFrameRelStructure, \
     ScheduledStopPointsInFrameRelStructure, TimingPointsInFrameRelStructure, TimingLinksInFrameRelStructure, \
     ServiceLinksInFrameRelStructure, StopAssignmentsInFrameRelStructure, Network, GroupsOfLinesInFrameRelStructure, \
-    GroupOfLines
-from refs import getRef, getIndex
+    GroupOfLines, OperatingPeriod, OperatingPeriodVersionStructure, UicOperatingPeriod, UicOperatingPeriodRef, \
+    OperatingPeriodRef, RouteLinksInFrameRelStructure, RouteView
+from refs import getRef, getIndex, getId
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
-
+import lxml
 
 class NordicProfile:
     codespace: Codespace
@@ -27,6 +29,43 @@ class NordicProfile:
         self.data_source = data_source
         self.version = version
 
+    @staticmethod
+    def changeRemoveBackgroundColour(line: Line):
+        if line.presentation:
+            line.presentation.background_colour = None
+
+    @staticmethod
+    def changeCodeSpaceNaive(input_filename: str, desired_codespace: str):
+        tree = lxml.etree.parse(input_filename)
+        for element in tree.iterfind(".//*"):
+            if element.tag == '{http://www.netex.org.uk/netex}QuayRef':
+                continue
+            if 'id' in element.attrib:
+                element.attrib['id'] = ':'.join([desired_codespace] + element.attrib['id'].split(':')[1:])
+            elif 'ref' in element.attrib:
+                element.attrib['ref'] = ':'.join([desired_codespace] + element.attrib['ref'].split(':')[1:])
+
+        tree.write(input_filename, pretty_print=True, xml_declaration=True, encoding="utf-8")
+
+
+    """The Nordic profile does cross references between files, that will not work."""
+    @staticmethod
+    def changeRemoveVersion(input_filename: str):
+        tree = lxml.etree.parse(input_filename)
+
+        for element in tree.iterfind(".//{http://www.netex.org.uk/netex}DayTypeRef"):
+            element.attrib['versionRef'] = element.attrib['version']
+            del element.attrib['version']
+
+        for element in tree.iterfind(".//{http://www.netex.org.uk/netex}OperatorRef"):
+            element.attrib['versionRef'] = element.attrib['version']
+            del element.attrib['version']
+
+        for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPointRef"):
+            element.attrib['versionRef'] = element.attrib['version']
+            del element.attrib['version']
+
+        tree.write(input_filename, pretty_print=True, xml_declaration=True, encoding="utf-8")
 
     @staticmethod
     def projectServiceJourneyPattern(service_journey_pattern: ServiceJourneyPattern) -> JourneyPattern:
@@ -38,15 +77,46 @@ class NordicProfile:
         journey_pattern: JourneyPattern = utils.project(dead_run_journey_pattern, JourneyPattern)
         return journey_pattern
 
-    @staticmethod
-    def projectNetworkFromLines(lines: List[Line]) -> Network:
-        group_of_lines: GroupOfLines = GroupOfLines(id="GroupOfLines", name=MultilingualString(value="GroupOfLines"))
+    def projectNetworkFromLines(self, lines: List[Line]) -> Network:
+        group_of_lines: GroupOfLines = GroupOfLines(id=getId(GroupOfLines, self.codespace, "1"), version=lines[0].version, name=MultilingualString(value="GroupOfLines"))
         ref = getRef(group_of_lines)
         for line in lines:
             line.represented_by_group_ref = ref
 
-        network: Network = Network(id="Network", groups_of_lines=GroupsOfLinesInFrameRelStructure(group_of_lines=[group_of_lines]))
+        network: Network = Network(id=getId(Network, self.codespace, "1"), version=lines[0].version, groups_of_lines=GroupsOfLinesInFrameRelStructure(group_of_lines=[group_of_lines]))
         return network
+
+    # This function tries to transform an arbitrary DayTypeAssignement into as expanded date based export
+    @staticmethod
+    def projectDayTypeAssignmentToDayTypeAssignmentDate(day_type_assignment: DayTypeAssignment, operating_periods: Dict[str, UicOperatingPeriod]) -> List[DayTypeAssignment]:
+        result: List[DayTypeAssignment] = []
+        if isinstance(day_type_assignment.choice, OperatingPeriodRef):
+            uic_operating_period: UicOperatingPeriod = operating_periods.get(day_type_assignment.choice.ref)
+            operational_dates = [uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i) for i in
+                                 range(0, len(uic_operating_period.valid_day_bits)) if
+                                 uic_operating_period.valid_day_bits[i] == '1']
+
+            for i in range(0, len(operational_dates)):
+                day_type_assignment = DayTypeAssignment(id=day_type_assignment.id, version=day_type_assignment.version,
+                                  day_type_ref=day_type_assignment.day_type_ref,
+                                  choice=XmlDate.from_date(operational_dates[i]),
+                                  order=(i + 1))
+                result.append(day_type_assignment)
+
+        else:
+            return [day_type_assignment]
+
+        return result
+
+    @staticmethod
+    def projectServiceJourneyPatternToRoute(journey_pattern: JourneyPattern) -> Route:
+        route = utils.project(journey_pattern, Route)
+        if isinstance(journey_pattern.route_ref_or_route_view, RouteView):
+            route.line_ref = journey_pattern.route_ref_or_route_view.flexible_line_ref_or_line_ref_or_line_view
+        route.points_in_sequence = None
+
+        journey_pattern.route_ref_or_route_view = getRef(route)
+        return route
 
     @staticmethod
     def getServiceJourney(service_journey: ServiceJourney, journey_patterns: Dict[str, object]):
@@ -84,11 +154,21 @@ class NordicProfile:
     def getDataSources(self, data_sources: List[DataSource]) -> List[DataSource]:
         return data_sources
 
-    def getServiceFrameShared(self, network, route_points, destination_displays, scheduled_stop_points, timing_points, timing_links, service_links, stop_assignments):
+    def getServiceFrameShared(self, network, route_points, route_links, routes, destination_displays, scheduled_stop_points, timing_points, timing_links, service_links, stop_assignments):
         if len(route_points) > 0:
             route_points = RoutePointsInFrameRelStructure(route_point=route_points)
         else:
             route_points = None
+
+        if len(route_links) > 0:
+            route_links = RouteLinksInFrameRelStructure(route_link=route_links)
+        else:
+            route_links = None
+
+        if len(routes) > 0:
+            routes = RoutesInFrameRelStructure(route=routes)
+        else:
+            routes = None
 
         if len(destination_displays) > 0:
             destination_displays = DestinationDisplaysInFrameRelStructure(destination_display=destination_displays)
@@ -120,9 +200,11 @@ class NordicProfile:
         else:
             stop_assignments = None
 
-        service_frame = ServiceFrame(id="ServiceFrame", version=self.version.version,
+        service_frame = ServiceFrame(id=getId(ServiceFrame, self.codespace, "1"), version=self.version.version,
                                      network=network,
+                                     routes=routes,
                                      route_points=route_points,
+                                     route_links=route_links,
                                      destination_displays=destination_displays,
                                      scheduled_stop_points=scheduled_stop_points,
                                      timing_points=timing_points,
@@ -143,15 +225,19 @@ class NordicProfile:
         else:
             day_types = None
 
-        service_calendar_frame = ServiceCalendarFrame(id="ServiceCalendarFrame", version=self.version.version,
+        service_calendar_frame = ServiceCalendarFrame(id=getId(ServiceCalendarFrame, self.codespace, "1"), version=self.version.version,
                                                       day_type_assignments=day_type_assignments,
                                                       day_types=day_types)
 
         return service_calendar_frame
 
     def getResourceFrameShared(self, operators: List[Operator]) -> ResourceFrame:
-        resource_frame = ResourceFrame(id="ResourceFrame", version="1",
-                                       data_sources=DataSourcesInFrameRelStructure(data_source=[self.data_source]),
+        data_sources = None
+        if self.data_source is not None:
+            data_sources = DataSourcesInFrameRelStructure(data_source=[self.data_source])
+
+        resource_frame = ResourceFrame(id=getId(ResourceFrame, self.codespace, "1"), version=self.version.version,
+                                       # data_sources=data_sources,
                                        organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=operators))
         return resource_frame
 
@@ -174,15 +260,21 @@ class NordicProfile:
         journey_patterns.clear()
         journey_patterns += list(journey_patterns_index.values())
 
-        return TimetableFrame(id=line.id.replace("Line", "TimetableFrame"), vehicle_journeys=JourneysInFrameRelStructure(choice=service_journeys))
+        return TimetableFrame(id=line.id.replace("Line", "TimetableFrame"), version=self.version.version, vehicle_journeys=JourneysInFrameRelStructure(choice=service_journeys))
 
     def getServiceFrame(self, line: Line, journey_patterns: List[JourneyPattern], routes: List[Route]) -> ServiceFrame:
+        if len(routes) == 0:
+            for journey_pattern in journey_patterns:
+                route = NordicProfile.projectServiceJourneyPatternToRoute(journey_pattern)
+                routes.append(route)
+
         if len(routes) > 0:
             routes = RoutesInFrameRelStructure(route=routes)
         else:
             routes = None
 
         return ServiceFrame(id=line.id.replace("Line", "ServiceFrame"),
+                            version=self.version.version,
                             lines=LinesInFrameRelStructure(line=[line]),
                             journey_patterns=JourneyPatternsInFrameRelStructure(journey_pattern=journey_patterns),
                             routes=routes)

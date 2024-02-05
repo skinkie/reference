@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional
+from typing import Optional, List, T
 
 from netex import *
 
@@ -52,7 +52,7 @@ def getIdByRef(obj: object, codespace: Codespace, ref: str):
 
 from operator import attrgetter
 
-def getIndex(l, attr=None) -> dict:
+def getIndex(l: List[T], attr=None) -> dict[object, T]:
     if not attr:
         return {x.id:x for x in l }
 
