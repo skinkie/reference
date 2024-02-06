@@ -1,3 +1,4 @@
+import datetime
 from datetime import timedelta
 from typing import List, Dict
 
@@ -86,15 +87,21 @@ class NordicProfile:
         network: Network = Network(id=getId(Network, self.codespace, "1"), version=lines[0].version, groups_of_lines=GroupsOfLinesInFrameRelStructure(group_of_lines=[group_of_lines]))
         return network
 
+    @staticmethod
+    def getOperationalDates(uic_operating_period: UicOperatingPeriod) -> List[datetime.datetime]:
+        operational_dates = [(uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i)).date()
+                             for i in
+                             range(0, len(uic_operating_period.valid_day_bits)) if
+                             uic_operating_period.valid_day_bits[i] == '1']
+        return operational_dates
+
     # This function tries to transform an arbitrary DayTypeAssignement into as expanded date based export
     @staticmethod
     def projectDayTypeAssignmentToDayTypeAssignmentDate(day_type_assignment: DayTypeAssignment, operating_periods: Dict[str, UicOperatingPeriod]) -> List[DayTypeAssignment]:
         result: List[DayTypeAssignment] = []
         if isinstance(day_type_assignment.choice, OperatingPeriodRef):
             uic_operating_period: UicOperatingPeriod = operating_periods.get(day_type_assignment.choice.ref)
-            operational_dates = [uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i) for i in
-                                 range(0, len(uic_operating_period.valid_day_bits)) if
-                                 uic_operating_period.valid_day_bits[i] == '1']
+            operational_dates = NordicProfile.getOperationalDates(uic_operating_period)
 
             for i in range(0, len(operational_dates)):
                 day_type_assignment = DayTypeAssignment(id=day_type_assignment.id, version=day_type_assignment.version,

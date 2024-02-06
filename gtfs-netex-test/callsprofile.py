@@ -7,7 +7,8 @@ from netex import ServiceJourney, StopPointInJourneyPattern, ServiceJourneyPatte
     TimingLinkRefStructure, TimingLinkRef, Call, DepartureStructure, ArrivalStructure, JourneyRunTime, JourneyWaitTime, \
     StopPointInJourneyPatternRef, StopPointInJourneyPatternRefStructure, PointInJourneyPatternRefStructure, \
     OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, TimeDemandTypeRef, \
-    TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint, Route
+    TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint, Route, CallsRelStructure, TimingPointInJourneyPattern, \
+    ScheduledStopPointRef
 from refs import setIdVersion, getRef, getIndex, getIdByRef
 
 
@@ -19,6 +20,41 @@ class CallsProfile:
     @staticmethod
     def getWaitTime(arrival: ArrivalStructure, departure: DepartureStructure) -> int:
         return ((departure.day_offset or 0) * 86400 + departure.time.hour * 3600 +  departure.time.minute * 60 + departure.time.second) - ((arrival.day_offset or 0) * 86400 + arrival.time.hour * 3600 + arrival.time.minute * 60 + arrival.time.second)
+
+    @staticmethod
+    def getCalls(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern):
+        if service_journey.calls is not None:
+            return
+
+        if service_journey.journey_pattern_ref.ref != service_journey_pattern.id:
+            return
+
+        ssp_refs = {}
+        for pis in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
+            if isinstance(pis, StopPointInJourneyPattern):
+                ssp_refs[pis.id] = pis.scheduled_stop_point_ref
+            elif isinstance(pis, TimingPointInJourneyPattern):
+                if isinstance(pis.choice_1, ScheduledStopPointRef):
+                    ssp_refs[pis.id] = pis.choice_1
+                else:
+                    # TODO: implement TimingPointRef nameOfRefClass
+                    pass
+
+        calls = CallsRelStructure(call = [])
+        order = 1
+        for timetabled_passing_time in service_journey.passing_times.timetabled_passing_time:
+            call = Call(id = timetabled_passing_time.id.replace(":TimetabledPassingTime:", ":Call:"),
+                        order=order,
+                 version=timetabled_passing_time.version,
+                 fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=ssp_refs[timetabled_passing_time.point_in_journey_pattern_ref.ref],
+                 arrival=ArrivalStructure(day_offset=timetabled_passing_time.arrival_day_offset,
+                                          time=timetabled_passing_time.arrival_time),
+                 departure=DepartureStructure(day_offset=timetabled_passing_time.departure_day_offset,
+                                              time=timetabled_passing_time.departure_time)
+                 )
+            order += 1
+            calls.call.append(call)
+        service_journey.calls = calls
 
     def getTimeDemandTypes(self):
         tdts = {}
