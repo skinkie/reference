@@ -17,10 +17,10 @@ from xml_imports import parser, serializer
 
 # Loop that assures that our remote subscription remains active
 async def abo_anfrage(BASE_URL, TIMEOUT=3600):
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(timeout=10) as session:
         while True:
-            verfall_zst = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=TIMEOUT)
-            abo_anfrage = AboAnfrage(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0), choice=[AboAustype(abo_id=1, verfall_zst=XmlDateTime.from_datetime(verfall_zst).replace(fractional_second=0, offset=60), hysterese=60, vorschauzeit=120)])
+            verfall_zst = datetime.datetime.utcnow() + datetime.timedelta(seconds=TIMEOUT) + datetime.timedelta(seconds=TIMEOUT) # This is a hack
+            abo_anfrage = AboAnfrage(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0), abo_aus=[AboAustype(abo_id=1, verfall_zst=XmlDateTime.from_datetime(verfall_zst).replace(fractional_second=0, offset=60), hysterese=60, vorschauzeit=120)])
             anfrage = serializer.render(abo_anfrage)
             url = f"{BASE_URL}/aus/aboverwalten.xml"
             print(url)

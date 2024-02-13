@@ -4,6 +4,7 @@ from io import BytesIO
 import time
 
 import aiohttp
+import asyncio
 from paho.mqtt.packettypes import PacketTypes
 from paho.mqtt.properties import Properties
 from xsdata.models.datatype import XmlDateTime
@@ -207,20 +208,18 @@ async def mqtt_subscriber():
                         except:
                             pass
 
-                        if daten_abrufen_antwort is not None and isinstance(daten_abrufen_antwort.choice, list):
+                        if daten_abrufen_antwort is not None:
                             l = []
-                            for aus_nachricht in daten_abrufen_antwort.choice:
-                                if isinstance(aus_nachricht, AusnachrichtType):
-                                    for istfahrt in aus_nachricht.choice:
-                                        if isinstance(istfahrt, IstFahrtType):
-                                            l.append((istfahrt.fahrt_ref.fahrt_id.fahrt_bezeichner, istfahrt.linien_id, istfahrt.richtungs_id, istfahrt.umlauf_id, istfahrt.fahrt_ref.fahrt_start_ende[0].endzeit.to_datetime().timestamp(), int(time.time()), serializer_db.render(istfahrt),))
+                            for aus_nachricht in daten_abrufen_antwort.ausnachricht:
+                                for istfahrt in aus_nachricht.ist_fahrt:
+                                    l.append((istfahrt.fahrt_ref.fahrt_id.fahrt_bezeichner, istfahrt.linien_id, istfahrt.richtungs_id, istfahrt.umlauf_id, istfahrt.fahrt_ref.fahrt_start_ende[0].endzeit.to_datetime().timestamp(), int(time.time()), serializer_db.render(istfahrt),))
 
                             if len(l) > 0:
                                 cursor.executemany("""INSERT OR REPLACE INTO queue VALUES (?, ?, ?, ?, ?, ?, ?);""", l)
 
         except:
-            raise
-        asyncio.sleep(15)
+            pass
+        await asyncio.sleep(15)
 
 async def aus_datenabrufen(sender):
     print("In aus_datenabrufen")
@@ -247,7 +246,7 @@ async def aus_datenabrufen(sender):
                 if isinstance(aus_nachricht, AusnachrichtType):
                     for istfahrt in aus_nachricht.choice:
                         if isinstance(istfahrt, IstFahrtType):
-                            split_antwort = DatenAbrufenAntwortType(bestaetigung=daten_abrufen_antwort.bestaetigung, choice=[AusnachrichtType(abo_id=0, choice=[istfahrt])])
+                            split_antwort = DatenAbrufenAntwortType(bestaetigung=daten_abrufen_antwort.bestaetigung, ausnachricht=[AusnachrichtType(abo_id=0, ist_fahrt=[istfahrt])])
                             payload = serializer.render(split_antwort)
                             # print(payload)
                             payload = gzip.compress(bytes(payload, 'utf-8'))

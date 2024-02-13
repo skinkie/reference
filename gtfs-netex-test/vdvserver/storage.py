@@ -19,11 +19,11 @@ db = sqlite3.connect(SQLITE_DATABASE)
 
 async def check_or_create_tables():
     cursor = db.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS sender (sender TEXT, epoch INTEGER, uri TEXT, PRIMARY KEY (sender));
-                      CREATE TABLE IF NOT EXISTS abo (sender TEXT, abo_id INTEGER, linien_filter BOOLEAN, umlauf_filter BOOLEAN, hysterese INTEGER, vorschauzeit INTEGER, verfall_zst INTEGER, PRIMARY KEY (sender, abo_id), FOREIGN KEY(sender) REFERENCES sender (sender));
-                      CREATE TABLE IF NOT EXISTS linien_filter (sender TEXT, abo_id INTEGER, linien_id TEXT, richtungs_id TEXT, PRIMARY KEY (sender, abo_id, linien_id), FOREIGN KEY(sender, abo_id) REFERENCES abo (sender, abo_id));
-                      CREATE TABLE IF NOT EXISTS umlauf_filter (sender TEXT, abo_id INTEGER, umlauf_id TEXT, PRIMARY KEY (sender, abo_id, umlauf_id), FOREIGN KEY(sender, abo_id) REFERENCES abo (sender, abo_id));
-                      CREATE TABLE IF NOT EXISTS queue (journeyref TEXT, linien_id TEXT, richtungs_id TEXT, umlauf_id TEXT, expiry INTEGER, epoch INTEGER, message TEXT, PRIMARY KEY (journeyref));""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS sender (sender TEXT, epoch INTEGER, uri TEXT, PRIMARY KEY (sender));""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS abo (sender TEXT, abo_id INTEGER, linien_filter BOOLEAN, umlauf_filter BOOLEAN, hysterese INTEGER, vorschauzeit INTEGER, verfall_zst INTEGER, PRIMARY KEY (sender, abo_id), FOREIGN KEY(sender) REFERENCES sender (sender));""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS linien_filter (sender TEXT, abo_id INTEGER, linien_id TEXT, richtungs_id TEXT, PRIMARY KEY (sender, abo_id, linien_id), FOREIGN KEY(sender, abo_id) REFERENCES abo (sender, abo_id));""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS umlauf_filter (sender TEXT, abo_id INTEGER, umlauf_id TEXT, PRIMARY KEY (sender, abo_id, umlauf_id), FOREIGN KEY(sender, abo_id) REFERENCES abo (sender, abo_id));""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS queue (journeyref TEXT, linien_id TEXT, richtungs_id TEXT, umlauf_id TEXT, expiry INTEGER, epoch INTEGER, message TEXT, PRIMARY KEY (journeyref));""")
 
 async def create_sender(sender: str, uri: str):
     cursor = db.cursor()
@@ -104,7 +104,8 @@ async def check_daten_bereit(sender: str):
 async def queue_garbage_collector():
     cursor = db.cursor()
     while True:
-        cursor.execute("""BEGIN TRANSACTION; DELETE FROM queue WHERE (expiry + 600) > epoch(now()::TIMESTAMP)::INTEGER; COMMIT;""")
+        # cursor.execute("""DELETE FROM queue WHERE (expiry + 600) > epoch(now()::TIMESTAMP)::INTEGER;""")
+        cursor.execute("""DELETE FROM queue WHERE (expiry + 600) > CAST(strftime('%s', 'now') AS INTEGER);""")
         await asyncio.sleep(600)
 
 async def aus_nachrichten(sender: str) -> List[AusnachrichtType]:
@@ -119,9 +120,9 @@ async def aus_nachrichten(sender: str) -> List[AusnachrichtType]:
         except:
             pass
         if len(results) == 0 or results[-1].abo_id != abo_id:
-            results.append(AusnachrichtType(abo_id=abo_id, choice=[ist_fahrt_type]))
+            results.append(AusnachrichtType(abo_id=abo_id, ist_fahrt=[ist_fahrt_type]))
         else:
-            results[-1].choice.append(ist_fahrt_type)
+            results[-1].ist_fahrt.append(ist_fahrt_type)
 
     cursor.execute("""UPDATE sender SET epoch = ? WHERE sender = ?""", (epoch, sender,))
 
