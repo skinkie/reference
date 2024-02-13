@@ -4,16 +4,18 @@ from typing import List
 
 import aiohttp
 import duckdb
+import sqlite3
 from xsdata.models.datatype import XmlDateTime
 
 from vdv453 import AboAustype, DatenBereitAnfrageType, DatenBereitAntwortType, ErgebnisType, AusnachrichtType, \
     IstFahrtType
 
-from config import DUCKDB_DATABASE, SENDER_ID
+from config import SQLITE_DATABASE, DUCKDB_DATABASE, SENDER_ID, SERVER_SENDER_ID
 from xml_imports import parser, serializer
 import logging
 
-db = duckdb.connect(DUCKDB_DATABASE)
+# db = duckdb.connect(DUCKDB_DATABASE)
+db = sqlite3.connect(SQLITE_DATABASE)
 
 async def check_or_create_tables():
     cursor = db.cursor()
@@ -36,7 +38,7 @@ async def check_sender(sender: str) -> str:
 
     return None
 
-async def drop_ender(sender: str):
+async def drop_sender(sender: str):
     cursor = db.cursor()
     cursor.execute("""DELETE FROM linien_filter WHERE sender = ?;""", (sender,))
     cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ?;""", (sender,))
@@ -45,7 +47,7 @@ async def drop_ender(sender: str):
 async def abo_loeschen_alle(sender: str):
     cursor = db.cursor()
     cursor.execute("""DELETE FROM umlauf_filter WHERE sender = ?;""", (sender,))
-    cursor.execute("""DELETE FROM linien_filter WHERE sender = ?;""", (sender,))
+    cursor.execute("""DELETE FROM linien_filter WHERE sender = ? AND sender <> 'local' AND sender <> 'idsvrs01';""", (sender,))
     cursor.execute("""DELETE FROM abo WHERE sender = ?;""", (sender,))
 
 async def abo_loeschen(sender: str, abo_id: int):
@@ -73,10 +75,10 @@ async def queue_daten_bereit():
         while True:
             cursor.execute("""select sender.sender, sender.uri from sender JOIN abo USING (sender) LEFT JOIN linien_filter USING (abo_id) LEFT JOIN umlauf_filter USING (abo_id), queue where sender.epoch < queue.epoch and (linien_filter = false OR linien_filter.linien_id = queue.linien_id and (linien_filter.richtungs_id IS NULL OR linien_filter.richtungs_id = queue.richtungs_id)) and (umlauf_filter = false OR umlauf_filter.umlauf_id = queue.umlauf_id) group by sender.sender, sender.uri having count(*) > 0;""")
             for sender_uri in cursor.fetchall():
-                daten_bereit_anfrage_type = DatenBereitAnfrageType(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0))
+                daten_bereit_anfrage_type = DatenBereitAnfrageType(sender=SERVER_SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0))
                 anfrage = serializer.render(daten_bereit_anfrage_type)
                 try:
-                    url = f"{sender_uri[1]}/{SENDER_ID}/aus/datenbereit.xml"
+                    url = f"{sender_uri[1]}/{SERVER_SENDER_ID}/aus/datenbereit.xml"
                     logging.info(f"Notify {sender_uri[0]} via {url}.")
                     async with session.post(url, data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
                         print(resp.status)

@@ -20,7 +20,7 @@ async def abo_anfrage(BASE_URL, TIMEOUT=3600):
     async with aiohttp.ClientSession() as session:
         while True:
             verfall_zst = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=TIMEOUT)
-            abo_anfrage = AboAnfrage(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0), choice=[AboAustype(abo_id=1, verfall_zst=XmlDateTime.from_datetime(verfall_zst).replace(fractional_second=0, offset=60), hysterese=10, vorschauzeit=3600)])
+            abo_anfrage = AboAnfrage(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0), choice=[AboAustype(abo_id=1, verfall_zst=XmlDateTime.from_datetime(verfall_zst).replace(fractional_second=0, offset=60), hysterese=60, vorschauzeit=120)])
             anfrage = serializer.render(abo_anfrage)
             url = f"{BASE_URL}/aus/aboverwalten.xml"
             print(url)

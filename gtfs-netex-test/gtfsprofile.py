@@ -10,12 +10,27 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
 import operator as operator_f
 
 class GtfsProfile:
+
+    empty_stop_time = {'trip_id': None, 'arrival_time': None, 'departure_time': None, 'stop_id': None,
+                       'stop_sequence': None, 'stop_headsign': None, 'pickup_type': None, 'drop_off_type': None,
+                       'continuous_pickup': None, 'continuous_drop_off': None, 'shape_dist_traveled': None, 'timepoint': None}
+
+    empty_trip = {'route_id': None, 'service_id': None, 'trip_id': None, 'trip_headsign': None, 'trip_short_name': None,
+                  'direction_id': None, 'block_id': None, 'shape_id': None, 'wheelchair_accessible': None, 'bikes_allowed': None}
+
     @staticmethod
-    def writeToFile(filename: str, data: List[dict]):
-        with open(filename, 'w') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
-            writer.writeheader()
-            writer.writerows(data)
+    def writeToFile(filename: str, data: List[dict], write_header=False):
+        mode = 'a'
+        if write_header:
+            mode = 'w'
+
+        if len(data) > 0:
+            with open(filename, mode) as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
+                if write_header:
+                    writer.writeheader()
+                if data[0][list(data[0].keys())[0]] is not None:
+                    writer.writerows(data)
 
     @staticmethod
     def getOptionalMultilingualString(multilingual_string: MultilingualString | List[MultilingualString]):
@@ -94,6 +109,8 @@ class GtfsProfile:
     
     @staticmethod
     def getOrNone(object, attr, default=None):
+        if object is None:
+            return None
         try:
             return operator_f.attrgetter(attr)(object)
         except:
@@ -187,7 +204,7 @@ class GtfsProfile:
                 'zone_id': GtfsProfile.getTariffZoneFromScheduledStopPoint(scheduled_stop_point.tariff_zones),
                 'stop_url': scheduled_stop_point.url or '',
                 'location_type': 0,
-                'parent_station': stop_place.id,
+                'parent_station': GtfsProfile.getOrNone(stop_place, 'id'),
                 'stop_timezone': '',
                 'wheelchair_boarding': '',
                 'level_id': '',
@@ -278,7 +295,7 @@ class GtfsProfile:
                 'stop_url': stop_place.url or '',
                 'location_type': 1, # Station
                 'parent_station': '',
-                'stop_timezone': stop_place.locale.time_zone,
+                'stop_timezone': GtfsProfile.getOrNone(stop_place, 'locale.time_zone'),
                 'wheelchair_boarding': GtfsProfile.getWheelchairAccess(stop_place.accessibility_assessment),
                 'level_id': '', # stop_place.levels.level_ref_or_level,
                 'platform_code': ''
@@ -308,5 +325,5 @@ class GtfsProfile:
                         }
 
                 yield stop
-        else:
-            print(stop_place.id)
+        # else:
+        #    print(stop_place.id)

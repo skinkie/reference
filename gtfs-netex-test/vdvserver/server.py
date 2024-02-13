@@ -16,7 +16,7 @@ from storage import db, check_sender, abo_loeschen_alle, abo_loeschen, abo_aus, 
 from vdv453 import ErgebnisType, \
     BestaetigungType, AboAustype, DatenAbrufenAntwort, \
     AboAnfrage, AboAntwort, DatenBereitAnfrage, DatenBereitAntwort, DatenAbrufenAnfrage
-from config import SENDER_ID
+from config import SERVER_SENDER_ID
 
 context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
@@ -25,20 +25,24 @@ parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
 serializer_config = SerializerConfig(ignore_default_attributes=True)
 serializer_config.ignore_default_attributes = True
 serializer_config.xml_declaration = True
+# serializer_config.encoding = 'ISO-8859-1'
 serializer = XmlSerializer(serializer_config)
 
 import logging
 
 async def queue_daten_bereit():
     cursor = db.cursor()
-    async with aiohttp.ClientSession() as session:
-        while True:
+    while True:
+        async with aiohttp.ClientSession() as session:
+            logging.info(f"Queue daten bereit.")
             cursor.execute("""select sender.sender, sender.uri from sender JOIN abo USING (sender) LEFT JOIN linien_filter USING (abo_id) LEFT JOIN umlauf_filter USING (abo_id), queue where sender.epoch < queue.epoch and (linien_filter = false OR linien_filter.linien_id = queue.linien_id and (linien_filter.richtungs_id IS NULL OR linien_filter.richtungs_id = queue.richtungs_id)) and (umlauf_filter = false OR umlauf_filter.umlauf_id = queue.umlauf_id) group by sender.sender, sender.uri having count(*) > 0;""")
+            logging.info(f"After query")
             for sender_uri in cursor.fetchall():
-                daten_bereit_anfrage = DatenBereitAnfrage(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0))
+                logging.info(f"Every uri for {sender_uri[0]}.")
+                daten_bereit_anfrage = DatenBereitAnfrage(sender=SERVER_SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0))
                 anfrage = serializer.render(daten_bereit_anfrage)
                 try:
-                    url = f"{sender_uri[1]}/{SENDER_ID}/aus/datenbereit.xml"
+                    url = f"{sender_uri[1]}/{SERVER_SENDER_ID}/aus/datenbereit.xml"
                     logging.info(f"Notify {sender_uri[0]} via {url}.")
                     async with session.post(url, data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
                         print(resp.status)
@@ -48,9 +52,9 @@ async def queue_daten_bereit():
                         if (daten_bereit_antwort.bestaetigung.ergebnis == ErgebnisType.NOTOK):
                             pass
                 except:
-                    pass
+                    raise
 
-            await asyncio.sleep(15)
+        await asyncio.sleep(15)
 
 async def aus_datenabrufen(request):
     anfrage = await request.read()
@@ -65,8 +69,10 @@ async def aus_datenabrufen(request):
     else:
         antwort = DatenAbrufenAntwort(bestaetigung=unknown_sender(request))
 
-    #return web.Response(body=gzip.compress(bytes(serializer.render(antwort), 'utf-8')), headers={"Content-Encoding": "gzip"}, content_type="application/xml")
-    return web.Response(text=serializer.render(antwort), content_type="application/xml")
+    # return web.Response(body=gzip.compress(bytes(serializer.render(antwort), 'utf-8')), headers={"Content-Encoding": "gzip"}, content_type="application/xml")
+    xml = serializer.render(antwort)
+    print(xml)
+    return web.Response(text=xml, content_type="application/xml")
 
 async def aus_aboverwalten(request):
     anfrage = await request.read()
@@ -101,6 +107,7 @@ async def aus_aboverwalten(request):
 
     print(anfrage.decode('utf-8'))
     text = serializer.render(antwort)
+    # open('/tmp/output.xml', 'w').write(text)
     print(text)
 
     return web.Response(text=text, content_type="application/xml")

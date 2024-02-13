@@ -35,7 +35,7 @@ async def aus_status(request):
 
         else:
             print("Sender not OK", status_anfrage.sender, request.match_info['sender'])
-            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), daten_bereit=False,
+            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
                                         start_dienst_zst=XmlDateTime.utcnow().replace(fractional_second=0).replace(hour=4, minute=0, second=0))
     else:
         print("Can't parse")

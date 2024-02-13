@@ -36,7 +36,7 @@ app.add_routes(routes)
 async def main():
     await asyncio.gather(web._run_app(app, port=8192),
                          mqtt_subscriber(),
-                         client.abo_anfrage("http://192.168.202.75:8092/local"),
+                         client.abo_anfrage("http://192.168.202.75:8092/local2"),
                          storage.queue_garbage_collector(),
                          storage.queue_daten_bereit())
 
