@@ -90,7 +90,7 @@ class CallsProfile:
                                                   order=call.order,
                                                   for_alighting=call.arrival.for_alighting,
                                                   for_boarding=call.departure.for_boarding,
-                                                  destination_display_view=call.destination_display_view,
+                                                  destination_display_ref_or_destination_display_view=call.destination_display_view,
                                                   derived_from_object_ref=call.id)
                 spijps.append(spijp)
 

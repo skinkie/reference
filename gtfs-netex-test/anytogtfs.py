@@ -19,6 +19,9 @@ from refs import getId, getRef, getIndex
 
 from decimal import Decimal
 
+from timetabledpassingtimesprofile import TimetablePassingTimesProfile
+
+
 def get_location_hash(location: LocationStructure2, digits=5):
     return str(location.latitude)[0:5] + '_' + str(location.longitude)[0:5]
 
@@ -30,15 +33,6 @@ def check_national_grid00(location: LocationStructure2):
 import csv
 
 def convert():
-    stations = {}
-    with open('/home/skinkie/Sources/stations/stations.csv', 'r') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=';')
-        for row in reader:
-            if row['latitude'] != '':
-                # stations[row['uic']] = LocationStructure2(latitude=Decimal(row['latitude']), longitude=Decimal(row['longitude']))
-                stations[row['db_id']] = LocationStructure2(latitude=Decimal(row['latitude']), longitude=Decimal(row['longitude']))
-
-
     context = XmlContext()
     config = ParserConfig(fail_on_unknown_properties=False)
     parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
@@ -57,7 +51,7 @@ def convert():
     GtfsProfile.writeToFile('/tmp/trips.txt', [GtfsProfile.empty_trip], write_header=True)
     GtfsProfile.writeToFile('/tmp/stop_times.txt', [GtfsProfile.empty_stop_time], write_header=True)
 
-    for input_filename in glob.glob("/tmp/lux/*/*.xml"):
+    for input_filename in glob.glob("/tmp/NeTEx_CXX_HWGO_20240213_2024-02-18_202400046_baseline.xml.gz"):
         tree = lxml.etree.parse(input_filename)
 
         for element in tree.iterfind(".//{http://www.netex.org.uk/netex}Authority"):
@@ -83,104 +77,6 @@ def convert():
             routes[route['route_id']] = route
             used_agencies.add(route['agency_id'])
 
-        stop_place_hash = {}
-        stop_place_name = {}
-        stop_place_id = {}
-        quay_to_sp = {}
-
-        for element in tree.iterfind(".//{http://www.netex.org.uk/netex}StopPlace"):
-            stop_place: StopPlace = parser.parse(element, StopPlace)
-
-            # Lux hack, the IVU export does not have unique StopPlace@id attributes
-            if stop_place.id == 'LU::StopPlace:0_CdT::':
-                stop_place.id = getId(StopPlace, codespace, hashlib.md5(stop_place.name.value.encode()).hexdigest()[0:5])
-
-            stop_place_id[stop_place.id] = stop_place
-
-            if check_national_grid00(stop_place.centroid.location):
-                continue
-
-            stop_place_hash[get_location_hash(stop_place.centroid.location)] = stop_place
-            stop_place_name[stop_place.name.value.split(', Gare')[0].split(', ')[-1].split('-')[0]] = stop_place
-
-            if stop_place.quays is not None:
-                for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
-                    quay_to_sp[quay.id] = stop_place.id
-
-        ssp_to_quay = {}
-        ssp_to_sp = {}
-        for element in tree.iterfind(".//{http://www.netex.org.uk/netex}PassengerStopAssignment"):
-            passenger_stop_assignment: PassengerStopAssignment = parser.parse(element, PassengerStopAssignment)
-            if passenger_stop_assignment.taxi_stand_ref_or_quay_ref_or_quay is not None:
-                ssp_to_quay[passenger_stop_assignment.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = passenger_stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref
-                if passenger_stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref != 'LU::StopPlace:0_CdT::':
-                    ssp_to_sp[passenger_stop_assignment.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = passenger_stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref
-
-        ssp_hash = {}
-        for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPoint"):
-            scheduled_stop_point: ScheduledStopPoint = parser.parse(element, ScheduledStopPoint)
-
-            if '_CFL_' in scheduled_stop_point.id:
-                uic = scheduled_stop_point.id.split(':')[3].split('_')[0]
-                location = stations.get(uic, None)
-                if location:
-                    scheduled_stop_point.location = location
-
-            if check_national_grid00(scheduled_stop_point.location):
-                scheduled_stop_point.location = None
-
-            if scheduled_stop_point.id in ssp_to_sp:
-                stop_place = stop_place_id[ssp_to_sp[scheduled_stop_point.id]]
-
-            elif scheduled_stop_point.id in ssp_to_quay:
-                quay_ref = ssp_to_quay[scheduled_stop_point.id]
-                if quay_ref in quay_to_sp:
-                    stop_place = stop_place_id[quay_to_sp[quay_ref]]
-
-            if stop_place is None:
-                if scheduled_stop_point.location is not None:
-                    stop_place = stop_place_hash.get(get_location_hash(scheduled_stop_point.location))
-
-            if stop_place is None:
-                stop_place = stop_place_name.get(scheduled_stop_point.short_name.value.split(', Gare')[0].split('-')[0])
-
-            if stop_place is None:
-                print(scheduled_stop_point.short_name.value)
-
-            else:
-                if scheduled_stop_point.location is None:
-                    scheduled_stop_point.location = stop_place.centroid.location
-
-
-                psa = PassengerStopAssignment(id=stop_place.id.replace("StopPlace", "PassengerStopAssignment"),
-                                              taxi_rank_ref_or_stop_place_ref_or_stop_place=getRef(stop_place),
-                                              taxi_stand_ref_or_quay_ref_or_quay=ssp_to_quay.get(scheduled_stop_point.id, None),
-                                              fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(scheduled_stop_point))
-
-                psas[psa.id] = psa
-
-                # stop_1 = list(GtfsProfile.projectQuayStop(stop_place))
-                # stops[stop_1[0]['stop_id']] = stop_1[0]
-                stop_place = None
-
-            if scheduled_stop_point.id not in stops:
-                stop = GtfsProfile.projectScheduledStopPointToStop(scheduled_stop_point, stop_place)
-                stops[stop['stop_id']] = stop
-
-        for element in tree.iterfind(".//{http://www.netex.org.uk/netex}UicOperatingPeriod"):
-            uic_operating_period: UicOperatingPeriod = parser.parse(element, UicOperatingPeriod)
-            operational_dates = NordicProfile.getOperationalDates(uic_operating_period)
-            if operational_dates[-1] > max_date:
-                max_date = operational_dates[-1]
-            uic_operating_periods[uic_operating_period.id] = operational_dates
-
-        for element in tree.iterfind(".//{http://www.netex.org.uk/netex}DayTypeAssignment"):
-            day_type_assignment: DayTypeAssignment = parser.parse(element, DayTypeAssignment)
-            calendar_dates[day_type_assignment.day_type_ref.ref] = list(
-                GtfsProfile.getCalendarDates(day_type_assignment.day_type_ref.ref,
-                                             uic_operating_periods[day_type_assignment.choice.ref]))
-
-        
         trips = []
         stop_times = []
         service_journey_patterns = []
@@ -192,6 +88,9 @@ def convert():
 
         for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourney"):
             service_journey: ServiceJourney = parser.parse(element, ServiceJourney)
+
+
+
             # CallsProfile.getCalls(service_journey, service_journey_patterns_index)
             service_journey_pattern = service_journey_patterns_index.get(service_journey.journey_pattern_ref.ref)
             trip = GtfsProfile.projectServiceJourneyToTrip(service_journey, service_journey_pattern)
@@ -199,6 +98,12 @@ def convert():
 
             CallsProfile.getCalls(service_journey, service_journey_pattern)
             stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
+
+
+        timetabledpassingtimesprofile = TimetablePassingTimesProfile(codespace, version, service_journeys,
+                                                                     service_journey_patterns)
+        timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
+
 
         GtfsProfile.writeToFile('/tmp/trips.txt', trips)
         GtfsProfile.writeToFile('/tmp/stop_times.txt', stop_times)
