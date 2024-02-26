@@ -219,8 +219,10 @@ def convert():
             service_journey.day_types = None
             dates, _ = ServiceCalendarEPIPFrame.positiveAvailabilityCondition([availability_conditions[vc.ref] for vc in service_journey.validity_conditions_or_valid_between[0].choice])
             service_id = '+'.join([vc.ref for vc in service_journey.validity_conditions_or_valid_between[0].choice])
-            used_availability_conditions[service_id] = [mydate.date() for mydate in dates]
-
+            operational_dates = [mydate.date() for mydate in dates]
+            used_availability_conditions[service_id] = operational_dates
+            if operational_dates[-1] > max_date:
+                max_date = operational_dates[-1]
 
             trip = GtfsProfile.projectServiceJourneyToTrip(service_journey, service_journey_pattern)
             # trips.append(trip)

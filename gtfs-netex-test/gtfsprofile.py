@@ -395,23 +395,52 @@ class GtfsProfile:
     @staticmethod
     def projectRouteLinksToShapes(route: Route, route_links: List[RouteLink], transformer: Transformer = None) -> List[dict]:
         sequence = 0
+        distance = 0
+        distance_keep = 0
 
-        for route_link in route_links:
+        for route_link in route_links[0:-1]:
             # TODO: handle variants (posList, pos array)
             l = route_link.line_string.pos_or_point_property_or_pos_list[0].value
             dimensions = route_link.line_string.srs_dimension or 2
-            for i in range(0, len(l), dimensions):
+            for i in range(0, len(l) - dimensions, dimensions):
                 if transformer:
                     latitude, longitude = transformer.transform(l[i], l[i + 1])
 
                 else:
                     latitude, longitude = l[i], l[i + 1]
 
-                stop = {'shape_id': route.id,
+                shape_point = {'shape_id': route.id,
                         'shape_pt_lat': round(latitude, 7),
                         'shape_pt_lon': round(longitude, 7),
                         'shape_pt_sequence': sequence,
-                        'shape_dist_traveled': ''
+                        'shape_dist_traveled': distance
                 }
 
-                yield stop
+                sequence += 1
+                distance = ''
+
+                yield shape_point
+
+            distance_keep += route_link.distance
+            distance = distance_keep
+
+        l = route_links[-1].line_string.pos_or_point_property_or_pos_list[0].value
+        dimensions = route_links[-1].line_string.srs_dimension or 2
+        for i in range(0, len(l), dimensions):
+            if transformer:
+                latitude, longitude = transformer.transform(l[i], l[i + 1])
+
+            else:
+                latitude, longitude = l[i], l[i + 1]
+
+            shape_point = {'shape_id': route.id,
+                           'shape_pt_lat': round(latitude, 7),
+                           'shape_pt_lon': round(longitude, 7),
+                           'shape_pt_sequence': sequence,
+                           'shape_dist_traveled': distance
+                           }
+
+            sequence += 1
+            distance = ''
+
+            yield shape_point
