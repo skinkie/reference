@@ -85,7 +85,7 @@ class ServiceCalendarEPIPFrame:
             operational_dates = list(rrule(DAILY, byweekday=byweekday, dtstart=availability_condition.from_date.to_datetime(),
                        until=availability_condition.to_date.to_datetime()))
 
-        return (set(operational_dates), days_of_week, availability_condition.is_available)
+        return (set(operational_dates), days_of_week, availability_condition.is_available or True)
 
     """
     This function combines a list of flattened availability conditions

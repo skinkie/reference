@@ -1,11 +1,12 @@
 import csv
 import datetime
 from typing import List
+from pyproj import Transformer
 
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \
     ScheduledStopPoint, StopPlace, AccessibilityAssessment, LimitationStatusEnumeration, TariffZoneRefsRelStructure, \
     PrivateCode, PrivateCodeStructure, Quay, PresentationStructure, Authority, Branding, Operator, ServiceJourney, \
-    ServiceJourneyPattern, LineRefStructure, RouteView
+    ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink
 
 import operator as operator_f
 
@@ -17,6 +18,8 @@ class GtfsProfile:
 
     empty_trip = {'route_id': None, 'service_id': None, 'trip_id': None, 'trip_headsign': None, 'trip_short_name': None,
                   'direction_id': None, 'block_id': None, 'shape_id': None, 'wheelchair_accessible': None, 'bikes_allowed': None}
+
+    empty_shapes = {'shape_id': None, 'shape_pt_lat': None, 'shape_pt_lon': None, 'shape_pt_sequence': None, 'shape_dist_traveled': None}
 
     @staticmethod
     def writeToFile(filename: str, data: List[dict], write_header=False):
@@ -90,7 +93,7 @@ class GtfsProfile:
     @staticmethod
     def getOptionalPresentation(presentation: PresentationStructure, attrib: str):
         if presentation is not None:
-            return getattr(presentation, attrib, '')
+            return getattr(presentation, attrib, '').hex()
 
         return None
 
@@ -127,6 +130,19 @@ class GtfsProfile:
                   'agency_phone': GtfsProfile.getOrNone(operator, "contact_details.phone"),
                   'agency_fare_url': '',
                   'agency_email': GtfsProfile.getOrNone(operator, "contact_details.email")
+                  }
+        return agency
+
+    @staticmethod
+    def projectBrandingToAgency(branding: Branding) -> dict:
+        agency = {'agency_id': branding.id,
+                  'agency_name': GtfsProfile.getOptionalMultilingualString(branding.name) or GtfsProfile.getOptionalMultilingualString(branding.short_name),
+                  'agency_url': GtfsProfile.getOrNone(branding, 'url') or 'http://openov.nl/', # TODO: FrameDefaults
+                  'agency_timezone': GtfsProfile.getOrNone(branding, "locale.time_zone") or 'Europe/Amsterdam', # TODO: FrameDefaults
+                  'agency_lang': GtfsProfile.getOrNone(branding, "locale.default_language"),
+                  'agency_phone': GtfsProfile.getOrNone(branding, "contact_details.phone"),
+                  'agency_fare_url': '',
+                  'agency_email': GtfsProfile.getOrNone(branding, "contact_details.email")
                   }
         return agency
 
@@ -192,19 +208,24 @@ class GtfsProfile:
         return 0
 
     @staticmethod
-    def projectScheduledStopPointToStop(scheduled_stop_point: ScheduledStopPoint, stop_place: StopPlace):
+    def projectScheduledStopPointToStop(scheduled_stop_point: ScheduledStopPoint, parent: StopPlaceRef | StopAreaRef, transformer: Transformer = None):
         # TODO: parent_station could be obtained from StopPlace or StopArea
+
+        if transformer:
+            latitude, longitude = transformer.transform(scheduled_stop_point.location.pos.value[0], scheduled_stop_point.location.pos.value[1])
+        else:
+            latitude, longitude = scheduled_stop_point.location.latitude, scheduled_stop_point.location.longitude
 
         stop = {'stop_id': scheduled_stop_point.id,
                 'stop_code': GtfsProfile.getOptionalPrivateCode(scheduled_stop_point.public_code),
                 'stop_name': GtfsProfile.getOptionalMultilingualString(scheduled_stop_point.name) or GtfsProfile.getOptionalMultilingualString(scheduled_stop_point.short_name),
                 'stop_desc': GtfsProfile.getOptionalMultilingualString(scheduled_stop_point.description),
-                'stop_lat': scheduled_stop_point.location.latitude,
-                'stop_lon': scheduled_stop_point.location.longitude,
+                'stop_lat': round(latitude, 7),
+                'stop_lon': round(longitude, 7),
                 'zone_id': GtfsProfile.getTariffZoneFromScheduledStopPoint(scheduled_stop_point.tariff_zones),
                 'stop_url': scheduled_stop_point.url or '',
                 'location_type': 0,
-                'parent_station': GtfsProfile.getOrNone(stop_place, 'id'),
+                'parent_station': GtfsProfile.getOrNone(parent, 'ref'),
                 'stop_timezone': '',
                 'wheelchair_boarding': '',
                 'level_id': '',
@@ -233,8 +254,14 @@ class GtfsProfile:
 
     @staticmethod
     def projectServiceJourneyToTrip(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern) -> dict:
+        if service_journey.day_types:
+            service_id = service_journey.day_types.day_type_ref[0].ref
+        else:
+            # TODO: Handle valid between
+            service_id = '+'.join([vc.ref for vc in service_journey.validity_conditions_or_valid_between[0].choice])
+
         trip = {'route_id': GtfsProfile.getLineRef(service_journey, service_journey_pattern),
-                'service_id': service_journey.day_types.day_type_ref[0].ref,  # TODO: Guard for duplicates, and AvailabilityCondition
+                'service_id': service_id,  # TODO: Guard for duplicates, and AvailabilityCondition
                 'trip_id': service_journey.id,
                 'trip_headsign': '', # service_journey.destination.destination_display_ref,
                 'trip_short_name': '',
@@ -280,17 +307,48 @@ class GtfsProfile:
                     }
             yield stop_time
 
+    @staticmethod
+    def projectStopAreaStop(stop_area: StopArea, transformer: Transformer = None) -> dict:
+        # TODO: parent_station could be obtained from StopPlace or StopArea
+        if transformer:
+            latitude, longitude = transformer.transform(stop_area.centroid.location.pos.value[0], stop_area.centroid.location.pos.value[1])
+        else:
+            latitude, longitude = stop_area.centroid.location.latitude, stop_area.centroid.location.longitude
+
+        stop = {'stop_id': stop_area.id,
+                'stop_code': stop_area.public_code or '',
+                'stop_name': GtfsProfile.getOptionalMultilingualString(stop_area.name) or GtfsProfile.getOptionalMultilingualString(stop_area.short_name),
+                'stop_desc': GtfsProfile.getOptionalMultilingualString(stop_area.description),
+                'stop_lat': round(latitude, 7),
+                'stop_lon': round(longitude, 7),
+                'zone_id': '',
+                'stop_url': '',
+                'location_type': 1, # Station
+                'parent_station': '',
+                'stop_timezone': GtfsProfile.getOrNone(stop_area, 'locale.time_zone'),
+                'wheelchair_boarding': '',
+                'level_id': '', # stop_place.levels.level_ref_or_level,
+                'platform_code': ''
+        }
+
+        return stop
+
 
     @staticmethod
-    def projectQuayStop(stop_place: StopPlace, with_quays = False) -> List[dict]:
+    def projectQuayStop(stop_place: StopPlace, with_quays = False, transformer: Transformer = None) -> List[dict]:
         # TODO: parent_station could be obtained from StopPlace or StopArea
+        if transformer:
+            latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
+        else:
+            latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
+
         result = []
         stop = {'stop_id': stop_place.id,
                 'stop_code': stop_place.public_code or '',
                 'stop_name': GtfsProfile.getOptionalMultilingualString(stop_place.name) or GtfsProfile.getOptionalMultilingualString(stop_place.short_name),
                 'stop_desc': GtfsProfile.getOptionalMultilingualString(stop_place.description),
-                'stop_lat': stop_place.centroid.location.latitude,
-                'stop_lon': stop_place.centroid.location.longitude,
+                'stop_lat': round(latitude, 7),
+                'stop_lon': round(longitude, 7),
                 'zone_id': GtfsProfile.getTariffZoneFromScheduledStopPoint(stop_place.tariff_zones),
                 'stop_url': stop_place.url or '',
                 'location_type': 1, # Station
@@ -308,17 +366,23 @@ class GtfsProfile:
                 if not isinstance(quay, Quay):
                     continue
 
+                if transformer:
+                    latitude, longitude = transformer.transform(quay.centroid.location.pos.value[0],
+                                                                quay.centroid.location.pos.value[1])
+                else:
+                    latitude, longitude = quay.centroid.location.latitude, quay.centroid.location.longitude
+
                 stop = {'stop_id': quay.id,
                         'stop_code': quay.public_code or '',
                         'stop_name': GtfsProfile.getOptionalMultilingualString(quay.name) or GtfsProfile.getOptionalMultilingualString(quay.short_name),
                         'stop_desc': GtfsProfile.getOptionalMultilingualString(quay.description),
-                        'stop_lat': quay.centroid.location.latitude,
-                        'stop_lon': quay.centroid.location.longitude,
+                        'stop_lat': round(latitude, 7),
+                        'stop_lon': round(longitude, 7),
                         'zone_id': GtfsProfile.getTariffZoneFromScheduledStopPoint(quay.tariff_zones),
                         'stop_url': quay.url or '',
                         'location_type': 0,  # Platform
                         'parent_station': stop_place.id,
-                        'stop_timezone': stop_place.locale.time_zone,
+                        'stop_timezone': GtfsProfile.getOrNone(stop_place, 'locale.time_zone'),
                         'wheelchair_boarding': GtfsProfile.getWheelchairAccess(quay.accessibility_assessment),
                         'level_id': '',  # stop_place.levels.level_ref_or_level,
                         'platform_code': quay.short_code
@@ -327,3 +391,27 @@ class GtfsProfile:
                 yield stop
         # else:
         #    print(stop_place.id)
+
+    @staticmethod
+    def projectRouteLinksToShapes(route: Route, route_links: List[RouteLink], transformer: Transformer = None) -> List[dict]:
+        sequence = 0
+
+        for route_link in route_links:
+            # TODO: handle variants (posList, pos array)
+            l = route_link.line_string.pos_or_point_property_or_pos_list[0].value
+            dimensions = route_link.line_string.srs_dimension or 2
+            for i in range(0, len(l), dimensions):
+                if transformer:
+                    latitude, longitude = transformer.transform(l[i], l[i + 1])
+
+                else:
+                    latitude, longitude = l[i], l[i + 1]
+
+                stop = {'shape_id': route.id,
+                        'shape_pt_lat': round(latitude, 7),
+                        'shape_pt_lon': round(longitude, 7),
+                        'shape_pt_sequence': sequence,
+                        'shape_dist_traveled': ''
+                }
+
+                yield stop

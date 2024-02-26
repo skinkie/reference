@@ -15,7 +15,6 @@ class TimetablePassingTimesProfile:
         self.service_journeys = service_journeys
         self.service_journey_patterns = service_journey_patterns
 
-
     @staticmethod
     def mapCallToStopPointInJourneyPattern(call: Call, codespace: Codespace) -> StopPointInJourneyPattern:
         stop_point_in_journey_pattern = StopPointInJourneyPattern(
