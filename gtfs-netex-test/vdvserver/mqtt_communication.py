@@ -206,7 +206,7 @@ async def mqtt_subscriber():
                             content = GzipFile('','r',0,BytesIO(message.payload)).read()
                             daten_abrufen_antwort = parser.from_bytes(content, DatenAbrufenAntwortType)
                         except:
-                            pass
+                            raise
 
                         if daten_abrufen_antwort is not None:
                             l = []
@@ -218,7 +218,7 @@ async def mqtt_subscriber():
                                 cursor.executemany("""INSERT OR REPLACE INTO queue VALUES (?, ?, ?, ?, ?, ?, ?);""", l)
 
         except:
-            pass
+            raise
         await asyncio.sleep(15)
 
 async def aus_datenabrufen(sender):

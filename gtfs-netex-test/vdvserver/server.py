@@ -62,7 +62,7 @@ async def aus_datenabrufen(request):
     if daten_abrufen_anfrage.sender == request.match_info['sender']:
         uri = await check_sender(daten_abrufen_anfrage.sender)
         if uri is not None:
-            antwort = DatenAbrufenAntwort(bestaetigung=BestaetigungType(fehlernummer="0", zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), choice=await aus_nachrichten(sender=daten_abrufen_anfrage.sender))
+            antwort = DatenAbrufenAntwort(bestaetigung=BestaetigungType(fehlernummer="0", zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), ausnachricht=await aus_nachrichten(sender=daten_abrufen_anfrage.sender))
         else:
             antwort = DatenAbrufenAntwort(bestaetigung=unknown_sender(request))
 
@@ -80,23 +80,24 @@ async def aus_aboverwalten(request):
     if abo_anfrage.sender == request.match_info['sender']:
         uri = await check_sender(abo_anfrage.sender)
         if uri:
-            if isinstance(abo_anfrage.choice, bool):
+            if abo_anfrage.abo_loeschen_alle is not None:
                 await abo_loeschen_alle(abo_anfrage.sender)
                 antwort = AboAntwort(bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
 
-            elif isinstance(abo_anfrage.choice, int):
-                await abo_loeschen(abo_anfrage.sender, abo_anfrage.choice)
+            elif abo_anfrage.abo_loeschen is not None:
+                await abo_loeschen(abo_anfrage.sender, abo_anfrage.abo_loeschen)
                 antwort = AboAntwort(bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
 
-            elif isinstance(abo_anfrage.choice, list):
-                abo_aus_types = [abo_aus_type for abo_aus_type in abo_anfrage.choice if isinstance(abo_aus_type, AboAustype)]
-                for abo_aus_type in abo_aus_types:
+            elif abo_anfrage.abo_aus is not None:
+                for abo_aus_type in abo_anfrage.abo_aus:
                     await abo_aus(abo_anfrage.sender, abo_aus_type)
 
-                ids = ', '.join([str(abo_aus_type.abo_id) for abo_aus_type in abo_aus_types])
+                ids = ', '.join([str(abo_aus_type.abo_id) for abo_aus_type in abo_anfrage.abo_aus])
                 antwort = AboAntwort(bestaetigung=BestaetigungType(fehlernummer="0", fehlertext=f"Adding/Replacing abo_id(s) {ids} for {abo_anfrage.sender}.", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
 
             else:
+                print("Not handeled")
+                print(abo_anfrage)
                 antwort = AboAntwort(
                     bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.NOTOK, zst=XmlDateTime.utcnow().replace(fractional_second=0), fehlertext="This operation is not implemented."))
         else:
