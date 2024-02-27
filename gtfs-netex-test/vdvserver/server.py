@@ -71,7 +71,7 @@ async def aus_datenabrufen(request):
 
     # return web.Response(body=gzip.compress(bytes(serializer.render(antwort), 'utf-8')), headers={"Content-Encoding": "gzip"}, content_type="application/xml")
     xml = serializer.render(antwort)
-    print(xml)
+    # print(xml)
     return web.Response(text=xml, content_type="application/xml")
 
 async def aus_aboverwalten(request):
