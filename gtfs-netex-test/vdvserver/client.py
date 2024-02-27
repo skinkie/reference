@@ -35,7 +35,8 @@ async def abo_anfrage(BASE_URL, TIMEOUT=3600):
                     print(abo_antwort_type)
                     await asyncio.sleep(TIMEOUT - 120)
             except:
-                pass
+                raise
+
             await asyncio.sleep(60)
             
 
