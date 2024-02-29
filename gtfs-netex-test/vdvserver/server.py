@@ -80,15 +80,15 @@ async def aus_aboverwalten(request):
     if abo_anfrage.sender == request.match_info['sender']:
         uri = await check_sender(abo_anfrage.sender)
         if uri:
-            if abo_anfrage.abo_loeschen_alle is not None:
+            if abo_anfrage.abo_loeschen_alle:
                 await abo_loeschen_alle(abo_anfrage.sender)
                 antwort = AboAntwort(bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
 
-            elif abo_anfrage.abo_loeschen is not None:
+            elif len(abo_anfrage.abo_loeschen) > 0:
                 await abo_loeschen(abo_anfrage.sender, abo_anfrage.abo_loeschen)
                 antwort = AboAntwort(bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
 
-            elif abo_anfrage.abo_aus is not None:
+            elif len(abo_anfrage.abo_aus) > 0:
                 for abo_aus_type in abo_anfrage.abo_aus:
                     await abo_aus(abo_anfrage.sender, abo_aus_type)
 
@@ -109,6 +109,6 @@ async def aus_aboverwalten(request):
     print(anfrage.decode('utf-8'))
     text = serializer.render(antwort)
     # open('/tmp/output.xml', 'w').write(text)
-    print(text)
+    print(request.match_info['sender'], text)
 
     return web.Response(text=text, content_type="application/xml")
