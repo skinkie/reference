@@ -8,7 +8,7 @@ from netex import ServiceJourney, StopPointInJourneyPattern, ServiceJourneyPatte
     StopPointInJourneyPatternRef, StopPointInJourneyPatternRefStructure, PointInJourneyPatternRefStructure, \
     OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, TimeDemandTypeRef, \
     TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint, Route, CallsRelStructure, TimingPointInJourneyPattern, \
-    ScheduledStopPointRef
+    ScheduledStopPointRef, ServiceLinkInJourneyPattern, TimingLinkInJourneyPattern, JourneyPatternWaitTimesRelStructure
 from refs import setIdVersion, getRef, getIndex, getIdByRef
 from utils import project
 
@@ -52,6 +52,25 @@ class CallsProfile:
         return (service_journey.departure_day_offset or 0) * 86400 + service_journey.departure_time.hour * 3600 + service_journey.departure_time.minute * 60 + service_journey.departure_time.second
 
     @staticmethod
+    def getWaitTimesFromPointInJourneyPattern(wait_time_or_wait_times, time_demand_type: TimeDemandType = None):
+        if isinstance(wait_time_or_wait_times, XmlDuration):
+            return wait_time_or_wait_times
+
+        elif isinstance(wait_time_or_wait_times, JourneyPatternWaitTimesRelStructure):
+            # TODO: Check for ambiguities, for example due to Timebands, TimeDemandType
+            if time_demand_type is not None:
+                for x in wait_time_or_wait_times.journey_pattern_wait_time_ref_or_journey_pattern_wait_time:
+                    if x.time_demand_type_ref_or_timeband_ref.ref == time_demand_type.id:
+                        return x.wait_time
+
+                return wait_time_or_wait_times.journey_pattern_wait_time_ref_or_journey_pattern_wait_time[0].wait_time
+
+            else:
+                return wait_time_or_wait_times.journey_pattern_wait_time_ref_or_journey_pattern_wait_time[0].wait_time
+
+        return None
+
+    @staticmethod
     def getCallsFromTimeDemandType(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern, time_demand_type: TimeDemandType):
         # If calls are present, we don't have to do anything
         if service_journey.calls is not None:
@@ -66,17 +85,37 @@ class CallsProfile:
             return
 
         # TODO: Check for ambiguities, for example due to Timebands or points having the same name
-        tdt_tl: dict[str, JourneyRunTime] = getIndex(time_demand_type.run_times.journey_run_time, 'timing_link_ref.ref')
+        tdt_tl: dict[str, JourneyRunTime] = {}
+        if time_demand_type.run_times:
+            tdt_tl = getIndex(time_demand_type.run_times.journey_run_time, 'timing_link_ref.ref')
+
+        tdt_point: dict[str, JourneyWaitTime] = {}
         if time_demand_type.wait_times:
-            tdt_point: dict[str, JourneyWaitTime] = getIndex(time_demand_type.wait_times.journey_wait_time, 'choice.ref')
-        else:
-            tdt_point: dict[str, JourneyWaitTime] = {}
+            tdt_point = getIndex(time_demand_type.wait_times, 'journey_wait_time.choice.ref')
+
+        i = 0
+        for lis in service_journey_pattern.links_in_sequence.service_link_in_journey_pattern_or_timing_link_in_journey_pattern:
+            if isinstance(lis, ServiceLinkInJourneyPattern):
+                for journey_run_time in lis.run_times.journey_run_time:
+                    tdt_tl[lis.service_link_ref.ref] = journey_run_time
+                    # TODO: Guard begin point equeals assigned value
+                    service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_service_link_ref = lis.service_link_ref
+
+            elif isinstance(lis, TimingLinkInJourneyPattern):
+                for journey_run_time in lis.run_times.journey_run_time:
+                    tdt_tl[lis.timing_link_ref.ref] = journey_run_time
+                    # TODO: Guard begin point equeals assigned value
+                    service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_timing_link_ref = lis.timing_link_ref
+
+            i += 1
 
         departure: int = CallsProfile.getDepartureTime(service_journey)
         arrival: int = departure
         offset: int = service_journey.departure_time.offset
 
         calls = CallsRelStructure(call = [])
+
+
 
         # If there are no onward timing links, we must consider links in sequence
         for pis in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
@@ -89,13 +128,19 @@ class CallsProfile:
             if isinstance(pis, StopPointInJourneyPattern):
                 ssp_ref = pis.scheduled_stop_point_ref
                 spijp = pis
-                wait_time = tdt_point.get(pis.scheduled_stop_point_ref.ref, None)
-                if wait_time is not None:
-                    wait_time = wait_time.wait_time
+
+                wait_time = CallsProfile.getWaitTimesFromPointInJourneyPattern(pis.wait_time_or_wait_times, time_demand_type)
+
+                if wait_time is None:
+                    wait_time = tdt_point.get(pis.scheduled_stop_point_ref.ref, None)
+                    if wait_time is not None:
+                        wait_time = wait_time.wait_time
+
                 if pis.onward_timing_link_ref:
                     run_time = tdt_tl[pis.onward_timing_link_ref.ref]
                 elif pis.onward_service_link_ref:
                     run_time = tdt_tl[pis.onward_service_link_ref.ref]
+
             elif isinstance(pis, TimingPointInJourneyPattern):
                 if isinstance(pis.choice_1, ScheduledStopPointRef):
                     spijp = project(pis, StopPointInJourneyPattern)

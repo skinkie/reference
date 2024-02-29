@@ -6,7 +6,8 @@ from pyproj import Transformer
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \
     ScheduledStopPoint, StopPlace, AccessibilityAssessment, LimitationStatusEnumeration, TariffZoneRefsRelStructure, \
     PrivateCode, PrivateCodeStructure, Quay, PresentationStructure, Authority, Branding, Operator, ServiceJourney, \
-    ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink
+    ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
+    ServiceLink
 
 import operator as operator_f
 
@@ -434,6 +435,59 @@ class GtfsProfile:
                 latitude, longitude = l[i], l[i + 1]
 
             shape_point = {'shape_id': route.id,
+                           'shape_pt_lat': round(latitude, 7),
+                           'shape_pt_lon': round(longitude, 7),
+                           'shape_pt_sequence': sequence,
+                           'shape_dist_traveled': distance
+                           }
+
+            sequence += 1
+            distance = ''
+
+            yield shape_point
+
+    @staticmethod
+    def projectServiceLinksToShapes(service_journey_pattern: ServiceJourneyPattern, service_links: List[ServiceLink], transformer: Transformer = None) -> List[dict]:
+        sequence = 0
+        distance = 0
+        distance_keep = 0
+
+        for route_link in service_links[0:-1]:
+            # TODO: handle variants (posList, pos array)
+            l = route_link.line_string.pos_or_point_property_or_pos_list[0].value
+            dimensions = route_link.line_string.srs_dimension or 2
+            for i in range(0, len(l) - dimensions, dimensions):
+                if transformer:
+                    latitude, longitude = transformer.transform(l[i], l[i + 1])
+
+                else:
+                    latitude, longitude = l[i], l[i + 1]
+
+                shape_point = {'shape_id': service_journey_pattern.id,
+                        'shape_pt_lat': round(latitude, 7),
+                        'shape_pt_lon': round(longitude, 7),
+                        'shape_pt_sequence': sequence,
+                        'shape_dist_traveled': distance
+                }
+
+                sequence += 1
+                distance = ''
+
+                yield shape_point
+
+            distance_keep += route_link.distance
+            distance = distance_keep
+
+        l = service_links[-1].line_string.pos_or_point_property_or_pos_list[0].value
+        dimensions = service_links[-1].line_string.srs_dimension or 2
+        for i in range(0, len(l), dimensions):
+            if transformer:
+                latitude, longitude = transformer.transform(l[i], l[i + 1])
+
+            else:
+                latitude, longitude = l[i], l[i + 1]
+
+            shape_point = {'shape_id': service_journey_pattern.id,
                            'shape_pt_lat': round(latitude, 7),
                            'shape_pt_lon': round(longitude, 7),
                            'shape_pt_sequence': sequence,

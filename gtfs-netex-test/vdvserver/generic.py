@@ -28,11 +28,11 @@ def unknown_sender(request) -> BestaetigungType:
 
 async def aus_status(request):
     # StartDienst
-    now = XmlDateTime.utcnow()
+    now = XmlDateTime.utcnow().replace(fractional_second=0)
     if now.hour < 4:
         now = now.to_datetime() - datetime.timedelta(days=1)
 
-    start_dienst_zst = now.replace(fractional_second=0).replace(hour=4, minute=0, second=0)
+    start_dienst_zst = now.replace(hour=4, minute=0, second=0)
 
     anfrage = await request.read()
     try:
