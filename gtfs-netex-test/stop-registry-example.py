@@ -8,7 +8,8 @@ from xsdata.models.datatype import XmlDateTime
 
 from netex import StopPlace, SimplePointVersionStructure, LocationStructure2, PublicationDelivery, MultilingualString, \
     DataObjectsRelStructure, CompositeFrame, FramesRelStructure, InfrastructureFrame, ServiceFrame, ResourceFrame, \
-    SiteFrame, StopPlacesInFrameRelStructure
+    SiteFrame, StopPlacesInFrameRelStructure, Vehicle, VehicleType
+
 
 def transform(stations_csv: str) -> Iterator[StopPlace]:
     with open(stations_csv, 'r') as csvfile:
@@ -42,3 +43,6 @@ ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/
 
 with open('/tmp/stopregistry2.xml', 'w') as out:
     serializer.write(out, publication_delivery, ns_map)
+
+
+VehicleType(type)
