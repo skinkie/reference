@@ -20,7 +20,7 @@ from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
     Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
     TimeDemandType, Route, Quay, SimplePointVersionStructure, Pos, StopArea, AvailabilityCondition, RouteLink, \
-    ServiceLink, RouteRef
+    ServiceLink, RouteRef, InfrastructureFrame
 from nordicprofile import NordicProfile
 from refs import getId, getRef, getIndex
 
@@ -30,6 +30,8 @@ from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 
 import csv
+
+
 
 def convert():
     context = XmlContext()

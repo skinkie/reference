@@ -165,7 +165,8 @@ def convert():
 
             if scheduled_stop_point.id not in stops:
                 stop = GtfsProfile.projectScheduledStopPointToStop(scheduled_stop_point, stop_place)
-                stops[stop['stop_id']] = stop
+                if stop is not None:
+                    stops[stop['stop_id']] = stop
 
         for element in tree.iterfind(".//{http://www.netex.org.uk/netex}UicOperatingPeriod"):
             uic_operating_period: UicOperatingPeriod = parser.parse(element, UicOperatingPeriod)
@@ -178,7 +179,7 @@ def convert():
             day_type_assignment: DayTypeAssignment = parser.parse(element, DayTypeAssignment)
             calendar_dates[day_type_assignment.day_type_ref.ref] = list(
                 GtfsProfile.getCalendarDates(day_type_assignment.day_type_ref.ref,
-                                             uic_operating_periods[day_type_assignment.choice.ref]))
+                                             uic_operating_periods[day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]))
 
         
         trips = []
@@ -197,7 +198,7 @@ def convert():
             trip = GtfsProfile.projectServiceJourneyToTrip(service_journey, service_journey_pattern)
             trips.append(trip)
 
-            CallsProfile.getCalls(service_journey, service_journey_pattern)
+            CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
             stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
 
         GtfsProfile.writeToFile('/tmp/trips.txt', trips)
