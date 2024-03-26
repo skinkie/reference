@@ -3332,6 +3332,7 @@ from .organisation_part_version_structure import (
 )
 from .organisation_parts_rel_structure import OrganisationPartsRelStructure
 from .organisation_ref import OrganisationRef
+from .organisation_ref_abstract import OrganisationRefAbstract
 from .organisation_ref_structure import OrganisationRefStructure
 from .organisation_refs_rel_structure import OrganisationRefsRelStructure
 from .organisation_role_enumeration import OrganisationRoleEnumeration
@@ -9112,6 +9113,7 @@ __all__ = [
     "OrganisationPartVersionStructure",
     "OrganisationPartsRelStructure",
     "OrganisationRef",
+    "OrganisationRefAbstract",
     "OrganisationRefStructure",
     "OrganisationRefsRelStructure",
     "OrganisationRoleEnumeration",

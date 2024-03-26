@@ -1,7 +1,7 @@
 import inspect
-import netex
+from netex import models
 
-clsmembers = inspect.getmembers(netex, inspect.isclass)
+clsmembers = inspect.getmembers(models, inspect.isclass)
 
 with open('/tmp/overview.txt', 'w') as f:
     for member in clsmembers:

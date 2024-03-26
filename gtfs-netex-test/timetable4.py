@@ -6,12 +6,12 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDuration, XmlDateTime, XmlTime
 
 from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, TimingPointInJourneyPattern, TimeDemandType, \
-    ServiceJourney1, AvailabilityCondition, Operator, Line1, DestinationDisplay, MultilingualString, LocationStructure2, \
-    Quay1, PrivateCodeStructure, StopAreaRefsRelStructure, StopAreaRefStructure, ServiceJourneyPattern, \
+    ServiceJourney, AvailabilityCondition, Operator, Line, DestinationDisplay, MultilingualString, LocationStructure2, \
+    Quay, PrivateCodeStructure, StopAreaRefsRelStructure, StopAreaRefStructure, ServiceJourneyPattern, \
     ValidityConditionsRelStructure, PointsInJourneyPatternRelStructure, DestinationDisplayView, ScheduledStopPointRef, \
     JourneyRunTimesRelStructure, JourneyRunTime, ServiceLinkRefStructure, TimingLinkRef, JourneyWaitTimesRelStructure, \
     JourneyWaitTime, ServiceJourneyPatternRef, TimeDemandTypeRef, SimplePointVersionStructure, ContactStructure, \
-    PresentationStructure, StopPlace1, PassengerStopAssignment, StopPlaceRef, Locale, PublicationDelivery, \
+    PresentationStructure, StopPlace, PassengerStopAssignment, StopPlaceRef, Locale, PublicationDelivery, \
     CompositeFrame, FramesRelStructure, SiteFrame, StopPlacesInFrameRelStructure, ServiceFrame, \
     StopAssignmentsInFrameRelStructure, ScheduledStopPointsInFrameRelStructure, ResourceFrame, \
     OrganisationsInFrameRelStructure, TimetableFrame, LinesInFrameRelStructure, DataObjectsRelStructure, \
@@ -36,7 +36,7 @@ from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, Timin
 parkings: List[Parking] = [Parking(id="1", version="1", parking_vehicle_types=[ParkingVehicleEnumeration.CAR]),
     Parking(id="2", version="1", parking_vehicle_types=[ParkingVehicleEnumeration.CYCLE])
 ]
-stop_places: List[StopPlace1] = [StopPlace1(
+stop_places: List[StopPlace] = [StopPlace(
     id="1a1p", version="1",
     name=MultilingualString(value='Name'),
     centroid=SimplePointVersionStructure(location=LocationStructure2(latitude=Decimal('1.0'), longitude=Decimal('2.0'))),
@@ -50,11 +50,11 @@ stop_places: List[StopPlace1] = [StopPlace1(
             Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=MobilityEnumeration.WHEELCHAIR),
             Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=PyschosensoryNeedEnumeration.VISUAL_IMPAIRMENT),
         ])),
-    quays=QuaysRelStructure(taxi_stand_ref_or_quay_ref_or_quay=[Quay1(id="1a1", version="1"),
-                                                                Quay1(id="1a3", version="1"),
-                                                                Quay1(id="1a5", version="1")])
+    quays=QuaysRelStructure(taxi_stand_ref_or_quay_ref_or_quay=[Quay(id="1a1", version="1"),
+                                                                Quay(id="1a3", version="1"),
+                                                                Quay(id="1a5", version="1")])
 ),
-    StopPlace1(
+    StopPlace(
     id="1a2p", version="1",
     name=MultilingualString(value='Name'),
     centroid=SimplePointVersionStructure(location=LocationStructure2(latitude=Decimal('1.0'), longitude=Decimal('2.0'))),
@@ -68,9 +68,9 @@ stop_places: List[StopPlace1] = [StopPlace1(
             Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=MobilityEnumeration.WHEELCHAIR),
             Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=PyschosensoryNeedEnumeration.VISUAL_IMPAIRMENT),
         ])),
-    quays=QuaysRelStructure(taxi_stand_ref_or_quay_ref_or_quay=[Quay1(id="1a2", version="1"),
-                                                                Quay1(id="1a4", version="1"),
-                                                                Quay1(id="1a6", version="1")])
+    quays=QuaysRelStructure(taxi_stand_ref_or_quay_ref_or_quay=[Quay(id="1a2", version="1"),
+                                                                Quay(id="1a4", version="1"),
+                                                                Quay(id="1a6", version="1")])
 )
 ]
 
@@ -150,7 +150,7 @@ scheduled_stop_points: List[ScheduledStopPoint] = [ScheduledStopPoint(
 ),
 ]
 
-lines: List[Line1] = [Line1(
+lines: List[Line] = [Line(
     id="1a|bus", version="1",
     name=MultilingualString(value="Bus"),
     public_code="Code",
@@ -158,7 +158,7 @@ lines: List[Line1] = [Line1(
     operator_ref=OperatorRef(ref="MMRI", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
 ),
-Line1(
+Line(
     id="1a|ferry", version="1",
     name=MultilingualString(value="Ferry"),
     public_code="Code",
@@ -166,7 +166,7 @@ Line1(
     operator_ref=OperatorRef(ref="MMRI", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
 ),
-Line1(
+Line(
     id="1a|rail", version="1",
     name=MultilingualString(value="Rail"),
     public_code="Code",
@@ -245,7 +245,7 @@ ServiceJourneyPattern(
 ]
 
 # TODO: appropriate_signage
-service_journeys: List[ServiceJourney1] = [ServiceJourney1(
+service_journeys: List[ServiceJourney] = [ServiceJourney(
     id="1a|bus|1", version="1",
     validity_conditions_or_valid_between=[
         ValidityConditionsRelStructure(choice=[AvailabilityCondition(
@@ -269,7 +269,7 @@ service_journeys: List[ServiceJourney1] = [ServiceJourney1(
     ]),
     flexible_service_properties_ref_or_flexible_service_properties=FlexibleServiceProperties(flexible_service_type=FlexibleServiceEnumeration.FIXED_PASSING_TIMES)
 ),
-ServiceJourney1(
+ServiceJourney(
     id="1a|ferry|1", version="1",
     validity_conditions_or_valid_between=[
         ValidityConditionsRelStructure(choice=[AvailabilityCondition(
@@ -295,7 +295,7 @@ ServiceJourney1(
     ]),
     flexible_service_properties_ref_or_flexible_service_properties=FlexibleServiceProperties(flexible_service_type=FlexibleServiceEnumeration.NOT_FLEXIBLE)
 ),
-ServiceJourney1(
+ServiceJourney(
     id="1a|rail|1", version="1",
     validity_conditions_or_valid_between=[
         ValidityConditionsRelStructure(choice=[AvailabilityCondition(
