@@ -29,7 +29,8 @@ from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, Timin
     SanitaryFacilityList, SanitaryFacilityEnumeration, FlexibleServiceProperties, FlexibleServiceEnumeration, \
     TransportSubmode, BusSubmode, BusSubmodeEnumeration, ServiceReservationFacilityList, ReservationEnumeration, \
     SuitableEnumeration, ParkingsInFrameRelStructure, QuaysRelStructure, QuayRef, RouteView, LineRef, \
-    DestinationDisplayView, TimetabledPassingTimesRelStructure, TimetabledPassingTime, StopPointInJourneyPatternRef
+    DestinationDisplayView, TimetabledPassingTimesRelStructure, TimetabledPassingTime, StopPointInJourneyPatternRef, \
+    ValidBetween
 
 # Missing: BicycleRent
 
@@ -43,16 +44,30 @@ stop_places: List[StopPlace] = [StopPlace(
     locale=Locale(time_zone_offset=Decimal('2.0')),
     covered=CoveredEnumeration.COVERED,
     adjacent_sites=SiteRefsRelStructure(stop_place_ref_or_site_ref=[ParkingRef(ref="1", version="1"), ParkingRef(ref="2", version="1")]),
-    accessibility_assessment=AccessibilityAssessment(
-        id="1a1p", version="1",
+    quays=QuaysRelStructure(taxi_stand_ref_or_quay_ref_or_quay=[Quay(id="1a1", version="1", accessibility_assessment=AccessibilityAssessment(
+        id="1a1", version="1",
         mobility_impaired_access=LimitationStatusEnumeration.TRUE,
         suitabilities=SuitabilitiesRelStructure(suitability=[
             Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=MobilityEnumeration.WHEELCHAIR),
             Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=PyschosensoryNeedEnumeration.VISUAL_IMPAIRMENT),
         ])),
-    quays=QuaysRelStructure(taxi_stand_ref_or_quay_ref_or_quay=[Quay(id="1a1", version="1"),
-                                                                Quay(id="1a3", version="1"),
-                                                                Quay(id="1a5", version="1")])
+),
+                                                                Quay(id="1a3", version="1", accessibility_assessment=AccessibilityAssessment(
+        id="1a3", version="1",
+        mobility_impaired_access=LimitationStatusEnumeration.TRUE,
+        suitabilities=SuitabilitiesRelStructure(suitability=[
+            Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=MobilityEnumeration.WHEELCHAIR),
+            Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=PyschosensoryNeedEnumeration.VISUAL_IMPAIRMENT),
+        ])),
+),
+                                                                Quay(id="1a5", version="1", accessibility_assessment=AccessibilityAssessment(
+        id="1a5", version="1",
+        mobility_impaired_access=LimitationStatusEnumeration.TRUE,
+        suitabilities=SuitabilitiesRelStructure(suitability=[
+            Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=MobilityEnumeration.WHEELCHAIR),
+            Suitability(suitable=SuitableEnumeration.SUITABLE, mobility_need_or_psychosensory_need_or_medical_need_or_encumbrance_need=PyschosensoryNeedEnumeration.VISUAL_IMPAIRMENT),
+        ])),
+)])
 ),
     StopPlace(
     id="1a2p", version="1",
@@ -115,37 +130,31 @@ passenger_stop_assignments: List[PassengerStopAssignment] = [
 scheduled_stop_points: List[ScheduledStopPoint] = [ScheduledStopPoint(
     id="1a1", version="1",
     name=MultilingualString(value='Stop 1a1'),
-    public_code=PrivateCodeStructure(),
-    location=LocationStructure2(latitude=Decimal('1.101'), longitude=Decimal('1.1'))
+    location=LocationStructure2(latitude=Decimal('1.101'), longitude=Decimal('1.1')),
 ),
     ScheduledStopPoint(
     id="1a2", version="1",
     name=MultilingualString(value='Stop 1a2'),
-    public_code=PrivateCodeStructure(),
     location=LocationStructure2(latitude=Decimal('1.102'), longitude=Decimal('1.1'))
 ),
     ScheduledStopPoint(
     id="1a3", version="1",
     name=MultilingualString(value='Stop 1a3'),
-    public_code=PrivateCodeStructure(),
     location=LocationStructure2(latitude=Decimal('1.103'), longitude=Decimal('1.1'))
 ),
     ScheduledStopPoint(
     id="1a4", version="1",
     name=MultilingualString(value='Stop 1a4'),
-    public_code=PrivateCodeStructure(),
     location=LocationStructure2(latitude=Decimal('1.104'), longitude=Decimal('1.1'))
 ),
     ScheduledStopPoint(
     id="1a5", version="1",
     name=MultilingualString(value='Stop 1a5'),
-    public_code=PrivateCodeStructure(),
     location=LocationStructure2(latitude=Decimal('1.105'), longitude=Decimal('1.1'))
 ),
     ScheduledStopPoint(
     id="1a6", version="1",
     name=MultilingualString(value='Stop 1a6'),
-    public_code=PrivateCodeStructure(),
     location=LocationStructure2(latitude=Decimal('1.106'), longitude=Decimal('1.1'))
 ),
 ]
@@ -153,7 +162,6 @@ scheduled_stop_points: List[ScheduledStopPoint] = [ScheduledStopPoint(
 lines: List[Line] = [Line(
     id="1a|bus", version="1",
     name=MultilingualString(value="Bus"),
-    public_code="Code",
     transport_mode=AllVehicleModesOfTransportEnumeration.BUS,
     operator_ref=OperatorRef(ref="MMRI", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
@@ -161,7 +169,6 @@ lines: List[Line] = [Line(
 Line(
     id="1a|ferry", version="1",
     name=MultilingualString(value="Ferry"),
-    public_code="Code",
     transport_mode=AllVehicleModesOfTransportEnumeration.FERRY,
     operator_ref=OperatorRef(ref="MMRI", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
@@ -169,7 +176,6 @@ Line(
 Line(
     id="1a|rail", version="1",
     name=MultilingualString(value="Rail"),
-    public_code="Code",
     transport_mode=AllVehicleModesOfTransportEnumeration.RAIL,
     operator_ref=OperatorRef(ref="MMRI", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
@@ -370,7 +376,9 @@ timetable_frame = TimetableFrame(
     vehicle_journeys=JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journeys),
 )
 
-composite_frame: CompositeFrame = CompositeFrame(id="1", version="1", frames=FramesRelStructure(common_frame=[resource_frame, site_frame, service_frame, timetable_frame]))
+composite_frame: CompositeFrame = CompositeFrame(id="1", version="1",
+                                                 validity_conditions_or_valid_between=[ValidBetween(from_date=XmlDateTime.from_string("2014-01-01T00:00:00"), to_date=XmlDateTime.from_string("2014-01-01T00:00:00"))],
+                                                 frames=FramesRelStructure(common_frame=[resource_frame, site_frame, service_frame, timetable_frame]))
 
 publication_delivery: PublicationDelivery = PublicationDelivery(
     publication_timestamp=XmlDateTime.now(),
@@ -382,7 +390,7 @@ publication_delivery: PublicationDelivery = PublicationDelivery(
 serializer_config = SerializerConfig(ignore_default_attributes=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
-serializer = XmlSerializer(serializer_config)
+serializer = XmlSerializer(config=serializer_config)
 
 ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
