@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .accessibility_tool_enumeration import AccessibilityToolEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

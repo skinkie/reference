@@ -1,16 +1,11 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+from .participant_ref_structure import ParticipantRefStructure
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
 @dataclass(kw_only=True)
-class RequestorRef:
+class RequestorRef(ParticipantRefStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"
-
-    value: str = field(
-        default="",
-        metadata={
-            "required": True,
-        },
-    )

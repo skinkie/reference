@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .parking_facility_enumeration import ParkingFacilityEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

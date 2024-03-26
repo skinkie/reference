@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from xsdata.models.datatype import XmlDuration, XmlTime
+
 from .connecting_journey_view import ConnectingJourneyView
 from .connection_certainty_enumeration import ConnectionCertaintyEnumeration
 from .connection_ref_structure import ConnectionRefStructure
@@ -13,6 +15,7 @@ from .journey_meeting_ref import JourneyMeetingRef
 from .line_derived_view_structure import LineDerivedViewStructure
 from .line_ref import LineRef
 from .multilingual_string import MultilingualString
+from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .reason_for_meeting_enumeration import ReasonForMeetingEnumeration
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 from .service_journey_ref import ServiceJourneyRef
@@ -118,9 +121,10 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
+    single_journey_ref_or_normal_dated_vehicle_journey_ref_or_dated_vehicle_journey_ref_or_dated_special_service_ref_or_special_service_ref_or_template_service_journey_ref_or_service_journey_ref_or_dead_run_ref_or_vehicle_journey_ref_or_connecting_journey_view: Optional[
         Union[
             SingleJourneyRef,
+            NormalDatedVehicleJourneyRef,
             DatedVehicleJourneyRef,
             DatedSpecialServiceRef,
             SpecialServiceRef,
@@ -138,6 +142,11 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
                 {
                     "name": "SingleJourneyRef",
                     "type": SingleJourneyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NormalDatedVehicleJourneyRef",
+                    "type": NormalDatedVehicleJourneyRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

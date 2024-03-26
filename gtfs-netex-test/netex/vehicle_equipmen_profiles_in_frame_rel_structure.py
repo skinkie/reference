@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Union
-from .charging_equipment_profile import ChargingEquipmentProfile
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
+from .recharging_equipment_profile import RechargingEquipmentProfile
 from .vehicle_equipment_profile import VehicleEquipmentProfile
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -14,8 +15,8 @@ class VehicleEquipmenProfilesInFrameRelStructure(
     class Meta:
         name = "vehicleEquipmenProfilesInFrame_RelStructure"
 
-    vehicle_equipment_profile_or_charging_equipment_profile: List[
-        Union[VehicleEquipmentProfile, ChargingEquipmentProfile]
+    vehicle_equipment_profile_or_recharging_equipment_profile: List[
+        Union[VehicleEquipmentProfile, RechargingEquipmentProfile]
     ] = field(
         default_factory=list,
         metadata={
@@ -27,8 +28,8 @@ class VehicleEquipmenProfilesInFrameRelStructure(
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "ChargingEquipmentProfile",
-                    "type": ChargingEquipmentProfile,
+                    "name": "RechargingEquipmentProfile",
+                    "type": RechargingEquipmentProfile,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

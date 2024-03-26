@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .access_rights_in_product_rel_structure import (
     AccessRightsInProductRelStructure,
 )
@@ -12,7 +13,7 @@ from .condition_summary import ConditionSummary
 from .fare_product_prices_rel_structure import FareProductPricesRelStructure
 from .fare_product_ref import FareProductRef
 from .general_organisation_ref import GeneralOrganisationRef
-from .generic_parameter_assignment_version_structure import (
+from .generic_parameter_assignments_rel_structure import (
     GenericParameterAssignment,
     GenericParameterAssignmentInContext,
     GenericParameterAssignmentsRelStructure,
@@ -259,15 +260,15 @@ class FareProductVersionStructure(ServiceAccessRightVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    access_rights_in_product: Optional[
-        AccessRightsInProductRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "accessRightsInProduct",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    access_rights_in_product: Optional[AccessRightsInProductRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "accessRightsInProduct",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     tariffs: Optional[TariffRefsRelStructure] = field(
         default=None,

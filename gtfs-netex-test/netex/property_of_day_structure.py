@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Type, Union
+
 from xsdata.models.datatype import XmlPeriod
+
 from .country_ref_structure import CountryRefStructure
 from .crowding_enumeration import CrowdingEnumeration
 from .day_event_enumeration import DayEventEnumeration
@@ -50,24 +52,30 @@ class PropertyOfDayStructure:
             "tokens": True,
         },
     )
-    month_of_year_or_day_of_month_or_day_of_year: Optional[XmlPeriod] = field(
+    month_of_year_or_day_of_month_or_day_of_year: Optional[
+        Union[
+            "PropertyOfDayStructure.MonthOfYear",
+            "PropertyOfDayStructure.DayOfMonth",
+            "PropertyOfDayStructure.DayOfYear",
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "MonthOfYear",
-                    "type": XmlPeriod,
+                    "type": Type["PropertyOfDayStructure.MonthOfYear"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DayOfMonth",
-                    "type": XmlPeriod,
+                    "type": Type["PropertyOfDayStructure.DayOfMonth"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DayOfYear",
-                    "type": XmlPeriod,
+                    "type": Type["PropertyOfDayStructure.DayOfYear"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -124,3 +132,27 @@ class PropertyOfDayStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+
+    @dataclass(kw_only=True)
+    class MonthOfYear:
+        value: XmlPeriod = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class DayOfMonth:
+        value: XmlPeriod = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class DayOfYear:
+        value: XmlPeriod = field(
+            metadata={
+                "required": True,
+            }
+        )

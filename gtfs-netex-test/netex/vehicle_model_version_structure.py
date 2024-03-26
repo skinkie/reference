@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import Optional, Union
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .car_model_profile_ref import CarModelProfileRef
 from .compound_train_ref import CompoundTrainRef
 from .cycle_model_profile_ref import CycleModelProfileRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
 from .train_ref import TrainRef
@@ -86,15 +88,31 @@ class VehicleModelVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    equipment_profiles: Optional[
-        VehicleEquipmentProfileRefsRelStructure
-    ] = field(
+    range: Optional[Decimal] = field(
         default=None,
         metadata={
-            "name": "equipmentProfiles",
+            "name": "Range",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
+    )
+    full_charge: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "FullCharge",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    equipment_profiles: Optional[VehicleEquipmentProfileRefsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "equipmentProfiles",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     vehicle_model_profile_ref: Optional[
         Union[CycleModelProfileRef, CarModelProfileRef]

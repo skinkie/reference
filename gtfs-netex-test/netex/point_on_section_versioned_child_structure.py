@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .activation_link_ref import ActivationLinkRef
 from .activation_point import ActivationPoint
 from .activation_point_ref import ActivationPointRef
@@ -58,7 +59,7 @@ class PointOnSectionVersionedChildStructure(
     class Meta:
         name = "PointOnSection_VersionedChildStructure"
 
-    choice_1: Optional[
+    choice: Optional[
         Union[
             VehicleMeetingPointRef,
             WirePointRef,

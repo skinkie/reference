@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Optional
+from typing import List, Optional, Type, Union
+
 from .all_vehicle_modes_of_transport_enumeration import (
     AllVehicleModesOfTransportEnumeration,
 )
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .entity_in_version_structure import DataManagedObjectStructure
 from .fuel_type_enumeration import FuelTypeEnumeration
 from .multilingual_string import MultilingualString
 from .passenger_capacity_structure import PassengerCapacityStructure
@@ -75,27 +76,33 @@ class TransportTypeVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    propulsion_type: Optional[PropulsionTypeEnumeration] = field(
-        default=None,
+    propulsion_type: List[PropulsionTypeEnumeration] = field(
+        default_factory=list,
         metadata={
             "name": "PropulsionType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
         },
     )
-    fuel_type_or_type_of_fuel: Optional[FuelTypeEnumeration] = field(
+    fuel_type_or_type_of_fuel: Optional[
+        Union[
+            "TransportTypeVersionStructure.FuelType",
+            "TransportTypeVersionStructure.TypeOfFuel",
+        ]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "FuelType",
-                    "type": FuelTypeEnumeration,
+                    "type": Type["TransportTypeVersionStructure.FuelType"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "TypeOfFuel",
-                    "type": FuelTypeEnumeration,
+                    "type": Type["TransportTypeVersionStructure.TypeOfFuel"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -105,6 +112,14 @@ class TransportTypeVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "MaximumRange",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    maximum_velocity: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "MaximumVelocity",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
@@ -125,3 +140,20 @@ class TransportTypeVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+
+    @dataclass(kw_only=True)
+    class FuelType:
+        value: List[FuelTypeEnumeration] = field(
+            default_factory=list,
+            metadata={
+                "tokens": True,
+            },
+        )
+
+    @dataclass(kw_only=True)
+    class TypeOfFuel:
+        value: FuelTypeEnumeration = field(
+            metadata={
+                "required": True,
+            }
+        )

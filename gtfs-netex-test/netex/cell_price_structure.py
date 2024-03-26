@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDate
+
 from .capping_rule_price_ref import CappingRulePriceRef
 from .controllable_element_price_ref import ControllableElementPriceRef
 from .customer_purchase_package_price_ref import (
@@ -153,7 +155,6 @@ class CellPriceStructure:
             ValidableElementPriceRef,
             GeographicalIntervalPriceRef,
             GeographicalUnitPriceRef,
-            UsageParameterPriceRef,
             SeriesConstraintPriceRef,
             SalesOfferPackagePriceRef,
             DistanceMatrixElementPriceRef,
@@ -161,6 +162,7 @@ class CellPriceStructure:
             FulfilmentMethodPriceRef,
             CappingRulePriceRef,
             FareProductPriceRef,
+            UsageParameterPriceRef,
             FarePriceRef,
         ]
     ] = field(
@@ -214,11 +216,6 @@ class CellPriceStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "UsageParameterPriceRef",
-                    "type": UsageParameterPriceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "SeriesConstraintPriceRef",
                     "type": SeriesConstraintPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -251,6 +248,11 @@ class CellPriceStructure:
                 {
                     "name": "FareProductPriceRef",
                     "type": FareProductPriceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UsageParameterPriceRef",
+                    "type": UsageParameterPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

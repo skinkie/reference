@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .fare_demand_factor_ref import FareDemandFactorRef
 from .fare_quota_factor_ref import FareQuotaFactorRef
@@ -17,7 +18,7 @@ class FareStructureFactorsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "fareStructureFactors_RelStructure"
 
-    choice: List[
+    parking_charge_band_ref_or_time_structure_factor_ref_or_fare_quota_factor_ref_or_fare_demand_factor_ref_or_quality_structure_factor_ref_or_geographical_structure_factor_ref_or_fare_structure_factor: List[
         Union[
             ParkingChargeBandRef,
             TimeStructureFactorRef,

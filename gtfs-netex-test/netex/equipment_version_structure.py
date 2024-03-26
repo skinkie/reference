@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
+from .entity_in_version_structure import DataManagedObjectStructure
 from .info_links_rel_structure import InfoLinksRelStructure
 from .multilingual_string import MultilingualString
 from .private_code import PrivateCode
-from .private_code_structure import PrivateCodeStructure
+from .public_code_type import PublicCodeType
 from .type_of_equipment_ref import TypeOfEquipmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -31,7 +32,7 @@ class EquipmentVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[PrivateCodeStructure] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

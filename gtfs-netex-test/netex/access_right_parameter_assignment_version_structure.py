@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .access_right_in_product_ref import AccessRightInProductRef
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .assignment_version_structure_1 import AssignmentVersionStructure1
@@ -14,6 +15,7 @@ from .distance_matrix_element_inverse_ref import (
 )
 from .distance_matrix_element_ref import DistanceMatrixElementRef
 from .distance_matrix_element_view import DistanceMatrixElementView
+from .dynamic_distance_matrix_element import DynamicDistanceMatrixElement
 from .fare_product_ref import FareProductRef
 from .fare_structure_element_in_sequence_ref import (
     FareStructureElementInSequenceRef,
@@ -208,12 +210,24 @@ class AccessRightParameterAssignmentVersionStructure(
             ),
         },
     )
-    distance_matrix_element_ref: Optional[DistanceMatrixElementRef] = field(
+    distance_matrix_element_ref_or_dynamic_distance_matrix_element: Optional[
+        Union[DistanceMatrixElementRef, DynamicDistanceMatrixElement]
+    ] = field(
         default=None,
         metadata={
-            "name": "DistanceMatrixElementRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "DistanceMatrixElementRef",
+                    "type": DistanceMatrixElementRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DynamicDistanceMatrixElement",
+                    "type": DynamicDistanceMatrixElement,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
     distance_matrix_element_inverse_ref: Optional[
@@ -295,25 +309,25 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_parameter_grouping_type: Optional[
-        LogicalOperationEnumeration
-    ] = field(
-        default=None,
-        metadata={
-            "name": "ValidityParameterGroupingType",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    validity_parameter_grouping_type: Optional[LogicalOperationEnumeration] = (
+        field(
+            default=None,
+            metadata={
+                "name": "ValidityParameterGroupingType",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
-    validity_parameter_set_selection_type: Optional[
-        SetOperatorEnumeration
-    ] = field(
-        default=None,
-        metadata={
-            "name": "ValidityParameterSetSelectionType",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    validity_parameter_set_selection_type: Optional[SetOperatorEnumeration] = (
+        field(
+            default=None,
+            metadata={
+                "name": "ValidityParameterSetSelectionType",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     temporal_validity_parameters: Optional[
         TemporalValidityParametersRelStructure

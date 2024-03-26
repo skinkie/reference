@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import (
+
+from .codespaces_rel_structure import CodespacesRelStructure
+from .entity_in_version_structure import (
     DataManagedObjectStructure,
     ValidityConditionsRelStructure,
 )
-from .codespaces_rel_structure import CodespacesRelStructure
 from .layer_refs_rel_structure import LayerRefsRelStructure
 from .multilingual_string import MultilingualString
 from .traces_rel_structure import TracesRelStructure
@@ -90,15 +91,15 @@ class VersionFrameVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    content_validity_conditions: Optional[
-        ValidityConditionsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "contentValidityConditions",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    content_validity_conditions: Optional[ValidityConditionsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "contentValidityConditions",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     layers: Optional[LayerRefsRelStructure] = field(
         default=None,

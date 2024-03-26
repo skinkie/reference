@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDate
-from .alternative_texts_rel_structure import VersionedChildStructure
+
 from .capping_rule_price_ref import CappingRulePriceRef
 from .controllable_element_price_ref import ControllableElementPriceRef
 from .customer_purchase_package_price_ref import (
@@ -11,6 +12,7 @@ from .customer_purchase_package_price_ref import (
 from .discounting_rule import DiscountingRule
 from .discounting_rule_ref import DiscountingRuleRef
 from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
+from .entity_in_version_structure import VersionedChildStructure
 from .fare_price_ref import FarePriceRef
 from .fare_product_price_ref import FareProductPriceRef
 from .fare_structure_element_price_ref import FareStructureElementPriceRef
@@ -157,7 +159,6 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             ValidableElementPriceRef,
             GeographicalIntervalPriceRef,
             GeographicalUnitPriceRef,
-            UsageParameterPriceRef,
             SeriesConstraintPriceRef,
             SalesOfferPackagePriceRef,
             DistanceMatrixElementPriceRef,
@@ -165,6 +166,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             FulfilmentMethodPriceRef,
             CappingRulePriceRef,
             FareProductPriceRef,
+            UsageParameterPriceRef,
             FarePriceRef,
         ]
     ] = field(
@@ -218,11 +220,6 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "UsageParameterPriceRef",
-                    "type": UsageParameterPriceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "SeriesConstraintPriceRef",
                     "type": SeriesConstraintPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -255,6 +252,11 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
                 {
                     "name": "FareProductPriceRef",
                     "type": FareProductPriceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UsageParameterPriceRef",
+                    "type": UsageParameterPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

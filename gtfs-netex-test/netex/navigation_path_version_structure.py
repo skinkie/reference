@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+
 from .access_feature_enumeration import AccessFeatureEnumeration
 from .access_mode_enumeration import AccessModeEnumeration
 from .access_summaries_rel_structure import AccessSummariesRelStructure
@@ -15,9 +16,7 @@ from .path_links_in_sequence_rel_structure import (
 from .places_in_sequence_rel_structure import PlacesInSequenceRelStructure
 from .presentation_structure import PresentationStructure
 from .public_use_enumeration import PublicUseEnumeration
-from .section_in_sequence_versioned_child_structure import (
-    LinkSequenceVersionStructure,
-)
+from .sections_in_sequence_rel_structure import LinkSequenceVersionStructure
 from .site_facility_sets_rel_structure import SiteFacilitySetsRelStructure
 from .transfer_duration_structure import TransferDurationStructure
 from .transfer_refs_rel_structure import TransferRefsRelStructure

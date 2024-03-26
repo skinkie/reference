@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .all_vehicle_modes_of_transport_enumeration import (
     AllVehicleModesOfTransportEnumeration,
 )
@@ -7,6 +8,7 @@ from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .flexible_stop_place_ref import FlexibleStopPlaceRef
 from .multilingual_string import MultilingualString
 from .place_version_structure import PlaceVersionStructure
+from .public_code_type import PublicCodeType
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -64,7 +66,7 @@ class FlexibleQuayVersionStructure(PlaceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

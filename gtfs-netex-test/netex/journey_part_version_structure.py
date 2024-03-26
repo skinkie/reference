@@ -1,8 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlTime
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .block_part_ref import BlockPartRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .journey_part_couple_ref import JourneyPartCoupleRef
 from .journey_part_positions_rel_structure import (
     JourneyPartPositionsRelStructure,
@@ -16,6 +18,7 @@ from .service_facility_sets_rel_structure import (
 )
 from .train_block_part_ref import TrainBlockPartRef
 from .train_number_ref import TrainNumberRef
+from .type_of_product_category_ref import TypeOfProductCategoryRef
 from .vehicle_journey_ref_structure import VehicleJourneyRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -161,6 +164,14 @@ class JourneyPartVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "journeyPartPositions",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    type_of_product_category_ref: Optional[TypeOfProductCategoryRef] = field(
+        default=None,
+        metadata={
+            "name": "TypeOfProductCategoryRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

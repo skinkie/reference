@@ -1,16 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
-from .cell_versioned_child_structure import (
-    FareTablesRelStructure,
-    PriceGroupsRelStructure,
-)
 from .condition_summary import ConditionSummary
 from .discounting_rule_ref import DiscountingRuleRef
 from .distribution_assignments_rel_structure import (
     DistributionAssignmentsRelStructure,
 )
-from .generic_parameter_assignment_version_structure import (
+from .generic_parameter_assignments_rel_structure import (
     GenericParameterAssignmentsRelStructure,
 )
 from .group_of_entities_version_structure import (
@@ -18,6 +15,10 @@ from .group_of_entities_version_structure import (
 )
 from .limiting_rule_ref import LimitingRuleRef
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
+from .priceable_object_version_structure import (
+    FareTablesRelStructure,
+    PriceGroupsRelStructure,
+)
 from .pricing_rule_ref import PricingRuleRef
 from .pricing_service_ref import PricingServiceRef
 from .rounding_ref import RoundingRef
@@ -107,15 +108,15 @@ class GroupOfSalesOfferPackagesVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    type_of_sales_offer_package_ref: Optional[
-        TypeOfSalesOfferPackageRef
-    ] = field(
-        default=None,
-        metadata={
-            "name": "TypeOfSalesOfferPackageRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    type_of_sales_offer_package_ref: Optional[TypeOfSalesOfferPackageRef] = (
+        field(
+            default=None,
+            metadata={
+                "name": "TypeOfSalesOfferPackageRef",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     condition_summary: Optional[ConditionSummary] = field(
         default=None,
@@ -135,15 +136,15 @@ class GroupOfSalesOfferPackagesVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distribution_assignments: Optional[
-        DistributionAssignmentsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "distributionAssignments",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    distribution_assignments: Optional[DistributionAssignmentsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "distributionAssignments",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     rounding_ref: Optional[RoundingRef] = field(
         default=None,

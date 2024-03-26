@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
+
 from xsdata.models.datatype import XmlDate, XmlDateTime
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .customer_accounts_rel_structure import CustomerAccountsRelStructure
 from .customer_eligibilities_rel_structure import (
     CustomerEligibilitiesRelStructure,
 )
+from .entity_in_version_structure import DataManagedObjectStructure
 from .fare_contracts_rel_structure import FareContractsRelStructure
 from .gender_enumeration import GenderEnumeration
 from .postal_address import PostalAddress
@@ -133,15 +135,15 @@ class CustomerVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    customer_eligibilities: Optional[
-        CustomerEligibilitiesRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "customerEligibilities",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    customer_eligibilities: Optional[CustomerEligibilitiesRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "customerEligibilities",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     customer_accounts: Optional[CustomerAccountsRelStructure] = field(
         default=None,

@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlTime
+
 from .accessibility_assessment import AccessibilityAssessment
 from .check_constraint import CheckConstraint
 from .duty_part_ref import DutyPartRef
@@ -119,7 +121,7 @@ class ArrivalStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
+    vehicle_journey_stop_assignment_ref_or_dynamic_stop_assignment_ref_or_passenger_stop_assignment_ref_or_quay_assignment_view: Optional[
         Union[
             VehicleJourneyStopAssignmentRef,
             DynamicStopAssignmentRef,

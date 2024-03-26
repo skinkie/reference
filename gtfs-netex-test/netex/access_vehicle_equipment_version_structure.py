@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional
+
 from .actual_vehicle_equipment_version_structure import (
     ActualVehicleEquipmentVersionStructure,
 )
@@ -44,14 +45,6 @@ class AccessVehicleEquipmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    hoist_operating_radius: Optional[Decimal] = field(
-        default=None,
-        metadata={
-            "name": "HoistOperatingRadius",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
     ramp: Optional[bool] = field(
         default=None,
         metadata={
@@ -60,10 +53,10 @@ class AccessVehicleEquipmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    ramp_bearing_capacity: Optional[Decimal] = field(
+    bearing_capacity: Optional[Decimal] = field(
         default=None,
         metadata={
-            "name": "RampBearingCapacity",
+            "name": "BearingCapacity",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
@@ -80,6 +73,22 @@ class AccessVehicleEquipmentVersionStructure(
         default=None,
         metadata={
             "name": "BoardingHeight",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    equipment_length: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "EquipmentLength",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    equipment_width: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "EquipmentWidth",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

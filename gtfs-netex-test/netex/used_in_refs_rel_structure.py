@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .group_of_distance_matrix_elements_ref import (
     GroupOfDistanceMatrixElementsRef,
 )
@@ -16,7 +17,7 @@ class UsedInRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "usedInRefs_RelStructure"
 
-    choice: List[
+    parking_tariff_ref_or_tariff_ref_or_group_of_distance_matrix_elements_ref_or_group_of_sales_offer_packages_ref: List[
         Union[
             ParkingTariffRef,
             TariffRef,

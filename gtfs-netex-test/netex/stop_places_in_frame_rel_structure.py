@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .stop_place import StopPlace
 from .taxi_rank import TaxiRank

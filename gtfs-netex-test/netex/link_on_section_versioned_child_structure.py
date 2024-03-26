@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .activation_link import ActivationLink
 from .activation_link_ref import ActivationLinkRef
 from .line_link_ref import LineLinkRef
@@ -35,7 +36,7 @@ class LinkOnSectionVersionedChildStructure(
     class Meta:
         name = "LinkOnSection_VersionedChildStructure"
 
-    choice_1: Optional[
+    link_ref_or_infrastructure_link_ref_or_link_or_infrastructure_link: Optional[
         Union[
             OnwardVehicleMeetingLinkRef,
             VehicleMeetingLinkRef,

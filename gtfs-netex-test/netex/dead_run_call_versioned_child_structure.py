@@ -1,14 +1,16 @@
 from dataclasses import dataclass, field
-from typing import Optional, Union
+from typing import List, Optional, Union
+
 from .activation_point_ref import ActivationPointRef
-from .alternative_texts_rel_structure import VersionedChildStructure
 from .beacon_point_ref import BeaconPointRef
+from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .booking_arrangements_structure import BookingArrangementsStructure
 from .border_point_ref import BorderPointRef
 from .dead_run_call_part_structure import DeadRunCallPartStructure
 from .destination_display_ref import DestinationDisplayRef
 from .destination_display_view import DestinationDisplayView
 from .dynamic_advertisement_enumeration import DynamicAdvertisementEnumeration
+from .entity_in_version_structure import VersionedChildStructure
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .flexible_point_properties import FlexiblePointProperties
 from .garage_point_ref import GaragePointRef
@@ -255,6 +257,24 @@ class DeadRunCallVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    boarding_request_method: List[RequestMethodTypeEnumeration] = field(
+        default_factory=list,
+        metadata={
+            "name": "BoardingRequestMethod",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
+        },
+    )
+    alighting_request_method: List[RequestMethodTypeEnumeration] = field(
+        default_factory=list,
+        metadata={
+            "name": "AlightingRequestMethod",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
+        },
+    )
     stop_use: Optional[StopUseEnumeration] = field(
         default=None,
         metadata={
@@ -263,12 +283,24 @@ class DeadRunCallVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_arrangements: Optional[BookingArrangementsStructure] = field(
+    booking_arrangements_or_booking_arrangements: Optional[
+        Union[BookingArrangementsRelStructure, BookingArrangementsStructure]
+    ] = field(
         default=None,
         metadata={
-            "name": "BookingArrangements",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "bookingArrangements",
+                    "type": BookingArrangementsRelStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingArrangements",
+                    "type": BookingArrangementsStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
     print: Optional[bool] = field(

@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDateTime, XmlDuration
+
 from .access_vehicle_equipment_ref import AccessVehicleEquipmentRef
 from .activated_equipment_ref import ActivatedEquipmentRef
 from .assistance_booking_service_ref import AssistanceBookingServiceRef
@@ -20,7 +22,7 @@ from .cycle_storage_equipment_ref import CycleStorageEquipmentRef
 from .entrance_equipment_ref import EntranceEquipmentRef
 from .equipment_ref import EquipmentRef
 from .escalator_equipment_ref import EscalatorEquipmentRef
-from .fare_class_enumeration import FareClassEnumeration
+from .fare_class import FareClass
 from .general_sign_ref import GeneralSignRef
 from .group_of_operators_ref import GroupOfOperatorsRef
 from .group_ticket_ref import GroupTicketRef
@@ -28,6 +30,7 @@ from .heading_sign_ref import HeadingSignRef
 from .help_point_equipment_ref import HelpPointEquipmentRef
 from .hire_service_ref import HireServiceRef
 from .left_luggage_service_ref import LeftLuggageServiceRef
+from .lift_call_equipment_ref import LiftCallEquipmentRef
 from .lift_equipment_ref import LiftEquipmentRef
 from .local_service_ref import LocalServiceRef
 from .lost_property_service_ref import LostPropertyServiceRef
@@ -37,6 +40,7 @@ from .meeting_point_service_ref import MeetingPointServiceRef
 from .money_service_ref import MoneyServiceRef
 from .online_service_ref import OnlineServiceRef
 from .operator_ref import OperatorRef
+from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
 from .passenger_information_equipment_ref import (
     PassengerInformationEquipmentRef,
@@ -192,7 +196,7 @@ class TravelSpecificationSummaryViewStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_class: Optional[FareClassEnumeration] = field(
+    fare_class: Optional[FareClass] = field(
         default=None,
         metadata={
             "name": "FareClass",
@@ -329,6 +333,7 @@ class TravelSpecificationSummaryViewStructure:
             QueueingEquipmentRef,
             TravelatorEquipmentRef,
             EscalatorEquipmentRef,
+            LiftCallEquipmentRef,
             LiftEquipmentRef,
             CrossingEquipmentRef,
             RampEquipmentRef,
@@ -338,6 +343,7 @@ class TravelSpecificationSummaryViewStructure:
             PlaceSignRef,
             SignEquipmentRef,
             RubbishDisposalEquipmentRef,
+            PassengerBeaconEquipmentRef,
             HelpPointEquipmentRef,
             PassengerSafetyEquipmentRef,
             SanitaryEquipmentRef,
@@ -573,6 +579,11 @@ class TravelSpecificationSummaryViewStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "LiftCallEquipmentRef",
+                    "type": LiftCallEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "LiftEquipmentRef",
                     "type": LiftEquipmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -615,6 +626,11 @@ class TravelSpecificationSummaryViewStructure:
                 {
                     "name": "RubbishDisposalEquipmentRef",
                     "type": RubbishDisposalEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerBeaconEquipmentRef",
+                    "type": PassengerBeaconEquipmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

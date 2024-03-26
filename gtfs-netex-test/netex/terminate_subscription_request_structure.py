@@ -1,8 +1,13 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .authenticated_request_structure import AuthenticatedRequestStructure
 from .empty_type_1 import EmptyType1
 from .extensions_1 import Extensions1
+from .message_qualifier_structure import MessageQualifierStructure
+from .participant_ref_structure import ParticipantRefStructure
+from .requestor_ref import RequestorRef
+from .subscription_qualifier_structure import SubscriptionQualifierStructure
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
@@ -17,7 +22,7 @@ class TerminateSubscriptionRequestStructure(AuthenticatedRequestStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    requestor_ref: str = field(
+    requestor_ref: RequestorRef = field(
         metadata={
             "name": "RequestorRef",
             "type": "Element",
@@ -25,7 +30,7 @@ class TerminateSubscriptionRequestStructure(AuthenticatedRequestStructure):
             "required": True,
         }
     )
-    message_identifier: Optional[str] = field(
+    message_identifier: Optional[MessageQualifierStructure] = field(
         default=None,
         metadata={
             "name": "MessageIdentifier",
@@ -41,7 +46,7 @@ class TerminateSubscriptionRequestStructure(AuthenticatedRequestStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    delegator_ref: Optional[str] = field(
+    delegator_ref: Optional[ParticipantRefStructure] = field(
         default=None,
         metadata={
             "name": "DelegatorRef",
@@ -49,7 +54,7 @@ class TerminateSubscriptionRequestStructure(AuthenticatedRequestStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    subscriber_ref: Optional[str] = field(
+    subscriber_ref: Optional[ParticipantRefStructure] = field(
         default=None,
         metadata={
             "name": "SubscriberRef",
@@ -57,7 +62,9 @@ class TerminateSubscriptionRequestStructure(AuthenticatedRequestStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    all_or_subscription_ref: List[Union[EmptyType1, str]] = field(
+    all_or_subscription_ref: List[
+        Union[EmptyType1, SubscriptionQualifierStructure]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -69,7 +76,7 @@ class TerminateSubscriptionRequestStructure(AuthenticatedRequestStructure):
                 },
                 {
                     "name": "SubscriptionRef",
-                    "type": str,
+                    "type": SubscriptionQualifierStructure,
                     "namespace": "http://www.siri.org.uk/siri",
                 },
             ),

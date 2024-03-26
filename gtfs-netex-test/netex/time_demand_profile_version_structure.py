@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .dead_run_ref import DeadRunRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .journey_pattern_ref import JourneyPatternRef
 from .multilingual_string import MultilingualString
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
@@ -85,25 +86,25 @@ class TimeDemandProfileVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    vehicle_journey_ref: Optional[
-        Union[DeadRunRef, VehicleJourneyRef]
-    ] = field(
-        default=None,
-        metadata={
-            "type": "Elements",
-            "choices": (
-                {
-                    "name": "DeadRunRef",
-                    "type": DeadRunRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleJourneyRef",
-                    "type": VehicleJourneyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-            ),
-        },
+    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = (
+        field(
+            default=None,
+            metadata={
+                "type": "Elements",
+                "choices": (
+                    {
+                        "name": "DeadRunRef",
+                        "type": DeadRunRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "VehicleJourneyRef",
+                        "type": VehicleJourneyRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                ),
+            },
+        )
     )
     members: Optional[TimeDemandProfileMembersRelStructure] = field(
         default=None,

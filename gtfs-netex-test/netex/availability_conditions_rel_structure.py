@@ -1,12 +1,13 @@
 from dataclasses import dataclass, field
 from typing import List, Union
-from .alternative_texts_rel_structure import (
+
+from .availability_condition_ref import AvailabilityConditionRef
+from .containment_aggregation_structure import ContainmentAggregationStructure
+from .entity_in_version_structure import (
     AvailabilityCondition,
     ValidBetween,
     ValidDuring,
 )
-from .availability_condition_ref import AvailabilityConditionRef
-from .containment_aggregation_structure import ContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -16,7 +17,7 @@ class AvailabilityConditionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "availabilityConditions_RelStructure"
 
-    choice: List[
+    availability_condition_ref_or_availability_condition_or_valid_during_or_valid_between: List[
         Union[
             AvailabilityConditionRef,
             AvailabilityCondition,

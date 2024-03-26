@@ -1,11 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .administrative_zone_version_structure import (
-    AdministrativeZonesRelStructure,
-)
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
+from .administrative_zones_rel_structure import AdministrativeZonesRelStructure
 from .authority_ref import AuthorityRef
 from .contact_structure import ContactStructure
+from .entity_in_version_structure import DataManagedObjectStructure
 from .general_organisation_ref import GeneralOrganisationRef
 from .location_structure_2 import LocationStructure2
 from .management_agent_ref import ManagementAgentRef
@@ -16,7 +15,7 @@ from .organisation_ref import OrganisationRef
 from .organisation_refs_rel_structure import OrganisationRefsRelStructure
 from .other_organisation_ref import OtherOrganisationRef
 from .private_code import PrivateCode
-from .private_code_structure import PrivateCodeStructure
+from .public_code_type import PublicCodeType
 from .responsibility_sets_rel_structure import ResponsibilitySetsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .serviced_organisation_ref import ServicedOrganisationRef
@@ -55,7 +54,7 @@ class OrganisationPartVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[PrivateCodeStructure] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -182,15 +181,15 @@ class OrganisationPartVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    delegated_responsibility_sets: Optional[
-        ResponsibilitySetsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "delegatedResponsibilitySets",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    delegated_responsibility_sets: Optional[ResponsibilitySetsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "delegatedResponsibilitySets",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     delegated_from: Optional[OrganisationRefsRelStructure] = field(
         default=None,

@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+
 from xsdata.models.datatype import XmlDateTime
+
 from .multilingual_string import MultilingualString
 from .network_frame_request_policy_structure import (
     NetworkFrameRequestPolicyStructure,
@@ -9,6 +11,7 @@ from .network_frame_subscription_policy_structure import (
     NetworkFrameSubscriptionPolicyStructure,
 )
 from .network_frame_topic_structure import NetworkFrameTopicStructure
+from .participant_ref import ParticipantRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -23,7 +26,7 @@ class PublicationRequestStructure:
             "required": True,
         }
     )
-    participant_ref: Optional[str] = field(
+    participant_ref: Optional[ParticipantRef] = field(
         default=None,
         metadata={
             "name": "ParticipantRef",
@@ -54,15 +57,15 @@ class PublicationRequestStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    subscription_policy: Optional[
-        NetworkFrameSubscriptionPolicyStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "SubscriptionPolicy",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    subscription_policy: Optional[NetworkFrameSubscriptionPolicyStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "SubscriptionPolicy",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     version: str = field(
         default="1.0",

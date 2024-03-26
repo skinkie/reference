@@ -1,11 +1,12 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Any
+from typing import Any, List, Optional
+
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
-from .alternative_texts_rel_structure import (
+from .contact_structure import ContactStructure
+from .entity_in_version_structure import (
     DataManagedObjectStructure,
     ValidBetweenVersionStructure,
 )
-from .contact_structure import ContactStructure
 from .external_object_ref_structure import ExternalObjectRefStructure
 from .locale import Locale
 from .multilingual_string import MultilingualString
@@ -13,7 +14,7 @@ from .organisation_parts_rel_structure import OrganisationPartsRelStructure
 from .organisation_refs_rel_structure import OrganisationRefsRelStructure
 from .organisation_type_enumeration import OrganisationTypeEnumeration
 from .private_code import PrivateCode
-from .private_code_structure import PrivateCodeStructure
+from .public_code_type import PublicCodeType
 from .related_organisations_rel_structure import (
     RelatedOrganisationsRelStructure,
 )
@@ -30,7 +31,7 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "Organisation_VersionStructure"
 
-    public_code: Optional[PrivateCodeStructure] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -159,15 +160,15 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
             "tokens": True,
         },
     )
-    types_of_organisation: Optional[
-        TypeOfOrganisationRefsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "typesOfOrganisation",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    types_of_organisation: Optional[TypeOfOrganisationRefsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "typesOfOrganisation",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     status: Optional[bool] = field(
         default=None,
@@ -202,15 +203,15 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    delegated_responsibility_sets: Optional[
-        ResponsibilitySetsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "delegatedResponsibilitySets",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    delegated_responsibility_sets: Optional[ResponsibilitySetsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "delegatedResponsibilitySets",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     delegated_from: Optional[OrganisationRefsRelStructure] = field(
         default=None,
@@ -244,6 +245,12 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
             },
         )
         key_list: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        private_codes: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",

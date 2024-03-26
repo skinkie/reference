@@ -1,10 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .all_vehicle_modes_of_transport_enumeration import (
     AllVehicleModesOfTransportEnumeration,
 )
 from .derived_view_structure import DerivedViewStructure
 from .multilingual_string import MultilingualString
+from .public_code_type import PublicCodeType
 from .stop_place_ref import StopPlaceRef
 from .stop_type_enumeration import StopTypeEnumeration
 from .taxi_rank_ref import TaxiRankRef
@@ -60,7 +62,7 @@ class StopPlaceDerivedViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

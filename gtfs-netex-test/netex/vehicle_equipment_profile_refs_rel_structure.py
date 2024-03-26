@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Union
-from .charging_equipment_profile_ref import ChargingEquipmentProfileRef
+
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
+from .recharging_equipment_profile_ref import RechargingEquipmentProfileRef
 from .vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -13,15 +14,15 @@ class VehicleEquipmentProfileRefsRelStructure(OneToManyRelationshipStructure):
         name = "vehicleEquipmentProfileRefs_RelStructure"
 
     vehicle_equipment_profile_ref: List[
-        Union[ChargingEquipmentProfileRef, VehicleEquipmentProfileRef]
+        Union[RechargingEquipmentProfileRef, VehicleEquipmentProfileRef]
     ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
                 {
-                    "name": "ChargingEquipmentProfileRef",
-                    "type": ChargingEquipmentProfileRef,
+                    "name": "RechargingEquipmentProfileRef",
+                    "type": RechargingEquipmentProfileRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

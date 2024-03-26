@@ -1,10 +1,13 @@
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import Optional
+
 from .boarding_positions_rel_structure import BoardingPositionsRelStructure
 from .compass_bearing8_enumeration import CompassBearing8Enumeration
 from .destination_display_views_rel_structure import (
     DestinationDisplayViewsRelStructure,
 )
+from .public_code_type import PublicCodeType
 from .quay_ref_structure import QuayRefStructure
 from .quay_type_enumeration import QuayTypeEnumeration
 from .stop_place_space_version_structure import StopPlaceSpaceVersionStructure
@@ -17,7 +20,7 @@ class QuayVersionStructure(StopPlaceSpaceVersionStructure):
     class Meta:
         name = "Quay_VersionStructure"
 
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -68,6 +71,22 @@ class QuayVersionStructure(StopPlaceSpaceVersionStructure):
         default=None,
         metadata={
             "name": "QuayType",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    platform_height: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "PlatformHeight",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    edge_to_track_center_distance: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "EdgeToTrackCenterDistance",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

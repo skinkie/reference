@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .link_ref_structure import LinkRefStructure
 from .network_restriction_version_structure import (
     NetworkRestrictionVersionStructure,

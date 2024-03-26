@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .access_space_ref import AccessSpaceRef
 from .address_ref import AddressRef
 from .all_authorities_ref import AllAuthoritiesRef
@@ -14,6 +15,7 @@ from .assistance_booking_service_ref import AssistanceBookingServiceRef
 from .assistance_service_ref import AssistanceServiceRef
 from .authority_ref import AuthorityRef
 from .boarding_position_ref import BoardingPositionRef
+from .border_point_ref import BorderPointRef
 from .car_model_profile_ref import CarModelProfileRef
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .catering_service_ref import CateringServiceRef
@@ -29,7 +31,7 @@ from .discounting_rule_ref import DiscountingRuleRef
 from .distribution_channel_ref import DistributionChannelRef
 from .entrance_ref import EntranceRef
 from .facility_set_ref import FacilitySetRef
-from .fare_class_enumeration import FareClassEnumeration
+from .fare_class import FareClass
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .fare_section_ref import FareSectionRef
 from .fare_zone_ref import FareZoneRef
@@ -42,6 +44,7 @@ from .group_of_lines_ref import GroupOfLinesRef
 from .group_of_operators_ref import GroupOfOperatorsRef
 from .group_of_services_ref import GroupOfServicesRef
 from .group_of_single_journeys_ref import GroupOfSingleJourneysRef
+from .group_of_tariff_zones_ref import GroupOfTariffZonesRef
 from .hire_service_ref import HireServiceRef
 from .left_luggage_service_ref import LeftLuggageServiceRef
 from .limiting_rule_ref import LimitingRuleRef
@@ -90,10 +93,12 @@ from .relative_direction_enumeration import RelativeDirectionEnumeration
 from .retail_consortium_ref import RetailConsortiumRef
 from .retail_service_ref import RetailServiceRef
 from .road_address_ref import RoadAddressRef
+from .routing_constraint_zone_ref import RoutingConstraintZoneRef
 from .routing_type_enumeration import RoutingTypeEnumeration
 from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
 from .scheduled_stop_point_ref import ScheduledStopPointRef
 from .series_constraint_ref import SeriesConstraintRef
+from .service_exclusion_ref import ServiceExclusionRef
 from .service_facility_set_ref import ServiceFacilitySetRef
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_journey_ref import ServiceJourneyRef
@@ -124,6 +129,7 @@ from .train_component_label_assignment_ref import (
 from .train_element_ref import TrainElementRef
 from .train_number_ref import TrainNumberRef
 from .train_ref import TrainRef
+from .transfer_restriction_ref import TransferRestrictionRef
 from .transport_submode import TransportSubmode
 from .transport_type_ref import TransportTypeRef
 from .travel_agent_ref import TravelAgentRef
@@ -171,7 +177,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
         name = "validityParameters_RelStructure"
 
     vehicle_modes_or_transport_modes: List[
-        Union[VehicleModeEnumeration, AllModesEnumeration]
+        Union[List[VehicleModeEnumeration], List[AllModesEnumeration]]
     ] = field(
         default_factory=list,
         metadata={
@@ -259,7 +265,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    choice: List[
+    all_public_transport_organisations_ref_or_all_transport_organisations_ref_or_all_organisations_ref_or_organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: List[
         Union[
             AllAuthoritiesRef,
             AllOperatorsRef,
@@ -405,6 +411,15 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
+    group_of_tariff_zones_ref: List[GroupOfTariffZonesRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "GroupOfTariffZonesRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
     tariff_zone_ref: List[TariffZoneRef] = field(
         default_factory=list,
         metadata={
@@ -508,32 +523,32 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    address_ref: List[
-        Union[PostalAddressRef, RoadAddressRef, AddressRef]
-    ] = field(
-        default_factory=list,
-        metadata={
-            "type": "Elements",
-            "choices": (
-                {
-                    "name": "PostalAddressRef",
-                    "type": PostalAddressRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "RoadAddressRef",
-                    "type": RoadAddressRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "AddressRef",
-                    "type": AddressRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-            ),
-        },
+    address_ref: List[Union[PostalAddressRef, RoadAddressRef, AddressRef]] = (
+        field(
+            default_factory=list,
+            metadata={
+                "type": "Elements",
+                "choices": (
+                    {
+                        "name": "PostalAddressRef",
+                        "type": PostalAddressRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "RoadAddressRef",
+                        "type": RoadAddressRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "AddressRef",
+                        "type": AddressRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                ),
+            },
+        )
     )
-    choice_1: List[
+    choice: List[
         Union[
             VehicleStoppingPositionRef,
             VehicleStoppingPlaceRef,
@@ -782,6 +797,15 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
+    border_point_ref: List[BorderPointRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "BorderPointRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
     series_constraint_ref: List[SeriesConstraintRef] = field(
         default_factory=list,
         metadata={
@@ -809,6 +833,33 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
+    transfer_restriction_ref: List[TransferRestrictionRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "TransferRestrictionRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    routing_constraint_zone_ref: List[RoutingConstraintZoneRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "RoutingConstraintZoneRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    service_exclusion_ref: List[ServiceExclusionRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "ServiceExclusionRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
     class_of_use_ref: List[ClassOfUseRef] = field(
         default_factory=list,
         metadata={
@@ -818,7 +869,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    fare_class: List[FareClassEnumeration] = field(
+    fare_class: List[FareClass] = field(
         default_factory=list,
         metadata={
             "name": "FareClass",
@@ -996,7 +1047,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    choice_2: List[
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref_or_local_service_ref: List[
         Union[
             OnlineServiceRef,
             VehicleRentalServiceRef,
@@ -1171,27 +1222,27 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_fare_structure_factor_ref: List[
-        TypeOfFareStructureFactorRef
-    ] = field(
-        default_factory=list,
-        metadata={
-            "name": "TypeOfFareStructureFactorRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "sequence": 1,
-        },
+    type_of_fare_structure_factor_ref: List[TypeOfFareStructureFactorRef] = (
+        field(
+            default_factory=list,
+            metadata={
+                "name": "TypeOfFareStructureFactorRef",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+                "sequence": 1,
+            },
+        )
     )
-    type_of_fare_structure_element_ref: List[
-        TypeOfFareStructureElementRef
-    ] = field(
-        default_factory=list,
-        metadata={
-            "name": "TypeOfFareStructureElementRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "sequence": 1,
-        },
+    type_of_fare_structure_element_ref: List[TypeOfFareStructureElementRef] = (
+        field(
+            default_factory=list,
+            metadata={
+                "name": "TypeOfFareStructureElementRef",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+                "sequence": 1,
+            },
+        )
     )
     type_of_tariff_ref: List[TypeOfTariffRef] = field(
         default_factory=list,

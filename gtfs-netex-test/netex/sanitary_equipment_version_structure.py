@@ -1,14 +1,16 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional
+
 from .accessibility_assessment import AccessibilityAssessment
 from .gender_limitation_enumeration import GenderLimitationEnumeration
 from .passenger_equipment_version_structure import (
     PassengerEquipmentVersionStructure,
 )
 from .payment_method_enumeration import PaymentMethodEnumeration
-from .sanitary_facility_enumeration import SanitaryFacilityEnumeration
+from .sanitary_facility_list import SanitaryFacilityList
 from .staffing_enumeration import StaffingEnumeration
+from .toilets_type_enumeration import ToiletsTypeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -34,13 +36,12 @@ class SanitaryEquipmentVersionStructure(PassengerEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    sanitary_facility_list: List[SanitaryFacilityEnumeration] = field(
-        default_factory=list,
+    sanitary_facility_list: Optional[SanitaryFacilityList] = field(
+        default=None,
         metadata={
             "name": "SanitaryFacilityList",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-            "tokens": True,
         },
     )
     number_of_toilets: Optional[int] = field(
@@ -147,6 +148,30 @@ class SanitaryEquipmentVersionStructure(PassengerEquipmentVersionStructure):
         default=None,
         metadata={
             "name": "KeyScheme",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    hand_washing: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "HandWashing",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    drinking_water: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "DrinkingWater",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    toilets_type: Optional[ToiletsTypeEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "ToiletsType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

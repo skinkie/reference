@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .activation_point_ref import ActivationPointRef
 from .beacon_point_ref import BeaconPointRef
 from .border_point_ref import BorderPointRef
@@ -23,7 +24,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class DeadRunEndpointStructure:
-    choice: Optional[
+    point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref: Optional[
         Union[
             VehicleMeetingPointRef,
             WirePointRef,

@@ -1,16 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
-from .alternative_texts_rel_structure import DataManagedObjectStructure
 from .assistance_booking_service_ref import AssistanceBookingServiceRef
 from .assistance_service_ref import AssistanceServiceRef
 from .authority_ref import AuthorityRef
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .catering_service_ref import CateringServiceRef
-from .cell_versioned_child_structure import (
-    FareTablesRelStructure,
-    PriceGroupsRelStructure,
-)
 from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
 from .communication_service_ref import CommunicationServiceRef
 from .complaints_service_ref import ComplaintsServiceRef
@@ -18,6 +14,7 @@ from .customer_service_ref import CustomerServiceRef
 from .distance_matrix_elements_rel_structure import (
     DistanceMatrixElementsRelStructure,
 )
+from .entity_in_version_structure import DataManagedObjectStructure
 from .fare_structure_elements_rel_structure import (
     FareStructureElementsRelStructure,
 )
@@ -54,6 +51,10 @@ from .operator_ref import OperatorRef
 from .organisation_ref import OrganisationRef
 from .other_organisation_ref import OtherOrganisationRef
 from .price_unit_ref import PriceUnitRef
+from .priceable_object_version_structure import (
+    FareTablesRelStructure,
+    PriceGroupsRelStructure,
+)
 from .private_code import PrivateCode
 from .quality_structure_factors_rel_structure import (
     QualityStructureFactorsRelStructure,
@@ -237,7 +238,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    choice_1: Optional[
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref_or_local_service_ref: Optional[
         Union[
             OnlineServiceRef,
             VehicleRentalServiceRef,
@@ -406,15 +407,15 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    geographical_intervals: Optional[
-        GeographicalIntervalsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "geographicalIntervals",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    geographical_intervals: Optional[GeographicalIntervalsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "geographicalIntervals",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     geographical_structure_factors: Optional[
         GeographicalStructureFactorsRelStructure
@@ -460,25 +461,25 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_structure_elements: Optional[
-        FareStructureElementsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "fareStructureElements",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    fare_structure_elements: Optional[FareStructureElementsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "fareStructureElements",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
-    distance_matrix_elements: Optional[
-        DistanceMatrixElementsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "distanceMatrixElements",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    distance_matrix_elements: Optional[DistanceMatrixElementsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "distanceMatrixElements",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     groups_of_distance_matrix_elements: Optional[
         GroupsOfDistanceMatrixElementsRelStructure

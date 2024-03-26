@@ -1,12 +1,15 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import VersionedChildStructure
+
+from xsdata.models.datatype import XmlDateTime
+
 from .customer_purchase_package_element_ref import (
     CustomerPurchasePackageElementRef,
 )
 from .customer_purchase_parameter_assignments_rel_structure import (
     CustomerPurchaseParameterAssignmentsRelStructure,
 )
+from .entity_in_version_structure import VersionedChildStructure
 from .fare_structure_element_in_sequence_ref import (
     FareStructureElementInSequenceRef,
 )
@@ -72,6 +75,22 @@ class CustomerPurchasePackageElementAccessVersionedChildStructure(
         default=None,
         metadata={
             "name": "AccessNumber",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    start_of_validity: Optional[XmlDateTime] = field(
+        default=None,
+        metadata={
+            "name": "StartOfValidity",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    end_of_validity: Optional[XmlDateTime] = field(
+        default=None,
+        metadata={
+            "name": "EndOfValidity",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

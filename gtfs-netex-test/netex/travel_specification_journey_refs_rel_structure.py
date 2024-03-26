@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .service_journey_ref import ServiceJourneyRef
 from .single_journey_ref import SingleJourneyRef
@@ -16,7 +17,7 @@ class TravelSpecificationJourneyRefsRelStructure(
     class Meta:
         name = "travelSpecificationJourneyRefs_RelStructure"
 
-    choice: List[
+    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref: List[
         Union[
             TemplateServiceJourneyRef,
             ServiceJourneyRef,

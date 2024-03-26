@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .accesses_rel_structure import AccessesRelStructure
 from .country_ref import CountryRef
 from .country_refs_rel_structure import CountryRefsRelStructure
@@ -90,15 +91,15 @@ class TopographicPlaceVersionStructure(PlaceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    parent_topographic_place_ref: Optional[
-        TopographicPlaceRefStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "ParentTopographicPlaceRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    parent_topographic_place_ref: Optional[TopographicPlaceRefStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "ParentTopographicPlaceRef",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     adjacent_places: Optional[TopographicPlaceRefsRelStructure] = field(
         default=None,

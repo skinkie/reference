@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import List, Optional
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .customer_ref import CustomerRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .gender_enumeration import GenderEnumeration
 from .individual_passenger_infos_rel_structure import (
     IndividualPassengerInfosRelStructure,
@@ -43,12 +45,14 @@ class IndividualTravellerVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    ranking: Optional[int] = field(
+    ranking: Optional[Decimal] = field(
         default=None,
         metadata={
             "name": "Ranking",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
+            "min_inclusive": Decimal("1.0"),
+            "max_inclusive": Decimal("5.0"),
         },
     )
     gender: Optional[GenderEnumeration] = field(

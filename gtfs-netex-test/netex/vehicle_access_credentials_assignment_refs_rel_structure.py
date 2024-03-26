@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .vehicle_access_credentials_assignment_ref import (
     VehicleAccessCredentialsAssignmentRef,

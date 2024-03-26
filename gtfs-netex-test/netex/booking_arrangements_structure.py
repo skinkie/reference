@@ -1,9 +1,12 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+
 from xsdata.models.datatype import XmlDuration, XmlTime
+
 from .booking_access_enumeration import BookingAccessEnumeration
 from .booking_method_enumeration import BookingMethodEnumeration
 from .contact_structure import ContactStructure
+from .info_link_structure import InfoLinkStructure
 from .multilingual_string import MultilingualString
 from .purchase_moment_enumeration import PurchaseMomentEnumeration
 from .purchase_when_enumeration import PurchaseWhenEnumeration
@@ -79,7 +82,7 @@ class BookingArrangementsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_url: Optional[str] = field(
+    booking_url: Optional[InfoLinkStructure] = field(
         default=None,
         metadata={
             "name": "BookingUrl",

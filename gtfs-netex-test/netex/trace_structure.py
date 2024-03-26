@@ -1,7 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDateTime
+
 from .delta import Delta
+from .multilingual_string import MultilingualString
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -33,7 +36,7 @@ class TraceStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    description: Optional[str] = field(
+    description: Optional[MultilingualString] = field(
         default=None,
         metadata={
             "name": "Description",

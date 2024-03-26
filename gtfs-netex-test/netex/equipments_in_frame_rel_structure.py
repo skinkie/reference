@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .access_vehicle_equipment import AccessVehicleEquipment
 from .assistance_booking_service import AssistanceBookingService
 from .assistance_service import AssistanceService
@@ -20,12 +21,14 @@ from .heading_sign import HeadingSign
 from .help_point_equipment import HelpPointEquipment
 from .hire_service import HireService
 from .left_luggage_service import LeftLuggageService
+from .lift_call_equipment import LiftCallEquipment
 from .lift_equipment import LiftEquipment
 from .lost_property_service import LostPropertyService
 from .luggage_service import LuggageService
 from .meeting_point_service import MeetingPointService
 from .money_service import MoneyService
 from .online_service import OnlineService
+from .passenger_beacon_equipment import PassengerBeaconEquipment
 from .passenger_information_equipment import PassengerInformationEquipment
 from .passenger_safety_equipment import PassengerSafetyEquipment
 from .place_lighting import PlaceLighting
@@ -99,6 +102,7 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
             QueueingEquipment,
             EntranceEquipment,
             RampEquipment,
+            LiftCallEquipment,
             LiftEquipment,
             TravelatorEquipment,
             StaircaseEquipment,
@@ -111,6 +115,7 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
             SignEquipment,
             PassengerInformationEquipment,
             RubbishDisposalEquipment,
+            PassengerBeaconEquipment,
             HelpPointEquipment,
             PassengerSafetyEquipment,
             SanitaryEquipment,
@@ -295,6 +300,11 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "LiftCallEquipment",
+                    "type": LiftCallEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "LiftEquipment",
                     "type": LiftEquipment,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -352,6 +362,11 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "RubbishDisposalEquipment",
                     "type": RubbishDisposalEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerBeaconEquipment",
+                    "type": PassengerBeaconEquipment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

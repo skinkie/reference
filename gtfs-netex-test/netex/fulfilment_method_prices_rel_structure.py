@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .cell_ref import CellRef
 from .fulfilment_method_price_ref import FulfilmentMethodPriceRef
 from .fulfilment_method_price_versioned_child_structure import (

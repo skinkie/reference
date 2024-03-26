@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .all_distribution_channels_ref import AllDistributionChannelsRef
 from .customer_account_status_ref import CustomerAccountStatusRef
 from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
@@ -62,7 +63,7 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typeOfEntityRefs_RelStructure"
 
-    choice: List[
+    type_of_entity_ref_or_mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: List[
         Union[
             TypeOfRetailDeviceRef,
             CustomerAccountStatusRef,
@@ -101,13 +102,13 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
             FlexibleModeOfOperationRef,
             ScheduledModeOfOperationRef,
             TypeOfEquipmentRef,
+            TypeOfPlaceRef,
+            TypeOfTransferRef,
             TypeOfProjectionRef,
             TypeOfFeatureRef,
             TypeOfLinkSequenceRef,
             TypeOfOrganisationPartRef,
             TypeOfOrganisationRef,
-            TypeOfPlaceRef,
-            TypeOfTransferRef,
             TypeOfZoneRef,
             TypeOfLinkRef,
             TypeOfPointRef,
@@ -306,6 +307,16 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfPlaceRef",
+                    "type": TypeOfPlaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfTransferRef",
+                    "type": TypeOfTransferRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TypeOfProjectionRef",
                     "type": TypeOfProjectionRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -328,16 +339,6 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "TypeOfOrganisationRef",
                     "type": TypeOfOrganisationRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfPlaceRef",
-                    "type": TypeOfPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfTransferRef",
-                    "type": TypeOfTransferRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

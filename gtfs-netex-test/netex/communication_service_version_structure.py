@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .communication_service_enumeration import CommunicationServiceEnumeration
 from .local_service_version_structure import LocalServiceVersionStructure
 
@@ -17,7 +18,6 @@ class CommunicationServiceVersionStructure(LocalServiceVersionStructure):
             "name": "ServiceList",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-            "required": True,
             "tokens": True,
         },
     )

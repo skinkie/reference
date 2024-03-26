@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDate
+
 from .authority_ref import AuthorityRef
 from .equipment_version_structure import EquipmentVersionStructure
 from .general_organisation_ref import GeneralOrganisationRef
@@ -11,8 +13,11 @@ from .operator_ref import OperatorRef
 from .organisation_ref import OrganisationRef
 from .other_organisation_ref import OtherOrganisationRef
 from .retail_consortium_ref import RetailConsortiumRef
-from .service_booking_arrangements_structure import (
-    ServiceBookingArrangementsStructure,
+from .service_booking_arrangement_version_structure import (
+    ServiceBookingArrangementVersionStructure,
+)
+from .service_booking_arrangements_rel_structure import (
+    ServiceBookingArrangementsRelStructure,
 )
 from .serviced_organisation_ref import ServicedOrganisationRef
 from .topographic_place_ref import TopographicPlaceRef
@@ -130,13 +135,26 @@ class MobilityServiceVersionStructure(EquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    service_booking_arrangements: Optional[
-        ServiceBookingArrangementsStructure
+    service_booking_arrangements_or_service_booking_arrangements: Optional[
+        Union[
+            ServiceBookingArrangementsRelStructure,
+            ServiceBookingArrangementVersionStructure,
+        ]
     ] = field(
         default=None,
         metadata={
-            "name": "ServiceBookingArrangements",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "serviceBookingArrangements",
+                    "type": ServiceBookingArrangementsRelStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ServiceBookingArrangements",
+                    "type": ServiceBookingArrangementVersionStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )

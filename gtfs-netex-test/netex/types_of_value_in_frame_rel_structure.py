@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .branding import Branding
 from .charging_moment import ChargingMoment
 from .class_of_use import ClassOfUse
@@ -24,6 +25,7 @@ from .type_of_concession import TypeOfConcession
 from .type_of_congestion import TypeOfCongestion
 from .type_of_customer_account import TypeOfCustomerAccount
 from .type_of_delivery_variant import TypeOfDeliveryVariant
+from .type_of_driver_permit import TypeOfDriverPermit
 from .type_of_entity import TypeOfEntity
 from .type_of_equipment import TypeOfEquipment
 from .type_of_facility import TypeOfFacility
@@ -106,14 +108,15 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
             TypeOfServiceFeature,
             Direction,
             TypeOfSecurityList,
+            TypeOfDriverPermit,
             PurposeOfEquipmentProfile,
             TypeOfProductCategory,
             TypeOfPaymentMethod,
             ClassOfUse,
             Submode,
             OpenTransportMode,
-            TypeOfCodespaceAssignment,
             TypeOfValidity,
+            TypeOfCodespaceAssignment,
             PurposeOfGrouping,
             Branding,
             DataSource,
@@ -149,6 +152,8 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
             TypeOfLinkSequence,
             TypeOfPlace,
             TypeOfTransfer,
+            TypeOfFrame,
+            TypeOfResponsibilityRole,
             TypeOfOperation,
             TypeOfOrganisationPart,
             TypeOfOrganisation,
@@ -156,8 +161,6 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
             TypeOfLink,
             TypeOfPoint,
             TypeOfProjection,
-            TypeOfFrame,
-            TypeOfResponsibilityRole,
             TypeOfEntity,
             TypeOfVersion,
         ]
@@ -262,6 +265,11 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfDriverPermit",
+                    "type": TypeOfDriverPermit,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "PurposeOfEquipmentProfile",
                     "type": PurposeOfEquipmentProfile,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -292,13 +300,13 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfCodespaceAssignment",
-                    "type": TypeOfCodespaceAssignment,
+                    "name": "TypeOfValidity",
+                    "type": TypeOfValidity,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfValidity",
-                    "type": TypeOfValidity,
+                    "name": "TypeOfCodespaceAssignment",
+                    "type": TypeOfCodespaceAssignment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -477,6 +485,16 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfFrame",
+                    "type": TypeOfFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfResponsibilityRole",
+                    "type": TypeOfResponsibilityRole,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TypeOfOperation",
                     "type": TypeOfOperation,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -509,16 +527,6 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "TypeOfProjection",
                     "type": TypeOfProjection,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfFrame",
-                    "type": TypeOfFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfResponsibilityRole",
-                    "type": TypeOfResponsibilityRole,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

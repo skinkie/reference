@@ -1,5 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
+from .message_qualifier_structure import MessageQualifierStructure
+from .message_ref_structure import MessageRefStructure
+from .participant_ref_structure import ParticipantRefStructure
 from .response_structure import ResponseStructure
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
@@ -7,7 +11,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class ProducerResponseEndpointStructure(ResponseStructure):
-    producer_ref: Optional[str] = field(
+    producer_ref: Optional[ParticipantRefStructure] = field(
         default=None,
         metadata={
             "name": "ProducerRef",
@@ -23,7 +27,7 @@ class ProducerResponseEndpointStructure(ResponseStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    response_message_identifier: Optional[str] = field(
+    response_message_identifier: Optional[MessageQualifierStructure] = field(
         default=None,
         metadata={
             "name": "ResponseMessageIdentifier",
@@ -31,7 +35,7 @@ class ProducerResponseEndpointStructure(ResponseStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    request_message_ref: Optional[str] = field(
+    request_message_ref: Optional[MessageRefStructure] = field(
         default=None,
         metadata={
             "name": "RequestMessageRef",

@@ -14,3 +14,4 @@ class AccessModeEnumeration(Enum):
     SKATE = "skate"
     MOTORCYCLE = "motorcycle"
     SCOOTER = "scooter"
+    WHEELCHAIR = "wheelchair"

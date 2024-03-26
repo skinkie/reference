@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .cell_versioned_child_structure import PriceableObjectVersionStructure
+
 from .customer_account_ref import CustomerAccountRef
 from .customer_purchase_package_elements_rel_structure import (
     CustomerPurchasePackageElementsRelStructure,
@@ -22,6 +22,7 @@ from .emv_card_ref import EmvCardRef
 from .fare_contract_ref import FareContractRef
 from .medium_application_instance_ref import MediumApplicationInstanceRef
 from .mobile_device_ref import MobileDeviceRef
+from .priceable_object_version_structure import PriceableObjectVersionStructure
 from .private_code import PrivateCode
 from .sales_offer_package_ref import SalesOfferPackageRef
 from .sales_transaction_ref import SalesTransactionRef
@@ -121,15 +122,15 @@ class CustomerPurchasePackageVersionStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distribution_assignments: Optional[
-        DistributionAssignmentsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "distributionAssignments",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    distribution_assignments: Optional[DistributionAssignmentsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "distributionAssignments",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     customer_purchase_package_elements: Optional[
         CustomerPurchasePackageElementsRelStructure
@@ -197,13 +198,13 @@ class CustomerPurchasePackageVersionStructure(PriceableObjectVersionStructure):
             ),
         },
     )
-    medium_application_instance_ref: Optional[
-        MediumApplicationInstanceRef
-    ] = field(
-        default=None,
-        metadata={
-            "name": "MediumApplicationInstanceRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    medium_application_instance_ref: Optional[MediumApplicationInstanceRef] = (
+        field(
+            default=None,
+            metadata={
+                "name": "MediumApplicationInstanceRef",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )

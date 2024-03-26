@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import Optional
+
 from .multilingual_string import MultilingualString
 from .site_entrances_rel_structure import SiteEntrancesRelStructure
 from .stop_place_component_version_structure import (
@@ -41,6 +43,22 @@ class StopPlaceSpaceVersionStructure(StopPlaceComponentVersionStructure):
     entrances: Optional[SiteEntrancesRelStructure] = field(
         default=None,
         metadata={
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    length: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "Length",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    width: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "Width",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

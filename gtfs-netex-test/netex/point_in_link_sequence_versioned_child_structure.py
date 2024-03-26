@@ -1,14 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .alternative_texts_rel_structure import VersionedChildStructure
+
 from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .dead_run_ref import DeadRunRef
+from .entity_in_version_structure import VersionedChildStructure
 from .journey_pattern_ref import JourneyPatternRef
 from .link_sequence_ref import LinkSequenceRef
 from .multilingual_string import MultilingualString
 from .navigation_path_ref import NavigationPathRef
+from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .projections_rel_structure import ProjectionsRelStructure
 from .route_ref import RouteRef
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
@@ -31,12 +33,13 @@ class PointInLinkSequenceVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "PointInLinkSequence_VersionedChildStructure"
 
-    choice: Optional[
+    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref: Optional[
         Union[
             TripRef,
             TripPatternTripRef,
             SingleJourneyPathRef,
             SingleJourneyRef,
+            NormalDatedVehicleJourneyRef,
             DatedVehicleJourneyRef,
             DatedSpecialServiceRef,
             SpecialServiceRef,
@@ -76,6 +79,11 @@ class PointInLinkSequenceVersionedChildStructure(VersionedChildStructure):
                 {
                     "name": "SingleJourneyRef",
                     "type": SingleJourneyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NormalDatedVehicleJourneyRef",
+                    "type": NormalDatedVehicleJourneyRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

@@ -1,11 +1,13 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .country_ref import CountryRef
 from .external_object_ref_structure import ExternalObjectRefStructure
 from .multilingual_string import MultilingualString
 from .presentation_structure import PresentationStructure
 from .private_code import PrivateCode
 from .private_code_structure import PrivateCodeStructure
+from .public_code_type import PublicCodeType
 from .request_method_type_enumeration import RequestMethodTypeEnumeration
 from .stop_area_refs_rel_structure import StopAreaRefsRelStructure
 from .stop_type_enumeration import StopTypeEnumeration
@@ -79,7 +81,7 @@ class ScheduledStopPointVersionStructure(TimingPointVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[PrivateCodeStructure] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -174,6 +176,24 @@ class ScheduledStopPointVersionStructure(TimingPointVersionStructure):
             "name": "RequestMethodType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    boarding_request_method: List[RequestMethodTypeEnumeration] = field(
+        default_factory=list,
+        metadata={
+            "name": "BoardingRequestMethod",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
+        },
+    )
+    alighting_request_method: List[RequestMethodTypeEnumeration] = field(
+        default_factory=list,
+        metadata={
+            "name": "AlightingRequestMethod",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
         },
     )
     country_ref: Optional[CountryRef] = field(

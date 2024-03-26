@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .parking_bay_condition import ParkingBayCondition
 from .parking_bay_condition_ref import ParkingBayConditionRef
@@ -14,7 +15,7 @@ class ParkingLogEntriesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "parkingLogEntries_RelStructure"
 
-    choice: List[
+    parking_bay_condition_ref_or_rental_availability_ref_or_parking_bay_condition_or_rental_availability: List[
         Union[
             ParkingBayConditionRef,
             RentalAvailabilityRef,

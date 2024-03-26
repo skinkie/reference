@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .stair_equipment_version_structure import StairEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -38,6 +39,14 @@ class EscalatorEquipmentVersionStructure(StairEquipmentVersionStructure):
         default=None,
         metadata={
             "name": "EscalatorWithLanding",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    monitoring_remote_control: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "MonitoringRemoteControl",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

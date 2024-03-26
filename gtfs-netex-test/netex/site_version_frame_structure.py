@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .accesses_in_frame_rel_structure import AccessesInFrameRelStructure
 from .addresses_in_frame_rel_structure import AddressesInFrameRelStructure
 from .check_constraint_delays_in_frame_rel_structure import (
@@ -19,6 +20,9 @@ from .flexible_stop_places_in_frame_rel_structure import (
 from .groups_of_stop_places_in_frame_rel_structure import (
     GroupsOfStopPlacesInFrameRelStructure,
 )
+from .groups_of_tariff_zones_in_frame_rel_structure import (
+    GroupsOfTariffZonesInFrameRelStructure,
+)
 from .navigation_paths_in_frame_rel_structure import (
     NavigationPathsInFrameRelStructure,
 )
@@ -35,6 +39,9 @@ from .point_of_interest_classifications_in_frame_rel_structure import (
 )
 from .points_of_interest_in_frame_rel_structure import (
     PointsOfInterestInFrameRelStructure,
+)
+from .recharging_point_assignments_rel_structure import (
+    RechargingPointAssignmentsRelStructure,
 )
 from .site_facility_sets_in_frame_rel_structure import (
     SiteFacilitySetsInFrameRelStructure,
@@ -82,15 +89,15 @@ class SiteVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    groups_of_stop_places: Optional[
-        GroupsOfStopPlacesInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "groupsOfStopPlaces",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    groups_of_stop_places: Optional[GroupsOfStopPlacesInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "groupsOfStopPlaces",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     stop_places: Optional[StopPlacesInFrameRelStructure] = field(
         default=None,
@@ -100,15 +107,15 @@ class SiteVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    flexible_stop_places: Optional[
-        FlexibleStopPlacesInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "flexibleStopPlaces",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    flexible_stop_places: Optional[FlexibleStopPlacesInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "flexibleStopPlaces",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     points_of_interest: Optional[PointsOfInterestInFrameRelStructure] = field(
         default=None,
@@ -205,10 +212,30 @@ class SiteVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    groups_of_tariff_zones: Optional[
+        GroupsOfTariffZonesInFrameRelStructure
+    ] = field(
+        default=None,
+        metadata={
+            "name": "groupsOfTariffZones",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     site_facility_sets: Optional[SiteFacilitySetsInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "siteFacilitySets",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    recharging_point_assignments: Optional[
+        RechargingPointAssignmentsRelStructure
+    ] = field(
+        default=None,
+        metadata={
+            "name": "rechargingPointAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

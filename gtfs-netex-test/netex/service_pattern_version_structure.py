@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .destination_display_ref import DestinationDisplayRef
 from .destination_display_view import DestinationDisplayView
 from .direction_ref import DirectionRef
@@ -22,9 +23,7 @@ from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .operational_context_ref import OperationalContextRef
 from .route_ref import RouteRef
 from .route_view import RouteView
-from .section_in_sequence_versioned_child_structure import (
-    LinkSequenceVersionStructure,
-)
+from .sections_in_sequence_rel_structure import LinkSequenceVersionStructure
 from .service_links_in_journey_pattern_rel_structure import (
     ServiceLinksInJourneyPatternRelStructure,
 )
@@ -178,23 +177,23 @@ class ServicePatternVersionStructure(LinkSequenceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    points_in_sequence: Optional[
-        StopPointsInJourneyPatternRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "pointsInSequence",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    points_in_sequence: Optional[StopPointsInJourneyPatternRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "pointsInSequence",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
-    links_in_sequence: Optional[
-        ServiceLinksInJourneyPatternRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "linksInSequence",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    links_in_sequence: Optional[ServiceLinksInJourneyPatternRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "linksInSequence",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )

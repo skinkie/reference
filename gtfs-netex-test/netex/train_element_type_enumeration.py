@@ -8,6 +8,7 @@ class TrainElementTypeEnumeration(Enum):
     CARRIAGE = "carriage"
     ENGINE = "engine"
     CAR_TRANSPORTER = "carTransporter"
+    LARGE_VEHICLE_TRANSPORTER = "largeVehicleTransporter"
     SLEEPER_CARRIAGE = "sleeperCarriage"
     LUGGAGE_VAN = "luggageVan"
     RESTAURANT_CARRIAGE = "restaurantCarriage"

@@ -1,13 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDateTime
+
+from .participant_ref_structure import ParticipantRefStructure
+from .subscription_qualifier_structure import SubscriptionQualifierStructure
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
 @dataclass(kw_only=True)
 class AbstractSubscriptionStructure:
-    subscriber_ref: Optional[str] = field(
+    subscriber_ref: Optional[ParticipantRefStructure] = field(
         default=None,
         metadata={
             "name": "SubscriberRef",
@@ -15,7 +19,7 @@ class AbstractSubscriptionStructure:
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    subscription_identifier: str = field(
+    subscription_identifier: SubscriptionQualifierStructure = field(
         metadata={
             "name": "SubscriptionIdentifier",
             "type": "Element",

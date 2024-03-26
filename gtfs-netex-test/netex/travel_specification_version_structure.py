@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDateTime
+
 from .capping_rule_price_ref import CappingRulePriceRef
 from .cell_ref import CellRef
 from .controllable_element_price_ref import ControllableElementPriceRef
@@ -33,7 +35,7 @@ from .sales_transaction_ref import SalesTransactionRef
 from .schedule_request_ref import ScheduleRequestRef
 from .series_constraint_price_ref import SeriesConstraintPriceRef
 from .single_trip_fare_request_ref import SingleTripFareRequestRef
-from .specific_parameter_assignment_version_structure import (
+from .specific_parameter_assignments_rel_structure import (
     SpecificParameterAssignmentsRelStructure,
 )
 from .stop_event_request_ref import StopEventRequestRef
@@ -126,7 +128,6 @@ class TravelSpecificationVersionStructure(FareContractEntryVersionStructure):
             ValidableElementPriceRef,
             GeographicalIntervalPriceRef,
             GeographicalUnitPriceRef,
-            UsageParameterPriceRef,
             SeriesConstraintPriceRef,
             SalesOfferPackagePriceRef,
             DistanceMatrixElementPriceRef,
@@ -134,6 +135,7 @@ class TravelSpecificationVersionStructure(FareContractEntryVersionStructure):
             FulfilmentMethodPriceRef,
             CappingRulePriceRef,
             FareProductPriceRef,
+            UsageParameterPriceRef,
             FarePriceRef,
             CellRef,
         ]
@@ -188,11 +190,6 @@ class TravelSpecificationVersionStructure(FareContractEntryVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "UsageParameterPriceRef",
-                    "type": UsageParameterPriceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "SeriesConstraintPriceRef",
                     "type": SeriesConstraintPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -225,6 +222,11 @@ class TravelSpecificationVersionStructure(FareContractEntryVersionStructure):
                 {
                     "name": "FareProductPriceRef",
                     "type": FareProductPriceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UsageParameterPriceRef",
+                    "type": UsageParameterPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

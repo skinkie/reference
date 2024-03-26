@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .access_space import AccessSpace
 from .access_zone import AccessZone
 from .addressable_place import AddressablePlace
-from .administrative_zone_version_structure import (
+from .administrative_zones_rel_structure import (
     AdministrativeZone,
     TransportAdministrativeZone,
 )
 from .boarding_position import BoardingPosition
-from .cell_versioned_child_structure import (
-    FareTable,
-    FareTableInContext,
-    PriceGroup,
-)
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .country import Country
 from .crew_base import CrewBase
@@ -35,6 +31,7 @@ from .group_of_places import GroupOfPlaces
 from .group_of_points import GroupOfPoints
 from .group_of_services import GroupOfServices
 from .group_of_single_journeys import GroupOfSingleJourneys
+from .group_of_tariff_zones import GroupOfTariffZones
 from .group_of_timing_links import GroupOfTimingLinks
 from .hail_and_ride_area import HailAndRideArea
 from .headway_journey_group import HeadwayJourneyGroup
@@ -56,6 +53,11 @@ from .point_of_interest_space import PointOfInterestSpace
 from .point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
 from .pool_of_vehicles import PoolOfVehicles
 from .postal_address import PostalAddress
+from .priceable_object_version_structure import (
+    FareTable,
+    FareTableInContext,
+    PriceGroup,
+)
 from .quay import Quay
 from .rhythmical_journey_group import RhythmicalJourneyGroup
 from .road_address import RoadAddress
@@ -110,6 +112,8 @@ class GroupOfEntitiesInFrameRelStructure(ContainmentAggregationStructure):
             GroupOfOperators,
             GroupOfPlaces,
             GroupOfLinkSequences,
+            Layer,
+            GroupOfTariffZones,
             MobilityServiceConstraintZone,
             RoutingConstraintZone,
             StopArea,
@@ -164,7 +168,6 @@ class GroupOfEntitiesInFrameRelStructure(ContainmentAggregationStructure):
             Zone,
             GroupOfLinks,
             GroupOfPoints,
-            Layer,
             GeneralGroupOfEntities,
         ]
     ] = field(
@@ -260,6 +263,16 @@ class GroupOfEntitiesInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "GroupOfLinkSequences",
                     "type": GroupOfLinkSequences,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Layer",
+                    "type": Layer,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupOfTariffZones",
+                    "type": GroupOfTariffZones,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -530,11 +543,6 @@ class GroupOfEntitiesInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "GroupOfPoints",
                     "type": GroupOfPoints,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "Layer",
-                    "type": Layer,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional, Type, Union
+
 from xsdata.models.datatype import XmlDuration, XmlTime
+
 from .headway_interval_structure import HeadwayIntervalStructure
 from .passing_time_view_structure import PassingTimeViewStructure
 
@@ -12,29 +14,47 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
     class Meta:
         name = "EstimatedPassingTime_ViewStructure"
 
-    choice: List[Union[XmlTime, int, XmlDuration]] = field(
+    expected_arrival_time_or_arrival_day_offset_or_expected_departure_time_or_departure_day_offset_or_expected_waiting_time_or_expected_nonstop_passing_time_or_passing_time_day_offset: List[
+        Union[
+            "EstimatedPassingTimeViewStructure.ExpectedArrivalTime",
+            "EstimatedPassingTimeViewStructure.ArrivalDayOffset",
+            "EstimatedPassingTimeViewStructure.ExpectedDepartureTime",
+            "EstimatedPassingTimeViewStructure.DepartureDayOffset",
+            XmlDuration,
+            "EstimatedPassingTimeViewStructure.ExpectedNonstopPassingTime",
+            "EstimatedPassingTimeViewStructure.PassingTimeDayOffset",
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "ExpectedArrivalTime",
-                    "type": XmlTime,
+                    "type": Type[
+                        "EstimatedPassingTimeViewStructure.ExpectedArrivalTime"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ArrivalDayOffset",
-                    "type": int,
+                    "type": Type[
+                        "EstimatedPassingTimeViewStructure.ArrivalDayOffset"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ExpectedDepartureTime",
-                    "type": XmlTime,
+                    "type": Type[
+                        "EstimatedPassingTimeViewStructure.ExpectedDepartureTime"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DepartureDayOffset",
-                    "type": int,
+                    "type": Type[
+                        "EstimatedPassingTimeViewStructure.DepartureDayOffset"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -44,12 +64,16 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
                 },
                 {
                     "name": "ExpectedNonstopPassingTime",
-                    "type": XmlTime,
+                    "type": Type[
+                        "EstimatedPassingTimeViewStructure.ExpectedNonstopPassingTime"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "PassingTimeDayOffset",
-                    "type": int,
+                    "type": Type[
+                        "EstimatedPassingTimeViewStructure.PassingTimeDayOffset"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -64,3 +88,51 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+
+    @dataclass(kw_only=True)
+    class ExpectedArrivalTime:
+        value: XmlTime = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class ArrivalDayOffset:
+        value: int = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class ExpectedDepartureTime:
+        value: XmlTime = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class DepartureDayOffset:
+        value: int = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class ExpectedNonstopPassingTime:
+        value: XmlTime = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class PassingTimeDayOffset:
+        value: int = field(
+            metadata={
+                "required": True,
+            }
+        )

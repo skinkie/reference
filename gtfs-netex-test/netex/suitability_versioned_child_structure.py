@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .suitable_enumeration import SuitableEnumeration
 from .user_need_versioned_child_structure import (
     UserNeedVersionedChildStructure,

@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .accessibility_assessment_versioned_child_structure import (
     AccessibilityAssessmentVersionedChildStructure,
 )
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
 from .parking_ref import ParkingRef
 from .point_of_interest_ref import PointOfInterestRef
+from .public_code_type import PublicCodeType
 from .service_site_ref import ServiceSiteRef
 from .site_ref import SiteRef
 from .stop_place_ref import StopPlaceRef
@@ -44,7 +46,7 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -56,6 +58,14 @@ class LevelVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "PublicUse",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    relative_level_order: Optional[int] = field(
+        default=None,
+        metadata={
+            "name": "RelativeLevelOrder",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

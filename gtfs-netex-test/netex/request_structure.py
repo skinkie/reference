@@ -1,6 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .authenticated_request_structure import AuthenticatedRequestStructure
+from .message_qualifier_structure import MessageQualifierStructure
+from .participant_ref_structure import ParticipantRefStructure
+from .requestor_ref import RequestorRef
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
@@ -15,7 +19,7 @@ class RequestStructure(AuthenticatedRequestStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    requestor_ref: str = field(
+    requestor_ref: RequestorRef = field(
         metadata={
             "name": "RequestorRef",
             "type": "Element",
@@ -23,7 +27,7 @@ class RequestStructure(AuthenticatedRequestStructure):
             "required": True,
         }
     )
-    message_identifier: Optional[str] = field(
+    message_identifier: Optional[MessageQualifierStructure] = field(
         default=None,
         metadata={
             "name": "MessageIdentifier",
@@ -39,7 +43,7 @@ class RequestStructure(AuthenticatedRequestStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    delegator_ref: Optional[str] = field(
+    delegator_ref: Optional[ParticipantRefStructure] = field(
         default=None,
         metadata={
             "name": "DelegatorRef",

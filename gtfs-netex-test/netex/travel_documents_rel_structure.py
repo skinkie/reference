@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .frame_containment_structure import FrameContainmentStructure
 from .service_access_code import ServiceAccessCode
 from .service_access_code_ref import ServiceAccessCodeRef
@@ -14,7 +15,7 @@ class TravelDocumentsRelStructure(FrameContainmentStructure):
     class Meta:
         name = "travelDocuments_RelStructure"
 
-    choice: List[
+    service_access_code_ref_or_travel_document_ref_or_travel_document_or_service_access_code: List[
         Union[
             ServiceAccessCodeRef,
             TravelDocumentRef,

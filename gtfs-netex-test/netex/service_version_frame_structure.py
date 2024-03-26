@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .common_sections_in_frame_rel_structure import (
     CommonSectionsInFrameRelStructure,
 )
@@ -47,6 +48,7 @@ from .notices_in_frame_rel_structure import NoticesInFrameRelStructure
 from .passenger_information_equipments_in_frame_rel_structure import (
     PassengerInformationEquipmentsInFrameRelStructure,
 )
+from .projections_rel_structure import ProjectionsRelStructure
 from .route_links_in_frame_rel_structure import RouteLinksInFrameRelStructure
 from .route_points_in_frame_rel_structure import RoutePointsInFrameRelStructure
 from .routes_in_frame_rel_structure import RoutesInFrameRelStructure
@@ -152,15 +154,15 @@ class ServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    flexible_link_properties: Optional[
-        FlexibleLinkPropertiesRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "flexibleLinkProperties",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    flexible_link_properties: Optional[FlexibleLinkPropertiesRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "flexibleLinkProperties",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     common_sections: Optional[CommonSectionsInFrameRelStructure] = field(
         default=None,
@@ -174,6 +176,13 @@ class ServiceVersionFrameStructure(CommonVersionFrameStructure):
         default=None,
         metadata={
             "name": "generalSections",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    projections: Optional[ProjectionsRelStructure] = field(
+        default=None,
+        metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
@@ -209,15 +218,15 @@ class ServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    destination_displays: Optional[
-        DestinationDisplaysInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "destinationDisplays",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    destination_displays: Optional[DestinationDisplaysInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "destinationDisplays",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     line_networks: Optional[LineNetworksInFrameRelStructure] = field(
         default=None,
@@ -227,15 +236,15 @@ class ServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    scheduled_stop_points: Optional[
-        ScheduledStopPointsInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "scheduledStopPoints",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    scheduled_stop_points: Optional[ScheduledStopPointsInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "scheduledStopPoints",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     service_links: Optional[ServiceLinksInFrameRelStructure] = field(
         default=None,
@@ -393,15 +402,15 @@ class ServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    display_assignments: Optional[
-        DisplayAssignmentsInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "displayAssignments",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    display_assignments: Optional[DisplayAssignmentsInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "displayAssignments",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     passenger_information_equipments: Optional[
         PassengerInformationEquipmentsInFrameRelStructure

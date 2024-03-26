@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .abstract_group_member_versioned_child_structure import (
     AbstractGroupMemberVersionedChildStructure,
 )
@@ -8,6 +9,7 @@ from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_ref import DeadRunRef
 from .group_of_services_ref_structure import GroupOfServicesRefStructure
 from .journey_designator import JourneyDesignator
+from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .notice_assignment_views_rel_structure import (
     NoticeAssignmentViewsRelStructure,
 )
@@ -37,6 +39,7 @@ class GroupOfServicesMemberStructure(
     choice: Optional[
         Union[
             SingleJourneyRef,
+            NormalDatedVehicleJourneyRef,
             DatedVehicleJourneyRef,
             DatedSpecialServiceRef,
             SpecialServiceRef,
@@ -56,6 +59,11 @@ class GroupOfServicesMemberStructure(
                 {
                     "name": "SingleJourneyRef",
                     "type": SingleJourneyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NormalDatedVehicleJourneyRef",
+                    "type": NormalDatedVehicleJourneyRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

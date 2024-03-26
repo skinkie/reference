@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .headway_journey_group import HeadwayJourneyGroup
 from .headway_journey_group_ref import HeadwayJourneyGroupRef
@@ -14,7 +15,7 @@ class FrequencyGroupsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "frequencyGroups_RelStructure"
 
-    choice: List[
+    headway_journey_group_ref_or_headway_journey_group_or_rhythmical_journey_group_ref_or_rhythmical_journey_group: List[
         Union[
             HeadwayJourneyGroupRef,
             HeadwayJourneyGroup,

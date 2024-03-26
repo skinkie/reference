@@ -1,10 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .blocks_in_frame_rel_structure import BlocksInFrameRelStructure
 from .common_version_frame_structure import CommonVersionFrameStructure
 from .courses_of_journeys_in_frame_rel_structure import (
     CoursesOfJourneysInFrameRelStructure,
 )
+from .recharging_plans_rel_structure import RechargingPlansRelStructure
 from .relief_opportunities_in_frame_rel_structure import (
     ReliefOpportunitiesInFrameRelStructure,
 )
@@ -36,15 +38,15 @@ class VehicleScheduleVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    courses_of_journeys: Optional[
-        CoursesOfJourneysInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "coursesOfJourneys",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    courses_of_journeys: Optional[CoursesOfJourneysInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "coursesOfJourneys",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     vehicle_services: Optional[VehicleServicesInFrameRelStructure] = field(
         default=None,
@@ -54,12 +56,20 @@ class VehicleScheduleVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    relief_opportunities: Optional[
-        ReliefOpportunitiesInFrameRelStructure
-    ] = field(
+    relief_opportunities: Optional[ReliefOpportunitiesInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "reliefOpportunities",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
+    )
+    recharging_plans: Optional[RechargingPlansRelStructure] = field(
         default=None,
         metadata={
-            "name": "reliefOpportunities",
+            "name": "rechargingPlans",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

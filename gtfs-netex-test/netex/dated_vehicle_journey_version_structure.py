@@ -1,18 +1,23 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .dated_calls_rel_structure import DatedCallsRelStructure
+
+from .calls_rel_structure import CallsRelStructure
 from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_ref import DeadRunRef
 from .driver_ref import DriverRef
 from .external_object_ref_structure import ExternalObjectRefStructure
 from .journey_pattern_ref_structure import JourneyPatternRefStructure
+from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .operating_day_ref import OperatingDayRef
+from .replaced_journeys_rel_structure import ReplacedJourneysRelStructure
+from .service_alteration_enumeration import ServiceAlterationEnumeration
 from .service_journey_ref import ServiceJourneyRef
 from .single_journey_ref import SingleJourneyRef
 from .special_service_ref import SpecialServiceRef
 from .target_passing_times_rel_structure import TargetPassingTimesRelStructure
 from .template_service_journey_ref import TemplateServiceJourneyRef
+from .uic_operating_period import UicOperatingPeriod
 from .vehicle_journey_ref import VehicleJourneyRef
 from .vehicle_journey_version_structure import VehicleJourneyVersionStructure
 
@@ -24,9 +29,10 @@ class DatedVehicleJourneyVersionStructure(VehicleJourneyVersionStructure):
     class Meta:
         name = "DatedVehicleJourney_VersionStructure"
 
-    choice: Optional[
+    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[
         Union[
             SingleJourneyRef,
+            NormalDatedVehicleJourneyRef,
             DatedVehicleJourneyRef,
             DatedSpecialServiceRef,
             SpecialServiceRef,
@@ -43,6 +49,11 @@ class DatedVehicleJourneyVersionStructure(VehicleJourneyVersionStructure):
                 {
                     "name": "SingleJourneyRef",
                     "type": SingleJourneyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NormalDatedVehicleJourneyRef",
+                    "type": NormalDatedVehicleJourneyRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -83,13 +94,29 @@ class DatedVehicleJourneyVersionStructure(VehicleJourneyVersionStructure):
             ),
         },
     )
-    operating_day_ref: OperatingDayRef = field(
+    replaced_journeys: Optional[ReplacedJourneysRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "replacedJourneys",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    operating_day_ref: Optional[OperatingDayRef] = field(
+        default=None,
         metadata={
             "name": "OperatingDayRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-            "required": True,
-        }
+        },
+    )
+    uic_operating_period: Optional[UicOperatingPeriod] = field(
+        default=None,
+        metadata={
+            "name": "UicOperatingPeriod",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     external_dated_vehicle_journey_ref: Optional[
         ExternalObjectRefStructure
@@ -125,10 +152,18 @@ class DatedVehicleJourneyVersionStructure(VehicleJourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    dated_calls: Optional[DatedCallsRelStructure] = field(
+    dated_calls: Optional[CallsRelStructure] = field(
         default=None,
         metadata={
             "name": "datedCalls",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    service_alteration_type: Optional[ServiceAlterationEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "ServiceAlterationType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

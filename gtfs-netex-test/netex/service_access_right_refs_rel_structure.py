@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .capped_discount_right_ref import CappedDiscountRightRef
 from .entitlement_product_ref import EntitlementProductRef
@@ -20,7 +21,7 @@ class ServiceAccessRightRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "serviceAccessRightRefs_RelStructure"
 
-    choice: List[
+    service_access_right_ref_or_preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: List[
         Union[
             EntitlementProductRef,
             SupplementProductRef,

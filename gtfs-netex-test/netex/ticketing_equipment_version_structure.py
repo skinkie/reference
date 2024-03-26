@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional
+
 from .all_modes_enumeration import AllModesEnumeration
 from .passenger_equipment_version_structure import (
     PassengerEquipmentVersionStructure,
@@ -9,10 +10,8 @@ from .payment_method_enumeration import PaymentMethodEnumeration
 from .queue_management_enumeration import QueueManagementEnumeration
 from .scope_of_ticket_enumeration import ScopeOfTicketEnumeration
 from .ticket_type_enumeration import TicketTypeEnumeration
-from .ticketing_facility_enumeration import TicketingFacilityEnumeration
-from .ticketing_service_facility_enumeration import (
-    TicketingServiceFacilityEnumeration,
-)
+from .ticketing_facility_list import TicketingFacilityList
+from .ticketing_service_facility_list import TicketingServiceFacilityList
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -55,25 +54,23 @@ class TicketingEquipmentVersionStructure(PassengerEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    ticketing_facility_list: List[TicketingFacilityEnumeration] = field(
-        default_factory=list,
+    ticketing_facility_list: Optional[TicketingFacilityList] = field(
+        default=None,
         metadata={
             "name": "TicketingFacilityList",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-            "tokens": True,
         },
     )
-    ticketing_service_facility_list: List[
-        TicketingServiceFacilityEnumeration
-    ] = field(
-        default_factory=list,
-        metadata={
-            "name": "TicketingServiceFacilityList",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "tokens": True,
-        },
+    ticketing_service_facility_list: Optional[TicketingServiceFacilityList] = (
+        field(
+            default=None,
+            metadata={
+                "name": "TicketingServiceFacilityList",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     ticket_office: Optional[bool] = field(
         default=None,

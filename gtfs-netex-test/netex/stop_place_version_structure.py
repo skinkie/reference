@@ -1,36 +1,38 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .access_spaces_rel_structure import AccessSpacesRelStructure
 from .accesses_rel_structure import AccessesRelStructure
-from .air_submode_enumeration import AirSubmodeEnumeration
+from .air_submode import AirSubmode
 from .all_vehicle_modes_of_transport_enumeration import (
     AllVehicleModesOfTransportEnumeration,
 )
-from .bus_submode_enumeration import BusSubmodeEnumeration
-from .coach_submode_enumeration import CoachSubmodeEnumeration
+from .bus_submode import BusSubmode
+from .coach_submode import CoachSubmode
 from .explicit_equipments_rel_structure import ExplicitEquipmentsRelStructure
 from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from .funicular_submode_enumeration import FunicularSubmodeEnumeration
+from .funicular_submode import FunicularSubmode
 from .interchange_weighting_enumeration import InterchangeWeightingEnumeration
 from .limited_use_type_enumeration import LimitedUseTypeEnumeration
-from .metro_submode_enumeration import MetroSubmodeEnumeration
+from .metro_submode import MetroSubmode
 from .navigation_paths_rel_structure import NavigationPathsRelStructure
 from .path_junctions_rel_structure import PathJunctionsRelStructure
 from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
+from .public_code_type import PublicCodeType
 from .quays_rel_structure import QuaysRelStructure
-from .rail_submode_enumeration import RailSubmodeEnumeration
+from .rail_submode import RailSubmode
 from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
 from .site_path_links_rel_structure import SitePathLinksRelStructure
 from .site_version_structure import SiteVersionStructure
-from .snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
+from .snow_and_ice_submode import SnowAndIceSubmode
 from .stop_place_weight_enumeration import StopPlaceWeightEnumeration
 from .stop_type_enumeration import StopTypeEnumeration
 from .tariff_zone_refs_rel_structure import TariffZoneRefsRelStructure
-from .telecabin_submode_enumeration import TelecabinSubmodeEnumeration
+from .telecabin_submode import TelecabinSubmode
 from .topographic_place_refs_rel_structure import (
     TopographicPlaceRefsRelStructure,
 )
-from .tram_submode_enumeration import TramSubmodeEnumeration
+from .tram_submode import TramSubmode
 from .vehicle_mode_enumeration import VehicleModeEnumeration
 from .vehicle_pooling_ref import VehiclePoolingRef
 from .vehicle_rental_ref import VehicleRentalRef
@@ -38,7 +40,7 @@ from .vehicle_sharing_ref import VehicleSharingRef
 from .vehicle_stopping_places_rel_structure import (
     VehicleStoppingPlacesRelStructure,
 )
-from .water_submode_enumeration import WaterSubmodeEnumeration
+from .water_submode import WaterSubmode
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -48,7 +50,7 @@ class StopPlaceVersionStructure(SiteVersionStructure):
     class Meta:
         name = "StopPlace_VersionStructure"
 
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -64,18 +66,18 @@ class StopPlaceVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice_1: Optional[
+    air_submode_or_bus_submode_or_coach_submode_or_funicular_submode_or_metro_submode_or_tram_submode_or_telecabin_submode_or_rail_submode_or_water_submode_or_snow_and_ice_submode: Optional[
         Union[
-            AirSubmodeEnumeration,
-            BusSubmodeEnumeration,
-            CoachSubmodeEnumeration,
-            FunicularSubmodeEnumeration,
-            MetroSubmodeEnumeration,
-            TramSubmodeEnumeration,
-            TelecabinSubmodeEnumeration,
-            RailSubmodeEnumeration,
-            WaterSubmodeEnumeration,
-            SnowAndIceSubmodeEnumeration,
+            AirSubmode,
+            BusSubmode,
+            CoachSubmode,
+            FunicularSubmode,
+            MetroSubmode,
+            TramSubmode,
+            TelecabinSubmode,
+            RailSubmode,
+            WaterSubmode,
+            SnowAndIceSubmode,
         ]
     ] = field(
         default=None,
@@ -84,52 +86,52 @@ class StopPlaceVersionStructure(SiteVersionStructure):
             "choices": (
                 {
                     "name": "AirSubmode",
-                    "type": AirSubmodeEnumeration,
+                    "type": AirSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "BusSubmode",
-                    "type": BusSubmodeEnumeration,
+                    "type": BusSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "CoachSubmode",
-                    "type": CoachSubmodeEnumeration,
+                    "type": CoachSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "FunicularSubmode",
-                    "type": FunicularSubmodeEnumeration,
+                    "type": FunicularSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "MetroSubmode",
-                    "type": MetroSubmodeEnumeration,
+                    "type": MetroSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "TramSubmode",
-                    "type": TramSubmodeEnumeration,
+                    "type": TramSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "TelecabinSubmode",
-                    "type": TelecabinSubmodeEnumeration,
+                    "type": TelecabinSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "RailSubmode",
-                    "type": RailSubmodeEnumeration,
+                    "type": RailSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "WaterSubmode",
-                    "type": WaterSubmodeEnumeration,
+                    "type": WaterSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "SnowAndIceSubmode",
-                    "type": SnowAndIceSubmodeEnumeration,
+                    "type": SnowAndIceSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -231,15 +233,15 @@ class StopPlaceVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    main_terminus_for_places: Optional[
-        TopographicPlaceRefsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "mainTerminusForPlaces",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    main_terminus_for_places: Optional[TopographicPlaceRefsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "mainTerminusForPlaces",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     limited_use: Optional[LimitedUseTypeEnumeration] = field(
         default=None,
@@ -311,13 +313,13 @@ class StopPlaceVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_stopping_places: Optional[
-        VehicleStoppingPlacesRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "vehicleStoppingPlaces",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    vehicle_stopping_places: Optional[VehicleStoppingPlacesRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "vehicleStoppingPlaces",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )

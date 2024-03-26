@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .destination_display_variants_rel_structure import (
     DestinationDisplayVariantsRelStructure,
 )
+from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
 from .presentation_structure import PresentationStructure
 from .private_code import PrivateCode
+from .public_code_type import PublicCodeType
 from .vias_rel_structure import ViasRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -65,7 +67,7 @@ class DestinationDisplayVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

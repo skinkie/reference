@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .fare_contract_entry import FareContractEntry
 from .fare_contract_entry_ref import FareContractEntryRef
@@ -21,7 +22,7 @@ class FareContractEntriesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "fareContractEntries_RelStructure"
 
-    choice: List[
+    fare_contract_entry_ref_or_travel_specification_ref_or_fare_contract_entry_or_travel_specification: List[
         Union[
             SalesTransactionRef,
             OfferedTravelSpecificationRef,

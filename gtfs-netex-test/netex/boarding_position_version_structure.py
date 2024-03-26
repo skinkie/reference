@@ -1,7 +1,10 @@
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import Optional
+
 from .boarding_position_type_enumeration import BoardingPositionTypeEnumeration
 from .entrance_refs_rel_structure import EntranceRefsRelStructure
+from .public_code_type import PublicCodeType
 from .stop_place_space_version_structure import StopPlaceSpaceVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -12,7 +15,7 @@ class BoardingPositionVersionStructure(StopPlaceSpaceVersionStructure):
     class Meta:
         name = "BoardingPosition_VersionStructure"
 
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -32,6 +35,22 @@ class BoardingPositionVersionStructure(StopPlaceSpaceVersionStructure):
         default=None,
         metadata={
             "name": "boardingPositionEntrances",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    platform_height: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "PlatformHeight",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    edge_to_track_center_distance: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "EdgeToTrackCenterDistance",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

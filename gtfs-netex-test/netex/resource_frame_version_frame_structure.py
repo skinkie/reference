@@ -1,8 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .blacklists_in_frame_rel_structure import BlacklistsInFrameRelStructure
+from .booking_arrangements_in_frame_rel_structure import (
+    BookingArrangementsInFrameRelStructure,
+)
 from .common_version_frame_structure import CommonVersionFrameStructure
 from .contacts_rel_structure import ContactsRelStructure
+from .contracts_in_frame_rel_structure import ContractsInFrameRelStructure
 from .control_centres_in_frame_rel_structure import (
     ControlCentresInFrameRelStructure,
 )
@@ -30,6 +35,9 @@ from .responsibility_sets_in_frame_rel_structure import (
 )
 from .schematic_maps_in_frame_rel_structure import (
     SchematicMapsInFrameRelStructure,
+)
+from .service_booking_arrangements_in_frame_rel_structure import (
+    ServiceBookingArrangementsInFrameRelStructure,
 )
 from .service_facility_sets_in_frame_rel_structure import (
     ServiceFacilitySetsInFrameRelStructure,
@@ -72,22 +80,29 @@ class ResourceFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    responsibility_roles: Optional[
-        ResponsibilityRolesInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "responsibilityRoles",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    responsibility_roles: Optional[ResponsibilityRolesInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "responsibilityRoles",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
-    responsibility_sets: Optional[
-        ResponsibilitySetsInFrameRelStructure
-    ] = field(
+    responsibility_sets: Optional[ResponsibilitySetsInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "responsibilitySets",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
+    )
+    contracts: Optional[ContractsInFrameRelStructure] = field(
         default=None,
         metadata={
-            "name": "responsibilitySets",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
@@ -114,25 +129,25 @@ class ResourceFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    groups_of_operators: Optional[
-        GroupsOfOperatorsInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "groupsOfOperators",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    groups_of_operators: Optional[GroupsOfOperatorsInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "groupsOfOperators",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
-    operational_contexts: Optional[
-        OperationalContextsInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "operationalContexts",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    operational_contexts: Optional[OperationalContextsInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "operationalContexts",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     control_centres: Optional[ControlCentresInFrameRelStructure] = field(
         default=None,
@@ -173,15 +188,15 @@ class ResourceFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    service_facility_sets: Optional[
-        ServiceFacilitySetsInFrameRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "serviceFacilitySets",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    service_facility_sets: Optional[ServiceFacilitySetsInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "serviceFacilitySets",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     vehicle_types: Optional[VehicleTypesInFrameRelStructure] = field(
         default=None,
@@ -259,6 +274,26 @@ class ResourceFrameVersionFrameStructure(CommonVersionFrameStructure):
     whitelists: Optional[WhitelistsInFrameRelStructure] = field(
         default=None,
         metadata={
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    booking_arrangements: Optional[BookingArrangementsInFrameRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "bookingArrangements",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
+    )
+    service_booking_arrangements: Optional[
+        ServiceBookingArrangementsInFrameRelStructure
+    ] = field(
+        default=None,
+        metadata={
+            "name": "serviceBookingArrangements",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

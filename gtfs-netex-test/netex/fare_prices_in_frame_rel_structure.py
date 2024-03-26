@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List
-from .cell_versioned_child_structure import PriceGroup
+
 from .frame_containment_structure import FrameContainmentStructure
+from .priceable_object_version_structure import PriceGroup
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

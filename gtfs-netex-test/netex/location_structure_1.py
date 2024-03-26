@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional, Union
+from typing import List, Optional, Type, Union
+
+from .coordinates_structure import CoordinatesStructure
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
@@ -10,31 +12,31 @@ class LocationStructure1:
     class Meta:
         name = "LocationStructure"
 
-    longitude_or_latitude_or_coordinates: List[Union[Decimal, str]] = field(
+    longitude_or_latitude_or_coordinates: List[
+        Union[
+            "LocationStructure1.Longitude",
+            "LocationStructure1.Latitude",
+            CoordinatesStructure,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "Longitude",
-                    "type": Decimal,
+                    "type": Type["LocationStructure1.Longitude"],
                     "namespace": "http://www.siri.org.uk/siri",
-                    "min_inclusive": Decimal("-180"),
-                    "max_inclusive": Decimal("180"),
                 },
                 {
                     "name": "Latitude",
-                    "type": Decimal,
+                    "type": Type["LocationStructure1.Latitude"],
                     "namespace": "http://www.siri.org.uk/siri",
-                    "min_inclusive": Decimal("-90"),
-                    "max_inclusive": Decimal("90"),
                 },
                 {
                     "name": "Coordinates",
-                    "type": List[str],
+                    "type": CoordinatesStructure,
                     "namespace": "http://www.siri.org.uk/siri",
-                    "default_factory": list,
-                    "tokens": True,
                 },
             ),
             "max_occurs": 2,
@@ -61,3 +63,23 @@ class LocationStructure1:
             "type": "Attribute",
         },
     )
+
+    @dataclass(kw_only=True)
+    class Longitude:
+        value: Decimal = field(
+            metadata={
+                "required": True,
+                "min_inclusive": Decimal("-180"),
+                "max_inclusive": Decimal("180"),
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class Latitude:
+        value: Decimal = field(
+            metadata={
+                "required": True,
+                "min_inclusive": Decimal("-90"),
+                "max_inclusive": Decimal("90"),
+            }
+        )

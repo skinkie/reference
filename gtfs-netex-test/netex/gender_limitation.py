@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .gender_limitation_enumeration import GenderLimitationEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

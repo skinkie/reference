@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .entity_structure import EntityStructure
+from .multilingual_string import MultilingualString
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -23,7 +25,7 @@ class CodespaceStructure(EntityStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    description: Optional[str] = field(
+    description: Optional[MultilingualString] = field(
         default=None,
         metadata={
             "name": "Description",

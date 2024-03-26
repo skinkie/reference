@@ -1,8 +1,11 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .cell_ref import CellRef
-from .cell_versioned_child_structure import ParkingPriceVersionedChildStructure
 from .parking_price_ref import ParkingPriceRef
+from .priceable_object_version_structure import (
+    ParkingPriceVersionedChildStructure,
+)
 from .strict_containment_aggregation_structure import (
     StrictContainmentAggregationStructure,
 )

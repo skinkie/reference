@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional
-from .cell_versioned_child_structure import PriceableObjectVersionStructure
+
 from .connection_ref_structure import ConnectionRefStructure
 from .fare_basis_enumeration import FareBasisEnumeration
 from .fare_points_in_pattern_rel_structure import (
@@ -9,6 +9,7 @@ from .fare_points_in_pattern_rel_structure import (
 )
 from .journey_pattern_refs_rel_structure import JourneyPatternRefsRelStructure
 from .multilingual_string import MultilingualString
+from .priceable_object_version_structure import PriceableObjectVersionStructure
 from .private_code import PrivateCode
 from .routing_type_enumeration import RoutingTypeEnumeration
 from .series_constraint_prices_rel_structure import (
@@ -18,6 +19,7 @@ from .series_constraint_refs_rel_structure import (
     SeriesConstraintRefsRelStructure,
 )
 from .series_type_enumeration import SeriesTypeEnumeration
+from .zones_in_series_rel_structure import ZonesInSeriesRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -123,8 +125,16 @@ class SeriesConstraintVersionStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_patterns: List[JourneyPatternRefsRelStructure] = field(
+    zones_in_series: List[ZonesInSeriesRelStructure] = field(
         default_factory=list,
+        metadata={
+            "name": "zonesInSeries",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    journey_patterns: Optional[JourneyPatternRefsRelStructure] = field(
+        default=None,
         metadata={
             "name": "journeyPatterns",
             "type": "Element",

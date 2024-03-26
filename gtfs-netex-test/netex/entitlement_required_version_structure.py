@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDuration
+
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .capped_discount_right_ref import CappedDiscountRightRef
 from .entitlement_constraint_structure import EntitlementConstraintStructure
@@ -22,7 +24,7 @@ class EntitlementRequiredVersionStructure(UsageParameterVersionStructure):
     class Meta:
         name = "EntitlementRequired_VersionStructure"
 
-    choice: Optional[
+    service_access_right_ref_or_preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[
         Union[
             EntitlementProductRef,
             SupplementProductRef,

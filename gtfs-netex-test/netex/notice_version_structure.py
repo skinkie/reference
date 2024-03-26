@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .delivery_variants_rel_structure import DeliveryVariantsRelStructure
+from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
 from .private_code import PrivateCode
+from .public_code_type import PublicCodeType
 from .type_of_notice_ref import TypeOfNoticeRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -38,7 +40,7 @@ class NoticeVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

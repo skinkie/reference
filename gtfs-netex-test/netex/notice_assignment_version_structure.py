@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .common_section_ref import CommonSectionRef
 from .dated_special_service_ref import DatedSpecialServiceRef
@@ -15,6 +16,7 @@ from .journey_pattern_ref import JourneyPatternRef
 from .line_section_ref import LineSectionRef
 from .link_sequence_ref import LinkSequenceRef
 from .navigation_path_ref import NavigationPathRef
+from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .notice import Notice
 from .notice_ref import NoticeRef
 from .parent_common_section_ref import ParentCommonSectionRef
@@ -76,12 +78,13 @@ class NoticeAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
+    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref: Optional[
         Union[
             TripRef,
             TripPatternTripRef,
             SingleJourneyPathRef,
             SingleJourneyRef,
+            NormalDatedVehicleJourneyRef,
             DatedVehicleJourneyRef,
             DatedSpecialServiceRef,
             SpecialServiceRef,
@@ -121,6 +124,11 @@ class NoticeAssignmentVersionStructure(AssignmentVersionStructure1):
                 {
                     "name": "SingleJourneyRef",
                     "type": SingleJourneyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NormalDatedVehicleJourneyRef",
+                    "type": NormalDatedVehicleJourneyRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

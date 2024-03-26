@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
+from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
 from .train_element import TrainElement
 from .train_element_ref import TrainElementRef

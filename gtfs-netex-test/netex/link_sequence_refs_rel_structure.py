@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
@@ -7,6 +8,7 @@ from .dead_run_ref import DeadRunRef
 from .journey_pattern_ref import JourneyPatternRef
 from .link_sequence_ref import LinkSequenceRef
 from .navigation_path_ref import NavigationPathRef
+from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .route_ref import RouteRef
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
@@ -29,12 +31,13 @@ class LinkSequenceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "linkSequenceRefs_RelStructure"
 
-    choice: List[
+    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref: List[
         Union[
             TripRef,
             TripPatternTripRef,
             SingleJourneyPathRef,
             SingleJourneyRef,
+            NormalDatedVehicleJourneyRef,
             DatedVehicleJourneyRef,
             DatedSpecialServiceRef,
             SpecialServiceRef,
@@ -74,6 +77,11 @@ class LinkSequenceRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "SingleJourneyRef",
                     "type": SingleJourneyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NormalDatedVehicleJourneyRef",
+                    "type": NormalDatedVehicleJourneyRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

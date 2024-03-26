@@ -1,10 +1,12 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional, Type, Union
+
 from xsdata.models.datatype import XmlDate
+
 from .administrative_zone_ref import AdministrativeZoneRef
-from .alternative_texts_rel_structure import VersionedChildStructure
 from .codespace import Codespace
 from .codespace_ref import CodespaceRef
+from .entity_in_version_structure import VersionedChildStructure
 from .multilingual_string import MultilingualString
 from .type_of_codespace_assignment_ref import TypeOfCodespaceAssignmentRef
 
@@ -16,25 +18,25 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "CodespaceAssignment_VersionedChildStructure"
 
-    codespace_ref_or_codespace: Optional[
-        Union[CodespaceRef, Codespace]
-    ] = field(
-        default=None,
-        metadata={
-            "type": "Elements",
-            "choices": (
-                {
-                    "name": "CodespaceRef",
-                    "type": CodespaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "Codespace",
-                    "type": Codespace,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-            ),
-        },
+    codespace_ref_or_codespace: Optional[Union[CodespaceRef, Codespace]] = (
+        field(
+            default=None,
+            metadata={
+                "type": "Elements",
+                "choices": (
+                    {
+                        "name": "CodespaceRef",
+                        "type": CodespaceRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "Codespace",
+                        "type": Codespace,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                ),
+            },
+        )
     )
     administrative_zone_ref: Optional[AdministrativeZoneRef] = field(
         default=None,
@@ -76,19 +78,28 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    start_value_or_end_value: List[str] = field(
+    start_value_or_end_value: List[
+        Union[
+            "CodespaceAssignmentVersionedChildStructure.StartValue",
+            "CodespaceAssignmentVersionedChildStructure.EndValue",
+        ]
+    ] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "StartValue",
-                    "type": str,
+                    "type": Type[
+                        "CodespaceAssignmentVersionedChildStructure.StartValue"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "EndValue",
-                    "type": str,
+                    "type": Type[
+                        "CodespaceAssignmentVersionedChildStructure.EndValue"
+                    ],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -121,3 +132,19 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+
+    @dataclass(kw_only=True)
+    class StartValue:
+        value: str = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class EndValue:
+        value: str = field(
+            metadata={
+                "required": True,
+            }
+        )

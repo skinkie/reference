@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .boarding_permission_enumeration import BoardingPermissionEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

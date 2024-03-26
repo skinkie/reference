@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List
-from .charging_equipment_profile import ChargingEquipmentProfile
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
+from .recharging_equipment_profile import RechargingEquipmentProfile
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -13,10 +14,10 @@ class ChargingEquipmenProfilesInFrameRelStructure(
     class Meta:
         name = "chargingEquipmenProfilesInFrame_RelStructure"
 
-    charging_equipment_profile: List[ChargingEquipmentProfile] = field(
+    recharging_equipment_profile: List[RechargingEquipmentProfile] = field(
         default_factory=list,
         metadata={
-            "name": "ChargingEquipmentProfile",
+            "name": "RechargingEquipmentProfile",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "min_occurs": 1,

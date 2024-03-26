@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDateTime
+
 from .account_status_type_enumeration import AccountStatusTypeEnumeration
-from .alternative_texts_rel_structure import DataManagedObjectStructure
 from .customer_account_status_ref import CustomerAccountStatusRef
 from .customer_payment_means_ref import CustomerPaymentMeansRef
 from .customer_payment_means_rel_structure import (
@@ -12,6 +13,7 @@ from .customer_purchase_package_refs_rel_structure import (
     CustomerPurchasePackageRefsRelStructure,
 )
 from .customer_ref import CustomerRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .fare_contracts_rel_structure import FareContractsRelStructure
 from .medium_access_device_refs_rel_structure import (
     MediumAccessDeviceRefsRelStructure,
@@ -83,15 +85,15 @@ class CustomerAccountVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    customer_account_status_type: Optional[
-        AccountStatusTypeEnumeration
-    ] = field(
-        default=None,
-        metadata={
-            "name": "CustomerAccountStatusType",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    customer_account_status_type: Optional[AccountStatusTypeEnumeration] = (
+        field(
+            default=None,
+            metadata={
+                "name": "CustomerAccountStatusType",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )
     fare_contracts: Optional[FareContractsRelStructure] = field(
         default=None,
@@ -127,13 +129,13 @@ class CustomerAccountVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    medium_access_devices: Optional[
-        MediumAccessDeviceRefsRelStructure
-    ] = field(
-        default=None,
-        metadata={
-            "name": "mediumAccessDevices",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
+    medium_access_devices: Optional[MediumAccessDeviceRefsRelStructure] = (
+        field(
+            default=None,
+            metadata={
+                "name": "mediumAccessDevices",
+                "type": "Element",
+                "namespace": "http://www.netex.org.uk/netex",
+            },
+        )
     )

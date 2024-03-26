@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
-from .alternative_texts_rel_structure import VersionedChildStructure
+
+from .contract_ref_rel_structure import ContractRefRelStructure
 from .data_role_type_enumeration import DataRoleTypeEnumeration
+from .entity_in_version_structure import VersionedChildStructure
 from .multilingual_string import MultilingualString
 from .organisation_part_ref_structure import OrganisationPartRefStructure
 from .organisation_ref_structure import OrganisationRefStructure
@@ -95,6 +97,14 @@ class ResponsibilityRoleAssignmentVersionedChildStructure(
         default=None,
         metadata={
             "name": "ResponsibleAreaRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    associated_contract: Optional[ContractRefRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "AssociatedContract",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
