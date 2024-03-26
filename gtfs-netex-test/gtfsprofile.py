@@ -165,8 +165,10 @@ class GtfsProfile:
 
         if line.branding_ref is not None:
             agency_id = line.branding_ref.ref
+        elif line.operator_ref is not None:
+            agency_id = line.operator_ref.ref
         else:
-            agency_id = line.authority_ref_or_operator_ref.ref
+            agency_id = line.authority_ref.ref
 
         route = {'route_id': line.id,
                  'agency_id': agency_id,
@@ -212,6 +214,11 @@ class GtfsProfile:
     def projectScheduledStopPointToStop(scheduled_stop_point: ScheduledStopPoint, parent: StopPlaceRef | StopAreaRef, transformer: Transformer = None):
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
+        if scheduled_stop_point.location is None:
+            print(f"SSP {scheduled_stop_point.id} does not have a location.")
+            # TODO: Maybe by parent?
+            return None
+
         if transformer:
             latitude, longitude = transformer.transform(scheduled_stop_point.location.pos.value[0], scheduled_stop_point.location.pos.value[1])
         else:
@@ -242,9 +249,9 @@ class GtfsProfile:
 
     @staticmethod
     def getLineRef(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern):
-        if service_journey.choice is not None:
-            if isinstance(service_journey.choice, LineRefStructure):
-                return service_journey.choice.ref
+        if service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view is not None:
+            if isinstance(service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view, LineRefStructure):
+                return service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view.ref
             else:
                 pass
         else:
