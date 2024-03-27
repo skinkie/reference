@@ -197,47 +197,9 @@ def export_sa_coords(index, out: RawIOBase):
     for sa in index.stop_areas:
         write2floats(out,sa.latitude or 0.0, sa.longitude or 0.0)
 
-def export_journey_pattern_point_stop(index, out: RawIOBase):
-    write_text_comment(out,"JOURNEY_PATTERN_POINT STOP")
-    index.loc_journey_pattern_points = tell(out)
-    index.offset_jpp = []
-    offset = 0
-    index.n_jpp = 0
-    for jp in index.journey_patterns:
-        index.offset_jpp.append(offset)
-        for jpp in jp.points:
-            index.n_jpp += 1
-            write_stop_point_idx(out,index,jpp.stop_point.uri)
-            offset += 1
 
-def export_journey_pattern_point_headsigns(index, out: RawIOBase):
-    write_text_comment(out,"JOURNEY_PATTERN_POINT HEADSIGN")
-    index.loc_journey_pattern_point_headsigns = tell(out)
-    index.offset_jpp = []
-    offset = 0
-    for jp in index.journey_patterns:
-        index.offset_jpp.append(offset)
-        for jpp in jp.points:
-            writeint(out,index.put_string(jpp.headsign or jp.headsign or ''))
-            offset += 1
 
-def export_journey_pattern_point_attributes(index, out: RawIOBase):
-    write_text_comment(out,"STOPS ATTRIBUTES BY JOURNEY_PATTERN")
-    index.loc_journey_pattern_point_attributes = tell(out)
-    index.offset_jpp_attributes = []
-    offset = 0
-    for jp in index.journey_patterns:
-        index.offset_jpp_attributes.append(offset)
-        for jpp in jp.points:
-            attr = 0
-            if jpp.timingpoint:
-                attr |= 1
-            if jpp.forboarding:
-                attr |= 2
-            if jpp.foralighting:
-                attr |= 4
-            writebyte(out,attr)
-            offset += 1
+
 
 timedemandgroup_t = Struct('HH')
 def export_timedemandgroups(index, out: RawIOBase):
@@ -356,13 +318,6 @@ def export_stop_indices(index, out: RawIOBase):
     for stop in zip (index.jpp_at_sp_offsets, index.transfers_offsets) :
         out.write(struct_2i.pack(*stop))
 
-def export_stop_point_attributes(index, out: RawIOBase):
-    print("saving stop attributes")
-    write_text_comment(out,"STOP Attributes")
-    index.loc_stop_point_attributes = tell(out)
-    for sp in index.stop_points:
-        attr = 0
-        writebyte(out,attr)
 
 def export_jp_structs(index, out: RawIOBase):
     print("saving route indexes")
@@ -429,10 +384,6 @@ def export_platform_codes(index, out: RawIOBase):
     write_text_comment(out,"PLATFORM CODES")
     index.loc_platformcodes = write_list_of_strings(out,index,[sp.platformcode or '' for sp in index.stop_points])
 
-def export_stop_pointnames(tdata,index,out: RawIOBase):
-    print("writing out locations for stopnames")
-    write_text_comment(out,"STOP POINT NAMES")
-    index.loc_stop_nameidx = write_list_of_strings(out,index,[sp.name or '' for sp in index.stop_points])
 
 def export_stop_areanames(index, out: RawIOBase):
     print("writing out locations for stopareas")
@@ -499,11 +450,6 @@ def export_line_uris(index, out: RawIOBase):
     write_text_comment(out,"LINE IDS")
     index.loc_line_uris = write_list_of_strings(out,index,[line.uri for line in index.lines])
 
-def export_sp_uris(index, out: RawIOBase):
-    print("writing out sorted stop_point ids to string point list")
-    # stopid index was several times bigger than the string table. it's probably better to just store fixed-width ids.
-    write_text_comment(out,"STOP_POINT IDS")
-    index.loc_stop_point_uris = write_list_of_strings(out,index,[sp.uri for sp in index.stop_points])
 
 def export_sa_uris(index, out: RawIOBase):
     print("writing out sorted stop_area ids to string point list")
