@@ -170,17 +170,20 @@ class Index2:
         write_text_comment(out,"STOP POINT COORDS")
         self.loc_stop_point_coords = tell(out)
 
-        for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points():
+        for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values():
             write2floats(self.out, scheduled_stop_point.location.latitude or 0.0, scheduled_stop_point.location.longitude or 0.0)
-            self.n_stops += 1
 
     def export_sp_names(self, out: RawIOBase):
         write_text_comment(out,"STOP POINT NAMES")
 
-        stop_names = [scheduled_stop_point.name.value for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points()]
+        stop_names = [scheduled_stop_point.name.value for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values()]
         self.loc_stop_nameidx = self.write_list_of_strings(stop_names)
 
-
+    def export_sp_uris(self, out: RawIOBase):
+        # stopid index was several times bigger than the string table. it's probably better to just store fixed-width ids.
+        write_text_comment(out, "STOP_POINT IDS")
+        stop_ids = [scheduled_stop_point.id for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values()]
+        self.loc_stop_point_uris = self.write_list_of_strings(stop_ids)
 
     def export_sp_attributes(self, out: RawIOBase):
         write_text_comment(out,"STOP POINT ATTRIBUTES")
