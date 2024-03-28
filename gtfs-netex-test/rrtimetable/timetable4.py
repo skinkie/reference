@@ -200,48 +200,6 @@ def export_sa_coords(index, out: RawIOBase):
 
 
 
-
-timedemandgroup_t = Struct('HH')
-def export_timedemandgroups(index, out: RawIOBase):
-    write_text_comment(out,"TIMEDEMANDGROUPS")
-    index.loc_timedemandgroups = tell(out)
-    index.offset_for_timedemandgroup_uri = {}
-    tp_offset = 0
-    for tp in index.timedemandgroups:
-        index.offset_for_timedemandgroup_uri[tp.uri] = tp_offset
-        for tpp in tp.points:
-            out.write(timedemandgroup_t.pack(tpp.drivetime >> 2, tpp.totaldrivetime >> 2))
-            tp_offset += 1
-    index.n_tpp = tp_offset
-
-def export_vj_in_jp(index, out: RawIOBase):
-    write_text_comment(out,"VEHICLE JOURNEYS IN JOURNEY_PATTERN")
-    index.loc_vehicle_journeys = tell(out)
-    tioffset = 0
-    index.vj_ids_offsets = []
-    vj_t = Struct('IHH')
-    for jp in index.journey_patterns:
-        index.vj_ids_offsets.append(tioffset)
-        for vj in index.vehicle_journeys_in_journey_pattern[jp.uri]:
-            vj_attr = 0
-            assert (tioffset - index.vj_ids_offsets[vj._jp_idx]) == vj._jpvjoffset
-            out.write(vj_t.pack(index.offset_for_timedemandgroup_uri[vj.timedemandgroup.uri], (vj.departure_time+index.global_utc_offset) >> 2, vj_attr))
-            tioffset += 1
-
-def export_jpp_at_sp(index, out: RawIOBase):
-    write_text_comment(out,"JOURNEY_PATTERNS AT STOP")
-    index.loc_jp_at_sp = tell(out)
-    index.jpp_at_sp_offsets = []
-    n_offset = 0
-    for sp in index.stop_points:
-        jp_uris = index.journey_patterns_at_stop_point[sp.uri]
-        index.jpp_at_sp_offsets.append(n_offset)
-        for jp_uri in set(jp_uris):
-            writeshort(out,index.idx_for_journey_pattern_uri[jp_uri])
-            n_offset += 1
-    index.jpp_at_sp_offsets.append(n_offset) #sentinel
-    index.n_jpp_at_sp = n_offset
-
 def export_sa_for_sp(index, out: RawIOBase):
     write_text_comment(out,"STOP_POINT -> STOP_AREA")
     index.loc_sa_for_sp = tell(out)
