@@ -10,19 +10,21 @@ from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
 
 from io import RawIOBase
 from lxml import etree
-from xsdata.models.datatype import XmlTime
+from xsdata.models.datatype import XmlTime, XmlDuration
 
 from netex import ScheduledStopPoint, StopPlace, Quay, PassengerStopAssignment, MobilityEnumeration, \
     PyschosensoryNeedEnumeration, CoveredEnumeration, Parking, ParkingVehicleEnumeration, ShelterEquipmentRef, \
     ShelterEquipment, ServiceJourneyPattern, DestinationDisplay, ServiceJourney, MobilityFacilityEnumeration, \
     LuggageCarriageEnumeration, PassengerInformationFacilityEnumeration, AssistanceFacilityEnumeration, \
     PassengerCommsFacilityEnumeration, SanitaryFacilityEnumeration, BusSubmode, BusSubmodeEnumeration, \
-    FlexibleServiceEnumeration, ReservationEnumeration
+    FlexibleServiceEnumeration, ReservationEnumeration, PathLink
 from rrutils import *
 
 from typing import Any, Dict, Iterable, Optional, Tuple, List, OrderedDict
 from xsdata.exceptions import XmlHandlerError
 from xsdata.models.enums import EventType
+
+MIN_WAITTIME = 2 * 60 #2 minutes ( in seconds)
 
 class MyLxmlEventHandler(LxmlEventHandler):
     def process_context(
@@ -82,6 +84,8 @@ class NeTExTimetable:
     passenger_stop_assignment: List[PassengerStopAssignment]
     quayref_to_quay: Dict[str, Quay]
     scheduled_stop_point_ref_to_physical: Dict[str, (StopPlace, Quay)]
+    quay_ref_to_scheduled_stop_point_ref: Dict[str, str]
+    path_links: List[PathLink]
 
     def __init__(self, input_filename: str):
         context = XmlContext()
@@ -92,6 +96,19 @@ class NeTExTimetable:
         self.scheduled_stop_points = None
         self.stop_places = None
         self.passenger_stop_assignment = None
+
+    def get_passenger_stop_assignments(self) -> List[PassengerStopAssignment]:
+        if self.passenger_stop_assignments is None:
+            self.passenger_stop_assignments = [self.parser.parse(element, PassengerStopAssignment) for element in
+                               self.tree.findall(".//{http://www.netex.org.uk/netex}PassengerStopAssignment")]
+
+        return self.passenger_stop_assignments
+
+    def get_path_links(self) -> List[PathLink]:
+        if self.path_links is None:
+            self.path_links = [self.parser.parse(element, PathLink) for element in self.tree.findall(".//{http://www.netex.org.uk/netex}PathLink")]
+        
+        return self.path_links
 
     def get_service_journeys(self) -> Dict[str, ServiceJourney]:
         if self.service_journeys is None:
@@ -122,12 +139,6 @@ class NeTExTimetable:
             self.parkings = {x.id: x for x in [self.parser.parse(element, Parking) for element in self.tree.findall(".//{http://www.netex.org.uk/netex}Parking")]}
 
         return self.parkings
-
-    def get_passenger_stop_assignments(self) -> List[PassengerStopAssignment]:
-        if self.passenger_stop_assignment is None:
-            self.passenger_stop_assignment = [self.parser.parse(element, PassengerStopAssignment) for element in self.tree.findall(".//{http://www.netex.org.uk/netex}PassengerStopAssignment")]
-
-        return self.passenger_stop_assignment
 
     def get_quayref_to_quay_stop_place(self) -> Dict[str, Quay]:
         if self.quayref_to_quay is None:
@@ -328,6 +339,11 @@ class Index2:
         _time = xml_time.to_time()
         return ((day_offset or 0) * 24 + _time.hour) * 3600 + _time.minute * 60 + _time.second
 
+    @staticmethod
+    def to_seconds2(xml_duration: XmlDuration):
+        return ((xml_duration.days or 0) * 24 + xml_duration.hour) * 3600 + xml_duration.minute * 60 + xml_duration.second
+
+
     def export_timedemandtypes(self):
         # This is the only structure we actually will do pre-processing on.
         # Our TimeDemandType consists from relative times, each from the first departure time.
@@ -455,3 +471,53 @@ class Index2:
                 n_offset += 1
         self.jpp_at_sp_offsets.append(n_offset) #sentinel
         self.n_jpp_at_sp = n_offset
+
+    def export_transfers(self):
+        passenger_stop_assignments = self.netex_timetable.get_passenger_stop_assignments()
+        passenger_stop_assignments.sort(key=operator.attrgetter('taxi_stand_ref_or_quay_ref_or_quay.ref'))
+        passenger_stop_assignments_by_quay_ref = groupby(passenger_stop_assignments, operator.attrgetter('taxi_stand_ref_or_quay_ref_or_quay.ref'))
+
+        path_links2 = []
+        path_links = self.netex_timetable.get_path_links()
+        for path_link in path_links:
+            for _from in passenger_stop_assignments_by_quay_ref.get(path_link.from_value.place_ref.ref, []):
+                for _to in passenger_stop_assignments_by_quay_ref.get(path_link.to.place_ref.ref, []):
+                    path_links2.append((_from, _to, Index2.to_seconds2(path_link.transfer_duration.default_duration)))
+
+        path_links2.sort(key=operator.itemgetter(1))
+        path_links_by_scheduled_stop_point_ref = groupby(path_links2, operator.itemgetter(1))
+
+        print("saving transfer stops (footpaths)")
+        write_text_comment(self.out,"TRANSFER TARGET STOPS")
+        self.loc_transfer_target_stop_points = tell(self.out)
+
+        self.transfers_offsets = []
+        offset = 0
+        transfertimes = []
+        stop_point_waittimes = {}
+        for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values():
+            self.transfers_offsets.append(offset)
+            if scheduled_stop_point.id not in path_links_by_scheduled_stop_point_ref:
+                continue
+            for _from, _to, _default_duration in path_links_by_scheduled_stop_point_ref[scheduled_stop_point.id]:
+                if _from == _to:
+                    stop_point_waittimes[_from] = _default_duration
+                    continue
+                self.write_stop_point_idx(_to)
+                transfertimes.append(_default_duration)
+                offset += 1
+        assert len(transfertimes) == offset
+        self.transfers_offsets.append(offset) #sentinel
+        self.n_connections = offset
+
+        print("saving transfer times (footpaths)")
+        write_text_comment(self.out, "TRANSFER TIMES")
+        self.loc_transfer_dist_meters = tell(self.out)
+
+        for transfer_time in transfertimes:
+            writeshort(self.out,(int(transfer_time) >> 2))
+
+        self.loc_stop_point_waittime = tell(self.out)
+        for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values():
+            _wait_time = stop_point_waittimes.get(scheduled_stop_point.id, MIN_WAITTIME)
+            writeshort(self.out,(int(_wait_time) >> 2))
