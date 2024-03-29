@@ -30,7 +30,7 @@ from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, Timin
     TransportSubmode, BusSubmode, BusSubmodeEnumeration, ServiceReservationFacilityList, ReservationEnumeration, \
     SuitableEnumeration, ParkingsInFrameRelStructure, QuaysRelStructure, QuayRef, RouteView, LineRef, \
     DestinationDisplayView, TimetabledPassingTimesRelStructure, TimetabledPassingTime, StopPointInJourneyPatternRef, \
-    ValidBetween
+    ValidBetween, Connection, ConnectionEndStructure, TransfersInFrameRelStructure
 
 # Missing: BicycleRent
 
@@ -342,6 +342,7 @@ operators: List[Operator] = [Operator(
     contact_details=ContactStructure(url="http://1313.nl/")
 )]
 
+"""
 path_links: List[PathLink] = [PathLink(
     id="1", version="1",
     from_value=PathLinkEndStructure(place_ref=PlaceRefStructure(name_of_ref_class="Quay", ref="1a2", version="1")),
@@ -355,17 +356,33 @@ path_links: List[PathLink] = [PathLink(
         transfer_duration=TransferDurationStructure(default_duration=XmlDuration("PT0S"))
     )
 ]
+"""
+
+connections: List[Connection] = [Connection(
+    id="1", version="1",
+    from_value=ConnectionEndStructure(scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a2", version="1")),
+    to=ConnectionEndStructure(scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a3", version="1")),
+    transfer_duration=TransferDurationStructure(default_duration=XmlDuration("PT0S"))
+),
+    Connection(
+        id="2", version="1",
+        from_value=ConnectionEndStructure(scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a4", version="1")),
+        to=ConnectionEndStructure(scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a5", version="1")),
+        transfer_duration=TransferDurationStructure(default_duration=XmlDuration("PT0S"))
+    )
+]
 
 resource_frame = ResourceFrame(id="1", version="1", organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=operators))
 
 site_frame = SiteFrame(id="1", version="1",
     stop_places=StopPlacesInFrameRelStructure(stop_place=stop_places),
-                       parkings=ParkingsInFrameRelStructure(parking=parkings),
-                       path_links=PathLinksInFrameRelStructure(path_link=path_links))
+                       parkings=ParkingsInFrameRelStructure(parking=parkings))
+                       # path_links=PathLinksInFrameRelStructure(path_link=path_links))
 
 service_frame = ServiceFrame(
     id="1", version="1",
     scheduled_stop_points=ScheduledStopPointsInFrameRelStructure(scheduled_stop_point=scheduled_stop_points),
+    connections=TransfersInFrameRelStructure(transfer=connections),
     stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment=passenger_stop_assignments),
     lines=LinesInFrameRelStructure(line=lines),
     journey_patterns=JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)

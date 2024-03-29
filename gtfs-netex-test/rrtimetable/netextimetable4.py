@@ -17,7 +17,7 @@ from netex import ScheduledStopPoint, StopPlace, Quay, PassengerStopAssignment, 
     ShelterEquipment, ServiceJourneyPattern, DestinationDisplay, ServiceJourney, MobilityFacilityEnumeration, \
     LuggageCarriageEnumeration, PassengerInformationFacilityEnumeration, AssistanceFacilityEnumeration, \
     PassengerCommsFacilityEnumeration, SanitaryFacilityEnumeration, BusSubmode, BusSubmodeEnumeration, \
-    FlexibleServiceEnumeration, ReservationEnumeration, PathLink
+    FlexibleServiceEnumeration, ReservationEnumeration, PathLink, Connection
 from rrutils import *
 
 from typing import Any, Dict, Iterable, Optional, Tuple, List, OrderedDict
@@ -85,7 +85,7 @@ class NeTExTimetable:
     quayref_to_quay: Dict[str, Quay]
     scheduled_stop_point_ref_to_physical: Dict[str, (StopPlace, Quay)]
     quay_ref_to_scheduled_stop_point_ref: Dict[str, str]
-    path_links: List[PathLink]
+    connections: List[Connection]
 
     def __init__(self, input_filename: str):
         context = XmlContext()
@@ -104,11 +104,11 @@ class NeTExTimetable:
 
         return self.passenger_stop_assignments
 
-    def get_path_links(self) -> List[PathLink]:
-        if self.path_links is None:
-            self.path_links = [self.parser.parse(element, PathLink) for element in self.tree.findall(".//{http://www.netex.org.uk/netex}PathLink")]
+    def get_connections(self) -> List[Connection]:
+        if self.connections is None:
+            self.connections = [self.parser.parse(element, Connection) for element in self.tree.findall(".//{http://www.netex.org.uk/netex}Connection")]
         
-        return self.path_links
+        return self.connections
 
     def get_service_journeys(self) -> Dict[str, ServiceJourney]:
         if self.service_journeys is None:
@@ -473,19 +473,23 @@ class Index2:
         self.n_jpp_at_sp = n_offset
 
     def export_transfers(self):
-        passenger_stop_assignments = self.netex_timetable.get_passenger_stop_assignments()
-        passenger_stop_assignments.sort(key=operator.attrgetter('taxi_stand_ref_or_quay_ref_or_quay.ref'))
-        passenger_stop_assignments_by_quay_ref = groupby(passenger_stop_assignments, operator.attrgetter('taxi_stand_ref_or_quay_ref_or_quay.ref'))
+        # passenger_stop_assignments = self.netex_timetable.get_passenger_stop_assignments()
+        # passenger_stop_assignments.sort(key=operator.attrgetter('taxi_stand_ref_or_quay_ref_or_quay.ref'))
+        # passenger_stop_assignments_by_quay_ref = groupby(passenger_stop_assignments, operator.attrgetter('taxi_stand_ref_or_quay_ref_or_quay.ref'))
 
-        path_links2 = []
-        path_links = self.netex_timetable.get_path_links()
-        for path_link in path_links:
-            for _from in passenger_stop_assignments_by_quay_ref.get(path_link.from_value.place_ref.ref, []):
-                for _to in passenger_stop_assignments_by_quay_ref.get(path_link.to.place_ref.ref, []):
-                    path_links2.append((_from, _to, Index2.to_seconds2(path_link.transfer_duration.default_duration)))
+        # path_links2 = []
+        # path_links = self.netex_timetable.get_path_links()
+        # for path_link in path_links:
+        #    for _from in passenger_stop_assignments_by_quay_ref.get(path_link.from_value.place_ref.ref, []):
+        #        for _to in passenger_stop_assignments_by_quay_ref.get(path_link.to.place_ref.ref, []):
+        #            path_links2.append((_from, _to, Index2.to_seconds2(path_link.transfer_duration.default_duration)))
 
-        path_links2.sort(key=operator.itemgetter(1))
-        path_links_by_scheduled_stop_point_ref = groupby(path_links2, operator.itemgetter(1))
+        # path_links2.sort(key=operator.itemgetter(1))
+        # path_links_by_scheduled_stop_point_ref = groupby(path_links2, operator.itemgetter(1))
+
+        connections = self.netex_timetable.get_connections()
+        connections.sort(key=operator.attrgetter('from_value.scheduled_stop_point_ref_or_vehicle_meeting_point_ref.ref'))
+        connections_by_scheduled_stop_point_ref: Dict[str, Iterable[Connection]] = groupby(connections, operator.attrgetter('from_value.scheduled_stop_point_ref_or_vehicle_meeting_point_ref.ref'))
 
         print("saving transfer stops (footpaths)")
         write_text_comment(self.out,"TRANSFER TARGET STOPS")
@@ -497,9 +501,12 @@ class Index2:
         stop_point_waittimes = {}
         for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values():
             self.transfers_offsets.append(offset)
-            if scheduled_stop_point.id not in path_links_by_scheduled_stop_point_ref:
+            if scheduled_stop_point.id not in connections_by_scheduled_stop_point_ref:
                 continue
-            for _from, _to, _default_duration in path_links_by_scheduled_stop_point_ref[scheduled_stop_point.id]:
+            for connection in connections_by_scheduled_stop_point_ref[scheduled_stop_point.id]:
+                _from = connection.from_value.scheduled_stop_point_ref_or_vehicle_meeting_point_ref.ref
+                _to = connection.to.scheduled_stop_point_ref_or_vehicle_meeting_point_ref.ref
+                _default_duration = Index2.to_seconds2(connection.transfer_duration.default_duration)
                 if _from == _to:
                     stop_point_waittimes[_from] = _default_duration
                     continue
