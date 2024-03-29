@@ -17,14 +17,19 @@ from netex import ScheduledStopPoint, StopPlace, Quay, PassengerStopAssignment, 
     ShelterEquipment, ServiceJourneyPattern, DestinationDisplay, ServiceJourney, MobilityFacilityEnumeration, \
     LuggageCarriageEnumeration, PassengerInformationFacilityEnumeration, AssistanceFacilityEnumeration, \
     PassengerCommsFacilityEnumeration, SanitaryFacilityEnumeration, BusSubmode, BusSubmodeEnumeration, \
-    FlexibleServiceEnumeration, ReservationEnumeration, PathLink, Connection
+    FlexibleServiceEnumeration, ReservationEnumeration, PathLink, Connection, ServiceJourneyInterchange, Line, \
+    AllVehicleModesOfTransportEnumeration, AvailabilityCondition
 from rrutils import *
 
 from typing import Any, Dict, Iterable, Optional, Tuple, List, OrderedDict
 from xsdata.exceptions import XmlHandlerError
 from xsdata.models.enums import EventType
 
+NUMBER_OF_DAYS = 32
 MIN_WAITTIME = 2 * 60 #2 minutes ( in seconds)
+MAX_INTERLINE_WAITTIME = 5 * 60 #5 minutes ( in seconds)
+JP_NONE = 65535
+VJ_NONE = 65535
 
 class MyLxmlEventHandler(LxmlEventHandler):
     def process_context(
@@ -86,6 +91,7 @@ class NeTExTimetable:
     scheduled_stop_point_ref_to_physical: Dict[str, (StopPlace, Quay)]
     quay_ref_to_scheduled_stop_point_ref: Dict[str, str]
     connections: List[Connection]
+    service_journey_interchanges: List[ServiceJourneyInterchange]
 
     def __init__(self, input_filename: str):
         context = XmlContext()
@@ -96,6 +102,13 @@ class NeTExTimetable:
         self.scheduled_stop_points = None
         self.stop_places = None
         self.passenger_stop_assignment = None
+
+    def get_service_journey_interchanges(self) -> List[ServiceJourneyInterchange]:
+        if self.service_journey_interchanges is None:
+            self.service_journey_interchanges = [self.parser.parse(element, ServiceJourneyInterchange) for element in
+                               self.tree.findall(".//{http://www.netex.org.uk/netex}ServiceJourneyInterchange")]
+
+        return self.service_journey_interchanges
 
     def get_passenger_stop_assignments(self) -> List[PassengerStopAssignment]:
         if self.passenger_stop_assignments is None:
@@ -110,9 +123,22 @@ class NeTExTimetable:
         
         return self.connections
 
+    def get_lines(self) -> Dict[str, Line]:
+        if self.lines is None:
+            self.lines = [self.parser.parse(element, Line) for element in
+                                self.tree.findall(".//{http://www.netex.org.uk/netex}Line")]
+
+        return self.lines
+
     def get_service_journeys(self) -> Dict[str, ServiceJourney]:
         if self.service_journeys is None:
-            self.service_journeys = collections.OrderedDict({x.id: x for x in [self.parser.parse(element, ServiceJourney) for element in self.tree.findall(".//{http://www.netex.org.uk/netex}ServiceJourney")]})
+            service_journeys = collections.OrderedDict({x.id: x for x in [self.parser.parse(element, ServiceJourney) for element in self.tree.findall(".//{http://www.netex.org.uk/netex}ServiceJourney")]})
+            for service_journey in service_journeys.values():
+                service_journey._utc_offset = 0 # TODO: maybe directly do it here, and remove everywhere else?
+                service_journey._departure_time_seconds = Index2.to_seconds(service_journey.passing_times.timetabled_passing_time[0].departure_time, service_journey.passing_times.timetabled_passing_time[0].departure_day_offset)
+                service_journey._arrival_time_seconds = Index2.to_seconds(service_journey.passing_times.timetabled_passing_time[-1].arrival_time, service_journey.passing_times.timetabled_passing_time[-1].arrival_day_offset)
+
+            self.service_journeys = service_journeys
 
         return self.service_journeys
 
@@ -168,6 +194,26 @@ class NeTExTimetable:
         return self.service_journey_patterns
 
 
+    def get_service_journey_service_journey_pattern_group(self):
+        if self.get_service_journey_service_journey_pattern_group is None:
+            service_journeys = list(self.get_service_journeys().values())
+            service_journeys.sort(key = operator.attrgetter('journey_pattern_ref.ref', '_departure_time_seconds'))
+            service_journey_service_journey_pattern_group = groupby(service_journeys, operator.attrgetter('journey_pattern_ref.ref'))
+
+            _jp_idx = 0
+            for journey_pattern_ref, service_journeys in service_journey_service_journey_pattern_group:
+                _jpvjoffset = 0
+                for service_journey in service_journeys:
+                    service_journey._jp_idx = _jp_idx
+                    service_journey._jpvjoffset = _jpvjoffset
+                    _jpvjoffset += 1
+
+                _jp_idx += 1
+
+            self.service_journey_service_journey_pattern_group = service_journey_service_journey_pattern_group
+
+        return self.service_journey_service_journey_pattern_group
+
 class Index2:
     parser: XmlParser
     tree: etree._ElementTree
@@ -182,12 +228,15 @@ class Index2:
 
     netex_timetable: NeTExTimetable
 
+    global_utc_offset: int
+
     def put_string(self,string):
         if string in self.loc_for_string:
             return self.loc_for_string[string]
         self.loc_for_string[string] = self.string_length
         self.string_length += (len(string) + 1)
         self.strings.append(string)
+
         return self.loc_for_string[string]
 
     def write_stop_point_idx(self, scheduled_stop_point_ref: str):
@@ -217,6 +266,7 @@ class Index2:
         self.loc_for_string = {}
         self.strings = []
         self.string_length = 0
+        self.global_utc_offset = 0
 
         self.netex_timetable = netex_timetable
 
@@ -429,17 +479,17 @@ class Index2:
 
         return departure_time, vj_attr
 
+
+
     def export_vj_in_jp(self):
-        service_journeys = list(self.netex_timetable.get_service_journeys().values())
-        service_journeys.sort(key = operator.attrgetter('journey_pattern_ref.ref'))
-        groups = groupby(service_journeys, operator.attrgetter('journey_pattern_ref.ref'))
+        service_journey_service_journey_pattern_group = self.netex_timetable.get_service_journey_service_journey_pattern_group()
 
         write_text_comment(self.out,"VEHICLE JOURNEYS USING JOURNEY_PATTERN")
         self.loc_vehicle_journeys = tell(self.out)
         tioffset = 0
         self.vj_ids_offsets = []
         vj_t = Struct('IHH')
-        for service_journey_pattern_ref, service_journeys in groups:
+        for service_journey_pattern_ref, service_journeys in service_journey_service_journey_pattern_group:
             self.vj_ids_offsets.append(tioffset)
             for service_journey in service_journeys:
                 departure_time, vj_attr = Index2.get_service_journey(service_journey)
@@ -528,3 +578,186 @@ class Index2:
         for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values():
             _wait_time = stop_point_waittimes.get(scheduled_stop_point.id, MIN_WAITTIME)
             writeshort(self.out,(int(_wait_time) >> 2))
+
+    def export_vj_interlines(self):
+        service_journey_service_journey_pattern_group = self.netex_timetable.get_service_journey_service_journey_pattern_group()
+        service_journey_interchanges = self.netex_timetable.get_service_journey_interchanges()
+        service_journeys = self.netex_timetable.get_service_journeys()
+
+        vj_interline_clockwise = {}
+        vj_interline_counterclockwise = {}
+
+        for service_journey_interchange in service_journey_interchanges:
+            _from = service_journey_interchange.from_journey_ref.ref
+            _to = service_journey_interchange.to_journey_ref.ref
+
+            from_vj = service_journeys[_from]
+            to_vj = service_journeys[_to]
+
+            _arrival_time = Index2.to_seconds(from_vj.passing_times.timetabled_passing_time[-1].arrival_time, from_vj.passing_times.timetabled_passing_time[-1].arrival_day_offset)
+            _departure_time = Index2.to_seconds(to_vj.passing_times.timetabled_passing_time[0].departure_time, to_vj.passing_times.timetabled_passing_time[0].departure_day_offset)
+
+            if _arrival_time > _departure_time:
+                print(f'Ignoring VJ interline {service_journey_interchange.id} from {from_vj.id} to {to_vj.id}, timetravel!')
+                continue
+
+            waittime = _arrival_time - _departure_time
+            if waittime > MAX_INTERLINE_WAITTIME:
+                print(f'Ignoring VJ interline {service_journey_interchange.id} from {from_vj.id} to {to_vj.id}, wait-time between VJs is {waittime} seconds!')
+                continue
+
+            if (from_vj._utc_offset, from_vj.id) in vj_interline_clockwise:
+                raise Exception("Vehicle_journey's can only point to ONE other VJ")
+
+            vj_interline_clockwise[(from_vj._utc_offset, from_vj.id)] = (to_vj._jp_idx, to_vj._jpvjoffset)
+
+            if (to_vj._utc_offset, to_vj.id) in vj_interline_counterclockwise:
+                raise Exception("Vehicle_journey's can only point to ONE other VJ counterclockwise")
+
+            vj_interline_counterclockwise[(to_vj._utc_offset, to_vj.id)] = (from_vj._jp_idx, from_vj._jpvjoffset)
+
+        vjref_t = Struct('HH')
+        self.loc_vj_interline_backward = tell(self.out)
+        n_vjtransfers = 0
+        for service_journey_pattern in self.netex_timetable.get_service_journeys().values():
+            for service_journey in service_journey_service_journey_pattern_group[service_journey_pattern.id]:
+                _key = (service_journey.utc_offset, service_journey.id) # TODO: we don't have a utc_offset
+                _interline = vj_interline_counterclockwise.get(_key, None)
+                if _interline:
+                    self.out.write(vjref_t.pack(*_interline))
+                else:
+                    self.out.write(vjref_t.pack(JP_NONE,VJ_NONE))
+                n_vjtransfers += 1
+        self.loc_vj_interline_forward = tell(self.out)
+        n_vjtransfers_forward = 0
+        for service_journey_pattern in self.netex_timetable.get_service_journeys().values():
+            for service_journey in service_journey_service_journey_pattern_group[service_journey_pattern.id]:
+                _key = (service_journey.utc_offset, service_journey.id)  # TODO: we don't have a utc_offset
+                _interline = vj_interline_clockwise.get(_key, None)
+                if _interline:
+                    self.out.write(vjref_t.pack(*_interline))
+                else:
+                    self.out.write(vjref_t.pack(JP_NONE,VJ_NONE))
+                n_vjtransfers_forward += 1
+        assert n_vjtransfers == n_vjtransfers_forward
+
+    def export_stop_indices(self):
+        print("saving stop indexes")
+        write_text_comment(self.out,"STOP STRUCTS")
+        self.loc_stop_points = tell(self.out)
+        struct_2i = Struct('II')
+        print(len(self.jpp_at_sp_offsets), len(self.transfers_offsets))
+        assert len(self.jpp_at_sp_offsets) == len(self.transfers_offsets)
+        for stop in zip (self.jpp_at_sp_offsets, self.transfers_offsets) :
+            self.out.write(struct_2i.pack(*stop))
+
+    @staticmethod
+    def map_transport_mode(transport_mode: AllVehicleModesOfTransportEnumeration):
+        mode = 0
+        match transport_mode:
+            case AllVehicleModesOfTransportEnumeration.TRAM:
+                return 1
+            case AllVehicleModesOfTransportEnumeration.METRO:
+                return 2
+            case AllVehicleModesOfTransportEnumeration.RAIL:
+                return 4
+            case AllVehicleModesOfTransportEnumeration.BUS:
+                return 8
+            case AllVehicleModesOfTransportEnumeration.FERRY:
+                return 16
+            case AllVehicleModesOfTransportEnumeration.CABLEWAY:
+                return 32
+            # TODO: Gondola
+            case AllVehicleModesOfTransportEnumeration.FUNICULAR:
+                return 128
+            case AllVehicleModesOfTransportEnumeration.ALL:
+                return 255
+            case _:
+                return 0
+
+    def export_jp_structs(self):
+        lines = self.netex_timetable.get_lines()
+        service_journey_patterns = self.netex_timetable.get_service_journey_patterns()
+        service_journey_service_journey_pattern_group = self.netex_timetable.get_service_journey_service_journey_pattern_group()
+
+        write_text_comment(self.out,"ROUTE STRUCTS")
+        self.loc_journey_patterns = tell(self.out)
+        route_t = Struct('2I6H')
+        jpp_offsets = self.offset_jpp
+        trip_ids_offsets = self.vj_ids_offsets
+        jp_attributes = []
+
+        nroutes = len(service_journey_patterns)
+
+        jp_n_jpp = []
+        jp_n_vj = []
+        routeidx_offsets = []
+        jp_min_time = []
+        jp_max_time = []
+        for service_journey_pattern in service_journey_patterns.values():
+            jp_n_jpp.append(len(service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern))
+            jp_n_vj.append(len(service_journey_service_journey_pattern_group[service_journey_pattern.id]))
+
+            # TODO: it feels like this is wrong, the vj.utc_offset is not considered.
+            jp_min_time.append(min([service_journey._departure_time_seconds + self.global_utc_offset for service_journey in service_journey_service_journey_pattern_group[service_journey_pattern.id]]) >> 2)
+            jp_max_time.append(max([service_journey._arrival_time_seconds + self.global_utc_offset for service_journey in service_journey_service_journey_pattern_group[service_journey_pattern.id]]) >> 2)
+            routeidx_offsets.append(self.idx_for_route_uri[service_journey_pattern.route_ref_or_route_view.flexible_line_ref_or_line_ref_or_line_view.ref])
+
+            _line = lines[service_journey_pattern.route_ref_or_route_view.flexible_line_ref_or_line_ref_or_line_view.ref]
+            jp_attributes.append(_line.transport_mode)
+
+        jp_t_fields = [jpp_offsets, trip_ids_offsets, jp_n_jpp, jp_n_vj, jp_attributes, routeidx_offsets, jp_min_time, jp_max_time]
+        for l in jp_t_fields:
+            # the extra last route is a sentinel so we can derive list lengths for the last true route.
+            assert len(l) == nroutes
+        for route in zip (*jp_t_fields) :
+            # print route
+            self.out.write(route_t.pack(*route));
+        self.out.write(route_t.pack(jpp_offsets[-1]+1, 0, 0, 0, 0, 0, 0, 0)) #Sentinel
+
+    @staticmethod
+    def validity_mask(valid_day_bits):
+        mask = 0
+        for day in range(0, min(NUMBER_OF_DAYS, len(valid_day_bits))):
+            mask |= 1 << day
+        return mask
+
+    def export_vj_validities(self):
+        print("writing bitfields indicating which days each trip is active")
+        # note that bitfields are ordered identically to the trip_ids table, and offsets into that table can be reused
+        write_text_comment(self.out,"VJ ACTIVE BITFIELDS")
+        self.loc_vj_active = tell(self.out)
+
+        for service_journey_pattern, service_journeys in self.netex_timetable.get_service_journey_service_journey_pattern_group():
+            for service_journey in service_journeys:
+                service_journey: ServiceJourney
+                availability_condition: AvailabilityCondition = service_journey.validity_conditions_or_valid_between[0].choice[0]
+                writeint(Index2.validity_mask(availability_condition.valid_day_bits))
+
+    def export_jp_validities(self):
+        service_journey_service_journey_pattern_group = self.netex_timetable.get_service_journey_service_journey_pattern_group()
+        service_journey_patterns = self.netex_timetable.get_service_journey_patterns()
+
+        print("writing bitfields indicating which days each trip is active")
+        # note that bitfields are ordered identically to the trip_ids table, and offsets into that table can be reused
+        write_text_comment(self.out,"JP ACTIVE BITFIELDS")
+        self.loc_jp_active = tell(self.out)
+        n_zeros = 0
+        for service_journey_pattern_ref, _vjs in service_journey_service_journey_pattern_group:
+            availability_condition: AvailabilityCondition = service_journey_patterns[service_journey_pattern_ref].validity_conditions_or_valid_between[0].choice[0]
+            writeint(self.out,Index2.validity_mask(availability_condition.valid_day_bits))
+
+    def export_platform_codes(self):
+        scheduled_stop_points = self.netex_timetable.get_scheduled_stop_points()
+        print("writing out platformcodes for stops")
+        write_text_comment(self.out, "PLATFORM CODES")
+
+        platform_codes = []
+        for ssp in self.netex_timetable.get_scheduled_stop_points().values():
+            if ssp.public_code is not None:
+                platform_codes.append(ssp.public_code.value)
+            else:
+                platform_codes.append('')
+
+        # Check ift
+        self.loc_platformcodes = self.write_list_of_strings(platform_codes)

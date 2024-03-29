@@ -30,7 +30,9 @@ from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, Timin
     TransportSubmode, BusSubmode, BusSubmodeEnumeration, ServiceReservationFacilityList, ReservationEnumeration, \
     SuitableEnumeration, ParkingsInFrameRelStructure, QuaysRelStructure, QuayRef, RouteView, LineRef, \
     DestinationDisplayView, TimetabledPassingTimesRelStructure, TimetabledPassingTime, StopPointInJourneyPatternRef, \
-    ValidBetween, Connection, ConnectionEndStructure, TransfersInFrameRelStructure
+    ValidBetween, Connection, ConnectionEndStructure, TransfersInFrameRelStructure, \
+    JourneyInterchangesInFrameRelStructure, ServiceJourneyInterchange, VehicleJourneyRefStructure, ServiceJourneyRef, \
+    PublicCodeType
 
 # Missing: BicycleRent
 
@@ -130,6 +132,7 @@ passenger_stop_assignments: List[PassengerStopAssignment] = [
 scheduled_stop_points: List[ScheduledStopPoint] = [ScheduledStopPoint(
     id="1a1", version="1",
     name=MultilingualString(value='Stop 1a1'),
+    public_code=PublicCodeType(value="Platform code"),
     location=LocationStructure2(latitude=Decimal('1.101'), longitude=Decimal('1.1')),
 ),
     ScheduledStopPoint(
@@ -372,6 +375,13 @@ connections: List[Connection] = [Connection(
     )
 ]
 
+service_journey_interchanges: List[ServiceJourneyInterchange] = [ServiceJourneyInterchange(
+    id="1", version="1",
+    from_journey_ref=VehicleJourneyRefStructure(ref="1", version="1", name_of_ref_class="ServiceJourney"),
+    to_journey_ref=VehicleJourneyRefStructure(ref="2", version="1", name_of_ref_class="ServiceJourney"),
+    stay_seated=True
+)]
+
 resource_frame = ResourceFrame(id="1", version="1", organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=operators))
 
 site_frame = SiteFrame(id="1", version="1",
@@ -391,6 +401,7 @@ service_frame = ServiceFrame(
 timetable_frame = TimetableFrame(
     id="1", version="1",
     vehicle_journeys=JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journeys),
+    journey_interchanges=JourneyInterchangesInFrameRelStructure(service_journey_pattern_interchange_or_service_journey_interchange=service_journey_interchanges)
 )
 
 composite_frame: CompositeFrame = CompositeFrame(id="1", version="1",

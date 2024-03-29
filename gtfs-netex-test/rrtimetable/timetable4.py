@@ -25,7 +25,7 @@ from lxml import etree
 
 NUMBER_OF_DAYS = 32
 MIN_WAITTIME = 2 * 60 #2 minutes ( in seconds)
-MAX_INTERLINE_WAITTIME = 5 *60 #5 minutes ( in seconds)
+MAX_INTERLINE_WAITTIME = 5 * 60 #5 minutes ( in seconds)
 JP_NONE = 65535
 VJ_NONE = 65535
 
@@ -206,136 +206,11 @@ def export_sa_for_sp(index, out: RawIOBase):
     for sp in index.stop_points:
         write_stop_area_idx(out,index,sp.stop_area.uri)
 
-vjref_t = Struct('HH')
-def export_vj_interlines(tdata,index,out: RawIOBase):
-    index.loc_vj_interline_backward = tell(out)
-    n_vjtransfers = 0
-    for jp in index.journey_patterns:
-        for vj in index.vehicle_journeys_in_journey_pattern[jp.uri]:
-            if (vj.utc_offset,vj.uri) in index.vj_interline_counterclockwise:
-                out.write(vjref_t.pack(*index.vj_interline_counterclockwise[(vj.utc_offset,vj.uri)]))
-            else:
-                out.write(vjref_t.pack(JP_NONE,VJ_NONE))
-            n_vjtransfers += 1
-    index.loc_vj_interline_forward = tell(out)
-    n_vjtransfers_forward = 0
-    for jp in index.journey_patterns:
-        for vj in index.vehicle_journeys_in_journey_pattern[jp.uri]:
-            if (vj.utc_offset,vj.uri) in index.vj_interline_clockwise:
-                out.write(vjref_t.pack(*index.vj_interline_clockwise[(vj.utc_offset,vj.uri)]))
-            else:
-                out.write(vjref_t.pack(JP_NONE,VJ_NONE))
-            n_vjtransfers_forward += 1
-    assert n_vjtransfers == n_vjtransfers_forward
-
-def export_transfers(tdata,index,out: RawIOBase):
-    print("saving transfer stops (footpaths)")
-    write_text_comment(out,"TRANSFER TARGET STOPS")
-    index.loc_transfer_target_stop_points = tell(out)
-
-    index.transfers_offsets = []
-    offset = 0
-    transfertimes = []
-    stop_point_waittimes = {}
-    for sp in index.stop_points:
-        index.transfers_offsets.append(offset)
-        if sp.uri not in index.connections_from_stop_point:
-            continue
-        for conn in index.connections_from_stop_point[sp.uri]:
-            if conn.from_stop_point.uri == conn.to_stop_point.uri:
-                stop_point_waittimes[conn.from_stop_point.uri] = conn.min_transfer_time
-                continue
-            write_stop_point_idx(out,index,conn.to_stop_point.uri)
-            transfertimes.append(conn.min_transfer_time)
-            offset += 1
-    assert len(transfertimes) == offset
-    index.transfers_offsets.append(offset) #sentinel
-    index.n_connections = offset
-
-    print("saving transfer times (footpaths)")
-    write_text_comment(out,"TRANSFER TIMES")
-    index.loc_transfer_dist_meters = tell(out)
-
-    for transfer_time in transfertimes:
-        writeshort(out,(int(transfer_time) >> 2))
-
-    index.loc_stop_point_waittime = tell(out)
-    for sp in index.stop_points:
-        if sp.uri in stop_point_waittimes:
-            writeshort(out,(int(stop_point_waittimes[sp.uri]) >> 2))
-        else:
-            writeshort(out,(int(MIN_WAITTIME) >> 2))
-
-def export_stop_indices(index, out: RawIOBase):
-    print("saving stop indexes")
-    write_text_comment(out,"STOP STRUCTS")
-    index.loc_stop_points = tell(out)
-    struct_2i = Struct('II')
-    print(len(index.jpp_at_sp_offsets), len(index.transfers_offsets))
-    assert len(index.jpp_at_sp_offsets) == len(index.transfers_offsets)
-    for stop in zip (index.jpp_at_sp_offsets, index.transfers_offsets) :
-        out.write(struct_2i.pack(*stop))
 
 
-def export_jp_structs(index, out: RawIOBase):
-    print("saving route indexes")
-    write_text_comment(out,"ROUTE STRUCTS")
-    index.loc_journey_patterns = tell(out)
-    route_t = Struct('2I6H')
-    jpp_offsets = index.offset_jpp
-    trip_ids_offsets = index.vj_ids_offsets
-    jp_attributes = []
 
-    nroutes = len(index.journey_patterns)
 
-    jp_n_jpp = []
-    jp_n_vj = []
-    routeidx_offsets = []
-    jp_min_time = []
-    jp_max_time = []
-    for jp in index.journey_patterns:
-        jp_n_jpp.append(len(jp.points))
-        jp_n_vj.append(len(index.vehicle_journeys_in_journey_pattern[jp.uri]))
-        jp_min_time.append(min([vj.departure_time+index.global_utc_offset for vj in index.vehicle_journeys_in_journey_pattern[jp.uri]]) >> 2)
-        jp_max_time.append(max([vj.departure_time+vj.timedemandgroup.points[-1].totaldrivetime+index.global_utc_offset
-                                for vj in index.vehicle_journeys_in_journey_pattern[jp.uri]]) >> 2)
-        routeidx_offsets.append(index.idx_for_route_uri[jp.route.uri])
 
-        jp_attributes.append(1 << jp.route.route_type)
-    jp_t_fields = [jpp_offsets, trip_ids_offsets,jp_n_jpp, jp_n_vj,jp_attributes,routeidx_offsets,jp_min_time, jp_max_time]
-    for l in jp_t_fields :
-        # the extra last route is a sentinel so we can derive list lengths for the last true route.
-        assert len(l) == nroutes
-    for route in zip (*jp_t_fields) :
-        # print route
-        out.write(route_t.pack(*route));
-    out.write(route_t.pack(jpp_offsets[-1]+1,0,0,0,0,0,0,0)) #Sentinel
-
-def validity_mask(days):
-    mask = 0
-    for day in days:
-        if day < NUMBER_OF_DAYS:
-            mask |= 1 << day
-    return mask
-
-def export_vj_validities(index, out: RawIOBase):
-    print("writing bitfields indicating which days each trip is active")
-    # note that bitfields are ordered identically to the trip_ids table, and offsets into that table can be reused
-    write_text_comment(out,"VJ ACTIVE BITFIELDS")
-    index.loc_vj_active = tell(out)
-
-    for jp in index.journey_patterns:
-        for vj in index.vehicle_journeys_in_journey_pattern[jp.uri]:
-            writeint(out,validity_mask(vj.validity_pattern))
-
-def export_jp_validities(index, out: RawIOBase):
-    print("writing bitfields indicating which days each trip is active")
-    # note that bitfields are ordered identically to the trip_ids table, and offsets into that table can be reused
-    write_text_comment(out,"JP ACTIVE BITFIELDS")
-    index.loc_jp_active = tell(out)
-    n_zeros = 0
-    for jp in index.journey_patterns:
-        writeint(out,validity_mask(index.validity_pattern_for_journey_pattern_uri[jp.uri]))
 
 def export_platform_codes(index, out: RawIOBase):
     print("writing out platformcodes for stops")
