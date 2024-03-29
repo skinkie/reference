@@ -7,7 +7,7 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
     ScheduledStopPoint, StopPlace, AccessibilityAssessment, LimitationStatusEnumeration, TariffZoneRefsRelStructure, \
     PrivateCode, PrivateCodeStructure, Quay, PresentationStructure, Authority, Branding, Operator, ServiceJourney, \
     ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
-    ServiceLink
+    ServiceLink, PublicCodeType
 
 import operator as operator_f
 
@@ -50,7 +50,7 @@ class GtfsProfile:
         return None
 
     @staticmethod
-    def getOptionalPrivateCode(private_code: PrivateCodeStructure | PrivateCode):
+    def getOptionalPrivateCode(private_code: PrivateCodeStructure | PrivateCode | PublicCodeType):
         if private_code is not None:
             return private_code.value
 
@@ -225,7 +225,7 @@ class GtfsProfile:
             latitude, longitude = scheduled_stop_point.location.latitude, scheduled_stop_point.location.longitude
 
         stop = {'stop_id': scheduled_stop_point.id,
-                'stop_code': GtfsProfile.getOptionalPrivateCode(scheduled_stop_point.public_code.value),
+                'stop_code': GtfsProfile.getOptionalPrivateCode(scheduled_stop_point.public_code),
                 'stop_name': GtfsProfile.getOptionalMultilingualString(scheduled_stop_point.name) or GtfsProfile.getOptionalMultilingualString(scheduled_stop_point.short_name),
                 'stop_desc': GtfsProfile.getOptionalMultilingualString(scheduled_stop_point.description),
                 'stop_lat': round(latitude, 7),
@@ -324,7 +324,7 @@ class GtfsProfile:
             latitude, longitude = stop_area.centroid.location.latitude, stop_area.centroid.location.longitude
 
         stop = {'stop_id': stop_area.id,
-                'stop_code': stop_area.public_code.value or '',
+                'stop_code': GtfsProfile.getOptionalPrivateCode(stop_area.public_code.value),
                 'stop_name': GtfsProfile.getOptionalMultilingualString(stop_area.name) or GtfsProfile.getOptionalMultilingualString(stop_area.short_name),
                 'stop_desc': GtfsProfile.getOptionalMultilingualString(stop_area.description),
                 'stop_lat': round(latitude, 7),
@@ -352,7 +352,7 @@ class GtfsProfile:
 
         result = []
         stop = {'stop_id': stop_place.id,
-                'stop_code': stop_place.public_code.value or '',
+                'stop_code': GtfsProfile.getOptionalPrivateCode(stop_place.public_code.value),
                 'stop_name': GtfsProfile.getOptionalMultilingualString(stop_place.name) or GtfsProfile.getOptionalMultilingualString(stop_place.short_name),
                 'stop_desc': GtfsProfile.getOptionalMultilingualString(stop_place.description),
                 'stop_lat': round(latitude, 7),
@@ -381,7 +381,7 @@ class GtfsProfile:
                     latitude, longitude = quay.centroid.location.latitude, quay.centroid.location.longitude
 
                 stop = {'stop_id': quay.id,
-                        'stop_code': quay.public_code.value or '',
+                        'stop_code': GtfsProfile.getOptionalPrivateCode(quay.public_code.value),
                         'stop_name': GtfsProfile.getOptionalMultilingualString(quay.name) or GtfsProfile.getOptionalMultilingualString(quay.short_name),
                         'stop_desc': GtfsProfile.getOptionalMultilingualString(quay.description),
                         'stop_lat': round(latitude, 7),
