@@ -32,7 +32,8 @@ from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, Timin
     DestinationDisplayView, TimetabledPassingTimesRelStructure, TimetabledPassingTime, StopPointInJourneyPatternRef, \
     ValidBetween, Connection, ConnectionEndStructure, TransfersInFrameRelStructure, \
     JourneyInterchangesInFrameRelStructure, ServiceJourneyInterchange, VehicleJourneyRefStructure, ServiceJourneyRef, \
-    PublicCodeType
+    PublicCodeType, RouteRef, Route, RoutesInFrameRelStructure, TypeOfProductCategoryRef, TypeOfProductCategory, \
+    TypesOfValueInFrameRelStructure
 
 # Missing: BicycleRent
 
@@ -166,27 +167,41 @@ lines: List[Line] = [Line(
     id="1a|bus", version="1",
     name=MultilingualString(value="Bus"),
     transport_mode=AllVehicleModesOfTransportEnumeration.BUS,
+    public_code=PublicCodeType(value="Bus"),
     operator_ref=OperatorRef(ref="MMRI", version="1"),
+    type_of_product_category_ref=TypeOfProductCategoryRef(ref="Standaard", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
 ),
 Line(
     id="1a|ferry", version="1",
     name=MultilingualString(value="Ferry"),
     transport_mode=AllVehicleModesOfTransportEnumeration.FERRY,
+    public_code=PublicCodeType(value="Ferry"),
     operator_ref=OperatorRef(ref="MMRI", version="1"),
+    type_of_product_category_ref=TypeOfProductCategoryRef(ref="Standaard", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
 ),
 Line(
     id="1a|rail", version="1",
     name=MultilingualString(value="Rail"),
     transport_mode=AllVehicleModesOfTransportEnumeration.RAIL,
+    public_code=PublicCodeType(value="Rail"),
     operator_ref=OperatorRef(ref="MMRI", version="1"),
+    type_of_product_category_ref=TypeOfProductCategoryRef(ref="Standaard", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
 )]
 
+type_of_product_categorys: List[TypeOfProductCategory] = [
+    TypeOfProductCategory(id="Standaard", version="1", name=MultilingualString(value="Standaard"))
+]
+
+routes: List[Route] = [Route(id="1a|bus", version="1", line_ref=LineRef(ref="1a|bus", version="1")),
+                       Route(id="1a|ferry", version="1", line_ref=LineRef(ref="1a|ferry", version="1")),
+                       Route(id="1a|rail", version="1", line_ref=LineRef(ref="1a|rail", version="1"))]
+
 service_journey_patterns: List[ServiceJourneyPattern] = [ServiceJourneyPattern(
     id="1a|bus", version="1",
-    route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=LineRef(ref="1a|bus", version="1")),
+    route_ref_or_route_view=RouteRef(ref="1a|bus", version="1"),
     validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[AvailabilityCondition(
         id="1a|bus", version="1",
         valid_day_bits="1", from_date=XmlDateTime.from_string("2014-01-01T00:00:00"), to_date=XmlDateTime.from_string("2014-01-01T00:00:00"))])],
@@ -208,7 +223,7 @@ service_journey_patterns: List[ServiceJourneyPattern] = [ServiceJourneyPattern(
 ),
 ServiceJourneyPattern(
     id="1a|ferry", version="1",
-    route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=LineRef(ref="1a|ferry", version="1")),
+    route_ref_or_route_view=RouteRef(ref="1a|ferry", version="1"),
     validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[AvailabilityCondition(
         id="1a|ferry", version="1",
         valid_day_bits="1", from_date=XmlDateTime.from_string("2014-01-01T00:00:00"), to_date=XmlDateTime.from_string("2014-01-01T00:00:00"))])],
@@ -230,7 +245,7 @@ ServiceJourneyPattern(
 ),
 ServiceJourneyPattern(
     id="1a|rail", version="1",
-    route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=LineRef(ref="1a|rail", version="1")),
+    route_ref_or_route_view=RouteRef(ref="1a|rail", version="1"),
     validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[AvailabilityCondition(
         id="1a|rail", version="1",
         valid_day_bits="1", from_date=XmlDateTime.from_string("2014-01-01T00:00:00"), to_date=XmlDateTime.from_string("2014-01-01T00:00:00"))])],
@@ -377,12 +392,13 @@ connections: List[Connection] = [Connection(
 
 service_journey_interchanges: List[ServiceJourneyInterchange] = [ServiceJourneyInterchange(
     id="1", version="1",
-    from_journey_ref=VehicleJourneyRefStructure(ref="1", version="1", name_of_ref_class="ServiceJourney"),
-    to_journey_ref=VehicleJourneyRefStructure(ref="2", version="1", name_of_ref_class="ServiceJourney"),
+    from_journey_ref=VehicleJourneyRefStructure(ref="1a|bus|1", version="1", name_of_ref_class="ServiceJourney"),
+    to_journey_ref=VehicleJourneyRefStructure(ref="1a|rail|1", version="1", name_of_ref_class="ServiceJourney"),
     stay_seated=True
 )]
 
-resource_frame = ResourceFrame(id="1", version="1", organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=operators))
+resource_frame = ResourceFrame(id="1", version="1", organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=operators),
+                               types_of_value=TypesOfValueInFrameRelStructure(choice=type_of_product_categorys))
 
 site_frame = SiteFrame(id="1", version="1",
     stop_places=StopPlacesInFrameRelStructure(stop_place=stop_places),
@@ -395,6 +411,7 @@ service_frame = ServiceFrame(
     connections=TransfersInFrameRelStructure(transfer=connections),
     stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment=passenger_stop_assignments),
     lines=LinesInFrameRelStructure(line=lines),
+    routes=RoutesInFrameRelStructure(route=routes),
     journey_patterns=JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
 )
 
