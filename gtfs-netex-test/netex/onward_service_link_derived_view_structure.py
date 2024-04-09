@@ -17,15 +17,13 @@ class OnwardServiceLinkDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "OnwardServiceLink_DerivedViewStructure"
 
-    service_link_in_journey_pattern: Optional[ServiceLinkInJourneyPattern] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ServiceLinkInJourneyPattern",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    service_link_in_journey_pattern: Optional[ServiceLinkInJourneyPattern] = field(
+        default=None,
+        metadata={
+            "name": "ServiceLinkInJourneyPattern",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     service_link_ref: Optional[ServiceLinkRef] = field(
         default=None,

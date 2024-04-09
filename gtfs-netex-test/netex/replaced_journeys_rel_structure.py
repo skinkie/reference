@@ -13,9 +13,7 @@ class ReplacedJourneysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "replacedJourneys_RelStructure"
 
-    dated_vehicle_journey_ref_or_normal_dated_vehicle_journey_ref: List[
-        Union[DatedVehicleJourneyRef, NormalDatedVehicleJourneyRef]
-    ] = field(
+    dated_vehicle_journey_ref_or_normal_dated_vehicle_journey_ref: List[Union[DatedVehicleJourneyRef, NormalDatedVehicleJourneyRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

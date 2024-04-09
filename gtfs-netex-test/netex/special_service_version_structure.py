@@ -82,14 +82,7 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -117,9 +110,7 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[
-        Union[CompoundTrainRef, TrainRef, VehicleTypeRef]
-    ] = field(
+    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -266,16 +257,12 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
                 },
                 {
                     "name": "MinimumBookingPeriod",
-                    "type": Type[
-                        "SpecialServiceVersionStructure.MinimumBookingPeriod"
-                    ],
+                    "type": Type["SpecialServiceVersionStructure.MinimumBookingPeriod"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "MaximumBookingPeriod",
-                    "type": Type[
-                        "SpecialServiceVersionStructure.MaximumBookingPeriod"
-                    ],
+                    "type": Type["SpecialServiceVersionStructure.MaximumBookingPeriod"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

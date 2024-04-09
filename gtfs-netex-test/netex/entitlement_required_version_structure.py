@@ -25,18 +25,7 @@ class EntitlementRequiredVersionStructure(UsageParameterVersionStructure):
         name = "EntitlementRequired_VersionStructure"
 
     service_access_right_ref_or_preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[
-        Union[
-            EntitlementProductRef,
-            SupplementProductRef,
-            PreassignedFareProductRef,
-            AmountOfPriceUnitProductRef,
-            UsageDiscountRightRef,
-            ThirdPartyProductRef,
-            CappedDiscountRightRef,
-            SaleDiscountRightRef,
-            FareProductRef,
-            ServiceAccessRightRef,
-        ]
+        Union[EntitlementProductRef, SupplementProductRef, PreassignedFareProductRef, AmountOfPriceUnitProductRef, UsageDiscountRightRef, ThirdPartyProductRef, CappedDiscountRightRef, SaleDiscountRightRef, FareProductRef, ServiceAccessRightRef]
     ] = field(
         default=None,
         metadata={

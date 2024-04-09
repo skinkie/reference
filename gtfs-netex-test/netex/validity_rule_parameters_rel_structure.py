@@ -12,14 +12,12 @@ class ValidityRuleParametersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "validityRuleParameters_RelStructure"
 
-    validity_rule_parameter: List[ValidityRuleParameterVersionStructure] = (
-        field(
-            default_factory=list,
-            metadata={
-                "name": "ValidityRuleParameter",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-                "min_occurs": 1,
-            },
-        )
+    validity_rule_parameter: List[ValidityRuleParameterVersionStructure] = field(
+        default_factory=list,
+        metadata={
+            "name": "ValidityRuleParameter",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "min_occurs": 1,
+        },
     )

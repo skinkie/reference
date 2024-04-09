@@ -24,20 +24,7 @@ class OrganisationDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "Organisation_DerivedViewStructure"
 
-    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-        ]
-    ] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

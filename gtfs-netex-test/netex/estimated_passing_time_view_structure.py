@@ -31,30 +31,22 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
             "choices": (
                 {
                     "name": "ExpectedArrivalTime",
-                    "type": Type[
-                        "EstimatedPassingTimeViewStructure.ExpectedArrivalTime"
-                    ],
+                    "type": Type["EstimatedPassingTimeViewStructure.ExpectedArrivalTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ArrivalDayOffset",
-                    "type": Type[
-                        "EstimatedPassingTimeViewStructure.ArrivalDayOffset"
-                    ],
+                    "type": Type["EstimatedPassingTimeViewStructure.ArrivalDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ExpectedDepartureTime",
-                    "type": Type[
-                        "EstimatedPassingTimeViewStructure.ExpectedDepartureTime"
-                    ],
+                    "type": Type["EstimatedPassingTimeViewStructure.ExpectedDepartureTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DepartureDayOffset",
-                    "type": Type[
-                        "EstimatedPassingTimeViewStructure.DepartureDayOffset"
-                    ],
+                    "type": Type["EstimatedPassingTimeViewStructure.DepartureDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -64,16 +56,12 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
                 },
                 {
                     "name": "ExpectedNonstopPassingTime",
-                    "type": Type[
-                        "EstimatedPassingTimeViewStructure.ExpectedNonstopPassingTime"
-                    ],
+                    "type": Type["EstimatedPassingTimeViewStructure.ExpectedNonstopPassingTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "PassingTimeDayOffset",
-                    "type": Type[
-                        "EstimatedPassingTimeViewStructure.PassingTimeDayOffset"
-                    ],
+                    "type": Type["EstimatedPassingTimeViewStructure.PassingTimeDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

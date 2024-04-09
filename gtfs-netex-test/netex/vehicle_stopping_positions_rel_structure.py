@@ -13,9 +13,7 @@ class VehicleStoppingPositionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleStoppingPositions_RelStructure"
 
-    vehicle_stopping_position_ref_or_vehicle_stopping_position: List[
-        Union[VehicleStoppingPositionRef, VehicleStoppingPosition]
-    ] = field(
+    vehicle_stopping_position_ref_or_vehicle_stopping_position: List[Union[VehicleStoppingPositionRef, VehicleStoppingPosition]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

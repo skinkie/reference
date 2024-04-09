@@ -32,19 +32,7 @@ class FlexibleServicePropertiesVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "FlexibleServiceProperties_VersionStructure"
 
-    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[
-        Union[
-            SingleJourneyRef,
-            NormalDatedVehicleJourneyRef,
-            DatedVehicleJourneyRef,
-            DatedSpecialServiceRef,
-            SpecialServiceRef,
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            DeadRunRef,
-            VehicleJourneyRef,
-        ]
-    ] = field(
+    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -189,16 +177,12 @@ class FlexibleServicePropertiesVersionStructure(DataManagedObjectStructure):
                 },
                 {
                     "name": "MinimumBookingPeriod",
-                    "type": Type[
-                        "FlexibleServicePropertiesVersionStructure.MinimumBookingPeriod"
-                    ],
+                    "type": Type["FlexibleServicePropertiesVersionStructure.MinimumBookingPeriod"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "MaximumBookingPeriod",
-                    "type": Type[
-                        "FlexibleServicePropertiesVersionStructure.MaximumBookingPeriod"
-                    ],
+                    "type": Type["FlexibleServicePropertiesVersionStructure.MaximumBookingPeriod"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

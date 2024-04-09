@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .route_instruction_version_structure import (
-    RouteInstructionVersionStructure,
-)
+from .route_instruction_version_structure import RouteInstructionVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

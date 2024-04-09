@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from .communications_transport_method_enumeration import (
-    CommunicationsTransportMethodEnumeration,
-)
+from .communications_transport_method_enumeration import CommunicationsTransportMethodEnumeration
 from .compression_method_enumeration import CompressionMethodEnumeration
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"

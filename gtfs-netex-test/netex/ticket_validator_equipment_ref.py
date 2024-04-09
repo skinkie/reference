@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .ticket_validator_equipment_ref_structure import (
-    TicketValidatorEquipmentRefStructure,
-)
+from .ticket_validator_equipment_ref_structure import TicketValidatorEquipmentRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

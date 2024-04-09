@@ -9,15 +9,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleEquipmenProfilesInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class VehicleEquipmenProfilesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleEquipmenProfilesInFrame_RelStructure"
 
-    vehicle_equipment_profile_or_recharging_equipment_profile: List[
-        Union[VehicleEquipmentProfile, RechargingEquipmentProfile]
-    ] = field(
+    vehicle_equipment_profile_or_recharging_equipment_profile: List[Union[VehicleEquipmentProfile, RechargingEquipmentProfile]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -13,9 +13,7 @@ class FareScheduledStopPointsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "fareScheduledStopPointsInFrame_RelStructure"
 
-    scheduled_stop_point_or_fare_scheduled_stop_point: List[
-        Union[ScheduledStopPoint, FareScheduledStopPoint]
-    ] = field(
+    scheduled_stop_point_or_fare_scheduled_stop_point: List[Union[ScheduledStopPoint, FareScheduledStopPoint]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

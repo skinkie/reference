@@ -8,17 +8,13 @@ from .coupling_type_enumeration import CouplingTypeEnumeration
 from .current_type_enumeration import CurrentTypeEnumeration
 from .plug_type_enumeration import PlugTypeEnumeration
 from .type_of_plug_ref import TypeOfPlugRef
-from .vehicle_equipment_profile_version_structure import (
-    VehicleEquipmentProfileVersionStructure,
-)
+from .vehicle_equipment_profile_version_structure import VehicleEquipmentProfileVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class RechargingEquipmentProfileVersionStructure(
-    VehicleEquipmentProfileVersionStructure
-):
+class RechargingEquipmentProfileVersionStructure(VehicleEquipmentProfileVersionStructure):
     class Meta:
         name = "RechargingEquipmentProfile_VersionStructure"
 

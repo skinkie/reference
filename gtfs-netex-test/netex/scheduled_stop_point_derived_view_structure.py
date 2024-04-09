@@ -21,9 +21,7 @@ class ScheduledStopPointDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "ScheduledStopPoint_DerivedViewStructure"
 
-    scheduled_stop_point_ref: Optional[
-        Union[FareScheduledStopPointRef, ScheduledStopPointRef]
-    ] = field(
+    scheduled_stop_point_ref: Optional[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

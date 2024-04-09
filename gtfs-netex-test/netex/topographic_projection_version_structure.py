@@ -22,9 +22,7 @@ class TopographicProjectionVersionStructure(ProjectionVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    country_ref_or_topographic_place_ref: Optional[
-        Union[CountryRef, TopographicPlaceRef]
-    ] = field(
+    country_ref_or_topographic_place_ref: Optional[Union[CountryRef, TopographicPlaceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

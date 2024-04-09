@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .individual_passenger_info_version_structure import (
-    IndividualPassengerInfoVersionStructure,
-)
+from .individual_passenger_info_version_structure import IndividualPassengerInfoVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

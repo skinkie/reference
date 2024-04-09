@@ -14,15 +14,13 @@ class VehiclePositionAlignmentVersionStructure(VersionedChildStructure):
     class Meta:
         name = "VehiclePositionAlignment_VersionStructure"
 
-    vehicle_stopping_position_ref: Optional[VehicleStoppingPositionRef] = (
-        field(
-            default=None,
-            metadata={
-                "name": "VehicleStoppingPositionRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    vehicle_stopping_position_ref: Optional[VehicleStoppingPositionRef] = field(
+        default=None,
+        metadata={
+            "name": "VehicleStoppingPositionRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     boarding_position_ref: Optional[BoardingPositionRef] = field(
         default=None,

@@ -23,22 +23,7 @@ class ProjectionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "projections_RelStructure"
 
-    projection_ref_or_projection: List[
-        Union[
-            TopographicProjectionRef,
-            ComplexFeatureProjectionRef,
-            LinkSequenceProjectionRef,
-            ZoneProjectionRef,
-            LinkProjectionRef,
-            PointProjectionRef,
-            TopographicProjection,
-            ZoneProjection,
-            ComplexFeatureProjection,
-            LinkSequenceProjection,
-            LinkProjection,
-            PointProjection,
-        ]
-    ] = field(
+    projection_ref_or_projection: List[Union[TopographicProjectionRef, ComplexFeatureProjectionRef, LinkSequenceProjectionRef, ZoneProjectionRef, LinkProjectionRef, PointProjectionRef, TopographicProjection, ZoneProjection, ComplexFeatureProjection, LinkSequenceProjection, LinkProjection, PointProjection]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

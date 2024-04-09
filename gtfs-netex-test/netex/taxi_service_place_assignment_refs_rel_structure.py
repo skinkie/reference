@@ -7,9 +7,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TaxiServicePlaceAssignmentRefsRelStructure(
-    OneToManyRelationshipStructure
-):
+class TaxiServicePlaceAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "TaxiServicePlaceAssignmentRefs_RelStructure"
 

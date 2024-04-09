@@ -1,30 +1,19 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .dynamic_vehicle_meeting_point_assignment_ref import (
-    DynamicVehicleMeetingPointAssignmentRef,
-)
+from .dynamic_vehicle_meeting_point_assignment_ref import DynamicVehicleMeetingPointAssignmentRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
-from .vehicle_meeting_point_assignment_ref import (
-    VehicleMeetingPointAssignmentRef,
-)
+from .vehicle_meeting_point_assignment_ref import VehicleMeetingPointAssignmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleMeetingPointAssignmentRefsRelStructure(
-    OneToManyRelationshipStructure
-):
+class VehicleMeetingPointAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "vehicleMeetingPointAssignmentRefs_RelStructure"
 
-    vehicle_meeting_point_assignment_ref: Optional[
-        Union[
-            DynamicVehicleMeetingPointAssignmentRef,
-            VehicleMeetingPointAssignmentRef,
-        ]
-    ] = field(
+    vehicle_meeting_point_assignment_ref: Optional[Union[DynamicVehicleMeetingPointAssignmentRef, VehicleMeetingPointAssignmentRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

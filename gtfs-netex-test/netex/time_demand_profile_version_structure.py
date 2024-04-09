@@ -8,9 +8,7 @@ from .journey_pattern_ref import JourneyPatternRef
 from .multilingual_string import MultilingualString
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_pattern_ref import ServicePatternRef
-from .time_demand_profile_members_rel_structure import (
-    TimeDemandProfileMembersRelStructure,
-)
+from .time_demand_profile_members_rel_structure import TimeDemandProfileMembersRelStructure
 from .time_demand_type_ref import TimeDemandTypeRef
 from .timeband_ref import TimebandRef
 from .vehicle_journey_ref import VehicleJourneyRef
@@ -31,9 +29,7 @@ class TimeDemandProfileVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    time_demand_type_ref_or_timeband_ref: Optional[
-        Union[TimeDemandTypeRef, TimebandRef]
-    ] = field(
+    time_demand_type_ref_or_timeband_ref: Optional[Union[TimeDemandTypeRef, TimebandRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -51,14 +47,7 @@ class TimeDemandProfileVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -86,25 +75,23 @@ class TimeDemandProfileVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "DeadRunRef",
-                        "type": DeadRunRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "VehicleJourneyRef",
-                        "type": VehicleJourneyRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "DeadRunRef",
+                    "type": DeadRunRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleJourneyRef",
+                    "type": VehicleJourneyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     members: Optional[TimeDemandProfileMembersRelStructure] = field(
         default=None,

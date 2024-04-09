@@ -40,20 +40,7 @@ class RelatedOrganisationVersionStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-        ]
-    ] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

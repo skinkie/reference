@@ -13,9 +13,7 @@ class DisplayAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "displayAssignments_RelStructure"
 
-    display_assignment_ref_or_display_assignment: List[
-        Union[DisplayAssignmentRef, DisplayAssignment]
-    ] = field(
+    display_assignment_ref_or_display_assignment: List[Union[DisplayAssignmentRef, DisplayAssignment]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

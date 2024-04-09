@@ -7,9 +7,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class MediumApplicationInstanceRefsRelStructure(
-    OneToManyRelationshipStructure
-):
+class MediumApplicationInstanceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "mediumApplicationInstanceRefs_RelStructure"
 

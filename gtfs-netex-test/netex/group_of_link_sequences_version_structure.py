@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .link_sequence_refs_rel_structure import LinkSequenceRefsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

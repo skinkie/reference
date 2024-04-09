@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .timing_point_in_journey_pattern import TimingPointInJourneyPattern
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TimingPointsInJourneyPatternRelStructure(
-    StrictContainmentAggregationStructure
-):
+class TimingPointsInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "timingPointsInJourneyPattern_RelStructure"
 

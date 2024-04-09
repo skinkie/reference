@@ -82,35 +82,25 @@ class VehicleVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "AuthorityRef",
-                        "type": AuthorityRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "OperatorRef",
-                        "type": OperatorRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "AuthorityRef",
+                    "type": AuthorityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatorRef",
+                    "type": OperatorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -151,9 +141,7 @@ class VehicleVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_model_profile_ref: Optional[
-        Union[CycleModelProfileRef, CarModelProfileRef]
-    ] = field(
+    vehicle_model_profile_ref: Optional[Union[CycleModelProfileRef, CarModelProfileRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

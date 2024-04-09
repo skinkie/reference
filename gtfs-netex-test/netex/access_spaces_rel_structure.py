@@ -13,9 +13,7 @@ class AccessSpacesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "accessSpaces_RelStructure"
 
-    access_space_ref_or_access_space: List[
-        Union[AccessSpaceRef, AccessSpace]
-    ] = field(
+    access_space_ref_or_access_space: List[Union[AccessSpaceRef, AccessSpace]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

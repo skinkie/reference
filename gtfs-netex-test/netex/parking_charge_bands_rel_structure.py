@@ -13,9 +13,7 @@ class ParkingChargeBandsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "parkingChargeBands_RelStructure"
 
-    parking_charge_band_ref_or_parking_charge_band: List[
-        Union[ParkingChargeBandRef, ParkingChargeBand]
-    ] = field(
+    parking_charge_band_ref_or_parking_charge_band: List[Union[ParkingChargeBandRef, ParkingChargeBand]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

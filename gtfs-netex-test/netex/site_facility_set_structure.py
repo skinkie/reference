@@ -48,15 +48,13 @@ class SiteFacilitySetStructure(FacilitySetVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    luggage_service_facility_list: Optional[LuggageServiceFacilityList] = (
-        field(
-            default=None,
-            metadata={
-                "name": "LuggageServiceFacilityList",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    luggage_service_facility_list: Optional[LuggageServiceFacilityList] = field(
+        default=None,
+        metadata={
+            "name": "LuggageServiceFacilityList",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     money_facility_list: Optional[MoneyFacilityList] = field(
         default=None,

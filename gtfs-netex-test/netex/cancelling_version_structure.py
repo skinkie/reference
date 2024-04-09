@@ -13,9 +13,7 @@ class CancellingVersionStructure(UsageParameterVersionStructure):
     class Meta:
         name = "Cancelling_VersionStructure"
 
-    booking_arrangements_or_booking_arrangements: Optional[
-        Union[BookingArrangementsRelStructure, BookingArrangementsStructure]
-    ] = field(
+    booking_arrangements_or_booking_arrangements: Optional[Union[BookingArrangementsRelStructure, BookingArrangementsStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

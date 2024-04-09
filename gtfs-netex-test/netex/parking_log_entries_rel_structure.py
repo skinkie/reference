@@ -15,14 +15,7 @@ class ParkingLogEntriesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "parkingLogEntries_RelStructure"
 
-    parking_bay_condition_ref_or_rental_availability_ref_or_parking_bay_condition_or_rental_availability: List[
-        Union[
-            ParkingBayConditionRef,
-            RentalAvailabilityRef,
-            ParkingBayCondition,
-            RentalAvailability,
-        ]
-    ] = field(
+    parking_bay_condition_ref_or_rental_availability_ref_or_parking_bay_condition_or_rental_availability: List[Union[ParkingBayConditionRef, RentalAvailabilityRef, ParkingBayCondition, RentalAvailability]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

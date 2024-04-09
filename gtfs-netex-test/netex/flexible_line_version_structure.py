@@ -30,18 +30,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
         },
     )
     booking_contact_or_booking_methods_or_booking_access_or_book_when_or_buy_when_or_latest_booking_time_or_minimum_booking_period_or_maximum_booking_period_or_booking_url_or_booking_note: List[
-        Union[
-            ContactStructure,
-            List[BookingMethodEnumeration],
-            BookingAccessEnumeration,
-            PurchaseWhenEnumeration,
-            List[PurchaseMomentEnumeration],
-            XmlTime,
-            "FlexibleLineVersionStructure.MinimumBookingPeriod",
-            "FlexibleLineVersionStructure.MaximumBookingPeriod",
-            InfoLinkStructure,
-            MultilingualString,
-        ]
+        Union[ContactStructure, List[BookingMethodEnumeration], BookingAccessEnumeration, PurchaseWhenEnumeration, List[PurchaseMomentEnumeration], XmlTime, "FlexibleLineVersionStructure.MinimumBookingPeriod", "FlexibleLineVersionStructure.MaximumBookingPeriod", InfoLinkStructure, MultilingualString]
     ] = field(
         default_factory=list,
         metadata={
@@ -83,16 +72,12 @@ class FlexibleLineVersionStructure(LineVersionStructure):
                 },
                 {
                     "name": "MinimumBookingPeriod",
-                    "type": Type[
-                        "FlexibleLineVersionStructure.MinimumBookingPeriod"
-                    ],
+                    "type": Type["FlexibleLineVersionStructure.MinimumBookingPeriod"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "MaximumBookingPeriod",
-                    "type": Type[
-                        "FlexibleLineVersionStructure.MaximumBookingPeriod"
-                    ],
+                    "type": Type["FlexibleLineVersionStructure.MaximumBookingPeriod"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

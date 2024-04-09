@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .alternative_mode_of_operation_value_structure import (
-    AlternativeModeOfOperationValueStructure,
-)
+from .alternative_mode_of_operation_value_structure import AlternativeModeOfOperationValueStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

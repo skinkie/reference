@@ -15,9 +15,7 @@ class VehicleTypesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleTypesInFrame_RelStructure"
 
-    compound_train_or_train_or_vehicle_type_or_simple_vehicle_type: List[
-        Union[CompoundTrain, Train, VehicleType, SimpleVehicleType]
-    ] = field(
+    compound_train_or_train_or_vehicle_type_or_simple_vehicle_type: List[Union[CompoundTrain, Train, VehicleType, SimpleVehicleType]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

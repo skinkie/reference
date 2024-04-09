@@ -6,7 +6,5 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GroupOfDistanceMatrixElementsRefStructureElement(
-    GroupOfEntitiesRefStructure1
-):
+class GroupOfDistanceMatrixElementsRefStructureElement(GroupOfEntitiesRefStructure1):
     pass

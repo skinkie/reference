@@ -21,27 +21,15 @@ from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_pattern_ref import ServicePatternRef
 from .time_demand_type_ref_structure import TimeDemandTypeRefStructure
 from .time_demand_type_refs_rel_structure import TimeDemandTypeRefsRelStructure
-from .timetabled_passing_times_rel_structure import (
-    TimetabledPassingTimesRelStructure,
-)
+from .timetabled_passing_times_rel_structure import TimetabledPassingTimesRelStructure
 from .timing_algorithm_type_ref import TimingAlgorithmTypeRef
 from .train_block_ref import TrainBlockRef
-from .train_component_label_assignments_rel_structure import (
-    TrainComponentLabelAssignmentsRelStructure,
-)
+from .train_component_label_assignments_rel_structure import TrainComponentLabelAssignmentsRelStructure
 from .train_ref import TrainRef
-from .vehicle_journey_layovers_rel_structure import (
-    VehicleJourneyLayoversRelStructure,
-)
-from .vehicle_journey_run_times_rel_structure import (
-    VehicleJourneyRunTimesRelStructure,
-)
-from .vehicle_journey_stop_assignments_rel_structure import (
-    VehicleJourneyStopAssignmentsRelStructure,
-)
-from .vehicle_journey_wait_times_rel_structure import (
-    VehicleJourneyWaitTimesRelStructure,
-)
+from .vehicle_journey_layovers_rel_structure import VehicleJourneyLayoversRelStructure
+from .vehicle_journey_run_times_rel_structure import VehicleJourneyRunTimesRelStructure
+from .vehicle_journey_stop_assignments_rel_structure import VehicleJourneyStopAssignmentsRelStructure
+from .vehicle_journey_wait_times_rel_structure import VehicleJourneyWaitTimesRelStructure
 from .vehicle_type_ref import VehicleTypeRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -100,14 +88,7 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -151,13 +132,7 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_frequency_group_ref: Optional[
-        Union[
-            RhythmicalJourneyGroupRef,
-            HeadwayJourneyGroupRef,
-            JourneyFrequencyGroupRef,
-        ]
-    ] = field(
+    journey_frequency_group_ref: Optional[Union[RhythmicalJourneyGroupRef, HeadwayJourneyGroupRef, JourneyFrequencyGroupRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -180,9 +155,7 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[
-        Union[CompoundTrainRef, TrainRef, VehicleTypeRef]
-    ] = field(
+    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -262,9 +235,7 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    train_component_label_assignments: Optional[
-        TrainComponentLabelAssignmentsRelStructure
-    ] = field(
+    train_component_label_assignments: Optional[TrainComponentLabelAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "trainComponentLabelAssignments",
@@ -272,9 +243,7 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_journey_stop_assignments: Optional[
-        VehicleJourneyStopAssignmentsRelStructure
-    ] = field(
+    vehicle_journey_stop_assignments: Optional[VehicleJourneyStopAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleJourneyStopAssignments",

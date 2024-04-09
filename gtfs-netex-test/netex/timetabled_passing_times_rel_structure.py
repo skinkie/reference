@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .timetabled_passing_time import TimetabledPassingTime
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TimetabledPassingTimesRelStructure(
-    StrictContainmentAggregationStructure
-):
+class TimetabledPassingTimesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "timetabledPassingTimes_RelStructure"
 

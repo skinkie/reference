@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from .service_booking_arrangement_version_structure import (
-    ServiceBookingArrangementVersionStructure,
-)
+from .service_booking_arrangement_version_structure import ServiceBookingArrangementVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

@@ -1,12 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .transport_organisation_version_structure import (
-    TransportOrganisationVersionStructure,
-)
-from .type_of_organisation_refs_rel_structure import (
-    TypeOfOrganisationRefsRelStructure,
-)
+from .transport_organisation_version_structure import TransportOrganisationVersionStructure
+from .type_of_organisation_refs_rel_structure import TypeOfOrganisationRefsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

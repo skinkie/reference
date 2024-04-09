@@ -122,18 +122,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
         },
     )
     single_journey_ref_or_normal_dated_vehicle_journey_ref_or_dated_vehicle_journey_ref_or_dated_special_service_ref_or_special_service_ref_or_template_service_journey_ref_or_service_journey_ref_or_dead_run_ref_or_vehicle_journey_ref_or_connecting_journey_view: Optional[
-        Union[
-            SingleJourneyRef,
-            NormalDatedVehicleJourneyRef,
-            DatedVehicleJourneyRef,
-            DatedSpecialServiceRef,
-            SpecialServiceRef,
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            DeadRunRef,
-            VehicleJourneyRef,
-            ConnectingJourneyView,
-        ]
+        Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef, ConnectingJourneyView]
     ] = field(
         default=None,
         metadata={
@@ -192,9 +181,7 @@ class JourneyMeetingDerivedViewStructure(DerivedViewStructure):
             ),
         },
     )
-    flexible_line_ref_or_line_ref_or_connecting_line_view: Optional[
-        Union[FlexibleLineRef, LineRef, LineDerivedViewStructure]
-    ] = field(
+    flexible_line_ref_or_line_ref_or_connecting_line_view: Optional[Union[FlexibleLineRef, LineRef, LineDerivedViewStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

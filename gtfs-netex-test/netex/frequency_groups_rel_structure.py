@@ -15,14 +15,7 @@ class FrequencyGroupsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "frequencyGroups_RelStructure"
 
-    headway_journey_group_ref_or_headway_journey_group_or_rhythmical_journey_group_ref_or_rhythmical_journey_group: List[
-        Union[
-            HeadwayJourneyGroupRef,
-            HeadwayJourneyGroup,
-            RhythmicalJourneyGroupRef,
-            RhythmicalJourneyGroup,
-        ]
-    ] = field(
+    headway_journey_group_ref_or_headway_journey_group_or_rhythmical_journey_group_ref_or_rhythmical_journey_group: List[Union[HeadwayJourneyGroupRef, HeadwayJourneyGroup, RhythmicalJourneyGroupRef, RhythmicalJourneyGroup]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

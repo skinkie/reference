@@ -2,17 +2,13 @@ from dataclasses import dataclass, field
 from typing import List
 
 from .default_dead_run_run_time import DefaultDeadRunRunTime
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class DefaultDeadRunRunTimesRelStructure(
-    StrictContainmentAggregationStructure
-):
+class DefaultDeadRunRunTimesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "defaultDeadRunRunTimes_RelStructure"
 

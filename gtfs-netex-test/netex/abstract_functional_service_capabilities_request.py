@@ -6,8 +6,6 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
 @dataclass(kw_only=True)
-class AbstractFunctionalServiceCapabilitiesRequest(
-    AbstractServiceRequestStructure
-):
+class AbstractFunctionalServiceCapabilitiesRequest(AbstractServiceRequestStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

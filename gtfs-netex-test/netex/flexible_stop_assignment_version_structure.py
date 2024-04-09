@@ -23,9 +23,7 @@ class FlexibleStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             "required": True,
         }
     )
-    flexible_quay_ref: Optional[
-        Union[HailAndRideAreaRef, FlexibleAreaRef, FlexibleQuayRef]
-    ] = field(
+    flexible_quay_ref: Optional[Union[HailAndRideAreaRef, FlexibleAreaRef, FlexibleQuayRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

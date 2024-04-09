@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Union
 
-from .group_of_distance_matrix_elements_ref import (
-    GroupOfDistanceMatrixElementsRef,
-)
+from .group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
 from .group_of_sales_offer_packages_ref import GroupOfSalesOfferPackagesRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .parking_tariff_ref import ParkingTariffRef
@@ -17,14 +15,7 @@ class UsedInRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "usedInRefs_RelStructure"
 
-    parking_tariff_ref_or_tariff_ref_or_group_of_distance_matrix_elements_ref_or_group_of_sales_offer_packages_ref: List[
-        Union[
-            ParkingTariffRef,
-            TariffRef,
-            GroupOfDistanceMatrixElementsRef,
-            GroupOfSalesOfferPackagesRef,
-        ]
-    ] = field(
+    parking_tariff_ref_or_tariff_ref_or_group_of_distance_matrix_elements_ref_or_group_of_sales_offer_packages_ref: List[Union[ParkingTariffRef, TariffRef, GroupOfDistanceMatrixElementsRef, GroupOfSalesOfferPackagesRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

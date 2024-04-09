@@ -4,9 +4,7 @@ from typing import List, Optional
 from .local_service_version_structure import LocalServiceVersionStructure
 from .payment_method_enumeration import PaymentMethodEnumeration
 from .ticket_type_enumeration import TicketTypeEnumeration
-from .ticketing_service_facility_enumeration import (
-    TicketingServiceFacilityEnumeration,
-)
+from .ticketing_service_facility_enumeration import TicketingServiceFacilityEnumeration
 from .vehicle_mode_enumeration import VehicleModeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

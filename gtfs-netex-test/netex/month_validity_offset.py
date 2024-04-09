@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .month_validity_offset_versioned_structure import (
-    MonthValidityOffsetVersionedStructure,
-)
+from .month_validity_offset_versioned_structure import MonthValidityOffsetVersionedStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

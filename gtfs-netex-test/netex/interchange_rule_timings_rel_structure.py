@@ -13,9 +13,7 @@ class InterchangeRuleTimingsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "interchangeRuleTimings_RelStructure"
 
-    interchange_rule_timing_ref_or_interchange_rule_timing: List[
-        Union[InterchangeRuleTimingRef, InterchangeRuleTiming]
-    ] = field(
+    interchange_rule_timing_ref_or_interchange_rule_timing: List[Union[InterchangeRuleTimingRef, InterchangeRuleTiming]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

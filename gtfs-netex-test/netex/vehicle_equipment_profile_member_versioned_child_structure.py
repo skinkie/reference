@@ -35,9 +35,7 @@ from .multilingual_string import MultilingualString
 from .online_service_ref import OnlineServiceRef
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
-from .passenger_information_equipment_ref import (
-    PassengerInformationEquipmentRef,
-)
+from .passenger_information_equipment_ref import PassengerInformationEquipmentRef
 from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
 from .place_lighting_equipment_ref import PlaceLightingEquipmentRef
 from .place_sign_ref import PlaceSignRef
@@ -74,9 +72,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleEquipmentProfileMemberVersionedChildStructure(
-    VersionedChildStructure
-):
+class VehicleEquipmentProfileMemberVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "VehicleEquipmentProfileMember_VersionedChildStructure"
 

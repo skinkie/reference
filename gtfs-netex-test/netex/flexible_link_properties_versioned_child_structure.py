@@ -23,21 +23,7 @@ class FlexibleLinkPropertiesVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "FlexibleLinkProperties_VersionedChildStructure"
 
-    link_ref_or_infrastructure_link_ref: Optional[
-        Union[
-            OnwardVehicleMeetingLinkRef,
-            VehicleMeetingLinkRef,
-            ServiceLinkRef,
-            LineLinkRef,
-            TimingLinkRef,
-            WireLinkRef,
-            RoadLinkRef,
-            RailwayLinkRef,
-            ActivationLinkRef,
-            PathLinkRef,
-            RouteLinkRef,
-        ]
-    ] = field(
+    link_ref_or_infrastructure_link_ref: Optional[Union[OnwardVehicleMeetingLinkRef, VehicleMeetingLinkRef, ServiceLinkRef, LineLinkRef, TimingLinkRef, WireLinkRef, RoadLinkRef, RailwayLinkRef, ActivationLinkRef, PathLinkRef, RouteLinkRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

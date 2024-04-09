@@ -13,9 +13,7 @@ class LinesInDirectionRefsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "linesInDirectionRefs_RelStructure"
 
-    line_in_direction_ref_or_allowed_line_direction_ref: List[
-        Union[LineInDirectionRef, AllowedLineDirectionRef]
-    ] = field(
+    line_in_direction_ref_or_allowed_line_direction_ref: List[Union[LineInDirectionRef, AllowedLineDirectionRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

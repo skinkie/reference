@@ -3,9 +3,7 @@ from typing import Optional, Union
 
 from .authority_ref import AuthorityRef
 from .general_organisation_ref import GeneralOrganisationRef
-from .installed_equipment_version_structure import (
-    InstalledEquipmentVersionStructure,
-)
+from .installed_equipment_version_structure import InstalledEquipmentVersionStructure
 from .management_agent_ref import ManagementAgentRef
 from .online_service_operator_ref import OnlineServiceOperatorRef
 from .operator_ref import OperatorRef
@@ -32,20 +30,7 @@ class RetailDeviceVersionStructure(InstalledEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-        ]
-    ] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

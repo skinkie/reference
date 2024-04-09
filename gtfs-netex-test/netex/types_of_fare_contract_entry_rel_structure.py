@@ -13,9 +13,7 @@ class TypesOfFareContractEntryRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typesOfFareContractEntry_RelStructure"
 
-    type_of_fare_contract_entry_ref_or_type_of_fare_contract_entry: List[
-        Union[TypeOfFareContractEntryRef, TypeOfFareContractEntry]
-    ] = field(
+    type_of_fare_contract_entry_ref_or_type_of_fare_contract_entry: List[Union[TypeOfFareContractEntryRef, TypeOfFareContractEntry]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

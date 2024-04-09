@@ -5,17 +5,13 @@ from .accessibility_assessment import AccessibilityAssessment
 from .beacon_direction_enumeration import BeaconDirectionEnumeration
 from .beacon_protocol_enumeration import BeaconProtocolEnumeration
 from .beacon_type_enumeration import BeaconTypeEnumeration
-from .passenger_equipment_version_structure import (
-    PassengerEquipmentVersionStructure,
-)
+from .passenger_equipment_version_structure import PassengerEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PassengerBeaconEquipmentVersionStructure(
-    PassengerEquipmentVersionStructure
-):
+class PassengerBeaconEquipmentVersionStructure(PassengerEquipmentVersionStructure):
     class Meta:
         name = "PassengerBeaconEquipment_VersionStructure"
 

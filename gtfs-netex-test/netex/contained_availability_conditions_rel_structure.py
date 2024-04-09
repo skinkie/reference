@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ContainedAvailabilityConditionsRelStructure(
-    ContainmentAggregationStructure
-):
+class ContainedAvailabilityConditionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "containedAvailabilityConditions_RelStructure"
 

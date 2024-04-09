@@ -10,15 +10,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class InfrastructureElementsInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class InfrastructureElementsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "infrastructureElementsInFrame_RelStructure"
 
-    railway_element_or_road_element_or_wire_element: List[
-        Union[RailwayElement, RoadElement, WireElement]
-    ] = field(
+    railway_element_or_road_element_or_wire_element: List[Union[RailwayElement, RoadElement, WireElement]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

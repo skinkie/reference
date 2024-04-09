@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GroupsOfDistanceMatrixElementsInFrameRelStructure(
-    FrameContainmentStructure
-):
+class GroupsOfDistanceMatrixElementsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "groupsOfDistanceMatrixElementsInFrame_RelStructure"
 

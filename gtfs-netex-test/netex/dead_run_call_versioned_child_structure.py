@@ -17,9 +17,7 @@ from .garage_point_ref import GaragePointRef
 from .multilingual_string import MultilingualString
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .parking_point_ref import ParkingPointRef
-from .point_in_journey_pattern_ref_structure import (
-    PointInJourneyPatternRefStructure,
-)
+from .point_in_journey_pattern_ref_structure import PointInJourneyPatternRefStructure
 from .point_ref import PointRef
 from .railway_point_ref import RailwayPointRef
 from .relief_point_ref import ReliefPointRef
@@ -45,23 +43,7 @@ class DeadRunCallVersionedChildStructure(VersionedChildStructure):
 
     choice: Optional[
         Union[
-            VehicleMeetingPointRef,
-            WirePointRef,
-            RoadPointRef,
-            RailwayPointRef,
-            TrafficControlPointRef,
-            BeaconPointRef,
-            ActivationPointRef,
-            BorderPointRef,
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            GaragePointRef,
-            ParkingPointRef,
-            ReliefPointRef,
-            TimingPointRef,
-            RoutePointRef,
-            PointRef,
-            ScheduledStopPointView,
+            VehicleMeetingPointRef, WirePointRef, RoadPointRef, RailwayPointRef, TrafficControlPointRef, BeaconPointRef, ActivationPointRef, BorderPointRef, FareScheduledStopPointRef, ScheduledStopPointRef, GaragePointRef, ParkingPointRef, ReliefPointRef, TimingPointRef, RoutePointRef, PointRef, ScheduledStopPointView
         ]
     ] = field(
         default=None,
@@ -156,9 +138,7 @@ class DeadRunCallVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    point_in_journey_pattern_ref: Optional[
-        PointInJourneyPatternRefStructure
-    ] = field(
+    point_in_journey_pattern_ref: Optional[PointInJourneyPatternRefStructure] = field(
         default=None,
         metadata={
             "name": "PointInJourneyPatternRef",
@@ -182,9 +162,7 @@ class DeadRunCallVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    destination_display_ref_or_destination_display_view: Optional[
-        Union[DestinationDisplayRef, DestinationDisplayView]
-    ] = field(
+    destination_display_ref_or_destination_display_view: Optional[Union[DestinationDisplayRef, DestinationDisplayView]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -283,9 +261,7 @@ class DeadRunCallVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_arrangements_or_booking_arrangements: Optional[
-        Union[BookingArrangementsRelStructure, BookingArrangementsStructure]
-    ] = field(
+    booking_arrangements_or_booking_arrangements: Optional[Union[BookingArrangementsRelStructure, BookingArrangementsStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

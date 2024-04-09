@@ -22,9 +22,7 @@ class JourneyPartPositionVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    scheduled_stop_point_ref: List[
-        Union[FareScheduledStopPointRef, ScheduledStopPointRef]
-    ] = field(
+    scheduled_stop_point_ref: List[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -9,9 +9,7 @@ __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 @dataclass(kw_only=True)
 class EnvelopeType:
-    lower_corner_or_upper_corner_or_pos: List[
-        Union["EnvelopeType.LowerCorner", "EnvelopeType.UpperCorner", Pos]
-    ] = field(
+    lower_corner_or_upper_corner_or_pos: List[Union["EnvelopeType.LowerCorner", "EnvelopeType.UpperCorner", Pos]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

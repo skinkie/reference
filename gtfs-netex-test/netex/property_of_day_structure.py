@@ -52,13 +52,7 @@ class PropertyOfDayStructure:
             "tokens": True,
         },
     )
-    month_of_year_or_day_of_month_or_day_of_year: Optional[
-        Union[
-            "PropertyOfDayStructure.MonthOfYear",
-            "PropertyOfDayStructure.DayOfMonth",
-            "PropertyOfDayStructure.DayOfYear",
-        ]
-    ] = field(
+    month_of_year_or_day_of_month_or_day_of_year: Optional[Union["PropertyOfDayStructure.MonthOfYear", "PropertyOfDayStructure.DayOfMonth", "PropertyOfDayStructure.DayOfYear"]] = field(
         default=None,
         metadata={
             "type": "Elements",

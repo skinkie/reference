@@ -6,8 +6,6 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleServicePlaceAssignmentVersionStructure(
-    AssignmentVersionStructure1
-):
+class VehicleServicePlaceAssignmentVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "VehicleServicePlaceAssignment_VersionStructure"

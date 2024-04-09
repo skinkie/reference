@@ -4,9 +4,7 @@ from typing import Optional, Union
 
 from .capping_rule_price_ref import CappingRulePriceRef
 from .controllable_element_price_ref import ControllableElementPriceRef
-from .customer_purchase_package_price_ref import (
-    CustomerPurchasePackagePriceRef,
-)
+from .customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
 from .discounting_rule_ref import DiscountingRuleRef
 from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
 from .fare_price_ref import FarePriceRef
@@ -213,9 +211,7 @@ class PriceRuleStepResultStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    discounting_rule_ref_or_pricing_rule_ref: Optional[
-        Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]
-    ] = field(
+    discounting_rule_ref_or_pricing_rule_ref: Optional[Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

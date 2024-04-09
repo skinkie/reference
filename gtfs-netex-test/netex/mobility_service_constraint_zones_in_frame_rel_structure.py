@@ -8,20 +8,16 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class MobilityServiceConstraintZonesInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class MobilityServiceConstraintZonesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "mobilityServiceConstraintZonesInFrame_RelStructure"
 
-    mobility_service_constraint_zone: List[MobilityServiceConstraintZone] = (
-        field(
-            default_factory=list,
-            metadata={
-                "name": "MobilityServiceConstraintZone",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-                "min_occurs": 1,
-            },
-        )
+    mobility_service_constraint_zone: List[MobilityServiceConstraintZone] = field(
+        default_factory=list,
+        metadata={
+            "name": "MobilityServiceConstraintZone",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "min_occurs": 1,
+        },
     )

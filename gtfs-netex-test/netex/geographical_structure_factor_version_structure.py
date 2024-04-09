@@ -6,18 +6,14 @@ from .distance_matrix_element_ref import DistanceMatrixElementRef
 from .geographical_interval_ref import GeographicalIntervalRef
 from .geographical_unit_ref import GeographicalUnitRef
 from .parking_tariff_ref import ParkingTariffRef
-from .priceable_object_version_structure import (
-    FareStructureFactorVersionStructure,
-)
+from .priceable_object_version_structure import FareStructureFactorVersionStructure
 from .tariff_ref import TariffRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GeographicalStructureFactorVersionStructure(
-    FareStructureFactorVersionStructure
-):
+class GeographicalStructureFactorVersionStructure(FareStructureFactorVersionStructure):
     class Meta:
         name = "GeographicalStructureFactor_VersionStructure"
 

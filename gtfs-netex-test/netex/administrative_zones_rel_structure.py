@@ -4,9 +4,7 @@ from typing import List, Optional, Type, Union
 from .administrative_zone_ref import AdministrativeZoneRef
 from .all_modes_enumeration import AllModesEnumeration
 from .authority_ref import AuthorityRef
-from .codespace_assignments_rel_structure import (
-    CodespaceAssignmentsRelStructure,
-)
+from .codespace_assignments_rel_structure import CodespaceAssignmentsRelStructure
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .general_organisation_ref import GeneralOrganisationRef
 from .management_agent_ref import ManagementAgentRef
@@ -29,13 +27,7 @@ class AdministrativeZonesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "administrativeZones_RelStructure"
 
-    administrative_zone_ref_or_transport_administrative_zone_or_administrative_zone: List[
-        Union[
-            AdministrativeZoneRef,
-            "TransportAdministrativeZone",
-            "AdministrativeZone",
-        ]
-    ] = field(
+    administrative_zone_ref_or_transport_administrative_zone_or_administrative_zone: List[Union[AdministrativeZoneRef, "TransportAdministrativeZone", "AdministrativeZone"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -73,20 +65,7 @@ class AdministrativeZoneVersionStructure(ZoneVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-        ]
-    ] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -175,9 +154,7 @@ class AdministrativeZone(AdministrativeZoneVersionStructure):
 
 
 @dataclass(kw_only=True)
-class TransportAdministrativeZoneVersionStructure(
-    AdministrativeZoneVersionStructure
-):
+class TransportAdministrativeZoneVersionStructure(AdministrativeZoneVersionStructure):
     class Meta:
         name = "TransportAdministrativeZone_VersionStructure"
 

@@ -2,31 +2,19 @@ from dataclasses import dataclass, field
 from typing import List, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
-from .dynamic_vehicle_meeting_point_assignment_ref import (
-    DynamicVehicleMeetingPointAssignmentRef,
-)
+from .dynamic_vehicle_meeting_point_assignment_ref import DynamicVehicleMeetingPointAssignmentRef
 from .vehicle_meeting_point_assignment_1 import VehicleMeetingPointAssignment1
-from .vehicle_meeting_point_assignment_ref import (
-    VehicleMeetingPointAssignmentRef,
-)
+from .vehicle_meeting_point_assignment_ref import VehicleMeetingPointAssignmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleMeetingPointAssignmentsRelStructure(
-    ContainmentAggregationStructure
-):
+class VehicleMeetingPointAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleMeetingPointAssignments_RelStructure"
 
-    dynamic_vehicle_meeting_point_assignment_ref_or_vehicle_meeting_point_assignment_ref_or_vehicle_meeting_point_assignment: List[
-        Union[
-            DynamicVehicleMeetingPointAssignmentRef,
-            VehicleMeetingPointAssignmentRef,
-            VehicleMeetingPointAssignment1,
-        ]
-    ] = field(
+    dynamic_vehicle_meeting_point_assignment_ref_or_vehicle_meeting_point_assignment_ref_or_vehicle_meeting_point_assignment: List[Union[DynamicVehicleMeetingPointAssignmentRef, VehicleMeetingPointAssignmentRef, VehicleMeetingPointAssignment1]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Union
 
 from .authority_ref import AuthorityRef
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .operator_ref import OperatorRef
 from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
 from .type_of_fleet_ref import TypeOfFleetRef
@@ -25,25 +23,23 @@ class FleetVersionStructure(GroupOfEntitiesVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "AuthorityRef",
-                        "type": AuthorityRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "OperatorRef",
-                        "type": OperatorRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "AuthorityRef",
+                    "type": AuthorityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatorRef",
+                    "type": OperatorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     type_of_fleet_ref: Optional[TypeOfFleetRef] = field(
         default=None,

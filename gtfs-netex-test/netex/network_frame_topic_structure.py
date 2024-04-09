@@ -36,15 +36,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class NetworkFrameTopicStructure(TopicStructure):
-    current_or_changed_since_or_current_at_or_historic_between_or_selection_validity_conditions: Optional[
-        Union[
-            EmptyType2,
-            "NetworkFrameTopicStructure.ChangedSince",
-            "NetworkFrameTopicStructure.CurrentAt",
-            ClosedTimestampRangeStructure,
-            "NetworkFrameTopicStructure.SelectionValidityConditions",
-        ]
-    ] = field(
+    current_or_changed_since_or_current_at_or_historic_between_or_selection_validity_conditions: Optional[Union[EmptyType2, "NetworkFrameTopicStructure.ChangedSince", "NetworkFrameTopicStructure.CurrentAt", ClosedTimestampRangeStructure, "NetworkFrameTopicStructure.SelectionValidityConditions"]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -71,9 +63,7 @@ class NetworkFrameTopicStructure(TopicStructure):
                 },
                 {
                     "name": "selectionValidityConditions",
-                    "type": Type[
-                        "NetworkFrameTopicStructure.SelectionValidityConditions"
-                    ],
+                    "type": Type["NetworkFrameTopicStructure.SelectionValidityConditions"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -191,16 +181,7 @@ class NetworkFrameTopicStructure(TopicStructure):
 
     @dataclass(kw_only=True)
     class SelectionValidityConditions:
-        validity_condition: List[
-            Union[
-                SimpleAvailabilityCondition,
-                ValidDuring,
-                AvailabilityCondition,
-                ValidityRuleParameter,
-                ValidityTrigger,
-                ValidityCondition,
-            ]
-        ] = field(
+        validity_condition: List[Union[SimpleAvailabilityCondition, ValidDuring, AvailabilityCondition, ValidityRuleParameter, ValidityTrigger, ValidityCondition]] = field(
             default_factory=list,
             metadata={
                 "type": "Elements",

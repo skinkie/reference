@@ -3,23 +3,17 @@ from typing import List, Union
 
 from .controllable_element_in_sequence import ControllableElementInSequence
 from .fare_structure_element_in_sequence import FareStructureElementInSequence
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class FareStructureElementsInSequenceRelStructure(
-    StrictContainmentAggregationStructure
-):
+class FareStructureElementsInSequenceRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "fareStructureElementsInSequence_RelStructure"
 
-    fare_structure_element_in_sequence_or_controllable_element_in_sequence: List[
-        Union[FareStructureElementInSequence, ControllableElementInSequence]
-    ] = field(
+    fare_structure_element_in_sequence_or_controllable_element_in_sequence: List[Union[FareStructureElementInSequence, ControllableElementInSequence]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

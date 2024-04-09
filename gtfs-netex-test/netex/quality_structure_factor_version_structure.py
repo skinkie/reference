@@ -1,20 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .priceable_object_version_structure import (
-    FareStructureFactorVersionStructure,
-)
-from .quality_structure_factor_prices_rel_structure import (
-    QualityStructureFactorPricesRelStructure,
-)
+from .priceable_object_version_structure import FareStructureFactorVersionStructure
+from .quality_structure_factor_prices_rel_structure import QualityStructureFactorPricesRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class QualityStructureFactorVersionStructure(
-    FareStructureFactorVersionStructure
-):
+class QualityStructureFactorVersionStructure(FareStructureFactorVersionStructure):
     class Meta:
         name = "QualityStructureFactor_VersionStructure"
 

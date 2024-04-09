@@ -6,9 +6,7 @@ from xsdata.models.datatype import XmlDateTime
 from .customer_account_ref import CustomerAccountRef
 from .customer_ref import CustomerRef
 from .entity_in_version_structure import DataManagedObjectStructure
-from .fare_contract_entries_rel_structure import (
-    FareContractEntriesRelStructure,
-)
+from .fare_contract_entries_rel_structure import FareContractEntriesRelStructure
 from .multilingual_string import MultilingualString
 from .type_of_fare_contract_ref import TypeOfFareContractRef
 

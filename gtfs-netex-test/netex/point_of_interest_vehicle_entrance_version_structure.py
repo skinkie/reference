@@ -6,8 +6,6 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PointOfInterestVehicleEntranceVersionStructure(
-    SiteEntranceVersionStructure
-):
+class PointOfInterestVehicleEntranceVersionStructure(SiteEntranceVersionStructure):
     class Meta:
         name = "PointOfInterestVehicleEntrance_VersionStructure"

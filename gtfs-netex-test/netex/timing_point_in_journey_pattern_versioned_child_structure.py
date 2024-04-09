@@ -6,17 +6,11 @@ from xsdata.models.datatype import XmlDuration
 from .border_point_ref import BorderPointRef
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .garage_point_ref import GaragePointRef
-from .journey_pattern_headways_rel_structure import (
-    JourneyPatternHeadwaysRelStructure,
-)
-from .journey_pattern_wait_times_rel_structure import (
-    JourneyPatternWaitTimesRelStructure,
-)
+from .journey_pattern_headways_rel_structure import JourneyPatternHeadwaysRelStructure
+from .journey_pattern_wait_times_rel_structure import JourneyPatternWaitTimesRelStructure
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .parking_point_ref import ParkingPointRef
-from .point_in_link_sequence_versioned_child_structure import (
-    PointInLinkSequenceVersionedChildStructure,
-)
+from .point_in_link_sequence_versioned_child_structure import PointInLinkSequenceVersionedChildStructure
 from .relief_point_ref import ReliefPointRef
 from .scheduled_stop_point_ref import ScheduledStopPointRef
 from .timing_link_ref_structure import TimingLinkRefStructure
@@ -26,23 +20,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TimingPointInJourneyPatternVersionedChildStructure(
-    PointInLinkSequenceVersionedChildStructure
-):
+class TimingPointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersionedChildStructure):
     class Meta:
         name = "TimingPointInJourneyPattern_VersionedChildStructure"
 
-    timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref: Optional[
-        Union[
-            BorderPointRef,
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            GaragePointRef,
-            ParkingPointRef,
-            ReliefPointRef,
-            TimingPointRef,
-        ]
-    ] = field(
+    timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref: Optional[Union[BorderPointRef, FareScheduledStopPointRef, ScheduledStopPointRef, GaragePointRef, ParkingPointRef, ReliefPointRef, TimingPointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -101,9 +83,7 @@ class TimingPointInJourneyPatternVersionedChildStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    wait_time_or_wait_times: Optional[
-        Union[XmlDuration, JourneyPatternWaitTimesRelStructure]
-    ] = field(
+    wait_time_or_wait_times: Optional[Union[XmlDuration, JourneyPatternWaitTimesRelStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

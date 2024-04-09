@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .consumer_response_endpoint_structure import (
-    ConsumerResponseEndpointStructure,
-)
+from .consumer_response_endpoint_structure import ConsumerResponseEndpointStructure
 from .error_description_structure import ErrorDescriptionStructure
 from .other_error import OtherError
 from .status import Status
@@ -22,22 +20,18 @@ class DataReadyResponseStructure(ConsumerResponseEndpointStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    error_condition: Optional["DataReadyResponseStructure.ErrorCondition"] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ErrorCondition",
-                "type": "Element",
-                "namespace": "http://www.siri.org.uk/siri",
-            },
-        )
+    error_condition: Optional["DataReadyResponseStructure.ErrorCondition"] = field(
+        default=None,
+        metadata={
+            "name": "ErrorCondition",
+            "type": "Element",
+            "namespace": "http://www.siri.org.uk/siri",
+        },
     )
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        unknown_subscription_error_or_other_error: Optional[
-            Union[UnknownSubscriptionError, OtherError]
-        ] = field(
+        unknown_subscription_error_or_other_error: Optional[Union[UnknownSubscriptionError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",

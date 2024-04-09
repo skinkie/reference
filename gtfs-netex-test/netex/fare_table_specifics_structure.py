@@ -48,9 +48,7 @@ from .operator_ref import OperatorRef
 from .parking_ref import ParkingRef
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
-from .passenger_information_equipment_ref import (
-    PassengerInformationEquipmentRef,
-)
+from .passenger_information_equipment_ref import PassengerInformationEquipmentRef
 from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
 from .payment_method_enumeration import PaymentMethodEnumeration
 from .place_lighting_equipment_ref import PlaceLightingEquipmentRef
@@ -110,25 +108,23 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class FareTableSpecificsStructure:
-    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "AuthorityRef",
-                        "type": AuthorityRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "OperatorRef",
-                        "type": OperatorRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "AuthorityRef",
+                    "type": AuthorityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatorRef",
+                    "type": OperatorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     group_of_lines_ref: Optional[Union[NetworkRef, GroupOfLinesRef]] = field(
         default=None,
@@ -166,16 +162,7 @@ class FareTableSpecificsStructure:
             ),
         },
     )
-    stop_place_ref_or_site_ref: Optional[
-        Union[
-            TaxiRankRef,
-            StopPlaceRef,
-            ParkingRef,
-            PointOfInterestRef,
-            ServiceSiteRef,
-            SiteRef,
-        ]
-    ] = field(
+    stop_place_ref_or_site_ref: Optional[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -213,9 +200,7 @@ class FareTableSpecificsStructure:
             ),
         },
     )
-    vehicle_meeting_place_ref: Optional[
-        Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]
-    ] = field(
+    vehicle_meeting_place_ref: Optional[Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -289,9 +274,7 @@ class FareTableSpecificsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    facility_set_ref: Optional[
-        Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]
-    ] = field(
+    facility_set_ref: Optional[Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -330,16 +313,7 @@ class FareTableSpecificsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref_or_group_of_services_ref_or_group_of_single_journeys_ref: Optional[
-        Union[
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            SingleJourneyRef,
-            TrainNumberRef,
-            GroupOfServicesRef,
-            GroupOfSingleJourneysRef,
-        ]
-    ] = field(
+    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref_or_group_of_services_ref_or_group_of_single_journeys_ref: Optional[Union[TemplateServiceJourneyRef, ServiceJourneyRef, SingleJourneyRef, TrainNumberRef, GroupOfServicesRef, GroupOfSingleJourneysRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -774,9 +748,7 @@ class FareTableSpecificsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distribution_channel_ref_or_group_of_distribution_channels_ref: Optional[
-        Union[DistributionChannelRef, GroupOfDistributionChannelsRef]
-    ] = field(
+    distribution_channel_ref_or_group_of_distribution_channels_ref: Optional[Union[DistributionChannelRef, GroupOfDistributionChannelsRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

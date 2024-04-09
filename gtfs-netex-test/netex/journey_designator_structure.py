@@ -91,25 +91,23 @@ class JourneyDesignatorStructure:
             ),
         },
     )
-    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "AuthorityRef",
-                        "type": AuthorityRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "OperatorRef",
-                        "type": OperatorRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "AuthorityRef",
+                    "type": AuthorityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatorRef",
+                    "type": OperatorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     line_ref: Optional[Union[FlexibleLineRef, LineRef]] = field(
         default=None,

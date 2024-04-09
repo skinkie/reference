@@ -15,9 +15,7 @@ class TimingPointsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "timingPoints_RelStructure"
 
-    relief_point_or_parking_point_or_timing_point: List[
-        Union[ParkingPoint, GaragePoint, ReliefPoint, TimingPoint]
-    ] = field(
+    relief_point_or_parking_point_or_timing_point: List[Union[ParkingPoint, GaragePoint, ReliefPoint, TimingPoint]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

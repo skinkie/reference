@@ -8,9 +8,7 @@ from .passenger_stop_assignment_ref import PassengerStopAssignmentRef
 from .quay_ref_structure import QuayRefStructure
 from .stop_place_ref import StopPlaceRef
 from .taxi_rank_ref import TaxiRankRef
-from .vehicle_journey_stop_assignment_ref import (
-    VehicleJourneyStopAssignmentRef,
-)
+from .vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -20,13 +18,7 @@ class PassengerStopAssignmentDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "PassengerStopAssignment_DerivedViewStructure"
 
-    passenger_stop_assignment_ref: Optional[
-        Union[
-            VehicleJourneyStopAssignmentRef,
-            DynamicStopAssignmentRef,
-            PassengerStopAssignmentRef,
-        ]
-    ] = field(
+    passenger_stop_assignment_ref: Optional[Union[VehicleJourneyStopAssignmentRef, DynamicStopAssignmentRef, PassengerStopAssignmentRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

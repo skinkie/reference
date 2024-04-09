@@ -3,9 +3,7 @@ from decimal import Decimal
 from typing import Optional
 
 from .link_ref_structure import LinkRefStructure
-from .network_restriction_version_structure import (
-    NetworkRestrictionVersionStructure,
-)
+from .network_restriction_version_structure import NetworkRestrictionVersionStructure
 from .point_ref_structure import PointRefStructure
 from .transport_type_ref_structure import TransportTypeRefStructure
 
@@ -13,9 +11,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class OvertakingPossibilityVersionStructure(
-    NetworkRestrictionVersionStructure
-):
+class OvertakingPossibilityVersionStructure(NetworkRestrictionVersionStructure):
     class Meta:
         name = "OvertakingPossibility_VersionStructure"
 

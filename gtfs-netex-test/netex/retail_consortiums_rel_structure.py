@@ -13,9 +13,7 @@ class RetailConsortiumsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "retailConsortiums_RelStructure"
 
-    retail_consortium_ref_or_retail_consortium: List[
-        Union[RetailConsortiumRef, RetailConsortium]
-    ] = field(
+    retail_consortium_ref_or_retail_consortium: List[Union[RetailConsortiumRef, RetailConsortium]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

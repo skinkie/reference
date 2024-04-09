@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .abstract_service_delivery_structure import (
-    AbstractServiceDeliveryStructure,
-)
+from .abstract_service_delivery_structure import AbstractServiceDeliveryStructure
 from .data_object_request import DataObjectRequest
 from .data_objects_rel_structure import DataObjectsRelStructure
 from .extensions_2 import Extensions2

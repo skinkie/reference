@@ -2,16 +2,12 @@ from dataclasses import dataclass, field
 from typing import Optional, Union
 
 from .air_submode import AirSubmode
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .bus_submode import BusSubmode
 from .coach_submode import CoachSubmode
 from .funicular_submode import FunicularSubmode
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .metro_submode import MetroSubmode
 from .polygon import Polygon
 from .public_code_type import PublicCodeType
@@ -76,18 +72,7 @@ class GroupOfStopPlacesStructure(GroupOfEntitiesVersionStructure):
         },
     )
     air_submode_or_bus_submode_or_coach_submode_or_funicular_submode_or_metro_submode_or_tram_submode_or_telecabin_submode_or_rail_submode_or_water_submode_or_snow_and_ice_submode: Optional[
-        Union[
-            AirSubmode,
-            BusSubmode,
-            CoachSubmode,
-            FunicularSubmode,
-            MetroSubmode,
-            TramSubmode,
-            TelecabinSubmode,
-            RailSubmode,
-            WaterSubmode,
-            SnowAndIceSubmode,
-        ]
+        Union[AirSubmode, BusSubmode, CoachSubmode, FunicularSubmode, MetroSubmode, TramSubmode, TelecabinSubmode, RailSubmode, WaterSubmode, SnowAndIceSubmode]
     ] = field(
         default=None,
         metadata={

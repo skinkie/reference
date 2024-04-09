@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from .lighting_control_facility_enumeration import (
-    LightingControlFacilityEnumeration,
-)
+from .lighting_control_facility_enumeration import LightingControlFacilityEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

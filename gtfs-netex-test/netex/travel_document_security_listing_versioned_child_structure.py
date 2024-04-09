@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .security_listing_versioned_child_structure import (
-    SecurityListingVersionedChildStructure,
-)
+from .security_listing_versioned_child_structure import SecurityListingVersionedChildStructure
 from .service_access_code_ref import ServiceAccessCodeRef
 from .travel_document_ref import TravelDocumentRef
 
@@ -11,15 +9,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TravelDocumentSecurityListingVersionedChildStructure(
-    SecurityListingVersionedChildStructure
-):
+class TravelDocumentSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
     class Meta:
         name = "TravelDocumentSecurityListing_VersionedChildStructure"
 
-    travel_document_ref: Optional[
-        Union[ServiceAccessCodeRef, TravelDocumentRef]
-    ] = field(
+    travel_document_ref: Optional[Union[ServiceAccessCodeRef, TravelDocumentRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

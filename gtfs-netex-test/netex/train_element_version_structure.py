@@ -8,9 +8,7 @@ from .fare_classes import FareClasses
 from .multilingual_string import MultilingualString
 from .passenger_capacities_rel_structure import PassengerCapacitiesRelStructure
 from .passenger_capacity_structure import PassengerCapacityStructure
-from .service_facility_sets_rel_structure import (
-    ServiceFacilitySetsRelStructure,
-)
+from .service_facility_sets_rel_structure import ServiceFacilitySetsRelStructure
 from .train_element_type_enumeration import TrainElementTypeEnumeration
 from .train_size import TrainSize
 

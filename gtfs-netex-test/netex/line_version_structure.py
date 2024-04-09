@@ -3,12 +3,8 @@ from typing import List, Optional
 
 from .access_mode_enumeration import AccessModeEnumeration
 from .accessibility_assessment import AccessibilityAssessment
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
-from .allowed_line_directions_rel_structure import (
-    AllowedLineDirectionsRelStructure,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
+from .allowed_line_directions_rel_structure import AllowedLineDirectionsRelStructure
 from .authority_ref import AuthorityRef
 from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .contact_structure import ContactStructure
@@ -29,14 +25,10 @@ from .private_code import PrivateCode
 from .public_code_type import PublicCodeType
 from .purchase_moment_enumeration import PurchaseMomentEnumeration
 from .route_refs_rel_structure import RouteRefsRelStructure
-from .transport_organisation_refs_rel_structure import (
-    TransportOrganisationRefsRelStructure,
-)
+from .transport_organisation_refs_rel_structure import TransportOrganisationRefsRelStructure
 from .transport_submode import TransportSubmode
 from .type_of_line_ref import TypeOfLineRef
-from .type_of_payment_method_value_structure import (
-    TypeOfPaymentMethodValueStructure,
-)
+from .type_of_payment_method_value_structure import TypeOfPaymentMethodValueStructure
 from .type_of_product_category_ref import TypeOfProductCategoryRef
 from .type_of_service_ref import TypeOfServiceRef
 from .user_type_enumeration import UserTypeEnumeration
@@ -137,15 +129,13 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    additional_operators: Optional[TransportOrganisationRefsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "additionalOperators",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    additional_operators: Optional[TransportOrganisationRefsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "additionalOperators",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     other_modes: Optional[ModeRefsRelStructure] = field(
         default=None,
@@ -179,15 +169,13 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    external_product_category_ref: Optional[ExternalObjectRefStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ExternalProductCategoryRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    external_product_category_ref: Optional[ExternalObjectRefStructure] = field(
+        default=None,
+        metadata={
+            "name": "ExternalProductCategoryRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     type_of_product_category_ref: Optional[TypeOfProductCategoryRef] = field(
         default=None,
@@ -287,15 +275,13 @@ class LineVersionStructure(DataManagedObjectStructure):
             "tokens": True,
         },
     )
-    types_of_payment_method: Optional[TypeOfPaymentMethodValueStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "typesOfPaymentMethod",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    types_of_payment_method: Optional[TypeOfPaymentMethodValueStructure] = field(
+        default=None,
+        metadata={
+            "name": "typesOfPaymentMethod",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     purchase_moment: List[PurchaseMomentEnumeration] = field(
         default_factory=list,

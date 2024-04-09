@@ -13,23 +13,21 @@ class DepartmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "departments_RelStructure"
 
-    department_ref_or_department: List[Union[DepartmentRef, Department]] = (
-        field(
-            default_factory=list,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "DepartmentRef",
-                        "type": DepartmentRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "Department",
-                        "type": Department,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    department_ref_or_department: List[Union[DepartmentRef, Department]] = field(
+        default_factory=list,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "DepartmentRef",
+                    "type": DepartmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Department",
+                    "type": Department,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )

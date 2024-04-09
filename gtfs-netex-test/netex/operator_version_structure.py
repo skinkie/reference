@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .transport_organisation_version_structure import (
-    TransportOrganisationVersionStructure,
-)
+from .transport_organisation_version_structure import TransportOrganisationVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

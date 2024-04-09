@@ -29,13 +29,11 @@ class ResponsibilityRoleVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    type_of_responsibility_role_ref: Optional[TypeOfResponsibilityRoleRef] = (
-        field(
-            default=None,
-            metadata={
-                "name": "TypeOfResponsibilityRoleRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    type_of_responsibility_role_ref: Optional[TypeOfResponsibilityRoleRef] = field(
+        default=None,
+        metadata={
+            "name": "TypeOfResponsibilityRoleRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )

@@ -13,9 +13,7 @@ class FlexibleServicePropertiesRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "flexibleServiceProperties_RelStructure"
 
-    flexible_service_properties_ref_or_flexible_service_properties: List[
-        Union[FlexibleServicePropertiesRef, FlexibleServiceProperties]
-    ] = field(
+    flexible_service_properties_ref_or_flexible_service_properties: List[Union[FlexibleServicePropertiesRef, FlexibleServiceProperties]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -31,30 +31,22 @@ class TargetPassingTimeViewStructure(PassingTimeViewStructure):
             "choices": (
                 {
                     "name": "AimedArrivalTime",
-                    "type": Type[
-                        "TargetPassingTimeViewStructure.AimedArrivalTime"
-                    ],
+                    "type": Type["TargetPassingTimeViewStructure.AimedArrivalTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ArrivalDayOffset",
-                    "type": Type[
-                        "TargetPassingTimeViewStructure.ArrivalDayOffset"
-                    ],
+                    "type": Type["TargetPassingTimeViewStructure.ArrivalDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "AimedDepartureTime",
-                    "type": Type[
-                        "TargetPassingTimeViewStructure.AimedDepartureTime"
-                    ],
+                    "type": Type["TargetPassingTimeViewStructure.AimedDepartureTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DepartureDayOffset",
-                    "type": Type[
-                        "TargetPassingTimeViewStructure.DepartureDayOffset"
-                    ],
+                    "type": Type["TargetPassingTimeViewStructure.DepartureDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -64,16 +56,12 @@ class TargetPassingTimeViewStructure(PassingTimeViewStructure):
                 },
                 {
                     "name": "AimedNonstopPassingTime",
-                    "type": Type[
-                        "TargetPassingTimeViewStructure.AimedNonstopPassingTime"
-                    ],
+                    "type": Type["TargetPassingTimeViewStructure.AimedNonstopPassingTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "PassingDayOffset",
-                    "type": Type[
-                        "TargetPassingTimeViewStructure.PassingDayOffset"
-                    ],
+                    "type": Type["TargetPassingTimeViewStructure.PassingDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

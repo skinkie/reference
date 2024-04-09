@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .fare_structure_element_price_ref_structure import (
-    FareStructureElementPriceRefStructure,
-)
+from .fare_structure_element_price_ref_structure import FareStructureElementPriceRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

@@ -4,9 +4,7 @@ from typing import Optional
 
 from .access_equipment_version_structure import AccessEquipmentVersionStructure
 from .handrail_enumeration import HandrailEnumeration
-from .reached_floor_announcement_enumeration import (
-    ReachedFloorAnnouncementEnumeration,
-)
+from .reached_floor_announcement_enumeration import ReachedFloorAnnouncementEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -200,9 +198,7 @@ class LiftEquipmentVersionStructure(AccessEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    reached_floor_announcement: Optional[
-        ReachedFloorAnnouncementEnumeration
-    ] = field(
+    reached_floor_announcement: Optional[ReachedFloorAnnouncementEnumeration] = field(
         default=None,
         metadata={
             "name": "ReachedFloorAnnouncement",

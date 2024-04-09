@@ -48,15 +48,13 @@ class TravelDocumentVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    customer_purchase_package_ref: Optional[CustomerPurchasePackageRef] = (
-        field(
-            default=None,
-            metadata={
-                "name": "CustomerPurchasePackageRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    customer_purchase_package_ref: Optional[CustomerPurchasePackageRef] = field(
+        default=None,
+        metadata={
+            "name": "CustomerPurchasePackageRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     marked_as: Optional[MarkedAsEnumeration] = field(
         default=None,

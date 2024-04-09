@@ -13,12 +13,8 @@ from .operator_ref import OperatorRef
 from .organisation_ref import OrganisationRef
 from .other_organisation_ref import OtherOrganisationRef
 from .retail_consortium_ref import RetailConsortiumRef
-from .service_booking_arrangement_version_structure import (
-    ServiceBookingArrangementVersionStructure,
-)
-from .service_booking_arrangements_rel_structure import (
-    ServiceBookingArrangementsRelStructure,
-)
+from .service_booking_arrangement_version_structure import ServiceBookingArrangementVersionStructure
+from .service_booking_arrangements_rel_structure import ServiceBookingArrangementsRelStructure
 from .serviced_organisation_ref import ServicedOrganisationRef
 from .topographic_place_ref import TopographicPlaceRef
 from .travel_agent_ref import TravelAgentRef
@@ -56,20 +52,7 @@ class MobilityServiceVersionStructure(EquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-        ]
-    ] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -135,12 +118,7 @@ class MobilityServiceVersionStructure(EquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    service_booking_arrangements_or_service_booking_arrangements: Optional[
-        Union[
-            ServiceBookingArrangementsRelStructure,
-            ServiceBookingArrangementVersionStructure,
-        ]
-    ] = field(
+    service_booking_arrangements_or_service_booking_arrangements: Optional[Union[ServiceBookingArrangementsRelStructure, ServiceBookingArrangementVersionStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

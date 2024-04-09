@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TimeDemandTypeAssignmentsInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class TimeDemandTypeAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "timeDemandTypeAssignmentsInFrame_RelStructure"
 

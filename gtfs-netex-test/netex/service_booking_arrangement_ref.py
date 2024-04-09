@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .service_booking_arrangement_ref_structure import (
-    ServiceBookingArrangementRefStructure,
-)
+from .service_booking_arrangement_ref_structure import ServiceBookingArrangementRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

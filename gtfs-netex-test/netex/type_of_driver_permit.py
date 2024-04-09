@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from .type_of_driver_permit_value_structure import (
-    TypeOfDriverPermitValueStructure,
-)
+from .type_of_driver_permit_value_structure import TypeOfDriverPermitValueStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

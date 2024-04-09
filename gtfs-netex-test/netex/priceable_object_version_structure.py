@@ -34,21 +34,15 @@ from .controllable_element_price import ControllableElementPrice
 from .controllable_element_price_ref import ControllableElementPriceRef
 from .controllable_element_ref import ControllableElementRef
 from .crossing_equipment_ref import CrossingEquipmentRef
-from .customer_purchase_package_element_ref import (
-    CustomerPurchasePackageElementRef,
-)
+from .customer_purchase_package_element_ref import CustomerPurchasePackageElementRef
 from .customer_purchase_package_price import CustomerPurchasePackagePrice
-from .customer_purchase_package_price_ref import (
-    CustomerPurchasePackagePriceRef,
-)
+from .customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
 from .customer_purchase_package_ref import CustomerPurchasePackageRef
 from .customer_service_ref import CustomerServiceRef
 from .cycle_model_profile_ref import CycleModelProfileRef
 from .cycle_storage_equipment_ref import CycleStorageEquipmentRef
 from .discounting_rule_ref import DiscountingRuleRef
-from .distance_matrix_element_inverse_ref import (
-    DistanceMatrixElementInverseRef,
-)
+from .distance_matrix_element_inverse_ref import DistanceMatrixElementInverseRef
 from .distance_matrix_element_price import DistanceMatrixElementPrice
 from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
 from .distance_matrix_element_ref import DistanceMatrixElementRef
@@ -69,9 +63,7 @@ from .facility_set_ref import FacilitySetRef
 from .fare_class import FareClass
 from .fare_demand_factor_ref import FareDemandFactorRef
 from .fare_price_ref import FarePriceRef
-from .fare_price_versioned_child_structure import (
-    FarePriceVersionedChildStructure,
-)
+from .fare_price_versioned_child_structure import FarePriceVersionedChildStructure
 from .fare_product_price import FareProductPrice
 from .fare_product_price_ref import FareProductPriceRef
 from .fare_product_ref import FareProductRef
@@ -99,13 +91,9 @@ from .geographical_interval_ref import GeographicalIntervalRef
 from .geographical_structure_factor_ref import GeographicalStructureFactorRef
 from .geographical_unit_price import GeographicalUnitPrice
 from .geographical_unit_price_ref import GeographicalUnitPriceRef
-from .group_of_distance_matrix_elements_ref import (
-    GroupOfDistanceMatrixElementsRef,
-)
+from .group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
 from .group_of_distribution_channels_ref import GroupOfDistributionChannelsRef
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .group_of_lines_ref import GroupOfLinesRef
 from .group_of_services_ref import GroupOfServicesRef
 from .group_of_single_journeys_ref import GroupOfSingleJourneysRef
@@ -145,9 +133,7 @@ from .parking_tariff_ref import ParkingTariffRef
 from .parking_vehicle_enumeration import ParkingVehicleEnumeration
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
-from .passenger_information_equipment_ref import (
-    PassengerInformationEquipmentRef,
-)
+from .passenger_information_equipment_ref import PassengerInformationEquipmentRef
 from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
 from .payment_method_enumeration import PaymentMethodEnumeration
 from .penalty_policy_ref import PenaltyPolicyRef
@@ -157,9 +143,7 @@ from .point_of_interest_ref import PointOfInterestRef
 from .preassigned_fare_product_ref import PreassignedFareProductRef
 from .price_group_ref import PriceGroupRef
 from .priceable_object_ref import PriceableObjectRef
-from .priceable_object_refs_rel_structure import (
-    PriceableObjectRefsRelStructure,
-)
+from .priceable_object_refs_rel_structure import PriceableObjectRefsRelStructure
 from .pricing_rule_ref import PricingRuleRef
 from .pricing_service_ref import PricingServiceRef
 from .private_code import PrivateCode
@@ -189,12 +173,8 @@ from .routing_type_enumeration import RoutingTypeEnumeration
 from .rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
 from .sale_discount_right_ref import SaleDiscountRightRef
 from .sales_offer_package_element_ref import SalesOfferPackageElementRef
-from .sales_offer_package_entitlement_given_ref import (
-    SalesOfferPackageEntitlementGivenRef,
-)
-from .sales_offer_package_entitlement_required_ref import (
-    SalesOfferPackageEntitlementRequiredRef,
-)
+from .sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
+from .sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
 from .sales_offer_package_price import SalesOfferPackagePrice
 from .sales_offer_package_price_ref import SalesOfferPackagePriceRef
 from .sales_offer_package_ref import SalesOfferPackageRef
@@ -220,9 +200,7 @@ from .standard_fare_table import StandardFareTable
 from .standard_fare_table_ref import StandardFareTableRef
 from .step_limit_ref import StepLimitRef
 from .stop_place_ref import StopPlaceRef
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .subscribing_ref import SubscribingRef
 from .supplement_product_ref import SupplementProductRef
 from .suspending_ref import SuspendingRef
@@ -345,9 +323,7 @@ class PriceableObjectVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    discounting_rule_ref_or_pricing_rule_ref: Optional[
-        Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]
-    ] = field(
+    discounting_rule_ref_or_pricing_rule_ref: Optional[Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -627,15 +603,7 @@ class FareTablesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "fareTables_RelStructure"
 
-    fare_table_ref_or_fare_table: List[
-        Union[
-            StandardFareTableRef,
-            FareTableRef,
-            StandardFareTable,
-            "FareTableInContext",
-            "FareTable",
-        ]
-    ] = field(
+    fare_table_ref_or_fare_table: List[Union[StandardFareTableRef, FareTableRef, StandardFareTable, "FareTableInContext", "FareTable"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -683,9 +651,7 @@ class FareStructureFactorVersionStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    type_of_fare_structure_factor_ref: Optional[
-        TypeOfFareStructureFactorRef
-    ] = field(
+    type_of_fare_structure_factor_ref: Optional[TypeOfFareStructureFactorRef] = field(
         default=None,
         metadata={
             "name": "TypeOfFareStructureFactorRef",
@@ -905,11 +871,7 @@ class TimeStructureFactorVersionStructure(FareStructureFactorVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    quality_structure_factor_ref: Optional[
-        Union[
-            FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef
-        ]
-    ] = field(
+    quality_structure_factor_ref: Optional[Union[FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -955,15 +917,7 @@ class ParkingChargeBandVersionStructure(TimeStructureFactorVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -1018,25 +972,23 @@ class PriceGroupsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "priceGroups_RelStructure"
 
-    price_group_ref_or_price_group: List[Union[PriceGroupRef, PriceGroup]] = (
-        field(
-            default_factory=list,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "PriceGroupRef",
-                        "type": PriceGroupRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "PriceGroup",
-                        "type": PriceGroup,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    price_group_ref_or_price_group: List[Union[PriceGroupRef, PriceGroup]] = field(
+        default_factory=list,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "PriceGroupRef",
+                    "type": PriceGroupRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PriceGroup",
+                    "type": PriceGroup,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
 
 
@@ -1051,9 +1003,7 @@ class ParkingPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "ParkingPrice_VersionedChildStructure"
 
-    parking_tariff_ref_or_parking_charge_band: Optional[
-        Union[ParkingTariffRef, ParkingChargeBand]
-    ] = field(
+    parking_tariff_ref_or_parking_charge_band: Optional[Union[ParkingTariffRef, ParkingChargeBand]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -1740,9 +1690,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    group_of_distance_matrix_elements_ref: Optional[
-        GroupOfDistanceMatrixElementsRef
-    ] = field(
+    group_of_distance_matrix_elements_ref: Optional[GroupOfDistanceMatrixElementsRef] = field(
         default=None,
         metadata={
             "name": "GroupOfDistanceMatrixElementsRef",
@@ -1766,25 +1714,23 @@ class CellVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "AuthorityRef",
-                        "type": AuthorityRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "OperatorRef",
-                        "type": OperatorRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "AuthorityRef",
+                    "type": AuthorityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatorRef",
+                    "type": OperatorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     group_of_lines_ref: Optional[Union[NetworkRef, GroupOfLinesRef]] = field(
         default=None,
@@ -1822,16 +1768,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    stop_place_ref_or_site_ref: Optional[
-        Union[
-            TaxiRankRef,
-            StopPlaceRef,
-            ParkingRef,
-            PointOfInterestRef,
-            ServiceSiteRef,
-            SiteRef,
-        ]
-    ] = field(
+    stop_place_ref_or_site_ref: Optional[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -1869,9 +1806,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    vehicle_meeting_place_ref: Optional[
-        Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]
-    ] = field(
+    vehicle_meeting_place_ref: Optional[Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -1929,9 +1864,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    facility_set_ref: Optional[
-        Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]
-    ] = field(
+    facility_set_ref: Optional[Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -1970,16 +1903,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref_or_group_of_services_ref_or_group_of_single_journeys_ref: Optional[
-        Union[
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            SingleJourneyRef,
-            TrainNumberRef,
-            GroupOfServicesRef,
-            GroupOfSingleJourneysRef,
-        ]
-    ] = field(
+    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref_or_group_of_services_ref_or_group_of_single_journeys_ref: Optional[Union[TemplateServiceJourneyRef, ServiceJourneyRef, SingleJourneyRef, TrainNumberRef, GroupOfServicesRef, GroupOfSingleJourneysRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -2017,15 +1941,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -2066,9 +1982,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_model_profile_ref: Optional[
-        Union[CycleModelProfileRef, CarModelProfileRef]
-    ] = field(
+    vehicle_model_profile_ref: Optional[Union[CycleModelProfileRef, CarModelProfileRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -2483,9 +2397,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distribution_channel_ref_or_group_of_distribution_channels_ref: Optional[
-        Union[DistributionChannelRef, GroupOfDistributionChannelsRef]
-    ] = field(
+    distribution_channel_ref_or_group_of_distribution_channels_ref: Optional[Union[DistributionChannelRef, GroupOfDistributionChannelsRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -2527,25 +2439,23 @@ class CellVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_table_ref: Optional[Union[StandardFareTableRef, FareTableRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "StandardFareTableRef",
-                        "type": StandardFareTableRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "FareTableRef",
-                        "type": FareTableRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    fare_table_ref: Optional[Union[StandardFareTableRef, FareTableRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "StandardFareTableRef",
+                    "type": StandardFareTableRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FareTableRef",
+                    "type": FareTableRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     column_ref: Optional[FareTableColumnRefStructure] = field(
         default=None,
@@ -2912,20 +2822,7 @@ class FareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-        ]
-    ] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

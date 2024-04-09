@@ -4,9 +4,7 @@ from typing import Optional
 
 from .boarding_positions_rel_structure import BoardingPositionsRelStructure
 from .compass_bearing8_enumeration import CompassBearing8Enumeration
-from .destination_display_views_rel_structure import (
-    DestinationDisplayViewsRelStructure,
-)
+from .destination_display_views_rel_structure import DestinationDisplayViewsRelStructure
 from .public_code_type import PublicCodeType
 from .quay_ref_structure import QuayRefStructure
 from .quay_type_enumeration import QuayTypeEnumeration

@@ -9,9 +9,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ServiceJourneyPatternInterchangeVersionStructure(
-    InterchangeVersionStructure
-):
+class ServiceJourneyPatternInterchangeVersionStructure(InterchangeVersionStructure):
     class Meta:
         name = "ServiceJourneyPatternInterchange_VersionStructure"
 

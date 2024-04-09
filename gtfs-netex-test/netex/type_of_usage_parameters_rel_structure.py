@@ -13,9 +13,7 @@ class TypeOfUsageParametersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typeOfUsageParameters_RelStructure"
 
-    type_of_usage_parameter_ref_or_type_of_usage_parameter: List[
-        Union[TypeOfUsageParameterRef, TypeOfUsageParameter]
-    ] = field(
+    type_of_usage_parameter_ref_or_type_of_usage_parameter: List[Union[TypeOfUsageParameterRef, TypeOfUsageParameter]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -17,9 +17,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ResponsibilityRoleAssignmentVersionedChildStructure(
-    VersionedChildStructure
-):
+class ResponsibilityRoleAssignmentVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "ResponsibilityRoleAssignment_VersionedChildStructure"
 
@@ -57,9 +55,7 @@ class ResponsibilityRoleAssignmentVersionedChildStructure(
             "tokens": True,
         },
     )
-    type_of_responsibility_role_ref_or_responsibility_role_ref: Optional[
-        Union[TypeOfResponsibilityRoleRef, ResponsibilityRoleRef]
-    ] = field(
+    type_of_responsibility_role_ref_or_responsibility_role_ref: Optional[Union[TypeOfResponsibilityRoleRef, ResponsibilityRoleRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

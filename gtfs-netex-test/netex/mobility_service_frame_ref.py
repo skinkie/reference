@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .mobility_service_frame_ref_structure import (
-    MobilityServiceFrameRefStructure,
-)
+from .mobility_service_frame_ref_structure import MobilityServiceFrameRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

@@ -21,9 +21,7 @@ from .garage import Garage
 from .general_zone import GeneralZone
 from .hail_and_ride_area import HailAndRideArea
 from .mobility_service_constraint_zone import MobilityServiceConstraintZone
-from .monitored_vehicle_sharing_parking_bay import (
-    MonitoredVehicleSharingParkingBay,
-)
+from .monitored_vehicle_sharing_parking_bay import MonitoredVehicleSharingParkingBay
 from .parking import Parking
 from .parking_area import ParkingArea
 from .parking_bay import ParkingBay

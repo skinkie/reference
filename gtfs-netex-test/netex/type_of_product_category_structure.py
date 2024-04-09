@@ -10,15 +10,13 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class TypeOfProductCategoryStructure(TypeOfEntityVersionStructure):
-    external_product_category_ref: Optional[ExternalObjectRefStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ExternalProductCategoryRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    external_product_category_ref: Optional[ExternalObjectRefStructure] = field(
+        default=None,
+        metadata={
+            "name": "ExternalProductCategoryRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     presentation: Optional[PresentationStructure] = field(
         default=None,

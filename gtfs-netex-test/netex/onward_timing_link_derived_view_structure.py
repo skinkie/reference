@@ -17,9 +17,7 @@ class OnwardTimingLinkDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "OnwardTimingLink_DerivedViewStructure"
 
-    timing_link_in_journey_pattern_ref: Optional[
-        TimingLinkInJourneyPatternRef
-    ] = field(
+    timing_link_in_journey_pattern_ref: Optional[TimingLinkInJourneyPatternRef] = field(
         default=None,
         metadata={
             "name": "TimingLinkInJourneyPatternRef",

@@ -6,9 +6,7 @@ from .access_equipment_version_structure import AccessEquipmentVersionStructure
 from .compass_bearing8_enumeration import CompassBearing8Enumeration
 from .door_handle_enumeration import DoorHandleEnumeration
 from .entrance_attention_enumeration import EntranceAttentionEnumeration
-from .entrance_turning_space_position_enumeration import (
-    EntranceTurningSpacePositionEnumeration,
-)
+from .entrance_turning_space_position_enumeration import EntranceTurningSpacePositionEnumeration
 from .necessary_force_enumeration import NecessaryForceEnumeration
 from .staffing_enumeration import StaffingEnumeration
 
@@ -244,9 +242,7 @@ class EntranceEquipmentVersionStructure(AccessEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    turning_space_position: Optional[
-        EntranceTurningSpacePositionEnumeration
-    ] = field(
+    turning_space_position: Optional[EntranceTurningSpacePositionEnumeration] = field(
         default=None,
         metadata={
             "name": "TurningSpacePosition",

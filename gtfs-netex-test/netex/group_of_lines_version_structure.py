@@ -1,13 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .group_of_lines_type_enumeration import GroupOfLinesTypeEnumeration
 from .line_ref_structure import LineRefStructure
 from .line_refs_rel_structure import LineRefsRelStructure
@@ -16,9 +12,7 @@ from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
 from .purchase_moment_enumeration import PurchaseMomentEnumeration
 from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
 from .transport_submode import TransportSubmode
-from .type_of_payment_method_value_structure import (
-    TypeOfPaymentMethodValueStructure,
-)
+from .type_of_payment_method_value_structure import TypeOfPaymentMethodValueStructure
 from .vehicle_pooling_ref import VehiclePoolingRef
 from .vehicle_rental_ref import VehicleRentalRef
 from .vehicle_sharing_ref import VehicleSharingRef
@@ -70,16 +64,7 @@ class GroupOfLinesVersionStructure(GroupOfEntitiesVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
-        Union[
-            PersonalModeOfOperationRef,
-            VehiclePoolingRef,
-            VehicleSharingRef,
-            VehicleRentalRef,
-            FlexibleModeOfOperationRef,
-            ScheduledModeOfOperationRef,
-        ]
-    ] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -134,15 +119,13 @@ class GroupOfLinesVersionStructure(GroupOfEntitiesVersionStructure):
             "tokens": True,
         },
     )
-    types_of_payment_method: Optional[TypeOfPaymentMethodValueStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "typesOfPaymentMethod",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    types_of_payment_method: Optional[TypeOfPaymentMethodValueStructure] = field(
+        default=None,
+        metadata={
+            "name": "typesOfPaymentMethod",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     purchase_moment: List[PurchaseMomentEnumeration] = field(
         default_factory=list,

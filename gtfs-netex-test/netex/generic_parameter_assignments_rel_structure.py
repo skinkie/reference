@@ -3,9 +3,7 @@ from typing import List, Optional, Type, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .logical_operation_enumeration import LogicalOperationEnumeration
-from .validity_parameter_assignment_version_structure import (
-    ValidityParameterAssignmentVersionStructure,
-)
+from .validity_parameter_assignment_version_structure import ValidityParameterAssignmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -15,11 +13,7 @@ class GenericParameterAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "genericParameterAssignments_RelStructure"
 
-    generic_parameter_assignment_or_generic_parameter_assignment_in_context: List[
-        Union[
-            "GenericParameterAssignment", "GenericParameterAssignmentInContext"
-        ]
-    ] = field(
+    generic_parameter_assignment_or_generic_parameter_assignment_in_context: List[Union["GenericParameterAssignment", "GenericParameterAssignmentInContext"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -40,9 +34,7 @@ class GenericParameterAssignmentsRelStructure(ContainmentAggregationStructure):
 
 
 @dataclass(kw_only=True)
-class GenericParameterAssignmentVersionStructure(
-    ValidityParameterAssignmentVersionStructure
-):
+class GenericParameterAssignmentVersionStructure(ValidityParameterAssignmentVersionStructure):
     class Meta:
         name = "GenericParameterAssignment_VersionStructure"
 
@@ -70,8 +62,6 @@ class GenericParameterAssignment(GenericParameterAssignmentVersionStructure):
 
 
 @dataclass(kw_only=True)
-class GenericParameterAssignmentInContext(
-    GenericParameterAssignmentVersionStructure
-):
+class GenericParameterAssignmentInContext(GenericParameterAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

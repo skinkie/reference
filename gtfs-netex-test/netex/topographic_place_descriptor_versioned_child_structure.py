@@ -9,9 +9,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TopographicPlaceDescriptorVersionedChildStructure(
-    VersionedChildStructure
-):
+class TopographicPlaceDescriptorVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "TopographicPlaceDescriptor_VersionedChildStructure"
 
@@ -31,9 +29,7 @@ class TopographicPlaceDescriptorVersionedChildStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    qualify: Optional[
-        "TopographicPlaceDescriptorVersionedChildStructure.Qualify"
-    ] = field(
+    qualify: Optional["TopographicPlaceDescriptorVersionedChildStructure.Qualify"] = field(
         default=None,
         metadata={
             "name": "Qualify",

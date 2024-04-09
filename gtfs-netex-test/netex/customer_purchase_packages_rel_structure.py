@@ -13,9 +13,7 @@ class CustomerPurchasePackagesRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "customerPurchasePackages_RelStructure"
 
-    customer_purchase_package_or_customer_purchase_package_ref: List[
-        Union[CustomerPurchasePackage, CustomerPurchasePackageRef]
-    ] = field(
+    customer_purchase_package_or_customer_purchase_package_ref: List[Union[CustomerPurchasePackage, CustomerPurchasePackageRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

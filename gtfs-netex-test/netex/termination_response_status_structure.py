@@ -66,9 +66,7 @@ class TerminationResponseStatusStructure:
             "required": True,
         }
     )
-    error_condition: Optional[
-        "TerminationResponseStatusStructure.ErrorCondition"
-    ] = field(
+    error_condition: Optional["TerminationResponseStatusStructure.ErrorCondition"] = field(
         default=None,
         metadata={
             "name": "ErrorCondition",
@@ -79,14 +77,7 @@ class TerminationResponseStatusStructure:
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        capability_not_supported_error_or_unknown_subscriber_error_or_unknown_subscription_error_or_other_error: Optional[
-            Union[
-                CapabilityNotSupportedError,
-                UnknownSubscriberError,
-                UnknownSubscriptionError,
-                OtherError,
-            ]
-        ] = field(
+        capability_not_supported_error_or_unknown_subscriber_error_or_unknown_subscription_error_or_other_error: Optional[Union[CapabilityNotSupportedError, UnknownSubscriberError, UnknownSubscriptionError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",

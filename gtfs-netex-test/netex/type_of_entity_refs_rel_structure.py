@@ -32,9 +32,7 @@ from .type_of_mode_of_operation_ref import TypeOfModeOfOperationRef
 from .type_of_notice_ref import TypeOfNoticeRef
 from .type_of_organisation_part_ref import TypeOfOrganisationPartRef
 from .type_of_organisation_ref import TypeOfOrganisationRef
-from .type_of_passenger_information_equipment_ref import (
-    TypeOfPassengerInformationEquipmentRef,
-)
+from .type_of_passenger_information_equipment_ref import TypeOfPassengerInformationEquipmentRef
 from .type_of_place_ref import TypeOfPlaceRef
 from .type_of_plug_ref import TypeOfPlugRef
 from .type_of_point_ref import TypeOfPointRef

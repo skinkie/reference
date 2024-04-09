@@ -16,15 +16,13 @@ class ServiceExclusionVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "ServiceExclusion_VersionStructure"
 
-    excluding_journey_pattern_ref: Optional[JourneyPatternRefStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ExcludingJourneyPatternRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    excluding_journey_pattern_ref: Optional[JourneyPatternRefStructure] = field(
+        default=None,
+        metadata={
+            "name": "ExcludingJourneyPatternRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     start_point_ref: Optional[ScheduledStopPointRefStructure] = field(
         default=None,
@@ -42,15 +40,13 @@ class ServiceExclusionVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    excluded_journey_pattern_refs: Optional[JourneyPatternRefsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "excludedJourneyPatternRefs",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    excluded_journey_pattern_refs: Optional[JourneyPatternRefsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "excludedJourneyPatternRefs",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     line_ref: Optional[Union[FlexibleLineRef, LineRef]] = field(
         default=None,

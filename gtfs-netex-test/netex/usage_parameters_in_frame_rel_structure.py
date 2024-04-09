@@ -26,12 +26,8 @@ from .reselling import Reselling
 from .reserving import Reserving
 from .round_trip import RoundTrip
 from .routing import Routing
-from .sales_offer_package_entitlement_given import (
-    SalesOfferPackageEntitlementGiven,
-)
-from .sales_offer_package_entitlement_required import (
-    SalesOfferPackageEntitlementRequired,
-)
+from .sales_offer_package_entitlement_given import SalesOfferPackageEntitlementGiven
+from .sales_offer_package_entitlement_required import SalesOfferPackageEntitlementRequired
 from .step_limit import StepLimit
 from .subscribing import Subscribing
 from .suspending import Suspending

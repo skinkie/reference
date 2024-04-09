@@ -13,9 +13,7 @@ class VehicleTypeStopAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleTypeStopAssignments_RelStructure"
 
-    vehicle_type_stop_assignment_ref_or_vehicle_type_stop_assignment: List[
-        Union[VehicleTypeStopAssignmentRef, VehicleTypeStopAssignment]
-    ] = field(
+    vehicle_type_stop_assignment_ref_or_vehicle_type_stop_assignment: List[Union[VehicleTypeStopAssignmentRef, VehicleTypeStopAssignment]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

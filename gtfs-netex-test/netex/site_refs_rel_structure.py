@@ -17,16 +17,7 @@ class SiteRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "siteRefs_RelStructure"
 
-    stop_place_ref_or_site_ref: List[
-        Union[
-            TaxiRankRef,
-            StopPlaceRef,
-            ParkingRef,
-            PointOfInterestRef,
-            ServiceSiteRef,
-            SiteRef,
-        ]
-    ] = field(
+    stop_place_ref_or_site_ref: List[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

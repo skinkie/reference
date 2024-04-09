@@ -13,9 +13,7 @@ class InterchangeRulesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "interchangeRules_RelStructure"
 
-    interchange_rule_ref_or_interchange_rule: List[
-        Union[InterchangeRuleRef, InterchangeRule]
-    ] = field(
+    interchange_rule_ref_or_interchange_rule: List[Union[InterchangeRuleRef, InterchangeRule]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

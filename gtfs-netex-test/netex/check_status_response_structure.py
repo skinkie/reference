@@ -31,9 +31,7 @@ class CheckStatusResponseStructure(ProducerResponseStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    error_condition: Optional[
-        "CheckStatusResponseStructure.ErrorCondition"
-    ] = field(
+    error_condition: Optional["CheckStatusResponseStructure.ErrorCondition"] = field(
         default=None,
         metadata={
             "name": "ErrorCondition",
@@ -76,9 +74,7 @@ class CheckStatusResponseStructure(ProducerResponseStructure):
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        service_not_available_error_or_other_error: Optional[
-            Union[ServiceNotAvailableError, OtherError]
-        ] = field(
+        service_not_available_error_or_other_error: Optional[Union[ServiceNotAvailableError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",

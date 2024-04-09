@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .link_in_link_sequence_versioned_child_structure import (
-    LinkInLinkSequenceVersionedChildStructure,
-)
+from .link_in_link_sequence_versioned_child_structure import LinkInLinkSequenceVersionedChildStructure
 from .service_link_ref import ServiceLinkRef
 from .timing_link_ref import TimingLinkRef
 
@@ -11,15 +9,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class LinkInJourneyPatternVersionedChildStructure(
-    LinkInLinkSequenceVersionedChildStructure
-):
+class LinkInJourneyPatternVersionedChildStructure(LinkInLinkSequenceVersionedChildStructure):
     class Meta:
         name = "LinkInJourneyPattern_VersionedChildStructure"
 
-    service_link_ref_or_timing_link_ref: Optional[
-        Union[ServiceLinkRef, TimingLinkRef]
-    ] = field(
+    service_link_ref_or_timing_link_ref: Optional[Union[ServiceLinkRef, TimingLinkRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

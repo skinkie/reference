@@ -6,7 +6,5 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleManoeuvringRequirementRefStructure(
-    VehicleRequirementRefStructure
-):
+class VehicleManoeuvringRequirementRefStructure(VehicleRequirementRefStructure):
     pass

@@ -108,15 +108,13 @@ class ConditionSummaryStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    has_operator_restrictions: Optional[OperatorRestrictionsEnumeration] = (
-        field(
-            default=None,
-            metadata={
-                "name": "HasOperatorRestrictions",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    has_operator_restrictions: Optional[OperatorRestrictionsEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "HasOperatorRestrictions",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     has_travel_time_restrictions: Optional[bool] = field(
         default=None,

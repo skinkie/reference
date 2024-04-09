@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .mobility_service_refs_rel_structure import (
-    MobilityServiceRefsRelStructure,
-)
+from .mobility_service_refs_rel_structure import MobilityServiceRefsRelStructure
 from .mobility_service_version_structure import MobilityServiceVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

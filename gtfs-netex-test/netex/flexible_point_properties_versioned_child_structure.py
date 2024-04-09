@@ -29,25 +29,7 @@ class FlexiblePointPropertiesVersionedChildStructure(VersionedChildStructure):
         name = "FlexiblePointProperties_VersionedChildStructure"
 
     choice: Optional[
-        Union[
-            PointOnRouteRef,
-            VehicleMeetingPointRef,
-            WirePointRef,
-            RoadPointRef,
-            RailwayPointRef,
-            TrafficControlPointRef,
-            BeaconPointRef,
-            ActivationPointRef,
-            BorderPointRef,
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            GaragePointRef,
-            ParkingPointRef,
-            ReliefPointRef,
-            TimingPointRef,
-            RoutePointRef,
-            PointRef,
-        ]
+        Union[PointOnRouteRef, VehicleMeetingPointRef, WirePointRef, RoadPointRef, RailwayPointRef, TrafficControlPointRef, BeaconPointRef, ActivationPointRef, BorderPointRef, FareScheduledStopPointRef, ScheduledStopPointRef, GaragePointRef, ParkingPointRef, ReliefPointRef, TimingPointRef, RoutePointRef, PointRef]
     ] = field(
         default=None,
         metadata={

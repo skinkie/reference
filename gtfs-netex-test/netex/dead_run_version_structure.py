@@ -5,9 +5,7 @@ from .dead_run_endpoint_structure import DeadRunEndpointStructure
 from .dead_run_type_enumeration import DeadRunTypeEnumeration
 from .direction_type import DirectionType
 from .flexible_line_ref import FlexibleLineRef
-from .group_of_services_refs_rel_structure import (
-    GroupOfServicesRefsRelStructure,
-)
+from .group_of_services_refs_rel_structure import GroupOfServicesRefsRelStructure
 from .line_ref import LineRef
 from .operator_ref import OperatorRef
 from .train_number_refs_rel_structure import TrainNumberRefsRelStructure

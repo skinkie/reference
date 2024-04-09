@@ -2,18 +2,14 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from .abstract_capabilities_structure import AbstractCapabilitiesStructure
-from .data_object_capability_request_policy_structure import (
-    DataObjectCapabilityRequestPolicyStructure,
-)
+from .data_object_capability_request_policy_structure import DataObjectCapabilityRequestPolicyStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
 class DataObjectServiceCapabilitiesStructure(AbstractCapabilitiesStructure):
-    topic_filtering: Optional[
-        "DataObjectServiceCapabilitiesStructure.TopicFiltering"
-    ] = field(
+    topic_filtering: Optional["DataObjectServiceCapabilitiesStructure.TopicFiltering"] = field(
         default=None,
         metadata={
             "name": "TopicFiltering",
@@ -21,19 +17,15 @@ class DataObjectServiceCapabilitiesStructure(AbstractCapabilitiesStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    request_policy: Optional[DataObjectCapabilityRequestPolicyStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "RequestPolicy",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    request_policy: Optional[DataObjectCapabilityRequestPolicyStructure] = field(
+        default=None,
+        metadata={
+            "name": "RequestPolicy",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
-    subscription_policy: Optional[
-        "DataObjectServiceCapabilitiesStructure.SubscriptionPolicy"
-    ] = field(
+    subscription_policy: Optional["DataObjectServiceCapabilitiesStructure.SubscriptionPolicy"] = field(
         default=None,
         metadata={
             "name": "SubscriptionPolicy",

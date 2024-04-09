@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Union
 
 from .empty_type_2 import EmptyType2
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .via_versioned_child_structure import ViaVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

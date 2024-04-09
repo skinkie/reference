@@ -1,22 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .access_right_parameter_assignments_rel_structure import (
-    AccessRightParameterAssignmentsRelStructure,
-)
+from .access_right_parameter_assignments_rel_structure import AccessRightParameterAssignmentsRelStructure
 from .controllable_element_ref import ControllableElementRef
-from .fare_element_in_sequence_versioned_child_structure import (
-    FareElementInSequenceVersionedChildStructure,
-)
+from .fare_element_in_sequence_versioned_child_structure import FareElementInSequenceVersionedChildStructure
 from .fare_structure_element_ref import FareStructureElementRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ControllableElementInSequenceVersionedChildStructure(
-    FareElementInSequenceVersionedChildStructure
-):
+class ControllableElementInSequenceVersionedChildStructure(FareElementInSequenceVersionedChildStructure):
     class Meta:
         name = "ControllableElementInSequence_VersionedChildStructure"
 
@@ -36,9 +30,7 @@ class ControllableElementInSequenceVersionedChildStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    access_right_parameter_assignments: Optional[
-        AccessRightParameterAssignmentsRelStructure
-    ] = field(
+    access_right_parameter_assignments: Optional[AccessRightParameterAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "accessRightParameterAssignments",

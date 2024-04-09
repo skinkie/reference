@@ -8,15 +8,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class RetailDeviceSecurityListingRefsRelStructure(
-    OneToManyRelationshipStructure
-):
+class RetailDeviceSecurityListingRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "RetailDeviceSecurityListingRefs_RelStructure"
 
-    retail_device_security_listing_ref: List[
-        RetailDeviceSecurityListingRef
-    ] = field(
+    retail_device_security_listing_ref: List[RetailDeviceSecurityListingRef] = field(
         default_factory=list,
         metadata={
             "name": "RetailDeviceSecurityListingRef",

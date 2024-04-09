@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .check_constraint_delay_ref_structure import (
-    CheckConstraintDelayRefStructure,
-)
+from .check_constraint_delay_ref_structure import CheckConstraintDelayRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

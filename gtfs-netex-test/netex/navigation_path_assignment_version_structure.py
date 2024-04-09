@@ -21,9 +21,7 @@ class NavigationPathAssignmentVersionStructure(StopAssignmentVersionStructure):
     class Meta:
         name = "NavigationPathAssignment_VersionStructure"
 
-    connection_ref: Optional[
-        Union[DefaultConnectionRef, SiteConnectionRef, ConnectionRef]
-    ] = field(
+    connection_ref: Optional[Union[DefaultConnectionRef, SiteConnectionRef, ConnectionRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -46,16 +44,7 @@ class NavigationPathAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    stop_place_ref_or_site_ref: Optional[
-        Union[
-            TaxiRankRef,
-            StopPlaceRef,
-            ParkingRef,
-            PointOfInterestRef,
-            ServiceSiteRef,
-            SiteRef,
-        ]
-    ] = field(
+    stop_place_ref_or_site_ref: Optional[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

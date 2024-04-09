@@ -11,12 +11,8 @@ from .battery_equipment_ref import BatteryEquipmentRef
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .catering_service_ref import CateringServiceRef
 from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from .check_constraint_delays_rel_structure import (
-    CheckConstraintDelaysRelStructure,
-)
-from .check_constraint_throughputs_rel_structure import (
-    CheckConstraintThroughputsRelStructure,
-)
+from .check_constraint_delays_rel_structure import CheckConstraintDelaysRelStructure
+from .check_constraint_throughputs_rel_structure import CheckConstraintThroughputsRelStructure
 from .check_direction_enumeration import CheckDirectionEnumeration
 from .check_process_type_enumeration import CheckProcessTypeEnumeration
 from .check_service_enumeration import CheckServiceEnumeration
@@ -47,9 +43,7 @@ from .money_service_ref import MoneyServiceRef
 from .online_service_ref import OnlineServiceRef
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
-from .passenger_information_equipment_ref import (
-    PassengerInformationEquipmentRef,
-)
+from .passenger_information_equipment_ref import PassengerInformationEquipmentRef
 from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
 from .place_lighting_equipment_ref import PlaceLightingEquipmentRef
 from .place_ref import PlaceRef

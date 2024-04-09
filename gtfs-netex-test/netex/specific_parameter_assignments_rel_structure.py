@@ -6,17 +6,13 @@ from .distribution_assignment_ref import DistributionAssignmentRef
 from .logical_operation_enumeration import LogicalOperationEnumeration
 from .organisation_ref_structure import OrganisationRefStructure
 from .point_ref_structure import PointRefStructure
-from .validity_parameter_assignment_version_structure import (
-    ValidityParameterAssignmentVersionStructure,
-)
+from .validity_parameter_assignment_version_structure import ValidityParameterAssignmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SpecificParameterAssignmentsRelStructure(
-    ContainmentAggregationStructure
-):
+class SpecificParameterAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "specificParameterAssignments_RelStructure"
 
@@ -32,9 +28,7 @@ class SpecificParameterAssignmentsRelStructure(
 
 
 @dataclass(kw_only=True)
-class SpecificParameterAssignmentVersionStructure(
-    ValidityParameterAssignmentVersionStructure
-):
+class SpecificParameterAssignmentVersionStructure(ValidityParameterAssignmentVersionStructure):
     class Meta:
         name = "SpecificParameterAssignment_VersionStructure"
 

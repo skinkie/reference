@@ -39,13 +39,7 @@ class StopAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point: Optional[
-        Union[
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            ScheduledStopPoint,
-        ]
-    ] = field(
+    fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point: Optional[Union[FareScheduledStopPointRef, ScheduledStopPointRef, ScheduledStopPoint]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -8,9 +8,7 @@ from .beacon_point_ref import BeaconPointRef
 from .border_point_ref import BorderPointRef
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .garage_point_ref import GaragePointRef
-from .journey_timing_versioned_child_structure import (
-    JourneyTimingVersionedChildStructure,
-)
+from .journey_timing_versioned_child_structure import JourneyTimingVersionedChildStructure
 from .parking_point_ref import ParkingPointRef
 from .point_ref import PointRef
 from .railway_point_ref import RailwayPointRef
@@ -37,24 +35,7 @@ class JourneyLayoverStructure(JourneyTimingVersionedChildStructure):
         }
     )
     point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref: Optional[
-        Union[
-            VehicleMeetingPointRef,
-            WirePointRef,
-            RoadPointRef,
-            RailwayPointRef,
-            TrafficControlPointRef,
-            BeaconPointRef,
-            ActivationPointRef,
-            BorderPointRef,
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            GaragePointRef,
-            ParkingPointRef,
-            ReliefPointRef,
-            TimingPointRef,
-            RoutePointRef,
-            PointRef,
-        ]
+        Union[VehicleMeetingPointRef, WirePointRef, RoadPointRef, RailwayPointRef, TrafficControlPointRef, BeaconPointRef, ActivationPointRef, BorderPointRef, FareScheduledStopPointRef, ScheduledStopPointRef, GaragePointRef, ParkingPointRef, ReliefPointRef, TimingPointRef, RoutePointRef, PointRef]
     ] = field(
         default=None,
         metadata={

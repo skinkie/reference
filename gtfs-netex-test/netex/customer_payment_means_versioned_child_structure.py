@@ -36,9 +36,7 @@ class CustomerPaymentMeansVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    medium_access_device_ref: Optional[
-        Union[MobileDeviceRef, EmvCardRef, SmartcardRef]
-    ] = field(
+    medium_access_device_ref: Optional[Union[MobileDeviceRef, EmvCardRef, SmartcardRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

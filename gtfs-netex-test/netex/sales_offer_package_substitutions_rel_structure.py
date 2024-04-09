@@ -3,23 +3,17 @@ from typing import List, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .sales_offer_package_substitution import SalesOfferPackageSubstitution
-from .sales_offer_package_substitution_ref import (
-    SalesOfferPackageSubstitutionRef,
-)
+from .sales_offer_package_substitution_ref import SalesOfferPackageSubstitutionRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SalesOfferPackageSubstitutionsRelStructure(
-    ContainmentAggregationStructure
-):
+class SalesOfferPackageSubstitutionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "salesOfferPackageSubstitutions_RelStructure"
 
-    sales_offer_package_substitution_ref_or_sales_offer_package_substitution: List[
-        Union[SalesOfferPackageSubstitutionRef, SalesOfferPackageSubstitution]
-    ] = field(
+    sales_offer_package_substitution_ref_or_sales_offer_package_substitution: List[Union[SalesOfferPackageSubstitutionRef, SalesOfferPackageSubstitution]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

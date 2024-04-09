@@ -17,16 +17,7 @@ class MobilityServiceRefsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "mobilityServiceRefs_RelStructure"
 
-    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref: List[
-        Union[
-            OnlineServiceRef,
-            VehicleRentalServiceRef,
-            VehicleSharingServiceRef,
-            ChauffeuredVehicleServiceRef,
-            TaxiServiceRef,
-            CarPoolingServiceRef,
-        ]
-    ] = field(
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref: List[Union[OnlineServiceRef, VehicleRentalServiceRef, VehicleSharingServiceRef, ChauffeuredVehicleServiceRef, TaxiServiceRef, CarPoolingServiceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -35,9 +35,7 @@ from .multilingual_string import MultilingualString
 from .online_service_ref import OnlineServiceRef
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
-from .passenger_information_equipment_ref import (
-    PassengerInformationEquipmentRef,
-)
+from .passenger_information_equipment_ref import PassengerInformationEquipmentRef
 from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
 from .place_lighting_equipment_ref import PlaceLightingEquipmentRef
 from .place_sign_ref import PlaceSignRef
@@ -63,9 +61,7 @@ from .travelator_equipment_ref import TravelatorEquipmentRef
 from .trolley_stand_equipment_ref import TrolleyStandEquipmentRef
 from .type_of_equipment_ref import TypeOfEquipmentRef
 from .vehicle_charging_equipment_ref import VehicleChargingEquipmentRef
-from .vehicle_equipment_profile_members_rel_structure import (
-    VehicleEquipmentProfileMembersRelStructure,
-)
+from .vehicle_equipment_profile_members_rel_structure import VehicleEquipmentProfileMembersRelStructure
 from .vehicle_equipment_ref import VehicleEquipmentRef
 from .vehicle_release_equipment_ref import VehicleReleaseEquipmentRef
 from .vehicle_rental_service_ref import VehicleRentalServiceRef
@@ -511,9 +507,7 @@ class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    purpose_of_equipment_profile_ref: Optional[
-        PurposeOfEquipmentProfileRef
-    ] = field(
+    purpose_of_equipment_profile_ref: Optional[PurposeOfEquipmentProfileRef] = field(
         default=None,
         metadata={
             "name": "PurposeOfEquipmentProfileRef",
@@ -521,9 +515,7 @@ class VehicleEquipmentProfileVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_equipment_profile_members: Optional[
-        VehicleEquipmentProfileMembersRelStructure
-    ] = field(
+    vehicle_equipment_profile_members: Optional[VehicleEquipmentProfileMembersRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleEquipmentProfileMembers",

@@ -4,13 +4,9 @@ from typing import Optional, Union
 
 from .group_of_lines_ref import GroupOfLinesRef
 from .line_refs_rel_structure import LineRefsRelStructure
-from .lines_in_direction_refs_rel_structure import (
-    LinesInDirectionRefsRelStructure,
-)
+from .lines_in_direction_refs_rel_structure import LinesInDirectionRefsRelStructure
 from .network_ref import NetworkRef
-from .points_in_journey_pattern_rel_structure import (
-    PointsInJourneyPatternRelStructure,
-)
+from .points_in_journey_pattern_rel_structure import PointsInJourneyPatternRelStructure
 from .zone_use_enumeration import ZoneUseEnumeration
 from .zone_version_structure import ZoneVersionStructure
 

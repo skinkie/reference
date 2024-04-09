@@ -4,9 +4,7 @@ from typing import Optional
 from xsdata.models.datatype import XmlDuration
 
 from .penalty_policy_type_enumeration import PenaltyPolicyTypeEnumeration
-from .same_station_reentry_policy_enumeration import (
-    SameStationReentryPolicyEnumeration,
-)
+from .same_station_reentry_policy_enumeration import SameStationReentryPolicyEnumeration
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -25,9 +23,7 @@ class PenaltyPolicyVersionStructure(UsageParameterVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    same_station_rentry_policy: Optional[
-        SameStationReentryPolicyEnumeration
-    ] = field(
+    same_station_rentry_policy: Optional[SameStationReentryPolicyEnumeration] = field(
         default=None,
         metadata={
             "name": "SameStationRentryPolicy",

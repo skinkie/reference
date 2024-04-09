@@ -13,9 +13,7 @@ class FacilityRequirementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "facilityRequirements_RelStructure"
 
-    facility_requirement_ref_or_facility_requirement: List[
-        Union[FacilityRequirementRef, FacilityRequirement]
-    ] = field(
+    facility_requirement_ref_or_facility_requirement: List[Union[FacilityRequirementRef, FacilityRequirement]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

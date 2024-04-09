@@ -62,9 +62,7 @@ class TerminateSubscriptionRequestStructure(AuthenticatedRequestStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    all_or_subscription_ref: List[
-        Union[EmptyType1, SubscriptionQualifierStructure]
-    ] = field(
+    all_or_subscription_ref: List[Union[EmptyType1, SubscriptionQualifierStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

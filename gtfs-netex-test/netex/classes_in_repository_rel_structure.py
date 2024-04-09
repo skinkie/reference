@@ -13,9 +13,7 @@ class ClassesInRepositoryRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "classesInRepository_RelStructure"
 
-    class_in_frame_ref_or_class_in_frame: List[
-        Union[ClassInFrameRef, ClassInFrame]
-    ] = field(
+    class_in_frame_ref_or_class_in_frame: List[Union[ClassInFrameRef, ClassInFrame]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

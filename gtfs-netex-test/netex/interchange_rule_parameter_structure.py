@@ -3,16 +3,12 @@ from typing import List, Optional, Union
 
 from xsdata.models.datatype import XmlDuration
 
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .empty_type_2 import EmptyType2
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .journey_designator import JourneyDesignator
 from .line_in_direction_ref import LineInDirectionRef
-from .lines_in_direction_refs_rel_structure import (
-    LinesInDirectionRefsRelStructure,
-)
+from .lines_in_direction_refs_rel_structure import LinesInDirectionRefsRelStructure
 from .operator_ref import OperatorRef
 from .point_ref_structure import PointRefStructure
 from .scheduled_stop_point_ref import ScheduledStopPointRef
@@ -72,9 +68,7 @@ class InterchangeRuleParameterStructure:
             ),
         },
     )
-    all_lines_or_lines_in_direction_refs_or_line_in_direction_ref: List[
-        Union[EmptyType2, LinesInDirectionRefsRelStructure, LineInDirectionRef]
-    ] = field(
+    all_lines_or_lines_in_direction_refs_or_line_in_direction_ref: List[Union[EmptyType2, LinesInDirectionRefsRelStructure, LineInDirectionRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -97,9 +91,7 @@ class InterchangeRuleParameterStructure:
             ),
         },
     )
-    scheduled_stop_point_ref: Optional[
-        Union[FareScheduledStopPointRef, ScheduledStopPointRef]
-    ] = field(
+    scheduled_stop_point_ref: Optional[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -157,9 +149,7 @@ class InterchangeRuleParameterStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    service_journey_ref_or_journey_designator_or_service_designator: Optional[
-        Union[ServiceJourneyRefStructure, JourneyDesignator, ServiceDesignator]
-    ] = field(
+    service_journey_ref_or_journey_designator_or_service_designator: Optional[Union[ServiceJourneyRefStructure, JourneyDesignator, ServiceDesignator]] = field(
         default=None,
         metadata={
             "type": "Elements",

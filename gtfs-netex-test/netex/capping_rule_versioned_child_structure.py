@@ -47,9 +47,7 @@ class CappingRuleVersionedChildStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    preassigned_fare_product_ref: List[
-        Union[SupplementProductRef, PreassignedFareProductRef]
-    ] = field(
+    preassigned_fare_product_ref: List[Union[SupplementProductRef, PreassignedFareProductRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -75,13 +73,7 @@ class CappingRuleVersionedChildStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context: Optional[
-        Union[
-            GenericParameterAssignmentsRelStructure,
-            GenericParameterAssignment,
-            GenericParameterAssignmentInContext,
-        ]
-    ] = field(
+    validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context: Optional[Union[GenericParameterAssignmentsRelStructure, GenericParameterAssignment, GenericParameterAssignmentInContext]] = field(
         default=None,
         metadata={
             "type": "Elements",

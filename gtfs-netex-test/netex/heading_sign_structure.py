@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .destination_display_ref import DestinationDisplayRef
 from .direction_ref import DirectionRef
 from .flexible_line_ref import FlexibleLineRef

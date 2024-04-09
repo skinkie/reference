@@ -31,30 +31,22 @@ class ObservedPassingTimeViewStructure(PassingTimeViewStructure):
             "choices": (
                 {
                     "name": "ActualArrivalTime",
-                    "type": Type[
-                        "ObservedPassingTimeViewStructure.ActualArrivalTime"
-                    ],
+                    "type": Type["ObservedPassingTimeViewStructure.ActualArrivalTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ArrivalDayOffset",
-                    "type": Type[
-                        "ObservedPassingTimeViewStructure.ArrivalDayOffset"
-                    ],
+                    "type": Type["ObservedPassingTimeViewStructure.ArrivalDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ActualDepartureTime",
-                    "type": Type[
-                        "ObservedPassingTimeViewStructure.ActualDepartureTime"
-                    ],
+                    "type": Type["ObservedPassingTimeViewStructure.ActualDepartureTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DepartureDayOffset",
-                    "type": Type[
-                        "ObservedPassingTimeViewStructure.DepartureDayOffset"
-                    ],
+                    "type": Type["ObservedPassingTimeViewStructure.DepartureDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -64,16 +56,12 @@ class ObservedPassingTimeViewStructure(PassingTimeViewStructure):
                 },
                 {
                     "name": "ActualNonstopPassingTime",
-                    "type": Type[
-                        "ObservedPassingTimeViewStructure.ActualNonstopPassingTime"
-                    ],
+                    "type": Type["ObservedPassingTimeViewStructure.ActualNonstopPassingTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "PassingTimeDayOffset",
-                    "type": Type[
-                        "ObservedPassingTimeViewStructure.PassingTimeDayOffset"
-                    ],
+                    "type": Type["ObservedPassingTimeViewStructure.PassingTimeDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

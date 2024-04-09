@@ -3,37 +3,17 @@ from typing import Optional
 
 from .blacklists_in_frame_rel_structure import BlacklistsInFrameRelStructure
 from .common_version_frame_structure import CommonVersionFrameStructure
-from .customer_accounts_in_frame_rel_structure import (
-    CustomerAccountsInFrameRelStructure,
-)
-from .customer_purchase_packages_in_frame_rel_structure import (
-    CustomerPurchasePackagesInFrameRelStructure,
-)
+from .customer_accounts_in_frame_rel_structure import CustomerAccountsInFrameRelStructure
+from .customer_purchase_packages_in_frame_rel_structure import CustomerPurchasePackagesInFrameRelStructure
 from .customers_in_frame_rel_structure import CustomersInFrameRelStructure
-from .fare_contracts_in_frame_rel_structure import (
-    FareContractsInFrameRelStructure,
-)
-from .medium_access_devices_in_frame_rel_structure import (
-    MediumAccessDevicesInFrameRelStructure,
-)
-from .retail_consortiums_in_frame_rel_structure import (
-    RetailConsortiumsInFrameRelStructure,
-)
-from .retail_devices_in_frame_rel_structure import (
-    RetailDevicesInFrameRelStructure,
-)
-from .sales_transactions_in_frame_rel_structure import (
-    SalesTransactionsInFrameRelStructure,
-)
-from .travel_documents_in_frame_rel_structure import (
-    TravelDocumentsInFrameRelStructure,
-)
-from .travel_specifications_in_frame_rel_structure import (
-    TravelSpecificationsInFrameRelStructure,
-)
-from .types_of_travel_document_in_frame_rel_structure import (
-    TypesOfTravelDocumentInFrameRelStructure,
-)
+from .fare_contracts_in_frame_rel_structure import FareContractsInFrameRelStructure
+from .medium_access_devices_in_frame_rel_structure import MediumAccessDevicesInFrameRelStructure
+from .retail_consortiums_in_frame_rel_structure import RetailConsortiumsInFrameRelStructure
+from .retail_devices_in_frame_rel_structure import RetailDevicesInFrameRelStructure
+from .sales_transactions_in_frame_rel_structure import SalesTransactionsInFrameRelStructure
+from .travel_documents_in_frame_rel_structure import TravelDocumentsInFrameRelStructure
+from .travel_specifications_in_frame_rel_structure import TravelSpecificationsInFrameRelStructure
+from .types_of_travel_document_in_frame_rel_structure import TypesOfTravelDocumentInFrameRelStructure
 from .whitelists_in_frame_rel_structure import WhitelistsInFrameRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -83,15 +63,13 @@ class SalesTransactionFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    medium_access_devices: Optional[MediumAccessDevicesInFrameRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "mediumAccessDevices",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    medium_access_devices: Optional[MediumAccessDevicesInFrameRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "mediumAccessDevices",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     blacklists: Optional[BlacklistsInFrameRelStructure] = field(
         default=None,
@@ -107,9 +85,7 @@ class SalesTransactionFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    travel_specifications: Optional[
-        TravelSpecificationsInFrameRelStructure
-    ] = field(
+    travel_specifications: Optional[TravelSpecificationsInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "travelSpecifications",
@@ -125,9 +101,7 @@ class SalesTransactionFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    types_of_travel_documents: Optional[
-        TypesOfTravelDocumentInFrameRelStructure
-    ] = field(
+    types_of_travel_documents: Optional[TypesOfTravelDocumentInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "typesOfTravelDocuments",
@@ -143,9 +117,7 @@ class SalesTransactionFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    customer_purchase_packages: Optional[
-        CustomerPurchasePackagesInFrameRelStructure
-    ] = field(
+    customer_purchase_packages: Optional[CustomerPurchasePackagesInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "customerPurchasePackages",

@@ -13,9 +13,7 @@ class FarePointsInPatternRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "farePointsInPattern_RelStructure"
 
-    fare_point_in_pattern_ref_or_fare_point_in_pattern: List[
-        Union[FarePointInPatternRef, FarePointInPattern]
-    ] = field(
+    fare_point_in_pattern_ref_or_fare_point_in_pattern: List[Union[FarePointInPatternRef, FarePointInPattern]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

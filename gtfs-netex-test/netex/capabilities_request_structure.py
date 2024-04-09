@@ -9,9 +9,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class CapabilitiesRequestStructure(RequestStructure):
-    data_object_capabilities_request: Optional[
-        DataObjectCapabilitiesRequest
-    ] = field(
+    data_object_capabilities_request: Optional[DataObjectCapabilitiesRequest] = field(
         default=None,
         metadata={
             "name": "DataObjectCapabilitiesRequest",

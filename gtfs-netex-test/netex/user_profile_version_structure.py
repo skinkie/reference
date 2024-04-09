@@ -8,9 +8,7 @@ from .companion_profiles_rel_structure import CompanionProfilesRelStructure
 from .discount_basis_enumeration import DiscountBasisEnumeration
 from .gender_limitation import GenderLimitation
 from .proof_of_identity_enumeration import ProofOfIdentityEnumeration
-from .residential_qualifications_rel_structure import (
-    ResidentialQualificationsRelStructure,
-)
+from .residential_qualifications_rel_structure import ResidentialQualificationsRelStructure
 from .type_of_concession_ref import TypeOfConcessionRef
 from .types_of_proof_refs_rel_structure import TypesOfProofRefsRelStructure
 from .usage_parameter_version_structure import UsageParameterVersionStructure
@@ -121,15 +119,13 @@ class UserProfileVersionStructure(UsageParameterVersionStructure):
             "tokens": True,
         },
     )
-    types_of_proof_required_ref: Optional[TypesOfProofRefsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "typesOfProofRequiredRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    types_of_proof_required_ref: Optional[TypesOfProofRefsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "typesOfProofRequiredRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     discount_basis: Optional[DiscountBasisEnumeration] = field(
         default=None,

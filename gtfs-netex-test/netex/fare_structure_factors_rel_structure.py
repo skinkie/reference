@@ -19,15 +19,7 @@ class FareStructureFactorsRelStructure(ContainmentAggregationStructure):
         name = "fareStructureFactors_RelStructure"
 
     parking_charge_band_ref_or_time_structure_factor_ref_or_fare_quota_factor_ref_or_fare_demand_factor_ref_or_quality_structure_factor_ref_or_geographical_structure_factor_ref_or_fare_structure_factor: List[
-        Union[
-            ParkingChargeBandRef,
-            TimeStructureFactorRef,
-            FareQuotaFactorRef,
-            FareDemandFactorRef,
-            QualityStructureFactorRef,
-            GeographicalStructureFactorRef,
-            FareStructureFactor,
-        ]
+        Union[ParkingChargeBandRef, TimeStructureFactorRef, FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef, GeographicalStructureFactorRef, FareStructureFactor]
     ] = field(
         default_factory=list,
         metadata={

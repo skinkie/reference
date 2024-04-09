@@ -13,9 +13,7 @@ class ResidentialQualificationsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "residentialQualifications_RelStructure"
 
-    residential_qualification_ref_or_residential_qualification: List[
-        Union[ResidentialQualificationRef, ResidentialQualification]
-    ] = field(
+    residential_qualification_ref_or_residential_qualification: List[Union[ResidentialQualificationRef, ResidentialQualification]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

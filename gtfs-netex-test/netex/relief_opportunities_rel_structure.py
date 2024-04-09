@@ -13,9 +13,7 @@ class ReliefOpportunitiesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "reliefOpportunities_RelStructure"
 
-    relief_opportunity_ref_or_relief_opportunity: List[
-        Union[ReliefOpportunityRef, ReliefOpportunity]
-    ] = field(
+    relief_opportunity_ref_or_relief_opportunity: List[Union[ReliefOpportunityRef, ReliefOpportunity]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

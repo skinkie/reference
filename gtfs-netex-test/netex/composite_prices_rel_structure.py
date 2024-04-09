@@ -6,9 +6,7 @@ from .capping_rule_price_ref import CappingRulePriceRef
 from .controllable_element_price import ControllableElementPrice
 from .controllable_element_price_ref import ControllableElementPriceRef
 from .customer_purchase_package_price import CustomerPurchasePackagePrice
-from .customer_purchase_package_price_ref import (
-    CustomerPurchasePackagePriceRef,
-)
+from .customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
 from .distance_matrix_element_price import DistanceMatrixElementPrice
 from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
 from .fare_price_ref import FarePriceRef
@@ -34,9 +32,7 @@ from .sales_offer_package_price import SalesOfferPackagePrice
 from .sales_offer_package_price_ref import SalesOfferPackagePriceRef
 from .series_constraint_price import SeriesConstraintPrice
 from .series_constraint_price_ref import SeriesConstraintPriceRef
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .time_interval_price import TimeIntervalPrice
 from .time_interval_price_ref import TimeIntervalPriceRef
 from .time_unit_price import TimeUnitPrice

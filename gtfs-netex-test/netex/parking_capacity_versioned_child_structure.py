@@ -62,15 +62,7 @@ class ParkingCapacityVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

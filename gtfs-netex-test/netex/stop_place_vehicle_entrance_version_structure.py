@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
 from .air_submode import AirSubmode
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .bus_submode import BusSubmode
 from .coach_submode import CoachSubmode
 from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
@@ -28,9 +26,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class StopPlaceVehicleEntranceVersionStructure(
-    VehicleEntranceVersionStructure
-):
+class StopPlaceVehicleEntranceVersionStructure(VehicleEntranceVersionStructure):
     class Meta:
         name = "StopPlaceVehicleEntrance_VersionStructure"
 
@@ -43,18 +39,7 @@ class StopPlaceVehicleEntranceVersionStructure(
         },
     )
     air_submode_or_bus_submode_or_coach_submode_or_funicular_submode_or_metro_submode_or_tram_submode_or_telecabin_submode_or_rail_submode_or_water_submode_or_snow_and_ice_submode: Optional[
-        Union[
-            AirSubmode,
-            BusSubmode,
-            CoachSubmode,
-            FunicularSubmode,
-            MetroSubmode,
-            TramSubmode,
-            TelecabinSubmode,
-            RailSubmode,
-            WaterSubmode,
-            SnowAndIceSubmode,
-        ]
+        Union[AirSubmode, BusSubmode, CoachSubmode, FunicularSubmode, MetroSubmode, TramSubmode, TelecabinSubmode, RailSubmode, WaterSubmode, SnowAndIceSubmode]
     ] = field(
         default=None,
         metadata={
@@ -113,16 +98,7 @@ class StopPlaceVehicleEntranceVersionStructure(
             ),
         },
     )
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
-        Union[
-            PersonalModeOfOperationRef,
-            VehiclePoolingRef,
-            VehicleSharingRef,
-            VehicleRentalRef,
-            FlexibleModeOfOperationRef,
-            ScheduledModeOfOperationRef,
-        ]
-    ] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

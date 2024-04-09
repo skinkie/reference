@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from .infrastructure_link_version_structure import (
-    InfrastructureLinkVersionStructure,
-)
+from .infrastructure_link_version_structure import InfrastructureLinkVersionStructure
 from .railway_point_ref_structure import RailwayPointRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

@@ -3,16 +3,12 @@ from typing import Optional, Union
 
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from .monitored_vehicle_sharing_parking_bay_ref import (
-    MonitoredVehicleSharingParkingBayRef,
-)
+from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .parking_bay_ref import ParkingBayRef
 from .taxi_service_ref import TaxiServiceRef
 from .vehicle_pooling_parking_bay_ref import VehiclePoolingParkingBayRef
 from .vehicle_rental_service_ref import VehicleRentalServiceRef
-from .vehicle_service_place_assignment_version_structure import (
-    VehicleServicePlaceAssignmentVersionStructure,
-)
+from .vehicle_service_place_assignment_version_structure import VehicleServicePlaceAssignmentVersionStructure
 from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
 from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
 from .vehicle_sharing_service_ref import VehicleSharingServiceRef
@@ -21,21 +17,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleSharingPlaceAssignmentVersionStructure(
-    VehicleServicePlaceAssignmentVersionStructure
-):
+class VehicleSharingPlaceAssignmentVersionStructure(VehicleServicePlaceAssignmentVersionStructure):
     class Meta:
         name = "VehicleSharingPlaceAssignment_VersionStructure"
 
-    common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[
-        Union[
-            VehicleRentalServiceRef,
-            VehicleSharingServiceRef,
-            ChauffeuredVehicleServiceRef,
-            TaxiServiceRef,
-            CarPoolingServiceRef,
-        ]
-    ] = field(
+    common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[Union[VehicleRentalServiceRef, VehicleSharingServiceRef, ChauffeuredVehicleServiceRef, TaxiServiceRef, CarPoolingServiceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -76,14 +62,7 @@ class VehicleSharingPlaceAssignmentVersionStructure(
             "required": True,
         }
     )
-    parking_bay_ref_or_vehicle_sharing_parking_bay_ref: Optional[
-        Union[
-            VehiclePoolingParkingBayRef,
-            MonitoredVehicleSharingParkingBayRef,
-            VehicleSharingParkingBayRef,
-            ParkingBayRef,
-        ]
-    ] = field(
+    parking_bay_ref_or_vehicle_sharing_parking_bay_ref: Optional[Union[VehiclePoolingParkingBayRef, MonitoredVehicleSharingParkingBayRef, VehicleSharingParkingBayRef, ParkingBayRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

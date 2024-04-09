@@ -11,9 +11,7 @@ from .entrance_ref import EntranceRef
 from .equipment_place_ref import EquipmentPlaceRef
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .garage_point_ref import GaragePointRef
-from .monitored_vehicle_sharing_parking_bay_ref import (
-    MonitoredVehicleSharingParkingBayRef,
-)
+from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .parking_area_ref import ParkingAreaRef
 from .parking_bay_ref import ParkingBayRef
 from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
@@ -22,9 +20,7 @@ from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
 from .parking_point_ref import ParkingPointRef
 from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
 from .point_of_interest_space_ref import PointOfInterestSpaceRef
-from .point_of_interest_vehicle_entrance_ref import (
-    PointOfInterestVehicleEntranceRef,
-)
+from .point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
 from .point_ref import PointRef
 from .quay_ref import QuayRef
 from .railway_point_ref import RailwayPointRef
@@ -60,24 +56,7 @@ class RechargingPointAssignmentVersionStructure(AssignmentVersionStructure1):
         name = "RechargingPointAssignment_VersionStructure"
 
     point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref: Optional[
-        Union[
-            VehicleMeetingPointRef,
-            WirePointRef,
-            RoadPointRef,
-            RailwayPointRef,
-            TrafficControlPointRef,
-            BeaconPointRef,
-            ActivationPointRef,
-            BorderPointRef,
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            GaragePointRef,
-            ParkingPointRef,
-            ReliefPointRef,
-            TimingPointRef,
-            RoutePointRef,
-            PointRef,
-        ]
+        Union[VehicleMeetingPointRef, WirePointRef, RoadPointRef, RailwayPointRef, TrafficControlPointRef, BeaconPointRef, ActivationPointRef, BorderPointRef, FareScheduledStopPointRef, ScheduledStopPointRef, GaragePointRef, ParkingPointRef, ReliefPointRef, TimingPointRef, RoutePointRef, PointRef]
     ] = field(
         default=None,
         metadata={
@@ -341,13 +320,11 @@ class RechargingPointAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_charging_equipment_ref: Optional[VehicleChargingEquipmentRef] = (
-        field(
-            default=None,
-            metadata={
-                "name": "VehicleChargingEquipmentRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    vehicle_charging_equipment_ref: Optional[VehicleChargingEquipmentRef] = field(
+        default=None,
+        metadata={
+            "name": "VehicleChargingEquipmentRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )

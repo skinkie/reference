@@ -118,13 +118,11 @@ class AccommodationVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    passenger_comms_facility_list: Optional[PassengerCommsFacilityList] = (
-        field(
-            default=None,
-            metadata={
-                "name": "PassengerCommsFacilityList",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    passenger_comms_facility_list: Optional[PassengerCommsFacilityList] = field(
+        default=None,
+        metadata={
+            "name": "PassengerCommsFacilityList",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )

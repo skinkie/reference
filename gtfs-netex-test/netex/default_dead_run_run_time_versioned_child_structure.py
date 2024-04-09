@@ -4,17 +4,13 @@ from typing import Optional
 from xsdata.models.datatype import XmlDuration
 
 from .dead_run_ref import DeadRunRef
-from .journey_timing_versioned_child_structure import (
-    JourneyTimingVersionedChildStructure,
-)
+from .journey_timing_versioned_child_structure import JourneyTimingVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class DefaultDeadRunRunTimeVersionedChildStructure(
-    JourneyTimingVersionedChildStructure
-):
+class DefaultDeadRunRunTimeVersionedChildStructure(JourneyTimingVersionedChildStructure):
     class Meta:
         name = "DefaultDeadRunRunTime_VersionedChildStructure"
 

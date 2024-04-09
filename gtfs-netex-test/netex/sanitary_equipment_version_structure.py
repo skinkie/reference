@@ -4,9 +4,7 @@ from typing import List, Optional
 
 from .accessibility_assessment import AccessibilityAssessment
 from .gender_limitation_enumeration import GenderLimitationEnumeration
-from .passenger_equipment_version_structure import (
-    PassengerEquipmentVersionStructure,
-)
+from .passenger_equipment_version_structure import PassengerEquipmentVersionStructure
 from .payment_method_enumeration import PaymentMethodEnumeration
 from .sanitary_facility_list import SanitaryFacilityList
 from .staffing_enumeration import StaffingEnumeration

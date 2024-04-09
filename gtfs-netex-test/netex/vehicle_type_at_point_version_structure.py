@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .network_restriction_version_structure import (
-    NetworkRestrictionVersionStructure,
-)
+from .network_restriction_version_structure import NetworkRestrictionVersionStructure
 from .transport_type_ref_structure import TransportTypeRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

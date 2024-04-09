@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .assistance_availability_enumeration import (
-    AssistanceAvailabilityEnumeration,
-)
+from .assistance_availability_enumeration import AssistanceAvailabilityEnumeration
 from .authority_ref import AuthorityRef
 from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .booking_arrangements_structure import BookingArrangementsStructure
@@ -30,15 +28,13 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
     class Meta:
         name = "AssistanceBookingService_VersionStructure"
 
-    assistance_availability: Optional[AssistanceAvailabilityEnumeration] = (
-        field(
-            default=None,
-            metadata={
-                "name": "AssistanceAvailability",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    assistance_availability: Optional[AssistanceAvailabilityEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "AssistanceAvailability",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     wheelchair_booking_required: Optional[bool] = field(
         default=None,
@@ -56,9 +52,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_arrangements_or_booking_arrangements: Optional[
-        Union[BookingArrangementsRelStructure, BookingArrangementsStructure]
-    ] = field(
+    booking_arrangements_or_booking_arrangements: Optional[Union[BookingArrangementsRelStructure, BookingArrangementsStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -84,16 +78,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
-        Union[
-            PersonalModeOfOperationRef,
-            VehiclePoolingRef,
-            VehicleSharingRef,
-            VehicleRentalRef,
-            FlexibleModeOfOperationRef,
-            ScheduledModeOfOperationRef,
-        ]
-    ] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -131,25 +116,23 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             ),
         },
     )
-    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "AuthorityRef",
-                        "type": AuthorityRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "OperatorRef",
-                        "type": OperatorRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "AuthorityRef",
+                    "type": AuthorityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatorRef",
+                    "type": OperatorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     line_ref: Optional[Union[FlexibleLineRef, LineRef]] = field(
         default=None,

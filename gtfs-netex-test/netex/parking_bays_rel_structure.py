@@ -2,12 +2,8 @@ from dataclasses import dataclass, field
 from typing import List, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
-from .monitored_vehicle_sharing_parking_bay import (
-    MonitoredVehicleSharingParkingBay,
-)
-from .monitored_vehicle_sharing_parking_bay_ref import (
-    MonitoredVehicleSharingParkingBayRef,
-)
+from .monitored_vehicle_sharing_parking_bay import MonitoredVehicleSharingParkingBay
+from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .parking_bay import ParkingBay
 from .parking_bay_ref import ParkingBayRef
 from .vehicle_pooling_parking_bay import VehiclePoolingParkingBay
@@ -23,18 +19,7 @@ class ParkingBaysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "parkingBays_RelStructure"
 
-    parking_bay_ref_or_vehicle_sharing_parking_bay_ref_or_parking_bay: List[
-        Union[
-            VehiclePoolingParkingBayRef,
-            MonitoredVehicleSharingParkingBayRef,
-            VehicleSharingParkingBayRef,
-            ParkingBayRef,
-            MonitoredVehicleSharingParkingBay,
-            VehiclePoolingParkingBay,
-            VehicleSharingParkingBay,
-            ParkingBay,
-        ]
-    ] = field(
+    parking_bay_ref_or_vehicle_sharing_parking_bay_ref_or_parking_bay: List[Union[VehiclePoolingParkingBayRef, MonitoredVehicleSharingParkingBayRef, VehicleSharingParkingBayRef, ParkingBayRef, MonitoredVehicleSharingParkingBay, VehiclePoolingParkingBay, VehicleSharingParkingBay, ParkingBay]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

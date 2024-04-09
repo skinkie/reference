@@ -13,9 +13,7 @@ class BookingArrangementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "bookingArrangements_RelStructure"
 
-    booking_arrangement_ref_or_booking_arrangement: List[
-        Union[BookingArrangementRef, BookingArrangement]
-    ] = field(
+    booking_arrangement_ref_or_booking_arrangement: List[Union[BookingArrangementRef, BookingArrangement]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

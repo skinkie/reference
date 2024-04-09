@@ -16,15 +16,7 @@ class CommonVehicleServiceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "commonVehicleServiceRefs_RelStructure"
 
-    common_vehicle_service_ref_or_vehicle_pooling_service_ref: List[
-        Union[
-            VehicleRentalServiceRef,
-            VehicleSharingServiceRef,
-            ChauffeuredVehicleServiceRef,
-            TaxiServiceRef,
-            CarPoolingServiceRef,
-        ]
-    ] = field(
+    common_vehicle_service_ref_or_vehicle_pooling_service_ref: List[Union[VehicleRentalServiceRef, VehicleSharingServiceRef, ChauffeuredVehicleServiceRef, TaxiServiceRef, CarPoolingServiceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

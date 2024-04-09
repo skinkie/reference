@@ -9,21 +9,15 @@ from .duty_part_ref import DutyPartRef
 from .dynamic_stop_assignment import DynamicStopAssignment
 from .dynamic_stop_assignment_ref import DynamicStopAssignmentRef
 from .interchange_rules_rel_structure import InterchangeRulesRelStructure
-from .journey_meeting_views_rel_structure import (
-    JourneyMeetingViewsRelStructure,
-)
+from .journey_meeting_views_rel_structure import JourneyMeetingViewsRelStructure
 from .journey_part_ref import JourneyPartRef
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .passenger_stop_assignment_ref import PassengerStopAssignmentRef
 from .quay_assignment_view import QuayAssignmentView
-from .service_journey_interchanges_rel_structure import (
-    ServiceJourneyInterchangesRelStructure,
-)
+from .service_journey_interchanges_rel_structure import ServiceJourneyInterchangesRelStructure
 from .time_demand_type_ref import TimeDemandTypeRef
 from .timeband_ref import TimebandRef
-from .vehicle_journey_stop_assignment_ref import (
-    VehicleJourneyStopAssignmentRef,
-)
+from .vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -93,9 +87,7 @@ class ArrivalStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    time_demand_type_ref_or_timeband_ref: Optional[
-        Union[TimeDemandTypeRef, TimebandRef]
-    ] = field(
+    time_demand_type_ref_or_timeband_ref: Optional[Union[TimeDemandTypeRef, TimebandRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -121,14 +113,7 @@ class ArrivalStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_journey_stop_assignment_ref_or_dynamic_stop_assignment_ref_or_passenger_stop_assignment_ref_or_quay_assignment_view: Optional[
-        Union[
-            VehicleJourneyStopAssignmentRef,
-            DynamicStopAssignmentRef,
-            PassengerStopAssignmentRef,
-            QuayAssignmentView,
-        ]
-    ] = field(
+    vehicle_journey_stop_assignment_ref_or_dynamic_stop_assignment_ref_or_passenger_stop_assignment_ref_or_quay_assignment_view: Optional[Union[VehicleJourneyStopAssignmentRef, DynamicStopAssignmentRef, PassengerStopAssignmentRef, QuayAssignmentView]] = field(
         default=None,
         metadata={
             "type": "Elements",

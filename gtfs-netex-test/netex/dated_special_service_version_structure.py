@@ -29,19 +29,7 @@ class DatedSpecialServiceVersionStructure(SpecialServiceVersionStructure):
     class Meta:
         name = "DatedSpecialService_VersionStructure"
 
-    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[
-        Union[
-            SingleJourneyRef,
-            NormalDatedVehicleJourneyRef,
-            DatedVehicleJourneyRef,
-            DatedSpecialServiceRef,
-            SpecialServiceRef,
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            DeadRunRef,
-            VehicleJourneyRef,
-        ]
-    ] = field(
+    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -118,9 +106,7 @@ class DatedSpecialServiceVersionStructure(SpecialServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    external_dated_vehicle_journey_ref: Optional[
-        ExternalObjectRefStructure
-    ] = field(
+    external_dated_vehicle_journey_ref: Optional[ExternalObjectRefStructure] = field(
         default=None,
         metadata={
             "name": "ExternalDatedVehicleJourneyRef",

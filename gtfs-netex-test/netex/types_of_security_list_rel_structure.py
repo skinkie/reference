@@ -13,9 +13,7 @@ class TypesOfSecurityListRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typesOfSecurityList_RelStructure"
 
-    type_of_security_list_ref_or_type_of_security_list: List[
-        Union[TypeOfSecurityListRef, TypeOfSecurityList]
-    ] = field(
+    type_of_security_list_ref_or_type_of_security_list: List[Union[TypeOfSecurityListRef, TypeOfSecurityList]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

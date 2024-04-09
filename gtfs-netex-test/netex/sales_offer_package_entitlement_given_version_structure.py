@@ -12,9 +12,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SalesOfferPackageEntitlementGivenVersionStructure(
-    UsageParameterVersionStructure
-):
+class SalesOfferPackageEntitlementGivenVersionStructure(UsageParameterVersionStructure):
     class Meta:
         name = "SalesOfferPackageEntitlementGiven_VersionStructure"
 

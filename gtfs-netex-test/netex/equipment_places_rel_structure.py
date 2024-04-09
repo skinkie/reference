@@ -13,9 +13,7 @@ class EquipmentPlacesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "equipmentPlaces_RelStructure"
 
-    equipment_place_ref_or_equipment_place: List[
-        Union[EquipmentPlaceRef, EquipmentPlace]
-    ] = field(
+    equipment_place_ref_or_equipment_place: List[Union[EquipmentPlaceRef, EquipmentPlace]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

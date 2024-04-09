@@ -15,11 +15,7 @@ class PricingRulesRelStructure(FrameContainmentStructure):
     class Meta:
         name = "pricingRules_RelStructure"
 
-    pricing_rule: List[
-        Union[
-            LimitingRuleInContext, LimitingRule, DiscountingRule, PricingRule
-        ]
-    ] = field(
+    pricing_rule: List[Union[LimitingRuleInContext, LimitingRule, DiscountingRule, PricingRule]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .third_party_product_version_structure import (
-    ThirdPartyProductVersionStructure,
-)
+from .third_party_product_version_structure import ThirdPartyProductVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

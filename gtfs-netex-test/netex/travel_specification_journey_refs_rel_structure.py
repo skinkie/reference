@@ -11,20 +11,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TravelSpecificationJourneyRefsRelStructure(
-    OneToManyRelationshipStructure
-):
+class TravelSpecificationJourneyRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "travelSpecificationJourneyRefs_RelStructure"
 
-    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref: List[
-        Union[
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            SingleJourneyRef,
-            TrainNumberRef,
-        ]
-    ] = field(
+    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref: List[Union[TemplateServiceJourneyRef, ServiceJourneyRef, SingleJourneyRef, TrainNumberRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

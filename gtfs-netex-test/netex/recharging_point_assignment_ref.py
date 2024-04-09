@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .recharging_point_assignment_ref_structure import (
-    RechargingPointAssignmentRefStructure,
-)
+from .recharging_point_assignment_ref_structure import RechargingPointAssignmentRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

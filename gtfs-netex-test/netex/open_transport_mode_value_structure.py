@@ -33,22 +33,7 @@ class OpenTransportModeValueStructure(TypeOfValueVersionStructure):
             "required": True,
         }
     )
-    choice: Optional[
-        Union[
-            AirSubmode,
-            BusSubmode,
-            CoachSubmode,
-            FunicularSubmode,
-            MetroSubmode,
-            TramSubmode,
-            TelecabinSubmode,
-            RailSubmode,
-            WaterSubmode,
-            SnowAndIceSubmode,
-            TaxiSubmode,
-            SelfDriveSubmode,
-        ]
-    ] = field(
+    choice: Optional[Union[AirSubmode, BusSubmode, CoachSubmode, FunicularSubmode, MetroSubmode, TramSubmode, TelecabinSubmode, RailSubmode, WaterSubmode, SnowAndIceSubmode, TaxiSubmode, SelfDriveSubmode]] = field(
         default=None,
         metadata={
             "type": "Elements",

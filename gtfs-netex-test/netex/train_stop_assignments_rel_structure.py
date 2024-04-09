@@ -13,9 +13,7 @@ class TrainStopAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "trainStopAssignments_RelStructure"
 
-    train_stop_assignment_ref_or_train_stop_assignment: List[
-        Union[TrainStopAssignmentRef, TrainStopAssignment]
-    ] = field(
+    train_stop_assignment_ref_or_train_stop_assignment: List[Union[TrainStopAssignmentRef, TrainStopAssignment]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

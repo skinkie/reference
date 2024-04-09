@@ -18,25 +18,23 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "CodespaceAssignment_VersionedChildStructure"
 
-    codespace_ref_or_codespace: Optional[Union[CodespaceRef, Codespace]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "CodespaceRef",
-                        "type": CodespaceRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "Codespace",
-                        "type": Codespace,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    codespace_ref_or_codespace: Optional[Union[CodespaceRef, Codespace]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "CodespaceRef",
+                    "type": CodespaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Codespace",
+                    "type": Codespace,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     administrative_zone_ref: Optional[AdministrativeZoneRef] = field(
         default=None,
@@ -78,28 +76,19 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    start_value_or_end_value: List[
-        Union[
-            "CodespaceAssignmentVersionedChildStructure.StartValue",
-            "CodespaceAssignmentVersionedChildStructure.EndValue",
-        ]
-    ] = field(
+    start_value_or_end_value: List[Union["CodespaceAssignmentVersionedChildStructure.StartValue", "CodespaceAssignmentVersionedChildStructure.EndValue"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "StartValue",
-                    "type": Type[
-                        "CodespaceAssignmentVersionedChildStructure.StartValue"
-                    ],
+                    "type": Type["CodespaceAssignmentVersionedChildStructure.StartValue"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "EndValue",
-                    "type": Type[
-                        "CodespaceAssignmentVersionedChildStructure.EndValue"
-                    ],
+                    "type": Type["CodespaceAssignmentVersionedChildStructure.EndValue"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -122,9 +111,7 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    type_of_codespace_assignment_ref: Optional[
-        TypeOfCodespaceAssignmentRef
-    ] = field(
+    type_of_codespace_assignment_ref: Optional[TypeOfCodespaceAssignmentRef] = field(
         default=None,
         metadata={
             "name": "TypeOfCodespaceAssignmentRef",

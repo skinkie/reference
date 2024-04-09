@@ -24,9 +24,7 @@ class GroupOfServicesEndPointDerivedViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    scheduled_stop_point_ref: Optional[
-        Union[FareScheduledStopPointRef, ScheduledStopPointRef]
-    ] = field(
+    scheduled_stop_point_ref: Optional[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

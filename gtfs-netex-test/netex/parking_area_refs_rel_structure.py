@@ -15,14 +15,7 @@ class ParkingAreaRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "parkingAreaRefs_RelStructure"
 
-    parking_area_ref: List[
-        Union[
-            VehiclePoolingParkingAreaRef,
-            VehicleSharingParkingAreaRef,
-            TaxiParkingAreaRef,
-            ParkingAreaRef,
-        ]
-    ] = field(
+    parking_area_ref: List[Union[VehiclePoolingParkingAreaRef, VehicleSharingParkingAreaRef, TaxiParkingAreaRef, ParkingAreaRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

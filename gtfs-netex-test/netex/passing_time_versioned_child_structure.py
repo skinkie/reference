@@ -25,19 +25,7 @@ class PassingTimeVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "PassingTime_VersionedChildStructure"
 
-    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[
-        Union[
-            SingleJourneyRef,
-            NormalDatedVehicleJourneyRef,
-            DatedVehicleJourneyRef,
-            DatedSpecialServiceRef,
-            SpecialServiceRef,
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            DeadRunRef,
-            VehicleJourneyRef,
-        ]
-    ] = field(
+    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -98,15 +86,7 @@ class PassingTimeVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    point_in_journey_pattern_ref: Optional[
-        Union[
-            PointInSingleJourneyPathRef,
-            FarePointInPatternRef,
-            StopPointInJourneyPatternRef,
-            TimingPointInJourneyPatternRef,
-            PointInJourneyPatternRef,
-        ]
-    ] = field(
+    point_in_journey_pattern_ref: Optional[Union[PointInSingleJourneyPathRef, FarePointInPatternRef, StopPointInJourneyPatternRef, TimingPointInJourneyPatternRef, PointInJourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

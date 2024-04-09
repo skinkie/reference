@@ -31,9 +31,7 @@ class LinkSequenceProjectionVersionStructure(ProjectionVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    points_or_line_string: Optional[
-        Union[PointRefsRelStructure, LineString]
-    ] = field(
+    points_or_line_string: Optional[Union[PointRefsRelStructure, LineString]] = field(
         default=None,
         metadata={
             "type": "Elements",

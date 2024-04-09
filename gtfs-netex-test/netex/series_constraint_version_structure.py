@@ -4,20 +4,14 @@ from typing import List, Optional
 
 from .connection_ref_structure import ConnectionRefStructure
 from .fare_basis_enumeration import FareBasisEnumeration
-from .fare_points_in_pattern_rel_structure import (
-    FarePointsInPatternRelStructure,
-)
+from .fare_points_in_pattern_rel_structure import FarePointsInPatternRelStructure
 from .journey_pattern_refs_rel_structure import JourneyPatternRefsRelStructure
 from .multilingual_string import MultilingualString
 from .priceable_object_version_structure import PriceableObjectVersionStructure
 from .private_code import PrivateCode
 from .routing_type_enumeration import RoutingTypeEnumeration
-from .series_constraint_prices_rel_structure import (
-    SeriesConstraintPricesRelStructure,
-)
-from .series_constraint_refs_rel_structure import (
-    SeriesConstraintRefsRelStructure,
-)
+from .series_constraint_prices_rel_structure import SeriesConstraintPricesRelStructure
+from .series_constraint_refs_rel_structure import SeriesConstraintRefsRelStructure
 from .series_type_enumeration import SeriesTypeEnumeration
 from .zones_in_series_rel_structure import ZonesInSeriesRelStructure
 

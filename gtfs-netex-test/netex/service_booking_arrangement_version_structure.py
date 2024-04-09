@@ -3,18 +3,14 @@ from typing import Optional
 
 from xsdata.models.datatype import XmlDuration
 
-from .booking_arrangement_version_structure import (
-    BookingArrangementVersionStructure,
-)
+from .booking_arrangement_version_structure import BookingArrangementVersionStructure
 from .booking_charge_type_enumeration import BookingChargeTypeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ServiceBookingArrangementVersionStructure(
-    BookingArrangementVersionStructure
-):
+class ServiceBookingArrangementVersionStructure(BookingArrangementVersionStructure):
     class Meta:
         name = "ServiceBookingArrangement_VersionStructure"
 

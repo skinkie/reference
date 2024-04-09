@@ -5,9 +5,7 @@ from .border_point_ref import BorderPointRef
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .garage_point_ref import GaragePointRef
-from .journey_headway_versioned_child_structure import (
-    JourneyHeadwayVersionedChildStructure,
-)
+from .journey_headway_versioned_child_structure import JourneyHeadwayVersionedChildStructure
 from .journey_pattern_ref import JourneyPatternRef
 from .parking_point_ref import ParkingPointRef
 from .relief_point_ref import ReliefPointRef
@@ -20,20 +18,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class JourneyPatternHeadwayVersionedChildStructure(
-    JourneyHeadwayVersionedChildStructure
-):
+class JourneyPatternHeadwayVersionedChildStructure(JourneyHeadwayVersionedChildStructure):
     class Meta:
         name = "JourneyPatternHeadway_VersionedChildStructure"
 
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -61,17 +50,7 @@ class JourneyPatternHeadwayVersionedChildStructure(
             ),
         },
     )
-    timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref: Optional[
-        Union[
-            BorderPointRef,
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            GaragePointRef,
-            ParkingPointRef,
-            ReliefPointRef,
-            TimingPointRef,
-        ]
-    ] = field(
+    timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref: Optional[Union[BorderPointRef, FareScheduledStopPointRef, ScheduledStopPointRef, GaragePointRef, ParkingPointRef, ReliefPointRef, TimingPointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

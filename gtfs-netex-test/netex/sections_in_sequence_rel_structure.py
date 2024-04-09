@@ -3,9 +3,7 @@ from decimal import Decimal
 from typing import List, Optional, Union
 
 from .authority_ref import AuthorityRef
-from .common_section_point_members_rel_structure import (
-    CommonSectionPointMembersRelStructure,
-)
+from .common_section_point_members_rel_structure import CommonSectionPointMembersRelStructure
 from .common_section_ref import CommonSectionRef
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .destination_display_ref import DestinationDisplayRef
@@ -19,40 +17,24 @@ from .fare_section_ref import FareSectionRef
 from .flexible_line_ref import FlexibleLineRef
 from .general_section_ref import GeneralSectionRef
 from .info_links_rel_structure import InfoLinksRelStructure
-from .journey_pattern_headways_rel_structure import (
-    JourneyPatternHeadwaysRelStructure,
-)
-from .journey_pattern_layovers_rel_structure import (
-    JourneyPatternLayoversRelStructure,
-)
+from .journey_pattern_headways_rel_structure import JourneyPatternHeadwaysRelStructure
+from .journey_pattern_layovers_rel_structure import JourneyPatternLayoversRelStructure
 from .journey_pattern_ref import JourneyPatternRef
-from .journey_pattern_run_times_rel_structure import (
-    JourneyPatternRunTimesRelStructure,
-)
-from .journey_pattern_wait_times_rel_structure import (
-    JourneyPatternWaitTimesRelStructure,
-)
+from .journey_pattern_run_times_rel_structure import JourneyPatternRunTimesRelStructure
+from .journey_pattern_wait_times_rel_structure import JourneyPatternWaitTimesRelStructure
 from .line_ref import LineRef
 from .line_section_ref import LineSectionRef
-from .link_in_link_sequence_versioned_child_structure import (
-    LinkInLinkSequenceVersionedChildStructure,
-)
+from .link_in_link_sequence_versioned_child_structure import LinkInLinkSequenceVersionedChildStructure
 from .link_sequence_refs_rel_structure import LinkSequenceRefsRelStructure
-from .links_in_journey_pattern_rel_structure import (
-    LinksInJourneyPatternRelStructure,
-)
+from .links_in_journey_pattern_rel_structure import LinksInJourneyPatternRelStructure
 from .links_on_section_rel_structure import LinksOnSectionRelStructure
 from .multilingual_string import MultilingualString
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .operational_context_ref import OperationalContextRef
 from .operator_ref import OperatorRef
 from .parent_common_section_ref import ParentCommonSectionRef
-from .point_on_line_sections_rel_structure import (
-    PointOnLineSectionsRelStructure,
-)
-from .points_in_journey_pattern_rel_structure import (
-    PointsInJourneyPatternRelStructure,
-)
+from .point_on_line_sections_rel_structure import PointOnLineSectionsRelStructure
+from .points_in_journey_pattern_rel_structure import PointsInJourneyPatternRelStructure
 from .points_on_section_rel_structure import PointsOnSectionRelStructure
 from .private_code import PrivateCode
 from .projections_rel_structure import ProjectionsRelStructure
@@ -63,9 +45,7 @@ from .section_ref import SectionRef
 from .section_type_enumeration import SectionTypeEnumeration
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_pattern_ref import ServicePatternRef
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .timing_pattern_ref import TimingPatternRef
 from .type_of_journey_pattern_ref import TypeOfJourneyPatternRef
 
@@ -189,9 +169,7 @@ class JourneyPatternVersionStructure(LinkSequenceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    direction_ref_or_direction_view: Optional[
-        Union[DirectionRef, DirectionView]
-    ] = field(
+    direction_ref_or_direction_view: Optional[Union[DirectionRef, DirectionView]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -209,9 +187,7 @@ class JourneyPatternVersionStructure(LinkSequenceVersionStructure):
             ),
         },
     )
-    destination_display_ref_or_destination_display_view: Optional[
-        Union[DestinationDisplayRef, DestinationDisplayView]
-    ] = field(
+    destination_display_ref_or_destination_display_view: Optional[Union[DestinationDisplayRef, DestinationDisplayView]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -344,11 +320,7 @@ class CommonSectionVersionStructure(SectionVersionStructure):
     class Meta:
         name = "CommonSection_VersionStructure"
 
-    points_on_section_or_members: Optional[
-        Union[
-            PointsOnSectionRelStructure, CommonSectionPointMembersRelStructure
-        ]
-    ] = field(
+    points_on_section_or_members: Optional[Union[PointsOnSectionRelStructure, CommonSectionPointMembersRelStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -402,12 +374,7 @@ class LineSectionVersionStructure(SectionVersionStructure):
     class Meta:
         name = "LineSection_VersionStructure"
 
-    points_on_section_or_members: Optional[
-        Union[
-            PointOnLineSectionsRelStructure,
-            CommonSectionPointMembersRelStructure,
-        ]
-    ] = field(
+    points_on_section_or_members: Optional[Union[PointOnLineSectionsRelStructure, CommonSectionPointMembersRelStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -425,12 +392,7 @@ class LineSectionVersionStructure(SectionVersionStructure):
             ),
         },
     )
-    reverse_points_on_section_or_reverse_members: Optional[
-        Union[
-            PointOnLineSectionsRelStructure,
-            CommonSectionPointMembersRelStructure,
-        ]
-    ] = field(
+    reverse_points_on_section_or_reverse_members: Optional[Union[PointOnLineSectionsRelStructure, CommonSectionPointMembersRelStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -474,25 +436,23 @@ class LineSectionVersionStructure(SectionVersionStructure):
             ),
         },
     )
-    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "AuthorityRef",
-                        "type": AuthorityRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "OperatorRef",
-                        "type": OperatorRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "AuthorityRef",
+                    "type": AuthorityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatorRef",
+                    "type": OperatorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
 
 
@@ -507,15 +467,7 @@ class FareSectionVersionStructure(GeneralSectionVersionStructure):
     class Meta:
         name = "FareSection_VersionStructure"
 
-    service_journey_pattern_ref_or_service_pattern_ref_or_dead_run_journey_pattern_ref_or_journey_pattern_ref_or_journey_pattern: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-            JourneyPattern,
-        ]
-    ] = field(
+    service_journey_pattern_ref_or_service_pattern_ref_or_dead_run_journey_pattern_ref_or_journey_pattern_ref_or_journey_pattern: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef, JourneyPattern]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -548,15 +500,13 @@ class FareSectionVersionStructure(GeneralSectionVersionStructure):
             ),
         },
     )
-    from_point_in_pattern_ref: Optional[FarePointInPatternRefStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "FromPointInPatternRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    from_point_in_pattern_ref: Optional[FarePointInPatternRefStructure] = field(
+        default=None,
+        metadata={
+            "name": "FromPointInPatternRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     to_point_in_pattern_ref: Optional[FarePointInPatternRefStructure] = field(
         default=None,
@@ -587,26 +537,11 @@ class FareSection(FareSectionVersionStructure):
 
 
 @dataclass(kw_only=True)
-class SectionInSequenceVersionedChildStructure(
-    LinkInLinkSequenceVersionedChildStructure
-):
+class SectionInSequenceVersionedChildStructure(LinkInLinkSequenceVersionedChildStructure):
     class Meta:
         name = "SectionInSequence_VersionedChildStructure"
 
-    section_ref_or_general_section_ref_or_section: Optional[
-        Union[
-            ParentCommonSectionRef,
-            CommonSectionRef,
-            LineSectionRef,
-            FareSectionRef,
-            GeneralSectionRef,
-            SectionRef,
-            FareSection,
-            CommonSection,
-            LineSection,
-            GeneralSection,
-        ]
-    ] = field(
+    section_ref_or_general_section_ref_or_section: Optional[Union[ParentCommonSectionRef, CommonSectionRef, LineSectionRef, FareSectionRef, GeneralSectionRef, SectionRef, FareSection, CommonSection, LineSection, GeneralSection]] = field(
         default=None,
         metadata={
             "type": "Elements",

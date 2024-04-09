@@ -54,9 +54,7 @@ class BlockPartVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[
-        Union[CompoundTrainRef, TrainRef, VehicleTypeRef]
-    ] = field(
+    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -87,9 +85,7 @@ class BlockPartVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_part_couple_ref_or_journey_parts: Optional[
-        Union[JourneyPartCoupleRef, JourneyPartRefsRelStructure]
-    ] = field(
+    journey_part_couple_ref_or_journey_parts: Optional[Union[JourneyPartCoupleRef, JourneyPartRefsRelStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -19,9 +19,7 @@ class ServiceDeliveryBodyStructure:
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    error_condition: Optional[
-        "ServiceDeliveryBodyStructure.ErrorCondition"
-    ] = field(
+    error_condition: Optional["ServiceDeliveryBodyStructure.ErrorCondition"] = field(
         default=None,
         metadata={
             "name": "ErrorCondition",
@@ -55,9 +53,7 @@ class ServiceDeliveryBodyStructure:
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        capability_not_supported_error_or_other_error: Optional[
-            Union[CapabilityNotSupportedError, OtherError]
-        ] = field(
+        capability_not_supported_error_or_other_error: Optional[Union[CapabilityNotSupportedError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",

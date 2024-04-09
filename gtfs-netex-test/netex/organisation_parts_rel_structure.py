@@ -20,19 +20,7 @@ class OrganisationPartsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "organisationParts_RelStructure"
 
-    organisation_part_ref_or_organisation_part: List[
-        Union[
-            ControlCentreRef,
-            OrganisationalUnitRef,
-            DepartmentRef,
-            OrganisationPartRef,
-            ControlCentre,
-            OperatingDepartment,
-            OrganisationalUnit,
-            Department,
-            OrganisationPart,
-        ]
-    ] = field(
+    organisation_part_ref_or_organisation_part: List[Union[ControlCentreRef, OrganisationalUnitRef, DepartmentRef, OrganisationPartRef, ControlCentre, OperatingDepartment, OrganisationalUnit, Department, OrganisationPart]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

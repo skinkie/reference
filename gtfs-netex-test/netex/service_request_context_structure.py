@@ -93,9 +93,7 @@ class ServiceRequestContextStructure:
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    wgs_decimal_degrees_or_gml_coordinate_format: Optional[
-        Union[EmptyType1, str]
-    ] = field(
+    wgs_decimal_degrees_or_gml_coordinate_format: Optional[Union[EmptyType1, str]] = field(
         default=None,
         metadata={
             "type": "Elements",

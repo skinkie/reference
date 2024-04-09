@@ -19,18 +19,7 @@ class ParkingAreasRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "parkingAreas_RelStructure"
 
-    parking_area_ref_or_parking_area: List[
-        Union[
-            VehiclePoolingParkingAreaRef,
-            VehicleSharingParkingAreaRef,
-            TaxiParkingAreaRef,
-            ParkingAreaRef,
-            VehiclePoolingParkingArea,
-            VehicleSharingParkingArea,
-            TaxiParkingArea,
-            ParkingArea,
-        ]
-    ] = field(
+    parking_area_ref_or_parking_area: List[Union[VehiclePoolingParkingAreaRef, VehicleSharingParkingAreaRef, TaxiParkingAreaRef, ParkingAreaRef, VehiclePoolingParkingArea, VehicleSharingParkingArea, TaxiParkingArea, ParkingArea]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

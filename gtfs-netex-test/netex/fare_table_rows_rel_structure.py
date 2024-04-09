@@ -7,9 +7,7 @@ from .multilingual_string import MultilingualString
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .object_refs_rel_structure import ObjectRefsRelStructure
 from .standard_fare_table_ref import StandardFareTableRef
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -51,25 +49,23 @@ class FareTableRowVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_table_ref: Optional[Union[StandardFareTableRef, FareTableRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "StandardFareTableRef",
-                        "type": StandardFareTableRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "FareTableRef",
-                        "type": FareTableRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    fare_table_ref: Optional[Union[StandardFareTableRef, FareTableRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "StandardFareTableRef",
+                    "type": StandardFareTableRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FareTableRef",
+                    "type": FareTableRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     notice_assignments: Optional[NoticeAssignmentsRelStructure] = field(
         default=None,

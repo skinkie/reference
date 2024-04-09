@@ -13,9 +13,7 @@ class AllowedLineDirectionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "allowedLineDirections_RelStructure"
 
-    allowed_line_direction_ref_or_allowed_line_direction: List[
-        Union[AllowedLineDirectionRef, AllowedLineDirection]
-    ] = field(
+    allowed_line_direction_ref_or_allowed_line_direction: List[Union[AllowedLineDirectionRef, AllowedLineDirection]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

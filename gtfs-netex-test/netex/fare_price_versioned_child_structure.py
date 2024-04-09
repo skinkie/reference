@@ -6,9 +6,7 @@ from xsdata.models.datatype import XmlDate
 
 from .capping_rule_price_ref import CappingRulePriceRef
 from .controllable_element_price_ref import ControllableElementPriceRef
-from .customer_purchase_package_price_ref import (
-    CustomerPurchasePackagePriceRef,
-)
+from .customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
 from .discounting_rule import DiscountingRule
 from .discounting_rule_ref import DiscountingRuleRef
 from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
@@ -24,9 +22,7 @@ from .limiting_rule_in_context import LimitingRuleInContext
 from .limiting_rule_ref import LimitingRuleRef
 from .multilingual_string import MultilingualString
 from .parking_price_ref import ParkingPriceRef
-from .price_rule_step_results_rel_structure import (
-    PriceRuleStepResultsRelStructure,
-)
+from .price_rule_step_results_rel_structure import PriceRuleStepResultsRelStructure
 from .price_unit_ref import PriceUnitRef
 from .pricing_rule import PricingRule
 from .pricing_rule_ref import PricingRuleRef
@@ -267,17 +263,7 @@ class FarePriceVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    discounting_rule_ref_or_pricing_rule_ref_or_pricing_rule: Optional[
-        Union[
-            LimitingRuleRef,
-            DiscountingRuleRef,
-            PricingRuleRef,
-            LimitingRuleInContext,
-            LimitingRule,
-            DiscountingRule,
-            PricingRule,
-        ]
-    ] = field(
+    discounting_rule_ref_or_pricing_rule_ref_or_pricing_rule: Optional[Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef, LimitingRuleInContext, LimitingRule, DiscountingRule, PricingRule]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -5,13 +5,9 @@ from .accesses_rel_structure import AccessesRelStructure
 from .multilingual_string import MultilingualString
 from .navigation_paths_rel_structure import NavigationPathsRelStructure
 from .parking_areas_rel_structure import ParkingAreasRelStructure
-from .parking_entrances_for_vehicles_rel_structure import (
-    ParkingEntrancesForVehiclesRelStructure,
-)
+from .parking_entrances_for_vehicles_rel_structure import ParkingEntrancesForVehiclesRelStructure
 from .parking_layout_enumeration import ParkingLayoutEnumeration
-from .parking_payment_process_enumeration import (
-    ParkingPaymentProcessEnumeration,
-)
+from .parking_payment_process_enumeration import ParkingPaymentProcessEnumeration
 from .parking_properties_rel_structure import ParkingPropertiesRelStructure
 from .parking_reservation_enumeration import ParkingReservationEnumeration
 from .parking_type_enumeration import ParkingTypeEnumeration
@@ -24,9 +20,7 @@ from .site_path_links_rel_structure import SitePathLinksRelStructure
 from .site_version_structure import SiteVersionStructure
 from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
 from .type_of_parking_ref import TypeOfParkingRef
-from .type_of_payment_method_refs_rel_structure import (
-    TypeOfPaymentMethodRefsRelStructure,
-)
+from .type_of_payment_method_refs_rel_structure import TypeOfPaymentMethodRefsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -206,15 +200,13 @@ class ParkingVersionStructure(SiteVersionStructure):
             "tokens": True,
         },
     )
-    types_of_payment_method: Optional[TypeOfPaymentMethodRefsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "typesOfPaymentMethod",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    types_of_payment_method: Optional[TypeOfPaymentMethodRefsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "typesOfPaymentMethod",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     default_currency: Optional[str] = field(
         default=None,
@@ -296,13 +288,11 @@ class ParkingVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_entrances: Optional[ParkingEntrancesForVehiclesRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "vehicleEntrances",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    vehicle_entrances: Optional[ParkingEntrancesForVehiclesRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "vehicleEntrances",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )

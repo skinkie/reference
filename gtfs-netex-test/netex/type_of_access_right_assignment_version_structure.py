@@ -6,8 +6,6 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TypeOfAccessRightAssignmentVersionStructure(
-    TypeOfEntityVersionStructure
-):
+class TypeOfAccessRightAssignmentVersionStructure(TypeOfEntityVersionStructure):
     class Meta:
         name = "TypeOfAccessRightAssignment_VersionStructure"

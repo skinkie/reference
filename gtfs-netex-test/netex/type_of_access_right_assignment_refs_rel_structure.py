@@ -8,15 +8,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TypeOfAccessRightAssignmentRefsRelStructure(
-    OneToManyRelationshipStructure
-):
+class TypeOfAccessRightAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "TypeOfAccessRightAssignmentRefs_RelStructure"
 
-    type_of_access_right_assignment_ref: List[
-        TypeOfAccessRightAssignmentRef
-    ] = field(
+    type_of_access_right_assignment_ref: List[TypeOfAccessRightAssignmentRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfAccessRightAssignmentRef",

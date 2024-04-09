@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from .dated_special_service_version_structure import (
-    DatedSpecialServiceVersionStructure,
-)
+from .dated_special_service_version_structure import DatedSpecialServiceVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

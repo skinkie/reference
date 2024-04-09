@@ -13,9 +13,7 @@ class ControlCentresRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "ControlCentres_RelStructure"
 
-    control_centre_ref_or_control_centre: List[
-        Union[ControlCentreRef, ControlCentre]
-    ] = field(
+    control_centre_ref_or_control_centre: List[Union[ControlCentreRef, ControlCentre]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

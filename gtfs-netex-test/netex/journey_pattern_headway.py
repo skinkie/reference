@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .journey_pattern_headway_versioned_child_structure import (
-    JourneyPatternHeadwayVersionedChildStructure,
-)
+from .journey_pattern_headway_versioned_child_structure import JourneyPatternHeadwayVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

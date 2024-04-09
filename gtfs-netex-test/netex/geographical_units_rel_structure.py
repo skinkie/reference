@@ -13,9 +13,7 @@ class GeographicalUnitsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "geographicalUnits_RelStructure"
 
-    geographical_unit_ref_or_geographical_unit: List[
-        Union[GeographicalUnitRef, GeographicalUnit]
-    ] = field(
+    geographical_unit_ref_or_geographical_unit: List[Union[GeographicalUnitRef, GeographicalUnit]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

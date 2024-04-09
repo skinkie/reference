@@ -3,23 +3,17 @@ from typing import List, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .group_of_distance_matrix_elements import GroupOfDistanceMatrixElements
-from .group_of_distance_matrix_elements_ref import (
-    GroupOfDistanceMatrixElementsRef,
-)
+from .group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GroupsOfDistanceMatrixElementsRelStructure(
-    ContainmentAggregationStructure
-):
+class GroupsOfDistanceMatrixElementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "groupsOfDistanceMatrixElements_RelStructure"
 
-    group_of_distance_matrix_elements_ref_or_group_of_distance_matrix_elements: List[
-        Union[GroupOfDistanceMatrixElementsRef, GroupOfDistanceMatrixElements]
-    ] = field(
+    group_of_distance_matrix_elements_ref_or_group_of_distance_matrix_elements: List[Union[GroupOfDistanceMatrixElementsRef, GroupOfDistanceMatrixElements]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

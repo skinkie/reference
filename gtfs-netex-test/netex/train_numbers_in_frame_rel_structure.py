@@ -13,9 +13,7 @@ class TrainNumbersInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "trainNumbersInFrame_RelStructure"
 
-    train_number_or_train_number_ref: List[
-        Union[TrainNumber, TrainNumberRef]
-    ] = field(
+    train_number_or_train_number_ref: List[Union[TrainNumber, TrainNumberRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

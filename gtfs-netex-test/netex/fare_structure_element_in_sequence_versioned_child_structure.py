@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .fare_element_in_sequence_versioned_child_structure import (
-    FareElementInSequenceVersionedChildStructure,
-)
+from .fare_element_in_sequence_versioned_child_structure import FareElementInSequenceVersionedChildStructure
 from .fare_structure_element_ref import FareStructureElementRef
 from .generic_parameter_assignments_rel_structure import (
     GenericParameterAssignment,
@@ -16,9 +14,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class FareStructureElementInSequenceVersionedChildStructure(
-    FareElementInSequenceVersionedChildStructure
-):
+class FareStructureElementInSequenceVersionedChildStructure(FareElementInSequenceVersionedChildStructure):
     class Meta:
         name = "FareStructureElementInSequence_VersionedChildStructure"
 
@@ -38,13 +34,7 @@ class FareStructureElementInSequenceVersionedChildStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context: Optional[
-        Union[
-            GenericParameterAssignmentsRelStructure,
-            GenericParameterAssignment,
-            GenericParameterAssignmentInContext,
-        ]
-    ] = field(
+    validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context: Optional[Union[GenericParameterAssignmentsRelStructure, GenericParameterAssignment, GenericParameterAssignmentInContext]] = field(
         default=None,
         metadata={
             "type": "Elements",

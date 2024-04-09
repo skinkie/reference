@@ -13,9 +13,7 @@ class NavigationPathsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "navigationPaths_RelStructure"
 
-    navigation_path_ref_or_navigation_path: List[
-        Union[NavigationPathRef, NavigationPath]
-    ] = field(
+    navigation_path_ref_or_navigation_path: List[Union[NavigationPathRef, NavigationPath]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

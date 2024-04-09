@@ -54,9 +54,7 @@ from .passenger_beacon_equipment import PassengerBeaconEquipment
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
 from .passenger_information_equipment import PassengerInformationEquipment
-from .passenger_information_equipment_ref import (
-    PassengerInformationEquipmentRef,
-)
+from .passenger_information_equipment_ref import PassengerInformationEquipmentRef
 from .passenger_safety_equipment import PassengerSafetyEquipment
 from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
 from .place_lighting import PlaceLighting

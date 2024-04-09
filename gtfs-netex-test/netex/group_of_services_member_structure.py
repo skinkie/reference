@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .abstract_group_member_versioned_child_structure import (
-    AbstractGroupMemberVersionedChildStructure,
-)
+from .abstract_group_member_versioned_child_structure import AbstractGroupMemberVersionedChildStructure
 from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_ref import DeadRunRef
 from .group_of_services_ref_structure import GroupOfServicesRefStructure
 from .journey_designator import JourneyDesignator
 from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
-from .notice_assignment_views_rel_structure import (
-    NoticeAssignmentViewsRelStructure,
-)
+from .notice_assignment_views_rel_structure import NoticeAssignmentViewsRelStructure
 from .service_designator import ServiceDesignator
 from .service_journey_ref import ServiceJourneyRef
 from .single_journey_ref import SingleJourneyRef
@@ -25,9 +21,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GroupOfServicesMemberStructure(
-    AbstractGroupMemberVersionedChildStructure
-):
+class GroupOfServicesMemberStructure(AbstractGroupMemberVersionedChildStructure):
     group_of_services_ref: Optional[GroupOfServicesRefStructure] = field(
         default=None,
         metadata={
@@ -36,22 +30,7 @@ class GroupOfServicesMemberStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            SingleJourneyRef,
-            NormalDatedVehicleJourneyRef,
-            DatedVehicleJourneyRef,
-            DatedSpecialServiceRef,
-            SpecialServiceRef,
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            DeadRunRef,
-            VehicleJourneyRef,
-            TrainNumberRef,
-            JourneyDesignator,
-            ServiceDesignator,
-        ]
-    ] = field(
+    choice: Optional[Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef, TrainNumberRef, JourneyDesignator, ServiceDesignator]] = field(
         default=None,
         metadata={
             "type": "Elements",

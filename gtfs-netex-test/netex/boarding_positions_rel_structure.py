@@ -13,9 +13,7 @@ class BoardingPositionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "boardingPositions_RelStructure"
 
-    boarding_position_ref_or_boarding_position: List[
-        Union[BoardingPositionRef, BoardingPosition]
-    ] = field(
+    boarding_position_ref_or_boarding_position: List[Union[BoardingPositionRef, BoardingPosition]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

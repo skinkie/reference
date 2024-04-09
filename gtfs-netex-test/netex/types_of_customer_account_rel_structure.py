@@ -13,9 +13,7 @@ class TypesOfCustomerAccountRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typesOfCustomerAccount_RelStructure"
 
-    type_of_customer_account_ref_or_type_of_customer_account: List[
-        Union[TypeOfCustomerAccountRef, TypeOfCustomerAccount]
-    ] = field(
+    type_of_customer_account_ref_or_type_of_customer_account: List[Union[TypeOfCustomerAccountRef, TypeOfCustomerAccount]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

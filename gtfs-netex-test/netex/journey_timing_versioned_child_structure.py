@@ -24,9 +24,7 @@ class JourneyTimingVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    time_demand_type_ref_or_timeband_ref: Optional[
-        Union[TimeDemandTypeRef, TimebandRef]
-    ] = field(
+    time_demand_type_ref_or_timeband_ref: Optional[Union[TimeDemandTypeRef, TimebandRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

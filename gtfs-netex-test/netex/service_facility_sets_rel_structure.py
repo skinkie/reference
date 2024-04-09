@@ -13,9 +13,7 @@ class ServiceFacilitySetsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "serviceFacilitySets_RelStructure"
 
-    service_facility_set_ref_or_service_facility_set: List[
-        Union[ServiceFacilitySetRef, ServiceFacilitySet]
-    ] = field(
+    service_facility_set_ref_or_service_facility_set: List[Union[ServiceFacilitySetRef, ServiceFacilitySet]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

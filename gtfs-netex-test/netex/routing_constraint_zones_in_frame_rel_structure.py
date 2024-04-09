@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class RoutingConstraintZonesInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class RoutingConstraintZonesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "routingConstraintZonesInFrame_RelStructure"
 

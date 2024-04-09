@@ -19,9 +19,7 @@ from .parking_point_ref import ParkingPointRef
 from .path_junction import PathJunction
 from .path_link_ref import PathLinkRef
 from .point_2 import Point2
-from .point_in_link_sequence_versioned_child_structure import (
-    PointInLinkSequenceVersionedChildStructure,
-)
+from .point_in_link_sequence_versioned_child_structure import PointInLinkSequenceVersionedChildStructure
 from .point_ref import PointRef
 from .railway_junction import RailwayJunction
 from .railway_link_ref import RailwayLinkRef
@@ -53,9 +51,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PointOnSectionVersionedChildStructure(
-    PointInLinkSequenceVersionedChildStructure
-):
+class PointOnSectionVersionedChildStructure(PointInLinkSequenceVersionedChildStructure):
     class Meta:
         name = "PointOnSection_VersionedChildStructure"
 
@@ -268,21 +264,7 @@ class PointOnSectionVersionedChildStructure(
             ),
         },
     )
-    link_ref_or_infrastructure_link_ref: Optional[
-        Union[
-            OnwardVehicleMeetingLinkRef,
-            VehicleMeetingLinkRef,
-            ServiceLinkRef,
-            LineLinkRef,
-            TimingLinkRef,
-            WireLinkRef,
-            RoadLinkRef,
-            RailwayLinkRef,
-            ActivationLinkRef,
-            PathLinkRef,
-            RouteLinkRef,
-        ]
-    ] = field(
+    link_ref_or_infrastructure_link_ref: Optional[Union[OnwardVehicleMeetingLinkRef, VehicleMeetingLinkRef, ServiceLinkRef, LineLinkRef, TimingLinkRef, WireLinkRef, RoadLinkRef, RailwayLinkRef, ActivationLinkRef, PathLinkRef, RouteLinkRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

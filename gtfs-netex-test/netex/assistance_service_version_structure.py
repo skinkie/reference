@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 from .accessibility_tool_enumeration import AccessibilityToolEnumeration
-from .assistance_availability_enumeration import (
-    AssistanceAvailabilityEnumeration,
-)
+from .assistance_availability_enumeration import AssistanceAvailabilityEnumeration
 from .assistance_facility_list import AssistanceFacilityList
 from .emergency_service_enumeration import EmergencyServiceEnumeration
 from .local_service_version_structure import LocalServiceVersionStructure
@@ -27,15 +25,13 @@ class AssistanceServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    assistance_availability: Optional[AssistanceAvailabilityEnumeration] = (
-        field(
-            default=None,
-            metadata={
-                "name": "AssistanceAvailability",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    assistance_availability: Optional[AssistanceAvailabilityEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "AssistanceAvailability",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     staffing: Optional[StaffingEnumeration] = field(
         default=None,

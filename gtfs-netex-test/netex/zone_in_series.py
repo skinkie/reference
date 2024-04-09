@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from .zone_in_series_versioned_child_structure import (
-    ZoneInSeriesVersionedChildStructure,
-)
+from .zone_in_series_versioned_child_structure import ZoneInSeriesVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

@@ -5,9 +5,7 @@ from .block_parts_rel_structure import BlockPartsRelStructure
 from .compound_train_ref import CompoundTrainRef
 from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
-from .timing_point_in_journey_pattern_ref_structure import (
-    TimingPointInJourneyPatternRefStructure,
-)
+from .timing_point_in_journey_pattern_ref_structure import TimingPointInJourneyPatternRefStructure
 from .train_ref import TrainRef
 from .vehicle_type_ref import VehicleTypeRef
 
@@ -32,9 +30,7 @@ class CompoundBlockStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_type_ref: Optional[
-        Union[CompoundTrainRef, TrainRef, VehicleTypeRef]
-    ] = field(
+    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

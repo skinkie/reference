@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .default_connection_version_structure import (
-    DefaultConnectionVersionStructure,
-)
+from .default_connection_version_structure import DefaultConnectionVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

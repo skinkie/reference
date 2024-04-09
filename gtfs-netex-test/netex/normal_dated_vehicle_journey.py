@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from .normal_dated_vehicle_journey_version_structure import (
-    NormalDatedVehicleJourneyVersionStructure,
-)
+from .normal_dated_vehicle_journey_version_structure import NormalDatedVehicleJourneyVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

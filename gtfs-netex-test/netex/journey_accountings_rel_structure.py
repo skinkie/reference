@@ -13,9 +13,7 @@ class JourneyAccountingsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "journeyAccountings_RelStructure"
 
-    journey_accounting_ref_or_journey_accounting: List[
-        Union[JourneyAccountingRef, JourneyAccounting]
-    ] = field(
+    journey_accounting_ref_or_journey_accounting: List[Union[JourneyAccountingRef, JourneyAccounting]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

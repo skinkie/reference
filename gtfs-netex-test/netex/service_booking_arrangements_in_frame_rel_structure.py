@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ServiceBookingArrangementsInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class ServiceBookingArrangementsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "serviceBookingArrangementsInFrame_RelStructure"
 

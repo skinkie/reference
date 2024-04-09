@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ValidityParameterAssignmentsInFrameRelStructure(
-    FrameContainmentStructure
-):
+class ValidityParameterAssignmentsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "validityParameterAssignmentsInFrame_RelStructure"
 

@@ -22,9 +22,7 @@ from .relative_operator_enumeration import RelativeOperatorEnumeration
 from .service_calendar_ref import ServiceCalendarRef
 from .serviced_organisation_ref import ServicedOrganisationRef
 from .status_enumeration import StatusEnumeration
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .time_of_day_enumeration import TimeOfDayEnumeration
 from .timeband_ref import TimebandRef
 from .validity_condition_ref import ValidityConditionRef
@@ -38,9 +36,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class EntityInVersionStructure(EntityStructure):
-    validity_conditions_or_valid_between: List[
-        Union["ValidityConditionsRelStructure", "ValidBetween"]
-    ] = field(
+    validity_conditions_or_valid_between: List[Union["ValidityConditionsRelStructure", "ValidBetween"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -309,9 +305,7 @@ class TimebandVersionedChildStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    start_time_or_start_event: Optional[
-        Union[XmlTime, TimeOfDayEnumeration]
-    ] = field(
+    start_time_or_start_event: Optional[Union[XmlTime, TimeOfDayEnumeration]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -329,9 +323,7 @@ class TimebandVersionedChildStructure(DataManagedObjectStructure):
             ),
         },
     )
-    end_time_or_end_event_or_day_offset_or_duration: List[
-        Union[XmlTime, TimeOfDayEnumeration, int, XmlDuration]
-    ] = field(
+    end_time_or_end_event_or_day_offset_or_duration: List[Union[XmlTime, TimeOfDayEnumeration, int, XmlDuration]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -487,15 +479,7 @@ class ValidityRuleParameterVersionStructure(ValidityConditionVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    attribute_name_or_comparison_operator_or_attribute_value_or_method_or_is_valid: List[
-        Union[
-            str,
-            RelativeOperatorEnumeration,
-            "ValidityRuleParameterVersionStructure.AttributeValue",
-            "ValidityRuleParameterVersionStructure.Method",
-            bool,
-        ]
-    ] = field(
+    attribute_name_or_comparison_operator_or_attribute_value_or_method_or_is_valid: List[Union[str, RelativeOperatorEnumeration, "ValidityRuleParameterVersionStructure.AttributeValue", "ValidityRuleParameterVersionStructure.Method", bool]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -512,16 +496,12 @@ class ValidityRuleParameterVersionStructure(ValidityConditionVersionStructure):
                 },
                 {
                     "name": "AttributeValue",
-                    "type": Type[
-                        "ValidityRuleParameterVersionStructure.AttributeValue"
-                    ],
+                    "type": Type["ValidityRuleParameterVersionStructure.AttributeValue"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "Method",
-                    "type": Type[
-                        "ValidityRuleParameterVersionStructure.Method"
-                    ],
+                    "type": Type["ValidityRuleParameterVersionStructure.Method"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -583,9 +563,7 @@ class TimebandsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "timebands_RelStructure"
 
-    timeband_ref_or_timeband: List[
-        Union[TimebandRef, TimebandVersionedChildStructure]
-    ] = field(
+    timeband_ref_or_timeband: List[Union[TimebandRef, TimebandVersionedChildStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -746,9 +724,7 @@ class ValidDuringVersionStructure(ValidBetweenVersionStructure):
     class Meta:
         name = "ValidDuring_VersionStructure"
 
-    fare_day_type_ref_or_day_type_ref_or_days_of_week_or_days: Optional[
-        Union[FareDayTypeRef, DayTypeRef, List[DayOfWeekEnumeration], str]
-    ] = field(
+    fare_day_type_ref_or_day_type_ref_or_days_of_week_or_days: Optional[Union[FareDayTypeRef, DayTypeRef, List[DayOfWeekEnumeration], str]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -849,9 +825,7 @@ class OperatingDaysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "operatingDays_RelStructure"
 
-    operating_day_ref_or_operating_day: List[
-        Union[OperatingDayRef, OperatingDay]
-    ] = field(
+    operating_day_ref_or_operating_day: List[Union[OperatingDayRef, OperatingDay]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -972,15 +946,7 @@ class DayTypesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "dayTypes_RelStructure"
 
-    day_type_ref_or_day_type: List[
-        Union[
-            FareDayTypeRef,
-            DayTypeRef,
-            FareDayType,
-            OrganisationDayType,
-            DayType,
-        ]
-    ] = field(
+    day_type_ref_or_day_type: List[Union[FareDayTypeRef, DayTypeRef, FareDayType, OrganisationDayType, DayType]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1085,21 +1051,7 @@ class ValidityConditionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "validityConditions_RelStructure"
 
-    choice: List[
-        Union[
-            AvailabilityConditionRef,
-            ValidityRuleParameterRef,
-            ValidityTriggerRef,
-            ValidityConditionRef,
-            ValidBetween,
-            SimpleAvailabilityCondition,
-            ValidDuring,
-            AvailabilityCondition,
-            ValidityRuleParameter,
-            ValidityTrigger,
-            ValidityCondition,
-        ]
-    ] = field(
+    choice: List[Union[AvailabilityConditionRef, ValidityRuleParameterRef, ValidityTriggerRef, ValidityConditionRef, ValidBetween, SimpleAvailabilityCondition, ValidDuring, AvailabilityCondition, ValidityRuleParameter, ValidityTrigger, ValidityCondition]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

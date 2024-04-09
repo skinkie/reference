@@ -1,13 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .other_organisation_version_structure import (
-    OtherOrganisationVersionStructure,
-)
+from .other_organisation_version_structure import OtherOrganisationVersionStructure
 from .service_calendar_ref import ServiceCalendarRef
-from .serviced_organisation_type_enumeration import (
-    ServicedOrganisationTypeEnumeration,
-)
+from .serviced_organisation_type_enumeration import ServicedOrganisationTypeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -25,9 +21,7 @@ class ServicedOrganisationVersionStructure(OtherOrganisationVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    serviced_organisation_type: Optional[
-        ServicedOrganisationTypeEnumeration
-    ] = field(
+    serviced_organisation_type: Optional[ServicedOrganisationTypeEnumeration] = field(
         default=None,
         metadata={
             "name": "ServicedOrganisationType",

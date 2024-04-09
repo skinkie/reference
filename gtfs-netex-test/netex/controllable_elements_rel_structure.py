@@ -3,9 +3,7 @@ from typing import List, Union
 
 from .controllable_element import ControllableElement
 from .controllable_element_ref import ControllableElementRef
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -15,9 +13,7 @@ class ControllableElementsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "controllableElements_RelStructure"
 
-    controllable_element_ref_or_controllable_element: List[
-        Union[ControllableElementRef, ControllableElement]
-    ] = field(
+    controllable_element_ref_or_controllable_element: List[Union[ControllableElementRef, ControllableElement]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

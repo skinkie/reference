@@ -3,9 +3,7 @@ from typing import List, Union
 
 from .commercial_profile_eligibility_ref import CommercialProfileEligibilityRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
-from .residential_qualification_eligibility_ref import (
-    ResidentialQualificationEligibilityRef,
-)
+from .residential_qualification_eligibility_ref import ResidentialQualificationEligibilityRef
 from .user_profile_eligibility_ref import UserProfileEligibilityRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -16,13 +14,7 @@ class CustomerEligibilityRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "customerEligibilityRefs_RelStructure"
 
-    customer_eligibility_ref: List[
-        Union[
-            ResidentialQualificationEligibilityRef,
-            CommercialProfileEligibilityRef,
-            UserProfileEligibilityRef,
-        ]
-    ] = field(
+    customer_eligibility_ref: List[Union[ResidentialQualificationEligibilityRef, CommercialProfileEligibilityRef, UserProfileEligibilityRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

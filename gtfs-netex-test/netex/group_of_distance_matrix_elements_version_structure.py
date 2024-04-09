@@ -2,18 +2,10 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
 
-from .distance_matrix_element_prices_rel_structure import (
-    DistanceMatrixElementPricesRelStructure,
-)
-from .distance_matrix_elements_rel_structure import (
-    DistanceMatrixElementsRelStructure,
-)
-from .geographical_structure_factors_rel_structure import (
-    GeographicalStructureFactorsRelStructure,
-)
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .distance_matrix_element_prices_rel_structure import DistanceMatrixElementPricesRelStructure
+from .distance_matrix_elements_rel_structure import DistanceMatrixElementsRelStructure
+from .geographical_structure_factors_rel_structure import GeographicalStructureFactorsRelStructure
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .priceable_object_version_structure import (
     FareTablesRelStructure,
@@ -24,9 +16,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GroupOfDistanceMatrixElementsVersionStructure(
-    GroupOfEntitiesVersionStructure
-):
+class GroupOfDistanceMatrixElementsVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "GroupOfDistanceMatrixElements_VersionStructure"
 
@@ -62,15 +52,13 @@ class GroupOfDistanceMatrixElementsVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    structure_factors: Optional[GeographicalStructureFactorsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "structureFactors",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    structure_factors: Optional[GeographicalStructureFactorsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "structureFactors",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     notice_assignments: Optional[NoticeAssignmentsRelStructure] = field(
         default=None,

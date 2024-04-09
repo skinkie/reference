@@ -1,12 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
-from .zone_in_series_versioned_child_structure import (
-    ZoneInSeriesVersionedChildStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
+from .zone_in_series_versioned_child_structure import ZoneInSeriesVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

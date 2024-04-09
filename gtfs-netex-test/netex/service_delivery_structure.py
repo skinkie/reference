@@ -20,15 +20,13 @@ class ServiceDeliveryStructure(ProducerResponseStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    error_condition: Optional["ServiceDeliveryStructure.ErrorCondition"] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ErrorCondition",
-                "type": "Element",
-                "namespace": "http://www.siri.org.uk/siri",
-            },
-        )
+    error_condition: Optional["ServiceDeliveryStructure.ErrorCondition"] = field(
+        default=None,
+        metadata={
+            "name": "ErrorCondition",
+            "type": "Element",
+            "namespace": "http://www.siri.org.uk/siri",
+        },
     )
     more_data: Optional[bool] = field(
         default=None,
@@ -56,9 +54,7 @@ class ServiceDeliveryStructure(ProducerResponseStructure):
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        capability_not_supported_error_or_other_error: Optional[
-            Union[CapabilityNotSupportedError, OtherError]
-        ] = field(
+        capability_not_supported_error_or_other_error: Optional[Union[CapabilityNotSupportedError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",

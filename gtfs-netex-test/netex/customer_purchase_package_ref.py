@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .customer_purchase_package_ref_structure import (
-    CustomerPurchasePackageRefStructure,
-)
+from .customer_purchase_package_ref_structure import CustomerPurchasePackageRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

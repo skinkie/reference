@@ -2,17 +2,13 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from .commercial_profile_ref import CommercialProfileRef
-from .customer_eligibility_versioned_child_structure import (
-    CustomerEligibilityVersionedChildStructure,
-)
+from .customer_eligibility_versioned_child_structure import CustomerEligibilityVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class CommercialProfileEligibilityVersionedChildStructure(
-    CustomerEligibilityVersionedChildStructure
-):
+class CommercialProfileEligibilityVersionedChildStructure(CustomerEligibilityVersionedChildStructure):
     class Meta:
         name = "CommercialProfileEligibility_VersionedChildStructure"
 

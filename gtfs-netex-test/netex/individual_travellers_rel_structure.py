@@ -13,9 +13,7 @@ class IndividualTravellersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "individualTravellers_RelStructure"
 
-    individual_traveller_ref_or_individual_traveller: List[
-        Union[IndividualTravellerRef, IndividualTraveller]
-    ] = field(
+    individual_traveller_ref_or_individual_traveller: List[Union[IndividualTravellerRef, IndividualTraveller]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

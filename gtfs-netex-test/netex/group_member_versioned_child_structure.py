@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .abstract_group_member_versioned_child_structure import (
-    AbstractGroupMemberVersionedChildStructure,
-)
+from .abstract_group_member_versioned_child_structure import AbstractGroupMemberVersionedChildStructure
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GroupMemberVersionedChildStructure(
-    AbstractGroupMemberVersionedChildStructure
-):
+class GroupMemberVersionedChildStructure(AbstractGroupMemberVersionedChildStructure):
     class Meta:
         name = "GroupMember_VersionedChildStructure"
 

@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from typing import List
 
 from .recharging_step import RechargingStep
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

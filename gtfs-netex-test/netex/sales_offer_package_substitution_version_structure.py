@@ -9,9 +9,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SalesOfferPackageSubstitutionVersionStructure(
-    AssignmentVersionStructure1
-):
+class SalesOfferPackageSubstitutionVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "SalesOfferPackageSubstitution_VersionStructure"
 

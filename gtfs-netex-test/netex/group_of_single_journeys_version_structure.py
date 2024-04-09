@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .single_journey_refs_rel_structure import SingleJourneyRefsRelStructure
 

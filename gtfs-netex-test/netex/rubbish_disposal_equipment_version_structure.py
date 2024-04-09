@@ -1,17 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .passenger_equipment_version_structure import (
-    PassengerEquipmentVersionStructure,
-)
+from .passenger_equipment_version_structure import PassengerEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class RubbishDisposalEquipmentVersionStructure(
-    PassengerEquipmentVersionStructure
-):
+class RubbishDisposalEquipmentVersionStructure(PassengerEquipmentVersionStructure):
     class Meta:
         name = "RubbishDisposalEquipment_VersionStructure"
 

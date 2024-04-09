@@ -2,17 +2,13 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from .journey_ref_structure import JourneyRefStructure
-from .passing_time_versioned_child_structure import (
-    PassingTimeVersionedChildStructure,
-)
+from .passing_time_versioned_child_structure import PassingTimeVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class DatedPassingTimeVersionedChildStructure(
-    PassingTimeVersionedChildStructure
-):
+class DatedPassingTimeVersionedChildStructure(PassingTimeVersionedChildStructure):
     class Meta:
         name = "DatedPassingTime_VersionedChildStructure"
 

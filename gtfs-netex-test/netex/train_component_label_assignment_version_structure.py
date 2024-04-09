@@ -11,9 +11,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TrainComponentLabelAssignmentVersionStructure(
-    AssignmentVersionStructure1
-):
+class TrainComponentLabelAssignmentVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "TrainComponentLabelAssignment_VersionStructure"
 
@@ -25,25 +23,23 @@ class TrainComponentLabelAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "DeadRunRef",
-                        "type": DeadRunRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "VehicleJourneyRef",
-                        "type": VehicleJourneyRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "DeadRunRef",
+                    "type": DeadRunRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleJourneyRef",
+                    "type": VehicleJourneyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     train_component_ref: TrainComponentRef = field(
         metadata={

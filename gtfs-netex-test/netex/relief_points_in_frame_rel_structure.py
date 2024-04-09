@@ -14,9 +14,7 @@ class ReliefPointsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "reliefPointsInFrame_RelStructure"
 
-    relief_point_or_parking_point: List[
-        Union[ParkingPoint, GaragePoint, ReliefPoint]
-    ] = field(
+    relief_point_or_parking_point: List[Union[ParkingPoint, GaragePoint, ReliefPoint]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -14,9 +14,7 @@ class SpecialServicesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "specialServices_RelStructure"
 
-    dated_special_service_ref_or_special_service_ref_or_special_service: List[
-        Union[DatedSpecialServiceRef, SpecialServiceRef, SpecialService]
-    ] = field(
+    dated_special_service_ref_or_special_service_ref_or_special_service: List[Union[DatedSpecialServiceRef, SpecialServiceRef, SpecialService]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

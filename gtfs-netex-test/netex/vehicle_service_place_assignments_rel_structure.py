@@ -10,19 +10,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleServicePlaceAssignmentsRelStructure(
-    OneToManyRelationshipStructure
-):
+class VehicleServicePlaceAssignmentsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "vehicleServicePlaceAssignments_RelStructure"
 
-    vehicle_sharing_place_assignment_or_vehicle_pooling_place_assignment_or_taxi_service_place_assignment: List[
-        Union[
-            VehicleSharingPlaceAssignment,
-            VehiclePoolingPlaceAssignment,
-            TaxiServicePlaceAssignment,
-        ]
-    ] = field(
+    vehicle_sharing_place_assignment_or_vehicle_pooling_place_assignment_or_taxi_service_place_assignment: List[Union[VehicleSharingPlaceAssignment, VehiclePoolingPlaceAssignment, TaxiServicePlaceAssignment]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

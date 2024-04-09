@@ -9,9 +9,7 @@ from .entity_in_version_structure import DayTypesRelStructure
 from .fixed_start_window_structure import FixedStartWindowStructure
 from .usage_end_enumeration import UsageEndEnumeration
 from .usage_parameter_version_structure import UsageParameterVersionStructure
-from .usage_start_constraint_type_enumeration import (
-    UsageStartConstraintTypeEnumeration,
-)
+from .usage_start_constraint_type_enumeration import UsageStartConstraintTypeEnumeration
 from .usage_trigger_enumeration import UsageTriggerEnumeration
 from .usage_validity_type_enumeration import UsageValidityTypeEnumeration
 
@@ -95,9 +93,7 @@ class UsageValidityPeriodVersionStructure(UsageParameterVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    usage_start_constraint_type: Optional[
-        UsageStartConstraintTypeEnumeration
-    ] = field(
+    usage_start_constraint_type: Optional[UsageStartConstraintTypeEnumeration] = field(
         default=None,
         metadata={
             "name": "UsageStartConstraintType",

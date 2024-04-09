@@ -3,12 +3,8 @@ from typing import Optional, Union
 
 from .authority_ref import AuthorityRef
 from .group_of_lines_version_structure import GroupOfLinesVersionStructure
-from .groups_of_lines_in_frame_rel_structure import (
-    GroupsOfLinesInFrameRelStructure,
-)
-from .groups_of_operators_refs_rel_structure import (
-    GroupsOfOperatorsRefsRelStructure,
-)
+from .groups_of_lines_in_frame_rel_structure import GroupsOfLinesInFrameRelStructure
+from .groups_of_operators_refs_rel_structure import GroupsOfOperatorsRefsRelStructure
 from .operator_ref import OperatorRef
 from .tariff_zone_refs_rel_structure import TariffZoneRefsRelStructure
 
@@ -20,25 +16,23 @@ class NetworkVersionStructure(GroupOfLinesVersionStructure):
     class Meta:
         name = "Network_VersionStructure"
 
-    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = (
-        field(
-            default=None,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "AuthorityRef",
-                        "type": AuthorityRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "OperatorRef",
-                        "type": OperatorRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
+        default=None,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "AuthorityRef",
+                    "type": AuthorityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatorRef",
+                    "type": OperatorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     groups_of_operators: Optional[GroupsOfOperatorsRefsRelStructure] = field(
         default=None,

@@ -6,17 +6,13 @@ from xsdata.models.datatype import XmlDate
 
 from .authority_ref import AuthorityRef
 from .general_organisation_ref import GeneralOrganisationRef
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .management_agent_ref import ManagementAgentRef
 from .online_service_operator_ref import OnlineServiceOperatorRef
 from .operator_ref import OperatorRef
 from .organisation_ref import OrganisationRef
 from .other_organisation_ref import OtherOrganisationRef
-from .priceable_object_refs_rel_structure import (
-    PriceableObjectRefsRelStructure,
-)
+from .priceable_object_refs_rel_structure import PriceableObjectRefsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .rounding_ref import RoundingRef
 from .serviced_organisation_ref import ServicedOrganisationRef
@@ -80,20 +76,7 @@ class StandardFareTableVersionStructure(GroupOfEntitiesVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-        ]
-    ] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

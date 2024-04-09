@@ -46,13 +46,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    address: Optional[
-        Union[
-            PostalAddress,
-            RoadAddress,
-            "TransportOrganisationVersionStructure.Address",
-        ]
-    ] = field(
+    address: Optional[Union[PostalAddress, RoadAddress, "TransportOrganisationVersionStructure.Address"]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -69,9 +63,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
                 },
                 {
                     "name": "Address",
-                    "type": Type[
-                        "TransportOrganisationVersionStructure.Address"
-                    ],
+                    "type": Type["TransportOrganisationVersionStructure.Address"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -85,22 +77,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            AirSubmode,
-            BusSubmode,
-            CoachSubmode,
-            FunicularSubmode,
-            MetroSubmode,
-            TramSubmode,
-            TelecabinSubmode,
-            RailSubmode,
-            WaterSubmode,
-            SnowAndIceSubmode,
-            TaxiSubmode,
-            SelfDriveSubmode,
-        ]
-    ] = field(
+    choice: Optional[Union[AirSubmode, BusSubmode, CoachSubmode, FunicularSubmode, MetroSubmode, TramSubmode, TelecabinSubmode, RailSubmode, WaterSubmode, SnowAndIceSubmode, TaxiSubmode, SelfDriveSubmode]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -168,16 +145,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             ),
         },
     )
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
-        Union[
-            PersonalModeOfOperationRef,
-            VehiclePoolingRef,
-            VehicleSharingRef,
-            VehicleRentalRef,
-            FlexibleModeOfOperationRef,
-            ScheduledModeOfOperationRef,
-        ]
-    ] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

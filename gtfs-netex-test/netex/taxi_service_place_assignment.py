@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .taxi_service_place_assignment_version_structure import (
-    TaxiServicePlaceAssignmentVersionStructure,
-)
+from .taxi_service_place_assignment_version_structure import TaxiServicePlaceAssignmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

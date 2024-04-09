@@ -6,9 +6,7 @@ from .all_countries_ref import AllCountriesRef
 from .all_distribution_channels_ref import AllDistributionChannelsRef
 from .all_operators_ref import AllOperatorsRef
 from .all_organisations_ref import AllOrganisationsRef
-from .all_public_transport_organisations_ref import (
-    AllPublicTransportOrganisationsRef,
-)
+from .all_public_transport_organisations_ref import AllPublicTransportOrganisationsRef
 from .all_transport_organisations_ref import AllTransportOrganisationsRef
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .assignment_version_structure_2 import AssignmentVersionStructure2
@@ -16,9 +14,7 @@ from .authority_ref import AuthorityRef
 from .capped_discount_right_ref import CappedDiscountRightRef
 from .country_ref import CountryRef
 from .distribution_channel_ref import DistributionChannelRef
-from .distribution_channel_type_enumeration import (
-    DistributionChannelTypeEnumeration,
-)
+from .distribution_channel_type_enumeration import DistributionChannelTypeEnumeration
 from .distribution_rights_enumeration import DistributionRightsEnumeration
 from .entitlement_product_ref import EntitlementProductRef
 from .fare_product_ref import FareProductRef
@@ -56,18 +52,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
         name = "DistributionAssignment_VersionStructure"
 
     service_access_right_ref_or_preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[
-        Union[
-            EntitlementProductRef,
-            SupplementProductRef,
-            PreassignedFareProductRef,
-            AmountOfPriceUnitProductRef,
-            UsageDiscountRightRef,
-            ThirdPartyProductRef,
-            CappedDiscountRightRef,
-            SaleDiscountRightRef,
-            FareProductRef,
-            ServiceAccessRightRef,
-        ]
+        Union[EntitlementProductRef, SupplementProductRef, PreassignedFareProductRef, AmountOfPriceUnitProductRef, UsageDiscountRightRef, ThirdPartyProductRef, CappedDiscountRightRef, SaleDiscountRightRef, FareProductRef, ServiceAccessRightRef]
     ] = field(
         default=None,
         metadata={
@@ -134,9 +119,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    group_of_sales_offer_packages_ref: Optional[
-        GroupOfSalesOfferPackagesRef
-    ] = field(
+    group_of_sales_offer_packages_ref: Optional[GroupOfSalesOfferPackagesRef] = field(
         default=None,
         metadata={
             "name": "GroupOfSalesOfferPackagesRef",
@@ -153,9 +136,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "tokens": True,
         },
     )
-    all_countries_ref_or_country_ref: Optional[
-        Union[AllCountriesRef, CountryRef]
-    ] = field(
+    all_countries_ref_or_country_ref: Optional[Union[AllCountriesRef, CountryRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -189,13 +170,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    all_distribution_channels_ref_or_group_of_distribution_channels_ref_or_distribution_channel_ref: Optional[
-        Union[
-            AllDistributionChannelsRef,
-            GroupOfDistributionChannelsRef,
-            DistributionChannelRef,
-        ]
-    ] = field(
+    all_distribution_channels_ref_or_group_of_distribution_channels_ref_or_distribution_channel_ref: Optional[Union[AllDistributionChannelsRef, GroupOfDistributionChannelsRef, DistributionChannelRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -218,15 +193,13 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             ),
         },
     )
-    distribution_channel_type: Optional[DistributionChannelTypeEnumeration] = (
-        field(
-            default=None,
-            metadata={
-                "name": "DistributionChannelType",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    distribution_channel_type: Optional[DistributionChannelTypeEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "DistributionChannelType",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     allowed_in_channel: Optional[bool] = field(
         default=None,
@@ -385,15 +358,13 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    ticketing_service_facility_list: Optional[TicketingServiceFacilityList] = (
-        field(
-            default=None,
-            metadata={
-                "name": "TicketingServiceFacilityList",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    ticketing_service_facility_list: Optional[TicketingServiceFacilityList] = field(
+        default=None,
+        metadata={
+            "name": "TicketingServiceFacilityList",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     payment_methods: List[PaymentMethodEnumeration] = field(
         default_factory=list,

@@ -42,9 +42,7 @@ from .online_service_ref import OnlineServiceRef
 from .operator_ref import OperatorRef
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
-from .passenger_information_equipment_ref import (
-    PassengerInformationEquipmentRef,
-)
+from .passenger_information_equipment_ref import PassengerInformationEquipmentRef
 from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
 from .passenger_seat_ref import PassengerSeatRef
 from .place_lighting_equipment_ref import PlaceLightingEquipmentRef
@@ -58,9 +56,7 @@ from .rough_surface_ref import RoughSurfaceRef
 from .rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
 from .sanitary_equipment_ref import SanitaryEquipmentRef
 from .seating_equipment_ref import SeatingEquipmentRef
-from .series_constraint_refs_rel_structure import (
-    SeriesConstraintRefsRelStructure,
-)
+from .series_constraint_refs_rel_structure import SeriesConstraintRefsRelStructure
 from .service_facility_set import ServiceFacilitySet
 from .shelter_equipment_ref import ShelterEquipmentRef
 from .sign_equipment_ref import SignEquipmentRef
@@ -70,16 +66,10 @@ from .taxi_service_ref import TaxiServiceRef
 from .ticket_validator_equipment_ref import TicketValidatorEquipmentRef
 from .ticketing_equipment_ref import TicketingEquipmentRef
 from .ticketing_service_ref import TicketingServiceRef
-from .train_component_label_assignment_ref import (
-    TrainComponentLabelAssignmentRef,
-)
+from .train_component_label_assignment_ref import TrainComponentLabelAssignmentRef
 from .train_element_ref import TrainElementRef
-from .travel_specification_journey_refs_rel_structure import (
-    TravelSpecificationJourneyRefsRelStructure,
-)
-from .travel_specification_summary_endpoint_structure import (
-    TravelSpecificationSummaryEndpointStructure,
-)
+from .travel_specification_journey_refs_rel_structure import TravelSpecificationJourneyRefsRelStructure
+from .travel_specification_summary_endpoint_structure import TravelSpecificationSummaryEndpointStructure
 from .travelator_equipment_ref import TravelatorEquipmentRef
 from .trolley_stand_equipment_ref import TrolleyStandEquipmentRef
 from .type_of_fare_product_ref import TypeOfFareProductRef
@@ -155,9 +145,7 @@ class TravelSpecificationSummaryViewStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    authority_ref_or_operator_ref_or_group_of_operators_ref: Optional[
-        Union[AuthorityRef, OperatorRef, GroupOfOperatorsRef]
-    ] = field(
+    authority_ref_or_operator_ref_or_group_of_operators_ref: Optional[Union[AuthorityRef, OperatorRef, GroupOfOperatorsRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -212,9 +200,7 @@ class TravelSpecificationSummaryViewStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    user_profile_ref: Optional[
-        Union[VehiclePoolerProfileRef, CompanionProfileRef, UserProfileRef]
-    ] = field(
+    user_profile_ref: Optional[Union[VehiclePoolerProfileRef, CompanionProfileRef, UserProfileRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -261,9 +247,7 @@ class TravelSpecificationSummaryViewStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    train_component_label_assignment_ref: Optional[
-        TrainComponentLabelAssignmentRef
-    ] = field(
+    train_component_label_assignment_ref: Optional[TrainComponentLabelAssignmentRef] = field(
         default=None,
         metadata={
             "name": "TrainComponentLabelAssignmentRef",

@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .accessibility_assessment_versioned_child_structure import (
-    AccessibilityAssessmentVersionedChildStructure,
-)
+from .accessibility_assessment_versioned_child_structure import AccessibilityAssessmentVersionedChildStructure
 from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
 from .parking_ref import ParkingRef
@@ -70,9 +68,7 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    accessibility_assessment: Optional[
-        AccessibilityAssessmentVersionedChildStructure
-    ] = field(
+    accessibility_assessment: Optional[AccessibilityAssessmentVersionedChildStructure] = field(
         default=None,
         metadata={
             "name": "AccessibilityAssessment",
@@ -88,16 +84,7 @@ class LevelVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    stop_place_ref_or_site_ref: Optional[
-        Union[
-            TaxiRankRef,
-            StopPlaceRef,
-            ParkingRef,
-            PointOfInterestRef,
-            ServiceSiteRef,
-            SiteRef,
-        ]
-    ] = field(
+    stop_place_ref_or_site_ref: Optional[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

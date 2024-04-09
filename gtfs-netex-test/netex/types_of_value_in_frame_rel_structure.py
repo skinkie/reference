@@ -51,9 +51,7 @@ from .type_of_operation import TypeOfOperation
 from .type_of_organisation import TypeOfOrganisation
 from .type_of_organisation_part import TypeOfOrganisationPart
 from .type_of_parking import TypeOfParking
-from .type_of_passenger_information_equipment import (
-    TypeOfPassengerInformationEquipment,
-)
+from .type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
 from .type_of_payment_method import TypeOfPaymentMethod
 from .type_of_place import TypeOfPlace
 from .type_of_plug import TypeOfPlug

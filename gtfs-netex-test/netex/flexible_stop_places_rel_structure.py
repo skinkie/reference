@@ -13,9 +13,7 @@ class FlexibleStopPlacesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "flexibleStopPlaces_RelStructure"
 
-    flexible_stop_place_ref_or_flexible_stop_place: List[
-        Union[FlexibleStopPlaceRef, FlexibleStopPlace]
-    ] = field(
+    flexible_stop_place_ref_or_flexible_stop_place: List[Union[FlexibleStopPlaceRef, FlexibleStopPlace]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

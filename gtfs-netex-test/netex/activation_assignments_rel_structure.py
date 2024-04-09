@@ -13,9 +13,7 @@ class ActivationAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "activationAssignments_RelStructure"
 
-    activation_assignment_ref_or_activation_assignment: List[
-        Union[ActivationAssignmentRef, ActivationAssignment]
-    ] = field(
+    activation_assignment_ref_or_activation_assignment: List[Union[ActivationAssignmentRef, ActivationAssignment]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

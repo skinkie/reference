@@ -10,9 +10,7 @@ from .gated_enumeration import GatedEnumeration
 from .lighting_enumeration import LightingEnumeration
 from .navigation_type_enumeration import NavigationTypeEnumeration
 from .path_link_end_structure import PathLinkEndStructure
-from .path_links_in_sequence_rel_structure import (
-    PathLinksInSequenceRelStructure,
-)
+from .path_links_in_sequence_rel_structure import PathLinksInSequenceRelStructure
 from .places_in_sequence_rel_structure import PlacesInSequenceRelStructure
 from .presentation_structure import PresentationStructure
 from .public_use_enumeration import PublicUseEnumeration

@@ -3,28 +3,18 @@ from typing import List, Union
 
 from .point_in_journey_pattern import PointInJourneyPattern
 from .stop_point_in_journey_pattern import StopPointInJourneyPattern
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .timing_point_in_journey_pattern import TimingPointInJourneyPattern
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PointsInJourneyPatternRelStructure(
-    StrictContainmentAggregationStructure
-):
+class PointsInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "pointsInJourneyPattern_RelStructure"
 
-    point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern: List[
-        Union[
-            PointInJourneyPattern,
-            StopPointInJourneyPattern,
-            TimingPointInJourneyPattern,
-        ]
-    ] = field(
+    point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern: List[Union[PointInJourneyPattern, StopPointInJourneyPattern, TimingPointInJourneyPattern]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

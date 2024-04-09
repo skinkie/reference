@@ -3,9 +3,7 @@ from typing import Optional
 
 from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
-from .vehicle_service_parts_rel_structure import (
-    VehicleServicePartsRelStructure,
-)
+from .vehicle_service_parts_rel_structure import VehicleServicePartsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

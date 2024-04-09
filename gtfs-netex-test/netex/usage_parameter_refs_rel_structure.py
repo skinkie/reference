@@ -28,12 +28,8 @@ from .reselling_ref import ResellingRef
 from .reserving_ref import ReservingRef
 from .round_trip_ref import RoundTripRef
 from .routing_ref import RoutingRef
-from .sales_offer_package_entitlement_given_ref import (
-    SalesOfferPackageEntitlementGivenRef,
-)
-from .sales_offer_package_entitlement_required_ref import (
-    SalesOfferPackageEntitlementRequiredRef,
-)
+from .sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
+from .sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
 from .step_limit_ref import StepLimitRef
 from .subscribing_ref import SubscribingRef
 from .suspending_ref import SuspendingRef

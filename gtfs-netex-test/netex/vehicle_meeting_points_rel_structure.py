@@ -13,9 +13,7 @@ class VehicleMeetingPointsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleMeetingPoints_RelStructure"
 
-    vehicle_meeting_point_ref_or_vehicle_meeting_point: List[
-        Union[VehicleMeetingPointRef, VehicleMeetingPoint]
-    ] = field(
+    vehicle_meeting_point_ref_or_vehicle_meeting_point: List[Union[VehicleMeetingPointRef, VehicleMeetingPoint]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

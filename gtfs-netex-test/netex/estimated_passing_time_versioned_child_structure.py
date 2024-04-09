@@ -3,18 +3,14 @@ from typing import List, Optional, Type, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
-from .dated_passing_time_versioned_child_structure import (
-    DatedPassingTimeVersionedChildStructure,
-)
+from .dated_passing_time_versioned_child_structure import DatedPassingTimeVersionedChildStructure
 from .headway_interval_structure import HeadwayIntervalStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class EstimatedPassingTimeVersionedChildStructure(
-    DatedPassingTimeVersionedChildStructure
-):
+class EstimatedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildStructure):
     class Meta:
         name = "EstimatedPassingTime_VersionedChildStructure"
 
@@ -35,30 +31,22 @@ class EstimatedPassingTimeVersionedChildStructure(
             "choices": (
                 {
                     "name": "ExpectedArrivalTime",
-                    "type": Type[
-                        "EstimatedPassingTimeVersionedChildStructure.ExpectedArrivalTime"
-                    ],
+                    "type": Type["EstimatedPassingTimeVersionedChildStructure.ExpectedArrivalTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ArrivalDayOffset",
-                    "type": Type[
-                        "EstimatedPassingTimeVersionedChildStructure.ArrivalDayOffset"
-                    ],
+                    "type": Type["EstimatedPassingTimeVersionedChildStructure.ArrivalDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ExpectedDepartureTime",
-                    "type": Type[
-                        "EstimatedPassingTimeVersionedChildStructure.ExpectedDepartureTime"
-                    ],
+                    "type": Type["EstimatedPassingTimeVersionedChildStructure.ExpectedDepartureTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DepartureDayOffset",
-                    "type": Type[
-                        "EstimatedPassingTimeVersionedChildStructure.DepartureDayOffset"
-                    ],
+                    "type": Type["EstimatedPassingTimeVersionedChildStructure.DepartureDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -68,16 +56,12 @@ class EstimatedPassingTimeVersionedChildStructure(
                 },
                 {
                     "name": "ExpectedNonstopPassingTime",
-                    "type": Type[
-                        "EstimatedPassingTimeVersionedChildStructure.ExpectedNonstopPassingTime"
-                    ],
+                    "type": Type["EstimatedPassingTimeVersionedChildStructure.ExpectedNonstopPassingTime"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "PassingTimeDayOffset",
-                    "type": Type[
-                        "EstimatedPassingTimeVersionedChildStructure.PassingTimeDayOffset"
-                    ],
+                    "type": Type["EstimatedPassingTimeVersionedChildStructure.PassingTimeDayOffset"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

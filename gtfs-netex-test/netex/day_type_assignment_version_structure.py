@@ -28,11 +28,7 @@ class DayTypeAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date: Optional[
-        Union[
-            UicOperatingPeriodRef, OperatingPeriodRef, OperatingDayRef, XmlDate
-        ]
-    ] = field(
+    uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date: Optional[Union[UicOperatingPeriodRef, OperatingPeriodRef, OperatingDayRef, XmlDate]] = field(
         default=None,
         metadata={
             "type": "Elements",

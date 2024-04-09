@@ -5,9 +5,7 @@ from typing import Optional
 from xsdata.models.datatype import XmlDuration
 
 from .accessibility_assessment import AccessibilityAssessment
-from .passenger_equipment_version_structure import (
-    PassengerEquipmentVersionStructure,
-)
+from .passenger_equipment_version_structure import PassengerEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

@@ -85,16 +85,12 @@ class FlexibleLineDerivedViewStructure(LineDerivedViewStructure):
                 },
                 {
                     "name": "MinimumBookingPeriod",
-                    "type": Type[
-                        "FlexibleLineDerivedViewStructure.MinimumBookingPeriod"
-                    ],
+                    "type": Type["FlexibleLineDerivedViewStructure.MinimumBookingPeriod"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "MaximumBookingPeriod",
-                    "type": Type[
-                        "FlexibleLineDerivedViewStructure.MaximumBookingPeriod"
-                    ],
+                    "type": Type["FlexibleLineDerivedViewStructure.MaximumBookingPeriod"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

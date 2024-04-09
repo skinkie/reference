@@ -5,9 +5,7 @@ from .containment_aggregation_structure import ContainmentAggregationStructure
 from .customer_account_security_listing import CustomerAccountSecurityListing
 from .customer_security_listing import CustomerSecurityListing
 from .fare_contract_security_listing import FareContractSecurityListing
-from .medium_access_device_security_listing import (
-    MediumAccessDeviceSecurityListing,
-)
+from .medium_access_device_security_listing import MediumAccessDeviceSecurityListing
 from .retail_device_security_listing import RetailDeviceSecurityListing
 from .travel_document_security_listing import TravelDocumentSecurityListing
 
@@ -19,16 +17,7 @@ class SecurityListingsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "securityListings_RelStructure"
 
-    security_listing: List[
-        Union[
-            MediumAccessDeviceSecurityListing,
-            TravelDocumentSecurityListing,
-            RetailDeviceSecurityListing,
-            FareContractSecurityListing,
-            CustomerSecurityListing,
-            CustomerAccountSecurityListing,
-        ]
-    ] = field(
+    security_listing: List[Union[MediumAccessDeviceSecurityListing, TravelDocumentSecurityListing, RetailDeviceSecurityListing, FareContractSecurityListing, CustomerSecurityListing, CustomerAccountSecurityListing]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

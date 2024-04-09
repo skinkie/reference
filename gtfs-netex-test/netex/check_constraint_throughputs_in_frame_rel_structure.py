@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class CheckConstraintThroughputsInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class CheckConstraintThroughputsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "checkConstraintThroughputsInFrame_RelStructure"
 

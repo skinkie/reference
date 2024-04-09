@@ -14,9 +14,7 @@ class NoticeAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "noticeAssignments_RelStructure"
 
-    sales_notice_assignment_or_notice_assignment_or_notice_assignment_view: List[
-        Union[SalesNoticeAssignment, NoticeAssignment, NoticeAssignmentView]
-    ] = field(
+    sales_notice_assignment_or_notice_assignment_or_notice_assignment_view: List[Union[SalesNoticeAssignment, NoticeAssignment, NoticeAssignmentView]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

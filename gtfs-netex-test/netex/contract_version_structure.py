@@ -89,19 +89,7 @@ class ContractVersionStructure(DataManagedObjectStructure):
 
     @dataclass(kw_only=True)
     class Contractors:
-        organisation_or_transport_organisation: List[
-            Union[
-                RetailConsortium,
-                ServicedOrganisation,
-                GeneralOrganisation,
-                ManagementAgent,
-                TravelAgent,
-                OtherOrganisation,
-                OnlineServiceOperator,
-                Authority,
-                Operator,
-            ]
-        ] = field(
+        organisation_or_transport_organisation: List[Union[RetailConsortium, ServicedOrganisation, GeneralOrganisation, ManagementAgent, TravelAgent, OtherOrganisation, OnlineServiceOperator, Authority, Operator]] = field(
             default_factory=list,
             metadata={
                 "type": "Elements",
@@ -157,19 +145,7 @@ class ContractVersionStructure(DataManagedObjectStructure):
 
     @dataclass(kw_only=True)
     class Contractees:
-        organisation_or_transport_organisation: List[
-            Union[
-                RetailConsortium,
-                ServicedOrganisation,
-                GeneralOrganisation,
-                ManagementAgent,
-                TravelAgent,
-                OtherOrganisation,
-                OnlineServiceOperator,
-                Authority,
-                Operator,
-            ]
-        ] = field(
+        organisation_or_transport_organisation: List[Union[RetailConsortium, ServicedOrganisation, GeneralOrganisation, ManagementAgent, TravelAgent, OtherOrganisation, OnlineServiceOperator, Authority, Operator]] = field(
             default_factory=list,
             metadata={
                 "type": "Elements",

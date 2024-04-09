@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional, Type, Union
 
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .entity_in_version_structure import DataManagedObjectStructure
 from .fuel_type_enumeration import FuelTypeEnumeration
 from .multilingual_string import MultilingualString
@@ -85,12 +83,7 @@ class TransportTypeVersionStructure(DataManagedObjectStructure):
             "tokens": True,
         },
     )
-    fuel_type_or_type_of_fuel: Optional[
-        Union[
-            "TransportTypeVersionStructure.FuelType",
-            "TransportTypeVersionStructure.TypeOfFuel",
-        ]
-    ] = field(
+    fuel_type_or_type_of_fuel: Optional[Union["TransportTypeVersionStructure.FuelType", "TransportTypeVersionStructure.TypeOfFuel"]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -68,9 +68,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    operating_period_ref: List[
-        Union[UicOperatingPeriodRef, OperatingPeriodRef]
-    ] = field(
+    operating_period_ref: List[Union[UicOperatingPeriodRef, OperatingPeriodRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -97,14 +95,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    validity_condition_ref: List[
-        Union[
-            AvailabilityConditionRef,
-            ValidityRuleParameterRef,
-            ValidityTriggerRef,
-            ValidityConditionRef,
-        ]
-    ] = field(
+    validity_condition_ref: List[Union[AvailabilityConditionRef, ValidityRuleParameterRef, ValidityTriggerRef, ValidityConditionRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

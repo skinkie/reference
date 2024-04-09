@@ -14,13 +14,7 @@ class TravelSpecificationRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "travelSpecificationRefs_RelStructure"
 
-    travel_specification_ref: List[
-        Union[
-            OfferedTravelSpecificationRef,
-            RequestedTravelSpecificationRef,
-            TravelSpecificationRef,
-        ]
-    ] = field(
+    travel_specification_ref: List[Union[OfferedTravelSpecificationRef, RequestedTravelSpecificationRef, TravelSpecificationRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

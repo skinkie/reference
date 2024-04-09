@@ -4,9 +4,7 @@ from typing import List, Union
 from .access_zone_ref import AccessZoneRef
 from .administrative_zone_ref import AdministrativeZoneRef
 from .fare_zone_ref import FareZoneRef
-from .mobility_service_constraint_zone_ref import (
-    MobilityServiceConstraintZoneRef,
-)
+from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .stop_area_ref import StopAreaRef
 from .tariff_zone_ref import TariffZoneRef
@@ -21,18 +19,7 @@ class GroupMembershipRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "groupMembershipRefs_RelStructure"
 
-    zone_ref_or_tariff_zone_ref: List[
-        Union[
-            MobilityServiceConstraintZoneRef,
-            StopAreaRef,
-            TransportAdministrativeZoneRef,
-            AccessZoneRef,
-            AdministrativeZoneRef,
-            FareZoneRef,
-            TariffZoneRef,
-            ZoneRef,
-        ]
-    ] = field(
+    zone_ref_or_tariff_zone_ref: List[Union[MobilityServiceConstraintZoneRef, StopAreaRef, TransportAdministrativeZoneRef, AccessZoneRef, AdministrativeZoneRef, FareZoneRef, TariffZoneRef, ZoneRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

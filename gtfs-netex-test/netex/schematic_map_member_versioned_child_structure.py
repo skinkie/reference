@@ -18,9 +18,7 @@ from .all_authorities_ref import AllAuthoritiesRef
 from .all_distribution_channels_ref import AllDistributionChannelsRef
 from .all_operators_ref import AllOperatorsRef
 from .all_organisations_ref import AllOrganisationsRef
-from .all_public_transport_organisations_ref import (
-    AllPublicTransportOrganisationsRef,
-)
+from .all_public_transport_organisations_ref import AllPublicTransportOrganisationsRef
 from .all_transport_organisations_ref import AllTransportOrganisationsRef
 from .allowed_line_direction_ref import AllowedLineDirectionRef
 from .alternative_name_ref import AlternativeNameRef
@@ -57,26 +55,18 @@ from .compound_train_ref import CompoundTrainRef
 from .connection_ref import ConnectionRef
 from .contact_ref import ContactRef
 from .control_centre_ref import ControlCentreRef
-from .controllable_element_in_sequence_ref import (
-    ControllableElementInSequenceRef,
-)
+from .controllable_element_in_sequence_ref import ControllableElementInSequenceRef
 from .controllable_element_price_ref import ControllableElementPriceRef
 from .controllable_element_ref import ControllableElementRef
 from .coupled_journey_ref import CoupledJourneyRef
 from .course_of_journeys_ref import CourseOfJourneysRef
 from .crew_base_ref import CrewBaseRef
 from .customer_account_ref import CustomerAccountRef
-from .customer_account_security_listing_ref import (
-    CustomerAccountSecurityListingRef,
-)
+from .customer_account_security_listing_ref import CustomerAccountSecurityListingRef
 from .customer_account_status_ref import CustomerAccountStatusRef
 from .customer_payment_means_ref import CustomerPaymentMeansRef
-from .customer_purchase_package_element_ref import (
-    CustomerPurchasePackageElementRef,
-)
-from .customer_purchase_package_price_ref import (
-    CustomerPurchasePackagePriceRef,
-)
+from .customer_purchase_package_element_ref import CustomerPurchasePackageElementRef
+from .customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
 from .customer_purchase_package_ref import CustomerPurchasePackageRef
 from .customer_ref import CustomerRef
 from .customer_security_listing_ref import CustomerSecurityListingRef
@@ -97,9 +87,7 @@ from .destination_display_ref import DestinationDisplayRef
 from .destination_display_variant_ref import DestinationDisplayVariantRef
 from .direction_ref import DirectionRef
 from .discounting_rule_ref import DiscountingRuleRef
-from .distance_matrix_element_inverse_ref import (
-    DistanceMatrixElementInverseRef,
-)
+from .distance_matrix_element_inverse_ref import DistanceMatrixElementInverseRef
 from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
 from .distance_matrix_element_ref import DistanceMatrixElementRef
 from .distribution_channel_ref import DistributionChannelRef
@@ -136,9 +124,7 @@ from .fare_quota_factor_ref import FareQuotaFactorRef
 from .fare_request_ref import FareRequestRef
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .fare_section_ref import FareSectionRef
-from .fare_structure_element_in_sequence_ref import (
-    FareStructureElementInSequenceRef,
-)
+from .fare_structure_element_in_sequence_ref import FareStructureElementInSequenceRef
 from .fare_structure_element_price_ref import FareStructureElementPriceRef
 from .fare_structure_element_ref import FareStructureElementRef
 from .fare_table_column_ref import FareTableColumnRef
@@ -168,12 +154,8 @@ from .geographical_interval_ref import GeographicalIntervalRef
 from .geographical_structure_factor_ref import GeographicalStructureFactorRef
 from .geographical_unit_price_ref import GeographicalUnitPriceRef
 from .geographical_unit_ref import GeographicalUnitRef
-from .group_of_customer_purchase_packages_ref import (
-    GroupOfCustomerPurchasePackagesRef,
-)
-from .group_of_distance_matrix_elements_ref import (
-    GroupOfDistanceMatrixElementsRef,
-)
+from .group_of_customer_purchase_packages_ref import GroupOfCustomerPurchasePackagesRef
+from .group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
 from .group_of_distribution_channels_ref import GroupOfDistributionChannelsRef
 from .group_of_lines_ref import GroupOfLinesRef
 from .group_of_operators_ref import GroupOfOperatorsRef
@@ -223,22 +205,16 @@ from .log_ref import LogRef
 from .logical_display_ref import LogicalDisplayRef
 from .luggage_allowance_ref import LuggageAllowanceRef
 from .management_agent_ref import ManagementAgentRef
-from .medium_access_device_security_listing_ref import (
-    MediumAccessDeviceSecurityListingRef,
-)
+from .medium_access_device_security_listing_ref import MediumAccessDeviceSecurityListingRef
 from .medium_application_instance_ref import MediumApplicationInstanceRef
 from .minimum_stay_ref import MinimumStayRef
 from .mobile_device_ref import MobileDeviceRef
 from .mobility_journey_frame_ref import MobilityJourneyFrameRef
-from .mobility_service_constraint_zone_ref import (
-    MobilityServiceConstraintZoneRef,
-)
+from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
 from .mobility_service_frame_ref import MobilityServiceFrameRef
 from .mode_ref import ModeRef
 from .mode_restriction_assessment_ref import ModeRestrictionAssessmentRef
-from .monitored_vehicle_sharing_parking_bay_ref import (
-    MonitoredVehicleSharingParkingBayRef,
-)
+from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .month_validity_offset_ref import MonthValidityOffsetRef
 from .multilingual_string import MultilingualString
 from .navigation_path_ref import NavigationPathRef
@@ -285,16 +261,12 @@ from .path_link_ref import PathLinkRef
 from .penalty_policy_ref import PenaltyPolicyRef
 from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
 from .place_ref import PlaceRef
-from .point_of_interest_classification_ref import (
-    PointOfInterestClassificationRef,
-)
+from .point_of_interest_classification_ref import PointOfInterestClassificationRef
 from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
 from .point_of_interest_hierarchy_ref import PointOfInterestHierarchyRef
 from .point_of_interest_ref import PointOfInterestRef
 from .point_of_interest_space_ref import PointOfInterestSpaceRef
-from .point_of_interest_vehicle_entrance_ref import (
-    PointOfInterestVehicleEntranceRef,
-)
+from .point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
 from .point_projection import PointProjection
 from .point_projection_ref import PointProjectionRef
 from .point_ref import PointRef
@@ -331,9 +303,7 @@ from .replacing_ref import ReplacingRef
 from .requested_travel_specification_ref import RequestedTravelSpecificationRef
 from .reselling_ref import ResellingRef
 from .reserving_ref import ReservingRef
-from .residential_qualification_eligibility_ref import (
-    ResidentialQualificationEligibilityRef,
-)
+from .residential_qualification_eligibility_ref import ResidentialQualificationEligibilityRef
 from .residential_qualification_ref import ResidentialQualificationRef
 from .resource_frame_ref import ResourceFrameRef
 from .responsibility_role_ref import ResponsibilityRoleRef
@@ -355,12 +325,8 @@ from .routing_constraint_zone_ref import RoutingConstraintZoneRef
 from .routing_ref import RoutingRef
 from .sale_discount_right_ref import SaleDiscountRightRef
 from .sales_offer_package_element_ref import SalesOfferPackageElementRef
-from .sales_offer_package_entitlement_given_ref import (
-    SalesOfferPackageEntitlementGivenRef,
-)
-from .sales_offer_package_entitlement_required_ref import (
-    SalesOfferPackageEntitlementRequiredRef,
-)
+from .sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
+from .sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
 from .sales_offer_package_price_ref import SalesOfferPackagePriceRef
 from .sales_offer_package_ref import SalesOfferPackageRef
 from .sales_transaction_frame_ref import SalesTransactionFrameRef
@@ -380,9 +346,7 @@ from .service_calendar_ref import ServiceCalendarRef
 from .service_facility_set_ref import ServiceFacilitySetRef
 from .service_frame_ref import ServiceFrameRef
 from .service_journey_interchange_ref import ServiceJourneyInterchangeRef
-from .service_journey_pattern_interchange_ref import (
-    ServiceJourneyPatternInterchangeRef,
-)
+from .service_journey_pattern_interchange_ref import ServiceJourneyPatternInterchangeRef
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_journey_ref import ServiceJourneyRef
 from .service_link_ref import ServiceLinkRef
@@ -455,9 +419,7 @@ from .transport_administrative_zone_ref import TransportAdministrativeZoneRef
 from .transport_type_ref import TransportTypeRef
 from .travel_agent_ref import TravelAgentRef
 from .travel_document_ref import TravelDocumentRef
-from .travel_document_security_listing_ref import (
-    TravelDocumentSecurityListingRef,
-)
+from .travel_document_security_listing_ref import TravelDocumentSecurityListingRef
 from .travel_specification_ref import TravelSpecificationRef
 from .trip_leg_ref import TripLegRef
 from .trip_pattern_trip_ref import TripPatternTripRef
@@ -498,9 +460,7 @@ from .type_of_operation_ref import TypeOfOperationRef
 from .type_of_organisation_part_ref import TypeOfOrganisationPartRef
 from .type_of_organisation_ref import TypeOfOrganisationRef
 from .type_of_parking_ref import TypeOfParkingRef
-from .type_of_passenger_information_equipment_ref import (
-    TypeOfPassengerInformationEquipmentRef,
-)
+from .type_of_passenger_information_equipment_ref import TypeOfPassengerInformationEquipmentRef
 from .type_of_payment_method_ref import TypeOfPaymentMethodRef
 from .type_of_place_ref import TypeOfPlaceRef
 from .type_of_plug_ref import TypeOfPlugRef
@@ -534,14 +494,10 @@ from .validity_condition_ref import ValidityConditionRef
 from .validity_rule_parameter_ref import ValidityRuleParameterRef
 from .validity_trigger_ref import ValidityTriggerRef
 from .vehicle_entrance_ref import VehicleEntranceRef
-from .vehicle_equipment_profile_member_ref import (
-    VehicleEquipmentProfileMemberRef,
-)
+from .vehicle_equipment_profile_member_ref import VehicleEquipmentProfileMemberRef
 from .vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
 from .vehicle_journey_ref import VehicleJourneyRef
-from .vehicle_manoeuvring_requirement_ref import (
-    VehicleManoeuvringRequirementRef,
-)
+from .vehicle_manoeuvring_requirement_ref import VehicleManoeuvringRequirementRef
 from .vehicle_meeting_link_ref import VehicleMeetingLinkRef
 from .vehicle_meeting_place_ref import VehicleMeetingPlaceRef
 from .vehicle_meeting_point_ref import VehicleMeetingPointRef
@@ -3788,16 +3744,7 @@ class SchematicMapMemberVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    projection: Optional[
-        Union[
-            TopographicProjection,
-            ZoneProjection,
-            ComplexFeatureProjection,
-            LinkSequenceProjection,
-            LinkProjection,
-            PointProjection,
-        ]
-    ] = field(
+    projection: Optional[Union[TopographicProjection, ZoneProjection, ComplexFeatureProjection, LinkSequenceProjection, LinkProjection, PointProjection]] = field(
         default=None,
         metadata={
             "type": "Elements",

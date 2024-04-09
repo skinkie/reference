@@ -34,13 +34,11 @@ class TopicStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    responsibility_role_assignment: Optional[ResponsibilityRoleAssignment] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ResponsibilityRoleAssignment",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    responsibility_role_assignment: Optional[ResponsibilityRoleAssignment] = field(
+        default=None,
+        metadata={
+            "name": "ResponsibilityRoleAssignment",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )

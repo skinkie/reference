@@ -21,9 +21,7 @@ from .path_link_end_structure import PathLinkEndStructure
 from .presentation_structure import PresentationStructure
 from .public_use_enumeration import PublicUseEnumeration
 from .site_facility_sets_rel_structure import SiteFacilitySetsRelStructure
-from .tactile_guiding_strip_status_enumeration import (
-    TactileGuidingStripStatusEnumeration,
-)
+from .tactile_guiding_strip_status_enumeration import TactileGuidingStripStatusEnumeration
 from .tactile_warning_strip_enumeration import TactileWarningStripEnumeration
 from .tilt_type_enumeration import TiltTypeEnumeration
 from .transfer_duration_structure import TransferDurationStructure
@@ -61,9 +59,7 @@ class PathLinkVersionStructure(LinkVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    accessibility_assessment_ref_or_accessibility_assessment: Optional[
-        Union[AccessibilityAssessmentRef, AccessibilityAssessment]
-    ] = field(
+    accessibility_assessment_ref_or_accessibility_assessment: Optional[Union[AccessibilityAssessmentRef, AccessibilityAssessment]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -313,9 +309,7 @@ class PathLinkVersionStructure(LinkVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    tactile_guiding_strip_status: Optional[
-        TactileGuidingStripStatusEnumeration
-    ] = field(
+    tactile_guiding_strip_status: Optional[TactileGuidingStripStatusEnumeration] = field(
         default=None,
         metadata={
             "name": "TactileGuidingStripStatus",

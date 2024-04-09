@@ -8,9 +8,7 @@ from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .dead_run_ref import DeadRunRef
 from .fare_section_ref import FareSectionRef
-from .general_group_of_entities_ref_structure import (
-    GeneralGroupOfEntitiesRefStructure,
-)
+from .general_group_of_entities_ref_structure import GeneralGroupOfEntitiesRefStructure
 from .general_section_ref import GeneralSectionRef
 from .journey_pattern_ref import JourneyPatternRef
 from .line_section_ref import LineSectionRef
@@ -45,9 +43,7 @@ class NoticeAssignmentVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "NoticeAssignment_VersionStructure"
 
-    notice_ref_or_group_of_notices_ref_or_notice: Optional[
-        Union[NoticeRef, GeneralGroupOfEntitiesRefStructure, Notice]
-    ] = field(
+    notice_ref_or_group_of_notices_ref_or_notice: Optional[Union[NoticeRef, GeneralGroupOfEntitiesRefStructure, Notice]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -209,16 +205,7 @@ class NoticeAssignmentVersionStructure(AssignmentVersionStructure1):
             ),
         },
     )
-    section_ref_or_general_section_ref: Optional[
-        Union[
-            ParentCommonSectionRef,
-            CommonSectionRef,
-            LineSectionRef,
-            FareSectionRef,
-            GeneralSectionRef,
-            SectionRef,
-        ]
-    ] = field(
+    section_ref_or_general_section_ref: Optional[Union[ParentCommonSectionRef, CommonSectionRef, LineSectionRef, FareSectionRef, GeneralSectionRef, SectionRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

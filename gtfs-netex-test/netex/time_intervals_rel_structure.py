@@ -13,9 +13,7 @@ class TimeIntervalsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "timeIntervals_RelStructure"
 
-    time_interval_ref_or_time_interval: List[
-        Union[TimeIntervalRef, TimeInterval]
-    ] = field(
+    time_interval_ref_or_time_interval: List[Union[TimeIntervalRef, TimeInterval]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

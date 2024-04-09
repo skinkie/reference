@@ -1,18 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .fare_price_versioned_child_structure import (
-    FarePriceVersionedChildStructure,
-)
+from .fare_price_versioned_child_structure import FarePriceVersionedChildStructure
 from .validable_element_ref import ValidableElementRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ValidableElementPriceVersionedChildStructure(
-    FarePriceVersionedChildStructure
-):
+class ValidableElementPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "ValidableElementPrice_VersionedChildStructure"
 

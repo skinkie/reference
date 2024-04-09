@@ -3,9 +3,7 @@ from typing import Optional
 
 from .country_ref import CountryRef
 from .group_of_sales_offer_packages_ref import GroupOfSalesOfferPackagesRef
-from .notice_assignment_version_structure import (
-    NoticeAssignmentVersionStructure,
-)
+from .notice_assignment_version_structure import NoticeAssignmentVersionStructure
 from .sales_offer_package_ref import SalesOfferPackageRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -32,9 +30,7 @@ class SalesNoticeAssignmentVersionStructure(NoticeAssignmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    group_of_sales_offer_packages_ref: Optional[
-        GroupOfSalesOfferPackagesRef
-    ] = field(
+    group_of_sales_offer_packages_ref: Optional[GroupOfSalesOfferPackagesRef] = field(
         default=None,
         metadata={
             "name": "GroupOfSalesOfferPackagesRef",

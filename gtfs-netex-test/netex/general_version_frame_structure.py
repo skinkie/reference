@@ -83,9 +83,7 @@ from .customer_payment_means import CustomerPaymentMeans
 from .customer_purchase_package import CustomerPurchasePackage
 from .customer_purchase_package_element import CustomerPurchasePackageElement
 from .customer_purchase_package_price import CustomerPurchasePackagePrice
-from .customer_purchase_parameter_assignment import (
-    CustomerPurchaseParameterAssignment,
-)
+from .customer_purchase_parameter_assignment import CustomerPurchaseParameterAssignment
 from .customer_security_listing import CustomerSecurityListing
 from .customer_service import CustomerService
 from .cycle_model_profile import CycleModelProfile
@@ -120,9 +118,7 @@ from .duty import Duty
 from .duty_part import DutyPart
 from .dynamic_distance_matrix_element import DynamicDistanceMatrixElement
 from .dynamic_stop_assignment import DynamicStopAssignment
-from .dynamic_vehicle_meeting_point_assignment import (
-    DynamicVehicleMeetingPointAssignment,
-)
+from .dynamic_vehicle_meeting_point_assignment import DynamicVehicleMeetingPointAssignment
 from .eligibility_change_policy import EligibilityChangePolicy
 from .emv_card import EmvCard
 from .entitlement_given import EntitlementGiven
@@ -257,9 +253,7 @@ from .luggage_allowance import LuggageAllowance
 from .luggage_service import LuggageService
 from .management_agent import ManagementAgent
 from .medium_access_device import MediumAccessDevice
-from .medium_access_device_security_listing import (
-    MediumAccessDeviceSecurityListing,
-)
+from .medium_access_device_security_listing import MediumAccessDeviceSecurityListing
 from .medium_application_instance import MediumApplicationInstance
 from .meeting_point_service import MeetingPointService
 from .meeting_restriction import MeetingRestriction
@@ -270,9 +264,7 @@ from .mobility_service_constraint_zone import MobilityServiceConstraintZone
 from .mobility_service_frame import MobilityServiceFrame
 from .mode_restriction_assessment import ModeRestrictionAssessment
 from .money_service import MoneyService
-from .monitored_vehicle_sharing_parking_bay import (
-    MonitoredVehicleSharingParkingBay,
-)
+from .monitored_vehicle_sharing_parking_bay import MonitoredVehicleSharingParkingBay
 from .month_validity_offset import MonthValidityOffset
 from .navigation_path import NavigationPath
 from .navigation_path_assignment import NavigationPathAssignment
@@ -308,9 +300,7 @@ from .parking_properties import ParkingProperties
 from .parking_tariff import ParkingTariff
 from .passenger_beacon_equipment import PassengerBeaconEquipment
 from .passenger_carrying_requirement import PassengerCarryingRequirement
-from .passenger_carrying_requirements_view import (
-    PassengerCarryingRequirementsView,
-)
+from .passenger_carrying_requirements_view import PassengerCarryingRequirementsView
 from .passenger_information_equipment import PassengerInformationEquipment
 from .passenger_safety_equipment import PassengerSafetyEquipment
 from .passenger_stop_assignment import PassengerStopAssignment
@@ -328,9 +318,7 @@ from .point_2 import Point2
 from .point_in_journey_pattern import PointInJourneyPattern
 from .point_of_interest import PointOfInterest
 from .point_of_interest_classification import PointOfInterestClassification
-from .point_of_interest_classification_hierarchy import (
-    PointOfInterestClassificationHierarchy,
-)
+from .point_of_interest_classification_hierarchy import PointOfInterestClassificationHierarchy
 from .point_of_interest_entrance import PointOfInterestEntrance
 from .point_of_interest_space import PointOfInterestSpace
 from .point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
@@ -382,9 +370,7 @@ from .requested_travel_specification import RequestedTravelSpecification
 from .reselling import Reselling
 from .reserving import Reserving
 from .residential_qualification import ResidentialQualification
-from .residential_qualification_eligibility import (
-    ResidentialQualificationEligibility,
-)
+from .residential_qualification_eligibility import ResidentialQualificationEligibility
 from .resource_frame import ResourceFrame
 from .responsibility_set import ResponsibilitySet
 from .restricted_manoeuvre import RestrictedManoeuvre
@@ -410,12 +396,8 @@ from .sale_discount_right import SaleDiscountRight
 from .sales_notice_assignment import SalesNoticeAssignment
 from .sales_offer_package import SalesOfferPackage
 from .sales_offer_package_element import SalesOfferPackageElement
-from .sales_offer_package_entitlement_given import (
-    SalesOfferPackageEntitlementGiven,
-)
-from .sales_offer_package_entitlement_required import (
-    SalesOfferPackageEntitlementRequired,
-)
+from .sales_offer_package_entitlement_given import SalesOfferPackageEntitlementGiven
+from .sales_offer_package_entitlement_required import SalesOfferPackageEntitlementRequired
 from .sales_offer_package_price import SalesOfferPackagePrice
 from .sales_offer_package_substitution import SalesOfferPackageSubstitution
 from .sales_transaction import SalesTransaction
@@ -442,9 +424,7 @@ from .service_frame import ServiceFrame
 from .service_journey import ServiceJourney
 from .service_journey_interchange import ServiceJourneyInterchange
 from .service_journey_pattern import ServiceJourneyPattern
-from .service_journey_pattern_interchange import (
-    ServiceJourneyPatternInterchange,
-)
+from .service_journey_pattern_interchange import ServiceJourneyPatternInterchange
 from .service_link import ServiceLink
 from .service_link_in_journey_pattern import ServiceLinkInJourneyPattern
 from .service_pattern import ServicePattern
@@ -462,9 +442,7 @@ from .site_path_link import SitePathLink
 from .smartcard import Smartcard
 from .spatial_feature import SpatialFeature
 from .special_service import SpecialService
-from .specific_parameter_assignments_rel_structure import (
-    SpecificParameterAssignment,
-)
+from .specific_parameter_assignments_rel_structure import SpecificParameterAssignment
 from .stair_flight import StairFlight
 from .staircase_equipment import StaircaseEquipment
 from .standard_fare_table import StandardFareTable
@@ -567,9 +545,7 @@ from .type_of_operation import TypeOfOperation
 from .type_of_organisation import TypeOfOrganisation
 from .type_of_organisation_part import TypeOfOrganisationPart
 from .type_of_parking import TypeOfParking
-from .type_of_passenger_information_equipment import (
-    TypeOfPassengerInformationEquipment,
-)
+from .type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
 from .type_of_payment_method import TypeOfPaymentMethod
 from .type_of_place import TypeOfPlace
 from .type_of_plug import TypeOfPlug
@@ -604,9 +580,7 @@ from .validable_element_price import ValidableElementPrice
 from .validity_parameter_assignment import ValidityParameterAssignment
 from .value_set import ValueSet
 from .vehicle import Vehicle
-from .vehicle_access_credentials_assignment import (
-    VehicleAccessCredentialsAssignment,
-)
+from .vehicle_access_credentials_assignment import VehicleAccessCredentialsAssignment
 from .vehicle_charging_equipment import VehicleChargingEquipment
 from .vehicle_equipment_profile import VehicleEquipmentProfile
 from .vehicle_equipment_profile_member import VehicleEquipmentProfileMember
@@ -4436,23 +4410,7 @@ class FramesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "frames_RelStructure"
 
-    common_frame: List[
-        Union[
-            MobilityJourneyFrame,
-            MobilityServiceFrame,
-            SalesTransactionFrame,
-            FareFrame,
-            DriverScheduleFrame,
-            VehicleScheduleFrame,
-            ServiceFrame,
-            TimetableFrame,
-            SiteFrame,
-            InfrastructureFrame,
-            "GeneralFrame",
-            ResourceFrame,
-            ServiceCalendarFrame,
-        ]
-    ] = field(
+    common_frame: List[Union[MobilityJourneyFrame, MobilityServiceFrame, SalesTransactionFrame, FareFrame, DriverScheduleFrame, VehicleScheduleFrame, ServiceFrame, TimetableFrame, SiteFrame, InfrastructureFrame, "GeneralFrame", ResourceFrame, ServiceCalendarFrame]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

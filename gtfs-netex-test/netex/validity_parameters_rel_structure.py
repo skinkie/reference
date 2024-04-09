@@ -7,9 +7,7 @@ from .all_authorities_ref import AllAuthoritiesRef
 from .all_modes_enumeration import AllModesEnumeration
 from .all_operators_ref import AllOperatorsRef
 from .all_organisations_ref import AllOrganisationsRef
-from .all_public_transport_organisations_ref import (
-    AllPublicTransportOrganisationsRef,
-)
+from .all_public_transport_organisations_ref import AllPublicTransportOrganisationsRef
 from .all_transport_organisations_ref import AllTransportOrganisationsRef
 from .assistance_booking_service_ref import AssistanceBookingServiceRef
 from .assistance_service_ref import AssistanceServiceRef
@@ -54,13 +52,9 @@ from .lost_property_service_ref import LostPropertyServiceRef
 from .luggage_service_ref import LuggageServiceRef
 from .management_agent_ref import ManagementAgentRef
 from .meeting_point_service_ref import MeetingPointServiceRef
-from .mobility_service_constraint_zone_ref import (
-    MobilityServiceConstraintZoneRef,
-)
+from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
 from .money_service_ref import MoneyServiceRef
-from .monitored_vehicle_sharing_parking_bay_ref import (
-    MonitoredVehicleSharingParkingBayRef,
-)
+from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .network_ref import NetworkRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .online_service_operator_ref import OnlineServiceOperatorRef
@@ -77,15 +71,11 @@ from .parking_ref import ParkingRef
 from .passenger_seat_ref import PassengerSeatRef
 from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
 from .place_use_enumeration import PlaceUseEnumeration
-from .point_of_interest_classification_ref import (
-    PointOfInterestClassificationRef,
-)
+from .point_of_interest_classification_ref import PointOfInterestClassificationRef
 from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
 from .point_of_interest_ref import PointOfInterestRef
 from .point_of_interest_space_ref import PointOfInterestSpaceRef
-from .point_of_interest_vehicle_entrance_ref import (
-    PointOfInterestVehicleEntranceRef,
-)
+from .point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
 from .postal_address_ref import PostalAddressRef
 from .pricing_rule_ref import PricingRuleRef
 from .quay_ref import QuayRef
@@ -123,9 +113,7 @@ from .taxi_stand_ref import TaxiStandRef
 from .template_service_journey_ref import TemplateServiceJourneyRef
 from .ticketing_service_ref import TicketingServiceRef
 from .topographic_place_ref import TopographicPlaceRef
-from .train_component_label_assignment_ref import (
-    TrainComponentLabelAssignmentRef,
-)
+from .train_component_label_assignment_ref import TrainComponentLabelAssignmentRef
 from .train_element_ref import TrainElementRef
 from .train_number_ref import TrainNumberRef
 from .train_ref import TrainRef
@@ -176,9 +164,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "validityParameters_RelStructure"
 
-    vehicle_modes_or_transport_modes: List[
-        Union[List[VehicleModeEnumeration], List[AllModesEnumeration]]
-    ] = field(
+    vehicle_modes_or_transport_modes: List[Union[List[VehicleModeEnumeration], List[AllModesEnumeration]]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -209,16 +195,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: List[
-        Union[
-            PersonalModeOfOperationRef,
-            VehiclePoolingRef,
-            VehicleSharingRef,
-            VehicleRentalRef,
-            FlexibleModeOfOperationRef,
-            ScheduledModeOfOperationRef,
-        ]
-    ] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: List[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -447,9 +424,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    scheduled_stop_point_ref: List[
-        Union[FareScheduledStopPointRef, ScheduledStopPointRef]
-    ] = field(
+    scheduled_stop_point_ref: List[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -485,9 +460,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    vehicle_meeting_place_ref: List[
-        Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]
-    ] = field(
+    vehicle_meeting_place_ref: List[Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -523,30 +496,28 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    address_ref: List[Union[PostalAddressRef, RoadAddressRef, AddressRef]] = (
-        field(
-            default_factory=list,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "PostalAddressRef",
-                        "type": PostalAddressRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "RoadAddressRef",
-                        "type": RoadAddressRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "AddressRef",
-                        "type": AddressRef,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    address_ref: List[Union[PostalAddressRef, RoadAddressRef, AddressRef]] = field(
+        default_factory=list,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "PostalAddressRef",
+                    "type": PostalAddressRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RoadAddressRef",
+                    "type": RoadAddressRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "AddressRef",
+                    "type": AddressRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     choice: List[
         Union[
@@ -757,9 +728,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    point_of_interest_classification_ref: List[
-        PointOfInterestClassificationRef
-    ] = field(
+    point_of_interest_classification_ref: List[PointOfInterestClassificationRef] = field(
         default_factory=list,
         metadata={
             "name": "PointOfInterestClassificationRef",
@@ -768,9 +737,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    mobility_service_constraint_zone_ref: List[
-        MobilityServiceConstraintZoneRef
-    ] = field(
+    mobility_service_constraint_zone_ref: List[MobilityServiceConstraintZoneRef] = field(
         default_factory=list,
         metadata={
             "name": "MobilityServiceConstraintZoneRef",
@@ -878,9 +845,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    facility_set_ref: List[
-        Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]
-    ] = field(
+    facility_set_ref: List[Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -912,9 +877,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    service_journey_ref: List[
-        Union[TemplateServiceJourneyRef, ServiceJourneyRef]
-    ] = field(
+    service_journey_ref: List[Union[TemplateServiceJourneyRef, ServiceJourneyRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -968,15 +931,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    transport_type_ref_or_vehicle_type_ref: List[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: List[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1027,9 +982,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    vehicle_model_profile_ref: List[
-        Union[CycleModelProfileRef, CarModelProfileRef]
-    ] = field(
+    vehicle_model_profile_ref: List[Union[CycleModelProfileRef, CarModelProfileRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1193,9 +1146,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    train_component_label_assignment_ref: List[
-        TrainComponentLabelAssignmentRef
-    ] = field(
+    train_component_label_assignment_ref: List[TrainComponentLabelAssignmentRef] = field(
         default_factory=list,
         metadata={
             "name": "TrainComponentLabelAssignmentRef",
@@ -1222,27 +1173,23 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_fare_structure_factor_ref: List[TypeOfFareStructureFactorRef] = (
-        field(
-            default_factory=list,
-            metadata={
-                "name": "TypeOfFareStructureFactorRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-                "sequence": 1,
-            },
-        )
+    type_of_fare_structure_factor_ref: List[TypeOfFareStructureFactorRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "TypeOfFareStructureFactorRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
     )
-    type_of_fare_structure_element_ref: List[TypeOfFareStructureElementRef] = (
-        field(
-            default_factory=list,
-            metadata={
-                "name": "TypeOfFareStructureElementRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-                "sequence": 1,
-            },
-        )
+    type_of_fare_structure_element_ref: List[TypeOfFareStructureElementRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "TypeOfFareStructureElementRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
     )
     type_of_tariff_ref: List[TypeOfTariffRef] = field(
         default_factory=list,
@@ -1253,9 +1200,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    discounting_rule_ref_or_pricing_rule_ref: List[
-        Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]
-    ] = field(
+    discounting_rule_ref_or_pricing_rule_ref: List[Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1350,9 +1295,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    distribution_channel_ref_or_group_of_distribution_channels_ref: List[
-        Union[DistributionChannelRef, GroupOfDistributionChannelsRef]
-    ] = field(
+    distribution_channel_ref_or_group_of_distribution_channels_ref: List[Union[DistributionChannelRef, GroupOfDistributionChannelsRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

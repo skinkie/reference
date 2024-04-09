@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from .overtaking_possibility_version_structure import (
-    OvertakingPossibilityVersionStructure,
-)
+from .overtaking_possibility_version_structure import OvertakingPossibilityVersionStructure
 from .point_ref_structure import PointRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

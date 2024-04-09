@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .luggage_locker_equipment_version_structure import (
-    LuggageLockerEquipmentVersionStructure,
-)
+from .luggage_locker_equipment_version_structure import LuggageLockerEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

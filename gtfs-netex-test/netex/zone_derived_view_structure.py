@@ -5,9 +5,7 @@ from .access_zone_ref import AccessZoneRef
 from .administrative_zone_ref import AdministrativeZoneRef
 from .derived_view_structure import DerivedViewStructure
 from .fare_zone_ref import FareZoneRef
-from .mobility_service_constraint_zone_ref import (
-    MobilityServiceConstraintZoneRef,
-)
+from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
 from .multilingual_string import MultilingualString
 from .stop_area_ref import StopAreaRef
 from .tariff_zone_ref import TariffZoneRef
@@ -23,18 +21,7 @@ class ZoneDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "Zone_DerivedViewStructure"
 
-    zone_ref_or_tariff_zone_ref: Optional[
-        Union[
-            MobilityServiceConstraintZoneRef,
-            StopAreaRef,
-            TransportAdministrativeZoneRef,
-            AccessZoneRef,
-            AdministrativeZoneRef,
-            FareZoneRef,
-            TariffZoneRef,
-            ZoneRef,
-        ]
-    ] = field(
+    zone_ref_or_tariff_zone_ref: Optional[Union[MobilityServiceConstraintZoneRef, StopAreaRef, TransportAdministrativeZoneRef, AccessZoneRef, AdministrativeZoneRef, FareZoneRef, TariffZoneRef, ZoneRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

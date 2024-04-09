@@ -13,9 +13,7 @@ class AccommodationsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "accommodations_RelStructure"
 
-    accommodation_ref_or_accommodation: List[
-        Union[AccommodationRef, Accommodation]
-    ] = field(
+    accommodation_ref_or_accommodation: List[Union[AccommodationRef, Accommodation]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

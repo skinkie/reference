@@ -13,23 +13,21 @@ class ParkingLogEntriesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "parkingLogEntriesInFrame_RelStructure"
 
-    parking_log_entry: List[Union[ParkingBayCondition, RentalAvailability]] = (
-        field(
-            default_factory=list,
-            metadata={
-                "type": "Elements",
-                "choices": (
-                    {
-                        "name": "ParkingBayCondition",
-                        "type": ParkingBayCondition,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                    {
-                        "name": "RentalAvailability",
-                        "type": RentalAvailability,
-                        "namespace": "http://www.netex.org.uk/netex",
-                    },
-                ),
-            },
-        )
+    parking_log_entry: List[Union[ParkingBayCondition, RentalAvailability]] = field(
+        default_factory=list,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "ParkingBayCondition",
+                    "type": ParkingBayCondition,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RentalAvailability",
+                    "type": RentalAvailability,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )

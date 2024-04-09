@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .security_listing_versioned_child_structure import (
-    SecurityListingVersionedChildStructure,
-)
+from .security_listing_versioned_child_structure import SecurityListingVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

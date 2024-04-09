@@ -3,9 +3,7 @@ from typing import List, Optional
 
 from .access_mode_enumeration import AccessModeEnumeration
 from .accessibility_assessment import AccessibilityAssessment
-from .addressable_place_version_structure import (
-    AddressablePlaceVersionStructure,
-)
+from .addressable_place_version_structure import AddressablePlaceVersionStructure
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .covered_enumeration import CoveredEnumeration
 from .gated_enumeration import GatedEnumeration

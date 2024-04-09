@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Union
 
 from .accessibility_assessment import AccessibilityAssessment
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .external_object_ref_structure import ExternalObjectRefStructure
 from .journey_accountings_rel_structure import JourneyAccountingsRelStructure
 from .link_sequence_projection import LinkSequenceProjection
@@ -63,9 +61,7 @@ class JourneyVersionStructure(LinkSequenceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    link_sequence_projection_ref_or_link_sequence_projection: Optional[
-        Union[LinkSequenceProjectionRef, LinkSequenceProjection]
-    ] = field(
+    link_sequence_projection_ref_or_link_sequence_projection: Optional[Union[LinkSequenceProjectionRef, LinkSequenceProjection]] = field(
         default=None,
         metadata={
             "type": "Elements",

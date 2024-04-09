@@ -10,9 +10,7 @@ from .multilingual_string import MultilingualString
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
 from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
-from .vehicle_equipment_profile_refs_rel_structure import (
-    VehicleEquipmentProfileRefsRelStructure,
-)
+from .vehicle_equipment_profile_refs_rel_structure import VehicleEquipmentProfileRefsRelStructure
 from .vehicle_type_ref import VehicleTypeRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -47,15 +45,7 @@ class VehicleModelVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -104,19 +94,15 @@ class VehicleModelVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    equipment_profiles: Optional[VehicleEquipmentProfileRefsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "equipmentProfiles",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    equipment_profiles: Optional[VehicleEquipmentProfileRefsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "equipmentProfiles",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
-    vehicle_model_profile_ref: Optional[
-        Union[CycleModelProfileRef, CarModelProfileRef]
-    ] = field(
+    vehicle_model_profile_ref: Optional[Union[CycleModelProfileRef, CarModelProfileRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

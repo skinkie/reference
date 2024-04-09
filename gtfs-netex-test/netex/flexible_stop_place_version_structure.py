@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .flexible_area import FlexibleArea
 from .flexible_area_ref import FlexibleAreaRef
@@ -71,14 +69,7 @@ class FlexibleStopPlaceVersionStructure(PlaceVersionStructure):
 
     @dataclass(kw_only=True)
     class Areas:
-        flexible_area_or_flexible_area_ref_or_hail_and_ride_area_or_hail_and_ride_area_ref: List[
-            Union[
-                FlexibleArea,
-                FlexibleAreaRef,
-                HailAndRideArea,
-                HailAndRideAreaRef,
-            ]
-        ] = field(
+        flexible_area_or_flexible_area_ref_or_hail_and_ride_area_or_hail_and_ride_area_ref: List[Union[FlexibleArea, FlexibleAreaRef, HailAndRideArea, HailAndRideAreaRef]] = field(
             default_factory=list,
             metadata={
                 "type": "Elements",

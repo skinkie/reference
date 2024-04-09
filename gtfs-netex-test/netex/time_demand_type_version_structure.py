@@ -10,9 +10,7 @@ from .multilingual_string import MultilingualString
 from .presentation_structure import PresentationStructure
 from .private_code import PrivateCode
 from .type_of_time_demand_type_ref import TypeOfTimeDemandTypeRef
-from .vehicle_type_preferences_rel_structure import (
-    VehicleTypePreferencesRelStructure,
-)
+from .vehicle_type_preferences_rel_structure import VehicleTypePreferencesRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GroupsOfDistributionChannelsInFrameRelStructure(
-    FrameContainmentStructure
-):
+class GroupsOfDistributionChannelsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "groupsOfDistributionChannelsInFrame_RelStructure"
 

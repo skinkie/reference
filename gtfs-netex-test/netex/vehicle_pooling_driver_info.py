@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .vehicle_pooling_driver_info_version_structure import (
-    VehiclePoolingDriverInfoVersionStructure,
-)
+from .vehicle_pooling_driver_info_version_structure import VehiclePoolingDriverInfoVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

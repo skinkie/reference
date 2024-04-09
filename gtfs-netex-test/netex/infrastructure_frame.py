@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .infrastructure_version_frame_structure import (
-    InfrastructureVersionFrameStructure,
-)
+from .infrastructure_version_frame_structure import InfrastructureVersionFrameStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

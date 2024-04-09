@@ -3,9 +3,7 @@ from decimal import Decimal
 from typing import List, Optional
 
 from .all_modes_enumeration import AllModesEnumeration
-from .passenger_equipment_version_structure import (
-    PassengerEquipmentVersionStructure,
-)
+from .passenger_equipment_version_structure import PassengerEquipmentVersionStructure
 from .payment_method_enumeration import PaymentMethodEnumeration
 from .queue_management_enumeration import QueueManagementEnumeration
 from .scope_of_ticket_enumeration import ScopeOfTicketEnumeration
@@ -62,15 +60,13 @@ class TicketingEquipmentVersionStructure(PassengerEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    ticketing_service_facility_list: Optional[TicketingServiceFacilityList] = (
-        field(
-            default=None,
-            metadata={
-                "name": "TicketingServiceFacilityList",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    ticketing_service_facility_list: Optional[TicketingServiceFacilityList] = field(
+        default=None,
+        metadata={
+            "name": "TicketingServiceFacilityList",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     ticket_office: Optional[bool] = field(
         default=None,

@@ -18,17 +18,7 @@ class ModesOfOperationRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "modesOfOperationRelStructure"
 
-    mode_of_operation_or_alternative_mode_of_operation_or_conventional_mode_of_operation: List[
-        Union[
-            PersonalModeOfOperation,
-            AlternativeModeOfOperation,
-            VehiclePooling,
-            VehicleSharing,
-            VehicleRental,
-            FlexibleOperation,
-            ScheduledOperation,
-        ]
-    ] = field(
+    mode_of_operation_or_alternative_mode_of_operation_or_conventional_mode_of_operation: List[Union[PersonalModeOfOperation, AlternativeModeOfOperation, VehiclePooling, VehicleSharing, VehicleRental, FlexibleOperation, ScheduledOperation]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

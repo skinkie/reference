@@ -1,17 +1,13 @@
 from dataclasses import dataclass, field
 
-from .dynamic_vehicle_meeting_point_assignment_ref import (
-    DynamicVehicleMeetingPointAssignmentRef,
-)
+from .dynamic_vehicle_meeting_point_assignment_ref import DynamicVehicleMeetingPointAssignmentRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class DynamicVehicleMeetingPointAssignmentRefsRelStructure(
-    OneToManyRelationshipStructure
-):
+class DynamicVehicleMeetingPointAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "dynamicVehicleMeetingPointAssignmentRefs_RelStructure"
 

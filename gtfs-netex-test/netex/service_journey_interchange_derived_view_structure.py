@@ -20,15 +20,13 @@ class ServiceJourneyInterchangeDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "ServiceJourneyInterchange_DerivedViewStructure"
 
-    service_journey_interchange_ref: Optional[ServiceJourneyInterchangeRef] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ServiceJourneyInterchangeRef",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    service_journey_interchange_ref: Optional[ServiceJourneyInterchangeRef] = field(
+        default=None,
+        metadata={
+            "name": "ServiceJourneyInterchangeRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     description: Optional[MultilingualString] = field(
         default=None,
@@ -102,9 +100,7 @@ class ServiceJourneyInterchangeDerivedViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    connecting_journey_ref_or_connecting_journey_view: Optional[
-        Union[VehicleJourneyRefStructure, ConnectingJourneyView]
-    ] = field(
+    connecting_journey_ref_or_connecting_journey_view: Optional[Union[VehicleJourneyRefStructure, ConnectingJourneyView]] = field(
         default=None,
         metadata={
             "type": "Elements",

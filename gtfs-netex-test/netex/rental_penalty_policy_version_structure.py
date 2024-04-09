@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .rental_penalty_policy_type_enumeration import (
-    RentalPenaltyPolicyTypeEnumeration,
-)
+from .rental_penalty_policy_type_enumeration import RentalPenaltyPolicyTypeEnumeration
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -14,9 +12,7 @@ class RentalPenaltyPolicyVersionStructure(UsageParameterVersionStructure):
     class Meta:
         name = "RentalPenaltyPolicy_VersionStructure"
 
-    rental_penalty_policy_type: Optional[
-        RentalPenaltyPolicyTypeEnumeration
-    ] = field(
+    rental_penalty_policy_type: Optional[RentalPenaltyPolicyTypeEnumeration] = field(
         default=None,
         metadata={
             "name": "RentalPenaltyPolicyType",

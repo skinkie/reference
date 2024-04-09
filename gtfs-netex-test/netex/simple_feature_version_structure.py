@@ -5,9 +5,7 @@ from .access_zone_ref import AccessZoneRef
 from .administrative_zone_ref import AdministrativeZoneRef
 from .fare_zone_ref import FareZoneRef
 from .group_of_points_version_structure import GroupOfPointsVersionStructure
-from .mobility_service_constraint_zone_ref import (
-    MobilityServiceConstraintZoneRef,
-)
+from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
 from .stop_area_ref import StopAreaRef
 from .tariff_zone_ref import TariffZoneRef
 from .transport_administrative_zone_ref import TransportAdministrativeZoneRef
@@ -21,18 +19,7 @@ class SimpleFeatureVersionStructure(GroupOfPointsVersionStructure):
     class Meta:
         name = "SimpleFeature_VersionStructure"
 
-    zone_ref_or_tariff_zone_ref: Optional[
-        Union[
-            MobilityServiceConstraintZoneRef,
-            StopAreaRef,
-            TransportAdministrativeZoneRef,
-            AccessZoneRef,
-            AdministrativeZoneRef,
-            FareZoneRef,
-            TariffZoneRef,
-            ZoneRef,
-        ]
-    ] = field(
+    zone_ref_or_tariff_zone_ref: Optional[Union[MobilityServiceConstraintZoneRef, StopAreaRef, TransportAdministrativeZoneRef, AccessZoneRef, AdministrativeZoneRef, FareZoneRef, TariffZoneRef, ZoneRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

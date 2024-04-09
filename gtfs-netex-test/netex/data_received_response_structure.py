@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .consumer_response_endpoint_structure import (
-    ConsumerResponseEndpointStructure,
-)
+from .consumer_response_endpoint_structure import ConsumerResponseEndpointStructure
 from .error_description_structure import ErrorDescriptionStructure
 from .other_error import OtherError
 from .status import Status
@@ -22,9 +20,7 @@ class DataReceivedResponseStructure(ConsumerResponseEndpointStructure):
             "required": True,
         }
     )
-    error_condition: Optional[
-        "DataReceivedResponseStructure.ErrorCondition"
-    ] = field(
+    error_condition: Optional["DataReceivedResponseStructure.ErrorCondition"] = field(
         default=None,
         metadata={
             "name": "ErrorCondition",
@@ -35,9 +31,7 @@ class DataReceivedResponseStructure(ConsumerResponseEndpointStructure):
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        unknown_subscription_error_or_other_error: Optional[
-            Union[UnknownSubscriptionError, OtherError]
-        ] = field(
+        unknown_subscription_error_or_other_error: Optional[Union[UnknownSubscriptionError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",

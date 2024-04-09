@@ -13,9 +13,7 @@ class GeographicalIntervalsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "geographicalIntervals_RelStructure"
 
-    geographical_interval_ref_or_geographical_interval: List[
-        Union[GeographicalIntervalRef, GeographicalInterval]
-    ] = field(
+    geographical_interval_ref_or_geographical_interval: List[Union[GeographicalIntervalRef, GeographicalInterval]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

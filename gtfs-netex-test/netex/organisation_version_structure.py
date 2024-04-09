@@ -15,13 +15,9 @@ from .organisation_refs_rel_structure import OrganisationRefsRelStructure
 from .organisation_type_enumeration import OrganisationTypeEnumeration
 from .private_code import PrivateCode
 from .public_code_type import PublicCodeType
-from .related_organisations_rel_structure import (
-    RelatedOrganisationsRelStructure,
-)
+from .related_organisations_rel_structure import RelatedOrganisationsRelStructure
 from .responsibility_sets_rel_structure import ResponsibilitySetsRelStructure
-from .type_of_organisation_refs_rel_structure import (
-    TypeOfOrganisationRefsRelStructure,
-)
+from .type_of_organisation_refs_rel_structure import TypeOfOrganisationRefsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -160,15 +156,13 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
             "tokens": True,
         },
     )
-    types_of_organisation: Optional[TypeOfOrganisationRefsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "typesOfOrganisation",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    types_of_organisation: Optional[TypeOfOrganisationRefsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "typesOfOrganisation",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     status: Optional[bool] = field(
         default=None,
@@ -178,9 +172,7 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_period: Optional[
-        "OrganisationVersionStructure.ValidityPeriod"
-    ] = field(
+    validity_period: Optional["OrganisationVersionStructure.ValidityPeriod"] = field(
         default=None,
         metadata={
             "name": "ValidityPeriod",
@@ -203,15 +195,13 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    delegated_responsibility_sets: Optional[ResponsibilitySetsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "delegatedResponsibilitySets",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    delegated_responsibility_sets: Optional[ResponsibilitySetsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "delegatedResponsibilitySets",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     delegated_from: Optional[OrganisationRefsRelStructure] = field(
         default=None,

@@ -13,9 +13,7 @@ class VehicleEquipmentProfileRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "vehicleEquipmentProfileRefs_RelStructure"
 
-    vehicle_equipment_profile_ref: List[
-        Union[RechargingEquipmentProfileRef, VehicleEquipmentProfileRef]
-    ] = field(
+    vehicle_equipment_profile_ref: List[Union[RechargingEquipmentProfileRef, VehicleEquipmentProfileRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

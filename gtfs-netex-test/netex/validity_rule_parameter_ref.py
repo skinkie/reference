@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .validity_rule_parameter_ref_structure import (
-    ValidityRuleParameterRefStructure,
-)
+from .validity_rule_parameter_ref_structure import ValidityRuleParameterRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

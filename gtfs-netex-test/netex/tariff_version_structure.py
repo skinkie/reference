@@ -11,27 +11,17 @@ from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
 from .communication_service_ref import CommunicationServiceRef
 from .complaints_service_ref import ComplaintsServiceRef
 from .customer_service_ref import CustomerServiceRef
-from .distance_matrix_elements_rel_structure import (
-    DistanceMatrixElementsRelStructure,
-)
+from .distance_matrix_elements_rel_structure import DistanceMatrixElementsRelStructure
 from .entity_in_version_structure import DataManagedObjectStructure
-from .fare_structure_elements_rel_structure import (
-    FareStructureElementsRelStructure,
-)
+from .fare_structure_elements_rel_structure import FareStructureElementsRelStructure
 from .flexible_line_ref import FlexibleLineRef
 from .general_organisation_ref import GeneralOrganisationRef
-from .geographical_intervals_rel_structure import (
-    GeographicalIntervalsRelStructure,
-)
-from .geographical_structure_factors_rel_structure import (
-    GeographicalStructureFactorsRelStructure,
-)
+from .geographical_intervals_rel_structure import GeographicalIntervalsRelStructure
+from .geographical_structure_factors_rel_structure import GeographicalStructureFactorsRelStructure
 from .geographical_unit_ref import GeographicalUnitRef
 from .group_of_lines_ref import GroupOfLinesRef
 from .group_of_operators_ref import GroupOfOperatorsRef
-from .groups_of_distance_matrix_elements_rel_structure import (
-    GroupsOfDistanceMatrixElementsRelStructure,
-)
+from .groups_of_distance_matrix_elements_rel_structure import GroupsOfDistanceMatrixElementsRelStructure
 from .hire_service_ref import HireServiceRef
 from .info_links_rel_structure import InfoLinksRelStructure
 from .left_luggage_service_ref import LeftLuggageServiceRef
@@ -56,9 +46,7 @@ from .priceable_object_version_structure import (
     PriceGroupsRelStructure,
 )
 from .private_code import PrivateCode
-from .quality_structure_factors_rel_structure import (
-    QualityStructureFactorsRelStructure,
-)
+from .quality_structure_factors_rel_structure import QualityStructureFactorsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .retail_service_ref import RetailServiceRef
 from .serviced_organisation_ref import ServicedOrganisationRef
@@ -66,9 +54,7 @@ from .tariff_basis_enumeration import TariffBasisEnumeration
 from .taxi_service_ref import TaxiServiceRef
 from .ticketing_service_ref import TicketingServiceRef
 from .time_intervals_rel_structure import TimeIntervalsRelStructure
-from .time_structure_factors_rel_structure import (
-    TimeStructureFactorsRelStructure,
-)
+from .time_structure_factors_rel_structure import TimeStructureFactorsRelStructure
 from .time_unit_ref import TimeUnitRef
 from .travel_agent_ref import TravelAgentRef
 from .type_of_tariff_ref import TypeOfTariffRef
@@ -131,21 +117,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-            GroupOfOperatorsRef,
-        ]
-    ] = field(
+    choice: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef, GroupOfOperatorsRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -208,9 +180,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    line_ref_or_group_of_lines_ref: Optional[
-        Union[FlexibleLineRef, LineRef, NetworkRef, GroupOfLinesRef]
-    ] = field(
+    line_ref_or_group_of_lines_ref: Optional[Union[FlexibleLineRef, LineRef, NetworkRef, GroupOfLinesRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -407,19 +377,15 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    geographical_intervals: Optional[GeographicalIntervalsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "geographicalIntervals",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    geographical_intervals: Optional[GeographicalIntervalsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "geographicalIntervals",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
-    geographical_structure_factors: Optional[
-        GeographicalStructureFactorsRelStructure
-    ] = field(
+    geographical_structure_factors: Optional[GeographicalStructureFactorsRelStructure] = field(
         default=None,
         metadata={
             "name": "geographicalStructureFactors",
@@ -451,9 +417,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    quality_structure_factors: Optional[
-        QualityStructureFactorsRelStructure
-    ] = field(
+    quality_structure_factors: Optional[QualityStructureFactorsRelStructure] = field(
         default=None,
         metadata={
             "name": "qualityStructureFactors",
@@ -461,29 +425,23 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_structure_elements: Optional[FareStructureElementsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "fareStructureElements",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    fare_structure_elements: Optional[FareStructureElementsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "fareStructureElements",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
-    distance_matrix_elements: Optional[DistanceMatrixElementsRelStructure] = (
-        field(
-            default=None,
-            metadata={
-                "name": "distanceMatrixElements",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    distance_matrix_elements: Optional[DistanceMatrixElementsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "distanceMatrixElements",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
-    groups_of_distance_matrix_elements: Optional[
-        GroupsOfDistanceMatrixElementsRelStructure
-    ] = field(
+    groups_of_distance_matrix_elements: Optional[GroupsOfDistanceMatrixElementsRelStructure] = field(
         default=None,
         metadata={
             "name": "groupsOfDistanceMatrixElements",

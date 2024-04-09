@@ -13,9 +13,7 @@ class ModeRestrictionAssessmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "modeRestrictionAssessments_RelStructure"
 
-    mode_restriction_assessment_ref_or_mode_restriction_assessment: List[
-        Union[ModeRestrictionAssessmentRef, ModeRestrictionAssessment]
-    ] = field(
+    mode_restriction_assessment_ref_or_mode_restriction_assessment: List[Union[ModeRestrictionAssessmentRef, ModeRestrictionAssessment]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -8,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ChargingEquipmenProfilesInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class ChargingEquipmenProfilesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "chargingEquipmenProfilesInFrame_RelStructure"
 

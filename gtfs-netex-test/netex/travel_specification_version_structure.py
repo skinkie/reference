@@ -7,13 +7,9 @@ from xsdata.models.datatype import XmlDateTime
 from .capping_rule_price_ref import CappingRulePriceRef
 from .cell_ref import CellRef
 from .controllable_element_price_ref import ControllableElementPriceRef
-from .customer_purchase_package_price_ref import (
-    CustomerPurchasePackagePriceRef,
-)
+from .customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
 from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
-from .fare_contract_entry_version_structure import (
-    FareContractEntryVersionStructure,
-)
+from .fare_contract_entry_version_structure import FareContractEntryVersionStructure
 from .fare_price_ref import FarePriceRef
 from .fare_product_price_ref import FareProductPriceRef
 from .fare_request_ref import FareRequestRef
@@ -24,9 +20,7 @@ from .geographical_unit_price_ref import GeographicalUnitPriceRef
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .parking_price_ref import ParkingPriceRef
 from .payment_method_enumeration import PaymentMethodEnumeration
-from .price_rule_step_results_rel_structure import (
-    PriceRuleStepResultsRelStructure,
-)
+from .price_rule_step_results_rel_structure import PriceRuleStepResultsRelStructure
 from .price_unit_ref import PriceUnitRef
 from .quality_structure_factor_price_ref import QualityStructureFactorPriceRef
 from .repeated_trip_fare_request_ref import RepeatedTripFareRequestRef
@@ -35,9 +29,7 @@ from .sales_transaction_ref import SalesTransactionRef
 from .schedule_request_ref import ScheduleRequestRef
 from .series_constraint_price_ref import SeriesConstraintPriceRef
 from .single_trip_fare_request_ref import SingleTripFareRequestRef
-from .specific_parameter_assignments_rel_structure import (
-    SpecificParameterAssignmentsRelStructure,
-)
+from .specific_parameter_assignments_rel_structure import SpecificParameterAssignmentsRelStructure
 from .stop_event_request_ref import StopEventRequestRef
 from .stop_finder_request_ref import StopFinderRequestRef
 from .time_interval_price_ref import TimeIntervalPriceRef
@@ -64,17 +56,7 @@ class TravelSpecificationVersionStructure(FareContractEntryVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_request_ref_or_passenger_information_request_ref: Optional[
-        Union[
-            RepeatedTripFareRequestRef,
-            SingleTripFareRequestRef,
-            FareRequestRef,
-            StopFinderRequestRef,
-            StopEventRequestRef,
-            ScheduleRequestRef,
-            TripPlanRequestRef,
-        ]
-    ] = field(
+    fare_request_ref_or_passenger_information_request_ref: Optional[Union[RepeatedTripFareRequestRef, SingleTripFareRequestRef, FareRequestRef, StopFinderRequestRef, StopEventRequestRef, ScheduleRequestRef, TripPlanRequestRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -317,9 +299,7 @@ class TravelSpecificationVersionStructure(FareContractEntryVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    travel_specification_summary_view: Optional[
-        TravelSpecificationSummaryView
-    ] = field(
+    travel_specification_summary_view: Optional[TravelSpecificationSummaryView] = field(
         default=None,
         metadata={
             "name": "TravelSpecificationSummaryView",
@@ -327,9 +307,7 @@ class TravelSpecificationVersionStructure(FareContractEntryVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    specific_parameter_assignments: Optional[
-        SpecificParameterAssignmentsRelStructure
-    ] = field(
+    specific_parameter_assignments: Optional[SpecificParameterAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "specificParameterAssignments",

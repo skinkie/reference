@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .recharging_equipment_profile_ref_structure import (
-    RechargingEquipmentProfileRefStructure,
-)
+from .recharging_equipment_profile_ref_structure import RechargingEquipmentProfileRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

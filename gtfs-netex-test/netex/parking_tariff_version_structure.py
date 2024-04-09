@@ -24,15 +24,11 @@ from .priceable_object_version_structure import (
     FareTablesRelStructure,
     PriceGroupsRelStructure,
 )
-from .quality_structure_factors_rel_structure import (
-    QualityStructureFactorsRelStructure,
-)
+from .quality_structure_factors_rel_structure import QualityStructureFactorsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .serviced_organisation_ref import ServicedOrganisationRef
 from .time_intervals_rel_structure import TimeIntervalsRelStructure
-from .time_structure_factors_rel_structure import (
-    TimeStructureFactorsRelStructure,
-)
+from .time_structure_factors_rel_structure import TimeStructureFactorsRelStructure
 from .time_unit_ref import TimeUnitRef
 from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
 from .travel_agent_ref import TravelAgentRef
@@ -86,21 +82,7 @@ class ParkingTariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-            GroupOfOperatorsRef,
-        ]
-    ] = field(
+    choice: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef, GroupOfOperatorsRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -187,9 +169,7 @@ class ParkingTariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    quality_structure_factors: Optional[
-        QualityStructureFactorsRelStructure
-    ] = field(
+    quality_structure_factors: Optional[QualityStructureFactorsRelStructure] = field(
         default=None,
         metadata={
             "name": "qualityStructureFactors",

@@ -5,9 +5,7 @@ from typing import Optional
 from .access_equipment_version_structure import AccessEquipmentVersionStructure
 from .gradient_enumeration import GradientEnumeration
 from .handrail_enumeration import HandrailEnumeration
-from .ramp_turning_space_position_enumeration import (
-    RampTurningSpacePositionEnumeration,
-)
+from .ramp_turning_space_position_enumeration import RampTurningSpacePositionEnumeration
 from .safety_edge_enumeration import SafetyEdgeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

@@ -7,9 +7,7 @@ from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .booking_arrangements_structure import BookingArrangementsStructure
 from .booking_policy_version_structure import BookingPolicyVersionStructure
 from .per_basis_enumeration import PerBasisEnumeration
-from .reservation_charge_type_enumeration import (
-    ReservationChargeTypeEnumeration,
-)
+from .reservation_charge_type_enumeration import ReservationChargeTypeEnumeration
 from .reservation_enumeration import ReservationEnumeration
 from .seat_allocation_method_enumeration import SeatAllocationMethodEnumeration
 
@@ -54,15 +52,13 @@ class ReservingVersionStructure(BookingPolicyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    reservation_charge_type: Optional[ReservationChargeTypeEnumeration] = (
-        field(
-            default=None,
-            metadata={
-                "name": "ReservationChargeType",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    reservation_charge_type: Optional[ReservationChargeTypeEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "ReservationChargeType",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     fee_basis: Optional[PerBasisEnumeration] = field(
         default=None,
@@ -96,9 +92,7 @@ class ReservingVersionStructure(BookingPolicyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_arrangements_or_booking_arrangements: Optional[
-        Union[BookingArrangementsRelStructure, BookingArrangementsStructure]
-    ] = field(
+    booking_arrangements_or_booking_arrangements: Optional[Union[BookingArrangementsRelStructure, BookingArrangementsStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

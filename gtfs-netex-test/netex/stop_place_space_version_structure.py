@@ -4,9 +4,7 @@ from typing import Optional
 
 from .multilingual_string import MultilingualString
 from .site_entrances_rel_structure import SiteEntrancesRelStructure
-from .stop_place_component_version_structure import (
-    StopPlaceComponentVersionStructure,
-)
+from .stop_place_component_version_structure import StopPlaceComponentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

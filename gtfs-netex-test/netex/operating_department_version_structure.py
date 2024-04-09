@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from .department_version_structure import DepartmentVersionStructure
-from .operational_contex_refs_rel_structure import (
-    OperationalContexRefsRelStructure,
-)
+from .operational_contex_refs_rel_structure import OperationalContexRefsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

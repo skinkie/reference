@@ -52,18 +52,10 @@ from .round_trip import RoundTrip
 from .round_trip_ref import RoundTripRef
 from .routing import Routing
 from .routing_ref import RoutingRef
-from .sales_offer_package_entitlement_given import (
-    SalesOfferPackageEntitlementGiven,
-)
-from .sales_offer_package_entitlement_given_ref import (
-    SalesOfferPackageEntitlementGivenRef,
-)
-from .sales_offer_package_entitlement_required import (
-    SalesOfferPackageEntitlementRequired,
-)
-from .sales_offer_package_entitlement_required_ref import (
-    SalesOfferPackageEntitlementRequiredRef,
-)
+from .sales_offer_package_entitlement_given import SalesOfferPackageEntitlementGiven
+from .sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
+from .sales_offer_package_entitlement_required import SalesOfferPackageEntitlementRequired
+from .sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
 from .step_limit import StepLimit
 from .step_limit_ref import StepLimitRef
 from .subscribing import Subscribing

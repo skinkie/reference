@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .type_of_access_right_assignment_version_structure import (
-    TypeOfAccessRightAssignmentVersionStructure,
-)
+from .type_of_access_right_assignment_version_structure import TypeOfAccessRightAssignmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

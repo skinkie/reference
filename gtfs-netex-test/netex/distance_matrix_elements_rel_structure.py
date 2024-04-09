@@ -13,9 +13,7 @@ class DistanceMatrixElementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "distanceMatrixElements_RelStructure"
 
-    distance_matrix_element_ref_or_distance_matrix_element: List[
-        Union[DistanceMatrixElementRef, DistanceMatrixElement]
-    ] = field(
+    distance_matrix_element_ref_or_distance_matrix_element: List[Union[DistanceMatrixElementRef, DistanceMatrixElement]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

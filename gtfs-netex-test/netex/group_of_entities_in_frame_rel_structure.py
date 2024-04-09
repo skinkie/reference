@@ -37,9 +37,7 @@ from .hail_and_ride_area import HailAndRideArea
 from .headway_journey_group import HeadwayJourneyGroup
 from .layer import Layer
 from .mobility_service_constraint_zone import MobilityServiceConstraintZone
-from .monitored_vehicle_sharing_parking_bay import (
-    MonitoredVehicleSharingParkingBay,
-)
+from .monitored_vehicle_sharing_parking_bay import MonitoredVehicleSharingParkingBay
 from .network import Network
 from .parking import Parking
 from .parking_area import ParkingArea

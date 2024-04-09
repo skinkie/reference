@@ -14,9 +14,7 @@ class DistanceMatrixElementDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "DistanceMatrixElement_DerivedViewStructure"
 
-    start_stop_point_ref_or_start_tariff_zone_ref: Optional[
-        Union[ScheduledStopPointRefStructure, TariffZoneRefStructure]
-    ] = field(
+    start_stop_point_ref_or_start_tariff_zone_ref: Optional[Union[ScheduledStopPointRefStructure, TariffZoneRefStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -42,9 +40,7 @@ class DistanceMatrixElementDerivedViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    end_stop_point_ref_or_end_tariff_zone_ref: Optional[
-        Union[ScheduledStopPointRefStructure, TariffZoneRefStructure]
-    ] = field(
+    end_stop_point_ref_or_end_tariff_zone_ref: Optional[Union[ScheduledStopPointRefStructure, TariffZoneRefStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .priceable_object_version_structure import (
-    FareStructureFactorVersionStructure,
-)
+from .priceable_object_version_structure import FareStructureFactorVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

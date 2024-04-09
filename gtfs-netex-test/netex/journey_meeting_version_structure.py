@@ -14,9 +14,7 @@ from .line_derived_view_structure import LineDerivedViewStructure
 from .line_ref import LineRef
 from .multilingual_string import MultilingualString
 from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
-from .point_in_journey_pattern_ref_structure import (
-    PointInJourneyPatternRefStructure,
-)
+from .point_in_journey_pattern_ref_structure import PointInJourneyPatternRefStructure
 from .reason_for_meeting_enumeration import ReasonForMeetingEnumeration
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 from .service_journey_ref import ServiceJourneyRef
@@ -66,9 +64,7 @@ class JourneyMeetingVersionStructure(DataManagedObjectStructure):
             "required": True,
         }
     )
-    from_point_in_journey_pattern_ref: Optional[
-        PointInJourneyPatternRefStructure
-    ] = field(
+    from_point_in_journey_pattern_ref: Optional[PointInJourneyPatternRefStructure] = field(
         default=None,
         metadata={
             "name": "FromPointInJourneyPatternRef",
@@ -76,9 +72,7 @@ class JourneyMeetingVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    to_point_in_journey_pattern_ref: Optional[
-        PointInJourneyPatternRefStructure
-    ] = field(
+    to_point_in_journey_pattern_ref: Optional[PointInJourneyPatternRefStructure] = field(
         default=None,
         metadata={
             "name": "ToPointInJourneyPatternRef",
@@ -159,18 +153,7 @@ class JourneyMeetingVersionStructure(DataManagedObjectStructure):
         },
     )
     single_journey_ref_or_normal_dated_vehicle_journey_ref_or_dated_vehicle_journey_ref_or_dated_special_service_ref_or_special_service_ref_or_template_service_journey_ref_or_service_journey_ref_or_dead_run_ref_or_vehicle_journey_ref_or_connecting_journey_view: Optional[
-        Union[
-            SingleJourneyRef,
-            NormalDatedVehicleJourneyRef,
-            DatedVehicleJourneyRef,
-            DatedSpecialServiceRef,
-            SpecialServiceRef,
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            DeadRunRef,
-            VehicleJourneyRef,
-            ConnectingJourneyView,
-        ]
+        Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef, ConnectingJourneyView]
     ] = field(
         default=None,
         metadata={
@@ -229,9 +212,7 @@ class JourneyMeetingVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    flexible_line_ref_or_line_ref_or_connecting_line_view: Optional[
-        Union[FlexibleLineRef, LineRef, LineDerivedViewStructure]
-    ] = field(
+    flexible_line_ref_or_line_ref_or_connecting_line_view: Optional[Union[FlexibleLineRef, LineRef, LineDerivedViewStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -24,13 +24,7 @@ class OnlineServiceOperatorVersionStructure(OrganisationVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    address: Optional[
-        Union[
-            PostalAddress,
-            RoadAddress,
-            "OnlineServiceOperatorVersionStructure.Address",
-        ]
-    ] = field(
+    address: Optional[Union[PostalAddress, RoadAddress, "OnlineServiceOperatorVersionStructure.Address"]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -47,9 +41,7 @@ class OnlineServiceOperatorVersionStructure(OrganisationVersionStructure):
                 },
                 {
                     "name": "Address",
-                    "type": Type[
-                        "OnlineServiceOperatorVersionStructure.Address"
-                    ],
+                    "type": Type["OnlineServiceOperatorVersionStructure.Address"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

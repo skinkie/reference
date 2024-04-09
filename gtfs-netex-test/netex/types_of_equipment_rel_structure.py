@@ -13,9 +13,7 @@ class TypesOfEquipmentRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typesOfEquipment_RelStructure"
 
-    type_of_equipment_ref_or_type_of_equipment: List[
-        Union[TypeOfEquipmentRef, TypeOfEquipment]
-    ] = field(
+    type_of_equipment_ref_or_type_of_equipment: List[Union[TypeOfEquipmentRef, TypeOfEquipment]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

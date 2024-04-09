@@ -13,9 +13,7 @@ class TransportModesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "transportModes_RelStructure"
 
-    open_transport_mode_ref_or_transport_mode: List[
-        Union[OpenTransportModeRef, TransportModeStructure]
-    ] = field(
+    open_transport_mode_ref_or_transport_mode: List[Union[OpenTransportModeRef, TransportModeStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

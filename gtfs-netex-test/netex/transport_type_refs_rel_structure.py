@@ -16,15 +16,7 @@ class TransportTypeRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "transportTypeRefs_RelStructure"
 
-    transport_type_ref_or_vehicle_type_ref: List[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: List[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

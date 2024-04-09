@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .flexible_stop_place_ref import FlexibleStopPlaceRef
 from .multilingual_string import MultilingualString

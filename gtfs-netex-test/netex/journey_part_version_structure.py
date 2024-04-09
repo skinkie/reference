@@ -6,16 +6,12 @@ from xsdata.models.datatype import XmlTime
 from .block_part_ref import BlockPartRef
 from .entity_in_version_structure import DataManagedObjectStructure
 from .journey_part_couple_ref import JourneyPartCoupleRef
-from .journey_part_positions_rel_structure import (
-    JourneyPartPositionsRelStructure,
-)
+from .journey_part_positions_rel_structure import JourneyPartPositionsRelStructure
 from .journey_part_ref_structure import JourneyPartRefStructure
 from .multilingual_string import MultilingualString
 from .purpose_of_journey_partition_ref import PurposeOfJourneyPartitionRef
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
-from .service_facility_sets_rel_structure import (
-    ServiceFacilitySetsRelStructure,
-)
+from .service_facility_sets_rel_structure import ServiceFacilitySetsRelStructure
 from .train_block_part_ref import TrainBlockPartRef
 from .train_number_ref import TrainNumberRef
 from .type_of_product_category_ref import TypeOfProductCategoryRef
@@ -143,9 +139,7 @@ class JourneyPartVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    purpose_of_journey_partition_ref: Optional[
-        PurposeOfJourneyPartitionRef
-    ] = field(
+    purpose_of_journey_partition_ref: Optional[PurposeOfJourneyPartitionRef] = field(
         default=None,
         metadata={
             "name": "PurposeOfJourneyPartitionRef",

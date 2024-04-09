@@ -31,9 +31,7 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
             "required": True,
         }
     )
-    departure_time_or_frequency: Optional[
-        Union[XmlTime, FrequencyStructure]
-    ] = field(
+    departure_time_or_frequency: Optional[Union[XmlTime, FrequencyStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -85,14 +83,7 @@ class ConnectingJourneyDerivedViewStructure(DerivedViewStructure):
             ),
         },
     )
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

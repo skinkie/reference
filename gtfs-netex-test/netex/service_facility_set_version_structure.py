@@ -56,15 +56,13 @@ class ServiceFacilitySetVersionStructure(FacilitySetVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_process_facility_list: Optional[BookingProcessFacilityList] = (
-        field(
-            default=None,
-            metadata={
-                "name": "BookingProcessFacilityList",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    booking_process_facility_list: Optional[BookingProcessFacilityList] = field(
+        default=None,
+        metadata={
+            "name": "BookingProcessFacilityList",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     couchette_facility_list: Optional[CouchetteFacilityList] = field(
         default=None,
@@ -82,19 +80,15 @@ class ServiceFacilitySetVersionStructure(FacilitySetVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    luggage_carriage_facility_list: Optional[LuggageCarriageFacilityList] = (
-        field(
-            default=None,
-            metadata={
-                "name": "LuggageCarriageFacilityList",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    luggage_carriage_facility_list: Optional[LuggageCarriageFacilityList] = field(
+        default=None,
+        metadata={
+            "name": "LuggageCarriageFacilityList",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
-    service_reservation_facility_list: Optional[
-        ServiceReservationFacilityList
-    ] = field(
+    service_reservation_facility_list: Optional[ServiceReservationFacilityList] = field(
         default=None,
         metadata={
             "name": "ServiceReservationFacilityList",
@@ -102,15 +96,13 @@ class ServiceFacilitySetVersionStructure(FacilitySetVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    uic_product_characteristic_list: Optional[UicProductCharacteristicList] = (
-        field(
-            default=None,
-            metadata={
-                "name": "UicProductCharacteristicList",
-                "type": "Element",
-                "namespace": "http://www.netex.org.uk/netex",
-            },
-        )
+    uic_product_characteristic_list: Optional[UicProductCharacteristicList] = field(
+        default=None,
+        metadata={
+            "name": "UicProductCharacteristicList",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
     )
     uic_train_rate: Optional[UicTrainRate] = field(
         default=None,

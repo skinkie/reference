@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from .train_stop_assignment_version_structure import (
-    TrainStopAssignmentVersionStructure,
-)
+from .train_stop_assignment_version_structure import TrainStopAssignmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

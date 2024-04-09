@@ -17,21 +17,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleAccessCredentialsAssignmentVersionStructure(
-    AssignmentVersionStructure1
-):
+class VehicleAccessCredentialsAssignmentVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "VehicleAccessCredentialsAssignment_VersionStructure"
 
-    common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[
-        Union[
-            VehicleRentalServiceRef,
-            VehicleSharingServiceRef,
-            ChauffeuredVehicleServiceRef,
-            TaxiServiceRef,
-            CarPoolingServiceRef,
-        ]
-    ] = field(
+    common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[Union[VehicleRentalServiceRef, VehicleSharingServiceRef, ChauffeuredVehicleServiceRef, TaxiServiceRef, CarPoolingServiceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -72,9 +62,7 @@ class VehicleAccessCredentialsAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    medium_access_device_ref: Optional[
-        Union[MobileDeviceRef, EmvCardRef, SmartcardRef]
-    ] = field(
+    medium_access_device_ref: Optional[Union[MobileDeviceRef, EmvCardRef, SmartcardRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

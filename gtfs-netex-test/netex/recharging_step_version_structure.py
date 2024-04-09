@@ -89,19 +89,7 @@ class RechargingStepVersionStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[
-        Union[
-            SingleJourneyRef,
-            NormalDatedVehicleJourneyRef,
-            DatedVehicleJourneyRef,
-            DatedSpecialServiceRef,
-            SpecialServiceRef,
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            DeadRunRef,
-            VehicleJourneyRef,
-        ]
-    ] = field(
+    journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref: Optional[Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -154,15 +142,7 @@ class RechargingStepVersionStructure(VersionedChildStructure):
             ),
         },
     )
-    point_in_journey_pattern_ref: Optional[
-        Union[
-            PointInSingleJourneyPathRef,
-            FarePointInPatternRef,
-            StopPointInJourneyPatternRef,
-            TimingPointInJourneyPatternRef,
-            PointInJourneyPatternRef,
-        ]
-    ] = field(
+    point_in_journey_pattern_ref: Optional[Union[PointInSingleJourneyPathRef, FarePointInPatternRef, StopPointInJourneyPatternRef, TimingPointInJourneyPatternRef, PointInJourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -195,9 +175,7 @@ class RechargingStepVersionStructure(VersionedChildStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[
-        Union[CompoundTrainRef, TrainRef, VehicleTypeRef]
-    ] = field(
+    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

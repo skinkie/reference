@@ -14,9 +14,7 @@ from .price_unit import PriceUnit
 from .purpose_of_equipment_profile import PurposeOfEquipmentProfile
 from .purpose_of_grouping import PurposeOfGrouping
 from .purpose_of_journey_partition import PurposeOfJourneyPartition
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .submode import Submode
 from .timing_algorithm_type import TimingAlgorithmType
 from .type_of_access_right_assignment import TypeOfAccessRightAssignment
@@ -53,9 +51,7 @@ from .type_of_operation import TypeOfOperation
 from .type_of_organisation import TypeOfOrganisation
 from .type_of_organisation_part import TypeOfOrganisationPart
 from .type_of_parking import TypeOfParking
-from .type_of_passenger_information_equipment import (
-    TypeOfPassengerInformationEquipment,
-)
+from .type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
 from .type_of_payment_method import TypeOfPaymentMethod
 from .type_of_place import TypeOfPlace
 from .type_of_plug import TypeOfPlug

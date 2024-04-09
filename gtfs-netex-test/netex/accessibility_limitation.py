@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from .accessibility_limitation_versioned_child_structure import (
-    AccessibilityLimitationVersionedChildStructure,
-)
+from .accessibility_limitation_versioned_child_structure import AccessibilityLimitationVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

@@ -2,22 +2,16 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional
 
-from .actual_vehicle_equipment_version_structure import (
-    ActualVehicleEquipmentVersionStructure,
-)
+from .actual_vehicle_equipment_version_structure import ActualVehicleEquipmentVersionStructure
 from .assistance_needed_enumeration import AssistanceNeededEnumeration
-from .assisted_boarding_location_enumeration import (
-    AssistedBoardingLocationEnumeration,
-)
+from .assisted_boarding_location_enumeration import AssistedBoardingLocationEnumeration
 from .mobility_enumeration import MobilityEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class AccessVehicleEquipmentVersionStructure(
-    ActualVehicleEquipmentVersionStructure
-):
+class AccessVehicleEquipmentVersionStructure(ActualVehicleEquipmentVersionStructure):
     class Meta:
         name = "AccessVehicleEquipment_VersionStructure"
 
@@ -142,9 +136,7 @@ class AccessVehicleEquipmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    assisted_boarding_location: Optional[
-        AssistedBoardingLocationEnumeration
-    ] = field(
+    assisted_boarding_location: Optional[AssistedBoardingLocationEnumeration] = field(
         default=None,
         metadata={
             "name": "AssistedBoardingLocation",
