@@ -191,20 +191,6 @@ def write_list_of_strings(out: RawIOBase, index, list_of_strings):
 
 
 
-def export_sa_coords(index, out: RawIOBase):
-    write_text_comment(out,"STOP AREA COORDS")
-    index.loc_stop_area_coords = out.tell()
-    for sa in index.stop_areas:
-        write2floats(out,sa.latitude or 0.0, sa.longitude or 0.0)
-
-
-
-
-def export_sa_for_sp(index, out: RawIOBase):
-    write_text_comment(out,"STOP_POINT -> STOP_AREA")
-    index.loc_sa_for_sp = tell(out)
-    for sp in index.stop_points:
-        write_stop_area_idx(out,index,sp.stop_area.uri)
 
 
 
@@ -212,47 +198,12 @@ def export_sa_for_sp(index, out: RawIOBase):
 
 
 
-def export_platform_codes(index, out: RawIOBase):
-    print("writing out platformcodes for stops")
-    write_text_comment(out,"PLATFORM CODES")
-    index.loc_platformcodes = write_list_of_strings(out,index,[sp.platformcode or '' for sp in index.stop_points])
 
 
-def export_stop_areanames(index, out: RawIOBase):
-    print("writing out locations for stopareas")
-    write_text_comment(out,"STOP AREA NAMES")
-    index.loc_stop_areaidx = write_list_of_strings(out,index,[sa.name or '' for sa in index.stop_areas])
-
-def export_operators(index, out: RawIOBase):
-    print("writing out opreators to string pool")
-    write_text_comment(out,"OPERATOR IDS")
-    index.loc_operator_ids = write_list_of_strings(out,index,[op.uri or '' for op in index.operators])
-    write_text_comment(out,"OPERATOR NAMES")
-    index.loc_operator_names = write_list_of_strings(out,index,[op.name or '' for op in index.operators])
-    write_text_comment(out,"OPERATOR URLS")
-    index.loc_operator_urls = write_list_of_strings(out,index,[op.url or '' for op in index.operators])
-
-def export_commercialmodes(index, out: RawIOBase):
-    print("writing out commercial_mode to string table")
-    write_text_comment(out,"CCMODE IDS")
-    index.loc_commercialmode_ids = write_list_of_strings(out,index,[cc.uri or '' for cc in index.commercial_modes])
-    write_text_comment(out,"CCMODE NAMES")
-    index.loc_commercialmode_names = write_list_of_strings(out,index,[cc.name or '' for cc in index.commercial_modes])
-    index.loc_commercial_mode_for_jp = tell(out)
-    for jp in index.journey_patterns:
-        writeshort(out,index.idx_for_commercial_mode_uri[jp.commercial_mode.uri])
 
 
-# TODO: Review
-def export_physicalmodes(index, out: RawIOBase):
-    print("writing out commercial_mode to string table")
-    write_text_comment(out,"CCMODE IDS")
-    index.loc_physicalmode_ids = write_list_of_strings(out,index,[cc.uri or '' for cc in index.physical_modes])
-    write_text_comment(out,"CCMODE NAMES")
-    index.loc_physicalmode_names = write_list_of_strings(out,index,[cc.name or '' for cc in index.physical_modes])
-    index.loc_physical_mode_for_line = tell(out)
-    for l in index.lines:
-        writeshort(out,index.idx_for_physical_mode_uri[l.physical_mode.uri])
+
+
 
 def export_stringpool(index, out: RawIOBase):
     print("writing out stringpool")
@@ -264,34 +215,9 @@ def export_stringpool(index, out: RawIOBase):
         written_length += len(string) + 1
     assert written_length == index.string_length
 
-def export_linecodes(index, out: RawIOBase):
-    write_text_comment(out,"LINE CODES")
-    index.loc_line_codes = write_list_of_strings(out,index,[line.code or '' for line in index.lines])
-
-def export_linecolors(index, out: RawIOBase):
-    write_text_comment(out,"LINE COLOR")
-    index.loc_line_color = write_list_of_strings(out,index,[line.color or '' for line in index.lines])
-    write_text_comment(out,"LINE COLOR_TEXT")
-    index.loc_line_color_text = write_list_of_strings(out,index,[line.color_text or '' for line in index.lines])
-
-def export_linenames(index, out: RawIOBase):
-    write_text_comment(out,"LINE NAMES")
-    index.loc_line_names = write_list_of_strings(out,index,[line.name or '' for line in index.lines])
-
-def export_line_uris(index, out: RawIOBase):
-    print("writing line ids to string table")
-    write_text_comment(out,"LINE IDS")
-    index.loc_line_uris = write_list_of_strings(out,index,[line.uri for line in index.lines])
 
 
-def export_sa_uris(index, out: RawIOBase):
-    print("writing out sorted stop_area ids to string point list")
-    write_text_comment(out,"STOP_AREA IDS")
-    index.loc_stop_area_uris = write_list_of_strings(out,index,[sa.uri for sa in index.stop_areas])
 
-def export_sa_timezones(index, out: RawIOBase):
-    write_text_comment(out,"STOP_AREA TIMEZONES")
-    index.loc_stop_area_timezones = write_list_of_strings(out,index,[sa.timezone for sa in index.stop_areas])
 
 def export_vj_time_offsets(index, out: RawIOBase):
      print('Timetable offset from UTC {index.global_utc_offset}')
@@ -316,15 +242,6 @@ def export_vj_uris(index, out: RawIOBase):
      index.loc_vj_uris = write_list_of_strings(out,index,all_vj_ids)
      index.n_vj = len(all_vj_ids)
 
-def export_routes(index, out: RawIOBase):
-    index.loc_line_for_route = tell(out)
-    for r in index.routes:
-        writeshort(out,index.idx_for_line_uri[r.line.uri])
-
-def export_lines(index, out: RawIOBase):
-    index.loc_operator_for_line = tell(out)
-    for l in index.lines:
-        writebyte(out,index.idx_for_operator_uri[l.operator.uri])
 
 def write_header (out: RawIOBase, index) :
     """ Write out a file header containing offsets to the beginning of each subsection.
