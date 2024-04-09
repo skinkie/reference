@@ -17,7 +17,7 @@ from netex import Codespace, VehicleScheduleFrame, Version, ServiceCalendarFrame
     StopAreasInFrameRelStructure, StopAssignmentsInFrameRelStructure, TimingPointsInFrameRelStructure, \
     TimingLinksInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure, \
     CodespacesInFrameRelStructure, CodespacesRelStructure, TransportAdministrativeZone, ZonesInFrameRelStructure, \
-    NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, ServiceJourney, CallZ
+    NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, ServiceJourney
 from refs import getId, getRef
 
 
@@ -46,7 +46,7 @@ class DutchProfile:
             operational_contexts = OperationalContextsInFrameRelStructure(operational_context=operational_contexts)
 
         if vehicle_types is not None and len(vehicle_types) > 0:
-            vehicle_types = VehicleTypesInFrameRelStructure(choice=vehicle_types)
+            vehicle_types = VehicleTypesInFrameRelStructure(compound_train_or_train_or_vehicle_type_or_simple_vehicle_type=vehicle_types)
 
         if zones is not None and len(zones) > 0:
             zones = ZonesInFrameRelStructure(choice=zones)
@@ -174,7 +174,7 @@ class DutchProfile:
             content_validity_conditions = ValidityConditionsRelStructure(choice=content_validity_conditions)
 
         if vehicle_journeys is not None and len(vehicle_journeys) > 0:
-            vehicle_journeys = JourneysInFrameRelStructure(choice=vehicle_journeys)
+            vehicle_journeys = JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=vehicle_journeys)
 
         if content_validity_conditions is not None or vehicle_journeys is not None or operator_view is not None:
             timetable_frame = TimetableFrame(

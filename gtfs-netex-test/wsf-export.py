@@ -23,7 +23,9 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     TimingLinkRefStructure, PointRefStructure, RoutePointRefStructure, TimingPointRefStructure, LineString, PosList, \
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, AuthorityRef, OrganisationRefStructure, ServiceJourney, \
-    AlternativeText
+    AlternativeText, MobilityFacilityList, SanitaryFacilityList, TicketingFacilityList, TicketingFacilityEnumeration, \
+    TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
+    TransportTypeVersionStructure, PublicCodeType
 import datetime
 
 from refs import getId, getRef, getFakeRef
@@ -34,10 +36,10 @@ ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gm
 short_name = "WSF"
 
 codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
-                      xmlns_url="http://bison.dova.nu/ns/WSF", description="Westerschelde Ferry")
+                      xmlns_url="http://bison.dova.nu/ns/WSF", description=MultilingualString(value="Westerschelde Ferry"))
 
 dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
-                      xmlns_url="http://bison.dova.nu/ns/DOVA", description="'Centrale' lijsten bijgehouden door DOVA")
+                      xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
 start_date = datetime.datetime(year=2023, month=11, day=29)
 end_date = datetime.datetime(year=2023, month=12, day=29)
@@ -102,7 +104,7 @@ operational_context = OperationalContext(id=getId(OperationalContext, codespace,
 vehicle_type = VehicleType(id=getId(VehicleType, codespace, "PMPWA"), version=version.version,
                            name=MultilingualString(value="Prinses Maxima en Prins Willem Alexander"),
                            description=MultilingualString(value="Prinses Maxima en Prins Willem Alexander"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "PMPWA"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=186, seating_capacity=186)]),
@@ -113,8 +115,10 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "PMPWA"), version=ve
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "PMPWA"), version=version.version,
-                                                  mobility_facility_list=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                   sanitary_facility_list=[SanitaryFacilityEnumeration.TOILET, SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET, SanitaryFacilityEnumeration.BABY_CHANGE],
+                                                  mobility_facility_list=MobilityFacilityList(value=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                  ticketing_service_facility_list=TicketingServiceFacilityList(value=[TicketingServiceFacilityEnumeration.PURCHASE, TicketingServiceFacilityEnumeration.RESERVATIONS]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]),
+                                                  sanitary_facility_list=SanitaryFacilityList(value=[SanitaryFacilityEnumeration.TOILET, SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET, SanitaryFacilityEnumeration.BABY_CHANGE]),
                                                   )]
                            ))
 
@@ -133,7 +137,7 @@ line = Line(id=getId(Line, codespace, "WSF"), version=version.version, name=Mult
               description=MultilingualString(value="Veer tussen Vlissingen en Breskens"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
-              public_code="WSF",
+              public_code=PublicCodeType(value="WSF"),
               private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "WSF"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
@@ -166,20 +170,20 @@ route_links = [rl_vb, rl_bv]
 route_vb = Route(id=getId(Route, codespace, "V-B"), version=version.version,
                  distance=Decimal('5803'),
                  line_ref=getRef(line),
-                   direction_type=DirectionTypeEnumeration.INBOUND,
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-B-V"), version=version.version, order=1, choice_1=getRef(rp_v), onward_route_link_ref=getRef(rl_vb, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-B-B"), version=version.version, order=2, choice_1=getRef(rp_b)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-B-V"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v), onward_route_link_ref=getRef(rl_vb, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-B-B"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_b)),
                    ])
                    )
 
 route_bv = Route(id=getId(Route, codespace, "B-V"), version=version.version,
                  distance=Decimal('5803'),
                  line_ref=getRef(line),
-                   direction_type=DirectionTypeEnumeration.OUTBOUND,
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "B-V-B"), version=version.version, order=1, choice_1=getRef(rp_b), onward_route_link_ref=getRef(rl_bv, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "B-V-V"), version=version.version, order=2, choice_1=getRef(rp_v)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "B-V-B"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_b), onward_route_link_ref=getRef(rl_bv, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "B-V-V"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v)),
                    ])
                    )
 
@@ -323,7 +327,7 @@ publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=compo
 serializer_config = SerializerConfig(ignore_default_attributes=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
-serializer = XmlSerializer(serializer_config)
+serializer = XmlSerializer(config=serializer_config)
 
 with open('netex-output/wsf.xml', 'w') as out:
     serializer.write(out, publication_delivery, ns_map)
