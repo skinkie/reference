@@ -1019,7 +1019,7 @@ class Index2:
         if presentation is not None:
             colour = getattr(presentation, attr)
             if colour is not None:
-                return colour.decode('utf-8')
+                return colour.hex()
 
         return ''
 
