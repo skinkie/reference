@@ -77,8 +77,10 @@ class MyLxmlEventHandler(LxmlEventHandler):
 class JSONWriter:
     intermediate: list
     out: dict[str, list]
+    strings: OrderedDict[str, int]
 
     def __init__(self, filename: str):
+        self.strings = collections.OrderedDict({})
         self.out = {}
 
     def save(self):
@@ -157,6 +159,18 @@ class JSONWriter:
     def write_string_table(self, strings):
         for s in strings:
             self.intermediate.append(s)
+
+    def put_string(self,string):
+        location = self.strings.get(string, None)
+        if location is not None:
+            return location
+
+        # self.strings[string] = self.string_length (binary variant)
+        location = len(self.strings.keys())
+        self.strings[string] = len(self.strings.keys())
+        # self.string_length += (len(string) + 1) (binary variant)
+        return location
+
 
 class NeTExTimetable:
     parser: XmlParser
@@ -359,6 +373,7 @@ class Index2:
 
     global_utc_offset: int
 
+    """
     def put_string(self,string):
         if string in self.loc_for_string:
             return self.loc_for_string[string]
@@ -367,6 +382,7 @@ class Index2:
         self.strings.append(string)
 
         return self.loc_for_string[string]
+    """
 
     def write_stop_point_idx(self, scheduled_stop_point_ref: str):
         if self.n_stops <= 65535:
@@ -383,7 +399,7 @@ class Index2:
     def write_list_of_strings(self, list_of_strings: List[str]):
         loc = self.out.tell()
         for x in list_of_strings:
-            self.out.writeint(self.put_string(x or ''))
+            self.out.writeint(self.out.put_string(x or ''))
         return loc
 
     def __init__(self, netex_timetable: NeTExTimetable, out):
@@ -512,7 +528,7 @@ class Index2:
         for service_journey_pattern in service_journey_patterns.values():
             self.offset_jpp.append(offset)
             for point_in_sequence in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
-                self.out.writeint(self.put_string(point_in_sequence.destination_display_ref_or_destination_display_view.front_text.value))
+                self.out.writeint(self.out.put_string(point_in_sequence.destination_display_ref_or_destination_display_view.front_text.value))
                 offset += 1
 
     @staticmethod
@@ -959,6 +975,7 @@ class Index2:
         self.out.write_text_comment("CCMODE NAMES")
         self.loc_commercialmode_names = self.write_list_of_strings([cc.name.value for cc in commercial_modes.values()])
 
+        self.out.write_text_comment("COMMERCIAL MODE FOR JOURNEY PATTERN")
         self.loc_commercial_mode_for_jp = self.out.tell()
 
         routeref_to_lineref = {route.id : route.line_ref.ref for route in routes.values()}
@@ -981,6 +998,7 @@ class Index2:
         self.loc_physicalmode_names = self.write_list_of_strings([pc.name.value for pc in type_of_productcategories.values()])
         self.loc_physical_mode_for_line = self.out.tell()
 
+        self.out.write_text_comment("PHYSICAL MODE FOR LINE")
         pc_idx = list(type_of_productcategories.keys())
         for l in lines.values():
             self.out.writeshort(pc_idx.index(l.type_of_product_category_ref.ref))
@@ -991,6 +1009,7 @@ class Index2:
 
         l_idx = list(lines.keys())
 
+        self.out.write_text_comment("LINE FOR ROUTE")
         self.loc_line_for_route = self.out.tell()
         for r in routes.values():
             self.out.writeshort(l_idx.index(r.line_ref.ref))
@@ -1014,6 +1033,7 @@ class Index2:
 
         # TODO assert that len(o_idx) <= 255 (less or equal than 255 operators)
 
+        self.out.write_text_comment("OPERATOR FOR LINE")
         self.loc_operator_for_line = self.out.tell()
         for l in lines.values():
             self.out.writebyte(o_idx.index(l.operator_ref.ref))
@@ -1052,6 +1072,8 @@ class Index2:
         print('Timetable offset from UTC {index.global_utc_offset}')
         self.loc_vj_time_offsets = self.out.tell()
 
+        self.out.write_text_comment("VJ OFFSET")
+
         for service_journey_pattern_ref, service_journeys in service_journey_service_journey_pattern_group.items():
             for service_journey in service_journeys:
                 self.out.writesignedbyte((self.global_utc_offset - service_journey._utc_offset) / 60 / 15)  # n * 15 minutes
@@ -1075,10 +1097,10 @@ class Index2:
         self.out.write_text_comment("STRINGPOOL")
         self.loc_stringpool = self.out.tell()
         written_length = 0
-        for string in self.strings:
+        for string in self.out.strings.keys():
             self.out.write_string(string)
             written_length += len(string) + 1
-        assert written_length == self.string_length
+        # assert written_length == self.string_length
 
     def export(self):
         self.export_sp_coords()
