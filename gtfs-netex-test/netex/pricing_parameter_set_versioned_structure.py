@@ -1,11 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .day_type_ref import DayTypeRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .fare_day_type_ref import FareDayTypeRef
-from .month_validity_offsets_rel_structure import (
-    MonthValidityOffsetsRelStructure,
-)
+from .month_validity_offsets_rel_structure import MonthValidityOffsetsRelStructure
 from .multilingual_string import MultilingualString
 from .price_unit_ref import PriceUnitRef
 from .price_units_rel_structure import PriceUnitsRelStructure

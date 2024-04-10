@@ -1,13 +1,12 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .all_authorities_ref import AllAuthoritiesRef
 from .all_countries_ref import AllCountriesRef
 from .all_distribution_channels_ref import AllDistributionChannelsRef
 from .all_operators_ref import AllOperatorsRef
 from .all_organisations_ref import AllOrganisationsRef
-from .all_public_transport_organisations_ref import (
-    AllPublicTransportOrganisationsRef,
-)
+from .all_public_transport_organisations_ref import AllPublicTransportOrganisationsRef
 from .all_transport_organisations_ref import AllTransportOrganisationsRef
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .assignment_version_structure_2 import AssignmentVersionStructure2
@@ -15,9 +14,7 @@ from .authority_ref import AuthorityRef
 from .capped_discount_right_ref import CappedDiscountRightRef
 from .country_ref import CountryRef
 from .distribution_channel_ref import DistributionChannelRef
-from .distribution_channel_type_enumeration import (
-    DistributionChannelTypeEnumeration,
-)
+from .distribution_channel_type_enumeration import DistributionChannelTypeEnumeration
 from .distribution_rights_enumeration import DistributionRightsEnumeration
 from .entitlement_product_ref import EntitlementProductRef
 from .fare_product_ref import FareProductRef
@@ -41,9 +38,7 @@ from .service_access_right_ref import ServiceAccessRightRef
 from .serviced_organisation_ref import ServicedOrganisationRef
 from .supplement_product_ref import SupplementProductRef
 from .third_party_product_ref import ThirdPartyProductRef
-from .ticketing_service_facility_enumeration import (
-    TicketingServiceFacilityEnumeration,
-)
+from .ticketing_service_facility_list import TicketingServiceFacilityList
 from .topographic_place_ref import TopographicPlaceRef
 from .travel_agent_ref import TravelAgentRef
 from .usage_discount_right_ref import UsageDiscountRightRef
@@ -56,19 +51,8 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
     class Meta:
         name = "DistributionAssignment_VersionStructure"
 
-    choice: Optional[
-        Union[
-            EntitlementProductRef,
-            SupplementProductRef,
-            PreassignedFareProductRef,
-            AmountOfPriceUnitProductRef,
-            UsageDiscountRightRef,
-            ThirdPartyProductRef,
-            CappedDiscountRightRef,
-            SaleDiscountRightRef,
-            FareProductRef,
-            ServiceAccessRightRef,
-        ]
+    service_access_right_ref_or_preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[
+        Union[EntitlementProductRef, SupplementProductRef, PreassignedFareProductRef, AmountOfPriceUnitProductRef, UsageDiscountRightRef, ThirdPartyProductRef, CappedDiscountRightRef, SaleDiscountRightRef, FareProductRef, ServiceAccessRightRef]
     ] = field(
         default=None,
         metadata={
@@ -135,9 +119,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    group_of_sales_offer_packages_ref: Optional[
-        GroupOfSalesOfferPackagesRef
-    ] = field(
+    group_of_sales_offer_packages_ref: Optional[GroupOfSalesOfferPackagesRef] = field(
         default=None,
         metadata={
             "name": "GroupOfSalesOfferPackagesRef",
@@ -154,9 +136,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "tokens": True,
         },
     )
-    all_countries_ref_or_country_ref: Optional[
-        Union[AllCountriesRef, CountryRef]
-    ] = field(
+    all_countries_ref_or_country_ref: Optional[Union[AllCountriesRef, CountryRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -190,13 +170,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    all_distribution_channels_ref_or_group_of_distribution_channels_ref_or_distribution_channel_ref: Optional[
-        Union[
-            AllDistributionChannelsRef,
-            GroupOfDistributionChannelsRef,
-            DistributionChannelRef,
-        ]
-    ] = field(
+    all_distribution_channels_ref_or_group_of_distribution_channels_ref_or_distribution_channel_ref: Optional[Union[AllDistributionChannelsRef, GroupOfDistributionChannelsRef, DistributionChannelRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -219,9 +193,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             ),
         },
     )
-    distribution_channel_type: Optional[
-        DistributionChannelTypeEnumeration
-    ] = field(
+    distribution_channel_type: Optional[DistributionChannelTypeEnumeration] = field(
         default=None,
         metadata={
             "name": "DistributionChannelType",
@@ -277,7 +249,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice_1: Optional[
+    all_public_transport_organisations_ref_or_all_transport_organisations_ref_or_all_organisations_ref_or_organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
         Union[
             AllAuthoritiesRef,
             AllOperatorsRef,
@@ -386,15 +358,12 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    ticketing_service_facility_list: List[
-        TicketingServiceFacilityEnumeration
-    ] = field(
-        default_factory=list,
+    ticketing_service_facility_list: Optional[TicketingServiceFacilityList] = field(
+        default=None,
         metadata={
             "name": "TicketingServiceFacilityList",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-            "tokens": True,
         },
     )
     payment_methods: List[PaymentMethodEnumeration] = field(

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .availability_condition_ref import AvailabilityConditionRef
 from .day_type_ref import DayTypeRef
 from .fare_day_type_ref import FareDayTypeRef
@@ -7,6 +8,8 @@ from .group_of_timebands_ref import GroupOfTimebandsRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .operating_day_ref import OperatingDayRef
 from .operating_period_ref import OperatingPeriodRef
+from .service_calendar_ref import ServiceCalendarRef
+from .timeband_ref import TimebandRef
 from .uic_operating_period_ref import UicOperatingPeriodRef
 from .validity_condition_ref import ValidityConditionRef
 from .validity_rule_parameter_ref import ValidityRuleParameterRef
@@ -38,6 +41,15 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
+    timeband_ref: List[TimebandRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "TimebandRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
     group_of_timebands_ref: List[GroupOfTimebandsRef] = field(
         default_factory=list,
         metadata={
@@ -56,9 +68,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    operating_period_ref: List[
-        Union[UicOperatingPeriodRef, OperatingPeriodRef]
-    ] = field(
+    operating_period_ref: List[Union[UicOperatingPeriodRef, OperatingPeriodRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -76,14 +86,16 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    validity_condition_ref: List[
-        Union[
-            AvailabilityConditionRef,
-            ValidityRuleParameterRef,
-            ValidityTriggerRef,
-            ValidityConditionRef,
-        ]
-    ] = field(
+    service_calendar_ref: List[ServiceCalendarRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "ServiceCalendarRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    validity_condition_ref: List[Union[AvailabilityConditionRef, ValidityRuleParameterRef, ValidityTriggerRef, ValidityConditionRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

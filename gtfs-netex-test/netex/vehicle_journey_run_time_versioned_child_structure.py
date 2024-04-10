@@ -1,24 +1,19 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .dead_run_ref import DeadRunRef
-from .journey_run_time_versioned_child_structure import (
-    JourneyRunTimeVersionedChildStructure,
-)
+from .journey_run_time_versioned_child_structure import JourneyRunTimeVersionedChildStructure
 from .vehicle_journey_ref import VehicleJourneyRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleJourneyRunTimeVersionedChildStructure(
-    JourneyRunTimeVersionedChildStructure
-):
+class VehicleJourneyRunTimeVersionedChildStructure(JourneyRunTimeVersionedChildStructure):
     class Meta:
         name = "VehicleJourneyRunTime_VersionedChildStructure"
 
-    vehicle_journey_ref: Optional[
-        Union[DeadRunRef, VehicleJourneyRef]
-    ] = field(
+    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

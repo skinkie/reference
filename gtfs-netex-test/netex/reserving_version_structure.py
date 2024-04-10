@@ -1,12 +1,13 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Union
+
 from xsdata.models.datatype import XmlDuration
+
+from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .booking_arrangements_structure import BookingArrangementsStructure
 from .booking_policy_version_structure import BookingPolicyVersionStructure
 from .per_basis_enumeration import PerBasisEnumeration
-from .reservation_charge_type_enumeration import (
-    ReservationChargeTypeEnumeration,
-)
+from .reservation_charge_type_enumeration import ReservationChargeTypeEnumeration
 from .reservation_enumeration import ReservationEnumeration
 from .seat_allocation_method_enumeration import SeatAllocationMethodEnumeration
 
@@ -51,9 +52,7 @@ class ReservingVersionStructure(BookingPolicyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    reservation_charge_type: Optional[
-        ReservationChargeTypeEnumeration
-    ] = field(
+    reservation_charge_type: Optional[ReservationChargeTypeEnumeration] = field(
         default=None,
         metadata={
             "name": "ReservationChargeType",
@@ -93,12 +92,22 @@ class ReservingVersionStructure(BookingPolicyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_arrangements: Optional[BookingArrangementsStructure] = field(
+    booking_arrangements_or_booking_arrangements: Optional[Union[BookingArrangementsRelStructure, BookingArrangementsStructure]] = field(
         default=None,
         metadata={
-            "name": "BookingArrangements",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "bookingArrangements",
+                    "type": BookingArrangementsRelStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingArrangements",
+                    "type": BookingArrangementsStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
     seat_allocation_method: Optional[SeatAllocationMethodEnumeration] = field(

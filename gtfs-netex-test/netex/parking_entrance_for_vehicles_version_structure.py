@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
 from .parking_area_refs_rel_structure import ParkingAreaRefsRelStructure
 from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
@@ -17,16 +18,7 @@ class ParkingEntranceForVehiclesVersionStructure(SiteEntranceVersionStructure):
     class Meta:
         name = "ParkingEntranceForVehicles__VersionStructure"
 
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
-        Union[
-            PersonalModeOfOperationRef,
-            VehiclePoolingRef,
-            VehicleSharingRef,
-            VehicleRentalRef,
-            FlexibleModeOfOperationRef,
-            ScheduledModeOfOperationRef,
-        ]
-    ] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

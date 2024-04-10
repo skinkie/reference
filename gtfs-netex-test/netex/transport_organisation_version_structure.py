@@ -1,33 +1,34 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union, Any
-from .air_submode_enumeration import AirSubmodeEnumeration
+from typing import Any, List, Optional, Type, Union
+
+from .air_submode import AirSubmode
 from .all_modes_enumeration import AllModesEnumeration
-from .bus_submode_enumeration import BusSubmodeEnumeration
-from .coach_submode_enumeration import CoachSubmodeEnumeration
+from .bus_submode import BusSubmode
+from .coach_submode import CoachSubmode
 from .contact_structure import ContactStructure
 from .country_ref import CountryRef
 from .departments_rel_structure import DepartmentsRelStructure
 from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
-from .funicular_submode_enumeration import FunicularSubmodeEnumeration
-from .metro_submode_enumeration import MetroSubmodeEnumeration
+from .funicular_submode import FunicularSubmode
+from .metro_submode import MetroSubmode
 from .mode_refs_rel_structure import ModeRefsRelStructure
 from .operator_activities_enumeration import OperatorActivitiesEnumeration
 from .organisation_version_structure import OrganisationVersionStructure
 from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
 from .postal_address import PostalAddress
 from .postal_address_version_structure import PostalAddressVersionStructure
-from .rail_submode_enumeration import RailSubmodeEnumeration
+from .rail_submode import RailSubmode
 from .road_address import RoadAddress
 from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
-from .self_drive_submode_enumeration import SelfDriveSubmodeEnumeration
-from .snow_and_ice_submode_enumeration import SnowAndIceSubmodeEnumeration
-from .taxi_submode_enumeration import TaxiSubmodeEnumeration
-from .telecabin_submode_enumeration import TelecabinSubmodeEnumeration
-from .tram_submode_enumeration import TramSubmodeEnumeration
+from .self_drive_submode import SelfDriveSubmode
+from .snow_and_ice_submode import SnowAndIceSubmode
+from .taxi_submode import TaxiSubmode
+from .telecabin_submode import TelecabinSubmode
+from .tram_submode import TramSubmode
 from .vehicle_pooling_ref import VehiclePoolingRef
 from .vehicle_rental_ref import VehicleRentalRef
 from .vehicle_sharing_ref import VehicleSharingRef
-from .water_submode_enumeration import WaterSubmodeEnumeration
+from .water_submode import WaterSubmode
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -45,13 +46,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    address: Optional[
-        Union[
-            PostalAddress,
-            RoadAddress,
-            "TransportOrganisationVersionStructure.Address",
-        ]
-    ] = field(
+    address: Optional[Union[PostalAddress, RoadAddress, "TransportOrganisationVersionStructure.Address"]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -68,9 +63,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
                 },
                 {
                     "name": "Address",
-                    "type": Type[
-                        "TransportOrganisationVersionStructure.Address"
-                    ],
+                    "type": Type["TransportOrganisationVersionStructure.Address"],
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -84,99 +77,75 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            AirSubmodeEnumeration,
-            BusSubmodeEnumeration,
-            CoachSubmodeEnumeration,
-            FunicularSubmodeEnumeration,
-            MetroSubmodeEnumeration,
-            TramSubmodeEnumeration,
-            TelecabinSubmodeEnumeration,
-            RailSubmodeEnumeration,
-            WaterSubmodeEnumeration,
-            SnowAndIceSubmodeEnumeration,
-            TaxiSubmodeEnumeration,
-            SelfDriveSubmodeEnumeration,
-        ]
-    ] = field(
+    choice: Optional[Union[AirSubmode, BusSubmode, CoachSubmode, FunicularSubmode, MetroSubmode, TramSubmode, TelecabinSubmode, RailSubmode, WaterSubmode, SnowAndIceSubmode, TaxiSubmode, SelfDriveSubmode]] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "AirSubmode",
-                    "type": AirSubmodeEnumeration,
+                    "type": AirSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "BusSubmode",
-                    "type": BusSubmodeEnumeration,
+                    "type": BusSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "CoachSubmode",
-                    "type": CoachSubmodeEnumeration,
+                    "type": CoachSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "FunicularSubmode",
-                    "type": FunicularSubmodeEnumeration,
+                    "type": FunicularSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "MetroSubmode",
-                    "type": MetroSubmodeEnumeration,
+                    "type": MetroSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "TramSubmode",
-                    "type": TramSubmodeEnumeration,
+                    "type": TramSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "TelecabinSubmode",
-                    "type": TelecabinSubmodeEnumeration,
+                    "type": TelecabinSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "RailSubmode",
-                    "type": RailSubmodeEnumeration,
+                    "type": RailSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "WaterSubmode",
-                    "type": WaterSubmodeEnumeration,
+                    "type": WaterSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "SnowAndIceSubmode",
-                    "type": SnowAndIceSubmodeEnumeration,
+                    "type": SnowAndIceSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "TaxiSubmode",
-                    "type": TaxiSubmodeEnumeration,
+                    "type": TaxiSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "SelfDriveSubmode",
-                    "type": SelfDriveSubmodeEnumeration,
+                    "type": SelfDriveSubmode,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
         },
     )
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
-        Union[
-            PersonalModeOfOperationRef,
-            VehiclePoolingRef,
-            VehicleSharingRef,
-            VehicleRentalRef,
-            FlexibleModeOfOperationRef,
-            ScheduledModeOfOperationRef,
-        ]
-    ] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -262,6 +231,12 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             },
         )
         key_list: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        private_codes: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",

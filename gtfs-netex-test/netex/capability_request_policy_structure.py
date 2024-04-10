@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .empty_type_1 import EmptyType1
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
@@ -24,9 +25,7 @@ class CapabilityRequestPolicyStructure:
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    gml_coordinate_format_or_wgs_decimal_degrees: Optional[
-        Union[str, EmptyType1]
-    ] = field(
+    gml_coordinate_format_or_wgs_decimal_degrees: Optional[Union[str, EmptyType1]] = field(
         default=None,
         metadata={
             "type": "Elements",

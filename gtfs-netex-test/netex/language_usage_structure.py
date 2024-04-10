@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .language_use_enumeration import LanguageUseEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -21,7 +22,6 @@ class LanguageUsageStructure:
             "name": "LanguageUse",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
-            "required": True,
             "tokens": True,
         },
     )

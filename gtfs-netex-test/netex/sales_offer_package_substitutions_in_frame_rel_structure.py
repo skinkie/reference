@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .frame_containment_structure import FrameContainmentStructure
 from .sales_offer_package_substitution import SalesOfferPackageSubstitution
 
@@ -7,15 +8,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SalesOfferPackageSubstitutionsInFrameRelStructure(
-    FrameContainmentStructure
-):
+class SalesOfferPackageSubstitutionsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "salesOfferPackageSubstitutionsInFrame_RelStructure"
 
-    sales_offer_package_substitution: List[
-        SalesOfferPackageSubstitution
-    ] = field(
+    sales_offer_package_substitution: List[SalesOfferPackageSubstitution] = field(
         default_factory=list,
         metadata={
             "name": "SalesOfferPackageSubstitution",

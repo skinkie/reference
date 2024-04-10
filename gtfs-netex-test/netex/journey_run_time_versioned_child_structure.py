@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDuration
-from .journey_timing_versioned_child_structure import (
-    JourneyTimingVersionedChildStructure,
-)
+
+from .journey_timing_versioned_child_structure import JourneyTimingVersionedChildStructure
 from .timing_link_ref import TimingLinkRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class JourneyRunTimeVersionedChildStructure(
-    JourneyTimingVersionedChildStructure
-):
+class JourneyRunTimeVersionedChildStructure(JourneyTimingVersionedChildStructure):
     class Meta:
         name = "JourneyRunTime_VersionedChildStructure"
 

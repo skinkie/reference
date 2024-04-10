@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .journey_pattern_layover import JourneyPatternLayover
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class JourneyPatternLayoversRelStructure(
-    StrictContainmentAggregationStructure
-):
+class JourneyPatternLayoversRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "journeyPatternLayovers_RelStructure"
 

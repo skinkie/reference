@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .vehicle_pooler_profile_ref_structure import (
-    VehiclePoolerProfileRefStructure,
-)
+
+from .vehicle_pooler_profile_ref_structure import VehiclePoolerProfileRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

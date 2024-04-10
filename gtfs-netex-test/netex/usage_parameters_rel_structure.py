@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .additional_driver_option import AdditionalDriverOption
 from .additional_driver_option_ref import AdditionalDriverOptionRef
 from .booking_policy_ref import BookingPolicyRef
@@ -51,18 +52,10 @@ from .round_trip import RoundTrip
 from .round_trip_ref import RoundTripRef
 from .routing import Routing
 from .routing_ref import RoutingRef
-from .sales_offer_package_entitlement_given import (
-    SalesOfferPackageEntitlementGiven,
-)
-from .sales_offer_package_entitlement_given_ref import (
-    SalesOfferPackageEntitlementGivenRef,
-)
-from .sales_offer_package_entitlement_required import (
-    SalesOfferPackageEntitlementRequired,
-)
-from .sales_offer_package_entitlement_required_ref import (
-    SalesOfferPackageEntitlementRequiredRef,
-)
+from .sales_offer_package_entitlement_given import SalesOfferPackageEntitlementGiven
+from .sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
+from .sales_offer_package_entitlement_required import SalesOfferPackageEntitlementRequired
+from .sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
 from .step_limit import StepLimit
 from .step_limit_ref import StepLimitRef
 from .subscribing import Subscribing
@@ -86,7 +79,7 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "usageParameters_RelStructure"
 
-    choice: List[
+    usage_parameter_ref_or_reselling_ref_or_booking_policy_ref_or_profile_parameter_ref_or_user_profile_ref_or_usage_parameter: List[
         Union[
             AdditionalDriverOptionRef,
             RentalOptionRef,
@@ -104,13 +97,6 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
             LuggageAllowanceRef,
             EntitlementGivenRef,
             EntitlementRequiredRef,
-            EligibilityChangePolicyRef,
-            GroupTicketRef,
-            CommercialProfileRef,
-            VehiclePoolerProfileRef,
-            CompanionProfileRef,
-            UserProfileRef,
-            ProfileParameterRef,
             SubscribingRef,
             PenaltyPolicyRef,
             ChargingPolicyRef,
@@ -123,6 +109,13 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
             ReservingRef,
             BookingPolicyRef,
             PurchaseWindowRef,
+            EligibilityChangePolicyRef,
+            GroupTicketRef,
+            CommercialProfileRef,
+            VehiclePoolerProfileRef,
+            CompanionProfileRef,
+            UserProfileRef,
+            ProfileParameterRef,
             AdditionalDriverOption,
             RentalOption,
             RentalPenaltyPolicy,
@@ -243,41 +236,6 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "EligibilityChangePolicyRef",
-                    "type": EligibilityChangePolicyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "GroupTicketRef",
-                    "type": GroupTicketRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CommercialProfileRef",
-                    "type": CommercialProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehiclePoolerProfileRef",
-                    "type": VehiclePoolerProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CompanionProfileRef",
-                    "type": CompanionProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UserProfileRef",
-                    "type": UserProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ProfileParameterRef",
-                    "type": ProfileParameterRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "SubscribingRef",
                     "type": SubscribingRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -335,6 +293,41 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "PurchaseWindowRef",
                     "type": PurchaseWindowRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EligibilityChangePolicyRef",
+                    "type": EligibilityChangePolicyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupTicketRef",
+                    "type": GroupTicketRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CommercialProfileRef",
+                    "type": CommercialProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehiclePoolerProfileRef",
+                    "type": VehiclePoolerProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CompanionProfileRef",
+                    "type": CompanionProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UserProfileRef",
+                    "type": UserProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ProfileParameterRef",
+                    "type": ProfileParameterRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

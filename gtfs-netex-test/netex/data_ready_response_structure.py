@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .consumer_response_endpoint_structure import (
-    ConsumerResponseEndpointStructure,
-)
+
+from .consumer_response_endpoint_structure import ConsumerResponseEndpointStructure
+from .error_description_structure import ErrorDescriptionStructure
 from .other_error import OtherError
+from .status import Status
 from .unknown_subscription_error import UnknownSubscriptionError
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
@@ -11,7 +12,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class DataReadyResponseStructure(ConsumerResponseEndpointStructure):
-    status: Optional[bool] = field(
+    status: Optional[Status] = field(
         default=None,
         metadata={
             "name": "Status",
@@ -19,9 +20,7 @@ class DataReadyResponseStructure(ConsumerResponseEndpointStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    error_condition: Optional[
-        "DataReadyResponseStructure.ErrorCondition"
-    ] = field(
+    error_condition: Optional["DataReadyResponseStructure.ErrorCondition"] = field(
         default=None,
         metadata={
             "name": "ErrorCondition",
@@ -32,9 +31,7 @@ class DataReadyResponseStructure(ConsumerResponseEndpointStructure):
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        unknown_subscription_error_or_other_error: Optional[
-            Union[UnknownSubscriptionError, OtherError]
-        ] = field(
+        unknown_subscription_error_or_other_error: Optional[Union[UnknownSubscriptionError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",
@@ -52,7 +49,7 @@ class DataReadyResponseStructure(ConsumerResponseEndpointStructure):
                 ),
             },
         )
-        description: Optional[str] = field(
+        description: Optional[ErrorDescriptionStructure] = field(
             default=None,
             metadata={
                 "name": "Description",

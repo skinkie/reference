@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .all_modes_enumeration import AllModesEnumeration
 from .authority_ref import AuthorityRef
 from .operator_ref import OperatorRef
@@ -28,9 +29,7 @@ class ConnectionEndStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_organisation_ref: Optional[
-        Union[AuthorityRef, OperatorRef]
-    ] = field(
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -48,9 +47,7 @@ class ConnectionEndStructure:
             ),
         },
     )
-    scheduled_stop_point_ref_or_vehicle_meeting_point_ref: Optional[
-        Union[ScheduledStopPointRefStructure, PointRefStructure]
-    ] = field(
+    scheduled_stop_point_ref_or_vehicle_meeting_point_ref: Optional[Union[ScheduledStopPointRefStructure, PointRefStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .access_mode_enumeration import AccessModeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

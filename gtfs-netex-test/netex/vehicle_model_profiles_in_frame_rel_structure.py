@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .car_model_profile import CarModelProfile
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .cycle_model_profile import CycleModelProfile
@@ -12,9 +13,7 @@ class VehicleModelProfilesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleModelProfilesInFrame_RelStructure"
 
-    car_model_profile_or_cycle_model_profile: List[
-        Union[CarModelProfile, CycleModelProfile]
-    ] = field(
+    car_model_profile_or_cycle_model_profile: List[Union[CarModelProfile, CycleModelProfile]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

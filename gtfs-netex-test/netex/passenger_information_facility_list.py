@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
-from .passenger_information_facility_enumeration import (
-    PassengerInformationFacilityEnumeration,
-)
+
+from .passenger_information_facility_enumeration import PassengerInformationFacilityEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

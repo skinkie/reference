@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .capping_rule_ref import CappingRuleRef
-from .fare_price_versioned_child_structure import (
-    FarePriceVersionedChildStructure,
-)
+from .fare_price_versioned_child_structure import FarePriceVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class CappingRulePriceVersionedChildStructure(
-    FarePriceVersionedChildStructure
-):
+class CappingRulePriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "CappingRulePrice_VersionedChildStructure"
 

@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .customer_ref import CustomerRef
-from .medium_application_instance_rel_structure import (
-    MediumApplicationInstanceRelStructure,
-)
+from .entity_in_version_structure import DataManagedObjectStructure
+from .medium_application_instance_rel_structure import MediumApplicationInstanceRelStructure
 from .multilingual_string import MultilingualString
 from .type_of_medium_access_device_ref import TypeOfMediumAccessDeviceRef
 
@@ -40,9 +39,7 @@ class MediumAccessDeviceVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    type_of_medium_access_device_ref: Optional[
-        TypeOfMediumAccessDeviceRef
-    ] = field(
+    type_of_medium_access_device_ref: Optional[TypeOfMediumAccessDeviceRef] = field(
         default=None,
         metadata={
             "name": "TypeOfMediumAccessDeviceRef",
@@ -50,9 +47,7 @@ class MediumAccessDeviceVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    application_instances: Optional[
-        MediumApplicationInstanceRelStructure
-    ] = field(
+    application_instances: Optional[MediumApplicationInstanceRelStructure] = field(
         default=None,
         metadata={
             "name": "applicationInstances",

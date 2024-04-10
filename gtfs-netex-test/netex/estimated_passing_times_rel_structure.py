@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .estimated_passing_time import EstimatedPassingTime
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

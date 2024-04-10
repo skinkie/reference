@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .country_ref import CountryRef
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .place_ref_structure import PlaceRefStructure
 from .place_refs_rel_structure import PlaceRefsRelStructure
 

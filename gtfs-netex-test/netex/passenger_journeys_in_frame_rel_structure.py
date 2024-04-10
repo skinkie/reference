@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .dated_service_journey import DatedServiceJourney
 from .service_journey import ServiceJourney
@@ -14,14 +15,7 @@ class PassengerJourneysInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "passengerJourneysInFrame_RelStructure"
 
-    choice: List[
-        Union[
-            DatedServiceJourney,
-            ServiceJourney,
-            SpecialService,
-            TemplateServiceJourney,
-        ]
-    ] = field(
+    dated_service_journey_or_service_journey_or_special_service_or_template_service_journey: List[Union[DatedServiceJourney, ServiceJourney, SpecialService, TemplateServiceJourney]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

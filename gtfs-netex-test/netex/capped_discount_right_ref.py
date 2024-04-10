@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .capped_discount_right_ref_structure import (
-    CappedDiscountRightRefStructure,
-)
+
+from .capped_discount_right_ref_structure import CappedDiscountRightRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

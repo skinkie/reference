@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .additional_driver_option_ref import AdditionalDriverOptionRef
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .booking_policy_ref import BookingPolicyRef
@@ -10,13 +11,9 @@ from .charging_policy_ref import ChargingPolicyRef
 from .commercial_profile_ref import CommercialProfileRef
 from .companion_profile_ref import CompanionProfileRef
 from .controllable_element_ref import ControllableElementRef
-from .customer_purchase_package_element_ref import (
-    CustomerPurchasePackageElementRef,
-)
+from .customer_purchase_package_element_ref import CustomerPurchasePackageElementRef
 from .customer_purchase_package_ref import CustomerPurchasePackageRef
-from .distance_matrix_element_inverse_ref import (
-    DistanceMatrixElementInverseRef,
-)
+from .distance_matrix_element_inverse_ref import DistanceMatrixElementInverseRef
 from .distance_matrix_element_ref import DistanceMatrixElementRef
 from .eligibility_change_policy_ref import EligibilityChangePolicyRef
 from .entitlement_given_ref import EntitlementGivenRef
@@ -53,12 +50,8 @@ from .round_trip_ref import RoundTripRef
 from .routing_ref import RoutingRef
 from .sale_discount_right_ref import SaleDiscountRightRef
 from .sales_offer_package_element_ref import SalesOfferPackageElementRef
-from .sales_offer_package_entitlement_given_ref import (
-    SalesOfferPackageEntitlementGivenRef,
-)
-from .sales_offer_package_entitlement_required_ref import (
-    SalesOfferPackageEntitlementRequiredRef,
-)
+from .sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
+from .sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
 from .sales_offer_package_ref import SalesOfferPackageRef
 from .series_constraint_ref import SeriesConstraintRef
 from .service_access_right_ref import ServiceAccessRightRef
@@ -90,41 +83,6 @@ class PriceableObjectRefsRelStructure(OneToManyRelationshipStructure):
             CustomerPurchasePackageRef,
             ControllableElementRef,
             ValidableElementRef,
-            AdditionalDriverOptionRef,
-            RentalOptionRef,
-            RentalPenaltyPolicyRef,
-            SalesOfferPackageEntitlementGivenRef,
-            SalesOfferPackageEntitlementRequiredRef,
-            MinimumStayRef,
-            InterchangingRef,
-            FrequencyOfUseRef,
-            SuspendingRef,
-            UsageValidityPeriodRef,
-            StepLimitRef,
-            RoutingRef,
-            RoundTripRef,
-            LuggageAllowanceRef,
-            EntitlementGivenRef,
-            EntitlementRequiredRef,
-            EligibilityChangePolicyRef,
-            GroupTicketRef,
-            CommercialProfileRef,
-            VehiclePoolerProfileRef,
-            CompanionProfileRef,
-            UserProfileRef,
-            ProfileParameterRef,
-            SubscribingRef,
-            PenaltyPolicyRef,
-            ChargingPolicyRef,
-            TransferabilityRef,
-            ReplacingRef,
-            RefundingRef,
-            ExchangingRef,
-            ResellingRef,
-            CancellingRef,
-            ReservingRef,
-            BookingPolicyRef,
-            PurchaseWindowRef,
             SeriesConstraintRef,
             SalesOfferPackageElementRef,
             SalesOfferPackageRef,
@@ -151,6 +109,41 @@ class PriceableObjectRefsRelStructure(OneToManyRelationshipStructure):
             FareDemandFactorRef,
             QualityStructureFactorRef,
             GeographicalStructureFactorRef,
+            AdditionalDriverOptionRef,
+            RentalOptionRef,
+            RentalPenaltyPolicyRef,
+            SalesOfferPackageEntitlementGivenRef,
+            SalesOfferPackageEntitlementRequiredRef,
+            MinimumStayRef,
+            InterchangingRef,
+            FrequencyOfUseRef,
+            SuspendingRef,
+            UsageValidityPeriodRef,
+            StepLimitRef,
+            RoutingRef,
+            RoundTripRef,
+            LuggageAllowanceRef,
+            EntitlementGivenRef,
+            EntitlementRequiredRef,
+            SubscribingRef,
+            PenaltyPolicyRef,
+            ChargingPolicyRef,
+            TransferabilityRef,
+            ReplacingRef,
+            RefundingRef,
+            ExchangingRef,
+            ResellingRef,
+            CancellingRef,
+            ReservingRef,
+            BookingPolicyRef,
+            PurchaseWindowRef,
+            EligibilityChangePolicyRef,
+            GroupTicketRef,
+            CommercialProfileRef,
+            VehiclePoolerProfileRef,
+            CompanionProfileRef,
+            UserProfileRef,
+            ProfileParameterRef,
             PriceableObjectRef,
         ]
     ] = field(
@@ -176,181 +169,6 @@ class PriceableObjectRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "ValidableElementRef",
                     "type": ValidableElementRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "AdditionalDriverOptionRef",
-                    "type": AdditionalDriverOptionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "RentalOptionRef",
-                    "type": RentalOptionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "RentalPenaltyPolicyRef",
-                    "type": RentalPenaltyPolicyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SalesOfferPackageEntitlementGivenRef",
-                    "type": SalesOfferPackageEntitlementGivenRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SalesOfferPackageEntitlementRequiredRef",
-                    "type": SalesOfferPackageEntitlementRequiredRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "MinimumStayRef",
-                    "type": MinimumStayRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "InterchangingRef",
-                    "type": InterchangingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "FrequencyOfUseRef",
-                    "type": FrequencyOfUseRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SuspendingRef",
-                    "type": SuspendingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UsageValidityPeriodRef",
-                    "type": UsageValidityPeriodRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StepLimitRef",
-                    "type": StepLimitRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "RoutingRef",
-                    "type": RoutingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "RoundTripRef",
-                    "type": RoundTripRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "LuggageAllowanceRef",
-                    "type": LuggageAllowanceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "EntitlementGivenRef",
-                    "type": EntitlementGivenRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "EntitlementRequiredRef",
-                    "type": EntitlementRequiredRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "EligibilityChangePolicyRef",
-                    "type": EligibilityChangePolicyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "GroupTicketRef",
-                    "type": GroupTicketRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CommercialProfileRef",
-                    "type": CommercialProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehiclePoolerProfileRef",
-                    "type": VehiclePoolerProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CompanionProfileRef",
-                    "type": CompanionProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UserProfileRef",
-                    "type": UserProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ProfileParameterRef",
-                    "type": ProfileParameterRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SubscribingRef",
-                    "type": SubscribingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "PenaltyPolicyRef",
-                    "type": PenaltyPolicyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ChargingPolicyRef",
-                    "type": ChargingPolicyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TransferabilityRef",
-                    "type": TransferabilityRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ReplacingRef",
-                    "type": ReplacingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "RefundingRef",
-                    "type": RefundingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ExchangingRef",
-                    "type": ExchangingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ResellingRef",
-                    "type": ResellingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CancellingRef",
-                    "type": CancellingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ReservingRef",
-                    "type": ReservingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "BookingPolicyRef",
-                    "type": BookingPolicyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "PurchaseWindowRef",
-                    "type": PurchaseWindowRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -481,6 +299,181 @@ class PriceableObjectRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "GeographicalStructureFactorRef",
                     "type": GeographicalStructureFactorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "AdditionalDriverOptionRef",
+                    "type": AdditionalDriverOptionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RentalOptionRef",
+                    "type": RentalOptionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RentalPenaltyPolicyRef",
+                    "type": RentalPenaltyPolicyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SalesOfferPackageEntitlementGivenRef",
+                    "type": SalesOfferPackageEntitlementGivenRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SalesOfferPackageEntitlementRequiredRef",
+                    "type": SalesOfferPackageEntitlementRequiredRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MinimumStayRef",
+                    "type": MinimumStayRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "InterchangingRef",
+                    "type": InterchangingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FrequencyOfUseRef",
+                    "type": FrequencyOfUseRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SuspendingRef",
+                    "type": SuspendingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UsageValidityPeriodRef",
+                    "type": UsageValidityPeriodRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StepLimitRef",
+                    "type": StepLimitRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RoutingRef",
+                    "type": RoutingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RoundTripRef",
+                    "type": RoundTripRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LuggageAllowanceRef",
+                    "type": LuggageAllowanceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EntitlementGivenRef",
+                    "type": EntitlementGivenRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EntitlementRequiredRef",
+                    "type": EntitlementRequiredRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SubscribingRef",
+                    "type": SubscribingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PenaltyPolicyRef",
+                    "type": PenaltyPolicyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ChargingPolicyRef",
+                    "type": ChargingPolicyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TransferabilityRef",
+                    "type": TransferabilityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ReplacingRef",
+                    "type": ReplacingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RefundingRef",
+                    "type": RefundingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ExchangingRef",
+                    "type": ExchangingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ResellingRef",
+                    "type": ResellingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CancellingRef",
+                    "type": CancellingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ReservingRef",
+                    "type": ReservingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingPolicyRef",
+                    "type": BookingPolicyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PurchaseWindowRef",
+                    "type": PurchaseWindowRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EligibilityChangePolicyRef",
+                    "type": EligibilityChangePolicyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupTicketRef",
+                    "type": GroupTicketRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CommercialProfileRef",
+                    "type": CommercialProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehiclePoolerProfileRef",
+                    "type": VehiclePoolerProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CompanionProfileRef",
+                    "type": CompanionProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UserProfileRef",
+                    "type": UserProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ProfileParameterRef",
+                    "type": ProfileParameterRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .point_of_interest_classification import PointOfInterestClassification
 
@@ -7,15 +8,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PointOfInterestClassificationsInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class PointOfInterestClassificationsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "pointOfInterestClassificationsInFrame_RelStructure"
 
-    point_of_interest_classification: List[
-        PointOfInterestClassification
-    ] = field(
+    point_of_interest_classification: List[PointOfInterestClassification] = field(
         default_factory=list,
         metadata={
             "name": "PointOfInterestClassification",

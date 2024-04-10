@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDuration, XmlTime
+
 from .block_ref import BlockRef
 from .calls_rel_structure import CallsRelStructure
 from .check_constraints_rel_structure import CheckConstraintsRelStructure
@@ -8,16 +10,14 @@ from .compound_train_ref import CompoundTrainRef
 from .course_of_journeys_ref import CourseOfJourneysRef
 from .day_type_refs_rel_structure import DayTypeRefsRelStructure
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
-from .direction_type_enumeration import DirectionTypeEnumeration
+from .direction_type import DirectionType
 from .dynamic_advertisement_enumeration import DynamicAdvertisementEnumeration
 from .flexible_line_ref import FlexibleLineRef
 from .flexible_line_view import FlexibleLineView
 from .flexible_service_properties import FlexibleServiceProperties
 from .flexible_service_properties_ref import FlexibleServicePropertiesRef
 from .frequency_structure import FrequencyStructure
-from .group_of_services_refs_rel_structure import (
-    GroupOfServicesRefsRelStructure,
-)
+from .group_of_services_refs_rel_structure import GroupOfServicesRefsRelStructure
 from .headway_journey_group_ref import HeadwayJourneyGroupRef
 from .journey_endpoint_structure import JourneyEndpointStructure
 from .journey_frequency_group_ref import JourneyFrequencyGroupRef
@@ -31,37 +31,25 @@ from .operational_context_ref import OperationalContextRef
 from .operator_ref import OperatorRef
 from .operator_view import OperatorView
 from .passenger_carrying_requirement_ref import PassengerCarryingRequirementRef
-from .passenger_carrying_requirements_view import (
-    PassengerCarryingRequirementsView,
-)
+from .passenger_carrying_requirements_view import PassengerCarryingRequirementsView
 from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
 from .route_ref import RouteRef
 from .service_alteration_enumeration import ServiceAlterationEnumeration
-from .service_facility_sets_rel_structure import (
-    ServiceFacilitySetsRelStructure,
-)
+from .service_facility_sets_rel_structure import ServiceFacilitySetsRelStructure
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_pattern_ref import ServicePatternRef
 from .time_demand_type_ref_structure import TimeDemandTypeRefStructure
 from .time_demand_type_refs_rel_structure import TimeDemandTypeRefsRelStructure
-from .timetabled_passing_times_rel_structure import (
-    TimetabledPassingTimesRelStructure,
-)
+from .timetabled_passing_times_rel_structure import TimetabledPassingTimesRelStructure
 from .timing_algorithm_type_ref import TimingAlgorithmTypeRef
 from .train_block_ref import TrainBlockRef
 from .train_number_refs_rel_structure import TrainNumberRefsRelStructure
 from .train_ref import TrainRef
 from .train_size import TrainSize
 from .vehicle_equipments_rel_structure import VehicleEquipmentsRelStructure
-from .vehicle_journey_layovers_rel_structure import (
-    VehicleJourneyLayoversRelStructure,
-)
-from .vehicle_journey_run_times_rel_structure import (
-    VehicleJourneyRunTimesRelStructure,
-)
-from .vehicle_journey_wait_times_rel_structure import (
-    VehicleJourneyWaitTimesRelStructure,
-)
+from .vehicle_journey_layovers_rel_structure import VehicleJourneyLayoversRelStructure
+from .vehicle_journey_run_times_rel_structure import VehicleJourneyRunTimesRelStructure
+from .vehicle_journey_wait_times_rel_structure import VehicleJourneyWaitTimesRelStructure
 from .vehicle_type_ref import VehicleTypeRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -128,14 +116,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -179,13 +160,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_frequency_group_ref: Optional[
-        Union[
-            RhythmicalJourneyGroupRef,
-            HeadwayJourneyGroupRef,
-            JourneyFrequencyGroupRef,
-        ]
-    ] = field(
+    journey_frequency_group_ref: Optional[Union[RhythmicalJourneyGroupRef, HeadwayJourneyGroupRef, JourneyFrequencyGroupRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -208,9 +183,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[
-        Union[CompoundTrainRef, TrainRef, VehicleTypeRef]
-    ] = field(
+    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -275,9 +248,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    operator_ref_or_operator_view: Optional[
-        Union[OperatorRef, OperatorView]
-    ] = field(
+    operator_ref_or_operator_view: Optional[Union[OperatorRef, OperatorView]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -295,9 +266,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-    choice: Optional[
-        Union[FlexibleLineRef, LineRef, LineView, FlexibleLineView]
-    ] = field(
+    flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view: Optional[Union[FlexibleLineRef, LineRef, LineView, FlexibleLineView]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -325,7 +294,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-    direction_type: Optional[DirectionTypeEnumeration] = field(
+    direction_type: Optional[DirectionType] = field(
         default=None,
         metadata={
             "name": "DirectionType",
@@ -457,11 +426,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    passenger_carrying_requirement_ref_or_passenger_carrying_requirements_view: Optional[
-        Union[
-            PassengerCarryingRequirementRef, PassengerCarryingRequirementsView
-        ]
-    ] = field(
+    passenger_carrying_requirement_ref_or_passenger_carrying_requirements_view: Optional[Union[PassengerCarryingRequirementRef, PassengerCarryingRequirementsView]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -494,9 +459,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    flexible_service_properties_ref_or_flexible_service_properties: Optional[
-        Union[FlexibleServicePropertiesRef, FlexibleServiceProperties]
-    ] = field(
+    flexible_service_properties_ref_or_flexible_service_properties: Optional[Union[FlexibleServicePropertiesRef, FlexibleServiceProperties]] = field(
         default=None,
         metadata={
             "type": "Elements",

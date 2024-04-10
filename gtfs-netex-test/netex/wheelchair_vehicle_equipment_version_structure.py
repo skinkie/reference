@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from .actual_vehicle_equipment_version_structure import (
-    ActualVehicleEquipmentVersionStructure,
-)
+
+from .actual_vehicle_equipment_version_structure import ActualVehicleEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class WheelchairVehicleEquipmentVersionStructure(
-    ActualVehicleEquipmentVersionStructure
-):
+class WheelchairVehicleEquipmentVersionStructure(ActualVehicleEquipmentVersionStructure):
     class Meta:
         name = "WheelchairVehicleEquipment_VersionStructure"
 

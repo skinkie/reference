@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .capability_general_interaction_structure import (
-    CapabilityGeneralInteractionStructure,
-)
+
+from .capability_general_interaction_structure import CapabilityGeneralInteractionStructure
 from .transport_description_structure import TransportDescriptionStructure
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
@@ -10,9 +9,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class AbstractCapabilitiesStructure:
-    general_interaction: Optional[
-        CapabilityGeneralInteractionStructure
-    ] = field(
+    general_interaction: Optional[CapabilityGeneralInteractionStructure] = field(
         default=None,
         metadata={
             "name": "GeneralInteraction",

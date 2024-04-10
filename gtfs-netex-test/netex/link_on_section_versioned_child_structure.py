@@ -1,11 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .activation_link import ActivationLink
 from .activation_link_ref import ActivationLinkRef
 from .line_link_ref import LineLinkRef
-from .link_in_link_sequence_versioned_child_structure import (
-    LinkInLinkSequenceVersionedChildStructure,
-)
+from .link_in_link_sequence_versioned_child_structure import LinkInLinkSequenceVersionedChildStructure
 from .onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
 from .path_link import PathLink
 from .path_link_ref import PathLinkRef
@@ -29,13 +28,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class LinkOnSectionVersionedChildStructure(
-    LinkInLinkSequenceVersionedChildStructure
-):
+class LinkOnSectionVersionedChildStructure(LinkInLinkSequenceVersionedChildStructure):
     class Meta:
         name = "LinkOnSection_VersionedChildStructure"
 
-    choice_1: Optional[
+    link_ref_or_infrastructure_link_ref_or_link_or_infrastructure_link: Optional[
         Union[
             OnwardVehicleMeetingLinkRef,
             VehicleMeetingLinkRef,

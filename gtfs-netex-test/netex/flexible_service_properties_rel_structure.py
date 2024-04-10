@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .flexible_service_properties import FlexibleServiceProperties
 from .flexible_service_properties_ref import FlexibleServicePropertiesRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,9 +13,7 @@ class FlexibleServicePropertiesRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "flexibleServiceProperties_RelStructure"
 
-    flexible_service_properties_ref_or_flexible_service_properties: List[
-        Union[FlexibleServicePropertiesRef, FlexibleServiceProperties]
-    ] = field(
+    flexible_service_properties_ref_or_flexible_service_properties: List[Union[FlexibleServicePropertiesRef, FlexibleServiceProperties]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,18 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDuration, XmlTime
+
 from .headway_interval_structure import HeadwayIntervalStructure
-from .passing_time_versioned_child_structure import (
-    PassingTimeVersionedChildStructure,
-)
+from .passing_time_versioned_child_structure import PassingTimeVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TimetabledPassingTimeVersionedChildStructure(
-    PassingTimeVersionedChildStructure
-):
+class TimetabledPassingTimeVersionedChildStructure(PassingTimeVersionedChildStructure):
     class Meta:
         name = "TimetabledPassingTime_VersionedChildStructure"
 

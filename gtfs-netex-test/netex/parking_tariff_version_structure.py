@@ -1,12 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
-from .alternative_texts_rel_structure import DataManagedObjectStructure
 from .authority_ref import AuthorityRef
-from .cell_versioned_child_structure import (
-    FareTablesRelStructure,
-    PriceGroupsRelStructure,
-)
+from .entity_in_version_structure import DataManagedObjectStructure
 from .general_organisation_ref import GeneralOrganisationRef
 from .group_of_operators_ref import GroupOfOperatorsRef
 from .info_links_rel_structure import InfoLinksRelStructure
@@ -23,15 +20,15 @@ from .parking_stay_enumeration import ParkingStayEnumeration
 from .parking_user_enumeration import ParkingUserEnumeration
 from .parking_vehicle_enumeration import ParkingVehicleEnumeration
 from .price_unit_ref import PriceUnitRef
-from .quality_structure_factors_rel_structure import (
-    QualityStructureFactorsRelStructure,
+from .priceable_object_version_structure import (
+    FareTablesRelStructure,
+    PriceGroupsRelStructure,
 )
+from .quality_structure_factors_rel_structure import QualityStructureFactorsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .serviced_organisation_ref import ServicedOrganisationRef
 from .time_intervals_rel_structure import TimeIntervalsRelStructure
-from .time_structure_factors_rel_structure import (
-    TimeStructureFactorsRelStructure,
-)
+from .time_structure_factors_rel_structure import TimeStructureFactorsRelStructure
 from .time_unit_ref import TimeUnitRef
 from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
 from .travel_agent_ref import TravelAgentRef
@@ -85,21 +82,7 @@ class ParkingTariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-            GroupOfOperatorsRef,
-        ]
-    ] = field(
+    choice: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef, GroupOfOperatorsRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -186,9 +169,7 @@ class ParkingTariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    quality_structure_factors: Optional[
-        QualityStructureFactorsRelStructure
-    ] = field(
+    quality_structure_factors: Optional[QualityStructureFactorsRelStructure] = field(
         default=None,
         metadata={
             "name": "qualityStructureFactors",

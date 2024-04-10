@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .activation_point_ref import ActivationPointRef
-from .alternative_texts_rel_structure import VersionedChildStructure
 from .beacon_point_ref import BeaconPointRef
 from .border_point_ref import BorderPointRef
+from .entity_in_version_structure import VersionedChildStructure
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .garage_point_ref import GaragePointRef
 from .parking_point_ref import ParkingPointRef
@@ -28,25 +29,7 @@ class FlexiblePointPropertiesVersionedChildStructure(VersionedChildStructure):
         name = "FlexiblePointProperties_VersionedChildStructure"
 
     choice: Optional[
-        Union[
-            PointOnRouteRef,
-            VehicleMeetingPointRef,
-            WirePointRef,
-            RoadPointRef,
-            RailwayPointRef,
-            TrafficControlPointRef,
-            BeaconPointRef,
-            ActivationPointRef,
-            BorderPointRef,
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            GaragePointRef,
-            ParkingPointRef,
-            ReliefPointRef,
-            TimingPointRef,
-            RoutePointRef,
-            PointRef,
-        ]
+        Union[PointOnRouteRef, VehicleMeetingPointRef, WirePointRef, RoadPointRef, RailwayPointRef, TrafficControlPointRef, BeaconPointRef, ActivationPointRef, BorderPointRef, FareScheduledStopPointRef, ScheduledStopPointRef, GaragePointRef, ParkingPointRef, ReliefPointRef, TimingPointRef, RoutePointRef, PointRef]
     ] = field(
         default=None,
         metadata={

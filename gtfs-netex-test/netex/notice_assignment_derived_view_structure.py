@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .derived_view_structure import DerivedViewStructure
 from .multilingual_string import MultilingualString
 from .notice_ref import NoticeRef
 from .private_code import PrivateCode
+from .public_code_type import PublicCodeType
 from .publicity_channel_enumeration import PublicityChannelEnumeration
 from .type_of_notice_ref import TypeOfNoticeRef
 
@@ -71,7 +73,7 @@ class NoticeAssignmentDerivedViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

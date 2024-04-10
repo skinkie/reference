@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .group_of_timebands_ref import GroupOfTimebandsRef
-from .group_of_timebands_versioned_child_structure import (
-    GroupOfTimebandsVersionedChildStructure,
-)
+from .group_of_timebands_versioned_child_structure import GroupOfTimebandsVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -14,9 +13,7 @@ class GroupOfTimebandsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "groupOfTimebands_RelStructure"
 
-    group_of_timebands_ref_or_group_of_timebands: List[
-        Union[GroupOfTimebandsRef, GroupOfTimebandsVersionedChildStructure]
-    ] = field(
+    group_of_timebands_ref_or_group_of_timebands: List[Union[GroupOfTimebandsRef, GroupOfTimebandsVersionedChildStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

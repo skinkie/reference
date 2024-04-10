@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .derived_view_structure import DerivedViewStructure
 from .external_object_ref_structure import ExternalObjectRefStructure
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
@@ -7,6 +8,7 @@ from .multilingual_string import MultilingualString
 from .presentation_structure import PresentationStructure
 from .private_code import PrivateCode
 from .private_code_structure import PrivateCodeStructure
+from .public_code_type import PublicCodeType
 from .scheduled_stop_point_ref import ScheduledStopPointRef
 from .stop_type_enumeration import StopTypeEnumeration
 from .type_of_point_ref import TypeOfPointRef
@@ -19,9 +21,7 @@ class ScheduledStopPointDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "ScheduledStopPoint_DerivedViewStructure"
 
-    scheduled_stop_point_ref: Optional[
-        Union[FareScheduledStopPointRef, ScheduledStopPointRef]
-    ] = field(
+    scheduled_stop_point_ref: Optional[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -95,7 +95,7 @@ class ScheduledStopPointDerivedViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[PrivateCodeStructure] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

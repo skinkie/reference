@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .turnaround_time_limit_time_ref_structure import (
-    TurnaroundTimeLimitTimeRefStructure,
-)
+
+from .turnaround_time_limit_time_ref_structure import TurnaroundTimeLimitTimeRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

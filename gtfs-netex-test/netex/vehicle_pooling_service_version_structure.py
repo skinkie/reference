@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .common_vehicle_service_version_structure import (
-    CommonVehicleServiceVersionStructure,
-)
+
+from .common_vehicle_service_version_structure import CommonVehicleServiceVersionStructure
 from .vehicle_pooling_ref import VehiclePoolingRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehiclePoolingServiceVersionStructure(
-    CommonVehicleServiceVersionStructure
-):
+class VehiclePoolingServiceVersionStructure(CommonVehicleServiceVersionStructure):
     class Meta:
         name = "VehiclePoolingService_VersionStructure"
 

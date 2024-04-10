@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .vehicle_service_part_version_structure import (
-    VehicleServicePartVersionStructure,
-)
+
+from .vehicle_service_part_version_structure import VehicleServicePartVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

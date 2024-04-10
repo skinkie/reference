@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .alternative_texts_rel_structure import VersionedChildStructure
+
 from .customer_account_ref import CustomerAccountRef
 from .emv_card_ref import EmvCardRef
+from .entity_in_version_structure import VersionedChildStructure
 from .mobile_device_ref import MobileDeviceRef
 from .multilingual_string import MultilingualString
 from .service_access_code_ref import ServiceAccessCodeRef
@@ -14,9 +15,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class MediumApplicationInstanceVersionedChildStructure(
-    VersionedChildStructure
-):
+class MediumApplicationInstanceVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "MediumApplicationInstance_VersionedChildStructure"
 
@@ -36,9 +35,7 @@ class MediumApplicationInstanceVersionedChildStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    medium_access_device_ref: Optional[
-        Union[MobileDeviceRef, EmvCardRef, SmartcardRef]
-    ] = field(
+    medium_access_device_ref: Optional[Union[MobileDeviceRef, EmvCardRef, SmartcardRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -77,9 +74,7 @@ class MediumApplicationInstanceVersionedChildStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    travel_document_ref: Optional[
-        Union[ServiceAccessCodeRef, TravelDocumentRef]
-    ] = field(
+    travel_document_ref: Optional[Union[ServiceAccessCodeRef, TravelDocumentRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

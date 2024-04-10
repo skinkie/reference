@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .interchange_version_structure import InterchangeVersionStructure
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
-from .service_journey_pattern_interchange_ref import (
-    ServiceJourneyPatternInterchangeRef,
-)
+from .service_journey_pattern_interchange_ref import ServiceJourneyPatternInterchangeRef
 from .vehicle_journey_ref_structure import VehicleJourneyRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -63,9 +62,7 @@ class ServiceJourneyInterchangeVersionStructure(InterchangeVersionStructure):
             "required": True,
         }
     )
-    service_journey_pattern_interchange_ref: Optional[
-        ServiceJourneyPatternInterchangeRef
-    ] = field(
+    service_journey_pattern_interchange_ref: Optional[ServiceJourneyPatternInterchangeRef] = field(
         default=None,
         metadata={
             "name": "ServiceJourneyPatternInterchangeRef",

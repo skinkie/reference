@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .authority_ref import AuthorityRef
 from .equipment_places_rel_structure import EquipmentPlacesRelStructure
 from .general_organisation_ref import GeneralOrganisationRef
@@ -9,9 +10,7 @@ from .locale import Locale
 from .management_agent_ref import ManagementAgentRef
 from .online_service_operator_ref import OnlineServiceOperatorRef
 from .operator_ref import OperatorRef
-from .organisation_derived_view_structure import (
-    OrganisationDerivedViewStructure,
-)
+from .organisation_derived_view_structure import OrganisationDerivedViewStructure
 from .organisation_ref import OrganisationRef
 from .other_organisation_ref import OtherOrganisationRef
 from .place_equipments_rel_structure import PlaceEquipmentsRelStructure
@@ -24,9 +23,7 @@ from .site_refs_rel_structure import SiteRefsRelStructure
 from .site_type_enumeration import SiteTypeEnumeration
 from .topographic_place_ref import TopographicPlaceRef
 from .topographic_place_ref_structure import TopographicPlaceRefStructure
-from .topographic_place_refs_rel_structure import (
-    TopographicPlaceRefsRelStructure,
-)
+from .topographic_place_refs_rel_structure import TopographicPlaceRefsRelStructure
 from .topographic_place_view import TopographicPlaceView
 from .travel_agent_ref import TravelAgentRef
 
@@ -38,9 +35,7 @@ class SiteVersionStructure(SiteElementVersionStructure):
     class Meta:
         name = "Site_VersionStructure"
 
-    topographic_place_ref_or_topographic_place_view: Optional[
-        Union[TopographicPlaceRef, TopographicPlaceView]
-    ] = field(
+    topographic_place_ref_or_topographic_place_view: Optional[Union[TopographicPlaceRef, TopographicPlaceView]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -58,9 +53,7 @@ class SiteVersionStructure(SiteElementVersionStructure):
             ),
         },
     )
-    additional_topographic_places: Optional[
-        TopographicPlaceRefsRelStructure
-    ] = field(
+    additional_topographic_places: Optional[TopographicPlaceRefsRelStructure] = field(
         default=None,
         metadata={
             "name": "additionalTopographicPlaces",
@@ -92,21 +85,7 @@ class SiteVersionStructure(SiteElementVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-            OrganisationDerivedViewStructure,
-        ]
-    ] = field(
+    choice: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef, OrganisationDerivedViewStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

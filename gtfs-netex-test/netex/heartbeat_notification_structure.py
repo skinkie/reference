@@ -1,19 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDateTime, XmlDuration
+
+from .error_description_structure import ErrorDescriptionStructure
 from .extensions_1 import Extensions1
 from .other_error import OtherError
-from .producer_request_endpoint_structure import (
-    ProducerRequestEndpointStructure,
-)
+from .producer_request_endpoint_structure import ProducerRequestEndpointStructure
 from .service_not_available_error import ServiceNotAvailableError
+from .status import Status
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
 @dataclass(kw_only=True)
 class HeartbeatNotificationStructure(ProducerRequestEndpointStructure):
-    status: Optional[bool] = field(
+    status: Optional[Status] = field(
         default=None,
         metadata={
             "name": "Status",
@@ -29,9 +31,7 @@ class HeartbeatNotificationStructure(ProducerRequestEndpointStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    error_condition: Optional[
-        "HeartbeatNotificationStructure.ErrorCondition"
-    ] = field(
+    error_condition: Optional["HeartbeatNotificationStructure.ErrorCondition"] = field(
         default=None,
         metadata={
             "name": "ErrorCondition",
@@ -74,9 +74,7 @@ class HeartbeatNotificationStructure(ProducerRequestEndpointStructure):
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        service_not_available_error_or_other_error: Optional[
-            Union[ServiceNotAvailableError, OtherError]
-        ] = field(
+        service_not_available_error_or_other_error: Optional[Union[ServiceNotAvailableError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",
@@ -94,7 +92,7 @@ class HeartbeatNotificationStructure(ProducerRequestEndpointStructure):
                 ),
             },
         )
-        description: Optional[str] = field(
+        description: Optional[ErrorDescriptionStructure] = field(
             default=None,
             metadata={
                 "name": "Description",

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .additional_driver_option_ref import AdditionalDriverOptionRef
 from .booking_policy_ref import BookingPolicyRef
 from .cancelling_ref import CancellingRef
@@ -10,9 +11,7 @@ from .eligibility_change_policy_ref import EligibilityChangePolicyRef
 from .entitlement_given_ref import EntitlementGivenRef
 from .entitlement_required_ref import EntitlementRequiredRef
 from .exchanging_ref import ExchangingRef
-from .fare_price_versioned_child_structure import (
-    FarePriceVersionedChildStructure,
-)
+from .fare_price_versioned_child_structure import FarePriceVersionedChildStructure
 from .frequency_of_use_ref import FrequencyOfUseRef
 from .group_ticket_ref import GroupTicketRef
 from .interchanging_ref import InterchangingRef
@@ -29,12 +28,8 @@ from .reselling_ref import ResellingRef
 from .reserving_ref import ReservingRef
 from .round_trip_ref import RoundTripRef
 from .routing_ref import RoutingRef
-from .sales_offer_package_entitlement_given_ref import (
-    SalesOfferPackageEntitlementGivenRef,
-)
-from .sales_offer_package_entitlement_required_ref import (
-    SalesOfferPackageEntitlementRequiredRef,
-)
+from .sales_offer_package_entitlement_given_ref import SalesOfferPackageEntitlementGivenRef
+from .sales_offer_package_entitlement_required_ref import SalesOfferPackageEntitlementRequiredRef
 from .step_limit_ref import StepLimitRef
 from .subscribing_ref import SubscribingRef
 from .suspending_ref import SuspendingRef
@@ -47,13 +42,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class UsageParameterPriceVersionedChildStructure(
-    FarePriceVersionedChildStructure
-):
+class UsageParameterPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "UsageParameterPrice_VersionedChildStructure"
 
-    choice: Optional[
+    usage_parameter_ref_or_reselling_ref_or_booking_policy_ref_or_profile_parameter_ref_or_user_profile_ref: Optional[
         Union[
             AdditionalDriverOptionRef,
             RentalOptionRef,
@@ -71,13 +64,6 @@ class UsageParameterPriceVersionedChildStructure(
             LuggageAllowanceRef,
             EntitlementGivenRef,
             EntitlementRequiredRef,
-            EligibilityChangePolicyRef,
-            GroupTicketRef,
-            CommercialProfileRef,
-            VehiclePoolerProfileRef,
-            CompanionProfileRef,
-            UserProfileRef,
-            ProfileParameterRef,
             SubscribingRef,
             PenaltyPolicyRef,
             ChargingPolicyRef,
@@ -90,6 +76,13 @@ class UsageParameterPriceVersionedChildStructure(
             ReservingRef,
             BookingPolicyRef,
             PurchaseWindowRef,
+            EligibilityChangePolicyRef,
+            GroupTicketRef,
+            CommercialProfileRef,
+            VehiclePoolerProfileRef,
+            CompanionProfileRef,
+            UserProfileRef,
+            ProfileParameterRef,
         ]
     ] = field(
         default=None,
@@ -177,41 +170,6 @@ class UsageParameterPriceVersionedChildStructure(
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "EligibilityChangePolicyRef",
-                    "type": EligibilityChangePolicyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "GroupTicketRef",
-                    "type": GroupTicketRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CommercialProfileRef",
-                    "type": CommercialProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehiclePoolerProfileRef",
-                    "type": VehiclePoolerProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CompanionProfileRef",
-                    "type": CompanionProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UserProfileRef",
-                    "type": UserProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ProfileParameterRef",
-                    "type": ProfileParameterRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "SubscribingRef",
                     "type": SubscribingRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -269,6 +227,41 @@ class UsageParameterPriceVersionedChildStructure(
                 {
                     "name": "PurchaseWindowRef",
                     "type": PurchaseWindowRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EligibilityChangePolicyRef",
+                    "type": EligibilityChangePolicyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupTicketRef",
+                    "type": GroupTicketRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CommercialProfileRef",
+                    "type": CommercialProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehiclePoolerProfileRef",
+                    "type": VehiclePoolerProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CompanionProfileRef",
+                    "type": CompanionProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UserProfileRef",
+                    "type": UserProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ProfileParameterRef",
+                    "type": ProfileParameterRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

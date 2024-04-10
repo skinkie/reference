@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .notice_assignment import NoticeAssignment
 from .notice_assignment_view import NoticeAssignmentView
@@ -13,9 +14,7 @@ class NoticeAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "noticeAssignments_RelStructure"
 
-    sales_notice_assignment_or_notice_assignment_or_notice_assignment_view: List[
-        Union[SalesNoticeAssignment, NoticeAssignment, NoticeAssignmentView]
-    ] = field(
+    sales_notice_assignment_or_notice_assignment_or_notice_assignment_view: List[Union[SalesNoticeAssignment, NoticeAssignment, NoticeAssignmentView]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

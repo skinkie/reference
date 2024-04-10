@@ -1,12 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .control_centre_ref import ControlCentreRef
-from .interchange_rule_parameter_structure import (
-    InterchangeRuleParameterStructure,
-)
-from .interchange_rule_timings_rel_structure import (
-    InterchangeRuleTimingsRelStructure,
-)
+from .interchange_rule_parameter_structure import InterchangeRuleParameterStructure
+from .interchange_rule_timings_rel_structure import InterchangeRuleTimingsRelStructure
 from .interchange_version_structure import InterchangeVersionStructure
 from .zone_ref_structure import ZoneRefStructure
 

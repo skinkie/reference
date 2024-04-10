@@ -1,7 +1,10 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional, Type, Union
+
 from xsdata.models.datatype import XmlDuration, XmlTime
+
 from .booking_access_enumeration import BookingAccessEnumeration
+from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .booking_method_enumeration import BookingMethodEnumeration
 from .compound_train_ref import CompoundTrainRef
 from .contact_structure import ContactStructure
@@ -10,6 +13,7 @@ from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .dynamic_advertisement_enumeration import DynamicAdvertisementEnumeration
 from .flexible_service_enumeration import FlexibleServiceEnumeration
 from .frequency_structure import FrequencyStructure
+from .info_link_structure import InfoLinkStructure
 from .journey_endpoint_structure import JourneyEndpointStructure
 from .journey_pattern_ref import JourneyPatternRef
 from .journey_version_structure import JourneyVersionStructure
@@ -78,14 +82,7 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -113,9 +110,7 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[
-        Union[CompoundTrainRef, TrainRef, VehicleTypeRef]
-    ] = field(
+    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -202,85 +197,101 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_contact: Optional[ContactStructure] = field(
-        default=None,
-        metadata={
-            "name": "BookingContact",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    booking_methods: List[BookingMethodEnumeration] = field(
+    choice: List[
+        Union[
+            BookingArrangementsRelStructure,
+            ContactStructure,
+            List[BookingMethodEnumeration],
+            BookingAccessEnumeration,
+            PurchaseWhenEnumeration,
+            List[PurchaseMomentEnumeration],
+            XmlTime,
+            "SpecialServiceVersionStructure.MinimumBookingPeriod",
+            "SpecialServiceVersionStructure.MaximumBookingPeriod",
+            InfoLinkStructure,
+            MultilingualString,
+        ]
+    ] = field(
         default_factory=list,
         metadata={
-            "name": "BookingMethods",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "tokens": True,
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "bookingArrangements",
+                    "type": BookingArrangementsRelStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingContact",
+                    "type": ContactStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingMethods",
+                    "type": List[BookingMethodEnumeration],
+                    "namespace": "http://www.netex.org.uk/netex",
+                    "default_factory": list,
+                    "tokens": True,
+                },
+                {
+                    "name": "BookingAccess",
+                    "type": BookingAccessEnumeration,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookWhen",
+                    "type": PurchaseWhenEnumeration,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BuyWhen",
+                    "type": List[PurchaseMomentEnumeration],
+                    "namespace": "http://www.netex.org.uk/netex",
+                    "default_factory": list,
+                    "tokens": True,
+                },
+                {
+                    "name": "LatestBookingTime",
+                    "type": XmlTime,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MinimumBookingPeriod",
+                    "type": Type["SpecialServiceVersionStructure.MinimumBookingPeriod"],
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MaximumBookingPeriod",
+                    "type": Type["SpecialServiceVersionStructure.MaximumBookingPeriod"],
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingUrl",
+                    "type": InfoLinkStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingNote",
+                    "type": MultilingualString,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+            "max_occurs": 10,
         },
     )
-    booking_access: Optional[BookingAccessEnumeration] = field(
-        default=None,
-        metadata={
-            "name": "BookingAccess",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    book_when: Optional[PurchaseWhenEnumeration] = field(
-        default=None,
-        metadata={
-            "name": "BookWhen",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    buy_when: List[PurchaseMomentEnumeration] = field(
-        default_factory=list,
-        metadata={
-            "name": "BuyWhen",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "tokens": True,
-        },
-    )
-    latest_booking_time: Optional[XmlTime] = field(
-        default=None,
-        metadata={
-            "name": "LatestBookingTime",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    minimum_booking_period: Optional[XmlDuration] = field(
-        default=None,
-        metadata={
-            "name": "MinimumBookingPeriod",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    maximum_booking_period: Optional[XmlDuration] = field(
-        default=None,
-        metadata={
-            "name": "MaximumBookingPeriod",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    booking_url: Optional[str] = field(
-        default=None,
-        metadata={
-            "name": "BookingUrl",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    booking_note: Optional[MultilingualString] = field(
-        default=None,
-        metadata={
-            "name": "BookingNote",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
+
+    @dataclass(kw_only=True)
+    class MaximumBookingPeriod:
+        value: XmlDuration = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class MinimumBookingPeriod:
+        value: XmlDuration = field(
+            metadata={
+                "required": True,
+            }
+        )

@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from xsdata.models.datatype import XmlDate
+
 from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .day_type_ref import DayTypeRef
 from .fare_day_type_ref import FareDayTypeRef
@@ -26,11 +28,7 @@ class DayTypeAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            UicOperatingPeriodRef, OperatingPeriodRef, OperatingDayRef, XmlDate
-        ]
-    ] = field(
+    uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date: Optional[Union[UicOperatingPeriodRef, OperatingPeriodRef, OperatingDayRef, XmlDate]] = field(
         default=None,
         metadata={
             "type": "Elements",

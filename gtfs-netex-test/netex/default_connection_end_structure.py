@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .operator_view import OperatorView
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

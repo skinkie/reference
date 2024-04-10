@@ -1,11 +1,12 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .driver_schedule_frame import DriverScheduleFrame
-from .entities_in_version_rel_structure import (
+from .fare_frame import FareFrame
+from .general_version_frame_structure import (
     CompositeFrame,
     GeneralFrame,
 )
-from .fare_frame import FareFrame
 from .infrastructure_frame import InfrastructureFrame
 from .mobility_journey_frame import MobilityJourneyFrame
 from .mobility_service_frame import MobilityServiceFrame
@@ -25,24 +26,7 @@ class DataObjectsRelStructure:
     class Meta:
         name = "dataObjects_RelStructure"
 
-    choice: List[
-        Union[
-            CompositeFrame,
-            MobilityJourneyFrame,
-            MobilityServiceFrame,
-            SalesTransactionFrame,
-            FareFrame,
-            DriverScheduleFrame,
-            VehicleScheduleFrame,
-            ServiceFrame,
-            TimetableFrame,
-            SiteFrame,
-            InfrastructureFrame,
-            GeneralFrame,
-            ResourceFrame,
-            ServiceCalendarFrame,
-        ]
-    ] = field(
+    choice: List[Union[CompositeFrame, MobilityJourneyFrame, MobilityServiceFrame, SalesTransactionFrame, FareFrame, DriverScheduleFrame, VehicleScheduleFrame, ServiceFrame, TimetableFrame, SiteFrame, InfrastructureFrame, GeneralFrame, ResourceFrame, ServiceCalendarFrame]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

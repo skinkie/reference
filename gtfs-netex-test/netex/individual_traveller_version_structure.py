@@ -1,15 +1,13 @@
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import List, Optional
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .customer_ref import CustomerRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .gender_enumeration import GenderEnumeration
-from .individual_passenger_infos_rel_structure import (
-    IndividualPassengerInfosRelStructure,
-)
+from .individual_passenger_infos_rel_structure import IndividualPassengerInfosRelStructure
 from .multilingual_string import MultilingualString
-from .vehicle_pooling_driver_infos_rel_structure import (
-    VehiclePoolingDriverInfosRelStructure,
-)
+from .vehicle_pooling_driver_infos_rel_structure import VehiclePoolingDriverInfosRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -43,12 +41,14 @@ class IndividualTravellerVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    ranking: Optional[int] = field(
+    ranking: Optional[Decimal] = field(
         default=None,
         metadata={
             "name": "Ranking",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
+            "min_inclusive": Decimal("1.0"),
+            "max_inclusive": Decimal("5.0"),
         },
     )
     gender: Optional[GenderEnumeration] = field(
@@ -84,9 +84,7 @@ class IndividualTravellerVersionStructure(DataManagedObjectStructure):
             "tokens": True,
         },
     )
-    vehicle_pooling_driver_infos: Optional[
-        VehiclePoolingDriverInfosRelStructure
-    ] = field(
+    vehicle_pooling_driver_infos: Optional[VehiclePoolingDriverInfosRelStructure] = field(
         default=None,
         metadata={
             "name": "vehiclePoolingDriverInfos",
@@ -94,9 +92,7 @@ class IndividualTravellerVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    individual_passenger_infos: Optional[
-        IndividualPassengerInfosRelStructure
-    ] = field(
+    individual_passenger_infos: Optional[IndividualPassengerInfosRelStructure] = field(
         default=None,
         metadata={
             "name": "individualPassengerInfos",

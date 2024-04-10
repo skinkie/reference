@@ -1,15 +1,13 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+
 from xsdata.models.datatype import XmlDuration
+
 from .payment_method_enumeration import PaymentMethodEnumeration
-from .subscription_renewal_policy_enumeration import (
-    SubscriptionRenewalPolicyEnumeration,
-)
+from .subscription_renewal_policy_enumeration import SubscriptionRenewalPolicyEnumeration
 from .subscription_term_type_enumeration import SubscriptionTermTypeEnumeration
 from .time_interval_refs_rel_structure import TimeIntervalRefsRelStructure
-from .type_of_payment_method_refs_rel_structure import (
-    TypeOfPaymentMethodRefsRelStructure,
-)
+from .type_of_payment_method_refs_rel_structure import TypeOfPaymentMethodRefsRelStructure
 from .usage_parameter_version_structure import UsageParameterVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -44,9 +42,7 @@ class SubscribingVersionStructure(UsageParameterVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    subscription_renewal_policy: Optional[
-        SubscriptionRenewalPolicyEnumeration
-    ] = field(
+    subscription_renewal_policy: Optional[SubscriptionRenewalPolicyEnumeration] = field(
         default=None,
         metadata={
             "name": "SubscriptionRenewalPolicy",
@@ -54,9 +50,7 @@ class SubscribingVersionStructure(UsageParameterVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    possible_installmentt_intervals: Optional[
-        TimeIntervalRefsRelStructure
-    ] = field(
+    possible_installmentt_intervals: Optional[TimeIntervalRefsRelStructure] = field(
         default=None,
         metadata={
             "name": "possibleInstallmenttIntervals",
@@ -73,9 +67,7 @@ class SubscribingVersionStructure(UsageParameterVersionStructure):
             "tokens": True,
         },
     )
-    installment_types_of_payment_method: Optional[
-        TypeOfPaymentMethodRefsRelStructure
-    ] = field(
+    installment_types_of_payment_method: Optional[TypeOfPaymentMethodRefsRelStructure] = field(
         default=None,
         metadata={
             "name": "installmentTypesOfPaymentMethod",

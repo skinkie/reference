@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .flexible_service_properties_ref_structure import (
-    FlexibleServicePropertiesRefStructure,
-)
+
+from .flexible_service_properties_ref_structure import FlexibleServicePropertiesRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

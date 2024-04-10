@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDateTime
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .customer_account_ref import CustomerAccountRef
 from .customer_ref import CustomerRef
-from .fare_contract_entries_rel_structure import (
-    FareContractEntriesRelStructure,
-)
+from .entity_in_version_structure import DataManagedObjectStructure
+from .fare_contract_entries_rel_structure import FareContractEntriesRelStructure
 from .multilingual_string import MultilingualString
 from .type_of_fare_contract_ref import TypeOfFareContractRef
 

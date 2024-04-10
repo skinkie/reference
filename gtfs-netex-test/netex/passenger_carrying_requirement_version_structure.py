@@ -1,18 +1,15 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
+
 from .passenger_capacity import PassengerCapacity
-from .vehicle_requirement_version_structure import (
-    VehicleRequirementVersionStructure,
-)
+from .vehicle_requirement_version_structure import VehicleRequirementVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PassengerCarryingRequirementVersionStructure(
-    VehicleRequirementVersionStructure
-):
+class PassengerCarryingRequirementVersionStructure(VehicleRequirementVersionStructure):
     class Meta:
         name = "PassengerCarryingRequirement_VersionStructure"
 

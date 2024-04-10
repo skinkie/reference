@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
 
@@ -7,15 +8,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleJourneyStopAssignmentsInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class VehicleJourneyStopAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleJourneyStopAssignmentsInFrame_RelStructure"
 
-    vehicle_journey_stop_assignment: List[
-        VehicleJourneyStopAssignment
-    ] = field(
+    vehicle_journey_stop_assignment: List[VehicleJourneyStopAssignment] = field(
         default_factory=list,
         metadata={
             "name": "VehicleJourneyStopAssignment",

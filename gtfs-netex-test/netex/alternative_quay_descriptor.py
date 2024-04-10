@@ -1,16 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Any
-from .alternative_quay_descriptor_versioned_child_structure import (
-    AlternativeQuayDescriptorVersionedChildStructure,
-)
+
+from .alternative_quay_descriptor_versioned_child_structure import AlternativeQuayDescriptorVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class AlternativeQuayDescriptor(
-    AlternativeQuayDescriptorVersionedChildStructure
-):
+class AlternativeQuayDescriptor(AlternativeQuayDescriptorVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 

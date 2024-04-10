@@ -62,7 +62,7 @@ async def aus_datenabrufen(request):
     if daten_abrufen_anfrage.sender == request.match_info['sender']:
         uri = await check_sender(daten_abrufen_anfrage.sender)
         if uri is not None:
-            antwort = DatenAbrufenAntwort(bestaetigung=BestaetigungType(fehlernummer="0", zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), choice=await aus_nachrichten(sender=daten_abrufen_anfrage.sender))
+            antwort = DatenAbrufenAntwort(bestaetigung=BestaetigungType(fehlernummer="0", zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), ausnachricht=await aus_nachrichten(sender=daten_abrufen_anfrage.sender))
         else:
             antwort = DatenAbrufenAntwort(bestaetigung=unknown_sender(request))
 
@@ -71,7 +71,7 @@ async def aus_datenabrufen(request):
 
     # return web.Response(body=gzip.compress(bytes(serializer.render(antwort), 'utf-8')), headers={"Content-Encoding": "gzip"}, content_type="application/xml")
     xml = serializer.render(antwort)
-    print(xml)
+    # print(xml)
     return web.Response(text=xml, content_type="application/xml")
 
 async def aus_aboverwalten(request):
@@ -80,23 +80,24 @@ async def aus_aboverwalten(request):
     if abo_anfrage.sender == request.match_info['sender']:
         uri = await check_sender(abo_anfrage.sender)
         if uri:
-            if isinstance(abo_anfrage.choice, bool):
+            if abo_anfrage.abo_loeschen_alle:
                 await abo_loeschen_alle(abo_anfrage.sender)
                 antwort = AboAntwort(bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
 
-            elif isinstance(abo_anfrage.choice, int):
-                await abo_loeschen(abo_anfrage.sender, abo_anfrage.choice)
+            elif len(abo_anfrage.abo_loeschen) > 0:
+                await abo_loeschen(abo_anfrage.sender, abo_anfrage.abo_loeschen)
                 antwort = AboAntwort(bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
 
-            elif isinstance(abo_anfrage.choice, list):
-                abo_aus_types = [abo_aus_type for abo_aus_type in abo_anfrage.choice if isinstance(abo_aus_type, AboAustype)]
-                for abo_aus_type in abo_aus_types:
+            elif len(abo_anfrage.abo_aus) > 0:
+                for abo_aus_type in abo_anfrage.abo_aus:
                     await abo_aus(abo_anfrage.sender, abo_aus_type)
 
-                ids = ', '.join([str(abo_aus_type.abo_id) for abo_aus_type in abo_aus_types])
+                ids = ', '.join([str(abo_aus_type.abo_id) for abo_aus_type in abo_anfrage.abo_aus])
                 antwort = AboAntwort(bestaetigung=BestaetigungType(fehlernummer="0", fehlertext=f"Adding/Replacing abo_id(s) {ids} for {abo_anfrage.sender}.", ergebnis=ErgebnisType.OK, zst=XmlDateTime.utcnow().replace(fractional_second=0)))
 
             else:
+                print("Not handeled")
+                print(abo_anfrage)
                 antwort = AboAntwort(
                     bestaetigung=BestaetigungType(fehlernummer="0", ergebnis=ErgebnisType.NOTOK, zst=XmlDateTime.utcnow().replace(fractional_second=0), fehlertext="This operation is not implemented."))
         else:
@@ -108,6 +109,6 @@ async def aus_aboverwalten(request):
     print(anfrage.decode('utf-8'))
     text = serializer.render(antwort)
     # open('/tmp/output.xml', 'w').write(text)
-    print(text)
+    print(request.match_info['sender'], text)
 
     return web.Response(text=text, content_type="application/xml")

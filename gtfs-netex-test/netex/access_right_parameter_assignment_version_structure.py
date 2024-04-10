@@ -1,27 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .access_right_in_product_ref import AccessRightInProductRef
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .capped_discount_right_ref import CappedDiscountRightRef
 from .charging_basis_enumeration import ChargingBasisEnumeration
-from .controllable_element_in_sequence_ref import (
-    ControllableElementInSequenceRef,
-)
+from .controllable_element_in_sequence_ref import ControllableElementInSequenceRef
 from .controllable_element_ref import ControllableElementRef
-from .distance_matrix_element_inverse_ref import (
-    DistanceMatrixElementInverseRef,
-)
+from .distance_matrix_element_inverse_ref import DistanceMatrixElementInverseRef
 from .distance_matrix_element_ref import DistanceMatrixElementRef
 from .distance_matrix_element_view import DistanceMatrixElementView
+from .dynamic_distance_matrix_element import DynamicDistanceMatrixElement
 from .fare_product_ref import FareProductRef
-from .fare_structure_element_in_sequence_ref import (
-    FareStructureElementInSequenceRef,
-)
+from .fare_structure_element_in_sequence_ref import FareStructureElementInSequenceRef
 from .fare_structure_element_ref import FareStructureElementRef
-from .group_of_distance_matrix_elements_ref import (
-    GroupOfDistanceMatrixElementsRef,
-)
+from .group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
 from .group_of_sales_offer_packages_ref import GroupOfSalesOfferPackagesRef
 from .logical_operation_enumeration import LogicalOperationEnumeration
 from .parking_tariff_ref import ParkingTariffRef
@@ -32,9 +26,7 @@ from .sales_offer_package_ref import SalesOfferPackageRef
 from .set_operator_enumeration import SetOperatorEnumeration
 from .supplement_product_ref import SupplementProductRef
 from .tariff_ref import TariffRef
-from .temporal_validity_parameters_rel_structure import (
-    TemporalValidityParametersRelStructure,
-)
+from .temporal_validity_parameters_rel_structure import TemporalValidityParametersRelStructure
 from .third_party_product_ref import ThirdPartyProductRef
 from .type_of_access_right_assignment_ref import TypeOfAccessRightAssignmentRef
 from .usage_discount_right_ref import UsageDiscountRightRef
@@ -46,9 +38,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class AccessRightParameterAssignmentVersionStructure(
-    AssignmentVersionStructure1
-):
+class AccessRightParameterAssignmentVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "AccessRightParameterAssignment_VersionStructure"
 
@@ -60,9 +50,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    type_of_access_right_assignment_ref: Optional[
-        TypeOfAccessRightAssignmentRef
-    ] = field(
+    type_of_access_right_assignment_ref: Optional[TypeOfAccessRightAssignmentRef] = field(
         default=None,
         metadata={
             "name": "TypeOfAccessRightAssignmentRef",
@@ -94,18 +82,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[
-        Union[
-            SupplementProductRef,
-            PreassignedFareProductRef,
-            AmountOfPriceUnitProductRef,
-            UsageDiscountRightRef,
-            ThirdPartyProductRef,
-            CappedDiscountRightRef,
-            SaleDiscountRightRef,
-            FareProductRef,
-        ]
-    ] = field(
+    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[Union[SupplementProductRef, PreassignedFareProductRef, AmountOfPriceUnitProductRef, UsageDiscountRightRef, ThirdPartyProductRef, CappedDiscountRightRef, SaleDiscountRightRef, FareProductRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -179,13 +156,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_element_in_sequence_ref: Optional[
-        Union[
-            ControllableElementInSequenceRef,
-            FareStructureElementInSequenceRef,
-            AccessRightInProductRef,
-        ]
-    ] = field(
+    fare_element_in_sequence_ref: Optional[Union[ControllableElementInSequenceRef, FareStructureElementInSequenceRef, AccessRightInProductRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -208,17 +179,25 @@ class AccessRightParameterAssignmentVersionStructure(
             ),
         },
     )
-    distance_matrix_element_ref: Optional[DistanceMatrixElementRef] = field(
+    distance_matrix_element_ref_or_dynamic_distance_matrix_element: Optional[Union[DistanceMatrixElementRef, DynamicDistanceMatrixElement]] = field(
         default=None,
         metadata={
-            "name": "DistanceMatrixElementRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "DistanceMatrixElementRef",
+                    "type": DistanceMatrixElementRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DynamicDistanceMatrixElement",
+                    "type": DynamicDistanceMatrixElement,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
-    distance_matrix_element_inverse_ref: Optional[
-        DistanceMatrixElementInverseRef
-    ] = field(
+    distance_matrix_element_inverse_ref: Optional[DistanceMatrixElementInverseRef] = field(
         default=None,
         metadata={
             "name": "DistanceMatrixElementInverseRef",
@@ -242,9 +221,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    group_of_distance_matrix_elements_ref: Optional[
-        GroupOfDistanceMatrixElementsRef
-    ] = field(
+    group_of_distance_matrix_elements_ref: Optional[GroupOfDistanceMatrixElementsRef] = field(
         default=None,
         metadata={
             "name": "GroupOfDistanceMatrixElementsRef",
@@ -252,9 +229,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    group_of_sales_offer_packages_ref: Optional[
-        GroupOfSalesOfferPackagesRef
-    ] = field(
+    group_of_sales_offer_packages_ref: Optional[GroupOfSalesOfferPackagesRef] = field(
         default=None,
         metadata={
             "name": "GroupOfSalesOfferPackagesRef",
@@ -285,9 +260,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_parameter_assignment_type: Optional[
-        RelativeOperatorEnumeration
-    ] = field(
+    validity_parameter_assignment_type: Optional[RelativeOperatorEnumeration] = field(
         default=None,
         metadata={
             "name": "ValidityParameterAssignmentType",
@@ -295,9 +268,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_parameter_grouping_type: Optional[
-        LogicalOperationEnumeration
-    ] = field(
+    validity_parameter_grouping_type: Optional[LogicalOperationEnumeration] = field(
         default=None,
         metadata={
             "name": "ValidityParameterGroupingType",
@@ -305,9 +276,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_parameter_set_selection_type: Optional[
-        SetOperatorEnumeration
-    ] = field(
+    validity_parameter_set_selection_type: Optional[SetOperatorEnumeration] = field(
         default=None,
         metadata={
             "name": "ValidityParameterSetSelectionType",
@@ -315,9 +284,7 @@ class AccessRightParameterAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    temporal_validity_parameters: Optional[
-        TemporalValidityParametersRelStructure
-    ] = field(
+    temporal_validity_parameters: Optional[TemporalValidityParametersRelStructure] = field(
         default=None,
         metadata={
             "name": "temporalValidityParameters",

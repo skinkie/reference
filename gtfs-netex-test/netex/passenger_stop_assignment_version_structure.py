@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .boarding_position import BoardingPosition
 from .boarding_position_ref import BoardingPositionRef
 from .quay import Quay
@@ -9,9 +10,7 @@ from .stop_place import StopPlace
 from .stop_place_ref import StopPlaceRef
 from .taxi_rank_ref import TaxiRankRef
 from .taxi_stand_ref import TaxiStandRef
-from .train_stop_assignments_rel_structure import (
-    TrainStopAssignmentsRelStructure,
-)
+from .train_stop_assignments_rel_structure import TrainStopAssignmentsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -21,9 +20,7 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
     class Meta:
         name = "PassengerStopAssignment_VersionStructure"
 
-    taxi_rank_ref_or_stop_place_ref_or_stop_place: Optional[
-        Union[TaxiRankRef, StopPlaceRef, StopPlace]
-    ] = field(
+    taxi_rank_ref_or_stop_place_ref_or_stop_place: Optional[Union[TaxiRankRef, StopPlaceRef, StopPlace]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -46,9 +43,7 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    taxi_stand_ref_or_quay_ref_or_quay: Optional[
-        Union[TaxiStandRef, QuayRef, Quay]
-    ] = field(
+    taxi_stand_ref_or_quay_ref_or_quay: Optional[Union[TaxiStandRef, QuayRef, Quay]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -71,9 +66,7 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    boarding_position_ref_or_boarding_position: Optional[
-        Union[BoardingPositionRef, BoardingPosition]
-    ] = field(
+    boarding_position_ref_or_boarding_position: Optional[Union[BoardingPositionRef, BoardingPosition]] = field(
         default=None,
         metadata={
             "type": "Elements",

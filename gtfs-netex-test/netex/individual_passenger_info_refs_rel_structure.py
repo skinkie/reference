@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from .individual_passenger_info_ref import IndividualPassengerInfoRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 

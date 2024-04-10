@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .distance_matrix_element_derived_view_structure import (
-    DistanceMatrixElementDerivedViewStructure,
-)
+
+from .distance_matrix_element_derived_view_structure import DistanceMatrixElementDerivedViewStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

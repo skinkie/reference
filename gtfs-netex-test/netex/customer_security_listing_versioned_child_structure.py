@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .customer_ref import CustomerRef
-from .security_listing_versioned_child_structure import (
-    SecurityListingVersionedChildStructure,
-)
+from .security_listing_versioned_child_structure import SecurityListingVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class CustomerSecurityListingVersionedChildStructure(
-    SecurityListingVersionedChildStructure
-):
+class CustomerSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
     class Meta:
         name = "CustomerSecurityListing_VersionedChildStructure"
 

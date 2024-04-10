@@ -1,22 +1,17 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from .audio_announcement_type_enumeration import (
-    AudioAnnouncementTypeEnumeration,
-)
+
+from .audio_announcement_type_enumeration import AudioAnnouncementTypeEnumeration
 from .audio_trigger_method_enumeration import AudioTriggerMethodEnumeration
 from .lighting_enumeration import LightingEnumeration
-from .passenger_equipment_version_structure import (
-    PassengerEquipmentVersionStructure,
-)
+from .passenger_equipment_version_structure import PassengerEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PassengerSafetyEquipmentVersionStructure(
-    PassengerEquipmentVersionStructure
-):
+class PassengerSafetyEquipmentVersionStructure(PassengerEquipmentVersionStructure):
     class Meta:
         name = "PassengerSafetyEquipment_VersionStructure"
 
@@ -84,9 +79,7 @@ class PassengerSafetyEquipmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    audio_announcement_type: Optional[
-        AudioAnnouncementTypeEnumeration
-    ] = field(
+    audio_announcement_type: Optional[AudioAnnouncementTypeEnumeration] = field(
         default=None,
         metadata={
             "name": "AudioAnnouncementType",
@@ -94,9 +87,7 @@ class PassengerSafetyEquipmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    audio_announcements_trigger: Optional[
-        AudioTriggerMethodEnumeration
-    ] = field(
+    audio_announcements_trigger: Optional[AudioTriggerMethodEnumeration] = field(
         default=None,
         metadata={
             "name": "AudioAnnouncementsTrigger",

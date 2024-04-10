@@ -1,18 +1,15 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+
 from .multilingual_string import MultilingualString
-from .passenger_equipment_version_structure import (
-    PassengerEquipmentVersionStructure,
-)
+from .passenger_equipment_version_structure import PassengerEquipmentVersionStructure
 from .ticket_validator_enumeration import TicketValidatorEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TicketValidatorEquipmentVersionStructure(
-    PassengerEquipmentVersionStructure
-):
+class TicketValidatorEquipmentVersionStructure(PassengerEquipmentVersionStructure):
     class Meta:
         name = "TicketValidatorEquipment_VersionStructure"
 

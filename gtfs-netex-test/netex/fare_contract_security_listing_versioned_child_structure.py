@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .fare_contract_ref import FareContractRef
-from .security_listing_versioned_child_structure import (
-    SecurityListingVersionedChildStructure,
-)
+from .security_listing_versioned_child_structure import SecurityListingVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class FareContractSecurityListingVersionedChildStructure(
-    SecurityListingVersionedChildStructure
-):
+class FareContractSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
     class Meta:
         name = "FareContractSecurityListing_VersionedChildStructure"
 

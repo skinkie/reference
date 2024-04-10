@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .derived_view_structure import DerivedViewStructure
 from .flexible_line_ref import FlexibleLineRef
 from .line_ref import LineRef
 from .multilingual_string import MultilingualString
 from .operator_ref import OperatorRef
+from .public_code_type import PublicCodeType
 from .transport_submode import TransportSubmode
 from .type_of_line_ref import TypeOfLineRef
 
@@ -37,7 +37,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
             ),
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

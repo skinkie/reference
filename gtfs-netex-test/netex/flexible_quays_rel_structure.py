@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .flexible_area_ref import FlexibleAreaRef
 from .flexible_quay import FlexibleQuay
@@ -14,11 +15,7 @@ class FlexibleQuaysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "flexibleQuays_RelStructure"
 
-    choice: List[
-        Union[
-            HailAndRideAreaRef, FlexibleAreaRef, FlexibleQuayRef, FlexibleQuay
-        ]
-    ] = field(
+    hail_and_ride_area_ref_or_flexible_area_ref_or_flexible_quay_ref_or_flexible_quay: List[Union[HailAndRideAreaRef, FlexibleAreaRef, FlexibleQuayRef, FlexibleQuay]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

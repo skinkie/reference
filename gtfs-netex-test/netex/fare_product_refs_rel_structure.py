@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .capped_discount_right_ref import CappedDiscountRightRef
 from .fare_product_ref import FareProductRef
@@ -18,18 +19,7 @@ class FareProductRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "fareProductRefs_RelStructure"
 
-    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: List[
-        Union[
-            SupplementProductRef,
-            PreassignedFareProductRef,
-            AmountOfPriceUnitProductRef,
-            UsageDiscountRightRef,
-            ThirdPartyProductRef,
-            CappedDiscountRightRef,
-            SaleDiscountRightRef,
-            FareProductRef,
-        ]
-    ] = field(
+    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: List[Union[SupplementProductRef, PreassignedFareProductRef, AmountOfPriceUnitProductRef, UsageDiscountRightRef, ThirdPartyProductRef, CappedDiscountRightRef, SaleDiscountRightRef, FareProductRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

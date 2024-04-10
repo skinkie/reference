@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .composite_frame_ref import CompositeFrameRef
 from .driver_schedule_frame_ref import DriverScheduleFrameRef
 from .fare_frame_ref import FareFrameRef
@@ -25,22 +26,7 @@ class VersionFrameRefsRelStructure(OneToManyRelationshipStructure):
         name = "versionFrameRefs_RelStructure"
 
     version_frame_ref: List[
-        Union[
-            MobilityJourneyFrameRef,
-            MobilityServiceFrameRef,
-            SalesTransactionFrameRef,
-            FareFrameRef,
-            ServiceFrameRef,
-            DriverScheduleFrameRef,
-            VehicleScheduleFrameRef,
-            TimetableFrameRef,
-            SiteFrameRef,
-            InfrastructureFrameRef,
-            GeneralFrameRef,
-            ResourceFrameRef,
-            ServiceCalendarFrameRef,
-            CompositeFrameRef,
-        ]
+        Union[MobilityJourneyFrameRef, MobilityServiceFrameRef, SalesTransactionFrameRef, FareFrameRef, ServiceFrameRef, DriverScheduleFrameRef, VehicleScheduleFrameRef, TimetableFrameRef, SiteFrameRef, InfrastructureFrameRef, GeneralFrameRef, ResourceFrameRef, ServiceCalendarFrameRef, CompositeFrameRef]
     ] = field(
         default_factory=list,
         metadata={

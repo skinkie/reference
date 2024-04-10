@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDateTime
+
 from .travel_document_version_structure import TravelDocumentVersionStructure
-from .vehicle_access_credentials_assignment_ref import (
-    VehicleAccessCredentialsAssignmentRef,
-)
+from .vehicle_access_credentials_assignment_ref import VehicleAccessCredentialsAssignmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -30,9 +30,7 @@ class ServiceAccessCodeVersionStructure(TravelDocumentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_access_credentials_assignment_ref: Optional[
-        VehicleAccessCredentialsAssignmentRef
-    ] = field(
+    vehicle_access_credentials_assignment_ref: Optional[VehicleAccessCredentialsAssignmentRef] = field(
         default=None,
         metadata={
             "name": "VehicleAccessCredentialsAssignmentRef",

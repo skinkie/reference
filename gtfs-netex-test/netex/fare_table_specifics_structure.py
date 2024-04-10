@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .access_vehicle_equipment_ref import AccessVehicleEquipmentRef
 from .activated_equipment_ref import ActivatedEquipmentRef
 from .assistance_booking_service_ref import AssistanceBookingServiceRef
@@ -20,7 +21,7 @@ from .entrance_equipment_ref import EntranceEquipmentRef
 from .equipment_ref import EquipmentRef
 from .escalator_equipment_ref import EscalatorEquipmentRef
 from .facility_set_ref import FacilitySetRef
-from .fare_class_enumeration import FareClassEnumeration
+from .fare_class import FareClass
 from .fare_section_ref import FareSectionRef
 from .flexible_line_ref import FlexibleLineRef
 from .general_sign_ref import GeneralSignRef
@@ -32,6 +33,7 @@ from .heading_sign_ref import HeadingSignRef
 from .help_point_equipment_ref import HelpPointEquipmentRef
 from .hire_service_ref import HireServiceRef
 from .left_luggage_service_ref import LeftLuggageServiceRef
+from .lift_call_equipment_ref import LiftCallEquipmentRef
 from .lift_equipment_ref import LiftEquipmentRef
 from .line_ref import LineRef
 from .local_service_ref import LocalServiceRef
@@ -44,10 +46,9 @@ from .network_ref import NetworkRef
 from .online_service_ref import OnlineServiceRef
 from .operator_ref import OperatorRef
 from .parking_ref import ParkingRef
+from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_equipment_ref import PassengerEquipmentRef
-from .passenger_information_equipment_ref import (
-    PassengerInformationEquipmentRef,
-)
+from .passenger_information_equipment_ref import PassengerInformationEquipmentRef
 from .passenger_safety_equipment_ref import PassengerSafetyEquipmentRef
 from .payment_method_enumeration import PaymentMethodEnumeration
 from .place_lighting_equipment_ref import PlaceLightingEquipmentRef
@@ -107,9 +108,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class FareTableSpecificsStructure:
-    transport_organisation_ref: Optional[
-        Union[AuthorityRef, OperatorRef]
-    ] = field(
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -163,16 +162,7 @@ class FareTableSpecificsStructure:
             ),
         },
     )
-    stop_place_ref_or_site_ref: Optional[
-        Union[
-            TaxiRankRef,
-            StopPlaceRef,
-            ParkingRef,
-            PointOfInterestRef,
-            ServiceSiteRef,
-            SiteRef,
-        ]
-    ] = field(
+    stop_place_ref_or_site_ref: Optional[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -210,9 +200,7 @@ class FareTableSpecificsStructure:
             ),
         },
     )
-    vehicle_meeting_place_ref: Optional[
-        Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]
-    ] = field(
+    vehicle_meeting_place_ref: Optional[Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -270,7 +258,7 @@ class FareTableSpecificsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_class: Optional[FareClassEnumeration] = field(
+    fare_class: Optional[FareClass] = field(
         default=None,
         metadata={
             "name": "FareClass",
@@ -286,9 +274,7 @@ class FareTableSpecificsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    facility_set_ref: Optional[
-        Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]
-    ] = field(
+    facility_set_ref: Optional[Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -327,16 +313,7 @@ class FareTableSpecificsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            SingleJourneyRef,
-            TrainNumberRef,
-            GroupOfServicesRef,
-            GroupOfSingleJourneysRef,
-        ]
-    ] = field(
+    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref_or_group_of_services_ref_or_group_of_single_journeys_ref: Optional[Union[TemplateServiceJourneyRef, ServiceJourneyRef, SingleJourneyRef, TrainNumberRef, GroupOfServicesRef, GroupOfSingleJourneysRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -374,7 +351,7 @@ class FareTableSpecificsStructure:
             ),
         },
     )
-    choice_1: Optional[
+    choice: Optional[
         Union[
             RetailDeviceRef,
             OnlineServiceRef,
@@ -420,6 +397,7 @@ class FareTableSpecificsStructure:
             QueueingEquipmentRef,
             TravelatorEquipmentRef,
             EscalatorEquipmentRef,
+            LiftCallEquipmentRef,
             LiftEquipmentRef,
             CrossingEquipmentRef,
             RampEquipmentRef,
@@ -429,6 +407,7 @@ class FareTableSpecificsStructure:
             PlaceSignRef,
             SignEquipmentRef,
             RubbishDisposalEquipmentRef,
+            PassengerBeaconEquipmentRef,
             HelpPointEquipmentRef,
             PassengerSafetyEquipmentRef,
             SanitaryEquipmentRef,
@@ -664,6 +643,11 @@ class FareTableSpecificsStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "LiftCallEquipmentRef",
+                    "type": LiftCallEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "LiftEquipmentRef",
                     "type": LiftEquipmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -706,6 +690,11 @@ class FareTableSpecificsStructure:
                 {
                     "name": "RubbishDisposalEquipmentRef",
                     "type": RubbishDisposalEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerBeaconEquipmentRef",
+                    "type": PassengerBeaconEquipmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -759,9 +748,7 @@ class FareTableSpecificsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distribution_channel_ref_or_group_of_distribution_channels_ref: Optional[
-        Union[DistributionChannelRef, GroupOfDistributionChannelsRef]
-    ] = field(
+    distribution_channel_ref_or_group_of_distribution_channels_ref: Optional[Union[DistributionChannelRef, GroupOfDistributionChannelsRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

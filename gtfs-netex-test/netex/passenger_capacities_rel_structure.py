@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .passenger_capacity import PassengerCapacity
 from .passenger_capacity_ref import PassengerCapacityRef
@@ -12,9 +13,7 @@ class PassengerCapacitiesRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "passengerCapacities_RelStructure"
 
-    passenger_capacity_ref_or_passenger_capacity: List[
-        Union[PassengerCapacityRef, PassengerCapacity]
-    ] = field(
+    passenger_capacity_ref_or_passenger_capacity: List[Union[PassengerCapacityRef, PassengerCapacity]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .dead_run_endpoint_structure import DeadRunEndpointStructure
 from .dead_run_type_enumeration import DeadRunTypeEnumeration
-from .direction_type_enumeration import DirectionTypeEnumeration
+from .direction_type import DirectionType
 from .flexible_line_ref import FlexibleLineRef
-from .group_of_services_refs_rel_structure import (
-    GroupOfServicesRefsRelStructure,
-)
+from .group_of_services_refs_rel_structure import GroupOfServicesRefsRelStructure
 from .line_ref import LineRef
 from .operator_ref import OperatorRef
 from .train_number_refs_rel_structure import TrainNumberRefsRelStructure
@@ -46,7 +45,7 @@ class DeadRunVersionStructure(VehicleJourneyVersionStructure):
             ),
         },
     )
-    direction_type: Optional[DirectionTypeEnumeration] = field(
+    direction_type: Optional[DirectionType] = field(
         default=None,
         metadata={
             "name": "DirectionType",

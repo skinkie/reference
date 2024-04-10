@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
+
 from xsdata.models.datatype import XmlDuration
+
 from .derived_view_structure import DerivedViewStructure
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 from .service_link_in_journey_pattern import ServiceLinkInJourneyPattern
@@ -15,9 +17,7 @@ class OnwardServiceLinkDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "OnwardServiceLink_DerivedViewStructure"
 
-    service_link_in_journey_pattern: Optional[
-        ServiceLinkInJourneyPattern
-    ] = field(
+    service_link_in_journey_pattern: Optional[ServiceLinkInJourneyPattern] = field(
         default=None,
         metadata={
             "name": "ServiceLinkInJourneyPattern",

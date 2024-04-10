@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .service_journey_ref import ServiceJourneyRef
 from .single_journey_ref import SingleJourneyRef
@@ -10,20 +11,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TravelSpecificationJourneyRefsRelStructure(
-    OneToManyRelationshipStructure
-):
+class TravelSpecificationJourneyRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "travelSpecificationJourneyRefs_RelStructure"
 
-    choice: List[
-        Union[
-            TemplateServiceJourneyRef,
-            ServiceJourneyRef,
-            SingleJourneyRef,
-            TrainNumberRef,
-        ]
-    ] = field(
+    template_service_journey_ref_or_service_journey_ref_or_single_journey_ref_or_train_number_ref: List[Union[TemplateServiceJourneyRef, ServiceJourneyRef, SingleJourneyRef, TrainNumberRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

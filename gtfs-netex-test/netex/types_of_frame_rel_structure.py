@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Type, Union
+
 from .class_ref_structure import ClassRefStructure
-from .classes_in_repository_rel_structure import (
-    ClassesInRepositoryRelStructure,
-)
+from .classes_in_repository_rel_structure import ClassesInRepositoryRelStructure
 from .layer_ref import LayerRef
 from .modification_set_enumeration import ModificationSetEnumeration
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -20,9 +19,7 @@ class TypesOfFrameRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typesOfFrame_RelStructure"
 
-    type_of_frame_ref_or_type_of_frame: List[
-        Union[TypeOfFrameRef, "TypeOfFrame"]
-    ] = field(
+    type_of_frame_ref_or_type_of_frame: List[Union[TypeOfFrameRef, "TypeOfFrame"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

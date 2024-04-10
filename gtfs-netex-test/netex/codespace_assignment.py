@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Any
-from .codespace_assignment_versioned_child_structure import (
-    CodespaceAssignmentVersionedChildStructure,
-)
+
+from .codespace_assignment_versioned_child_structure import CodespaceAssignmentVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

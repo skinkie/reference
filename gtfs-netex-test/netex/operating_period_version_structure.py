@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from xsdata.models.datatype import XmlDateTime
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
+from .entity_in_version_structure import DataManagedObjectStructure
 from .holiday_type_enumeration import HolidayTypeEnumeration
 from .multilingual_string import MultilingualString
 from .operating_day_ref_structure import OperatingDayRefStructure
@@ -40,9 +42,7 @@ class OperatingPeriodVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    from_operating_day_ref_or_from_date: Optional[
-        Union[OperatingDayRefStructure, XmlDateTime]
-    ] = field(
+    from_operating_day_ref_or_from_date: Optional[Union[OperatingDayRefStructure, XmlDateTime]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -60,9 +60,7 @@ class OperatingPeriodVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    to_operating_day_ref_or_to_date: Optional[
-        Union[OperatingDayRefStructure, XmlDateTime]
-    ] = field(
+    to_operating_day_ref_or_to_date: Optional[Union[OperatingDayRefStructure, XmlDateTime]] = field(
         default=None,
         metadata={
             "type": "Elements",

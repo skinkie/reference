@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .activation_link_ref import ActivationLinkRef
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .entity_in_version_structure import DataManagedObjectStructure
 from .line_link_ref import LineLinkRef
 from .multilingual_string import MultilingualString
 from .onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
@@ -38,21 +39,7 @@ class LineShapeStructure2(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    link_ref_or_infrastructure_link_ref: Optional[
-        Union[
-            OnwardVehicleMeetingLinkRef,
-            VehicleMeetingLinkRef,
-            ServiceLinkRef,
-            LineLinkRef,
-            TimingLinkRef,
-            WireLinkRef,
-            RoadLinkRef,
-            RailwayLinkRef,
-            ActivationLinkRef,
-            PathLinkRef,
-            RouteLinkRef,
-        ]
-    ] = field(
+    link_ref_or_infrastructure_link_ref: Optional[Union[OnwardVehicleMeetingLinkRef, VehicleMeetingLinkRef, ServiceLinkRef, LineLinkRef, TimingLinkRef, WireLinkRef, RoadLinkRef, RailwayLinkRef, ActivationLinkRef, PathLinkRef, RouteLinkRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

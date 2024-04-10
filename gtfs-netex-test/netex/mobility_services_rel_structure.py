@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .car_pooling_service import CarPoolingService
 from .chauffeured_vehicle_service import ChauffeuredVehicleService
 from .containment_aggregation_structure import ContainmentAggregationStructure
@@ -16,16 +17,7 @@ class MobilityServicesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "mobilityServices_RelStructure"
 
-    mobility_service_or_common_vehicle_service_or_vehicle_pooling_service: List[
-        Union[
-            OnlineService,
-            VehicleRentalService,
-            VehicleSharingService,
-            ChauffeuredVehicleService,
-            CarPoolingService,
-            TaxiService,
-        ]
-    ] = field(
+    mobility_service_or_common_vehicle_service_or_vehicle_pooling_service: List[Union[OnlineService, VehicleRentalService, VehicleSharingService, ChauffeuredVehicleService, CarPoolingService, TaxiService]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

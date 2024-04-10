@@ -1,80 +1,41 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .accessibility_assessment import AccessibilityAssessment
 from .common_version_frame_structure import CommonVersionFrameStructure
 from .compound_train_ref import CompoundTrainRef
-from .contained_availability_conditions_rel_structure import (
-    ContainedAvailabilityConditionsRelStructure,
-)
-from .coupled_journeys_in_frame_rel_structure import (
-    CoupledJourneysInFrameRelStructure,
-)
-from .default_interchangse_in_frame_rel_structure import (
-    DefaultInterchangseInFrameRelStructure,
-)
-from .flexible_service_properties_in_frame_rel_structure import (
-    FlexibleServicePropertiesInFrameRelStructure,
-)
-from .frequency_groups_in_frame_rel_structure import (
-    FrequencyGroupsInFrameRelStructure,
-)
-from .group_of_links_in_frame_rel_structure import (
-    GroupOfLinksInFrameRelStructure,
-)
-from .groups_of_services_in_frame_rel_structure import (
-    GroupsOfServicesInFrameRelStructure,
-)
-from .interchange_rules_in_frame_rel_structure import (
-    InterchangeRulesInFrameRelStructure,
-)
+from .contained_availability_conditions_rel_structure import ContainedAvailabilityConditionsRelStructure
+from .coupled_journeys_in_frame_rel_structure import CoupledJourneysInFrameRelStructure
+from .default_interchangse_in_frame_rel_structure import DefaultInterchangseInFrameRelStructure
+from .flexible_service_properties_in_frame_rel_structure import FlexibleServicePropertiesInFrameRelStructure
+from .frequency_groups_in_frame_rel_structure import FrequencyGroupsInFrameRelStructure
+from .group_of_links_in_frame_rel_structure import GroupOfLinksInFrameRelStructure
+from .groups_of_services_in_frame_rel_structure import GroupsOfServicesInFrameRelStructure
+from .interchange_rules_in_frame_rel_structure import InterchangeRulesInFrameRelStructure
 from .journey_accounting_ref import JourneyAccountingRef
-from .journey_accountings_in_frame_rel_structure import (
-    JourneyAccountingsInFrameRelStructure,
-)
-from .journey_interchanges_in_frame_rel_structure import (
-    JourneyInterchangesInFrameRelStructure,
-)
-from .journey_meetings_in_frame_rel_structure import (
-    JourneyMeetingsInFrameRelStructure,
-)
-from .journey_part_couples_in_frame_rel_structure import (
-    JourneyPartCouplesInFrameRelStructure,
-)
+from .journey_accountings_in_frame_rel_structure import JourneyAccountingsInFrameRelStructure
+from .journey_interchanges_in_frame_rel_structure import JourneyInterchangesInFrameRelStructure
+from .journey_meetings_in_frame_rel_structure import JourneyMeetingsInFrameRelStructure
+from .journey_part_couples_in_frame_rel_structure import JourneyPartCouplesInFrameRelStructure
 from .journeys_in_frame_rel_structure import JourneysInFrameRelStructure
 from .line_view import LineView
 from .network_view import NetworkView
-from .notice_assignments_in_frame_rel_structure import (
-    NoticeAssignmentsInFrameRelStructure,
-)
+from .notice_assignments_in_frame_rel_structure import NoticeAssignmentsInFrameRelStructure
 from .notices_in_frame_rel_structure import NoticesInFrameRelStructure
 from .operator_view import OperatorView
 from .service_calendar_frame_ref import ServiceCalendarFrameRef
-from .service_facility_sets_in_frame_rel_structure import (
-    ServiceFacilitySetsInFrameRelStructure,
-)
+from .service_facility_sets_in_frame_rel_structure import ServiceFacilitySetsInFrameRelStructure
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
-from .time_demand_type_assignments_in_frame_rel_structure import (
-    TimeDemandTypeAssignmentsInFrameRelStructure,
-)
-from .time_demand_types_in_frame_rel_structure import (
-    TimeDemandTypesInFrameRelStructure,
-)
-from .train_numbers_in_frame_rel_structure import (
-    TrainNumbersInFrameRelStructure,
-)
+from .time_demand_type_assignments_in_frame_rel_structure import TimeDemandTypeAssignmentsInFrameRelStructure
+from .time_demand_types_in_frame_rel_structure import TimeDemandTypesInFrameRelStructure
+from .train_numbers_in_frame_rel_structure import TrainNumbersInFrameRelStructure
 from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
-from .types_of_service_in_frame_rel_structure import (
-    TypesOfServiceInFrameRelStructure,
-)
-from .vehicle_journey_stop_assignments_in_frame_rel_structure import (
-    VehicleJourneyStopAssignmentsInFrameRelStructure,
-)
+from .types_of_service_in_frame_rel_structure import TypesOfServiceInFrameRelStructure
+from .vehicle_journey_stop_assignments_in_frame_rel_structure import VehicleJourneyStopAssignmentsInFrameRelStructure
 from .vehicle_mode_enumeration import VehicleModeEnumeration
 from .vehicle_type_ref import VehicleTypeRef
-from .vehicle_types_in_frame_rel_structure import (
-    VehicleTypesInFrameRelStructure,
-)
+from .vehicle_types_in_frame_rel_structure import VehicleTypesInFrameRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -157,9 +118,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_times: Optional[
-        ContainedAvailabilityConditionsRelStructure
-    ] = field(
+    booking_times: Optional[ContainedAvailabilityConditionsRelStructure] = field(
         default=None,
         metadata={
             "name": "bookingTimes",
@@ -175,15 +134,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -224,9 +175,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    time_demand_type_assignments: Optional[
-        TimeDemandTypeAssignmentsInFrameRelStructure
-    ] = field(
+    time_demand_type_assignments: Optional[TimeDemandTypeAssignmentsInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "timeDemandTypeAssignments",
@@ -274,9 +223,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_part_couples: Optional[
-        JourneyPartCouplesInFrameRelStructure
-    ] = field(
+    journey_part_couples: Optional[JourneyPartCouplesInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "journeyPartCouples",
@@ -292,9 +239,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    service_facility_sets: Optional[
-        ServiceFacilitySetsInFrameRelStructure
-    ] = field(
+    service_facility_sets: Optional[ServiceFacilitySetsInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "serviceFacilitySets",
@@ -310,9 +255,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    flexible_service_properties: Optional[
-        FlexibleServicePropertiesInFrameRelStructure
-    ] = field(
+    flexible_service_properties: Optional[FlexibleServicePropertiesInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "flexibleServiceProperties",
@@ -320,9 +263,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_journey_stop_assignments: Optional[
-        VehicleJourneyStopAssignmentsInFrameRelStructure
-    ] = field(
+    vehicle_journey_stop_assignments: Optional[VehicleJourneyStopAssignmentsInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleJourneyStopAssignments",
@@ -353,9 +294,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_interchanges: Optional[
-        JourneyInterchangesInFrameRelStructure
-    ] = field(
+    journey_interchanges: Optional[JourneyInterchangesInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "journeyInterchanges",
@@ -363,9 +302,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    default_interchanges: Optional[
-        DefaultInterchangseInFrameRelStructure
-    ] = field(
+    default_interchanges: Optional[DefaultInterchangseInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "defaultInterchanges",
@@ -389,9 +326,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_accountings: Optional[
-        JourneyAccountingsInFrameRelStructure
-    ] = field(
+    journey_accountings: Optional[JourneyAccountingsInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "journeyAccountings",

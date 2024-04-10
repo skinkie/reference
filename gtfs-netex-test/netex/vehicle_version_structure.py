@@ -1,11 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDate
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .authority_ref import AuthorityRef
 from .car_model_profile_ref import CarModelProfileRef
 from .compound_train_ref import CompoundTrainRef
 from .cycle_model_profile_ref import CycleModelProfileRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .equipments_rel_structure import EquipmentsRelStructure
 from .multilingual_string import MultilingualString
 from .operator_ref import OperatorRef
@@ -80,9 +82,7 @@ class VehicleVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_organisation_ref: Optional[
-        Union[AuthorityRef, OperatorRef]
-    ] = field(
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -100,15 +100,7 @@ class VehicleVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -149,9 +141,7 @@ class VehicleVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_model_profile_ref: Optional[
-        Union[CycleModelProfileRef, CarModelProfileRef]
-    ] = field(
+    vehicle_model_profile_ref: Optional[Union[CycleModelProfileRef, CarModelProfileRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

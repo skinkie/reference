@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .dead_run_ref import DeadRunRef
-from .journey_headway_versioned_child_structure import (
-    JourneyHeadwayVersionedChildStructure,
-)
+from .journey_headway_versioned_child_structure import JourneyHeadwayVersionedChildStructure
 from .timing_point_in_journey_pattern_ref import TimingPointInJourneyPatternRef
 from .vehicle_journey_ref import VehicleJourneyRef
 
@@ -11,15 +10,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleJourneyHeadwayVersionedChildStructure(
-    JourneyHeadwayVersionedChildStructure
-):
+class VehicleJourneyHeadwayVersionedChildStructure(JourneyHeadwayVersionedChildStructure):
     class Meta:
         name = "VehicleJourneyHeadway_VersionedChildStructure"
 
-    vehicle_journey_ref: Optional[
-        Union[DeadRunRef, VehicleJourneyRef]
-    ] = field(
+    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -37,9 +32,7 @@ class VehicleJourneyHeadwayVersionedChildStructure(
             ),
         },
     )
-    timing_point_in_journey_pattern_ref: Optional[
-        TimingPointInJourneyPatternRef
-    ] = field(
+    timing_point_in_journey_pattern_ref: Optional[TimingPointInJourneyPatternRef] = field(
         default=None,
         metadata={
             "name": "TimingPointInJourneyPatternRef",

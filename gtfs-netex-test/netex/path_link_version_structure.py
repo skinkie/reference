@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional, Union
+
 from .access_feature_enumeration import AccessFeatureEnumeration
 from .access_mode_enumeration import AccessModeEnumeration
 from .accessibility_assessment import AccessibilityAssessment
 from .accessibility_assessment_ref import AccessibilityAssessmentRef
 from .border_type_enumeration import BorderTypeEnumeration
 from .covered_enumeration import CoveredEnumeration
+from .flooring_status_enumeration import FlooringStatusEnumeration
 from .flooring_type_enumeration import FlooringTypeEnumeration
 from .gated_enumeration import GatedEnumeration
 from .gradient_enumeration import GradientEnumeration
@@ -19,6 +21,7 @@ from .path_link_end_structure import PathLinkEndStructure
 from .presentation_structure import PresentationStructure
 from .public_use_enumeration import PublicUseEnumeration
 from .site_facility_sets_rel_structure import SiteFacilitySetsRelStructure
+from .tactile_guiding_strip_status_enumeration import TactileGuidingStripStatusEnumeration
 from .tactile_warning_strip_enumeration import TactileWarningStripEnumeration
 from .tilt_type_enumeration import TiltTypeEnumeration
 from .transfer_duration_structure import TransferDurationStructure
@@ -56,9 +59,7 @@ class PathLinkVersionStructure(LinkVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    accessibility_assessment_ref_or_accessibility_assessment: Optional[
-        Union[AccessibilityAssessmentRef, AccessibilityAssessment]
-    ] = field(
+    accessibility_assessment_ref_or_accessibility_assessment: Optional[Union[AccessibilityAssessmentRef, AccessibilityAssessment]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -260,6 +261,14 @@ class PathLinkVersionStructure(LinkVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    flooring_status: Optional[FlooringStatusEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "FlooringStatus",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     right_side_border: Optional[BorderTypeEnumeration] = field(
         default=None,
         metadata={
@@ -284,10 +293,26 @@ class PathLinkVersionStructure(LinkVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    tactile_warning_strip_contrast: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "TactileWarningStripContrast",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     tactile_guiding_strip: Optional[bool] = field(
         default=None,
         metadata={
             "name": "TactileGuidingStrip",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    tactile_guiding_strip_status: Optional[TactileGuidingStripStatusEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "TactileGuidingStripStatus",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

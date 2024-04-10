@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_mode_of_operation_value_structure import (
-    AlternativeModeOfOperationValueStructure,
-)
+
+from .alternative_mode_of_operation_value_structure import AlternativeModeOfOperationValueStructure
 from .vehicle_pooling_type_enumeration import VehiclePoolingTypeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehiclePoolingModeOfOperationValueStructure(
-    AlternativeModeOfOperationValueStructure
-):
+class VehiclePoolingModeOfOperationValueStructure(AlternativeModeOfOperationValueStructure):
     class Meta:
         name = "VehiclePoolingModeOfOperation_ValueStructure"
 

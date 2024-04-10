@@ -1,15 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .access_right_parameter_assignments_rel_structure import (
-    AccessRightParameterAssignmentsRelStructure,
-)
-from .cell_versioned_child_structure import PriceableObjectVersionStructure
-from .controllable_element_prices_rel_structure import (
-    ControllableElementPricesRelStructure,
-)
-from .controllable_elements_in_sequence_rel_structure import (
-    ControllableElementsInSequenceRelStructure,
-)
+
+from .access_right_parameter_assignments_rel_structure import AccessRightParameterAssignmentsRelStructure
+from .controllable_element_prices_rel_structure import ControllableElementPricesRelStructure
+from .controllable_elements_in_sequence_rel_structure import ControllableElementsInSequenceRelStructure
+from .priceable_object_version_structure import PriceableObjectVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -19,9 +14,7 @@ class ControllableElementVersionStructure(PriceableObjectVersionStructure):
     class Meta:
         name = "ControllableElement_VersionStructure"
 
-    access_right_parameter_assignments: Optional[
-        AccessRightParameterAssignmentsRelStructure
-    ] = field(
+    access_right_parameter_assignments: Optional[AccessRightParameterAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "accessRightParameterAssignments",
@@ -29,9 +22,7 @@ class ControllableElementVersionStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    controllable_elements_in_sequence: Optional[
-        ControllableElementsInSequenceRelStructure
-    ] = field(
+    controllable_elements_in_sequence: Optional[ControllableElementsInSequenceRelStructure] = field(
         default=None,
         metadata={
             "name": "controllableElementsInSequence",

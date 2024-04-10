@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .fare_element_in_sequence_versioned_child_structure import (
-    FareElementInSequenceVersionedChildStructure,
-)
+
+from .fare_element_in_sequence_versioned_child_structure import FareElementInSequenceVersionedChildStructure
 from .preassigned_fare_product_ref import PreassignedFareProductRef
 from .supplement_product_ref import SupplementProductRef
 from .validable_element_ref import ValidableElementRef
@@ -11,9 +10,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class AccessRightInProductVersionedChildStructure(
-    FareElementInSequenceVersionedChildStructure
-):
+class AccessRightInProductVersionedChildStructure(FareElementInSequenceVersionedChildStructure):
     class Meta:
         name = "AccessRightInProduct_VersionedChildStructure"
 
@@ -25,9 +22,7 @@ class AccessRightInProductVersionedChildStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    preassigned_fare_product_ref: Optional[
-        Union[SupplementProductRef, PreassignedFareProductRef]
-    ] = field(
+    preassigned_fare_product_ref: Optional[Union[SupplementProductRef, PreassignedFareProductRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

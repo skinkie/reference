@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDate
-from .customer_eligibility_versioned_child_structure import (
-    CustomerEligibilityVersionedChildStructure,
-)
+
+from .customer_eligibility_versioned_child_structure import CustomerEligibilityVersionedChildStructure
 from .residence_type_enumeration import ResidenceTypeEnumeration
 from .residential_qualification_ref import ResidentialQualificationRef
 
@@ -11,15 +11,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ResidentialQualificationEligibilityVersionedChildStructure(
-    CustomerEligibilityVersionedChildStructure
-):
+class ResidentialQualificationEligibilityVersionedChildStructure(CustomerEligibilityVersionedChildStructure):
     class Meta:
         name = "ResidentialQualificationEligibility_VersionedChildStructure"
 
-    residential_qualification_ref: Optional[
-        ResidentialQualificationRef
-    ] = field(
+    residential_qualification_ref: Optional[ResidentialQualificationRef] = field(
         default=None,
         metadata={
             "name": "ResidentialQualificationRef",

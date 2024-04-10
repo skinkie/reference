@@ -1,17 +1,12 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .capping_rule_price import CappingRulePrice
 from .capping_rule_price_ref import CappingRulePriceRef
-from .cell_versioned_child_structure import (
-    ParkingPrice,
-    PriceGroup,
-)
 from .controllable_element_price import ControllableElementPrice
 from .controllable_element_price_ref import ControllableElementPriceRef
 from .customer_purchase_package_price import CustomerPurchasePackagePrice
-from .customer_purchase_package_price_ref import (
-    CustomerPurchasePackagePriceRef,
-)
+from .customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
 from .distance_matrix_element_price import DistanceMatrixElementPrice
 from .distance_matrix_element_price_ref import DistanceMatrixElementPriceRef
 from .fare_price_ref import FarePriceRef
@@ -27,15 +22,17 @@ from .geographical_unit_price import GeographicalUnitPrice
 from .geographical_unit_price_ref import GeographicalUnitPriceRef
 from .parking_price_ref import ParkingPriceRef
 from .price_group_ref import PriceGroupRef
+from .priceable_object_version_structure import (
+    ParkingPrice,
+    PriceGroup,
+)
 from .quality_structure_factor_price import QualityStructureFactorPrice
 from .quality_structure_factor_price_ref import QualityStructureFactorPriceRef
 from .sales_offer_package_price import SalesOfferPackagePrice
 from .sales_offer_package_price_ref import SalesOfferPackagePriceRef
 from .series_constraint_price import SeriesConstraintPrice
 from .series_constraint_price_ref import SeriesConstraintPriceRef
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .time_interval_price import TimeIntervalPrice
 from .time_interval_price_ref import TimeIntervalPriceRef
 from .time_unit_price import TimeUnitPrice
@@ -64,7 +61,6 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
             ValidableElementPriceRef,
             GeographicalIntervalPriceRef,
             GeographicalUnitPriceRef,
-            UsageParameterPriceRef,
             SeriesConstraintPriceRef,
             SalesOfferPackagePriceRef,
             DistanceMatrixElementPriceRef,
@@ -72,6 +68,7 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
             FulfilmentMethodPriceRef,
             CappingRulePriceRef,
             FareProductPriceRef,
+            UsageParameterPriceRef,
             FarePriceRef,
             PriceGroupRef,
             CustomerPurchasePackagePrice,
@@ -144,11 +141,6 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "UsageParameterPriceRef",
-                    "type": UsageParameterPriceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "SeriesConstraintPriceRef",
                     "type": SeriesConstraintPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -181,6 +173,11 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
                 {
                     "name": "FareProductPriceRef",
                     "type": FareProductPriceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UsageParameterPriceRef",
+                    "type": UsageParameterPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

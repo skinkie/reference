@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .flexible_stop_place_version_structure import (
-    FlexibleStopPlaceVersionStructure,
-)
+
+from .flexible_stop_place_version_structure import FlexibleStopPlaceVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

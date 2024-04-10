@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
 from .block_ref import BlockRef
 from .compound_block_ref import CompoundBlockRef
 from .compound_train_ref import CompoundTrainRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .journey_part_couple_ref import JourneyPartCoupleRef
 from .journey_part_refs_rel_structure import JourneyPartRefsRelStructure
 from .multilingual_string import MultilingualString
@@ -53,9 +54,7 @@ class BlockPartVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[
-        Union[CompoundTrainRef, TrainRef, VehicleTypeRef]
-    ] = field(
+    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -86,9 +85,7 @@ class BlockPartVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_part_couple_ref_or_journey_parts: Optional[
-        Union[JourneyPartCoupleRef, JourneyPartRefsRelStructure]
-    ] = field(
+    journey_part_couple_ref_or_journey_parts: Optional[Union[JourneyPartCoupleRef, JourneyPartRefsRelStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

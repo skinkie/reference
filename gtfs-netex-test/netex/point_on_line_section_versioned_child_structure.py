@@ -1,20 +1,15 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
-from .line_section_point_type_enumeration import (
-    LineSectionPointTypeEnumeration,
-)
-from .point_on_section_versioned_child_structure import (
-    PointOnSectionVersionedChildStructure,
-)
+
+from .line_section_point_type_enumeration import LineSectionPointTypeEnumeration
+from .point_on_section_versioned_child_structure import PointOnSectionVersionedChildStructure
 from .vehicle_mode_enumeration import VehicleModeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PointOnLineSectionVersionedChildStructure(
-    PointOnSectionVersionedChildStructure
-):
+class PointOnLineSectionVersionedChildStructure(PointOnSectionVersionedChildStructure):
     class Meta:
         name = "PointOnLineSection_VersionedChildStructure"
 

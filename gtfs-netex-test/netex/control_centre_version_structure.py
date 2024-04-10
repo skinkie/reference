@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .department_ref import DepartmentRef
 from .multilingual_string import MultilingualString
-from .organisation_part_version_structure import (
-    OrganisationPartVersionStructure,
-)
+from .organisation_part_version_structure import OrganisationPartVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

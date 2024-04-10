@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .compound_train_ref import CompoundTrainRef
 from .dead_run_ref import DeadRunRef
@@ -27,9 +28,7 @@ class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_stopping_position_ref: Optional[
-        VehicleStoppingPositionRef
-    ] = field(
+    vehicle_stopping_position_ref: Optional[VehicleStoppingPositionRef] = field(
         default=None,
         metadata={
             "name": "VehicleStoppingPositionRef",
@@ -37,9 +36,7 @@ class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_journey_ref: Optional[
-        Union[DeadRunRef, VehicleJourneyRef]
-    ] = field(
+    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -57,15 +54,7 @@ class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
             ),
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

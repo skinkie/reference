@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .meeting_restriction import MeetingRestriction
 from .overtaking_possibility import OvertakingPossibility
@@ -14,14 +15,7 @@ class NetworkRestrictionsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "networkRestrictionsInFrame_RelStructure"
 
-    network_restriction: List[
-        Union[
-            OvertakingPossibility,
-            MeetingRestriction,
-            RestrictedManoeuvre,
-            VehicleTypeAtPoint,
-        ]
-    ] = field(
+    network_restriction: List[Union[OvertakingPossibility, MeetingRestriction, RestrictedManoeuvre, VehicleTypeAtPoint]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

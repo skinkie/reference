@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .access_right_parameter_assignment_version_structure import (
-    AccessRightParameterAssignmentVersionStructure,
-)
+
+from .access_right_parameter_assignment_version_structure import AccessRightParameterAssignmentVersionStructure
 from .fare_demand_factor_ref import FareDemandFactorRef
 from .fare_quota_factor_ref import FareQuotaFactorRef
 from .geographical_interval_ref import GeographicalIntervalRef
@@ -16,15 +15,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ValidityParameterAssignmentVersionStructure(
-    AccessRightParameterAssignmentVersionStructure
-):
+class ValidityParameterAssignmentVersionStructure(AccessRightParameterAssignmentVersionStructure):
     class Meta:
         name = "ValidityParameterAssignment_VersionStructure"
 
-    time_interval_ref_or_parking_charge_band_ref_or_time_structure_factor_ref: Optional[
-        Union[TimeIntervalRef, ParkingChargeBandRef, TimeStructureFactorRef]
-    ] = field(
+    time_interval_ref_or_parking_charge_band_ref_or_time_structure_factor_ref: Optional[Union[TimeIntervalRef, ParkingChargeBandRef, TimeStructureFactorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -47,9 +42,7 @@ class ValidityParameterAssignmentVersionStructure(
             ),
         },
     )
-    geographical_interval_ref_or_geographical_structure_factor_ref: Optional[
-        Union[GeographicalIntervalRef, GeographicalStructureFactorRef]
-    ] = field(
+    geographical_interval_ref_or_geographical_structure_factor_ref: Optional[Union[GeographicalIntervalRef, GeographicalStructureFactorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -67,11 +60,7 @@ class ValidityParameterAssignmentVersionStructure(
             ),
         },
     )
-    quality_structure_factor_ref: Optional[
-        Union[
-            FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef
-        ]
-    ] = field(
+    quality_structure_factor_ref: Optional[Union[FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

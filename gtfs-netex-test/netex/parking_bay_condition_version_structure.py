@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .log_entry_version_structure import LogEntryVersionStructure
-from .monitored_vehicle_sharing_parking_bay_ref import (
-    MonitoredVehicleSharingParkingBayRef,
-)
+from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .parking_bay_ref import ParkingBayRef
 from .parking_bay_status_enumeration import ParkingBayStatusEnumeration
 from .parking_bay_status_ref import ParkingBayStatusRef
@@ -18,14 +17,7 @@ class ParkingBayConditionVersionStructure(LogEntryVersionStructure):
     class Meta:
         name = "ParkingBayCondition_VersionStructure"
 
-    parking_bay_ref_or_vehicle_sharing_parking_bay_ref: Optional[
-        Union[
-            VehiclePoolingParkingBayRef,
-            MonitoredVehicleSharingParkingBayRef,
-            VehicleSharingParkingBayRef,
-            ParkingBayRef,
-        ]
-    ] = field(
+    parking_bay_ref_or_vehicle_sharing_parking_bay_ref: Optional[Union[VehiclePoolingParkingBayRef, MonitoredVehicleSharingParkingBayRef, VehicleSharingParkingBayRef, ParkingBayRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -1,23 +1,18 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .dead_run_ref import DeadRunRef
 from .dynamic_stop_assignment_ref import DynamicStopAssignmentRef
 from .passenger_stop_assignment_ref import PassengerStopAssignmentRef
-from .passenger_stop_assignment_version_structure import (
-    PassengerStopAssignmentVersionStructure,
-)
+from .passenger_stop_assignment_version_structure import PassengerStopAssignmentVersionStructure
 from .vehicle_journey_ref import VehicleJourneyRef
-from .vehicle_journey_stop_assignment_ref import (
-    VehicleJourneyStopAssignmentRef,
-)
+from .vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleJourneyStopAssignmentVersionStructure(
-    PassengerStopAssignmentVersionStructure
-):
+class VehicleJourneyStopAssignmentVersionStructure(PassengerStopAssignmentVersionStructure):
     class Meta:
         name = "VehicleJourneyStopAssignment_VersionStructure"
 
@@ -39,13 +34,7 @@ class VehicleJourneyStopAssignmentVersionStructure(
             ),
         },
     )
-    passenger_stop_assignment_ref: Optional[
-        Union[
-            VehicleJourneyStopAssignmentRef,
-            DynamicStopAssignmentRef,
-            PassengerStopAssignmentRef,
-        ]
-    ] = field(
+    passenger_stop_assignment_ref: Optional[Union[VehicleJourneyStopAssignmentRef, DynamicStopAssignmentRef, PassengerStopAssignmentRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

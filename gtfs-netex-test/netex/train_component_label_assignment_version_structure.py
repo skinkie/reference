@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .dead_run_ref import DeadRunRef
 from .multilingual_string import MultilingualString
@@ -10,9 +11,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TrainComponentLabelAssignmentVersionStructure(
-    AssignmentVersionStructure1
-):
+class TrainComponentLabelAssignmentVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "TrainComponentLabelAssignment_VersionStructure"
 
@@ -24,9 +23,7 @@ class TrainComponentLabelAssignmentVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_journey_ref: Optional[
-        Union[DeadRunRef, VehicleJourneyRef]
-    ] = field(
+    vehicle_journey_ref: Optional[Union[DeadRunRef, VehicleJourneyRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

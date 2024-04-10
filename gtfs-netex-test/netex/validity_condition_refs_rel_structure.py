@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .availability_condition_ref import AvailabilityConditionRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .validity_condition_ref import ValidityConditionRef
@@ -14,14 +15,7 @@ class ValidityConditionRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "validityConditionRefs_RelStructure"
 
-    validity_condition_ref: List[
-        Union[
-            AvailabilityConditionRef,
-            ValidityRuleParameterRef,
-            ValidityTriggerRef,
-            ValidityConditionRef,
-        ]
-    ] = field(
+    validity_condition_ref: List[Union[AvailabilityConditionRef, ValidityRuleParameterRef, ValidityTriggerRef, ValidityConditionRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

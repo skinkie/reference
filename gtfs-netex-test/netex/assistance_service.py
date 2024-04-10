@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .assistance_service_version_structure import (
-    AssistanceServiceVersionStructure,
-)
+
+from .assistance_service_version_structure import AssistanceServiceVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

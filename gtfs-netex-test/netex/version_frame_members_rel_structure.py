@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
+from .accepted_driver_permit import AcceptedDriverPermit
 from .access import Access
 from .access_right_parameter_assignment import AccessRightParameterAssignment
 from .access_space import AccessSpace
@@ -11,24 +13,12 @@ from .activation_link import ActivationLink
 from .activation_point import ActivationPoint
 from .additional_driver_option import AdditionalDriverOption
 from .addressable_place import AddressablePlace
-from .administrative_zone_version_structure import (
+from .administrative_zones_rel_structure import (
     AdministrativeZone,
     TransportAdministrativeZone,
 )
 from .allowed_line_direction import AllowedLineDirection
 from .alternative_mode_of_operation import AlternativeModeOfOperation
-from .alternative_texts_rel_structure import (
-    AvailabilityCondition,
-    DayType,
-    FareDayType,
-    OperatingDay,
-    OrganisationDayType,
-    SimpleAvailabilityCondition,
-    ValidDuring,
-    ValidityCondition,
-    ValidityRuleParameter,
-    ValidityTrigger,
-)
 from .amount_of_price_unit_product import AmountOfPriceUnitProduct
 from .assistance_booking_service import AssistanceBookingService
 from .assistance_service import AssistanceService
@@ -39,6 +29,7 @@ from .blacklist import Blacklist
 from .block import Block
 from .block_part import BlockPart
 from .boarding_position import BoardingPosition
+from .booking_arrangement import BookingArrangement
 from .border_point import BorderPoint
 from .branding import Branding
 from .cancelling import Cancelling
@@ -47,13 +38,6 @@ from .capping_rule import CappingRule
 from .car_model_profile import CarModelProfile
 from .car_pooling_service import CarPoolingService
 from .catering_service import CateringService
-from .cell_versioned_child_structure import (
-    FareTable,
-    FareTableInContext,
-    ParkingChargeBand,
-    PriceGroup,
-)
-from .charging_equipment_profile import ChargingEquipmentProfile
 from .charging_moment import ChargingMoment
 from .charging_policy import ChargingPolicy
 from .chauffeured_vehicle_service import ChauffeuredVehicleService
@@ -84,9 +68,7 @@ from .customer_account import CustomerAccount
 from .customer_account_status import CustomerAccountStatus
 from .customer_purchase_package import CustomerPurchasePackage
 from .customer_purchase_package_element import CustomerPurchasePackageElement
-from .customer_purchase_parameter_assignment import (
-    CustomerPurchaseParameterAssignment,
-)
+from .customer_purchase_parameter_assignment import CustomerPurchaseParameterAssignment
 from .customer_service import CustomerService
 from .cycle_model_profile import CycleModelProfile
 from .cycle_storage_equipment import CycleStorageEquipment
@@ -114,21 +96,26 @@ from .driver_trip import DriverTrip
 from .driver_trip_time import DriverTripTime
 from .duty import Duty
 from .duty_part import DutyPart
+from .dynamic_distance_matrix_element import DynamicDistanceMatrixElement
 from .dynamic_stop_assignment import DynamicStopAssignment
-from .dynamic_vehicle_meeting_point_assignment import (
-    DynamicVehicleMeetingPointAssignment,
-)
+from .dynamic_vehicle_meeting_point_assignment import DynamicVehicleMeetingPointAssignment
 from .eligibility_change_policy import EligibilityChangePolicy
 from .emv_card import EmvCard
-from .entities_in_version_rel_structure import (
-    CompositeFrame,
-    GeneralFrame,
-)
 from .entitlement_given import EntitlementGiven
 from .entitlement_product import EntitlementProduct
 from .entitlement_required import EntitlementRequired
-from .entity_in_version_in_frame_ref_structure import (
-    EntityInVersionInFrameRefStructure,
+from .entity_in_version_in_frame_ref_structure import EntityInVersionInFrameRefStructure
+from .entity_in_version_structure import (
+    AvailabilityCondition,
+    DayType,
+    FareDayType,
+    OperatingDay,
+    OrganisationDayType,
+    SimpleAvailabilityCondition,
+    ValidDuring,
+    ValidityCondition,
+    ValidityRuleParameter,
+    ValidityTrigger,
 )
 from .entrance import Entrance
 from .entrance_equipment import EntranceEquipment
@@ -164,8 +151,12 @@ from .garage_point import GaragePoint
 from .general_group_of_entities import GeneralGroupOfEntities
 from .general_organisation import GeneralOrganisation
 from .general_sign import GeneralSign
+from .general_version_frame_structure import (
+    CompositeFrame,
+    GeneralFrame,
+)
 from .general_zone import GeneralZone
-from .generic_parameter_assignment_version_structure import (
+from .generic_parameter_assignments_rel_structure import (
     GenericParameterAssignment,
     GenericParameterAssignmentInContext,
 )
@@ -183,6 +174,7 @@ from .group_of_points import GroupOfPoints
 from .group_of_sales_offer_packages import GroupOfSalesOfferPackages
 from .group_of_services import GroupOfServices
 from .group_of_single_journeys import GroupOfSingleJourneys
+from .group_of_tariff_zones import GroupOfTariffZones
 from .group_of_timebands import GroupOfTimebands
 from .group_of_timing_links import GroupOfTimingLinks
 from .group_ticket import GroupTicket
@@ -203,6 +195,7 @@ from .journey_part_couple import JourneyPartCouple
 from .layer import Layer
 from .left_luggage_service import LeftLuggageService
 from .level import Level
+from .lift_call_equipment import LiftCallEquipment
 from .lift_equipment import LiftEquipment
 from .limiting_rule import LimitingRule
 from .limiting_rule_in_context import LimitingRuleInContext
@@ -226,9 +219,7 @@ from .mobility_service_constraint_zone import MobilityServiceConstraintZone
 from .mobility_service_frame import MobilityServiceFrame
 from .mode_restriction_assessment import ModeRestrictionAssessment
 from .money_service import MoneyService
-from .monitored_vehicle_sharing_parking_bay import (
-    MonitoredVehicleSharingParkingBay,
-)
+from .monitored_vehicle_sharing_parking_bay import MonitoredVehicleSharingParkingBay
 from .month_validity_offset import MonthValidityOffset
 from .navigation_path import NavigationPath
 from .navigation_path_assignment import NavigationPathAssignment
@@ -258,10 +249,9 @@ from .parking_entrance_for_vehicles import ParkingEntranceForVehicles
 from .parking_passenger_entrance import ParkingPassengerEntrance
 from .parking_point import ParkingPoint
 from .parking_tariff import ParkingTariff
+from .passenger_beacon_equipment import PassengerBeaconEquipment
 from .passenger_carrying_requirement import PassengerCarryingRequirement
-from .passenger_carrying_requirements_view import (
-    PassengerCarryingRequirementsView,
-)
+from .passenger_carrying_requirements_view import PassengerCarryingRequirementsView
 from .passenger_information_equipment import PassengerInformationEquipment
 from .passenger_safety_equipment import PassengerSafetyEquipment
 from .passenger_stop_assignment import PassengerStopAssignment
@@ -275,9 +265,7 @@ from .place_sign import PlaceSign
 from .point_2 import Point2
 from .point_of_interest import PointOfInterest
 from .point_of_interest_classification import PointOfInterestClassification
-from .point_of_interest_classification_hierarchy import (
-    PointOfInterestClassificationHierarchy,
-)
+from .point_of_interest_classification_hierarchy import PointOfInterestClassificationHierarchy
 from .point_of_interest_entrance import PointOfInterestEntrance
 from .point_of_interest_space import PointOfInterestSpace
 from .point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
@@ -286,6 +274,12 @@ from .pool_of_vehicles import PoolOfVehicles
 from .postal_address import PostalAddress
 from .preassigned_fare_product import PreassignedFareProduct
 from .price_unit import PriceUnit
+from .priceable_object_version_structure import (
+    FareTable,
+    FareTableInContext,
+    ParkingChargeBand,
+    PriceGroup,
+)
 from .pricing_parameter_set import PricingParameterSet
 from .pricing_rule import PricingRule
 from .pricing_service import PricingService
@@ -299,6 +293,9 @@ from .queueing_equipment import QueueingEquipment
 from .railway_element import RailwayElement
 from .railway_junction import RailwayJunction
 from .ramp_equipment import RampEquipment
+from .recharging_equipment_profile import RechargingEquipmentProfile
+from .recharging_plan import RechargingPlan
+from .recharging_point_assignment import RechargingPointAssignment
 from .refuelling_equipment import RefuellingEquipment
 from .refunding import Refunding
 from .relief_opportunity import ReliefOpportunity
@@ -334,12 +331,8 @@ from .sale_discount_right import SaleDiscountRight
 from .sales_notice_assignment import SalesNoticeAssignment
 from .sales_offer_package import SalesOfferPackage
 from .sales_offer_package_element import SalesOfferPackageElement
-from .sales_offer_package_entitlement_given import (
-    SalesOfferPackageEntitlementGiven,
-)
-from .sales_offer_package_entitlement_required import (
-    SalesOfferPackageEntitlementRequired,
-)
+from .sales_offer_package_entitlement_given import SalesOfferPackageEntitlementGiven
+from .sales_offer_package_entitlement_required import SalesOfferPackageEntitlementRequired
 from .sales_offer_package_substitution import SalesOfferPackageSubstitution
 from .sales_transaction import SalesTransaction
 from .sales_transaction_frame import SalesTransactionFrame
@@ -348,11 +341,12 @@ from .scheduled_operation import ScheduledOperation
 from .scheduled_stop_point import ScheduledStopPoint
 from .schematic_map import SchematicMap
 from .seating_equipment import SeatingEquipment
-from .section_in_sequence_versioned_child_structure import JourneyPattern
+from .sections_in_sequence_rel_structure import JourneyPattern
 from .series_constraint import SeriesConstraint
 from .service_access_code import ServiceAccessCode
 from .service_access_right_1 import ServiceAccessRight1
 from .service_access_right_2 import ServiceAccessRight2
+from .service_booking_arrangement import ServiceBookingArrangement
 from .service_calendar import ServiceCalendar
 from .service_calendar_frame import ServiceCalendarFrame
 from .service_exclusion import ServiceExclusion
@@ -360,9 +354,7 @@ from .service_frame import ServiceFrame
 from .service_journey import ServiceJourney
 from .service_journey_interchange import ServiceJourneyInterchange
 from .service_journey_pattern import ServiceJourneyPattern
-from .service_journey_pattern_interchange import (
-    ServiceJourneyPatternInterchange,
-)
+from .service_journey_pattern_interchange import ServiceJourneyPatternInterchange
 from .service_link import ServiceLink
 from .service_pattern import ServicePattern
 from .service_site import ServiceSite
@@ -379,9 +371,7 @@ from .site_path_link import SitePathLink
 from .smartcard import Smartcard
 from .spatial_feature import SpatialFeature
 from .special_service import SpecialService
-from .specific_parameter_assignment_version_structure import (
-    SpecificParameterAssignment,
-)
+from .specific_parameter_assignments_rel_structure import SpecificParameterAssignment
 from .staircase_equipment import StaircaseEquipment
 from .standard_fare_table import StandardFareTable
 from .step_limit import StepLimit
@@ -446,6 +436,7 @@ from .type_of_concession import TypeOfConcession
 from .type_of_congestion import TypeOfCongestion
 from .type_of_customer_account import TypeOfCustomerAccount
 from .type_of_delivery_variant import TypeOfDeliveryVariant
+from .type_of_driver_permit import TypeOfDriverPermit
 from .type_of_entity import TypeOfEntity
 from .type_of_equipment import TypeOfEquipment
 from .type_of_facility import TypeOfFacility
@@ -471,9 +462,7 @@ from .type_of_operation import TypeOfOperation
 from .type_of_organisation import TypeOfOrganisation
 from .type_of_organisation_part import TypeOfOrganisationPart
 from .type_of_parking import TypeOfParking
-from .type_of_passenger_information_equipment import (
-    TypeOfPassengerInformationEquipment,
-)
+from .type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
 from .type_of_payment_method import TypeOfPaymentMethod
 from .type_of_place import TypeOfPlace
 from .type_of_plug import TypeOfPlug
@@ -505,9 +494,7 @@ from .validable_element import ValidableElement
 from .validity_parameter_assignment import ValidityParameterAssignment
 from .value_set import ValueSet
 from .vehicle import Vehicle
-from .vehicle_access_credentials_assignment import (
-    VehicleAccessCredentialsAssignment,
-)
+from .vehicle_access_credentials_assignment import VehicleAccessCredentialsAssignment
 from .vehicle_charging_equipment import VehicleChargingEquipment
 from .vehicle_equipment_profile import VehicleEquipmentProfile
 from .vehicle_journey import VehicleJourney
@@ -651,6 +638,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             FareStructureElement,
             TimeStructureFactor,
             TimeUnit,
+            DynamicDistanceMatrixElement,
             DistanceMatrixElement,
             GeographicalStructureFactor,
             GeographicalUnit,
@@ -665,6 +653,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             MonthValidityOffset,
             Rounding,
             PricingParameterSet,
+            RechargingPlan,
             ReliefOpportunity,
             CourseOfJourneys,
             VehicleServicePart,
@@ -731,7 +720,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             VehicleRental,
             FlexibleOperation,
             ScheduledOperation,
-            ChargingEquipmentProfile,
+            RechargingEquipmentProfile,
             VehicleEquipmentProfile,
             VehicleModel,
             Vehicle,
@@ -739,6 +728,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             FacilityRequirement,
             VehicleManoeuvringRequirement,
             PassengerCarryingRequirement,
+            AcceptedDriverPermit,
             SimpleVehicleType,
             VehicleType,
             TransportType,
@@ -751,6 +741,8 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             Line,
             DeliveryVariant,
             Notice,
+            ServiceBookingArrangement,
+            BookingArrangement,
             OperationalContext,
             OnlineService,
             VehicleRentalService,
@@ -786,6 +778,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             QueueingEquipment,
             EntranceEquipment,
             RampEquipment,
+            LiftCallEquipment,
             LiftEquipment,
             TravelatorEquipment,
             StaircaseEquipment,
@@ -798,6 +791,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             SignEquipment,
             PassengerInformationEquipment,
             RubbishDisposalEquipment,
+            PassengerBeaconEquipment,
             HelpPointEquipment,
             PassengerSafetyEquipment,
             SanitaryEquipment,
@@ -821,6 +815,64 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             DefaultConnection,
             SiteConnection,
             Access,
+            CompositeFrame,
+            MobilityJourneyFrame,
+            MobilityServiceFrame,
+            SalesTransactionFrame,
+            FareFrame,
+            DriverScheduleFrame,
+            VehicleScheduleFrame,
+            ServiceFrame,
+            TimetableFrame,
+            SiteFrame,
+            InfrastructureFrame,
+            GeneralFrame,
+            ResourceFrame,
+            ServiceCalendarFrame,
+            UicOperatingPeriod,
+            OperatingPeriod,
+            OperatingDay,
+            ServiceCalendar,
+            VehicleSharingPlaceAssignment,
+            VehiclePoolingPlaceAssignment,
+            TaxiServicePlaceAssignment,
+            VehicleServicePlaceAssignment1,
+            VehicleServicePlaceAssignment2,
+            DynamicVehicleMeetingPointAssignment,
+            VehicleMeetingPointAssignment1,
+            VehicleMeetingPointAssignment2,
+            VehicleAccessCredentialsAssignment,
+            DistributionAssignment,
+            SalesOfferPackageSubstitution,
+            CustomerPurchaseParameterAssignment,
+            SpecificParameterAssignment,
+            GenericParameterAssignmentInContext,
+            GenericParameterAssignment,
+            ValidityParameterAssignment,
+            AccessRightParameterAssignment,
+            JourneyAccounting,
+            RechargingPointAssignment,
+            TimeDemandTypeAssignment,
+            TransferRestriction,
+            ServiceExclusion,
+            DisplayAssignment,
+            OvertakingPossibility,
+            MeetingRestriction,
+            RestrictedManoeuvre,
+            VehicleTypeAtPoint,
+            ActivationAssignment,
+            SalesNoticeAssignment,
+            NoticeAssignment,
+            CheckConstraintThroughput,
+            CheckConstraintDelay,
+            CheckConstraint,
+            DayTypeAssignment,
+            GroupOfTimebands,
+            Timeband,
+            FareDayType,
+            OrganisationDayType,
+            DayType,
+            ResponsibilitySet,
             Contact,
             ControlCentre,
             OperatingDepartment,
@@ -870,62 +922,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             LinkSequenceProjection,
             LinkProjection,
             PointProjection,
-            CompositeFrame,
-            MobilityJourneyFrame,
-            MobilityServiceFrame,
-            SalesTransactionFrame,
-            FareFrame,
-            DriverScheduleFrame,
-            VehicleScheduleFrame,
-            ServiceFrame,
-            TimetableFrame,
-            SiteFrame,
-            InfrastructureFrame,
-            GeneralFrame,
-            ResourceFrame,
-            ServiceCalendarFrame,
-            UicOperatingPeriod,
-            OperatingPeriod,
-            OperatingDay,
-            ServiceCalendar,
-            VehicleSharingPlaceAssignment,
-            VehiclePoolingPlaceAssignment,
-            TaxiServicePlaceAssignment,
-            VehicleServicePlaceAssignment1,
-            VehicleServicePlaceAssignment2,
-            DynamicVehicleMeetingPointAssignment,
-            VehicleMeetingPointAssignment1,
-            VehicleMeetingPointAssignment2,
-            VehicleAccessCredentialsAssignment,
-            DistributionAssignment,
-            SalesOfferPackageSubstitution,
-            CustomerPurchaseParameterAssignment,
-            SpecificParameterAssignment,
-            GenericParameterAssignmentInContext,
-            GenericParameterAssignment,
-            ValidityParameterAssignment,
-            AccessRightParameterAssignment,
-            JourneyAccounting,
-            TimeDemandTypeAssignment,
-            TransferRestriction,
-            ServiceExclusion,
-            DisplayAssignment,
-            OvertakingPossibility,
-            MeetingRestriction,
-            RestrictedManoeuvre,
-            VehicleTypeAtPoint,
-            ActivationAssignment,
-            SalesNoticeAssignment,
-            NoticeAssignment,
-            CheckConstraintThroughput,
-            CheckConstraintDelay,
-            CheckConstraint,
-            DayTypeAssignment,
-            GroupOfTimebands,
-            Timeband,
-            FareDayType,
-            OrganisationDayType,
-            DayType,
             PoolOfVehicles,
             GroupOfSingleJourneys,
             GroupOfDistributionChannels,
@@ -944,6 +940,8 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             GroupOfOperators,
             GroupOfPlaces,
             GroupOfLinkSequences,
+            Layer,
+            GroupOfTariffZones,
             MobilityServiceConstraintZone,
             RoutingConstraintZone,
             StopArea,
@@ -998,9 +996,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             Zone,
             GroupOfLinks,
             GroupOfPoints,
-            Layer,
             GeneralGroupOfEntities,
-            ResponsibilitySet,
             ValueSet,
             TypeOfFleet,
             ParkingBayStatus,
@@ -1020,14 +1016,15 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TypeOfServiceFeature,
             Direction,
             TypeOfSecurityList,
+            TypeOfDriverPermit,
             PurposeOfEquipmentProfile,
             TypeOfProductCategory,
             TypeOfPaymentMethod,
             ClassOfUse,
             Submode,
             OpenTransportMode,
-            TypeOfCodespaceAssignment,
             TypeOfValidity,
+            TypeOfCodespaceAssignment,
             PurposeOfGrouping,
             Branding,
             DataSource,
@@ -1063,6 +1060,8 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TypeOfLinkSequence,
             TypeOfPlace,
             TypeOfTransfer,
+            TypeOfFrame,
+            TypeOfResponsibilityRole,
             TypeOfOperation,
             TypeOfOrganisationPart,
             TypeOfOrganisation,
@@ -1070,8 +1069,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TypeOfLink,
             TypeOfPoint,
             TypeOfProjection,
-            TypeOfFrame,
-            TypeOfResponsibilityRole,
             TypeOfEntity,
             TypeOfVersion,
             PassingTimeView,
@@ -1524,6 +1521,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "DynamicDistanceMatrixElement",
+                    "type": DynamicDistanceMatrixElement,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "DistanceMatrixElement",
                     "type": DistanceMatrixElement,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -1591,6 +1593,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "PricingParameterSet",
                     "type": PricingParameterSet,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RechargingPlan",
+                    "type": RechargingPlan,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1924,8 +1931,8 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "ChargingEquipmentProfile",
-                    "type": ChargingEquipmentProfile,
+                    "name": "RechargingEquipmentProfile",
+                    "type": RechargingEquipmentProfile,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1961,6 +1968,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "PassengerCarryingRequirement",
                     "type": PassengerCarryingRequirement,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "AcceptedDriverPermit",
+                    "type": AcceptedDriverPermit,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2021,6 +2033,16 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "Notice",
                     "type": Notice,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ServiceBookingArrangement",
+                    "type": ServiceBookingArrangement,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingArrangement",
+                    "type": BookingArrangement,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2199,6 +2221,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "LiftCallEquipment",
+                    "type": LiftCallEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "LiftEquipment",
                     "type": LiftEquipment,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2256,6 +2283,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "RubbishDisposalEquipment",
                     "type": RubbishDisposalEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerBeaconEquipment",
+                    "type": PassengerBeaconEquipment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2371,6 +2403,296 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "Access",
                     "type": Access,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CompositeFrame",
+                    "type": CompositeFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MobilityJourneyFrame",
+                    "type": MobilityJourneyFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MobilityServiceFrame",
+                    "type": MobilityServiceFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SalesTransactionFrame",
+                    "type": SalesTransactionFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FareFrame",
+                    "type": FareFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DriverScheduleFrame",
+                    "type": DriverScheduleFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleScheduleFrame",
+                    "type": VehicleScheduleFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ServiceFrame",
+                    "type": ServiceFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TimetableFrame",
+                    "type": TimetableFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SiteFrame",
+                    "type": SiteFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "InfrastructureFrame",
+                    "type": InfrastructureFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GeneralFrame",
+                    "type": GeneralFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ResourceFrame",
+                    "type": ResourceFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ServiceCalendarFrame",
+                    "type": ServiceCalendarFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UicOperatingPeriod",
+                    "type": UicOperatingPeriod,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatingPeriod",
+                    "type": OperatingPeriod,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatingDay",
+                    "type": OperatingDay,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ServiceCalendar",
+                    "type": ServiceCalendar,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleSharingPlaceAssignment",
+                    "type": VehicleSharingPlaceAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehiclePoolingPlaceAssignment",
+                    "type": VehiclePoolingPlaceAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiServicePlaceAssignment",
+                    "type": TaxiServicePlaceAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleServicePlaceAssignment",
+                    "type": VehicleServicePlaceAssignment1,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleServicePlaceAssignment_",
+                    "type": VehicleServicePlaceAssignment2,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DynamicVehicleMeetingPointAssignment",
+                    "type": DynamicVehicleMeetingPointAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleMeetingPointAssignment",
+                    "type": VehicleMeetingPointAssignment1,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleMeetingPointAssignment_",
+                    "type": VehicleMeetingPointAssignment2,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleAccessCredentialsAssignment",
+                    "type": VehicleAccessCredentialsAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DistributionAssignment",
+                    "type": DistributionAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SalesOfferPackageSubstitution",
+                    "type": SalesOfferPackageSubstitution,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CustomerPurchaseParameterAssignment",
+                    "type": CustomerPurchaseParameterAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpecificParameterAssignment",
+                    "type": SpecificParameterAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericParameterAssignmentInContext",
+                    "type": GenericParameterAssignmentInContext,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericParameterAssignment",
+                    "type": GenericParameterAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ValidityParameterAssignment",
+                    "type": ValidityParameterAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "AccessRightParameterAssignment",
+                    "type": AccessRightParameterAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "JourneyAccounting",
+                    "type": JourneyAccounting,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RechargingPointAssignment",
+                    "type": RechargingPointAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TimeDemandTypeAssignment",
+                    "type": TimeDemandTypeAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TransferRestriction",
+                    "type": TransferRestriction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ServiceExclusion",
+                    "type": ServiceExclusion,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DisplayAssignment",
+                    "type": DisplayAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OvertakingPossibility",
+                    "type": OvertakingPossibility,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MeetingRestriction",
+                    "type": MeetingRestriction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RestrictedManoeuvre",
+                    "type": RestrictedManoeuvre,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleTypeAtPoint",
+                    "type": VehicleTypeAtPoint,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ActivationAssignment",
+                    "type": ActivationAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SalesNoticeAssignment",
+                    "type": SalesNoticeAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NoticeAssignment",
+                    "type": NoticeAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CheckConstraintThroughput",
+                    "type": CheckConstraintThroughput,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CheckConstraintDelay",
+                    "type": CheckConstraintDelay,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CheckConstraint",
+                    "type": CheckConstraint,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DayTypeAssignment",
+                    "type": DayTypeAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupOfTimebands",
+                    "type": GroupOfTimebands,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Timeband",
+                    "type": Timeband,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FareDayType",
+                    "type": FareDayType,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OrganisationDayType",
+                    "type": OrganisationDayType,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DayType",
+                    "type": DayType,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ResponsibilitySet",
+                    "type": ResponsibilitySet,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2619,286 +2941,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "CompositeFrame",
-                    "type": CompositeFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "MobilityJourneyFrame",
-                    "type": MobilityJourneyFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "MobilityServiceFrame",
-                    "type": MobilityServiceFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SalesTransactionFrame",
-                    "type": SalesTransactionFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "FareFrame",
-                    "type": FareFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "DriverScheduleFrame",
-                    "type": DriverScheduleFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleScheduleFrame",
-                    "type": VehicleScheduleFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ServiceFrame",
-                    "type": ServiceFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TimetableFrame",
-                    "type": TimetableFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SiteFrame",
-                    "type": SiteFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "InfrastructureFrame",
-                    "type": InfrastructureFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "GeneralFrame",
-                    "type": GeneralFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ResourceFrame",
-                    "type": ResourceFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ServiceCalendarFrame",
-                    "type": ServiceCalendarFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UicOperatingPeriod",
-                    "type": UicOperatingPeriod,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "OperatingPeriod",
-                    "type": OperatingPeriod,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "OperatingDay",
-                    "type": OperatingDay,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ServiceCalendar",
-                    "type": ServiceCalendar,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleSharingPlaceAssignment",
-                    "type": VehicleSharingPlaceAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehiclePoolingPlaceAssignment",
-                    "type": VehiclePoolingPlaceAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TaxiServicePlaceAssignment",
-                    "type": TaxiServicePlaceAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleServicePlaceAssignment",
-                    "type": VehicleServicePlaceAssignment1,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleServicePlaceAssignment_",
-                    "type": VehicleServicePlaceAssignment2,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "DynamicVehicleMeetingPointAssignment",
-                    "type": DynamicVehicleMeetingPointAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleMeetingPointAssignment",
-                    "type": VehicleMeetingPointAssignment1,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleMeetingPointAssignment_",
-                    "type": VehicleMeetingPointAssignment2,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleAccessCredentialsAssignment",
-                    "type": VehicleAccessCredentialsAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "DistributionAssignment",
-                    "type": DistributionAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SalesOfferPackageSubstitution",
-                    "type": SalesOfferPackageSubstitution,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CustomerPurchaseParameterAssignment",
-                    "type": CustomerPurchaseParameterAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SpecificParameterAssignment",
-                    "type": SpecificParameterAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "GenericParameterAssignmentInContext",
-                    "type": GenericParameterAssignmentInContext,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "GenericParameterAssignment",
-                    "type": GenericParameterAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ValidityParameterAssignment",
-                    "type": ValidityParameterAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "AccessRightParameterAssignment",
-                    "type": AccessRightParameterAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "JourneyAccounting",
-                    "type": JourneyAccounting,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TimeDemandTypeAssignment",
-                    "type": TimeDemandTypeAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TransferRestriction",
-                    "type": TransferRestriction,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ServiceExclusion",
-                    "type": ServiceExclusion,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "DisplayAssignment",
-                    "type": DisplayAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "OvertakingPossibility",
-                    "type": OvertakingPossibility,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "MeetingRestriction",
-                    "type": MeetingRestriction,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "RestrictedManoeuvre",
-                    "type": RestrictedManoeuvre,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleTypeAtPoint",
-                    "type": VehicleTypeAtPoint,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ActivationAssignment",
-                    "type": ActivationAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SalesNoticeAssignment",
-                    "type": SalesNoticeAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "NoticeAssignment",
-                    "type": NoticeAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CheckConstraintThroughput",
-                    "type": CheckConstraintThroughput,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CheckConstraintDelay",
-                    "type": CheckConstraintDelay,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CheckConstraint",
-                    "type": CheckConstraint,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "DayTypeAssignment",
-                    "type": DayTypeAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "GroupOfTimebands",
-                    "type": GroupOfTimebands,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "Timeband",
-                    "type": Timeband,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "FareDayType",
-                    "type": FareDayType,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "OrganisationDayType",
-                    "type": OrganisationDayType,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "DayType",
-                    "type": DayType,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "PoolOfVehicles",
                     "type": PoolOfVehicles,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2986,6 +3028,16 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "GroupOfLinkSequences",
                     "type": GroupOfLinkSequences,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Layer",
+                    "type": Layer,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupOfTariffZones",
+                    "type": GroupOfTariffZones,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -3259,18 +3311,8 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "Layer",
-                    "type": Layer,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "GeneralGroupOfEntities",
                     "type": GeneralGroupOfEntities,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ResponsibilitySet",
-                    "type": ResponsibilitySet,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -3369,6 +3411,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfDriverPermit",
+                    "type": TypeOfDriverPermit,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "PurposeOfEquipmentProfile",
                     "type": PurposeOfEquipmentProfile,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3399,13 +3446,13 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfCodespaceAssignment",
-                    "type": TypeOfCodespaceAssignment,
+                    "name": "TypeOfValidity",
+                    "type": TypeOfValidity,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfValidity",
-                    "type": TypeOfValidity,
+                    "name": "TypeOfCodespaceAssignment",
+                    "type": TypeOfCodespaceAssignment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -3584,6 +3631,16 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfFrame",
+                    "type": TypeOfFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfResponsibilityRole",
+                    "type": TypeOfResponsibilityRole,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TypeOfOperation",
                     "type": TypeOfOperation,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3616,16 +3673,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "TypeOfProjection",
                     "type": TypeOfProjection,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfFrame",
-                    "type": TypeOfFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfResponsibilityRole",
-                    "type": TypeOfResponsibilityRole,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

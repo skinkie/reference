@@ -1,29 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .common_version_frame_structure import CommonVersionFrameStructure
 from .fleets_rel_structure import FleetsRelStructure
-from .mobility_service_constraint_zones_in_frame_rel_structure import (
-    MobilityServiceConstraintZonesInFrameRelStructure,
-)
+from .mobility_service_constraint_zones_in_frame_rel_structure import MobilityServiceConstraintZonesInFrameRelStructure
 from .mobility_services_rel_structure import MobilityServicesRelStructure
 from .modes_of_operation_rel_structure import ModesOfOperationRelStructure
 from .online_services_rel_structure import OnlineServicesRelStructure
 from .pool_of_vehicles_rel_structure import PoolOfVehiclesRelStructure
-from .vehicle_meeting_links_in_frame_rel_structure import (
-    VehicleMeetingLinksInFrameRelStructure,
-)
-from .vehicle_meeting_places_rel_structure import (
-    VehicleMeetingPlacesRelStructure,
-)
-from .vehicle_meeting_point_assignments_in_frame_rel_structure import (
-    VehicleMeetingPointAssignmentsInFrameRelStructure,
-)
-from .vehicle_meeting_points_in_frame_rel_structure import (
-    VehicleMeetingPointsInFrameRelStructure,
-)
-from .vehicle_service_place_assignments_rel_structure import (
-    VehicleServicePlaceAssignmentsRelStructure,
-)
+from .vehicle_meeting_links_in_frame_rel_structure import VehicleMeetingLinksInFrameRelStructure
+from .vehicle_meeting_places_rel_structure import VehicleMeetingPlacesRelStructure
+from .vehicle_meeting_point_assignments_in_frame_rel_structure import VehicleMeetingPointAssignmentsInFrameRelStructure
+from .vehicle_meeting_points_in_frame_rel_structure import VehicleMeetingPointsInFrameRelStructure
+from .vehicle_service_place_assignments_rel_structure import VehicleServicePlaceAssignmentsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -72,9 +61,7 @@ class MobilityServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_meeting_points: Optional[
-        VehicleMeetingPointsInFrameRelStructure
-    ] = field(
+    vehicle_meeting_points: Optional[VehicleMeetingPointsInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleMeetingPoints",
@@ -82,9 +69,7 @@ class MobilityServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_meeting_links: Optional[
-        VehicleMeetingLinksInFrameRelStructure
-    ] = field(
+    vehicle_meeting_links: Optional[VehicleMeetingLinksInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleMeetingLinks",
@@ -92,9 +77,7 @@ class MobilityServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_meeting_point_assignments: Optional[
-        VehicleMeetingPointAssignmentsInFrameRelStructure
-    ] = field(
+    vehicle_meeting_point_assignments: Optional[VehicleMeetingPointAssignmentsInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleMeetingPointAssignments",
@@ -110,9 +93,7 @@ class MobilityServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_meeting_place_assignments: Optional[
-        VehicleServicePlaceAssignmentsRelStructure
-    ] = field(
+    vehicle_meeting_place_assignments: Optional[VehicleServicePlaceAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleMeetingPlaceAssignments",
@@ -120,9 +101,7 @@ class MobilityServiceVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    mobility_service_constraint_zones: Optional[
-        MobilityServiceConstraintZonesInFrameRelStructure
-    ] = field(
+    mobility_service_constraint_zones: Optional[MobilityServiceConstraintZonesInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "mobilityServiceConstraintZones",

@@ -1,15 +1,14 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional
+
+from .access_mode_enumeration import AccessModeEnumeration
 from .accessibility_assessment import AccessibilityAssessment
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
-from .allowed_line_directions_rel_structure import (
-    AllowedLineDirectionsRelStructure,
-)
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
+from .allowed_line_directions_rel_structure import AllowedLineDirectionsRelStructure
 from .authority_ref import AuthorityRef
+from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .contact_structure import ContactStructure
+from .entity_in_version_structure import DataManagedObjectStructure
 from .external_object_ref_structure import ExternalObjectRefStructure
 from .group_of_lines_ref_structure import GroupOfLinesRefStructure
 from .info_links_rel_structure import InfoLinksRelStructure
@@ -23,18 +22,16 @@ from .payment_method_enumeration import PaymentMethodEnumeration
 from .presentation_structure import PresentationStructure
 from .print_presentation_structure import PrintPresentationStructure
 from .private_code import PrivateCode
+from .public_code_type import PublicCodeType
 from .purchase_moment_enumeration import PurchaseMomentEnumeration
 from .route_refs_rel_structure import RouteRefsRelStructure
-from .transport_organisation_refs_rel_structure import (
-    TransportOrganisationRefsRelStructure,
-)
+from .transport_organisation_refs_rel_structure import TransportOrganisationRefsRelStructure
 from .transport_submode import TransportSubmode
 from .type_of_line_ref import TypeOfLineRef
-from .type_of_payment_method_value_structure import (
-    TypeOfPaymentMethodValueStructure,
-)
+from .type_of_payment_method_value_structure import TypeOfPaymentMethodValueStructure
 from .type_of_product_category_ref import TypeOfProductCategoryRef
 from .type_of_service_ref import TypeOfServiceRef
+from .user_type_enumeration import UserTypeEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -92,7 +89,7 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -116,29 +113,23 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    authority_ref_or_operator_ref: Optional[
-        Union[AuthorityRef, OperatorRef]
-    ] = field(
+    authority_ref: Optional[AuthorityRef] = field(
         default=None,
         metadata={
-            "type": "Elements",
-            "choices": (
-                {
-                    "name": "AuthorityRef",
-                    "type": AuthorityRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "OperatorRef",
-                    "type": OperatorRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-            ),
+            "name": "AuthorityRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    additional_operators: Optional[
-        TransportOrganisationRefsRelStructure
-    ] = field(
+    operator_ref: Optional[OperatorRef] = field(
+        default=None,
+        metadata={
+            "name": "OperatorRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    additional_operators: Optional[TransportOrganisationRefsRelStructure] = field(
         default=None,
         metadata={
             "name": "additionalOperators",
@@ -178,9 +169,7 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    external_product_category_ref: Optional[
-        ExternalObjectRefStructure
-    ] = field(
+    external_product_category_ref: Optional[ExternalObjectRefStructure] = field(
         default=None,
         metadata={
             "name": "ExternalProductCategoryRef",
@@ -200,6 +189,32 @@ class LineVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "TypeOfServiceRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    user_types: List[UserTypeEnumeration] = field(
+        default_factory=list,
+        metadata={
+            "name": "UserTypes",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
+        },
+    )
+    access_modes: List[AccessModeEnumeration] = field(
+        default_factory=list,
+        metadata={
+            "name": "AccessModes",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
+        },
+    )
+    restricted_line: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "RestrictedLine",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
@@ -260,9 +275,7 @@ class LineVersionStructure(DataManagedObjectStructure):
             "tokens": True,
         },
     )
-    types_of_payment_method: Optional[
-        TypeOfPaymentMethodValueStructure
-    ] = field(
+    types_of_payment_method: Optional[TypeOfPaymentMethodValueStructure] = field(
         default=None,
         metadata={
             "name": "typesOfPaymentMethod",
@@ -315,6 +328,14 @@ class LineVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "documentLinks",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    booking_arrangements: Optional[BookingArrangementsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "bookingArrangements",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

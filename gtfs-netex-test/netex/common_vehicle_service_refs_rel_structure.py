@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -15,15 +16,7 @@ class CommonVehicleServiceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "commonVehicleServiceRefs_RelStructure"
 
-    common_vehicle_service_ref_or_vehicle_pooling_service_ref: List[
-        Union[
-            VehicleRentalServiceRef,
-            VehicleSharingServiceRef,
-            ChauffeuredVehicleServiceRef,
-            TaxiServiceRef,
-            CarPoolingServiceRef,
-        ]
-    ] = field(
+    common_vehicle_service_ref_or_vehicle_pooling_service_ref: List[Union[VehicleRentalServiceRef, VehicleSharingServiceRef, ChauffeuredVehicleServiceRef, TaxiServiceRef, CarPoolingServiceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

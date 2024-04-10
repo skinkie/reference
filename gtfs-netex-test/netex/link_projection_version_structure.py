@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .link_ref_structure import LinkRefStructure
 from .point_on_link_by_value_structure import PointOnLinkByValueStructure
 from .point_on_link_ref_structure_1 import PointOnLinkRefStructure1
@@ -29,9 +30,7 @@ class LinkProjectionVersionStructure(ProjectionVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    start_point_on_link_ref_or_start_point_on_link_by_value: Optional[
-        Union[PointOnLinkRefStructure1, PointOnLinkByValueStructure]
-    ] = field(
+    start_point_on_link_ref_or_start_point_on_link_by_value: Optional[Union[PointOnLinkRefStructure1, PointOnLinkByValueStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -49,9 +48,7 @@ class LinkProjectionVersionStructure(ProjectionVersionStructure):
             ),
         },
     )
-    end_point_on_link_ref_or_end_point_on_link_by_value: Optional[
-        Union[PointOnLinkRefStructure1, PointOnLinkByValueStructure]
-    ] = field(
+    end_point_on_link_ref_or_end_point_on_link_by_value: Optional[Union[PointOnLinkRefStructure1, PointOnLinkByValueStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

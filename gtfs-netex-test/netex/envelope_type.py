@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional, Type, Union
+
 from .direct_position_type import DirectPositionType
 from .pos import Pos
 
@@ -8,27 +9,26 @@ __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 @dataclass(kw_only=True)
 class EnvelopeType:
-    lower_corner_or_upper_corner_or_pos: List[
-        Union[DirectPositionType, Pos]
-    ] = field(
+    lower_corner_or_upper_corner_or_pos: List[Union["EnvelopeType.LowerCorner", "EnvelopeType.UpperCorner", Pos]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "lowerCorner",
-                    "type": DirectPositionType,
+                    "type": Type["EnvelopeType.LowerCorner"],
                     "namespace": "http://www.opengis.net/gml/3.2",
                 },
                 {
                     "name": "upperCorner",
-                    "type": DirectPositionType,
+                    "type": Type["EnvelopeType.UpperCorner"],
                     "namespace": "http://www.opengis.net/gml/3.2",
                 },
                 {
                     "name": "pos",
                     "type": Pos,
                     "namespace": "http://www.opengis.net/gml/3.2",
+                    "max_occurs": 2,
                 },
             ),
             "max_occurs": 2,
@@ -48,3 +48,11 @@ class EnvelopeType:
             "type": "Attribute",
         },
     )
+
+    @dataclass(kw_only=True)
+    class LowerCorner(DirectPositionType):
+        pass
+
+    @dataclass(kw_only=True)
+    class UpperCorner(DirectPositionType):
+        pass

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .emv_card_ref import EmvCardRef
 from .mobile_device_ref import MobileDeviceRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -13,9 +14,7 @@ class MediumAccessDeviceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "mediumAccessDeviceRefs_RelStructure"
 
-    medium_access_device_ref: Optional[
-        Union[MobileDeviceRef, EmvCardRef, SmartcardRef]
-    ] = field(
+    medium_access_device_ref: Optional[Union[MobileDeviceRef, EmvCardRef, SmartcardRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

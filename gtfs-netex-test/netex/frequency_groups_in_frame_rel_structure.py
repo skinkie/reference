@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .headway_journey_group import HeadwayJourneyGroup
 from .rhythmical_journey_group import RhythmicalJourneyGroup
@@ -12,9 +13,7 @@ class FrequencyGroupsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "frequencyGroupsInFrame_RelStructure"
 
-    headway_journey_group_or_rhythmical_journey_group: List[
-        Union[HeadwayJourneyGroup, RhythmicalJourneyGroup]
-    ] = field(
+    headway_journey_group_or_rhythmical_journey_group: List[Union[HeadwayJourneyGroup, RhythmicalJourneyGroup]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

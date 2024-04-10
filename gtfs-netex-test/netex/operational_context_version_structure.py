@@ -1,11 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .control_centre_ref import ControlCentreRef
 from .department_ref import DepartmentRef
+from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
 from .organisation_part_ref import OrganisationPartRef
 from .organisational_unit_ref import OrganisationalUnitRef
@@ -44,14 +43,7 @@ class OperationalContextVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_part_ref: Optional[
-        Union[
-            ControlCentreRef,
-            OrganisationalUnitRef,
-            DepartmentRef,
-            OrganisationPartRef,
-        ]
-    ] = field(
+    organisation_part_ref: Optional[Union[ControlCentreRef, OrganisationalUnitRef, DepartmentRef, OrganisationPartRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .access_space_ref import AccessSpaceRef
 from .boarding_position_ref import BoardingPositionRef
 from .default_connection_end_structure import DefaultConnectionEndStructure
 from .entrance_ref import EntranceRef
-from .monitored_vehicle_sharing_parking_bay_ref import (
-    MonitoredVehicleSharingParkingBayRef,
-)
+from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .parking_area_ref import ParkingAreaRef
 from .parking_bay_ref import ParkingBayRef
 from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
@@ -16,9 +15,7 @@ from .parking_ref import ParkingRef
 from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
 from .point_of_interest_ref import PointOfInterestRef
 from .point_of_interest_space_ref import PointOfInterestSpaceRef
-from .point_of_interest_vehicle_entrance_ref import (
-    PointOfInterestVehicleEntranceRef,
-)
+from .point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
 from .quay_ref import QuayRef
 from .service_site_ref import ServiceSiteRef
 from .site_component_ref import SiteComponentRef

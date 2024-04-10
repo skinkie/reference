@@ -1,15 +1,12 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .authority_ref import AuthorityRef
 from .contact_structure import ContactStructure
-from .distribution_channel_type_enumeration import (
-    DistributionChannelTypeEnumeration,
-)
+from .distribution_channel_type_enumeration import DistributionChannelTypeEnumeration
 from .distribution_rights_enumeration import DistributionRightsEnumeration
-from .general_group_of_entities_ref_structure import (
-    GeneralGroupOfEntitiesRefStructure,
-)
+from .general_group_of_entities_ref_structure import GeneralGroupOfEntitiesRefStructure
 from .general_organisation_ref import GeneralOrganisationRef
 from .management_agent_ref import ManagementAgentRef
 from .online_service_operator_ref import OnlineServiceOperatorRef
@@ -21,9 +18,7 @@ from .point_refs_rel_structure import PointRefsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .serviced_organisation_ref import ServicedOrganisationRef
 from .travel_agent_ref import TravelAgentRef
-from .type_of_payment_method_refs_rel_structure import (
-    TypeOfPaymentMethodRefsRelStructure,
-)
+from .type_of_payment_method_refs_rel_structure import TypeOfPaymentMethodRefsRelStructure
 from .type_of_value_version_structure import TypeOfValueVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -42,9 +37,7 @@ class DistributionChannelVersionStructure(TypeOfValueVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distribution_channel_type: Optional[
-        DistributionChannelTypeEnumeration
-    ] = field(
+    distribution_channel_type: Optional[DistributionChannelTypeEnumeration] = field(
         default=None,
         metadata={
             "name": "DistributionChannelType",
@@ -76,20 +69,7 @@ class DistributionChannelVersionStructure(TypeOfValueVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-        ]
-    ] = field(
+    organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -156,9 +136,7 @@ class DistributionChannelVersionStructure(TypeOfValueVersionStructure):
             "tokens": True,
         },
     )
-    types_of_payment_method: Optional[
-        TypeOfPaymentMethodRefsRelStructure
-    ] = field(
+    types_of_payment_method: Optional[TypeOfPaymentMethodRefsRelStructure] = field(
         default=None,
         metadata={
             "name": "typesOfPaymentMethod",
@@ -175,9 +153,7 @@ class DistributionChannelVersionStructure(TypeOfValueVersionStructure):
             "tokens": True,
         },
     )
-    distribution_points_or_distribution_group_ref: Optional[
-        Union[PointRefsRelStructure, GeneralGroupOfEntitiesRefStructure]
-    ] = field(
+    distribution_points_or_distribution_group_ref: Optional[Union[PointRefsRelStructure, GeneralGroupOfEntitiesRefStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

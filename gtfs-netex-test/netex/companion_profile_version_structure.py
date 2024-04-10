@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .companion_profile_ref import CompanionProfileRef
-from .companion_relationship_enumeration import (
-    CompanionRelationshipEnumeration,
-)
+from .companion_relationship_enumeration import CompanionRelationshipEnumeration
 from .discount_basis_enumeration import DiscountBasisEnumeration
 from .usage_parameter_ref_structure import UsageParameterRefStructure
 from .usage_parameter_version_structure import UsageParameterVersionStructure
@@ -26,9 +25,7 @@ class CompanionProfileVersionStructure(UsageParameterVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    user_profile_ref: Optional[
-        Union[VehiclePoolerProfileRef, CompanionProfileRef, UserProfileRef]
-    ] = field(
+    user_profile_ref: Optional[Union[VehiclePoolerProfileRef, CompanionProfileRef, UserProfileRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -51,9 +48,7 @@ class CompanionProfileVersionStructure(UsageParameterVersionStructure):
             ),
         },
     )
-    companion_relationship_type: Optional[
-        CompanionRelationshipEnumeration
-    ] = field(
+    companion_relationship_type: Optional[CompanionRelationshipEnumeration] = field(
         default=None,
         metadata={
             "name": "CompanionRelationshipType",

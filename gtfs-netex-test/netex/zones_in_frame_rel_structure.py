@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .access_space import AccessSpace
 from .access_zone import AccessZone
 from .addressable_place import AddressablePlace
-from .administrative_zone_version_structure import (
+from .administrative_zones_rel_structure import (
     AdministrativeZone,
     TransportAdministrativeZone,
 )
@@ -20,9 +21,7 @@ from .garage import Garage
 from .general_zone import GeneralZone
 from .hail_and_ride_area import HailAndRideArea
 from .mobility_service_constraint_zone import MobilityServiceConstraintZone
-from .monitored_vehicle_sharing_parking_bay import (
-    MonitoredVehicleSharingParkingBay,
-)
+from .monitored_vehicle_sharing_parking_bay import MonitoredVehicleSharingParkingBay
 from .parking import Parking
 from .parking_area import ParkingArea
 from .parking_bay import ParkingBay

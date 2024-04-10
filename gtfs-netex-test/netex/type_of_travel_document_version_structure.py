@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .machine_readable_enumeration import MachineReadableEnumeration
 from .media_type_enumeration import MediaTypeEnumeration
 from .type_of_entity_version_structure import TypeOfEntityVersionStructure
-from .types_of_machine_readabilities_rel_structure import (
-    TypesOfMachineReadabilitiesRelStructure,
-)
+from .types_of_machine_readabilities_rel_structure import TypesOfMachineReadabilitiesRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -57,9 +56,7 @@ class TypeOfTravelDocumentVersionStructure(TypeOfEntityVersionStructure):
             "tokens": True,
         },
     )
-    types_of_machine_readabilities: Optional[
-        TypesOfMachineReadabilitiesRelStructure
-    ] = field(
+    types_of_machine_readabilities: Optional[TypesOfMachineReadabilitiesRelStructure] = field(
         default=None,
         metadata={
             "name": "typesOfMachineReadabilities",

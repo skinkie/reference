@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .multilingual_string import MultilingualString
-from .vehicle_model_profile_version_structure import (
-    VehicleModelProfileVersionStructure,
-)
+from .vehicle_model_profile_version_structure import VehicleModelProfileVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

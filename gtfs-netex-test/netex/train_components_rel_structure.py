@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .train_component import TrainComponent
 from .train_component_ref import TrainComponentRef
@@ -12,9 +13,7 @@ class TrainComponentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "trainComponents_RelStructure"
 
-    train_component_ref_or_train_component: List[
-        Union[TrainComponentRef, TrainComponent]
-    ] = field(
+    train_component_ref_or_train_component: List[Union[TrainComponentRef, TrainComponent]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

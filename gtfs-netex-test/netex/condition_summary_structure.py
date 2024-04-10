@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .fare_structure_type_enumeration import FareStructureTypeEnumeration
 from .operator_restrictions_enumeration import OperatorRestrictionsEnumeration
 from .tariff_basis_enumeration import TariffBasisEnumeration
@@ -107,9 +108,7 @@ class ConditionSummaryStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    has_operator_restrictions: Optional[
-        OperatorRestrictionsEnumeration
-    ] = field(
+    has_operator_restrictions: Optional[OperatorRestrictionsEnumeration] = field(
         default=None,
         metadata={
             "name": "HasOperatorRestrictions",

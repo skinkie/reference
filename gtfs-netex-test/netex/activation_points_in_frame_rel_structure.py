@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .activation_point import ActivationPoint
 from .beacon_point import BeaconPoint
 from .containment_aggregation_structure import ContainmentAggregationStructure

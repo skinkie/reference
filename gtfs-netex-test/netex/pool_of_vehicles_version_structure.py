@@ -1,17 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
-from .mobility_service_constraint_zone_ref import (
-    MobilityServiceConstraintZoneRef,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
+from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
 from .online_service_ref import OnlineServiceRef
-from .parking_component_refs_rel_structure import (
-    ParkingComponentRefsRelStructure,
-)
+from .parking_component_refs_rel_structure import ParkingComponentRefsRelStructure
 from .parking_ref import ParkingRef
 from .taxi_service_ref import TaxiServiceRef
 from .vehicle_refs_rel_structure import VehicleRefsRelStructure
@@ -26,16 +21,7 @@ class PoolOfVehiclesVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "PoolOfVehicles_VersionStructure"
 
-    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[
-        Union[
-            OnlineServiceRef,
-            VehicleRentalServiceRef,
-            VehicleSharingServiceRef,
-            ChauffeuredVehicleServiceRef,
-            TaxiServiceRef,
-            CarPoolingServiceRef,
-        ]
-    ] = field(
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[Union[OnlineServiceRef, VehicleRentalServiceRef, VehicleSharingServiceRef, ChauffeuredVehicleServiceRef, TaxiServiceRef, CarPoolingServiceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -73,9 +59,7 @@ class PoolOfVehiclesVersionStructure(GroupOfEntitiesVersionStructure):
             ),
         },
     )
-    mobility_service_constraint_zone_ref: Optional[
-        MobilityServiceConstraintZoneRef
-    ] = field(
+    mobility_service_constraint_zone_ref: Optional[MobilityServiceConstraintZoneRef] = field(
         default=None,
         metadata={
             "name": "MobilityServiceConstraintZoneRef",

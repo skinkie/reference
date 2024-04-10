@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .routing_constraint_zone_ref_structure import (
-    RoutingConstraintZoneRefStructure,
-)
+
+from .routing_constraint_zone_ref_structure import RoutingConstraintZoneRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

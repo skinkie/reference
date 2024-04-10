@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .flexible_area import FlexibleArea
 from .flexible_area_ref import FlexibleAreaRef
@@ -11,6 +10,7 @@ from .hail_and_ride_area_ref import HailAndRideAreaRef
 from .line_refs_rel_structure import LineRefsRelStructure
 from .multilingual_string import MultilingualString
 from .place_version_structure import PlaceVersionStructure
+from .public_code_type import PublicCodeType
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -44,7 +44,7 @@ class FlexibleStopPlaceVersionStructure(PlaceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -69,14 +69,7 @@ class FlexibleStopPlaceVersionStructure(PlaceVersionStructure):
 
     @dataclass(kw_only=True)
     class Areas:
-        choice: List[
-            Union[
-                FlexibleArea,
-                FlexibleAreaRef,
-                HailAndRideArea,
-                HailAndRideAreaRef,
-            ]
-        ] = field(
+        flexible_area_or_flexible_area_ref_or_hail_and_ride_area_or_hail_and_ride_area_ref: List[Union[FlexibleArea, FlexibleAreaRef, HailAndRideArea, HailAndRideAreaRef]] = field(
             default_factory=list,
             metadata={
                 "type": "Elements",

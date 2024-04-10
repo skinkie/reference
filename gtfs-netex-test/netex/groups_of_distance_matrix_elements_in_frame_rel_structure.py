@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .distance_matrix_element import DistanceMatrixElement
 from .frame_containment_structure import FrameContainmentStructure
 
@@ -7,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class GroupsOfDistanceMatrixElementsInFrameRelStructure(
-    FrameContainmentStructure
-):
+class GroupsOfDistanceMatrixElementsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "groupsOfDistanceMatrixElementsInFrame_RelStructure"
 

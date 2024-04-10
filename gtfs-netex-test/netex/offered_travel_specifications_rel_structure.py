@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .offered_travel_specification import OfferedTravelSpecification
 from .offered_travel_specification_ref import OfferedTravelSpecificationRef
@@ -12,9 +13,7 @@ class OfferedTravelSpecificationsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "offeredTravelSpecifications_RelStructure"
 
-    offered_travel_specification_ref_or_offered_travel_specification: List[
-        Union[OfferedTravelSpecificationRef, OfferedTravelSpecification]
-    ] = field(
+    offered_travel_specification_ref_or_offered_travel_specification: List[Union[OfferedTravelSpecificationRef, OfferedTravelSpecification]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .service_journey_interchange_ref_structure import (
-    ServiceJourneyInterchangeRefStructure,
-)
+
+from .service_journey_interchange_ref_structure import ServiceJourneyInterchangeRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

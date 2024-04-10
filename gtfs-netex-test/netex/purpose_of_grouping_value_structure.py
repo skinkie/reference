@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .class_refs_rel_structure import ClassRefsRelStructure
 from .customer_account_status import CustomerAccountStatus
 from .type_of_access_right_assignment import TypeOfAccessRightAssignment
@@ -28,9 +29,7 @@ from .type_of_notice import TypeOfNotice
 from .type_of_operation import TypeOfOperation
 from .type_of_organisation import TypeOfOrganisation
 from .type_of_organisation_part import TypeOfOrganisationPart
-from .type_of_passenger_information_equipment import (
-    TypeOfPassengerInformationEquipment,
-)
+from .type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
 from .type_of_place import TypeOfPlace
 from .type_of_plug import TypeOfPlug
 from .type_of_point import TypeOfPoint
@@ -96,6 +95,8 @@ class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
             TypeOfLinkSequence,
             TypeOfPlace,
             TypeOfTransfer,
+            TypeOfFrame,
+            TypeOfResponsibilityRole,
             TypeOfOperation,
             TypeOfOrganisationPart,
             TypeOfOrganisation,
@@ -103,8 +104,6 @@ class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
             TypeOfLink,
             TypeOfPoint,
             TypeOfProjection,
-            TypeOfFrame,
-            TypeOfResponsibilityRole,
             TypeOfEntity,
         ]
     ] = field(
@@ -273,6 +272,16 @@ class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfFrame",
+                    "type": TypeOfFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfResponsibilityRole",
+                    "type": TypeOfResponsibilityRole,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TypeOfOperation",
                     "type": TypeOfOperation,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -305,16 +314,6 @@ class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
                 {
                     "name": "TypeOfProjection",
                     "type": TypeOfProjection,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfFrame",
-                    "type": TypeOfFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfResponsibilityRole",
-                    "type": TypeOfResponsibilityRole,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

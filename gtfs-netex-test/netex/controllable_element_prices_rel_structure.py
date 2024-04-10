@@ -1,25 +1,20 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .cell_ref import CellRef
 from .controllable_element_price import ControllableElementPrice
 from .controllable_element_price_ref import ControllableElementPriceRef
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ControllableElementPricesRelStructure(
-    StrictContainmentAggregationStructure
-):
+class ControllableElementPricesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "controllableElementPrices_RelStructure"
 
-    controllable_element_price_ref_or_cell_ref_or_controllable_element_price: List[
-        Union[ControllableElementPriceRef, CellRef, ControllableElementPrice]
-    ] = field(
+    controllable_element_price_ref_or_cell_ref_or_controllable_element_price: List[Union[ControllableElementPriceRef, CellRef, ControllableElementPrice]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

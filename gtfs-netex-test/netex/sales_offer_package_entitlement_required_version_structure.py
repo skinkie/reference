@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDuration
+
 from .entitlement_constraint_structure import EntitlementConstraintStructure
 from .sales_offer_package_ref import SalesOfferPackageRef
 from .usage_parameter_version_structure import UsageParameterVersionStructure
@@ -9,9 +11,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SalesOfferPackageEntitlementRequiredVersionStructure(
-    UsageParameterVersionStructure
-):
+class SalesOfferPackageEntitlementRequiredVersionStructure(UsageParameterVersionStructure):
     class Meta:
         name = "SalesOfferPackageEntitlementRequired_VersionStructure"
 

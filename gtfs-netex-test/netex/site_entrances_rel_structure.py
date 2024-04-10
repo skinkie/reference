@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .entrance import Entrance
 from .entrance_ref import EntranceRef
@@ -11,9 +12,7 @@ from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
 from .point_of_interest_entrance import PointOfInterestEntrance
 from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
 from .point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
-from .point_of_interest_vehicle_entrance_ref import (
-    PointOfInterestVehicleEntranceRef,
-)
+from .point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
 from .stop_place_entrance import StopPlaceEntrance
 from .stop_place_entrance_ref import StopPlaceEntranceRef
 from .stop_place_vehicle_entrance import StopPlaceVehicleEntrance

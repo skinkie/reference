@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional, Union
+
 from xsdata.models.datatype import XmlDuration
+
 from .bay_geometry_enumeration import BayGeometryEnumeration
 from .compound_train_ref import CompoundTrainRef
 from .parking_area_ref import ParkingAreaRef
-from .parking_component_version_structure import (
-    ParkingComponentVersionStructure,
-)
+from .parking_component_version_structure import ParkingComponentVersionStructure
 from .parking_stay_enumeration import ParkingStayEnumeration
 from .parking_user_enumeration import ParkingUserEnumeration
 from .parking_vehicle_enumeration import ParkingVehicleEnumeration
@@ -28,14 +28,7 @@ class ParkingBayVersionStructure(ParkingComponentVersionStructure):
     class Meta:
         name = "ParkingBay_VersionStructure"
 
-    parking_area_ref: Optional[
-        Union[
-            VehiclePoolingParkingAreaRef,
-            VehicleSharingParkingAreaRef,
-            TaxiParkingAreaRef,
-            ParkingAreaRef,
-        ]
-    ] = field(
+    parking_area_ref: Optional[Union[VehiclePoolingParkingAreaRef, VehicleSharingParkingAreaRef, TaxiParkingAreaRef, ParkingAreaRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -80,15 +73,7 @@ class ParkingBayVersionStructure(ParkingComponentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[
-        Union[
-            SimpleVehicleTypeRef,
-            CompoundTrainRef,
-            TrainRef,
-            VehicleTypeRef,
-            TransportTypeRef,
-        ]
-    ] = field(
+    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

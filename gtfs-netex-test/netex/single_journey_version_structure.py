@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlTime
+
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
 from .journey_version_structure import JourneyVersionStructure
@@ -8,9 +10,8 @@ from .operating_day_ref import OperatingDayRef
 from .single_journey_path_ref import SingleJourneyPathRef
 from .target_passing_times_rel_structure import TargetPassingTimesRelStructure
 from .taxi_service_ref import TaxiServiceRef
-from .vehicle_meeting_point_assignments_rel_structure import (
-    VehicleMeetingPointAssignmentsRelStructure,
-)
+from .vehicle_meeting_point_assignments_rel_structure import VehicleMeetingPointAssignmentsRelStructure
+from .vehicle_pooling_driver_info_ref import VehiclePoolingDriverInfoRef
 from .vehicle_ref import VehicleRef
 from .vehicle_rental_service_ref import VehicleRentalServiceRef
 from .vehicle_sharing_service_ref import VehicleSharingServiceRef
@@ -23,15 +24,7 @@ class SingleJourneyVersionStructure(JourneyVersionStructure):
     class Meta:
         name = "SingleJourney_VersionStructure"
 
-    common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[
-        Union[
-            VehicleRentalServiceRef,
-            VehicleSharingServiceRef,
-            ChauffeuredVehicleServiceRef,
-            TaxiServiceRef,
-            CarPoolingServiceRef,
-        ]
-    ] = field(
+    common_vehicle_service_ref_or_vehicle_pooling_service_ref: Optional[Union[VehicleRentalServiceRef, VehicleSharingServiceRef, ChauffeuredVehicleServiceRef, TaxiServiceRef, CarPoolingServiceRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -112,12 +105,18 @@ class SingleJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    meeting_point_assignments: Optional[
-        VehicleMeetingPointAssignmentsRelStructure
-    ] = field(
+    meeting_point_assignments: Optional[VehicleMeetingPointAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "meetingPointAssignments",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    vehicle_pooling_driver_info_ref: Optional[VehiclePoolingDriverInfoRef] = field(
+        default=None,
+        metadata={
+            "name": "VehiclePoolingDriverInfoRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

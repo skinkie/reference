@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from xsdata.models.datatype import XmlDateTime
+
 from .modification_enumeration import ModificationEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -55,6 +57,12 @@ class VersionOfObjectRefStructure:
         default=None,
         metadata={
             "name": "versionRef",
+            "type": "Attribute",
+        },
+    )
+    uri: Optional[str] = field(
+        default=None,
+        metadata={
             "type": "Attribute",
         },
     )

@@ -1,24 +1,19 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .mobility_service_constraint_zone import MobilityServiceConstraintZone
-from .mobility_service_constraint_zone_ref import (
-    MobilityServiceConstraintZoneRef,
-)
+from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class MobilityServiceConstraintZonesRelStructure(
-    ContainmentAggregationStructure
-):
+class MobilityServiceConstraintZonesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "mobilityServiceConstraintZones_RelStructure"
 
-    mobility_service_constraint_zone_ref_or_mobility_service_constraint_zone: List[
-        Union[MobilityServiceConstraintZoneRef, MobilityServiceConstraintZone]
-    ] = field(
+    mobility_service_constraint_zone_ref_or_mobility_service_constraint_zone: List[Union[MobilityServiceConstraintZoneRef, MobilityServiceConstraintZone]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

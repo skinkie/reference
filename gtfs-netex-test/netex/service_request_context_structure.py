@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDuration
+
 from .data_name_spaces_structure import DataNameSpacesStructure
 from .delivery_method_enumeration import DeliveryMethodEnumeration
 from .empty_type_1 import EmptyType1
@@ -91,9 +93,7 @@ class ServiceRequestContextStructure:
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    wgs_decimal_degrees_or_gml_coordinate_format: Optional[
-        Union[EmptyType1, str]
-    ] = field(
+    wgs_decimal_degrees_or_gml_coordinate_format: Optional[Union[EmptyType1, str]] = field(
         default=None,
         metadata={
             "type": "Elements",

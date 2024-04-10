@@ -1,10 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .derived_view_structure import DerivedViewStructure
 from .destination_display_ref import DestinationDisplayRef
 from .key_list import KeyList
 from .multilingual_string import MultilingualString
 from .private_code import PrivateCode
+from .public_code_type import PublicCodeType
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -78,7 +80,7 @@ class DestinationDisplayDerivedViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",

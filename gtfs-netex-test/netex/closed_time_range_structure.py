@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from xsdata.models.datatype import XmlTime
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .alternative_texts_rel_structure import VersionedChildStructure
+
 from .border_point_ref import BorderPointRef
 from .destination_display_ref import DestinationDisplayRef
 from .destination_display_view import DestinationDisplayView
+from .entity_in_version_structure import VersionedChildStructure
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .garage_point_ref import GaragePointRef
 from .multilingual_string import MultilingualString
@@ -22,11 +23,7 @@ class ViaVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "Via_VersionedChildStructure"
 
-    destination_display_ref_or_destination_display_view_or_name: Optional[
-        Union[
-            DestinationDisplayRef, DestinationDisplayView, MultilingualString
-        ]
-    ] = field(
+    destination_display_ref_or_destination_display_view_or_name: Optional[Union[DestinationDisplayRef, DestinationDisplayView, MultilingualString]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -49,18 +46,7 @@ class ViaVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    choice: Optional[
-        Union[
-            BorderPointRef,
-            FareScheduledStopPointRef,
-            ScheduledStopPointRef,
-            GaragePointRef,
-            ParkingPointRef,
-            ReliefPointRef,
-            TimingPointRef,
-            RoutePointRef,
-        ]
-    ] = field(
+    timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref: Optional[Union[BorderPointRef, FareScheduledStopPointRef, ScheduledStopPointRef, GaragePointRef, ParkingPointRef, ReliefPointRef, TimingPointRef, RoutePointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -114,5 +100,11 @@ class ViaVersionedChildStructure(VersionedChildStructure):
             "name": "ViaType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    order: int = field(
+        default=1,
+        metadata={
+            "type": "Attribute",
         },
     )

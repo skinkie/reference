@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .group_of_single_journeys_ref_structure import (
-    GroupOfSingleJourneysRefStructure,
-)
+
+from .group_of_single_journeys_ref_structure import GroupOfSingleJourneysRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

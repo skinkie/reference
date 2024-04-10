@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .journey_pattern_ref import JourneyPatternRef
-from .journey_wait_time_versioned_child_structure import (
-    JourneyWaitTimeVersionedChildStructure,
-)
+from .journey_wait_time_versioned_child_structure import JourneyWaitTimeVersionedChildStructure
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_pattern_ref import ServicePatternRef
 
@@ -12,20 +11,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class JourneyPatternWaitTimeVersionedChildStructure(
-    JourneyWaitTimeVersionedChildStructure
-):
+class JourneyPatternWaitTimeVersionedChildStructure(JourneyWaitTimeVersionedChildStructure):
     class Meta:
         name = "JourneyPatternWaitTime_VersionedChildStructure"
 
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

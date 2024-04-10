@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .routing_constraint_zone import RoutingConstraintZone
 
@@ -7,9 +8,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class RoutingConstraintZonesInFrameRelStructure(
-    ContainmentAggregationStructure
-):
+class RoutingConstraintZonesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "routingConstraintZonesInFrame_RelStructure"
 

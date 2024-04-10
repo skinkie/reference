@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .all_modes_enumeration import AllModesEnumeration
-from .assistance_availability_enumeration import (
-    AssistanceAvailabilityEnumeration,
-)
+
+from .assistance_availability_enumeration import AssistanceAvailabilityEnumeration
 from .authority_ref import AuthorityRef
+from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .booking_arrangements_structure import BookingArrangementsStructure
 from .contact_structure import ContactStructure
 from .flexible_line_ref import FlexibleLineRef
@@ -15,6 +14,7 @@ from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 from .operator_ref import OperatorRef
 from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
 from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .vehicle_mode import VehicleMode
 from .vehicle_pooling_ref import VehiclePoolingRef
 from .vehicle_rental_ref import VehicleRentalRef
 from .vehicle_sharing_ref import VehicleSharingRef
@@ -28,9 +28,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
     class Meta:
         name = "AssistanceBookingService_VersionStructure"
 
-    assistance_availability: Optional[
-        AssistanceAvailabilityEnumeration
-    ] = field(
+    assistance_availability: Optional[AssistanceAvailabilityEnumeration] = field(
         default=None,
         metadata={
             "name": "AssistanceAvailability",
@@ -54,15 +52,25 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_arrangements: Optional[BookingArrangementsStructure] = field(
+    booking_arrangements_or_booking_arrangements: Optional[Union[BookingArrangementsRelStructure, BookingArrangementsStructure]] = field(
         default=None,
         metadata={
-            "name": "BookingArrangements",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "bookingArrangements",
+                    "type": BookingArrangementsRelStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingArrangements",
+                    "type": BookingArrangementsStructure,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
-    vehicle_mode: Optional[AllModesEnumeration] = field(
+    vehicle_mode: Optional[VehicleMode] = field(
         default=None,
         metadata={
             "name": "VehicleMode",
@@ -70,16 +78,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[
-        Union[
-            PersonalModeOfOperationRef,
-            VehiclePoolingRef,
-            VehicleSharingRef,
-            VehicleRentalRef,
-            FlexibleModeOfOperationRef,
-            ScheduledModeOfOperationRef,
-        ]
-    ] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: Optional[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -117,9 +116,7 @@ class AssistanceBookingServiceVersionStructure(LocalServiceVersionStructure):
             ),
         },
     )
-    transport_organisation_ref: Optional[
-        Union[AuthorityRef, OperatorRef]
-    ] = field(
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .boarding_position_ref_structure import BoardingPositionRefStructure
 from .dynamic_stop_assignment_ref import DynamicStopAssignmentRef
 from .multilingual_string import MultilingualString
@@ -8,9 +9,7 @@ from .stop_assignment_version_structure import StopAssignmentVersionStructure
 from .train_component_ref import TrainComponentRef
 from .train_component_view import TrainComponentView
 from .train_ref import TrainRef
-from .vehicle_journey_stop_assignment_ref import (
-    VehicleJourneyStopAssignmentRef,
-)
+from .vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -20,13 +19,7 @@ class TrainStopAssignmentVersionStructure(StopAssignmentVersionStructure):
     class Meta:
         name = "TrainStopAssignment_VersionStructure"
 
-    passenger_stop_assignment_ref: Optional[
-        Union[
-            VehicleJourneyStopAssignmentRef,
-            DynamicStopAssignmentRef,
-            PassengerStopAssignmentRef,
-        ]
-    ] = field(
+    passenger_stop_assignment_ref: Optional[Union[VehicleJourneyStopAssignmentRef, DynamicStopAssignmentRef, PassengerStopAssignmentRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -57,9 +50,7 @@ class TrainStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    train_component_ref_or_train_component_view: Optional[
-        Union[TrainComponentRef, TrainComponentView]
-    ] = field(
+    train_component_ref_or_train_component_view: Optional[Union[TrainComponentRef, TrainComponentView]] = field(
         default=None,
         metadata={
             "type": "Elements",

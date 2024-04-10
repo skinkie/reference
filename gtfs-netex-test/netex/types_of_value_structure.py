@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .branding import Branding
 from .charging_moment import ChargingMoment
 from .class_of_use import ClassOfUse
@@ -13,9 +14,7 @@ from .price_unit import PriceUnit
 from .purpose_of_equipment_profile import PurposeOfEquipmentProfile
 from .purpose_of_grouping import PurposeOfGrouping
 from .purpose_of_journey_partition import PurposeOfJourneyPartition
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .submode import Submode
 from .timing_algorithm_type import TimingAlgorithmType
 from .type_of_access_right_assignment import TypeOfAccessRightAssignment
@@ -26,6 +25,7 @@ from .type_of_concession import TypeOfConcession
 from .type_of_congestion import TypeOfCongestion
 from .type_of_customer_account import TypeOfCustomerAccount
 from .type_of_delivery_variant import TypeOfDeliveryVariant
+from .type_of_driver_permit import TypeOfDriverPermit
 from .type_of_entity import TypeOfEntity
 from .type_of_equipment import TypeOfEquipment
 from .type_of_facility import TypeOfFacility
@@ -51,9 +51,7 @@ from .type_of_operation import TypeOfOperation
 from .type_of_organisation import TypeOfOrganisation
 from .type_of_organisation_part import TypeOfOrganisationPart
 from .type_of_parking import TypeOfParking
-from .type_of_passenger_information_equipment import (
-    TypeOfPassengerInformationEquipment,
-)
+from .type_of_passenger_information_equipment import TypeOfPassengerInformationEquipment
 from .type_of_payment_method import TypeOfPaymentMethod
 from .type_of_place import TypeOfPlace
 from .type_of_plug import TypeOfPlug
@@ -106,14 +104,15 @@ class TypesOfValueStructure(StrictContainmentAggregationStructure):
             TypeOfServiceFeature,
             Direction,
             TypeOfSecurityList,
+            TypeOfDriverPermit,
             PurposeOfEquipmentProfile,
             TypeOfProductCategory,
             TypeOfPaymentMethod,
             ClassOfUse,
             Submode,
             OpenTransportMode,
-            TypeOfCodespaceAssignment,
             TypeOfValidity,
+            TypeOfCodespaceAssignment,
             PurposeOfGrouping,
             Branding,
             DataSource,
@@ -149,6 +148,8 @@ class TypesOfValueStructure(StrictContainmentAggregationStructure):
             TypeOfLinkSequence,
             TypeOfPlace,
             TypeOfTransfer,
+            TypeOfFrame,
+            TypeOfResponsibilityRole,
             TypeOfOperation,
             TypeOfOrganisationPart,
             TypeOfOrganisation,
@@ -156,8 +157,6 @@ class TypesOfValueStructure(StrictContainmentAggregationStructure):
             TypeOfLink,
             TypeOfPoint,
             TypeOfProjection,
-            TypeOfFrame,
-            TypeOfResponsibilityRole,
             TypeOfEntity,
             TypeOfVersion,
         ]
@@ -257,6 +256,11 @@ class TypesOfValueStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfDriverPermit",
+                    "type": TypeOfDriverPermit,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "PurposeOfEquipmentProfile",
                     "type": PurposeOfEquipmentProfile,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -287,13 +291,13 @@ class TypesOfValueStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfCodespaceAssignment",
-                    "type": TypeOfCodespaceAssignment,
+                    "name": "TypeOfValidity",
+                    "type": TypeOfValidity,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfValidity",
-                    "type": TypeOfValidity,
+                    "name": "TypeOfCodespaceAssignment",
+                    "type": TypeOfCodespaceAssignment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -472,6 +476,16 @@ class TypesOfValueStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfFrame",
+                    "type": TypeOfFrame,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfResponsibilityRole",
+                    "type": TypeOfResponsibilityRole,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TypeOfOperation",
                     "type": TypeOfOperation,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -504,16 +518,6 @@ class TypesOfValueStructure(StrictContainmentAggregationStructure):
                 {
                     "name": "TypeOfProjection",
                     "type": TypeOfProjection,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfFrame",
-                    "type": TypeOfFrame,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfResponsibilityRole",
-                    "type": TypeOfResponsibilityRole,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

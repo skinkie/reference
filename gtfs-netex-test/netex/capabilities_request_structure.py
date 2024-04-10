@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
+
 from .data_object_capabilities_request import DataObjectCapabilitiesRequest
 from .request_structure import RequestStructure
 
@@ -8,9 +9,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class CapabilitiesRequestStructure(RequestStructure):
-    data_object_capabilities_request: Optional[
-        DataObjectCapabilitiesRequest
-    ] = field(
+    data_object_capabilities_request: Optional[DataObjectCapabilitiesRequest] = field(
         default=None,
         metadata={
             "name": "DataObjectCapabilitiesRequest",

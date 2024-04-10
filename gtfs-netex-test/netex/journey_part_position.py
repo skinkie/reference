@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Any
-from .journey_part_position_versioned_child_structure import (
-    JourneyPartPositionVersionedChildStructure,
-)
+
+from .journey_part_position_versioned_child_structure import JourneyPartPositionVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

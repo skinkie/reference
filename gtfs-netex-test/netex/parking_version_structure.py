@@ -1,16 +1,13 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+
 from .accesses_rel_structure import AccessesRelStructure
 from .multilingual_string import MultilingualString
 from .navigation_paths_rel_structure import NavigationPathsRelStructure
 from .parking_areas_rel_structure import ParkingAreasRelStructure
-from .parking_entrances_for_vehicles_rel_structure import (
-    ParkingEntrancesForVehiclesRelStructure,
-)
+from .parking_entrances_for_vehicles_rel_structure import ParkingEntrancesForVehiclesRelStructure
 from .parking_layout_enumeration import ParkingLayoutEnumeration
-from .parking_payment_process_enumeration import (
-    ParkingPaymentProcessEnumeration,
-)
+from .parking_payment_process_enumeration import ParkingPaymentProcessEnumeration
 from .parking_properties_rel_structure import ParkingPropertiesRelStructure
 from .parking_reservation_enumeration import ParkingReservationEnumeration
 from .parking_type_enumeration import ParkingTypeEnumeration
@@ -18,13 +15,12 @@ from .parking_vehicle_enumeration import ParkingVehicleEnumeration
 from .path_junctions_rel_structure import PathJunctionsRelStructure
 from .payment_by_mobile_structure import PaymentByMobileStructure
 from .payment_method_enumeration import PaymentMethodEnumeration
+from .public_code_type import PublicCodeType
 from .site_path_links_rel_structure import SitePathLinksRelStructure
 from .site_version_structure import SiteVersionStructure
 from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
 from .type_of_parking_ref import TypeOfParkingRef
-from .type_of_payment_method_refs_rel_structure import (
-    TypeOfPaymentMethodRefsRelStructure,
-)
+from .type_of_payment_method_refs_rel_structure import TypeOfPaymentMethodRefsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -65,7 +61,7 @@ class ParkingVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeType] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -204,9 +200,7 @@ class ParkingVersionStructure(SiteVersionStructure):
             "tokens": True,
         },
     )
-    types_of_payment_method: Optional[
-        TypeOfPaymentMethodRefsRelStructure
-    ] = field(
+    types_of_payment_method: Optional[TypeOfPaymentMethodRefsRelStructure] = field(
         default=None,
         metadata={
             "name": "typesOfPaymentMethod",
@@ -294,9 +288,7 @@ class ParkingVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_entrances: Optional[
-        ParkingEntrancesForVehiclesRelStructure
-    ] = field(
+    vehicle_entrances: Optional[ParkingEntrancesForVehiclesRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleEntrances",

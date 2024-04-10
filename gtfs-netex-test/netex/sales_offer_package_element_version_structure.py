@@ -1,18 +1,15 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
 from .capped_discount_right_ref import CappedDiscountRightRef
-from .cell_versioned_child_structure import PriceableObjectVersionStructure
 from .condition_summary import ConditionSummary
 from .fare_product_ref import FareProductRef
-from .generic_parameter_assignment_version_structure import (
-    GenericParameterAssignmentsRelStructure,
-)
+from .generic_parameter_assignments_rel_structure import GenericParameterAssignmentsRelStructure
 from .preassigned_fare_product_ref import PreassignedFareProductRef
+from .priceable_object_version_structure import PriceableObjectVersionStructure
 from .sale_discount_right_ref import SaleDiscountRightRef
-from .sales_offer_package_prices_rel_structure import (
-    SalesOfferPackagePricesRelStructure,
-)
+from .sales_offer_package_prices_rel_structure import SalesOfferPackagePricesRelStructure
 from .sales_offer_package_ref import SalesOfferPackageRef
 from .supplement_product_ref import SupplementProductRef
 from .third_party_product_ref import ThirdPartyProductRef
@@ -23,9 +20,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SalesOfferPackageElementVersionStructure(
-    PriceableObjectVersionStructure
-):
+class SalesOfferPackageElementVersionStructure(PriceableObjectVersionStructure):
     class Meta:
         name = "SalesOfferPackageElement_VersionStructure"
 
@@ -61,18 +56,7 @@ class SalesOfferPackageElementVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[
-        Union[
-            SupplementProductRef,
-            PreassignedFareProductRef,
-            AmountOfPriceUnitProductRef,
-            UsageDiscountRightRef,
-            ThirdPartyProductRef,
-            CappedDiscountRightRef,
-            SaleDiscountRightRef,
-            FareProductRef,
-        ]
-    ] = field(
+    preassigned_fare_product_ref_or_fare_product_ref_or_sale_discount_right_ref: Optional[Union[SupplementProductRef, PreassignedFareProductRef, AmountOfPriceUnitProductRef, UsageDiscountRightRef, ThirdPartyProductRef, CappedDiscountRightRef, SaleDiscountRightRef, FareProductRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -120,9 +104,7 @@ class SalesOfferPackageElementVersionStructure(
             ),
         },
     )
-    validity_parameter_assignments: Optional[
-        GenericParameterAssignmentsRelStructure
-    ] = field(
+    validity_parameter_assignments: Optional[GenericParameterAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "validityParameterAssignments",

@@ -15,6 +15,7 @@ class RailSubmodeEnumeration(Enum):
     SLEEPER_RAIL_SERVICE = "sleeperRailService"
     NIGHT_RAIL = "nightRail"
     CAR_TRANSPORT_RAIL_SERVICE = "carTransportRailService"
+    LARGE_VEHICLE_TRANSPORT_RAIL_SERVICE = "largeVehicleTransportRailService"
     TOURIST_RAILWAY = "touristRailway"
     AIRPORT_LINK_RAIL = "airportLinkRail"
     RAIL_SHUTTLE = "railShuttle"

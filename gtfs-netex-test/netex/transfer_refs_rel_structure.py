@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .access_ref import AccessRef
 from .connection_ref import ConnectionRef
 from .default_connection_ref import DefaultConnectionRef
@@ -14,11 +15,7 @@ class TransferRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "transferRefs_RelStructure"
 
-    connection_ref_or_transfer_ref: List[
-        Union[
-            DefaultConnectionRef, SiteConnectionRef, ConnectionRef, AccessRef
-        ]
-    ] = field(
+    connection_ref_or_transfer_ref: List[Union[DefaultConnectionRef, SiteConnectionRef, ConnectionRef, AccessRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

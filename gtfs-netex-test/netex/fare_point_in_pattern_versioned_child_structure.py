@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .point_in_journey_pattern_versioned_child_structure import (
-    PointInJourneyPatternVersionedChildStructure,
-)
+
+from .point_in_journey_pattern_versioned_child_structure import PointInJourneyPatternVersionedChildStructure
 from .scheduled_stop_point_view import ScheduledStopPointView
 from .series_presentation_enumeration import SeriesPresentationEnumeration
 
@@ -10,9 +9,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class FarePointInPatternVersionedChildStructure(
-    PointInJourneyPatternVersionedChildStructure
-):
+class FarePointInPatternVersionedChildStructure(PointInJourneyPatternVersionedChildStructure):
     class Meta:
         name = "FarePointInPattern_VersionedChildStructure"
 

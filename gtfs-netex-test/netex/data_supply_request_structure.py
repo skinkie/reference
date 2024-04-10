@@ -1,15 +1,15 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .consumer_request_endpoint_structure import (
-    ConsumerRequestEndpointStructure,
-)
+
+from .consumer_request_endpoint_structure import ConsumerRequestEndpointStructure
+from .message_ref_structure import MessageRefStructure
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
 @dataclass(kw_only=True)
 class DataSupplyRequestStructure(ConsumerRequestEndpointStructure):
-    notification_ref: Optional[str] = field(
+    notification_ref: Optional[MessageRefStructure] = field(
         default=None,
         metadata={
             "name": "NotificationRef",

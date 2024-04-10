@@ -1,16 +1,13 @@
 from dataclasses import dataclass, field
+
 from .link_ref_structure import LinkRefStructure
-from .network_restriction_version_structure import (
-    NetworkRestrictionVersionStructure,
-)
+from .network_restriction_version_structure import NetworkRestrictionVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class InfrastructureLinkRestrictionVersionStructure(
-    NetworkRestrictionVersionStructure
-):
+class InfrastructureLinkRestrictionVersionStructure(NetworkRestrictionVersionStructure):
     class Meta:
         name = "InfrastructureLinkRestriction_VersionStructure"
 

@@ -1,16 +1,17 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional, Union
+
 from .capped_discount_right_ref import CappedDiscountRightRef
 from .capping_period_enumeration import CappingPeriodEnumeration
 from .capping_rule_prices_rel_structure import CappingRulePricesRelStructure
-from .cell_versioned_child_structure import PriceableObjectVersionStructure
-from .generic_parameter_assignment_version_structure import (
+from .generic_parameter_assignments_rel_structure import (
     GenericParameterAssignment,
     GenericParameterAssignmentInContext,
     GenericParameterAssignmentsRelStructure,
 )
 from .preassigned_fare_product_ref import PreassignedFareProductRef
+from .priceable_object_version_structure import PriceableObjectVersionStructure
 from .supplement_product_ref import SupplementProductRef
 from .validable_element_ref import ValidableElementRef
 
@@ -46,9 +47,7 @@ class CappingRuleVersionedChildStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    preassigned_fare_product_ref: List[
-        Union[SupplementProductRef, PreassignedFareProductRef]
-    ] = field(
+    preassigned_fare_product_ref: List[Union[SupplementProductRef, PreassignedFareProductRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -74,13 +73,7 @@ class CappingRuleVersionedChildStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context: Optional[
-        Union[
-            GenericParameterAssignmentsRelStructure,
-            GenericParameterAssignment,
-            GenericParameterAssignmentInContext,
-        ]
-    ] = field(
+    validity_parameter_assignments_or_generic_parameter_assignment_or_generic_parameter_assignment_in_context: Optional[Union[GenericParameterAssignmentsRelStructure, GenericParameterAssignment, GenericParameterAssignmentInContext]] = field(
         default=None,
         metadata={
             "type": "Elements",

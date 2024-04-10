@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .accessibility_limitations_rel_structure import (
-    AccessibilityLimitationsRelStructure,
-)
-from .alternative_texts_rel_structure import VersionedChildStructure
+
+from .accessibility_limitations_rel_structure import AccessibilityLimitationsRelStructure
+from .entity_in_version_structure import VersionedChildStructure
 from .limitation_status_enumeration import LimitationStatusEnumeration
 from .multilingual_string import MultilingualString
 from .suitabilities_rel_structure import SuitabilitiesRelStructure

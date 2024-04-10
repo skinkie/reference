@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .cycle_storage_equipment_ref_structure import (
-    CycleStorageEquipmentRefStructure,
-)
+
+from .cycle_storage_equipment_ref_structure import CycleStorageEquipmentRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

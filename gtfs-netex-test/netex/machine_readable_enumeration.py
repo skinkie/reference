@@ -10,6 +10,7 @@ class MachineReadableEnumeration(Enum):
     OCR = "ocr"
     APNR = "apnr"
     BAR_CODE = "barCode"
+    QR_CODE = "qrCode"
     SHOT_CODE = "shotCode"
     NFC = "nfc"
     OTHER = "other"

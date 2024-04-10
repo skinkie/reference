@@ -27,6 +27,7 @@ class TimeDemandTypesProfile:
     def getRunTimeCall(departure: Call, arrival: Call) -> int:
         return ((arrival.arrival.day_offset or 0) * 86400 + arrival.arrival.time.hour * 3600 + arrival.arrival.time.minute * 60 + arrival.arrival.time.second) - ((departure.departure.day_offset or 0) * 86400 + departure.departure.time.hour * 3600 +  departure.departure.time.minute * 60 + departure.departure.time.second)
 
+
     @staticmethod
     def getWaitTimeCall(call: DatedCall) -> int:
         if call.arrival is not None and call.departure is not None:
@@ -203,14 +204,14 @@ class TimeDemandTypesProfile:
             run_time = TimeDemandTypesProfile.getRunTimePassingTime(pass_times[i], pass_times[i + 1])
             wait_time = TimeDemandTypesProfile.getWaitTimePassingTime(pass_times[i])
             # dit moet uit het journey pattern komen, waarbij ook nog een onward timing link beschikbaar is
-            pis = piss[pass_times[i].choice_1.ref]
+            pis = piss[pass_times[i].point_in_journey_pattern_ref.ref]
             if isinstance(pis, StopPointInJourneyPattern):
                 pis: StopPointInJourneyPattern = pis
-                ssp = pis.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref
+                ssp = pis.scheduled_stop_point_ref
                 if pis.onward_timing_link_ref is not None:
                     tl_ref = pis.onward_timing_link_ref.ref
                 elif pis.onward_service_link_ref is not None:
-                    sl: ServiceLink = sls[pis.onward_service_link_ref]
+                    sl: ServiceLink = sls[pis.onward_service_link_ref.ref]
                     tl_ref = sl.id.replace('ServiceLink', 'TimingLink')
                     if tl_ref not in tls:
                         tls[tl_ref] = TimeDemandTypesProfile.getObjectFromObject(sl, TimingLink, tl_ref)
@@ -240,9 +241,9 @@ class TimeDemandTypesProfile:
             return time_demand_types[service_journey.time_demand_type_ref.ref]
 
         if service_journey.calls is not None:
-            if isinstance(service_journey.calls.choice[0], DatedCall):
+            if isinstance(service_journey.calls.call[0], DatedCall):
                 self.getTimeDemandTypeByDatedCalls(service_journey, time_demand_types, time_demand_types_hash, ssps, tls)
-            elif isinstance(service_journey.calls.choice[0], Call):
+            elif isinstance(service_journey.calls.call[0], Call):
                 self.getTimeDemandTypeByCalls(service_journey, time_demand_types, time_demand_types_hash, ssps, tls)
         elif service_journey.passing_times is not None:
             self.getTimeDemandTypeByTimetabledPassingTimes(service_journey, service_journey_patterns, time_demand_types, time_demand_types_hash, ssps, tls, sls)
@@ -252,7 +253,7 @@ class TimeDemandTypesProfile:
     @staticmethod
     def getPointRefFromPointInJourneyPattern(pis):
         if isinstance(pis, StopPointInJourneyPattern):
-            return pis.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref
+            return pis.scheduled_stop_point_ref
         elif isinstance(pis, TimingPointInJourneyPattern):
             return pis.choice_1
 
@@ -284,8 +285,8 @@ class TimeDemandTypesProfile:
 
             return sjp
 
-        if isinstance(service_journey.calls.choice[0], DatedCall):
-            dated_calls: List[DatedCall] = service_journey.calls.choice
+        if isinstance(service_journey.calls.call[0], DatedCall):
+            dated_calls: List[DatedCall] = service_journey.calls.call
             ssps_in_seq: List[TimingPointRefStructure] = []
             onward_tls: List[str] = []
 
@@ -310,7 +311,7 @@ class TimeDemandTypesProfile:
             sjp_hash = hash('-'.join(x.ref for x in ssps_in_seq))
             sjp_hash_hex = TimeDemandTypesProfile.getHexHash(sjp_hash)
 
-            if sjp_hash not in service_journey_patterns_hash or service_journey_patterns[service_journey_patterns_hash[sjp_hash]].id != service_journey.choice.ref:
+            if sjp_hash not in service_journey_patterns_hash or service_journey_patterns[service_journey_patterns_hash[sjp_hash]].id != service_journey.journey_pattern_ref.ref:
                 piss = [(i, ssps_in_seq[i], getFakeRef(onward_tls[i], TimingLinkRefStructure, version=self.version.version)) for i in range(0, len(ssps_in_seq) - 1)]
                 piss.append((len(ssps_in_seq) - 1, ssps_in_seq[-1], None))
 
@@ -326,7 +327,7 @@ class TimeDemandTypesProfile:
                                                      StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, self.codespace, "{:s}-{:d}".format(suffix, x[0] + 1)),
                                                                                version=self.version.version,
                                                                                order=x[0] + 1,
-                                                         fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssps[x[1].ref]), onward_timing_link_ref=x[2]) for x in piss]))
+                                                         scheduled_stop_point_ref=getRef(ssps[x[1].ref]), onward_timing_link_ref=x[2]) for x in piss]))
 
 
                 service_journey_patterns[sjp.id] = sjp

@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .type_of_machine_readability_ref_structure import (
-    TypeOfMachineReadabilityRefStructure,
-)
+
+from .type_of_machine_readability_ref_structure import TypeOfMachineReadabilityRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

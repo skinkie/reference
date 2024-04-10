@@ -1,19 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .fare_product_ref_structure import FareProductRefStructure
 from .fare_product_refs_rel_structure import FareProductRefsRelStructure
-from .preassigned_fare_product_version_structure import (
-    PreassignedFareProductVersionStructure,
-)
+from .preassigned_fare_product_version_structure import PreassignedFareProductVersionStructure
 from .supplement_product_enumeration import SupplementProductEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SupplementProductVersionStructure(
-    PreassignedFareProductVersionStructure
-):
+class SupplementProductVersionStructure(PreassignedFareProductVersionStructure):
     class Meta:
         name = "SupplementProduct_VersionStructure"
 
@@ -25,9 +22,7 @@ class SupplementProductVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    supplement_to_fare_product_ref_or_supplement_to: Optional[
-        Union[FareProductRefStructure, FareProductRefsRelStructure]
-    ] = field(
+    supplement_to_fare_product_ref_or_supplement_to: Optional[Union[FareProductRefStructure, FareProductRefsRelStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",

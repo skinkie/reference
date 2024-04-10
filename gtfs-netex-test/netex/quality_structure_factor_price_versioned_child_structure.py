@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .fare_demand_factor_ref import FareDemandFactorRef
-from .fare_price_versioned_child_structure import (
-    FarePriceVersionedChildStructure,
-)
+from .fare_price_versioned_child_structure import FarePriceVersionedChildStructure
 from .fare_quota_factor_ref import FareQuotaFactorRef
 from .quality_structure_factor_ref import QualityStructureFactorRef
 
@@ -11,17 +10,11 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class QualityStructureFactorPriceVersionedChildStructure(
-    FarePriceVersionedChildStructure
-):
+class QualityStructureFactorPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "QualityStructureFactorPrice_VersionedChildStructure"
 
-    quality_structure_factor_ref: Optional[
-        Union[
-            FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef
-        ]
-    ] = field(
+    quality_structure_factor_ref: Optional[Union[FareQuotaFactorRef, FareDemandFactorRef, QualityStructureFactorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

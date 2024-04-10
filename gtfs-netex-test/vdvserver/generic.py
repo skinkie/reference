@@ -1,3 +1,5 @@
+import datetime
+
 from aiohttp import web
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
@@ -25,22 +27,39 @@ def unknown_sender(request) -> BestaetigungType:
                      fehlertext=f"I'm sorry, your sender {request.match_info['sender']} is not (yet) configured.")
 
 async def aus_status(request):
+    # StartDienst
+    now = XmlDateTime.utcnow().replace(fractional_second=0)
+    if now.hour < 4:
+        now = XmlDateTime.from_datetime(now.to_datetime() - datetime.timedelta(days=1))
+
+    start_dienst_zst = now.replace(hour=4, minute=0, second=0)
+
+
     anfrage = await request.read()
-    status_anfrage = parser.from_bytes(anfrage, StatusAnfrage)
-    if status_anfrage.sender == request.match_info['sender']:
-        daten_bereit = await check_daten_bereit(status_anfrage.sender)
-        if daten_bereit is not None:
-            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), daten_bereit=daten_bereit,
-                                        start_dienst_zst=XmlDateTime.utcnow().replace(fractional_second=0).replace(hour=4, minute=0, second=0))
+    try:
+        status_anfrage = parser.from_bytes(anfrage, StatusAnfrage)
+
+    except:
+        print("Can't parse")
+        antwort = StatusAntwort(
+            status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.NOTOK),
+            daten_bereit=False,
+            start_dienst_zst=start_dienst_zst)
+
+    else:
+        if status_anfrage.sender == request.match_info['sender']:
+            daten_bereit = await check_daten_bereit(status_anfrage.sender)
+            if daten_bereit is not None:
+                antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), daten_bereit=daten_bereit, start_dienst_zst=start_dienst_zst)
+            else:
+                # Als start_dienst_zst nu is, dan komt er een nieuwe subscription
+                print("Force resubscription", status_anfrage.sender)
+                antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.OK), daten_bereit=False, start_dienst_zst=XmlDateTime.utcnow().replace(fractional_second=0))
 
         else:
             print("Sender not OK", status_anfrage.sender, request.match_info['sender'])
-            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
-                                        start_dienst_zst=XmlDateTime.utcnow().replace(fractional_second=0).replace(hour=4, minute=0, second=0))
-    else:
-        print("Can't parse")
-        antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.NOTOK), daten_bereit=False,
-                                    start_dienst_zst=XmlDateTime.utcnow().replace(fractional_second=0).replace(hour=4, minute=0, second=0))
-
-    print(antwort)
-    return web.Response(text=serializer.render(antwort), content_type="application/xml")
+            antwort = StatusAntwort(status=StatusType(zst=XmlDateTime.utcnow().replace(fractional_second=0), ergebnis=ErgebnisType.NOTOK), daten_bereit=False, start_dienst_zst=start_dienst_zst)
+        
+    finally:
+        print(request.match_info['sender'], antwort)
+        return web.Response(text=serializer.render(antwort), content_type="application/xml")

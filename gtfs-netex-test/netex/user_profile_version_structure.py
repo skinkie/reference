@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Optional
+
 from xsdata.models.datatype import XmlPeriod
+
 from .companion_profiles_rel_structure import CompanionProfilesRelStructure
 from .discount_basis_enumeration import DiscountBasisEnumeration
-from .gender_limitation_enumeration import GenderLimitationEnumeration
+from .gender_limitation import GenderLimitation
 from .proof_of_identity_enumeration import ProofOfIdentityEnumeration
-from .residential_qualifications_rel_structure import (
-    ResidentialQualificationsRelStructure,
-)
+from .residential_qualifications_rel_structure import ResidentialQualificationsRelStructure
 from .type_of_concession_ref import TypeOfConcessionRef
 from .types_of_proof_refs_rel_structure import TypesOfProofRefsRelStructure
 from .usage_parameter_version_structure import UsageParameterVersionStructure
@@ -102,7 +102,7 @@ class UserProfileVersionStructure(UsageParameterVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    gender_limitation: Optional[GenderLimitationEnumeration] = field(
+    gender_limitation: Optional[GenderLimitation] = field(
         default=None,
         metadata={
             "name": "GenderLimitation",
@@ -119,9 +119,7 @@ class UserProfileVersionStructure(UsageParameterVersionStructure):
             "tokens": True,
         },
     )
-    types_of_proof_required_ref: Optional[
-        TypesOfProofRefsRelStructure
-    ] = field(
+    types_of_proof_required_ref: Optional[TypesOfProofRefsRelStructure] = field(
         default=None,
         metadata={
             "name": "typesOfProofRequiredRef",

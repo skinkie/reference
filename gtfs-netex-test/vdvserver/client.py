@@ -17,7 +17,7 @@ from xml_imports import parser, serializer
 
 # Loop that assures that our remote subscription remains active
 async def abo_anfrage(BASE_URL, TIMEOUT=3600):
-    async with aiohttp.ClientSession(timeout=10) as session:
+    async with aiohttp.ClientSession() as session:
         while True:
             verfall_zst = datetime.datetime.utcnow() + datetime.timedelta(seconds=TIMEOUT) + datetime.timedelta(seconds=TIMEOUT) # This is a hack
             abo_anfrage = AboAnfrage(sender=SENDER_ID, zst=XmlDateTime.utcnow().replace(fractional_second=0), abo_aus=[AboAustype(abo_id=1, verfall_zst=XmlDateTime.from_datetime(verfall_zst).replace(fractional_second=0, offset=60), hysterese=60, vorschauzeit=120)])
@@ -27,7 +27,7 @@ async def abo_anfrage(BASE_URL, TIMEOUT=3600):
             print(anfrage)
             
             try:
-                async with session.post(url, data=anfrage, headers={"Content-Type": "applicantion/xml"}) as resp:
+                async with session.post(url, data=anfrage, headers={"Content-Type": "applicantion/xml"}, timeout=10) as resp:
                     print(resp.status)
                     antwort = await resp.read()
                     abo_antwort_type = parser.from_bytes(antwort, AboAntwort)
@@ -35,7 +35,9 @@ async def abo_anfrage(BASE_URL, TIMEOUT=3600):
                     print(abo_antwort_type)
                     await asyncio.sleep(TIMEOUT - 120)
             except:
+                print(f"Timeout {url}")
                 pass
+            
             await asyncio.sleep(60)
             
 

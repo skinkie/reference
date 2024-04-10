@@ -9,3 +9,4 @@ class SeriesTypeEnumeration(Enum):
     BORDER_TO_DESTINATION = "borderToDestination"
     BORDER = "border"
     TRANSIT = "transit"
+    ZONE_TO_ZONE = "zoneToZone"

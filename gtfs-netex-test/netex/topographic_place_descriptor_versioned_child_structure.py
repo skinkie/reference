@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import VersionedChildStructure
+
+from .entity_in_version_structure import VersionedChildStructure
 from .multilingual_string import MultilingualString
 from .topographic_place_ref import TopographicPlaceRef
 
@@ -8,9 +9,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class TopographicPlaceDescriptorVersionedChildStructure(
-    VersionedChildStructure
-):
+class TopographicPlaceDescriptorVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "TopographicPlaceDescriptor_VersionedChildStructure"
 
@@ -30,9 +29,7 @@ class TopographicPlaceDescriptorVersionedChildStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    qualify: Optional[
-        "TopographicPlaceDescriptorVersionedChildStructure.Qualify"
-    ] = field(
+    qualify: Optional["TopographicPlaceDescriptorVersionedChildStructure.Qualify"] = field(
         default=None,
         metadata={
             "name": "Qualify",

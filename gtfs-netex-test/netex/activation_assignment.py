@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .activation_assignment_version_structure import (
-    ActivationAssignmentVersionStructure,
-)
+
+from .activation_assignment_version_structure import ActivationAssignmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

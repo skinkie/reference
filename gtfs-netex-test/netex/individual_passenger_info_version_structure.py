@@ -1,9 +1,13 @@
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import Optional
+
 from xsdata.models.datatype import XmlDateTime
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
+from .entity_in_version_structure import DataManagedObjectStructure
 from .individual_traveller_ref import IndividualTravellerRef
 from .multilingual_string import MultilingualString
+from .reviews_rel_structure import ReviewsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -21,12 +25,14 @@ class IndividualPassengerInfoVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    ranking: Optional[int] = field(
+    ranking: Optional[Decimal] = field(
         default=None,
         metadata={
             "name": "Ranking",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
+            "min_inclusive": Decimal("1.0"),
+            "max_inclusive": Decimal("5.0"),
         },
     )
     last_trip_date: Optional[XmlDateTime] = field(
@@ -49,6 +55,13 @@ class IndividualPassengerInfoVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "TravellingWithPet",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    reviews: Optional[ReviewsRelStructure] = field(
+        default=None,
+        metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .fare_structure_element import FareStructureElement
 from .fare_structure_element_ref import FareStructureElementRef
@@ -12,9 +13,7 @@ class FareStructureElementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "fareStructureElements_RelStructure"
 
-    fare_structure_element_ref_or_fare_structure_element: List[
-        Union[FareStructureElementRef, FareStructureElement]
-    ] = field(
+    fare_structure_element_ref_or_fare_structure_element: List[Union[FareStructureElementRef, FareStructureElement]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

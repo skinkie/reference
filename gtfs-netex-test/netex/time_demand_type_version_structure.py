@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
+from .entity_in_version_structure import DataManagedObjectStructure
 from .journey_headways_rel_structure import JourneyHeadwaysRelStructure
 from .journey_layovers_rel_structure import JourneyLayoversRelStructure
 from .journey_run_times_rel_structure import JourneyRunTimesRelStructure
@@ -9,9 +10,7 @@ from .multilingual_string import MultilingualString
 from .presentation_structure import PresentationStructure
 from .private_code import PrivateCode
 from .type_of_time_demand_type_ref import TypeOfTimeDemandTypeRef
-from .vehicle_type_preferences_rel_structure import (
-    VehicleTypePreferencesRelStructure,
-)
+from .vehicle_type_preferences_rel_structure import VehicleTypePreferencesRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

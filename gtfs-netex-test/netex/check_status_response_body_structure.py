@@ -1,15 +1,19 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDateTime, XmlDuration
+
+from .error_description_structure import ErrorDescriptionStructure
 from .other_error import OtherError
 from .service_not_available_error import ServiceNotAvailableError
+from .status import Status
 
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
 @dataclass(kw_only=True)
 class CheckStatusResponseBodyStructure:
-    status: Optional[bool] = field(
+    status: Optional[Status] = field(
         default=None,
         metadata={
             "name": "Status",
@@ -25,9 +29,7 @@ class CheckStatusResponseBodyStructure:
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    error_condition: Optional[
-        "CheckStatusResponseBodyStructure.ErrorCondition"
-    ] = field(
+    error_condition: Optional["CheckStatusResponseBodyStructure.ErrorCondition"] = field(
         default=None,
         metadata={
             "name": "ErrorCondition",
@@ -62,9 +64,7 @@ class CheckStatusResponseBodyStructure:
 
     @dataclass(kw_only=True)
     class ErrorCondition:
-        service_not_available_error_or_other_error: Optional[
-            Union[ServiceNotAvailableError, OtherError]
-        ] = field(
+        service_not_available_error_or_other_error: Optional[Union[ServiceNotAvailableError, OtherError]] = field(
             default=None,
             metadata={
                 "type": "Elements",
@@ -82,7 +82,7 @@ class CheckStatusResponseBodyStructure:
                 ),
             },
         )
-        description: Optional[str] = field(
+        description: Optional[ErrorDescriptionStructure] = field(
             default=None,
             metadata={
                 "name": "Description",

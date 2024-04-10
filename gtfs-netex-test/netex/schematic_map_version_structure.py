@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .alternative_texts_rel_structure import DataManagedObjectStructure
+
+from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
-from .schematic_map_members_rel_structure import (
-    SchematicMapMembersRelStructure,
-)
+from .schematic_map_members_rel_structure import SchematicMapMembersRelStructure
 from .version_of_object_ref_structure import VersionOfObjectRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

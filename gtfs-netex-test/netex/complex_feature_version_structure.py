@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .complex_feature_members_rel_structure import (
-    ComplexFeatureMembersRelStructure,
-)
+
+from .complex_feature_members_rel_structure import ComplexFeatureMembersRelStructure
 from .group_of_points_version_structure import GroupOfPointsVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

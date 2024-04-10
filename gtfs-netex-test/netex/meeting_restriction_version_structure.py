@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .infrastructure_link_restriction_version_structure import (
-    InfrastructureLinkRestrictionVersionStructure,
-)
+
+from .infrastructure_link_restriction_version_structure import InfrastructureLinkRestrictionVersionStructure
 from .transport_type_ref_structure import TransportTypeRefStructure
 from .vehicle_type_ref_structure import VehicleTypeRefStructure
 
@@ -10,9 +9,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class MeetingRestrictionVersionStructure(
-    InfrastructureLinkRestrictionVersionStructure
-):
+class MeetingRestrictionVersionStructure(InfrastructureLinkRestrictionVersionStructure):
     class Meta:
         name = "MeetingRestriction_VersionStructure"
 

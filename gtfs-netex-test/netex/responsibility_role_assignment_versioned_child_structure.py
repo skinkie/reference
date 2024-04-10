@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
-from .alternative_texts_rel_structure import VersionedChildStructure
+
+from .contract_ref_rel_structure import ContractRefRelStructure
 from .data_role_type_enumeration import DataRoleTypeEnumeration
+from .entity_in_version_structure import VersionedChildStructure
 from .multilingual_string import MultilingualString
 from .organisation_part_ref_structure import OrganisationPartRefStructure
 from .organisation_ref_structure import OrganisationRefStructure
@@ -15,9 +17,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ResponsibilityRoleAssignmentVersionedChildStructure(
-    VersionedChildStructure
-):
+class ResponsibilityRoleAssignmentVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "ResponsibilityRoleAssignment_VersionedChildStructure"
 
@@ -55,9 +55,7 @@ class ResponsibilityRoleAssignmentVersionedChildStructure(
             "tokens": True,
         },
     )
-    type_of_responsibility_role_ref_or_responsibility_role_ref: Optional[
-        Union[TypeOfResponsibilityRoleRef, ResponsibilityRoleRef]
-    ] = field(
+    type_of_responsibility_role_ref_or_responsibility_role_ref: Optional[Union[TypeOfResponsibilityRoleRef, ResponsibilityRoleRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -95,6 +93,14 @@ class ResponsibilityRoleAssignmentVersionedChildStructure(
         default=None,
         metadata={
             "name": "ResponsibleAreaRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    associated_contract: Optional[ContractRefRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "AssociatedContract",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

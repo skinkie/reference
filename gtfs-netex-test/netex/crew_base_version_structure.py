@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .garage_point_ref import GaragePointRef
 from .garage_refs_rel_structure import GarageRefsRelStructure
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .parking_point_ref import ParkingPointRef
 from .relief_point_ref import ReliefPointRef
 
@@ -16,9 +15,7 @@ class CrewBaseVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "CrewBase_VersionStructure"
 
-    parking_point_ref_or_relief_point_ref: Optional[
-        Union[GaragePointRef, ParkingPointRef, ReliefPointRef]
-    ] = field(
+    parking_point_ref_or_relief_point_ref: Optional[Union[GaragePointRef, ParkingPointRef, ReliefPointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

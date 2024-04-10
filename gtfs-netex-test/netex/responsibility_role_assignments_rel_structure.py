@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from .responsibility_role_assignment import ResponsibilityRoleAssignment
-from .strict_containment_aggregation_structure import (
-    StrictContainmentAggregationStructure,
-)
+from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ResponsibilityRoleAssignmentsRelStructure(
-    StrictContainmentAggregationStructure
-):
+class ResponsibilityRoleAssignmentsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "responsibilityRoleAssignments_RelStructure"
 

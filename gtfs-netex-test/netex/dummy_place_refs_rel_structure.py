@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .access_space_ref import AccessSpaceRef
 from .address_ref import AddressRef
 from .addressable_place_ref import AddressablePlaceRef
@@ -12,9 +13,7 @@ from .flexible_quay_ref import FlexibleQuayRef
 from .flexible_stop_place_ref import FlexibleStopPlaceRef
 from .garage_ref import GarageRef
 from .hail_and_ride_area_ref import HailAndRideAreaRef
-from .monitored_vehicle_sharing_parking_bay_ref import (
-    MonitoredVehicleSharingParkingBayRef,
-)
+from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .parking_area_ref import ParkingAreaRef
 from .parking_bay_ref import ParkingBayRef
@@ -26,9 +25,7 @@ from .path_junction_ref import PathJunctionRef
 from .point_of_interest_entrance_ref import PointOfInterestEntranceRef
 from .point_of_interest_ref import PointOfInterestRef
 from .point_of_interest_space_ref import PointOfInterestSpaceRef
-from .point_of_interest_vehicle_entrance_ref import (
-    PointOfInterestVehicleEntranceRef,
-)
+from .point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
 from .postal_address_ref import PostalAddressRef
 from .quay_ref import QuayRef
 from .road_address_ref import RoadAddressRef

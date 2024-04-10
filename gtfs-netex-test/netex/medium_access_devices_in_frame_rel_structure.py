@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+
 from .emv_card import EmvCard
 from .frame_containment_structure import FrameContainmentStructure
 from .mobile_device import MobileDevice
@@ -13,9 +14,7 @@ class MediumAccessDevicesInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "mediumAccessDevicesInFrame_RelStructure"
 
-    emv_card_or_smartcard_or_mobile_device: List[
-        Union[EmvCard, Smartcard, MobileDevice]
-    ] = field(
+    emv_card_or_smartcard_or_mobile_device: List[Union[EmvCard, Smartcard, MobileDevice]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

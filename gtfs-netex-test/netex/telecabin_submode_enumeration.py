@@ -11,4 +11,5 @@ class TelecabinSubmodeEnumeration(Enum):
     LIFT = "lift"
     CHAIR_LIFT = "chairLift"
     DRAG_LIFT = "dragLift"
+    PATERNOSTER = "paternoster"
     TELECABIN_LINK = "telecabinLink"

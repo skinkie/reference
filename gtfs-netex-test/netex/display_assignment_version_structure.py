@@ -1,12 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
-from .all_modes_enumeration import AllModesEnumeration
+
 from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .direction_ref import DirectionRef
-from .display_assignment_type_enumeration import (
-    DisplayAssignmentTypeEnumeration,
-)
+from .display_assignment_type_enumeration import DisplayAssignmentTypeEnumeration
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .flexible_line_ref import FlexibleLineRef
 from .journey_pattern_ref import JourneyPatternRef
@@ -15,6 +13,7 @@ from .logical_display_ref import LogicalDisplayRef
 from .scheduled_stop_point_ref import ScheduledStopPointRef
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_pattern_ref import ServicePatternRef
+from .vehicle_mode import VehicleMode
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -32,9 +31,7 @@ class DisplayAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    scheduled_stop_point_ref: Optional[
-        Union[FareScheduledStopPointRef, ScheduledStopPointRef]
-    ] = field(
+    scheduled_stop_point_ref: Optional[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -52,7 +49,7 @@ class DisplayAssignmentVersionStructure(AssignmentVersionStructure1):
             ),
         },
     )
-    vehicle_mode: Optional[AllModesEnumeration] = field(
+    vehicle_mode: Optional[VehicleMode] = field(
         default=None,
         metadata={
             "name": "VehicleMode",
@@ -86,14 +83,7 @@ class DisplayAssignmentVersionStructure(AssignmentVersionStructure1):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    journey_pattern_ref: Optional[
-        Union[
-            ServiceJourneyPatternRef,
-            ServicePatternRef,
-            DeadRunJourneyPatternRef,
-            JourneyPatternRef,
-        ]
-    ] = field(
+    journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -121,9 +111,7 @@ class DisplayAssignmentVersionStructure(AssignmentVersionStructure1):
             ),
         },
     )
-    display_assignment_type: Optional[
-        DisplayAssignmentTypeEnumeration
-    ] = field(
+    display_assignment_type: Optional[DisplayAssignmentTypeEnumeration] = field(
         default=None,
         metadata={
             "name": "DisplayAssignmentType",

@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
 from typing import List, Union
-from .cell_versioned_child_structure import (
+
+from .frame_containment_structure import FrameContainmentStructure
+from .priceable_object_version_structure import (
     FareTable,
     FareTableInContext,
 )
-from .frame_containment_structure import FrameContainmentStructure
 from .standard_fare_table import StandardFareTable
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -15,9 +16,7 @@ class FareTablesInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "fareTablesInFrame_RelStructure"
 
-    fare_table: List[
-        Union[StandardFareTable, FareTableInContext, FareTable]
-    ] = field(
+    fare_table: List[Union[StandardFareTable, FareTableInContext, FareTable]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

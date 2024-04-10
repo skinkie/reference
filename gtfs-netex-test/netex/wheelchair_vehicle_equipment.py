@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from .wheelchair_vehicle_equipment_version_structure import (
-    WheelchairVehicleEquipmentVersionStructure,
-)
+
+from .wheelchair_vehicle_equipment_version_structure import WheelchairVehicleEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

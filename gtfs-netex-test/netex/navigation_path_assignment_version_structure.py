@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .connection_ref import ConnectionRef
 from .default_connection_ref import DefaultConnectionRef
 from .navigation_path_ref import NavigationPathRef
@@ -20,9 +21,7 @@ class NavigationPathAssignmentVersionStructure(StopAssignmentVersionStructure):
     class Meta:
         name = "NavigationPathAssignment_VersionStructure"
 
-    connection_ref: Optional[
-        Union[DefaultConnectionRef, SiteConnectionRef, ConnectionRef]
-    ] = field(
+    connection_ref: Optional[Union[DefaultConnectionRef, SiteConnectionRef, ConnectionRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -45,16 +44,7 @@ class NavigationPathAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    stop_place_ref_or_site_ref: Optional[
-        Union[
-            TaxiRankRef,
-            StopPlaceRef,
-            ParkingRef,
-            PointOfInterestRef,
-            ServiceSiteRef,
-            SiteRef,
-        ]
-    ] = field(
+    stop_place_ref_or_site_ref: Optional[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -1,20 +1,13 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from .facility_requirements_rel_structure import (
-    FacilityRequirementsRelStructure,
-)
+
+from .facility_requirements_rel_structure import FacilityRequirementsRelStructure
 from .passenger_capacities_rel_structure import PassengerCapacitiesRelStructure
-from .passenger_carrying_requirements_rel_structure import (
-    PassengerCarryingRequirementsRelStructure,
-)
-from .service_facility_sets_rel_structure import (
-    ServiceFacilitySetsRelStructure,
-)
+from .passenger_carrying_requirements_rel_structure import PassengerCarryingRequirementsRelStructure
+from .service_facility_sets_rel_structure import ServiceFacilitySetsRelStructure
 from .transport_type_version_structure import TransportTypeVersionStructure
-from .vehicle_manoeuvring_requirements_rel_structure import (
-    VehicleManoeuvringRequirementsRelStructure,
-)
+from .vehicle_manoeuvring_requirements_rel_structure import VehicleManoeuvringRequirementsRelStructure
 from .vehicle_model_ref_structure import VehicleModelRefStructure
 from .vehicle_type_ref_structure import VehicleTypeRefStructure
 
@@ -144,9 +137,7 @@ class VehicleTypeVersionStructure(TransportTypeVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    can_manoeuvre: Optional[
-        VehicleManoeuvringRequirementsRelStructure
-    ] = field(
+    can_manoeuvre: Optional[VehicleManoeuvringRequirementsRelStructure] = field(
         default=None,
         metadata={
             "name": "canManoeuvre",
@@ -154,9 +145,7 @@ class VehicleTypeVersionStructure(TransportTypeVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    satisfies_facility_requirements: Optional[
-        FacilityRequirementsRelStructure
-    ] = field(
+    satisfies_facility_requirements: Optional[FacilityRequirementsRelStructure] = field(
         default=None,
         metadata={
             "name": "satisfiesFacilityRequirements",

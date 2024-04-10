@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Optional
-from .waiting_equipment_version_structure import (
-    WaitingEquipmentVersionStructure,
-)
+
+from .waiting_equipment_version_structure import WaitingEquipmentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

@@ -1,14 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .direction_ref import DirectionRef
-from .direction_type_enumeration import DirectionTypeEnumeration
+from .direction_type import DirectionType
 from .flexible_line_ref import FlexibleLineRef
 from .line_ref import LineRef
 from .points_on_route_rel_structure import PointsOnRouteRelStructure
 from .route_ref_structure import RouteRefStructure
-from .section_in_sequence_versioned_child_structure import (
-    LinkSequenceVersionStructure,
-)
+from .sections_in_sequence_rel_structure import LinkSequenceVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -36,7 +35,7 @@ class RouteVersionStructure(LinkSequenceVersionStructure):
             ),
         },
     )
-    direction_type: Optional[DirectionTypeEnumeration] = field(
+    direction_type: Optional[DirectionType] = field(
         default=None,
         metadata={
             "name": "DirectionType",

@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
+
 from .access_space_ref import AccessSpaceRef
-from .all_vehicle_modes_of_transport_enumeration import (
-    AllVehicleModesOfTransportEnumeration,
-)
+from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .authority_ref import AuthorityRef
 from .boarding_position_ref import BoardingPositionRef
 from .multilingual_string import MultilingualString
@@ -50,9 +49,7 @@ class SiteConnectionEndStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    scheduled_stop_point_ref_or_vehicle_meeting_point_ref: Optional[
-        Union[ScheduledStopPointRefStructure, PointRefStructure]
-    ] = field(
+    scheduled_stop_point_ref_or_vehicle_meeting_point_ref: Optional[Union[ScheduledStopPointRefStructure, PointRefStructure]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -190,9 +187,7 @@ class SiteConnectionEndStructure:
             "max_occurs": 8,
         },
     )
-    authority_ref_or_operator_ref_or_operator_view: Optional[
-        Union[AuthorityRef, OperatorRef, OperatorView]
-    ] = field(
+    authority_ref_or_operator_ref_or_operator_view: Optional[Union[AuthorityRef, OperatorRef, OperatorView]] = field(
         default=None,
         metadata={
             "type": "Elements",

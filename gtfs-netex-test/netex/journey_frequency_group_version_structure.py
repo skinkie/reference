@@ -1,12 +1,10 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import List, Optional, Type, Union
+
 from xsdata.models.datatype import XmlTime
-from .explicit_journey_refs_rel_structure import (
-    ExplicitJourneyRefsRelStructure,
-)
-from .group_of_entities_version_structure import (
-    GroupOfEntitiesVersionStructure,
-)
+
+from .explicit_journey_refs_rel_structure import ExplicitJourneyRefsRelStructure
+from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .time_demand_type_refs_rel_structure import TimeDemandTypeRefsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -25,28 +23,42 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
             "required": True,
         }
     )
-    first_day_offset: Optional[int] = field(
-        default=None,
+    first_day_offset_or_last_departure_time_or_last_day_offset_or_first_arrival_time_or_last_arrival_time: List[
+        Union["JourneyFrequencyGroupVersionStructure.FirstDayOffset", "JourneyFrequencyGroupVersionStructure.LastDepartureTime", "JourneyFrequencyGroupVersionStructure.LastDayOffset", "JourneyFrequencyGroupVersionStructure.FirstArrivalTime", "JourneyFrequencyGroupVersionStructure.LastArrivalTime"]
+    ] = field(
+        default_factory=list,
         metadata={
-            "name": "FirstDayOffset",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    last_departure_time: Optional[XmlTime] = field(
-        default=None,
-        metadata={
-            "name": "LastDepartureTime",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    last_day_offset: Optional[int] = field(
-        default=None,
-        metadata={
-            "name": "LastDayOffset",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "FirstDayOffset",
+                    "type": Type["JourneyFrequencyGroupVersionStructure.FirstDayOffset"],
+                    "namespace": "http://www.netex.org.uk/netex",
+                    "max_occurs": 2,
+                },
+                {
+                    "name": "LastDepartureTime",
+                    "type": Type["JourneyFrequencyGroupVersionStructure.LastDepartureTime"],
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LastDayOffset",
+                    "type": Type["JourneyFrequencyGroupVersionStructure.LastDayOffset"],
+                    "namespace": "http://www.netex.org.uk/netex",
+                    "max_occurs": 2,
+                },
+                {
+                    "name": "FirstArrivalTime",
+                    "type": Type["JourneyFrequencyGroupVersionStructure.FirstArrivalTime"],
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LastArrivalTime",
+                    "type": Type["JourneyFrequencyGroupVersionStructure.LastArrivalTime"],
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+            "max_occurs": 5,
         },
     )
     time_demand_types: Optional[TimeDemandTypeRefsRelStructure] = field(
@@ -64,3 +76,43 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+
+    @dataclass(kw_only=True)
+    class FirstDayOffset:
+        value: int = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class LastDepartureTime:
+        value: XmlTime = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class LastDayOffset:
+        value: int = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class FirstArrivalTime:
+        value: XmlTime = field(
+            metadata={
+                "required": True,
+            }
+        )
+
+    @dataclass(kw_only=True)
+    class LastArrivalTime:
+        value: XmlTime = field(
+            metadata={
+                "required": True,
+            }
+        )

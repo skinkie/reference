@@ -1,32 +1,23 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from .cell_versioned_child_structure import PriceableObjectVersionStructure
-from .customer_purchase_package_element_accesses_rel_structure import (
-    CustomerPurchasePackageElementAccessesRelStructure,
-)
-from .customer_purchase_package_prices_rel_structure import (
-    CustomerPurchasePackagePricesRelStructure,
-)
+
+from .customer_purchase_package_element_accesses_rel_structure import CustomerPurchasePackageElementAccessesRelStructure
+from .customer_purchase_package_prices_rel_structure import CustomerPurchasePackagePricesRelStructure
 from .customer_purchase_package_ref import CustomerPurchasePackageRef
-from .customer_purchase_parameter_assignments_rel_structure import (
-    CustomerPurchaseParameterAssignmentsRelStructure,
-)
+from .customer_purchase_parameter_assignments_rel_structure import CustomerPurchaseParameterAssignmentsRelStructure
 from .marked_as_enumeration import MarkedAsEnumeration
+from .priceable_object_version_structure import PriceableObjectVersionStructure
 from .sales_offer_package_element_ref import SalesOfferPackageElementRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class CustomerPurchasePackageElementVersionStructure(
-    PriceableObjectVersionStructure
-):
+class CustomerPurchasePackageElementVersionStructure(PriceableObjectVersionStructure):
     class Meta:
         name = "CustomerPurchasePackageElement_VersionStructure"
 
-    customer_purchase_package_ref: Optional[
-        CustomerPurchasePackageRef
-    ] = field(
+    customer_purchase_package_ref: Optional[CustomerPurchasePackageRef] = field(
         default=None,
         metadata={
             "name": "CustomerPurchasePackageRef",
@@ -34,9 +25,7 @@ class CustomerPurchasePackageElementVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    sales_offer_package_element_ref: Optional[
-        SalesOfferPackageElementRef
-    ] = field(
+    sales_offer_package_element_ref: Optional[SalesOfferPackageElementRef] = field(
         default=None,
         metadata={
             "name": "SalesOfferPackageElementRef",
@@ -60,9 +49,7 @@ class CustomerPurchasePackageElementVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    element_accesses: Optional[
-        CustomerPurchasePackageElementAccessesRelStructure
-    ] = field(
+    element_accesses: Optional[CustomerPurchasePackageElementAccessesRelStructure] = field(
         default=None,
         metadata={
             "name": "elementAccesses",
@@ -70,9 +57,7 @@ class CustomerPurchasePackageElementVersionStructure(
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    validity_parameter_assignments: Optional[
-        CustomerPurchaseParameterAssignmentsRelStructure
-    ] = field(
+    validity_parameter_assignments: Optional[CustomerPurchaseParameterAssignmentsRelStructure] = field(
         default=None,
         metadata={
             "name": "validityParameterAssignments",

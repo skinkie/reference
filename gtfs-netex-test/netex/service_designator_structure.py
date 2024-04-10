@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from xsdata.models.datatype import XmlDate, XmlTime
+
 from .authority_ref import AuthorityRef
 from .day_type_ref import DayTypeRef
 from .direction_ref import DirectionRef
@@ -89,9 +91,7 @@ class ServiceDesignatorStructure:
             ),
         },
     )
-    transport_organisation_ref: Optional[
-        Union[AuthorityRef, OperatorRef]
-    ] = field(
+    transport_organisation_ref: Optional[Union[AuthorityRef, OperatorRef]] = field(
         default=None,
         metadata={
             "type": "Elements",

@@ -1,40 +1,27 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
+
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
-from .alternative_texts_rel_structure import DataManagedObjectStructure
 from .assistance_booking_service_ref import AssistanceBookingServiceRef
 from .assistance_service_ref import AssistanceServiceRef
 from .authority_ref import AuthorityRef
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .catering_service_ref import CateringServiceRef
-from .cell_versioned_child_structure import (
-    FareTablesRelStructure,
-    PriceGroupsRelStructure,
-)
 from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
 from .communication_service_ref import CommunicationServiceRef
 from .complaints_service_ref import ComplaintsServiceRef
 from .customer_service_ref import CustomerServiceRef
-from .distance_matrix_elements_rel_structure import (
-    DistanceMatrixElementsRelStructure,
-)
-from .fare_structure_elements_rel_structure import (
-    FareStructureElementsRelStructure,
-)
+from .distance_matrix_elements_rel_structure import DistanceMatrixElementsRelStructure
+from .entity_in_version_structure import DataManagedObjectStructure
+from .fare_structure_elements_rel_structure import FareStructureElementsRelStructure
 from .flexible_line_ref import FlexibleLineRef
 from .general_organisation_ref import GeneralOrganisationRef
-from .geographical_intervals_rel_structure import (
-    GeographicalIntervalsRelStructure,
-)
-from .geographical_structure_factors_rel_structure import (
-    GeographicalStructureFactorsRelStructure,
-)
+from .geographical_intervals_rel_structure import GeographicalIntervalsRelStructure
+from .geographical_structure_factors_rel_structure import GeographicalStructureFactorsRelStructure
 from .geographical_unit_ref import GeographicalUnitRef
 from .group_of_lines_ref import GroupOfLinesRef
 from .group_of_operators_ref import GroupOfOperatorsRef
-from .groups_of_distance_matrix_elements_rel_structure import (
-    GroupsOfDistanceMatrixElementsRelStructure,
-)
+from .groups_of_distance_matrix_elements_rel_structure import GroupsOfDistanceMatrixElementsRelStructure
 from .hire_service_ref import HireServiceRef
 from .info_links_rel_structure import InfoLinksRelStructure
 from .left_luggage_service_ref import LeftLuggageServiceRef
@@ -54,10 +41,12 @@ from .operator_ref import OperatorRef
 from .organisation_ref import OrganisationRef
 from .other_organisation_ref import OtherOrganisationRef
 from .price_unit_ref import PriceUnitRef
-from .private_code import PrivateCode
-from .quality_structure_factors_rel_structure import (
-    QualityStructureFactorsRelStructure,
+from .priceable_object_version_structure import (
+    FareTablesRelStructure,
+    PriceGroupsRelStructure,
 )
+from .private_code import PrivateCode
+from .quality_structure_factors_rel_structure import QualityStructureFactorsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .retail_service_ref import RetailServiceRef
 from .serviced_organisation_ref import ServicedOrganisationRef
@@ -65,9 +54,7 @@ from .tariff_basis_enumeration import TariffBasisEnumeration
 from .taxi_service_ref import TaxiServiceRef
 from .ticketing_service_ref import TicketingServiceRef
 from .time_intervals_rel_structure import TimeIntervalsRelStructure
-from .time_structure_factors_rel_structure import (
-    TimeStructureFactorsRelStructure,
-)
+from .time_structure_factors_rel_structure import TimeStructureFactorsRelStructure
 from .time_unit_ref import TimeUnitRef
 from .travel_agent_ref import TravelAgentRef
 from .type_of_tariff_ref import TypeOfTariffRef
@@ -130,21 +117,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: Optional[
-        Union[
-            RetailConsortiumRef,
-            OnlineServiceOperatorRef,
-            GeneralOrganisationRef,
-            ManagementAgentRef,
-            ServicedOrganisationRef,
-            TravelAgentRef,
-            OtherOrganisationRef,
-            AuthorityRef,
-            OperatorRef,
-            OrganisationRef,
-            GroupOfOperatorsRef,
-        ]
-    ] = field(
+    choice: Optional[Union[RetailConsortiumRef, OnlineServiceOperatorRef, GeneralOrganisationRef, ManagementAgentRef, ServicedOrganisationRef, TravelAgentRef, OtherOrganisationRef, AuthorityRef, OperatorRef, OrganisationRef, GroupOfOperatorsRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -207,9 +180,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    line_ref_or_group_of_lines_ref: Optional[
-        Union[FlexibleLineRef, LineRef, NetworkRef, GroupOfLinesRef]
-    ] = field(
+    line_ref_or_group_of_lines_ref: Optional[Union[FlexibleLineRef, LineRef, NetworkRef, GroupOfLinesRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -237,7 +208,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    choice_1: Optional[
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref_or_local_service_ref: Optional[
         Union[
             OnlineServiceRef,
             VehicleRentalServiceRef,
@@ -406,9 +377,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    geographical_intervals: Optional[
-        GeographicalIntervalsRelStructure
-    ] = field(
+    geographical_intervals: Optional[GeographicalIntervalsRelStructure] = field(
         default=None,
         metadata={
             "name": "geographicalIntervals",
@@ -416,9 +385,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    geographical_structure_factors: Optional[
-        GeographicalStructureFactorsRelStructure
-    ] = field(
+    geographical_structure_factors: Optional[GeographicalStructureFactorsRelStructure] = field(
         default=None,
         metadata={
             "name": "geographicalStructureFactors",
@@ -450,9 +417,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    quality_structure_factors: Optional[
-        QualityStructureFactorsRelStructure
-    ] = field(
+    quality_structure_factors: Optional[QualityStructureFactorsRelStructure] = field(
         default=None,
         metadata={
             "name": "qualityStructureFactors",
@@ -460,9 +425,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_structure_elements: Optional[
-        FareStructureElementsRelStructure
-    ] = field(
+    fare_structure_elements: Optional[FareStructureElementsRelStructure] = field(
         default=None,
         metadata={
             "name": "fareStructureElements",
@@ -470,9 +433,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distance_matrix_elements: Optional[
-        DistanceMatrixElementsRelStructure
-    ] = field(
+    distance_matrix_elements: Optional[DistanceMatrixElementsRelStructure] = field(
         default=None,
         metadata={
             "name": "distanceMatrixElements",
@@ -480,9 +441,7 @@ class TariffVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    groups_of_distance_matrix_elements: Optional[
-        GroupsOfDistanceMatrixElementsRelStructure
-    ] = field(
+    groups_of_distance_matrix_elements: Optional[GroupsOfDistanceMatrixElementsRelStructure] = field(
         default=None,
         metadata={
             "name": "groupsOfDistanceMatrixElements",
