@@ -1,7 +1,9 @@
 import collections
+from io import BufferedWriter
 
 from itertools import groupby
 import operator
+from struct import Struct
 
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
@@ -20,7 +22,7 @@ from netex import ScheduledStopPoint, StopPlace, Quay, PassengerStopAssignment, 
     AllVehicleModesOfTransportEnumeration, AvailabilityCondition, Operator, VehicleType, TypeOfProductCategory, Route, \
     PresentationStructure
 
-from typing import Any, Dict, Iterable, Optional, Tuple, List, OrderedDict
+from typing import Any, Dict, Iterable, Optional, Tuple, List, OrderedDict, BinaryIO
 from xsdata.exceptions import XmlHandlerError
 from xsdata.models.enums import EventType
 
@@ -74,7 +76,10 @@ class MyLxmlEventHandler(LxmlEventHandler):
 
         return self.objects[-1][1] if self.objects else None
 
-class JSONWriter:
+class Writer:
+    pass
+
+class JSONWriter(Writer):
     intermediate: list
     out: dict[str, list]
     strings: OrderedDict[str, int]
@@ -170,6 +175,175 @@ class JSONWriter:
         self.strings[string] = len(self.strings.keys())
         # self.string_length += (len(string) + 1) (binary variant)
         return location
+
+
+class BinaryWriter(Writer):
+    out: BinaryIO
+    strings: OrderedDict[str, int]
+    string_length: int
+
+    struct_header = Struct('8sQi91I')
+
+    def __init__(self, filename: str):
+        self.out = open(filename, 'wb')
+        self.out.seek(self.struct_header.size)
+
+        self.string_length = 0
+        self.strings = collections.OrderedDict({})
+
+    def write_header(self):
+        """ Write out a file header containing offsets to the beginning of each subsection.
+        Must match struct transit_data_header in transitdata.c
+        :param out: output filepointer
+        :param index: Index of the datastructure exported
+        """
+
+        self.out.seek(0)
+        htext = "TTABLEV4"
+        self.out.write(packed)
+
+    def save(self):
+        self.out.close()
+
+    def write_vj(self, tdg, departure_time, vj_attr):
+        vj_t = Struct('IHH')
+        self.out.write(vj_t.pack(tdg, departure_time, vj_attr))
+
+    def write_vjref(self, jpref, vjref):
+        vjref_t = Struct('HH')
+        self.out.write(vjref_t.pack(jpref, vjref))
+
+    def write_route(self, jp_offset, trip_id_offset, jp_n_jpp, jp_n_vj, jp_attribute, routeidx_offset, jp_min_time, jp_max_time):
+        route_t = Struct('2I6H')
+        self.out.write(route_t.pack(jp_offset, trip_id_offset, jp_n_jpp, jp_n_vj, jp_attribute, routeidx_offset, jp_min_time, jp_max_time))
+
+    def write_timedemandgroup(self, arrival_time, departure_time):
+        timedemandgroup_t = Struct('HH')
+        self.out.write(timedemandgroup_t.pack(arrival_time, departure_time))
+
+    def write_stopstruct(self, sp_offset, transfer_offset):
+        struct_2i = Struct('II')
+        self.out.write(struct_2i.pack(sp_offset, transfer_offset))
+
+    def writeint(self, x):
+        struct_1I = Struct('I') # a single UNSIGNED int
+        """Write x as packed binary data to file
+        :param out: output file-pointer
+        :param x: unsigned int (0 <= x <= 4294967295)
+        """
+        self.out.write(struct_1I.pack(x))
+
+    def writeshort(self, x):
+        struct_1H = Struct('H') # a single UNSIGNED short
+        """Write x as packed binary data to file
+        :param out: output file-pointer
+        :param x: unsigned short (0 <= x <= 65535)
+        """
+        self.out.write(struct_1H.pack(x))
+
+    def writebyte(self, x):
+        struct_1B = Struct('B')  # a single UNSIGNED byte
+        """Write x as packed binary data to file
+        :param out: output file-pointer
+        :param x: unsigned byte (0 <= x <= 255)
+        """
+        self.out.write(struct_1B.pack(x))
+
+    def writesignedbyte(self, x):
+        struct_1b = Struct('b') # a single SIGNED byte
+        """Write x as packed binary data to file
+        :param out: output file-pointer
+        :param x: signed byte (-128 <= x <= 127)
+        """
+        self.out.write(struct_1b.pack(x))
+
+    def write_2ushort(self, x, y):
+        struct_2H = Struct('HH') # two UNSIGNED shorts
+        """Write coordinate (x,y) as packed binary data to file
+        :param out: output file-pointer
+        :param x: short with x-coordinate
+        :param y: short with y-coordinate
+        """
+        self.out.write(struct_2H.pack(x, y))
+
+    def write2floats(self, x, y):
+        struct_2f = Struct("2f") # 2 floats
+        """Write coordinate (x,y) as packed binary data to file
+        :param out: output file-pointer
+        :param x: float with x-coordinate
+        :param y: float with y-coordinate
+        """
+        self.out.write(struct_2f.pack(float(x), float(y)))
+
+    def align(self, width=4):
+        """Align output file to a [width]-byte boundary.
+        :param width: size of the boundary
+        :param out: output file-pointer
+        """
+        pos = self.out.tell()
+        n_padding_bytes = (width - (pos % width)) % width
+        self.out.write(b'%' * n_padding_bytes)
+
+    def tell(self) :
+        """ Display the current output file position in a human-readable format, then return that position in bytes.
+        :param out: output filepointer
+        :return: current output file position
+        """
+        pos = self.out.tell()
+        if pos > 1024 * 1024 :
+            text = '%0.2f MB' % (pos / 1024.0 / 1024.0)
+        else :
+            text = '%0.2f kB' % (pos / 1024.0)
+        print("  at position %d in output [%s]" % (pos, text))
+        return pos
+
+    def write_text_comment(self, string: str):
+        """ Write a text block to the file, just to help indentify segment boundaries, and align.
+        :param out: output filepointer
+        :param string: text comment
+        """
+        string = '\r\n|| {:s} ||\r\n'.format(string)
+        self.out.write(string.encode('utf-8'))
+        self.align()
+
+    def write_string(self, string: str):
+        self.out.write(string.encode('utf-8') + b'\0')
+
+    def write_string_table(self,strings):
+        """ Write a table of fixed-width, null-terminated strings to the output file.
+        The argument is a list of Python strings.
+        The output string table begins with an integer indicating the width of each entry in bytes (including the null terminator).
+        This is followed by N*W bytes of string data.
+        This data structure can provide a mapping from integer IDs to strings and vice versa:
+        If the strings are sorted, a binary search can be used for string --> ID lookups in logarithmic time.
+        Note: Later we could use fixed width non-null-terminated string: printf("%.*s", length, string); or fwrite();
+        :param out: output filepointer
+        :param strings: list of strings
+        """
+        # sort a copy of the string list
+        # strings = list(strings)
+        # strings.sort()
+        width = 0
+        for s in strings :
+            if len(s) > width :
+                width = len(s)
+        width += 1
+        loc = self.tell()
+        self.writeint(width)
+        for s in strings.keys():
+            self.out.write(s.encode('utf-8'))
+            padding = b'\0' * (width - len(s))
+            self.out.write(padding)
+        return loc
+
+    def put_string(self,string):
+        location = self.strings.get(string, None)
+        if location is not None:
+            return location
+
+        self.strings[string] = self.string_length
+        self.string_length += (len(string) + 1)
+        return self.strings[string]
 
 
 class NeTExTimetable:
@@ -360,7 +534,7 @@ class NeTExTimetable:
 class Index2:
     parser: XmlParser
     tree: etree._ElementTree
-    writer: JSONWriter
+    writer: Writer
 
     n_stops: int
     loc_stop_point_coords: int
@@ -1076,7 +1250,7 @@ class Index2:
 
         for service_journey_pattern_ref, service_journeys in service_journey_service_journey_pattern_group.items():
             for service_journey in service_journeys:
-                self.out.writesignedbyte((self.global_utc_offset - service_journey._utc_offset) / 60 / 15)  # n * 15 minutes
+                self.out.writesignedbyte(int((self.global_utc_offset - service_journey._utc_offset) / 60 / 15))  # n * 15 minutes
 
     def export_vj_uris(self):
         service_journey_service_journey_pattern_group = self.netex_timetable.get_service_journey_service_journey_pattern_group()
@@ -1132,10 +1306,17 @@ class Index2:
         self.export_vj_time_offsets()
         self.export_vj_uris()
         self.export_stringpool()
+        self.out.write_text_comment("END TTABLEV4")
+        index.loc_eof = self.out.tell()
+        self.out.write_header()
 
 netex_timetable = NeTExTimetable("/tmp/timetable4.xml")
 jw = JSONWriter("/tmp/timetable4.json")
 index = Index2(netex_timetable, jw)
 index.export()
-
 jw.save()
+
+bw = BinaryWriter("/tmp/timetable4.dat")
+index = Index2(netex_timetable, bw)
+index.export()
+bw.save()
