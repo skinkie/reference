@@ -18,7 +18,7 @@ from netex import ServiceJourney, Codespace, MultilingualString, Version, Route,
     ArrivalStructure, DepartureStructure, ServiceJourneyPatternRef, ServiceJourneyPattern, OnwardTimingLinkView, \
     PublicationDelivery, DataObjectsRelStructure, GeneralFrame, CodespacesRelStructure, VersionsRelStructure, \
     GeneralFrameMembersRelStructure, DataSource, Operator, OrganisationTypeEnumeration, AllModesEnumeration, \
-    ContactStructure, OperatorActivitiesEnumeration, VersionTypeEnumeration
+    ContactStructure, OperatorActivitiesEnumeration, VersionTypeEnumeration, ParticipantRef
 from refs import getId, getFakeRef, getRef
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
@@ -91,9 +91,10 @@ class WagenborgTimetable():
         duration_secs = journey['duration'] * 60
 
         return ServiceJourney(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}"), version=self.version.version,
-                       compound_train_ref_or_train_ref_or_vehicle_type_ref=getFakeRef(getId(VehicleType, self.codespace, journey['resourceType']), VehicleTypeRef, self.version.version),
+                       vehicle_type_ref=getFakeRef(getId(VehicleType, self.codespace, journey['resourceType']), VehicleTypeRef, self.version.version),
                        status_attribute=WagenborgTimetable.mapStatus(journey['isUnavailable']),
-                       calls=CallsRelStructure(choice=[
+                       calls=CallsRelStructure(call=[
+                           # TODO: Remove DatedCalls
                            DatedCall(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}-{origin}"), version=self.version.version,
                                                departure_date = XmlDate.from_string(journey['departureDate'].split('T')[0]),
                                                departure = DepartureStructure(time=XmlTime.from_string(journey['departureDate'].split('T')[1]), for_boarding=True),
@@ -103,7 +104,7 @@ class WagenborgTimetable():
                                      fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getRef(self.ssps[destination]),
                                      arrival_date=XmlDate.from_string(journey['arrivalDate'].split('T')[0]),
                                      arrival=ArrivalStructure(time=XmlTime.from_string(journey['arrivalDate'].split('T')[1]), for_alighting=True))]),
-                       choice=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, journey['route']))
+                       journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, journey['route']))
                        )
 
 print("...")
@@ -113,7 +114,7 @@ if __name__ == '__main__':
     firstdate = datetime.date.today()
     days = 60
 
-    codespace = Codespace(id="BISON:Codespace:WPD", xmlns_url="http://bison.dova.nu/ns/WPD", xmlns="WPD", description="Wagenborg Passagiers Diensten")
+    codespace = Codespace(id="BISON:Codespace:WPD", xmlns_url="http://bison.dova.nu/ns/WPD", xmlns="WPD", description=MultilingualString(value="Wagenborg Passagiers Diensten"))
     version = Version(id=getId(Version, codespace, "1"), version="1",
                       version_type=VersionTypeEnumeration.BASELINE,
                       start_date=XmlDateTime.from_datetime(datetime.datetime.combine(firstdate, datetime.time.min)),
@@ -156,7 +157,7 @@ if __name__ == '__main__':
 
     publication_delivery = PublicationDelivery(
         publication_timestamp=XmlDateTime.now(),
-        participant_ref="NDOV",
+        participant_ref=ParticipantRef(value="NDOV"),
         description=MultilingualString(value="Ruwe data WPD"),
         data_objects=DataObjectsRelStructure(choice=[general_frame]),
         version="ntx:1.1",

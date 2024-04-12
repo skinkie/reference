@@ -20,7 +20,7 @@ from netex import PublicationDelivery, PassengerCapacity, DataObjectsRelStructur
     DirectionTypeEnumeration, PointsInJourneyPatternRelStructure, StopPointInJourneyPattern, \
     TimingPointInJourneyPattern, TimingLinkRefStructure, TimingLink, LineString, PosList, RouteView, LineRef, \
     TimingPointRefStructure, ValidityConditionsRelStructure, AvailabilityCondition, DayTypesRelStructure, DayTypeRef, \
-    ServiceJourneyPatternRef, OperatorRef
+    ServiceJourneyPatternRef, OperatorRef, ParticipantRef
 from netex import OnlineServiceOperatorVersionStructure
 from optibus import StopsOfTimeplan, TripsOfRoute, ServicesOfTimeplan, VehicleTypesOfTimeplan, RoutesOfTimeplan
 from optibus.routes_of_timeplan import StopsProperties, Patterns, Stops
@@ -86,7 +86,7 @@ def mapPointInSequence(stop: Stops, pattern: Patterns):
         case 'time_point':
             return TimingPointInJourneyPattern(id=f"{pattern.id}-{stop.stop_id}-{stop.route_stop_index}", version="1",
                                                               order=stop.route_stop_index + 1,
-                                                              choice_1=ScheduledStopPointRef(ref=stop.stop_id,
+                                                              timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref=ScheduledStopPointRef(ref=stop.stop_id,
                                                                                              version="1"))
         case 'bus_stop':
             return StopPointInJourneyPattern(id=f"{pattern.id}-{stop.stop_id}-{stop.route_stop_index}", version="1", order=stop.route_stop_index + 1,
@@ -196,7 +196,7 @@ trips: List[TripsOfRoute] = parser.parse(open('optibus-input/trips-of-route.json
 for trip in trips:
     service_journeys.append(ServiceJourney(id=trip.id, version="1",
                                            validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[AvailabilityCondition(id=trip.id, version="1", day_types=DayTypesRelStructure(day_type_ref_or_day_type=[DayTypeRef(ref=trip.service_id, version="1")]))])],
-                                           choice=LineRef(ref=trip.route_id ,version="1"),
+                                           flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=LineRef(ref=trip.route_id ,version="1"),
                                            operator_ref_or_operator_view=OperatorRef(ref=trip.properties.operator, version="1"),
                                            journey_pattern_ref=ServiceJourneyPatternRef(ref=trip.pattern_id, version="1"),
                                            calls=CallsRelStructure(call=[Call(id=f"{trip.id}-{trip_time.stop_index}",
@@ -208,7 +208,7 @@ for trip in trips:
 general_frame = GeneralFrame(id="GeneralFrame", version="1",
                              members=GeneralFrameMembersRelStructure(choice=vehicle_types + lines + scheduled_stop_points + tls + sjps + day_types + service_journeys))
 
-publication_delivery = PublicationDelivery(participant_ref="PyNeTExConv",
+publication_delivery = PublicationDelivery(participant_ref=ParticipantRef(value="PyNeTExConv"),
                                            publication_timestamp=XmlDateTime.from_datetime(datetime.datetime.now()))
 publication_delivery.version = "ntx:1.1"
 publication_delivery.description = "NeTEx export"

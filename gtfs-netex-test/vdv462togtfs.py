@@ -118,8 +118,8 @@ def convert():
         for element in tree.iterfind(".//{http://www.netex.org.uk/netex}DayTypeAssignment"):
             day_type_assignment: DayTypeAssignment = parser.parse(element, DayTypeAssignment)
             dates = calendar_dates.get(day_type_assignment.day_type_ref.ref, set([]))
-            if isinstance(day_type_assignment.choice, XmlDate):
-                dates.add(day_type_assignment.choice)
+            if isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
+                dates.add(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
             calendar_dates[day_type_assignment.day_type_ref.ref] = dates
 
         for service_id, dates in calendar_dates.items():

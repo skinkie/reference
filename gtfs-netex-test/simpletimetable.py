@@ -75,7 +75,7 @@ class SimpleTimetable:
             sj = ServiceJourney(id=getId(ServiceJourney, self.codespace, key), version=self.version.version,
                                 private_code=PrivateCode(type_value="JourneyNumber", value="{:04d}".format(int(time.replace(':', '')))),
                                 time_demand_type_ref=getRef(tdt),
-                                choice=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
+                                journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 departure_time=XmlTime(hour=int(time[0:2]), minute=int(time[3:5]), second=0),
                                 vehicle_type_ref=VehicleTypeRef(ref=getId(VehicleType, self.codespace, vessel), version=self.version.version),
                            validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=getRef(ac))])

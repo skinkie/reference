@@ -104,10 +104,10 @@ class TimetablePassingTimesProfile:
             # TODO: do something with the different elements of the choice (Call, CallZ, DatedCall, DatedCallZ)
             pis = pattern[call.order]
             if isinstance(pis, TimingPointInJourneyPattern):
-                if pis.choice_1.ref != call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref:  # TODO: make sure we get the right one
+                if pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref != call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref:  # TODO: make sure we get the right one
                     print("{} order does not match {} order ({} vs {})".format(journey_pattern.id, sj.id,
                                                                                call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view,
-                                                                               pis.choice_1),
+                                                                               pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref),
                           file=sys.stderr)
                 else:
                     ttpt.append(TimetablePassingTimesProfile.mapCallToTimetabledPassingTime(call, pattern))
@@ -159,7 +159,7 @@ class TimetablePassingTimesProfile:
                         service_journey_pattern = ServiceJourneyPattern(
                             id=getId(ServiceJourneyPattern, codespace, spijp_hash),
                             version=sj.version,
-                            route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.choice),
+                            route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view),
                             name=MultilingualString(value=spijp_hash),
                             derived_from_object_ref=sj.id,
                             derived_from_version_ref_attribute=sj.version,
@@ -180,11 +180,11 @@ class TimetablePassingTimesProfile:
                     sj.passing_times = TimetabledPassingTimesRelStructure(timetabled_passing_time=ttpt)
 
         # if there is a servicejourneypattern, departure time, timedemandtype it can be expanded
-        elif sj.choice and sj.departure_time and sj.time_demand_type_ref:
+        elif sj.journey_pattern_ref and sj.departure_time and sj.time_demand_type_ref:
             pass
 
         # if there are servicejourneypattern, departure time, waittimes, runtimes they can be expanded
-        elif sj.choice and sj.departure_time and sj.run_times:
+        elif sj.journey_pattern_ref and sj.departure_time and sj.run_times:
             pass
 
         if clean:
@@ -241,7 +241,7 @@ class TimetablePassingTimesProfile:
                         if len(spijps.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern) > 0 and service_journey_pattern is None:
                             service_journey_pattern = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, self.codespace, spijp_hash),
                                                                             version=sj.version,
-                                                                            route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.choice),
+                                                                            route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view),
                                                                             name=MultilingualString(value=spijp_hash),
                                                                             derived_from_object_ref = sj.id,
                                                                             derived_from_version_ref_attribute = sj.version,

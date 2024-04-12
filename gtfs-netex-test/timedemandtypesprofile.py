@@ -62,7 +62,7 @@ class TimeDemandTypesProfile:
     def getTimeDemandTypeHash(tdt: TimeDemandType):
         # TODO: REVIEW and replace with hashlib.sha256 digest!!
         # TODO: Check if the output of this code is the same as inline
-        l = [(x.run_time, x.timing_link_ref.ref) for x in tdt.run_times.journey_run_time] + [(x.wait_time, x.choice.ref) for x in tdt.wait_times.journey_wait_time]
+        l = [(x.run_time, x.timing_link_ref.ref) for x in tdt.run_times.journey_run_time] + [(x.wait_time, x.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref) for x in tdt.wait_times.journey_wait_time]
         return hash(l)
 
     @staticmethod
@@ -99,7 +99,7 @@ class TimeDemandTypesProfile:
                                      id=getId(JourneyWaitTime, self.codespace,
                                               "{:s}-{:d}".format(tdt_hash_hex, (order := order + 1))),
                                      version=self.version.version,
-                                     choice=getRef(ssps.get(x[1]), ScheduledStopPointRef),
+                                     timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref=getRef(ssps.get(x[1]), ScheduledStopPointRef),
                                      wait_time=x[0]) for x in wait_times if x[0].seconds > 0]))
 
             if len(tdt.wait_times.journey_wait_time) == 0:
@@ -113,7 +113,7 @@ class TimeDemandTypesProfile:
         service_journey.time_demand_type_ref = getRef(tdt)
 
     def getTimeDemandTypeByDatedCalls(self, service_journey: ServiceJourney, time_demand_types: Dict[str, TimeDemandType], time_demand_types_hash: Dict[int, str], ssps: Dict[str, ScheduledStopPoint], tls: Dict[str, TimingLink]):
-        dated_calls: List[DatedCall] = sorted(service_journey.calls.choice, key=lambda c: c.order)
+        dated_calls: List[DatedCall] = sorted(service_journey.calls.call, key=lambda c: c.order)
         run_times: List[Tuple[XmlDuration, str,]] = []
         wait_times: List[Tuple[XmlDuration, str,]] = []
 
@@ -148,7 +148,7 @@ class TimeDemandTypesProfile:
 
 
     def getTimeDemandTypeByCalls(self, service_journey: ServiceJourney, time_demand_types: Dict[str, TimeDemandType], time_demand_types_hash: Dict[int, str], ssps: Dict[str, ScheduledStopPoint], tls: Dict[str, TimingLink]):
-        calls: List[Call] = sorted(service_journey.calls.choice, key=lambda c: c.order)
+        calls: List[Call] = sorted(service_journey.calls.call, key=lambda c: c.order)
         run_times: List[Tuple[XmlDuration, str,]] = []
         wait_times: List[Tuple[XmlDuration, str,]] = []
 
@@ -197,7 +197,7 @@ class TimeDemandTypesProfile:
         run_times: List[Tuple[XmlDuration, str,]] = []
         wait_times: List[Tuple[XmlDuration, str,]] = []
 
-        sjp: ServiceJourneyPattern = service_journey_patterns[service_journey.choice.ref]
+        sjp: ServiceJourneyPattern = service_journey_patterns[service_journey.journey_pattern_ref.ref]
         piss = {x.id: x for x in sjp.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern}
 
         for i in range(0, len(pass_times) - 1):
@@ -255,15 +255,15 @@ class TimeDemandTypesProfile:
         if isinstance(pis, StopPointInJourneyPattern):
             return pis.scheduled_stop_point_ref
         elif isinstance(pis, TimingPointInJourneyPattern):
-            return pis.choice_1
+            return pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref
 
         return None
 
     def getServiceJourneyPattern(self, service_journey: ServiceJourney, service_journey_patterns: Dict[str, ServiceJourneyPattern], service_journey_patterns_hash: Dict[int, str],
                                  ssps: Dict[str, ScheduledStopPoint], tls: Dict[str, TimingLink]):
-        if service_journey.choice is not None and service_journey.choice.ref in service_journey_patterns:
+        if service_journey.journey_pattern_ref is not None and service_journey.journey_pattern_ref.ref in service_journey_patterns:
             # TODO zorg er voor dat hier de onwards in ieder geval zijn gezet
-            sjp = service_journey_patterns[service_journey.choice.ref]
+            sjp = service_journey_patterns[service_journey.journey_pattern_ref.ref]
             piss = sjp.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern
             for i in range(0, len(piss) - 1):
                 if isinstance(piss[i], StopPointInJourneyPattern):
@@ -316,8 +316,8 @@ class TimeDemandTypesProfile:
                 piss.append((len(ssps_in_seq) - 1, ssps_in_seq[-1], None))
 
                 id = getId(ServiceJourneyPattern, self.codespace, sjp_hash_hex)
-                if service_journey.choice is not None:
-                    id = service_journey.choice.ref
+                if service_journey.journey_pattern_ref is not None:
+                    id = service_journey.journey_pattern_ref.ref
                 suffix = id.split(':')[-1]
 
                 sjp =  ServiceJourneyPattern(id=id,
@@ -335,7 +335,7 @@ class TimeDemandTypesProfile:
             else:
                 sjp = service_journey_patterns[service_journey_patterns_hash[sjp_hash]]
 
-            service_journey.choice = getRef(sjp)
+            service_journey.journey_pattern_ref = getRef(sjp)
 
     def __init__(self, codespace: Codespace, version: Version):
         self.codespace = codespace

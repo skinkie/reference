@@ -26,7 +26,7 @@ from netex import PublicationDelivery, GeneralFrame, Codespace, DataSource, Tran
     TopographicPlaceView, ScheduledStopPoint, StopAreaRefsRelStructure, PassengerStopAssignment, QuayRef, OperatorView, \
     Version, ServiceJourney, VehicleTypeRef, ServiceJourneyPattern, RouteRef, DeliveryVariantTypeEnumeration, \
     Extensions2, StopPointInJourneyPattern, DestinationDisplayRef, ProjectionsRelStructure, PointProjection, \
-    PointRefStructure
+    PointRefStructure, DirectionType
 from refs import getId, getRef, getFakeRef
 from timedemandtypesprofile import TimeDemandTypesProfile
 
@@ -300,81 +300,81 @@ route_links = [rl_ha, rl_ah, rl_ls, rl_sl]
 
 route_hoam = Route(id=getId(Route, codespace, "HOAM"), version=version.version,
                  distance=Decimal('17000'),
-                 flexible_line_ref_or_line_ref=getRef(line_ha),
-                   direction_type=DirectionTypeEnumeration.OUTBOUND,
+                 line_ref=getRef(line_ha),
+                   direction_type=DirectionType(DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "HOAM-H"), version=version.version, order=1, choice_1=getRef(rp_h), onward_route_link_ref=getRef(rl_ha, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "HOAM-A"), version=version.version, order=2, choice_1=getRef(rp_a)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "HOAM-H"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_h), onward_route_link_ref=getRef(rl_ha, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "HOAM-A"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_a)),
                    ])
                    )
 
 route_amho = Route(id=getId(Route, codespace, "AMHO"), version=version.version,
                  distance=Decimal('17000'),
-                 flexible_line_ref_or_line_ref=getRef(line_ha),
-                   direction_type=DirectionTypeEnumeration.INBOUND,
+                 line_ref=getRef(line_ha),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "AMHO-A"), version=version.version, order=1, choice_1=getRef(rp_a), onward_route_link_ref=getRef(rl_ah, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "AMHO-H"), version=version.version, order=2, choice_1=getRef(rp_h)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "AMHO-A"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_a), onward_route_link_ref=getRef(rl_ah, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "AMHO-H"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_h)),
                    ])
                    )
 
 route_lasc = Route(id=getId(Route, codespace, "LASC"), version=version.version,
                  distance=Decimal('12000'),
-                 flexible_line_ref_or_line_ref=getRef(line_ls),
-                   direction_type=DirectionTypeEnumeration.OUTBOUND,
+                 line_ref=getRef(line_ls),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "LASC-L"), version=version.version, order=1, choice_1=getRef(rp_l), onward_route_link_ref=getRef(rl_ls, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "LASC-S"), version=version.version, order=2, choice_1=getRef(rp_s)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "LASC-L"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_l), onward_route_link_ref=getRef(rl_ls, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "LASC-S"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_s)),
                    ])
                    )
 
 route_scla = Route(id=getId(Route, codespace, "SCLA"), version=version.version,
                  distance=Decimal('12000'),
-                 flexible_line_ref_or_line_ref=getRef(line_ls),
+                 line_ref=getRef(line_ls),
                    direction_type=DirectionTypeEnumeration.INBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SCLA-S"), version=version.version, order=1, choice_1=getRef(rp_s), onward_route_link_ref=getRef(rl_sl, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SCLA-L"), version=version.version, order=2, choice_1=getRef(rp_l)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SCLA-S"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_s), onward_route_link_ref=getRef(rl_sl, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SCLA-L"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_l)),
                    ])
                    )
 
 route_shsa = Route(id=getId(Route, codespace, "SHSA"), version=version.version,
                  distance=Decimal('17000'),
-                 flexible_line_ref_or_line_ref=getRef(line_shsa),
+                 line_ref=getRef(line_shsa),
                    direction_type=DirectionTypeEnumeration.OUTBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SHSA-H"), version=version.version, order=1, choice_1=getRef(rp_h), onward_route_link_ref=getRef(rl_ha, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SHSA-A"), version=version.version, order=2, choice_1=getRef(rp_a)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SHSA-H"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_h), onward_route_link_ref=getRef(rl_ha, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SHSA-A"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_a)),
                    ])
                    )
 
 route_sash = Route(id=getId(Route, codespace, "SASH"), version=version.version,
                  distance=Decimal('17000'),
-                 flexible_line_ref_or_line_ref=getRef(line_shsa),
+                 line_ref=getRef(line_shsa),
                    direction_type=DirectionTypeEnumeration.INBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SASH-H"), version=version.version, order=1, choice_1=getRef(rp_a), onward_route_link_ref=getRef(rl_ah, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SASH-A"), version=version.version, order=2, choice_1=getRef(rp_h)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SASH-H"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_a), onward_route_link_ref=getRef(rl_ah, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SASH-A"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_h)),
                    ])
                    )
 
 route_slss = Route(id=getId(Route, codespace, "SLSS"), version=version.version,
                  distance=Decimal('12000'),
-                 flexible_line_ref_or_line_ref=getRef(line_slss),
+                 line_ref=getRef(line_slss),
                    direction_type=DirectionTypeEnumeration.OUTBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SLSS-L"), version=version.version, order=1, choice_1=getRef(rp_l), onward_route_link_ref=getRef(rl_ls, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SLSS-S"), version=version.version, order=2, choice_1=getRef(rp_s)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SLSS-L"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_l), onward_route_link_ref=getRef(rl_ls, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SLSS-S"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_s)),
                    ])
                    )
 
 route_sssl = Route(id=getId(Route, codespace, "SSSL"), version=version.version,
                  distance=Decimal('12000'),
-                 flexible_line_ref_or_line_ref=getRef(line_slss),
+                 line_ref=getRef(line_slss),
                    direction_type=DirectionTypeEnumeration.INBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SSSL-S"), version=version.version, order=1, choice_1=getRef(rp_s), onward_route_link_ref=getRef(rl_sl, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "SSSL-L"), version=version.version, order=2, choice_1=getRef(rp_l)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SSSL-S"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_s), onward_route_link_ref=getRef(rl_sl, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "SSSL-L"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_l)),
                    ])
                    )
 
@@ -424,7 +424,7 @@ ssps['S'].private_code=PrivateCode(value="29310001", type_value="UserStopCode")
 for ssp in ssps.values():
     rp: RoutePoint = route_points[ssp.id.replace('ScheduledStopPoint', 'RoutePoint')]
     ssp.location = rp.location
-    ssp.projections = ProjectionsRelStructure(choice=[
+    ssp.projections = ProjectionsRelStructure(projection_ref_or_projection=[
         PointProjection(id=ssp.id.replace('ScheduledStopPoint', 'PointProjection'), version=version.version,
                         project_to_point_ref=getRef(rp, PointRefStructure))])
 
@@ -460,13 +460,13 @@ for sj in sjs:
     tdtp.getServiceJourneyPattern(sj, sjps, sjps_hash, ssps, tls)
     tdtp.getTimeDemandType(sj, sjps, tdts, tdts_hash, ssps, tls, None)
     sj.private_code = PrivateCode(type_value="JourneyNumber", value=str(int(str(sj.departure_time).replace(':', ''))))
-    if sj.choice.ref in ('WPD:ServiceJourneyPattern:AMHO', 'WPD:ServiceJourneyPattern:HOAM'):
+    if sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:AMHO', 'WPD:ServiceJourneyPattern:HOAM'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_vieroerd, VehicleTypeRef)
-    elif sj.choice.ref in ('WPD:ServiceJourneyPattern:LASC', 'WPD:ServiceJourneyPattern:SCLA'):
+    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:LASC', 'WPD:ServiceJourneyPattern:SCLA'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_rottummonnik, VehicleTypeRef)
-    elif sj.choice.ref in ('WPD:ServiceJourneyPattern:SASH', 'WPD:ServiceJourneyPattern:SHSA'):
+    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:SASH', 'WPD:ServiceJourneyPattern:SHSA'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_fostaborg, VehicleTypeRef)
-    elif sj.choice.ref in ('WPD:ServiceJourneyPattern:SLSS', 'WPD:ServiceJourneyPattern:SSSL'):
+    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:SLSS', 'WPD:ServiceJourneyPattern:SSSL'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_esonborg, VehicleTypeRef)
 
 def setVariants(dd: DestinationDisplay):
@@ -502,7 +502,7 @@ sjp: ServiceJourneyPattern
 for sjp in sjps.values():
     sjp.route_ref_or_route_view = getFakeRef(sjp.id.replace("ServiceJourneyPattern", "Route"), RouteRef, version.version)
     spijp: StopPointInJourneyPattern = sjp.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[-1]
-    sjp.destination_display_ref_or_destination_display_view = getFakeRef(spijp.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref.ref.replace('ScheduledStopPoint', 'DestinationDisplay'), DestinationDisplayRef, version.version)
+    sjp.destination_display_ref_or_destination_display_view = getFakeRef(spijp.scheduled_stop_point_ref.ref.replace('ScheduledStopPoint', 'DestinationDisplay'), DestinationDisplayRef, version.version)
 
 acp = AvailabilityConditionsProfile(codespace=codespace, version=version)
 service_journeys, availability_conditions = acp.deduplicate(sjs)

@@ -150,8 +150,8 @@ route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
                    line_ref=getRef(line),
                    direction_type=DirectionTypeEnumeration.INBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "DH-TX-DH"), version=version.version, order=1, choice_1=getRef(rp_dh), onward_route_link_ref=getRef(rl_dhtx, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "DH-TX-TX"), version=version.version, order=2, choice_1=getRef(rp_tx)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "DH-TX-DH"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_dh), onward_route_link_ref=getRef(rl_dhtx, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "DH-TX-TX"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_tx)),
                    ])
                    )
 
@@ -160,8 +160,8 @@ route_txdh = Route(id=getId(Route, codespace, "TX-DH"), version=version.version,
                    line_ref=getRef(line),
                    direction_type=DirectionTypeEnumeration.OUTBOUND,
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "TX-DH-TX"), version=version.version, order=1, choice_1=getRef(rp_tx), onward_route_link_ref=getRef(rl_txdh, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "TX-DH-DH"), version=version.version, order=2, choice_1=getRef(rp_dh)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "TX-DH-TX"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_tx), onward_route_link_ref=getRef(rl_txdh, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "TX-DH-DH"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_dh)),
                    ])
                    )
 
