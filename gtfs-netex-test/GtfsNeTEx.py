@@ -694,7 +694,7 @@ class GtfsNeTexProfile(CallsProfile):
                             name=MultilingualString(value=trip_headsigns[i]), front_text=MultilingualString(value=trip_headsigns[i])))
 
                 accessibility_assessment = None
-                if wheelchair_accessibles[i] is not None:
+                if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
                     accessibility_assessment = AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
