@@ -1,6 +1,6 @@
 # Toolkit for NeTEx conversions
 
-Stefan de Konink 
+This repository in a testbed for ideas and development for conversion and visualisation.
 The system provides different transformations between NeTEx profiles and from and to GTFS.
 It is a very generic programmable system.
 
