@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from xsdata.models.datatype import XmlDateTime
 
@@ -17,7 +17,8 @@ from netex import Codespace, VehicleScheduleFrame, Version, ServiceCalendarFrame
     StopAreasInFrameRelStructure, StopAssignmentsInFrameRelStructure, TimingPointsInFrameRelStructure, \
     TimingLinksInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure, \
     CodespacesInFrameRelStructure, CodespacesRelStructure, TransportAdministrativeZone, ZonesInFrameRelStructure, \
-    NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, ServiceJourney
+    NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, ServiceJourney, \
+    Authority, Operator, ParticipantRef
 from refs import getId, getRef
 
 
@@ -29,7 +30,7 @@ class DutchProfile:
     def getResourceFrames(self, id: str = "ResourceFrame",
                          data_sources: List[DataSource]=None,
                          responsibility_sets: List[ResponsibilitySet]=None,
-                         organisations: List[object]=None,
+                         organisations: List[Union[Authority, Operator]]=None,
                          operational_contexts: List[OperationalContext]=None,
                          vehicle_types: List[VehicleType]=None,
                          zones: List[TransportAdministrativeZone]=None) -> List[ResourceFrame]:
@@ -266,7 +267,7 @@ class DutchProfile:
     def getPublicationDelivery(self, composite_frame: CompositeFrame, description: str):
         publication_delivery = PublicationDelivery(
             publication_timestamp=XmlDateTime.now(),
-            participant_ref="NDOV",
+            participant_ref=ParticipantRef(value="NDOV"),
             description=MultilingualString(value=description),
             data_objects=DataObjectsRelStructure(choice=[composite_frame]),
             version="ntx:1.1",

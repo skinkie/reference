@@ -414,7 +414,7 @@ class GtfsNeTexProfile(CallsProfile):
                         prev_route.append(route)
 
                 for route in prev_route:
-                    point_on_route = PointOnRoute(id=getId(PointOnRoute, self.codespace, "{}-{}".format(route_id, shape_pt_sequences[i])), version=self.version.version, order=prev_order, choice_1=getRef(route_point, RoutePointRef)) # shape_pt_sequence is non-negative integer
+                    point_on_route = PointOnRoute(id=getId(PointOnRoute, self.codespace, "{}-{}".format(route_id, shape_pt_sequences[i])), version=self.version.version, order=prev_order, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(route_point, RoutePointRef)) # shape_pt_sequence is non-negative integer
                     route.points_in_sequence.point_on_route.append(point_on_route)
 
                 prev_shape_id = shape_ids[i]
@@ -733,7 +733,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 service_journey = ServiceJourney(id=getId(ServiceJourney, self.codespace, trip_ids[i]),
                                                  version=self.version.version,
-                                                 choice=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
+                                                 flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
                                                  private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None])],
@@ -814,7 +814,7 @@ class GtfsNeTexProfile(CallsProfile):
     def getTimetableFrame(self, availability_conditions, service_journeys, id="TimetableFrame") -> TimetableFrame:
         timetable_frame = TimetableFrame(id=getId(TimetableFrame, self.codespace, id), version=self.version.version)
 
-        timetable_frame.vehicle_journeys = JourneysInFrameRelStructure(choice=service_journeys)
+        timetable_frame.vehicle_journeys = JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journeys)
         timetable_frame.content_validity_conditions = ValidityConditionsRelStructure(choice=availability_conditions)
 
         return timetable_frame

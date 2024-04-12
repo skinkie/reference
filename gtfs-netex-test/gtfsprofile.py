@@ -1,6 +1,6 @@
 import csv
 import datetime
-from typing import List
+from typing import List, Union
 from pyproj import Transformer
 
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \
@@ -50,7 +50,7 @@ class GtfsProfile:
         return None
 
     @staticmethod
-    def getOptionalPrivateCode(private_code: PrivateCodeStructure | PrivateCode | PublicCodeType):
+    def getOptionalPrivateCode(private_code: Union[PrivateCodeStructure, PrivateCode, PublicCodeType]):
         if private_code is not None:
             return private_code.value
 
@@ -352,7 +352,7 @@ class GtfsProfile:
 
         result = []
         stop = {'stop_id': stop_place.id,
-                'stop_code': GtfsProfile.getOptionalPrivateCode(stop_place.public_code.value),
+                'stop_code': GtfsProfile.getOptionalPrivateCode(stop_place.public_code),
                 'stop_name': GtfsProfile.getOptionalMultilingualString(stop_place.name) or GtfsProfile.getOptionalMultilingualString(stop_place.short_name),
                 'stop_desc': GtfsProfile.getOptionalMultilingualString(stop_place.description),
                 'stop_lat': round(latitude, 7),
@@ -381,7 +381,7 @@ class GtfsProfile:
                     latitude, longitude = quay.centroid.location.latitude, quay.centroid.location.longitude
 
                 stop = {'stop_id': quay.id,
-                        'stop_code': GtfsProfile.getOptionalPrivateCode(quay.public_code.value),
+                        'stop_code': GtfsProfile.getOptionalPrivateCode(quay.public_code),
                         'stop_name': GtfsProfile.getOptionalMultilingualString(quay.name) or GtfsProfile.getOptionalMultilingualString(quay.short_name),
                         'stop_desc': GtfsProfile.getOptionalMultilingualString(quay.description),
                         'stop_lat': round(latitude, 7),

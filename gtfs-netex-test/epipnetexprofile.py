@@ -49,13 +49,13 @@ class EPIPNeTexProfile(TimetablePassingTimesProfile):
                 EPIPNeTexProfile.clean_element(element)
 
         timetable_frame = TimetableFrame(id = "TimetableFrame")
-        timetable_frame.vehicle_journeys = JourneysInFrameRelStructure(choice=self.service_journeys)
+        timetable_frame.vehicle_journeys = JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=self.service_journeys)
         return timetable_frame
 
     @staticmethod
     def clean_line(line: Line):
         if line.operator_ref and line.authority_ref:
-            line.additional_operators = TransportOrganisationRefsRelStructure(operator_ref=[line.operator_ref])
+            line.additional_operators = TransportOrganisationRefsRelStructure(transport_organisation_ref=[line.operator_ref])
             line.operator_ref = None
 
     def getServiceFrame(self, clean=False) -> ServiceFrame:
@@ -84,7 +84,7 @@ class EPIPNeTexProfile(TimetablePassingTimesProfile):
 
         service_frame = ServiceFrame(id = "ServiceFrame")
         service_frame.type_of_frame_ref = TypeOfFrameRef(ref="EPIP:EU_PI_NETWORK")
-        service_frame.lines = LinesInFrameRelStructure(flexible_line_or_line=(self.lines + self.flexible_lines))
+        service_frame.lines = LinesInFrameRelStructure(line=(self.lines + self.flexible_lines))
 
         # TODO service_frame.destination_displays
 
@@ -94,7 +94,7 @@ class EPIPNeTexProfile(TimetablePassingTimesProfile):
         # TODO service_frame.connections =
         # TODO service_frame.stop_assignments =
 
-        service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(choice=self.service_journey_patterns)
+        service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=self.service_journey_patterns)
 
         # Leesbaarheid
         # service_frame.routes = RoutesInFrameRelStructure(route=self.routes)
@@ -115,7 +115,7 @@ class EPIPNeTexProfile(TimetablePassingTimesProfile):
         timetable_frame = self.getTimetableFrame(clean=True)
         service_frame = self.getServiceFrame(clean=True)
 
-        composite_frame.frames = FramesRelStructure(resource_frame=[self.getResourceFrame()], service_frame=[service_frame], timetable_frame=[timetable_frame])
+        composite_frame.frames = FramesRelStructure(common_frame=[self.getResourceFrame()] + [service_frame] + [timetable_frame])
 
         return composite_frame
 

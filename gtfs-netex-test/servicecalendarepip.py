@@ -168,7 +168,7 @@ class ServiceCalendarEPIPFrame:
                 day_type_assignment = DayTypeAssignment(id=acs[0].id.replace('AvailabilityCondition', 'DayTypeAssignment'), version=acs[0].version,
                                                         order=1,
                                                         derived_from_object_ref=acs[0].id, derived_from_version_ref_attribute=acs[0].version,
-                                                        choice=getRef(uic_operating_period, OperatingPeriodRef),
+                                                        uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date=getRef(uic_operating_period, OperatingPeriodRef),
                                                         day_type_ref=getRef(day_type)
                                                         )
                 day_type_assignments.append(day_type_assignment)
@@ -185,7 +185,7 @@ class ServiceCalendarEPIPFrame:
                                version=service_journeys[0].version,
                                from_date=XmlDate.from_date(from_date.date()), to_date=XmlDate.from_date(to_date.date()),
                                day_types=DayTypesRelStructure(day_type_ref_or_day_type=list(day_types.values())),
-                               operating_periods=OperatingPeriodsRelStructure(choice=uic_operating_periods),
+                               operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods),
                                day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments))
 
     def __init__(self, codespace: Codespace):

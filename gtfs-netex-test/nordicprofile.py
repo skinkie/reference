@@ -15,7 +15,7 @@ from netex import Codespace, DataSource, Version, VehicleJourney, TimetableFrame
     ScheduledStopPointsInFrameRelStructure, TimingPointsInFrameRelStructure, TimingLinksInFrameRelStructure, \
     ServiceLinksInFrameRelStructure, StopAssignmentsInFrameRelStructure, Network, GroupsOfLinesInFrameRelStructure, \
     GroupOfLines, OperatingPeriod, OperatingPeriodVersionStructure, UicOperatingPeriod, UicOperatingPeriodRef, \
-    OperatingPeriodRef, RouteLinksInFrameRelStructure, RouteView
+    OperatingPeriodRef, RouteLinksInFrameRelStructure, RouteView, ParticipantRef
 from refs import getRef, getIndex, getId
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 import lxml
@@ -99,14 +99,14 @@ class NordicProfile:
     @staticmethod
     def projectDayTypeAssignmentToDayTypeAssignmentDate(day_type_assignment: DayTypeAssignment, operating_periods: Dict[str, UicOperatingPeriod]) -> List[DayTypeAssignment]:
         result: List[DayTypeAssignment] = []
-        if isinstance(day_type_assignment.choice, OperatingPeriodRef):
-            uic_operating_period: UicOperatingPeriod = operating_periods.get(day_type_assignment.choice.ref)
+        if isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef):
+            uic_operating_period: UicOperatingPeriod = operating_periods.get(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref)
             operational_dates = NordicProfile.getOperationalDates(uic_operating_period)
 
             for i in range(0, len(operational_dates)):
                 day_type_assignment = DayTypeAssignment(id=day_type_assignment.id, version=day_type_assignment.version,
                                   day_type_ref=day_type_assignment.day_type_ref,
-                                  choice=XmlDate.from_date(operational_dates[i]),
+                                  uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date=XmlDate.from_date(operational_dates[i]),
                                   order=(i + 1))
                 result.append(day_type_assignment)
 
@@ -267,7 +267,7 @@ class NordicProfile:
         journey_patterns.clear()
         journey_patterns += list(journey_patterns_index.values())
 
-        return TimetableFrame(id=line.id.replace("Line", "TimetableFrame"), version=self.version.version, vehicle_journeys=JourneysInFrameRelStructure(choice=service_journeys))
+        return TimetableFrame(id=line.id.replace("Line", "TimetableFrame"), version=self.version.version, vehicle_journeys=JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journeys))
 
     def getServiceFrame(self, line: Line, journey_patterns: List[JourneyPattern], routes: List[Route]) -> ServiceFrame:
         if len(routes) == 0:
@@ -289,7 +289,7 @@ class NordicProfile:
     def getLineDelivery(self, line: Line, resource_frame: [ResourceFrame], service_frame: [ServiceFrame], timetable_frame: [TimetableFrame]) -> PublicationDelivery:
         return PublicationDelivery(version="1.08:NO-NeTEx-networktimetable:1.3",
                                    publication_timestamp=XmlDateTime.now(),
-                                   participant_ref="PyNeTExConv",
+                                   participant_ref=ParticipantRef(value="PyNeTExConv"),
                                    description=line.description,
                                    data_objects=DataObjectsRelStructure(choice=resource_frame + service_frame + timetable_frame)
                                    )

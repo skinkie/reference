@@ -23,7 +23,6 @@ class CallsProfile:
         return ArrivalStructure(time=XmlTime(hour=hour, minute=minute, second=second, offset=offset), day_offset=day_offset,
                                 for_alighting=spijp.for_alighting, notice_assignments=spijp.notice_assignments)
 
-    @staticmethod
     def getDuration(duration: XmlDuration) -> int:
         if not duration:
             return 0
@@ -91,7 +90,7 @@ class CallsProfile:
 
         tdt_point: dict[str, JourneyWaitTime] = {}
         if time_demand_type.wait_times:
-            tdt_point = getIndex(time_demand_type.wait_times, 'journey_wait_time.choice.ref')
+            tdt_point = getIndex(time_demand_type.wait_times, 'journey_wait_time.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref')
 
         i = 0
         for lis in service_journey_pattern.links_in_sequence.service_link_in_journey_pattern_or_timing_link_in_journey_pattern:
@@ -142,13 +141,13 @@ class CallsProfile:
                     run_time = tdt_tl[pis.onward_service_link_ref.ref]
 
             elif isinstance(pis, TimingPointInJourneyPattern):
-                if isinstance(pis.choice_1, ScheduledStopPointRef):
+                if isinstance(pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref, ScheduledStopPointRef):
                     spijp = project(pis, StopPointInJourneyPattern)
-                    ssp_ref = pis.choice_1
+                    ssp_ref = pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref
                     spijp.for_alighting = True
                     spijp.for_boarding = True
 
-                wait_time = tdt_point.get(pis.choice_1.ref, None)
+                wait_time = tdt_point.get(pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref, None)
                 if wait_time is not None:
                     wait_time = wait_time.wait_time
 

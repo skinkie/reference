@@ -6,7 +6,7 @@ import datetime
 
 from netex import StopPlace, StatusEnumeration, MultilingualString, AlternativeNamesRelStructure, AlternativeName, \
     Codespace, NameTypeEnumeration, StopTypeEnumeration, SimplePointVersionStructure, LocationStructure2, Extensions2, \
-    QuaysRelStructure, Quay, PrivateCode, InfoLinksRelStructure, InfoLink, TypeOfInfolinkEnumeration, SiteFrame, \
+    QuaysRelStructure, Quay, PrivateCode, InfoLinksRelStructure, InfoLink, SiteFrame, \
     StopPlacesInFrameRelStructure, PublicationDelivery, DataObjectsRelStructure, CompositeFrame, FramesRelStructure, \
     CodespacesRelStructure, AllVehicleModesOfTransportEnumeration
 from refs import getId

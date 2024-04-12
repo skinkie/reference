@@ -19,7 +19,7 @@ from netex import ServiceFrame, ScheduledStopPointsInFrameRelStructure, Schedule
     OperatingPeriodsRelStructure, DayTypeAssignmentsRelStructure, UicOperatingPeriod, DayTypeAssignment, SiteFrame, \
     StopPlacesInFrameRelStructure, StopPlace, StopAssignmentsInFrameRelStructure, ResourceFrame, \
     DataSourcesInFrameRelStructure, DataSource, OrganisationsInFrameRelStructure, CodespacesRelStructure, Codespace, \
-    VersionFrameDefaultsStructure
+    VersionFrameDefaultsStructure, ParticipantRef
 
 ns_map = {None: 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -88,7 +88,7 @@ with (open('/tmp/test.xml', 'w') as f):
 
     timetable_frame = TimetableFrame(id="OPENOV:TimetableFrame:Aggregated", version="1",
                                      type_of_frame_ref=TypeOfFrameRef(ref="epip:EU_PI_TIMETABLE", version_ref="epip:1.0"),
-                                     vehicle_journeys=JourneysInFrameRelStructure(choice=generate_from_duckdb(con, QUERY_VJ))
+                                     vehicle_journeys=JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=generate_from_duckdb(con, QUERY_VJ))
                                      )
 
     from_dates = []
@@ -109,7 +109,7 @@ with (open('/tmp/test.xml', 'w') as f):
                                                                                    from_date=from_date,
                                                                                    to_date=to_date,
                                                                                    day_types=DayTypesRelStructure(day_type_ref_or_day_type=generate_from_duckdb(con, QUERY_DT, DayType)),
-                                                                                   operating_periods=OperatingPeriodsRelStructure(choice=generate_from_duckdb(con, QUERY_UOP, UicOperatingPeriod)),
+                                                                                   operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=generate_from_duckdb(con, QUERY_UOP, UicOperatingPeriod)),
                                                                                    day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=generate_from_duckdb(con, QUERY_DTA, DayTypeAssignment))))
 
     site_frame = SiteFrame(id="OPENOV:SiteFrame:Aggregated", version="1",
@@ -122,7 +122,7 @@ with (open('/tmp/test.xml', 'w') as f):
                                      )
     composite_frame.frames = FramesRelStructure(common_frame=[resource_frame, service_frame, timetable_frame, service_calendar_frame, site_frame])
 
-    publication_delivery = PublicationDelivery(participant_ref="PyNeTExConv",
+    publication_delivery = PublicationDelivery(participant_ref=ParticipantRef(value="PyNeTExConv"),
         publication_timestamp=XmlDateTime.from_datetime(datetime.datetime.now()))
     publication_delivery.version = "ntx:1.1"
     publication_delivery.description = "NeTEx export"

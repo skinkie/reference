@@ -82,16 +82,16 @@ class AvailabilityConditionsProfile:
     def fromEPIPServiceCalendar(self, service_calendars: List[ServiceCalendar], service_journeys: List[ServiceJourney]) -> (List[AvailabilityCondition], List[ServiceJourney]):
         day_type_to_ac = {}
         for service_calendar in service_calendars:
-            if isinstance(service_calendar.operating_periods.choice[0], UicOperatingPeriod):
-                uic_operating_periods = {x.id : x for x in service_calendar.operating_periods.choice if isinstance(x, UicOperatingPeriod)}
+            if isinstance(service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period[0], UicOperatingPeriod):
+                uic_operating_periods = {x.id : x for x in service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period if isinstance(x, UicOperatingPeriod)}
                 for x in service_calendar.day_type_assignments.day_type_assignment:
-                    if x.choice.name_of_ref_class == "UicOperatingPeriod":
-                        day_type_to_ac[x.fare_day_type_ref_or_day_type_ref.ref] = AvailabilityConditionsProfile.mapUicOperatingPeriodToAvailabilityCondition(uic_operating_periods[x.choice.ref])
+                    if x.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.name_of_ref_class == "UicOperatingPeriod":
+                        day_type_to_ac[x.day_type_ref.ref] = AvailabilityConditionsProfile.mapUicOperatingPeriodToAvailabilityCondition(uic_operating_periods[x.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref])
 
         sjs = []
         for sj in service_journeys:
             sj = copy.deepcopy(sj)
-            sj.validity_conditions_or_valid_between = ValidityConditionsRelStructure(choice=[getRef(day_type_to_ac[sj.day_types.fare_day_type_ref_or_day_type_ref[0].ref])])
+            sj.validity_conditions_or_valid_between = ValidityConditionsRelStructure(choice=[getRef(day_type_to_ac[sj.day_types.day_type_ref[0].ref])])
             sj.day_types = None
             sjs.append(sj)
 

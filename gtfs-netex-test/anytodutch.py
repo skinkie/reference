@@ -93,7 +93,7 @@ def mapPointToRoutePoint(point_ref, ssps: Dict[str, ScheduledStopPoint], tps: Di
     rps[point.id] = rp
     if point.projections is None:
         point.projections = ProjectionsRelStructure(
-            choice=[PointProjection(id=point.id.replace(point.__class__.__name__, 'PointProjection'),
+            projection_ref_or_projection=[PointProjection(id=point.id.replace(point.__class__.__name__, 'PointProjection'),
                                     version=point.version, project_to_point_ref=getRef(rp, PointRefStructure))])
 
     return rp
@@ -110,7 +110,7 @@ def mapPointInJourneyPattern(x, ssps: Dict[str, ScheduledStopPoint],
 
     if isinstance(x, StopPointInJourneyPattern):
         x: StopPointInJourneyPattern = x
-        ssp_ref = x.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref.ref
+        ssp_ref = x.scheduled_stop_point_ref.ref
         rp = rps.get(ssp_ref, None)
         if rp is None:
             rp = mapPointToRoutePoint(ssp_ref, ssps, tls, rps)
@@ -154,14 +154,14 @@ def mapPointInJourneyPattern(x, ssps: Dict[str, ScheduledStopPoint],
 
     elif isinstance(x, TimingPointInJourneyPattern):
         x: TimingPointInJourneyPattern = x
-        tp_ref = x.choice_1.ref
+        tp_ref = x.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref
         rp = rps.get(tp_ref, None)
         if rp is None:
             tp = tps[tp_ref]
             rp: RoutePoint = TimeDemandTypesProfile.getObjectFromObject(tp, RoutePoint, tp.id.replace('TimingPoint', 'RoutePoint'))
             rps[tp_ref] = rp
             if tp.projections is None:
-                tp.projections = ProjectionsRelStructure(choice=[PointProjection(id=tp.id.replace('TimingPoint', 'PointProjection'), version=tp.version, project_to_point_ref=getRef(rp, PointRefStructure))])
+                tp.projections = ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=tp.id.replace('TimingPoint', 'PointProjection'), version=tp.version, project_to_point_ref=getRef(rp, PointRefStructure))])
 
         if x.onward_timing_link_ref is not None:
             tl_ref = x.onward_timing_link_ref.ref
@@ -209,7 +209,7 @@ def routeFromServiceJourneyPattern(service_journey_pattern: ServiceJourneyPatter
 import datetime
 from pytz import timezone
 def timeZoneConversion(sj: ServiceJourney, availability_conditions: Dict[str, AvailabilityCondition],  tz_in, tz_out):
-    ac: AvailabilityCondition = availability_conditions[sj.validity_conditions_or_valid_between.choice[0].ref]
+    ac: AvailabilityCondition = availability_conditions[sj.validity_conditions_or_valid_between[0].choice[0].ref]
 
     # establish that the availability condition is not overlapping two transition times
     if hasattr(tz_in, "_utc_transition_times"):

@@ -22,7 +22,8 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     PointsInJourneyPatternRelStructure, StopPointInJourneyPattern, JourneyRunTimesRelStructure, JourneyRunTime, \
     TimingLinkRefStructure, PointRefStructure, RoutePointRefStructure, TimingPointRefStructure, LineString, PosList, \
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
-    ContactStructure, Authority, TypeOfResponsibilityRoleRef, AuthorityRef, OrganisationRefStructure, ServiceJourney
+    ContactStructure, Authority, TypeOfResponsibilityRoleRef, AuthorityRef, OrganisationRefStructure, ServiceJourney, \
+    DirectionType
 import datetime
 
 from refs import getId, getRef, getFakeRef
@@ -407,61 +408,61 @@ route_links = [rl_th, rl_ht, rl_hv, rl_vh, rl_vt, rl_tv]
 
 route_th = Route(id=getId(Route, codespace, "T-H"), version=version.version,
                  distance=Decimal('43000'),
-                 flexible_line_ref_or_line_ref=getRef(line_ht),
-                   direction_type=DirectionTypeEnumeration.INBOUND,
+                 line_ref=getRef(line_ht),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-H-T"), version=version.version, order=1, choice_1=getRef(rp_th), onward_route_link_ref=getRef(rl_th, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-H-H"), version=version.version, order=2, choice_1=getRef(rp_ht)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-H-T"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_th), onward_route_link_ref=getRef(rl_th, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-H-H"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_ht)),
                    ])
                    )
 
 route_ht = Route(id=getId(Route, codespace, "H-T"), version=version.version,
                  distance=Decimal('43000'),
-                 flexible_line_ref_or_line_ref=getRef(line_ht),
-                   direction_type=DirectionTypeEnumeration.OUTBOUND,
+                 line_ref=getRef(line_ht),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-T-H"), version=version.version, order=1, choice_1=getRef(rp_ht), onward_route_link_ref=getRef(rl_ht, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-T-T"), version=version.version, order=2, choice_1=getRef(rp_th)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-T-H"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_ht), onward_route_link_ref=getRef(rl_ht, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-T-T"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_th)),
                    ])
                    )
 
 route_vh = Route(id=getId(Route, codespace, "V-H"), version=version.version,
                  distance=Decimal('43000'),
-                 flexible_line_ref_or_line_ref=getRef(line_hv),
-                   direction_type=DirectionTypeEnumeration.INBOUND,
+                 line_ref=getRef(line_hv),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-H-T"), version=version.version, order=1, choice_1=getRef(rp_v), onward_route_link_ref=getRef(rl_vh, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-H-H"), version=version.version, order=2, choice_1=getRef(rp_hv)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-H-T"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v), onward_route_link_ref=getRef(rl_vh, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-H-H"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_hv)),
                    ])
                    )
 
 route_hv = Route(id=getId(Route, codespace, "H-V"), version=version.version,
                  distance=Decimal('43000'),
-                 flexible_line_ref_or_line_ref=getRef(line_hv),
-                   direction_type=DirectionTypeEnumeration.OUTBOUND,
+                 line_ref=getRef(line_hv),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-V-T"), version=version.version, order=1, choice_1=getRef(rp_hv), onward_route_link_ref=getRef(rl_hv, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-V-H"), version=version.version, order=2, choice_1=getRef(rp_v)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-V-T"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_hv), onward_route_link_ref=getRef(rl_hv, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-V-H"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v)),
                    ])
                    )
 
 route_tv = Route(id=getId(Route, codespace, "T-V"), version=version.version,
                  distance=Decimal('16000'),
-                 flexible_line_ref_or_line_ref=getRef(line_tv),
-                   direction_type=DirectionTypeEnumeration.INBOUND,
+                 line_ref=getRef(line_tv),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-V-T"), version=version.version, order=1, choice_1=getRef(rp_tv), onward_route_link_ref=getRef(rl_tv, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-V-V"), version=version.version, order=2, choice_1=getRef(rp_v)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-V-T"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_tv), onward_route_link_ref=getRef(rl_tv, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-V-V"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v)),
                    ])
                    )
 
 route_vt = Route(id=getId(Route, codespace, "V-T"), version=version.version,
                  distance=Decimal('16000'),
-                 flexible_line_ref_or_line_ref=getRef(line_tv),
-                   direction_type=DirectionTypeEnumeration.OUTBOUND,
+                 line_ref=getRef(line_tv),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-T-V"), version=version.version, order=1, choice_1=getRef(rp_v), onward_route_link_ref=getRef(rl_vt, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-T-T"), version=version.version, order=2, choice_1=getRef(rp_tv)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-T-V"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v), onward_route_link_ref=getRef(rl_vt, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-T-T"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_tv)),
                    ])
                    )
 
@@ -522,7 +523,7 @@ stop_areas=[sa_h, sa_t, sa_v]
 ssp_ht = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "HT"), version=version.version,
                               name=MultilingualString(value="Harlingen"),
                               location=LocationStructure2(pos=Pos(value=[156806, 576728], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "HT"), version=version.version, project_to_point_ref=getRef(rp_ht, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "HT"), version=version.version, project_to_point_ref=getRef(rp_ht, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_h)]),
                               private_code=PrivateCode(value="20670002", type_value="UserStopCode"))
@@ -530,7 +531,7 @@ ssp_ht = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "HT"), versi
 ssp_hv = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "HV"), version=version.version,
                               name=MultilingualString(value="Harlingen"),
                               location=LocationStructure2(pos=Pos(value=[156671, 576646], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "HV"), version=version.version, project_to_point_ref=getRef(rp_hv, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "HV"), version=version.version, project_to_point_ref=getRef(rp_hv, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_h)]),
                               private_code=PrivateCode(value="20670003", type_value="UserStopCode"))
@@ -538,7 +539,7 @@ ssp_hv = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "HV"), versi
 ssp_th = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TH"), version=version.version,
                               name=MultilingualString(value="Terschelling"),
                               location=LocationStructure2(pos=Pos(value=[143673, 596725], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "TH"), version=version.version, project_to_point_ref=getRef(rp_th, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "TH"), version=version.version, project_to_point_ref=getRef(rp_th, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_t)]),
                               private_code=PrivateCode(value="29110001", type_value="UserStopCode"))
@@ -546,7 +547,7 @@ ssp_th = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TH"), versi
 ssp_tv = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TV"), version=version.version,
                               name=MultilingualString(value="Terschelling"),
                               location=LocationStructure2(pos=Pos(value=[143584, 596671], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "TV"), version=version.version, project_to_point_ref=getRef(rp_tv, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "TV"), version=version.version, project_to_point_ref=getRef(rp_tv, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_t)]),
                               private_code=PrivateCode(value="29110003", type_value="UserStopCode"))
@@ -554,7 +555,7 @@ ssp_tv = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TV"), versi
 ssp_v = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "V"), version=version.version,
                               name=MultilingualString(value="Vlieland"),
                               location=LocationStructure2(pos=Pos(value=[134235, 589993], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(choice=[PointProjection(id=getId(PointProjection, codespace, "V"), version=version.version, project_to_point_ref=getRef(rp_v, PointRefStructure))]),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "V"), version=version.version, project_to_point_ref=getRef(rp_v, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_v)]),
                               private_code=PrivateCode(value="29010001", type_value="UserStopCode"))
@@ -632,13 +633,13 @@ sjp_ht = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "HT-TH
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "H-T-H"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_ht),
+                                                                   scheduled_stop_point_ref=getRef(ssp_ht),
                                                                    onward_timing_link_ref=getRef(tl_ht, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "H-T-T"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_th)),
+                                             scheduled_stop_point_ref=getRef(ssp_th)),
                                      ]
                                     )
                                  )
@@ -650,13 +651,13 @@ sjp_th = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "TH-HT
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "T-H-T"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_th),
+                                                                   scheduled_stop_point_ref=getRef(ssp_th),
                                                                    onward_timing_link_ref=getRef(tl_th, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "T-H-H"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_ht)),
+                                             scheduled_stop_point_ref=getRef(ssp_ht)),
                                      ]
                                     )
                                  )
@@ -668,13 +669,13 @@ sjp_hv = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "HV-V"
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "H-V-H"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_hv),
+                                                                   scheduled_stop_point_ref=getRef(ssp_hv),
                                                                    onward_timing_link_ref=getRef(tl_hv, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "H-V-V"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_v)),
+                                             scheduled_stop_point_ref=getRef(ssp_v)),
                                      ]
                                     )
                                  )
@@ -686,13 +687,13 @@ sjp_vh = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "V-HV"
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "V-H-V"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_v),
+                                                                   scheduled_stop_point_ref=getRef(ssp_v),
                                                                    onward_timing_link_ref=getRef(tl_vh, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "V-H-H"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_hv)),
+                                             scheduled_stop_point_ref=getRef(ssp_hv)),
                                      ]
                                     )
                                  )
@@ -704,13 +705,13 @@ sjp_vt = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "V-TV"
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "V-T-H"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_v),
+                                                                   scheduled_stop_point_ref=getRef(ssp_v),
                                                                    onward_timing_link_ref=getRef(tl_vt, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "V-T-T"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_tv)),
+                                             scheduled_stop_point_ref=getRef(ssp_tv)),
                                      ]
                                     )
                                  )
@@ -722,13 +723,13 @@ sjp_tv = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "TV-V"
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
                                          StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "T-V-T"), version=version.version, order=1,
-                                                                   fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_tv),
+                                                                   scheduled_stop_point_ref=getRef(ssp_tv),
                                                                    onward_timing_link_ref=getRef(tl_tv, TimingLinkRefStructure),
                                                                    is_wait_point=True),
                                          StopPointInJourneyPattern(
                                              id=getId(StopPointInJourneyPattern, codespace, "T-V-V"),
                                              version=version.version, order=2,
-                                             fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref=getRef(ssp_v)),
+                                             scheduled_stop_point_ref=getRef(ssp_v)),
                                      ]
                                     )
                                  )

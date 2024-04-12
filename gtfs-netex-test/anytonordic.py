@@ -211,7 +211,7 @@ def conversion(input_filename: str, output_filename: str):
         CleanupProfile.firstAndLastStop(journey_pattern)
 
     for line in lines:
-        these_service_journeys = [service_journey for service_journey in service_journeys if service_journey.choice.ref == line.id]
+        these_service_journeys = [service_journey for service_journey in service_journeys if service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view.ref == line.id]
         # timetabledpassingtimesprofile = TimetablePassingTimesProfile(self.codespace, self.version, service_journeys, service_journey_patterns)
         # timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
 
