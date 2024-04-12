@@ -1,0 +1,8 @@
+*.txt
+**/.idea
+**/__pycache__/
+gtfs2.duckdb
+**/venv
+
+
+

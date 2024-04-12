@@ -7,3 +7,4 @@ websockets
 xsdata[cli,lxml,soap]
 duckdb
 openapi-python-client
+numpy
