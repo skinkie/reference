@@ -1,0 +1,10 @@
+
+gtfs-netex-test/tmp/timetable4.xml
+gtfs-netex-test/tmp/timetable4.json
+gtfs-netex-test/gtfs2.duckdb.wal
+*.pyc
+gtfs-netex-test/gtfs2.duckdb
+gtfs-netex-test/.idea/workspace.xml
+gtfs-netex-test/.idea/inspectionProfiles/Project_Default.xml
+gtfs-netex-test/.idea/inspectionProfiles/profiles_settings.xml
+gtfs-netex-test/.idea/gtfs-netex-test.iml

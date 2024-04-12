@@ -1,3 +1,5 @@
 xsdata[cli,lxml,soap]
 duckdb
 pyproj
+pip install chardet[universaldetector]
+numpy
