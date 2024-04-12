@@ -87,29 +87,45 @@ def detectencoding(filename):
     return detector.result
 
 def handle_file(filename: str, column_mapping: dict):
-    if not os.path.isfile(filename):
-        # TODO create sql for mandatory files
-        return
-    encoding=detectencoding(filename)
-    if (encoding["encoding"] != "utf-8" and encoding["encoding"] != "UTF-8-SIG"):
-        print("encoding "+encoding["encoding"]+" problematic for " + filename)
-    with open(filename, 'r', encoding=encoding["encoding"]) as f:
-        reader = csv.reader(f)
-        header = next(reader)
 
-    this_mapping = {}
-    for column in header:
-        #clean column name
-        column= re.sub('[^A-z0-9 -_]', '', column)
-        this_mapping[column] = column_mapping.get(column, 'VARCHAR')
-
-    table = filename.split('/')[-1].replace('.txt', '')
-    this_mapping_str = json.dumps(this_mapping)
     con = duckdb.connect(database='gtfs2.duckdb')
-    with duckdb.cursor(con) as cur:
-        cur.execute(f"""DROP TABLE IF EXISTS {table};""")
-        cur.execute(f"""CREATE TABLE {table} AS SELECT * FROM read_csv('{filename}', delim=',', header=true, auto_detect=true, columns = {this_mapping_str});""")
 
+    if not os.path.isfile(filename):
+        table = filename.split('/')[-1].replace('.txt', '')
+        templatefilename="gtfs_template/"
+        if table in ["feed_info","stops","routes","agency","calendar","calendar_dates","shapes","stop_times","transfers","trips"]:
+            templatefilename=templatefilename+table+".txt"
+            with open(filename, 'r', encoding="UTF-8-SIG") as f:
+                reader = csv.reader(f)
+                header = next(reader)
+                this_mapping = {}
+                for column in header:
+                    #clean column name
+                    column= re.sub('[^A-z0-9 -_]', '', column)
+                    this_mapping[column] = column_mapping.get(column, 'VARCHAR')
+                    table = filename.split('/')[-1].replace('.txt', '')
+            this_mapping_str = json.dumps(this_mapping)
+            with duckdb.cursor(con) as cur:
+                cur.execute(f"""DROP TABLE IF EXISTS {table};""")
+                cur.execute(
+                    f"""CREATE TABLE {table} AS SELECT * FROM read_csv('{templatefilename}', delim=',', header=true, auto_detect=true, columns = {this_mapping_str});""")
+    else:
+        encoding=detectencoding(filename)
+        if (encoding["encoding"] != "utf-8" and encoding["encoding"] != "UTF-8-SIG"):
+            print("encoding "+encoding["encoding"]+" problematic for " + filename)
+        with open(filename, 'r', encoding=encoding["encoding"]) as f:
+            reader = csv.reader(f)
+            header = next(reader)
+            this_mapping = {}
+            for column in header:
+                #clean column name
+                column= re.sub('[^A-z0-9 -_]', '', column)
+                this_mapping[column] = column_mapping.get(column, 'VARCHAR')
+                table = filename.split('/')[-1].replace('.txt', '')
+        this_mapping_str = json.dumps(this_mapping)
+        with duckdb.cursor(con) as cur:
+            cur.execute(f"""DROP TABLE IF EXISTS {table};""")
+            cur.execute(f"""CREATE TABLE {table} AS SELECT * FROM read_csv('{filename}', delim=',', header=true, auto_detect=true, columns = {this_mapping_str});""")
     con.close()
 
 handle_file('gtfs/feed_info.txt', column_mapping)
