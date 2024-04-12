@@ -284,11 +284,11 @@ class GtfsNeTexProfile(CallsProfile):
 
                 location = LocationStructure2(longitude=get_or_none(stop_lons, i), latitude=get_or_none(stop_lats, i), srs_name="EPSG:4326")
 
-                stop_areas = None
+                my_stop_areas = None
                 parent_station = get_or_none(parent_stations, i)
                 if parent_station is not None:
                     stop_area_ref = getId(StopArea, self.codespace, parent_station)
-                    stop_areas = StopAreaRefsRelStructure(stop_area_ref=[
+                    my_stop_areas = StopAreaRefsRelStructure(stop_area_ref=[
                         getRef(stop_areas[stop_area_ref], StopAreaRefStructure)])
 
 
@@ -301,7 +301,7 @@ class GtfsNeTexProfile(CallsProfile):
                                                           public_code=get_or_none(stop_codes, i),
                                                           url=get_or_none(stop_urls, i),
                                                           location=location,
-                                                          stop_areas=stop_areas)
+                                                          stop_areas=my_stop_areas)
                 scheduled_stop_points.append(scheduled_stop_point)
 
                 """
@@ -849,8 +849,8 @@ class GtfsNeTexProfile(CallsProfile):
         for line in self.lines:
             with open('netex-output/{}.xml'.format(line.id.replace(':', '_')), 'w') as out:
                 operators = self.getOperators({'query': """select distinct agency.* from agency join routes using (agency_id) where route_id = ? ;""", 'parameters': (line.private_code.value,)})
-                stop_areas = self.getStopAreas({'query': """select distinct stops.* from trips join stop_times using (trip_id) join stops using (stop_id) where location_type = 1 and route_id = ? order by stop_id;""", 'parameters': (line.private_code.value,)})
-                scheduled_stop_points = self.getScheduledStopPoints(stop_areas, {'query': """select distinct stops.* from trips join stop_times using (trip_id) join stops using (stop_id) where location_type = 0 or location_type is null and route_id = ? order by stop_id;""", 'parameters': (line.private_code.value,)})
+                stop_areas = self.getStopAreas({'query': """select stops.* from stops where stop_id in (select distinct stops.parent_station from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and parent_station is not null and route_id = ?) order by stop_id;""", 'parameters': (line.private_code.value,)})
+                scheduled_stop_points = self.getScheduledStopPoints(stop_areas, {'query': """select distinct stops.* from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and route_id = ? order by stop_id;""", 'parameters': (line.private_code.value,)})
                 availability_conditions = self.getAvailabilityConditions(availability_condition_sql = {
                     'query': """select distinct calendar.* from trips join calendar using (service_id) where route_id = ? order by service_id;""", 'parameters': (line.private_code.value,)}, exceptions_sql = {
                     'query': """select service_id, exception_type, array_agg(date order by date) as dates from (select calendar_dates.* from trips join calendar_dates using (service_id) where route_id = ?) as x group by service_id, exception_type;""", 'parameters': (line.private_code.value,)})

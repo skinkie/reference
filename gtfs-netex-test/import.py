@@ -110,16 +110,17 @@ def handle_file(filename: str, column_mapping: dict):
 
     con.close()
 
-handle_file('gtfs/feed_info.txt', column_mapping)
-handle_file('gtfs/agency.txt', column_mapping)
-handle_file('gtfs/calendar_dates.txt', column_mapping)
-handle_file('gtfs/calendar.txt', column_mapping)
-handle_file('gtfs/routes.txt', column_mapping)
-handle_file('gtfs/stops.txt', column_mapping)
-handle_file('gtfs/shapes.txt', column_mapping)
-handle_file('gtfs/trips.txt', column_mapping)
-handle_file('gtfs/transfers.txt', column_mapping)
-handle_file('gtfs/stop_times.txt', column_mapping)
+base_path = '/mnt/storage/compressed/'
+handle_file(base_path + 'gtfs/feed_info.txt', column_mapping)
+handle_file(base_path + 'gtfs/agency.txt', column_mapping)
+handle_file(base_path + 'gtfs/calendar_dates.txt', column_mapping)
+handle_file(base_path + 'gtfs/calendar.txt', column_mapping)
+handle_file(base_path + 'gtfs/routes.txt', column_mapping)
+handle_file(base_path + 'gtfs/stops.txt', column_mapping)
+handle_file(base_path + 'gtfs/shapes.txt', column_mapping)
+handle_file(base_path + 'gtfs/trips.txt', column_mapping)
+handle_file(base_path + 'gtfs/transfers.txt', column_mapping)
+handle_file(base_path + 'gtfs/stop_times.txt', column_mapping)
 
 #    cur.execute("""ALTER TABLE shapes ADD COLUMN shape_dist_traveled FLOAT;""")
 
