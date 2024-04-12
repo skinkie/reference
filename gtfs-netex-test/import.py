@@ -1,6 +1,9 @@
 import duckdb
 import csv
-
+from chardet.universaldetector import UniversalDetector
+import os
+import json
+import re
 
 # Example usage
 column_mapping = {
@@ -73,19 +76,31 @@ column_mapping = {
     'is_authority': 'INTEGER'
 }
 
-import os
-import json
+
+def detectencoding(filename):
+    detector = UniversalDetector()
+    for line in open(filename, 'rb'):
+        detector.feed(line)
+        if detector.done:
+            break
+    detector.close()
+    return detector.result
+
 def handle_file(filename: str, column_mapping: dict):
     if not os.path.isfile(filename):
         # TODO create sql for mandatory files
         return
-
-    with open(filename, 'r') as f:
+    encoding=detectencoding(filename)
+    if (encoding["encoding"] != "utf-8" and encoding["encoding"] != "UTF-8-SIG"):
+        print("encoding "+encoding["encoding"]+" problematic for " + filename)
+    with open(filename, 'r', encoding=encoding["encoding"]) as f:
         reader = csv.reader(f)
         header = next(reader)
 
     this_mapping = {}
     for column in header:
+        #clean column name
+        column= re.sub('[^A-z0-9 -_]', '', column)
         this_mapping[column] = column_mapping.get(column, 'VARCHAR')
 
     table = filename.split('/')[-1].replace('.txt', '')
