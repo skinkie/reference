@@ -208,7 +208,7 @@ class GtfsNeTexProfile(CallsProfile):
                             transport_mode=self.gtfsToNeTEx(get_or_none(route_types, i)),
                             presentation=presentation,
                             url=get_or_none(route_urls, i),
-                            authority_ref_or_operator_ref=operator_ref,
+                            authority_ref=operator_ref,
                             public_code=get_or_none(route_short_names, i),
                             private_code=PrivateCode(value=get_or_none(route_ids, i), type_value="route_id")
                             )
