@@ -75,14 +75,26 @@ column_mapping = {
 
 import os
 import json
+from chardet.universaldetector import UniversalDetector
+
+
 def handle_file(filename: str, column_mapping: dict):
     if not os.path.isfile(filename):
         # TODO create sql for mandatory files
         return
 
-    with open(filename, 'r') as f:
+    detector = UniversalDetector()
+    for line in open(filename, 'rb'):
+        detector.feed(line)
+        if detector.done: break
+    detector.close()
+
+    with open(filename, mode='r', encoding=detector.result['encoding']) as f:
         reader = csv.reader(f)
         header = next(reader)
+
+    if detector.result['encoding'] not in ('UTF-8', 'UTF-8-SIG,', 'ascii'):
+        print(f"DuckDB does not support anything else than UTF-8, must convert {detector.result['encoding']}. TODO")
 
     this_mapping = {}
     for column in header:
@@ -91,6 +103,7 @@ def handle_file(filename: str, column_mapping: dict):
     table = filename.split('/')[-1].replace('.txt', '')
     this_mapping_str = json.dumps(this_mapping)
     con = duckdb.connect(database='gtfs2.duckdb')
+
     with duckdb.cursor(con) as cur:
         cur.execute(f"""DROP TABLE IF EXISTS {table};""")
         cur.execute(f"""CREATE TABLE {table} AS SELECT * FROM read_csv('{filename}', delim=',', header=true, auto_detect=true, columns = {this_mapping_str});""")

@@ -892,7 +892,5 @@ if __name__ == '__main__':
     serializer_config.ignore_default_attributes = True
     serializer = XmlSerializer(config=serializer_config)
 
-
-
     gtfs = GtfsNeTexProfile(conn=duckdb.connect(database='gtfs2.duckdb', read_only=True), serializer=serializer, full=False)
 
