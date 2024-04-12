@@ -10,7 +10,7 @@ ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/
 serializer_config = SerializerConfig(ignore_default_attributes=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
-serializer = XmlSerializer(serializer_config)
+serializer = XmlSerializer(config=serializer_config)
 
 print(serializer.render(spijp, ns_map))
 

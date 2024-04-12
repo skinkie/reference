@@ -21,7 +21,7 @@ def conversion(input_filename: str, output_filename: str):
     serializer_config = SerializerConfig(ignore_default_attributes=True)
     serializer_config.pretty_print = True
     serializer_config.ignore_default_attributes = True
-    serializer = XmlSerializer(serializer_config)
+    serializer = XmlSerializer(config=serializer_config)
 
     context = XmlContext()
     config = ParserConfig(fail_on_unknown_properties=False)

@@ -331,7 +331,7 @@ publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=compo
 serializer_config = SerializerConfig(ignore_default_attributes=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
-serializer = XmlSerializer(serializer_config)
+serializer = XmlSerializer(config=serializer_config)
 
 with open('netex-output/teso.xml', 'w') as out:
     serializer.write(out, publication_delivery, ns_map)
