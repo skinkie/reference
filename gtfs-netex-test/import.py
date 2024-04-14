@@ -76,7 +76,18 @@ column_mapping = {
     'is_authority': 'INTEGER'
 }
 
-
+# columns needed to build empty files in the database
+gtfs_file_template={}
+gtfs_file_template['agency']=['agency_id','agency_name','agency_url','agency_timezone','agency_lang','agency_phone']
+gtfs_file_template['calendar']=['service_id','monday','tuesday','wednesday','thursday','friday','saturday','sunday','start_date','end_date']
+gtfs_file_template['calendar_dates']=['service_id','date','exception_type']
+gtfs_file_template['feed_info']=['feed_publisher_name','feed_publisher_url','feed_lang','feed_start_date','feed_end_date','feed_version']
+gtfs_file_template['routes']=['route_id','agency_id','route_short_name','route_long_name','route_desc','route_type']
+gtfs_file_template['shapes']=['shapeid','shape_pt_lat','shape_pt_lon','shape_pt_sequence']
+gtfs_file_template['stop_times']=['trip_id','arrival_time','departure_time','stop_id','stop_sequence','pickup_typ','drop_off_type']
+gtfs_file_template['stops']=['stop_id','stop_name','stop_lat','stop_lon','location_type','parent_station']
+gtfs_file_template['transfers']=['from_stop_id','to_stop_id','transfer_type','min_transfer_time']
+gtfs_file_template['trips']=['route_id','service_id','trip_id','trip_headsign','trip_short_name','direction_id','block_id']
 def detectencoding(filename):
     detector = UniversalDetector()
     for line in open(filename, 'rb'):
@@ -92,23 +103,29 @@ def handle_file(filename: str, column_mapping: dict):
 
     if not os.path.isfile(filename):
         table = filename.split('/')[-1].replace('.txt', '')
-        templatefilename="gtfs_template/"
         if table in ["feed_info","stops","routes","agency","calendar","calendar_dates","shapes","stop_times","transfers","trips"]:
-            templatefilename=templatefilename+table+".txt"
-            with open(filename, 'r', encoding="UTF-8-SIG") as f:
-                reader = csv.reader(f)
-                header = next(reader)
-                this_mapping = {}
-                for column in header:
-                    #clean column name
-                    column= re.sub('[^A-z0-9 -_]', '', column)
-                    this_mapping[column] = column_mapping.get(column, 'VARCHAR')
-                    table = filename.split('/')[-1].replace('.txt', '')
-            this_mapping_str = json.dumps(this_mapping)
+            this_mapping = {}
+            columns = gtfs_file_template[table]
+            print ("generating a table from scratch for: "+table)
+            for column in columns:
+                #clean column name
+                column= re.sub('[^A-z0-9 -_]', '', column)
+                this_mapping[column] = column_mapping.get(column, 'VARCHAR')
+            table = filename.split('/')[-1].replace('.txt', '')
+            # this_mapping_str = json.dumps(this_mapping)
             with duckdb.cursor(con) as cur:
                 cur.execute(f"""DROP TABLE IF EXISTS {table};""")
+                columns=''
+                for col in gtfs_file_template[table]:
+                    columns+=col + " "+ column_mapping.get(col,'VARCHAR')+", "
+                # remove ", " from the end
+                columns.rstrip()
+                columns.rstrip(',')
                 cur.execute(
-                    f"""CREATE TABLE {table} AS SELECT * FROM read_csv('{templatefilename}', delim=',', header=true, auto_detect=true, columns = {this_mapping_str});""")
+                    f"""CREATE TABLE {table} ({columns});""")
+                #special treatment for feed_info. we inject a line
+                if table == "feed_info":
+                     cur.execute(f"""INSERT INTO feed_info VALUES ('unknown','http://unknown.unknown','EN','20231210','20241214','20240402')""")
     else:
         encoding=detectencoding(filename)
         if (encoding["encoding"] != "utf-8" and encoding["encoding"] != "UTF-8-SIG"):
