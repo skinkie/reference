@@ -26,7 +26,7 @@ from netex import PublicationDelivery, GeneralFrame, Codespace, DataSource, Tran
     TopographicPlaceView, ScheduledStopPoint, StopAreaRefsRelStructure, PassengerStopAssignment, QuayRef, OperatorView, \
     Version, ServiceJourney, VehicleTypeRef, ServiceJourneyPattern, RouteRef, DeliveryVariantTypeEnumeration, \
     Extensions2, StopPointInJourneyPattern, DestinationDisplayRef, ProjectionsRelStructure, PointProjection, \
-    PointRefStructure, DirectionType
+    PointRefStructure, DirectionType, TransportTypeVersionStructure
 from refs import getId, getRef, getFakeRef
 from timedemandtypesprofile import TimeDemandTypesProfile
 
@@ -45,7 +45,7 @@ version: Version = general_frame.versions.version_ref_or_version[0]
 short_name = "WPD"
 
 dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
-                      xmlns_url="http://bison.dova.nu/ns/DOVA", description="'Centrale' lijsten bijgehouden door DOVA")
+                      xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
 data_source = [x for x in general_frame.members.choice if isinstance(x, DataSource)][0]
 
@@ -90,10 +90,10 @@ operational_context = OperationalContext(id=getId(OperationalContext, codespace,
 vehicle_type_vieroerd = VehicleType(id=getId(VehicleType, codespace, "SIEROERD"), version=version.version,
                            name=MultilingualString(value="Sier en Oerd"),
                            description=MultilingualString(value="Sier en Oerd"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "SIEROERD"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=1200)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "SIEROERD"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=1200)]),
                            length=Decimal(value='73.20'), width=Decimal(value='15.90'), height=Decimal(value='5.65'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=True,

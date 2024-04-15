@@ -27,6 +27,7 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
     TransportTypeVersionStructure, PublicCodeType
 import datetime
+import gzip
 
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
@@ -324,17 +325,23 @@ composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], version
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste WSF export")
 
-serializer_config = SerializerConfig(ignore_default_attributes=True)
+serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
-with open('netex-output/wsf.xml', 'w') as out:
+with open('netex-output/wsf.xml', 'w', encoding='utf-8') as out:
     serializer.write(out, publication_delivery, ns_map)
 
+import gzip
+with open('netex-output/wsf.xml', 'rb') as f_in, gzip.open(f"/tmp/NeTEx_WSF_WSF_{from_date}_{from_date}.xml.gz", 'wb') as f_out:
+    f_out.writelines(f_in)
+
+"""
 parser = lxml.etree.XMLParser(remove_blank_text=True)
 tree = lxml.etree.parse("netex-output/wsf.xml", parser=parser)
 for element in tree.iterfind(".//*"):
     if element.text is None and len(element) == 0 and len(element.attrib.keys()) == 0:
         element.getparent().remove(element)
-tree.write("netex-output/wsf-filter.xml", pretty_print=True, strip_text=True)
+tree.write(f"/tmp/NeTEx_WSF_{from_date}_{from_date}.xml", pretty_print=True, strip_text=True)
+"""
