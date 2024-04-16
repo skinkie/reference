@@ -842,12 +842,12 @@ class GtfsNeTexProfile(CallsProfile):
 
     def full(self):
         self.service_journeys = self.getServiceJourneys()
-        with open('netex-output/out.xml', 'w') as out:
+        with open('netex-output/out.xml', 'w',encoding="utf-8") as out:
             self.serializer.write(out, gtfs.getPublicationDelivery(), self.ns_map)
 
     def incremental(self):
         for line in self.lines:
-            with open('netex-output/{}.xml'.format(line.id.replace(':', '_')), 'w') as out:
+            with open('netex-output/{}.xml'.format(line.id.replace(':', '_')), 'w',encoding="utf-8") as out:
                 operators = self.getOperators({'query': """select distinct agency.* from agency join routes using (agency_id) where route_id = ? ;""", 'parameters': (line.private_code.value,)})
                 stop_areas = self.getStopAreas({'query': """select stops.* from stops where stop_id in (select distinct stops.parent_station from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and parent_station is not null and route_id = ?) order by stop_id;""", 'parameters': (line.private_code.value,)})
                 scheduled_stop_points = self.getScheduledStopPoints(stop_areas, {'query': """select distinct stops.* from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and route_id = ? order by stop_id;""", 'parameters': (line.private_code.value,)})
