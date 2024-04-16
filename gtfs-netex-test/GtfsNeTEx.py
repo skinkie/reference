@@ -1,4 +1,5 @@
 import datetime
+import locale
 import math
 from _decimal import Decimal
 from typing import List
@@ -891,8 +892,6 @@ if __name__ == '__main__':
     serializer_config.pretty_print = True
     serializer_config.ignore_default_attributes = True
     serializer = XmlSerializer(config=serializer_config)
-
-
 
     gtfs = GtfsNeTexProfile(conn=duckdb.connect(database='gtfs2.duckdb', read_only=True), serializer=serializer, full=False)
 
