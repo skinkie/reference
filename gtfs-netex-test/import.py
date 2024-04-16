@@ -82,7 +82,7 @@ def handle_file(filename: str, column_mapping: dict):
     if not os.path.isfile(filename):
         # TODO create sql for mandatory files
         return
-
+    print ("processing:"+ filename)
     detector = UniversalDetector()
     for line in open(filename, 'rb'):
         detector.feed(line)
