@@ -424,7 +424,7 @@ class GtfsNeTexProfile(CallsProfile):
 
         return (list(routes.values()), route_points, route_links)
 
-    def getLineStrings(self, shape_sql = {'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence, shape_dist_traveled from shapes order by shape_id, shape_pt_sequence, shape_dist_traveled;"""}) -> List[LinkSequenceProjection]:
+    def getLineStrings(self, shape_sql = {'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence from shapes order by shape_id, shape_pt_sequence;"""}) -> List[LinkSequenceProjection]:
         link_sequence_projection = []
 
         with self.conn.cursor() as cur:
@@ -710,7 +710,7 @@ class GtfsNeTexProfile(CallsProfile):
                     if shape_id in shape_used:
                         lsp = getFakeRef(getId(LinkSequenceProjection, self.codespace, shape_id), LinkSequenceProjectionRef, self.version.version)
                     else:
-                        lsps = self.getLineStrings({'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence, shape_dist_traveled from shapes where shape_id = ? order by shape_id, shape_pt_sequence, shape_dist_traveled;""", 'parameters': (shape_id,)})
+                        lsps = self.getLineStrings({'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence from shapes where shape_id = ? order by shape_id, shape_pt_sequence;""", 'parameters': (shape_id,)})
                         if len(lsps) > 0:
                             lsp = lsps[0]
 
