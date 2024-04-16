@@ -700,8 +700,9 @@ class GtfsNeTexProfile(CallsProfile):
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
 
                 block_ref = None
-                if block_ids[i] is not None:
-                    block_ref = getFakeRef(getId(Block, self.codespace, block_ids[i]), BlockRef, None)
+                if block_ids is not None:
+                    if block_ids[i] is not None:
+                        block_ref = getFakeRef(getId(Block, self.codespace, block_ids[i]), BlockRef, None)
 
                 route_ref = None
                 lsp = None
