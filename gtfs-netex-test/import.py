@@ -93,8 +93,8 @@ def handle_file(filename: str, column_mapping: dict):
         reader = csv.reader(f)
         header = next(reader)
 
-    if detector.result['encoding'] not in ('UTF-8', 'UTF-8-SIG,', 'ascii'):
-        print(f"DuckDB does not support anything else than UTF-8, must convert {detector.result['encoding']}. TODO")
+    if detector.result['encoding'] not in ('utf-8', 'UTF-8-SIG,', 'ascii'):
+        print(f"Error for file {filename} with encoding {detector.result['encoding']}. DuckDB does not support anything else than UTF-8, must convert {detector.result['encoding']}. TODO")
 
     this_mapping = {}
     for column in header:
@@ -110,7 +110,7 @@ def handle_file(filename: str, column_mapping: dict):
 
     con.close()
 
-base_path = '/mnt/storage/compressed/'
+base_path = './'
 handle_file(base_path + 'gtfs/feed_info.txt', column_mapping)
 handle_file(base_path + 'gtfs/agency.txt', column_mapping)
 handle_file(base_path + 'gtfs/calendar_dates.txt', column_mapping)
