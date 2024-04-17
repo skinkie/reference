@@ -1,7 +1,9 @@
 from _decimal import Decimal
 
+import datetime
+import gzip
+
 from xsdata.formats.dataclass.models.generics import AnyElement
-from xsdata.formats.dataclass.parsers.handlers import lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime, XmlDuration
@@ -10,10 +12,10 @@ from dutchprofile import DutchProfile
 from netex import Codespace, Version, VersionTypeEnumeration, DataSource, MultilingualString, ResponsibilitySet, \
     ResponsibilityRoleAssignmentsRelStructure, ResponsibilityRoleAssignment, VersionOfObjectRefStructure, Operator, \
     AllModesEnumeration, OrganisationTypeEnumeration, OperatorActivitiesEnumeration, OperationalContext, \
-    AllVehicleModesOfTransportEnumeration, VehicleType, FuelTypeEnumeration, PassengerCapacityStructure, \
+    AllVehicleModesOfTransportEnumeration, VehicleType, FuelTypeEnumeration, \
     FareClassEnumeration, ServiceFacilitySetsRelStructure, ServiceFacilitySet, MobilityFacilityEnumeration, \
-    SanitaryFacilityEnumeration, PassengerCommsFacilityEnumeration, VehicleAccessFacilityEnumeration, \
-    AssistanceFacilityEnumeration, MealFacilityEnumeration, TransportAdministrativeZone, RoutePoint, RouteLink, Route, \
+    SanitaryFacilityEnumeration, VehicleAccessFacilityEnumeration, \
+    TransportAdministrativeZone, RoutePoint, RouteLink, Route, \
     Line, DestinationDisplay, ScheduledStopPoint, StopArea, PassengerStopAssignment, TimingLink, ServiceJourneyPattern, \
     TimeDemandType, TypeOfServiceRef, AccessibilityAssessment, LimitationStatusEnumeration, LocationStructure2, Pos, \
     DirectionTypeEnumeration, PointsOnRouteRelStructure, PointOnRoute, PrivateCode, \
@@ -21,13 +23,11 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     ProjectionsRelStructure, PointProjection, StopAreaRefsRelStructure, TopographicPlaceView, \
     PointsInJourneyPatternRelStructure, StopPointInJourneyPattern, JourneyRunTimesRelStructure, JourneyRunTime, \
     TimingLinkRefStructure, PointRefStructure, RoutePointRefStructure, TimingPointRefStructure, LineString, PosList, \
-    PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
-    ContactStructure, Authority, TypeOfResponsibilityRoleRef, AuthorityRef, OrganisationRefStructure, ServiceJourney, \
-    AlternativeText, MobilityFacilityList, SanitaryFacilityList, TicketingFacilityList, TicketingFacilityEnumeration, \
+    PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, QuayRef, \
+    ContactStructure, Authority, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ServiceJourney, \
+    MobilityFacilityList, SanitaryFacilityList, \
     TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
     TransportTypeVersionStructure, PublicCodeType
-import datetime
-import gzip
 
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
@@ -333,7 +333,6 @@ serializer = XmlSerializer(config=serializer_config)
 with open('netex-output/wsf.xml', 'w', encoding='utf-8') as out:
     serializer.write(out, publication_delivery, ns_map)
 
-import gzip
 with open('netex-output/wsf.xml', 'rb') as f_in, gzip.open(f"/tmp/NeTEx_WSF_WSF_{from_date}_{from_date}.xml.gz", 'wb') as f_out:
     f_out.writelines(f_in)
 
