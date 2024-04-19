@@ -1,6 +1,5 @@
 import collections
 import datetime
-from io import BufferedWriter
 
 from itertools import groupby
 import operator
@@ -93,7 +92,7 @@ class JSONWriter(Writer):
         import json
         json.dump(self.out, open('/tmp/timetable4.json', 'w'), indent=4)
 
-    def write_header(self):
+    def write_header(self, index, global_utc_offset):
         pass
 
     def write_vj(self, tdg, departure_time, vj_attr):
@@ -1348,11 +1347,10 @@ class Index2:
         self.index.loc_physicalmode_ids = self.write_list_of_strings([pc.id for pc in type_of_productcategories.values()])
         self.out.write_text_comment("PHYSICAL MODE NAMES")
         self.index.loc_physicalmode_names = self.write_list_of_strings([pc.name.value for pc in type_of_productcategories.values()])
-        self.index.loc_physical_mode_for_line = self.out.tell()
-
         self.index.n_physical_modes = len(type_of_productcategories.values())
 
         self.out.write_text_comment("PHYSICAL MODE FOR LINE")
+        self.index.loc_physical_mode_for_line = self.out.tell()
         pc_idx = list(type_of_productcategories.keys())
         for l in lines.values():
             self.out.writeshort(pc_idx.index(l.type_of_product_category_ref.ref))
@@ -1461,9 +1459,10 @@ class Index2:
         # assert written_length == self.string_length
 
     def export(self):
+        valid_between = self.netex_timetable.get_valid_between()
         self.index.loc_time_zone = self.out.put_string(self.netex_timetable.get_time_zone())
         self.index.calendar_start_time = (self.netex_timetable.get_valid_between()[0].toordinal() - datetime.date(1970, 1, 1).toordinal()) * 24 * 60 * 60
-        self.index.n_days = NUMBER_OF_DAYS
+        self.index.n_days = min(NUMBER_OF_DAYS, (valid_between[1] - valid_between[0]).days + 1)
 
         self.export_sp_coords()
         self.export_journey_pattern_point_stop()
@@ -1500,10 +1499,10 @@ class Index2:
         self.out.write_header(self.index, self.global_utc_offset)
 
 netex_timetable = NeTExTimetable("/tmp/timetable4.xml")
-# jw = JSONWriter("/tmp/timetable4.json")
-# index = Index2(netex_timetable, jw)
-# index.export()
-# jw.save()
+jw = JSONWriter("/tmp/timetable4.json")
+index = Index2(netex_timetable, jw)
+index.export()
+jw.save()
 
 bw = BinaryWriter("/tmp/timetable4.dat")
 index = Index2(netex_timetable, bw)
