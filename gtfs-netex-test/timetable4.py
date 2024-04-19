@@ -383,9 +383,23 @@ connections: List[Connection] = [Connection(
     transfer_duration=TransferDurationStructure(default_duration=XmlDuration("PT0S"))
 ),
     Connection(
+        id="1a", version="1",
+        from_value=ConnectionEndStructure(scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a3", version="1")),
+        to=ConnectionEndStructure(scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a2", version="1")),
+        transfer_duration=TransferDurationStructure(default_duration=XmlDuration("PT0S"))
+    ),
+    Connection(
         id="2", version="1",
         from_value=ConnectionEndStructure(scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a4", version="1")),
         to=ConnectionEndStructure(scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a5", version="1")),
+        transfer_duration=TransferDurationStructure(default_duration=XmlDuration("PT0S"))
+    ),
+    Connection(
+        id="2a", version="1",
+        from_value=ConnectionEndStructure(
+            scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a5", version="1")),
+        to=ConnectionEndStructure(
+            scheduled_stop_point_ref_or_vehicle_meeting_point_ref=ScheduledStopPointRef(ref="1a4", version="1")),
         transfer_duration=TransferDurationStructure(default_duration=XmlDuration("PT0S"))
     )
 ]
