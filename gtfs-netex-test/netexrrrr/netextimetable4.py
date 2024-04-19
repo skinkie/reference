@@ -1,4 +1,5 @@
 import collections
+import datetime
 from io import BufferedWriter
 
 from itertools import groupby
@@ -20,7 +21,7 @@ from netex import ScheduledStopPoint, StopPlace, Quay, PassengerStopAssignment, 
     PassengerCommsFacilityEnumeration, SanitaryFacilityEnumeration, BusSubmode, BusSubmodeEnumeration, \
     FlexibleServiceEnumeration, ReservationEnumeration, PathLink, Connection, ServiceJourneyInterchange, Line, \
     AllVehicleModesOfTransportEnumeration, AvailabilityCondition, Operator, VehicleType, TypeOfProductCategory, Route, \
-    PresentationStructure
+    PresentationStructure, VersionFrameDefaultsStructure, ValidBetween
 
 from typing import Any, Dict, Iterable, Optional, Tuple, List, OrderedDict, BinaryIO
 from xsdata.exceptions import XmlHandlerError
@@ -91,6 +92,9 @@ class JSONWriter(Writer):
     def save(self):
         import json
         json.dump(self.out, open('/tmp/timetable4.json', 'w'), indent=4)
+
+    def write_header(self):
+        pass
 
     def write_vj(self, tdg, departure_time, vj_attr):
         self.intermediate.append((tdg, departure_time, vj_attr,))
@@ -191,15 +195,112 @@ class BinaryWriter(Writer):
         self.string_length = 0
         self.strings = collections.OrderedDict({})
 
-    def write_header(self):
+    def write_header(self, index, global_utc_offset):
         """ Write out a file header containing offsets to the beginning of each subsection.
         Must match struct transit_data_header in transitdata.c
         :param out: output filepointer
         :param index: Index of the datastructure exported
         """
-
         self.out.seek(0)
-        htext = "TTABLEV4"
+        htext = "TTABLEV4".encode('UTF-8')
+
+        struct_header = Struct('8sQi91I')
+        packed = struct_header.pack(htext,
+                                    index.calendar_start_time,
+                                    index.loc_time_zone,
+                                    global_utc_offset,
+                                    index.n_days,  # n_days
+                                    index.n_stops,  # n_stops
+                                    index.n_stop_areas,  # n_stop_areas
+                                    index.n_stops,  # n_stop_attributes
+                                    index.n_stops,  # n_stop_point_coords
+                                    index.n_stop_areas,  # n_stop_area_coords
+                                    index.n_stops,  # n_sa_for_ap
+                                    index.n_jp,  # n_routes
+                                    index.n_jpp,  # n_jpp
+                                    index.n_jpp,  # n_jpp_attributes
+                                    index.n_jpp,  # n_jpp_headsigns
+                                    index.n_tpp,  # n_stop_times
+                                    index.n_vj,  # n_vjs
+                                    index.n_jpp_at_sp,  # n_stop_routes
+                                    index.n_connections,  # n_transfer_target_stop
+                                    index.n_connections,  # n_transfer_dist_meters
+                                    index.n_vj,  # n_trip_active
+                                    index.n_jp,  # n_jp_active
+                                    index.n_stops,  # n_platformcodes
+                                    index.n_stops,  # n_stop_nameidx
+                                    index.n_stop_areas,  # n_stop_nameidx
+                                    index.n_operators,  # n_operator_id
+                                    index.n_operators,  # n_operator_names
+                                    index.n_operators,  # n_operator_urls
+                                    index.n_commercial_modes,  # n_commercialmode_id
+                                    index.n_commercial_modes,  # n_commercialmode_names
+                                    index.n_physical_modes,  # n_physicalmode_id
+                                    index.n_physical_modes,  # n_physicalmode_names
+                                    self.string_length,  # n_string_pool (length of the object)
+                                    index.n_lines,  # n_line_codes
+                                    index.n_lines,  # n_line_ids
+                                    index.n_lines,  # n_line_colors
+                                    index.n_lines,  # n_line_colors_text
+                                    index.n_lines,  # n_line_names
+                                    index.n_stops,  # n_stop_point_ids
+                                    index.n_stop_areas,  # n_stop_area_ids
+                                    index.n_stop_areas,  # n_stop_area_timezones
+                                    index.n_vj,  # n_vj_time_offsets
+                                    index.n_vj,  # n_vj_ids
+                                    index.n_line_for_route,  # n_line_for_route
+                                    index.n_lines,  # n_operator_for_line
+                                    index.n_commerical_mode_for_jp,  # n_commerical_mode_for_jp
+                                    index.n_lines,  # n_commerical_mode_for_line
+                                    index.n_vj,  # n_vj_interline_backward
+                                    index.n_vj,  # n_vj_interline_foward
+                                    index.n_stops,  # n_stop_point_waittime
+
+                                    index.loc_stop_points,
+                                    index.loc_stop_point_attributes,
+                                    index.loc_stop_point_coords,
+                                    index.loc_journey_patterns,
+                                    index.loc_journey_pattern_points,
+                                    index.loc_journey_pattern_point_attributes,
+                                    index.loc_journey_pattern_point_headsigns,
+                                    index.loc_timedemandgroups,
+                                    index.loc_vehicle_journeys,
+                                    index.loc_jp_at_sp,
+                                    index.loc_transfer_target_stop_points,
+                                    index.loc_transfer_dist_meters,
+                                    index.loc_stop_point_waittime,
+                                    index.loc_vj_interline_backward,
+                                    index.loc_vj_interline_forward,
+                                    index.loc_vj_active,
+                                    index.loc_jp_active,
+                                    index.loc_platformcodes,
+                                    index.loc_stop_nameidx,
+                                    index.loc_stop_areaidx,
+                                    index.loc_line_for_route,
+                                    index.loc_operator_for_line,
+                                    index.loc_operator_ids,
+                                    index.loc_operator_names,
+                                    index.loc_operator_urls,
+                                    index.loc_commercialmode_ids,
+                                    index.loc_commercialmode_names,
+                                    index.loc_commercial_mode_for_jp,
+                                    index.loc_physicalmode_ids,
+                                    index.loc_physicalmode_names,
+                                    index.loc_physical_mode_for_line,
+                                    index.loc_stringpool,
+                                    index.loc_line_codes,
+                                    index.loc_line_names,
+                                    index.loc_line_uris,
+                                    index.loc_line_color,
+                                    index.loc_line_color_text,
+                                    index.loc_stop_point_uris,
+                                    index.loc_stop_area_uris,
+                                    index.loc_stop_area_timezones,
+                                    index.loc_vj_time_offsets,
+                                    index.loc_vj_uris,
+                                    index.loc_stop_area_coords,
+                                    index.loc_sa_for_sp,
+                                    )
         self.out.write(packed)
 
     def save(self):
@@ -368,7 +469,8 @@ class NeTExTimetable:
     service_journey_patterns: Dict[str, ServiceJourneyPattern]
     service_journey_service_journey_pattern_group: Dict[str, List[ServiceJourney]]
     type_of_productcategories: OrderedDict[str, TypeOfProductCategory]
-
+    time_zone: str
+    valid_between: Tuple[datetime.datetime, datetime.datetime]
 
     def __init__(self, input_filename: str):
         context = XmlContext()
@@ -394,7 +496,22 @@ class NeTExTimetable:
         self.service_journey_patterns = None
         self.service_journey_service_journey_pattern_group = None
         self.type_of_productcategories = None
+        self.time_zone = None
+        self.valid_between = None
 
+    def get_valid_between(self) -> Tuple[datetime.datetime, datetime.datetime]:
+        if self.valid_between is None:
+            valid_between: ValidBetween = self.parser.parse(self.tree.findall(".//{http://www.netex.org.uk/netex}ValidBetween")[0], ValidBetween)
+            self.valid_between = (valid_between.from_date.to_datetime(), valid_between.to_date.to_datetime())
+
+        return self.valid_between
+
+    def get_time_zone(self) -> str:
+        if self.time_zone is None:
+            frame_defaults: VersionFrameDefaultsStructure = self.parser.parse(self.tree.findall(".//{http://www.netex.org.uk/netex}FrameDefaults")[0], VersionFrameDefaultsStructure)
+            self.time_zone = frame_defaults.default_locale.time_zone
+
+        return self.time_zone
 
     def get_service_journey_interchanges(self) -> List[ServiceJourneyInterchange]:
         if self.service_journey_interchanges is None:
@@ -420,7 +537,6 @@ class NeTExTimetable:
         if self.lines is None:
             self.lines = collections.OrderedDict({line.id: line for line in [self.parser.parse(element, Line) for element in
                                 self.tree.findall(".//{http://www.netex.org.uk/netex}Line")]})
-
         return self.lines
 
     def get_routes(self) -> Dict[str, Route]:
@@ -532,20 +648,71 @@ class NeTExTimetable:
         return self.type_of_productcategories
 
 class Index2:
+    class Index:
+        n_days: int
+        calendar_start_time: int
+        n_stops: int
+        n_stop_area: int
+        n_jp: int
+        timezone: int
+
+        loc_stop_points: int
+        loc_stop_point_attributes: int
+        loc_stop_point_coords: int
+        loc_journey_patterns: int
+        loc_journey_pattern_points: int
+        loc_journey_pattern_point_attributes: int
+        loc_journey_pattern_point_headsigns: int
+        loc_timedemandgroups: int
+        loc_vehicle_journeys: int
+        loc_jp_at_sp: int
+        loc_transfer_target_stop_points: int
+        loc_transfer_dist_meters: int
+        loc_stop_point_waittime: int
+        loc_vj_interline_backward: int
+        loc_vj_interline_forward: int
+        loc_vj_active: int
+        loc_jp_active: int
+        loc_platformcodes: int
+        loc_stop_nameidx: int
+        loc_stop_areaidx: int
+        loc_line_for_route: int
+        loc_operator_for_line: int
+        loc_operator_ids: int
+        loc_operator_names: int
+        loc_operator_urls: int
+        loc_commercialmode_ids: int
+        loc_commercialmode_names: int
+        loc_commercial_mode_for_jp: int
+        loc_physicalmode_ids: int
+        loc_physicalmode_names: int
+        loc_physical_mode_for_line: int
+        loc_stringpool: int
+        loc_line_codes: int
+        loc_line_names: int
+        loc_line_uris: int
+        loc_line_color: int
+        loc_line_color_text: int
+        loc_stop_point_uris: int
+        loc_stop_area_uris: int
+        loc_stop_area_timezones: int
+        loc_vj_time_offsets: int
+        loc_vj_uris: int
+        loc_stop_area_coords: int
+        loc_sa_for_sp: int
+
     parser: XmlParser
     tree: etree._ElementTree
     writer: Writer
 
-    n_stops: int
-    loc_stop_point_coords: int
-
     loc_for_string: dict
     strings: List[str]
-    string_length: int
 
     netex_timetable: NeTExTimetable
 
     global_utc_offset: int
+
+    index: Index
 
     """
     def put_string(self,string):
@@ -559,13 +726,13 @@ class Index2:
     """
 
     def write_stop_point_idx(self, scheduled_stop_point_ref: str):
-        if self.n_stops <= 65535:
+        if self.index.n_stops <= 65535:
             self.out.writeshort(list(self.netex_timetable.scheduled_stop_points.keys()).index(scheduled_stop_point_ref))
         else:
             self.out.writeint(list(self.netex_timetable.scheduled_stop_points.keys()).index(scheduled_stop_point_ref))
 
     def write_stop_area_idx(self, stop_place_ref: str):
-        if self.n_stops <= 65535:
+        if self.index.n_stops <= 65535:
             self.out.writeshort(list(self.netex_timetable.stop_places.keys()).index(stop_place_ref))
         else:
             self.out.writeint(list(self.netex_timetable.stop_places.keys()).index(stop_place_ref))
@@ -579,39 +746,40 @@ class Index2:
     def __init__(self, netex_timetable: NeTExTimetable, out):
 
         self.out = out
-        self.n_stops = 0
-        self.loc_stop_point_coords = 0
+        self.index = Index2.Index()
+        self.index.loc_stop_point_coords = 0
 
-        self.loc_for_string = {}
+        self.index.loc_for_string = {}
         self.strings = []
-        self.string_length = 0
+        self.index.string_length = 0
         self.global_utc_offset = 0
 
         self.netex_timetable = netex_timetable
 
     def export_sp_coords(self):
         self.out.write_text_comment("STOP POINT COORDS")
-        self.loc_stop_point_coords = self.out.tell()
+        self.index.loc_stop_point_coords = self.out.tell()
 
         for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values():
             self.out.write2floats(scheduled_stop_point.location.latitude or 0.0, scheduled_stop_point.location.longitude or 0.0)
-            self.n_stops += 1
+
+        self.index.n_stops = len(self.netex_timetable.get_scheduled_stop_points().keys())
 
     def export_sp_names(self):
         self.out.write_text_comment("STOP POINT NAMES")
 
         stop_names = [scheduled_stop_point.name.value for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values()]
-        self.loc_stop_nameidx = self.write_list_of_strings(stop_names)
+        self.index.loc_stop_nameidx = self.write_list_of_strings(stop_names)
 
     def export_sp_uris(self):
         # stopid index was several times bigger than the string table. it's probably better to just store fixed-width ids.
         self.out.write_text_comment("STOP_POINT IDS")
         stop_ids = [scheduled_stop_point.id for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values()]
-        self.loc_stop_point_uris = self.write_list_of_strings(stop_ids)
+        self.index.loc_stop_point_uris = self.write_list_of_strings(stop_ids)
 
     def export_sp_attributes(self):
         self.out.write_text_comment("STOP POINT ATTRIBUTES")
-        self.loc_stop_point_attributes = self.out.tell()
+        self.index.loc_stop_point_attributes = self.out.tell()
 
         scheduled_stop_points = self.netex_timetable.get_scheduled_stop_points()
         scheduled_stop_point_ref_to_physical = self.netex_timetable.get_scheduled_stop_point_ref_to_physical()
@@ -658,9 +826,10 @@ class Index2:
 
     def export_journey_pattern_point_stop(self):
         service_journey_patterns = self.netex_timetable.get_service_journey_patterns()
+        self.index.n_jp = len(service_journey_patterns.keys())
 
         self.out.write_text_comment("JOURNEY PATTERN POINT STOP")
-        self.loc_journey_pattern_points = self.out.tell()
+        self.index.loc_journey_pattern_points = self.out.tell()
         self.offset_jpp = []
         offset = 0
         self.n_jpp = 0
@@ -675,11 +844,11 @@ class Index2:
         service_journey_patterns = self.netex_timetable.get_service_journey_patterns()
 
         self.out.write_text_comment("JOURNEY PATTERN POINT ATTRIBUTES")
-        self.loc_journey_pattern_point_attributes = self.out.tell()
-        self.offset_jpp_attributes = []
+        self.index.loc_journey_pattern_point_attributes = self.out.tell()
+        # self.offset_jpp_attributes = [] # TODO: not used, check
         offset = 0
         for service_journey_pattern in service_journey_patterns.values():
-            self.offset_jpp_attributes.append(offset)
+            # self.offset_jpp_attributes.append(offset)
             for point_in_sequence in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
                 attr = 0
                 if point_in_sequence.is_wait_point:
@@ -689,21 +858,21 @@ class Index2:
                 if point_in_sequence.for_alighting:
                     attr |= 4
                 self.out.writebyte(attr)
-                offset += 1
+                # offset += 1
 
     def export_journey_pattern_point_headsigns(self):
         service_journey_patterns = self.netex_timetable.get_service_journey_patterns()
         # destination_displays = self.netex_timetable.get_destination_displays()
 
         self.out.write_text_comment("JOURNEY PATTERN POINT HEADSIGN")
-        self.loc_journey_pattern_point_headsigns = self.out.tell()
+        self.index.loc_journey_pattern_point_headsigns = self.out.tell()
         self.offset_jpp = []
-        offset = 0
+        self.index.n_jpp = 0
         for service_journey_pattern in service_journey_patterns.values():
-            self.offset_jpp.append(offset)
+            self.offset_jpp.append(self.index.n_jpp)
             for point_in_sequence in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
                 self.out.writeint(self.out.put_string(point_in_sequence.destination_display_ref_or_destination_display_view.front_text.value))
-                offset += 1
+                self.index.n_jpp += 1
 
     @staticmethod
     def to_seconds(xml_time: XmlTime, day_offset: int = 0):
@@ -752,7 +921,7 @@ class Index2:
             self.sj_to_tdt[service_journey.id] = tentative.index(_tuple)
 
         self.out.write_text_comment("TIME DEMAND TYPES")
-        self.loc_timedemandgroups = self.out.tell()
+        self.index.loc_timedemandgroups = self.out.tell()
         self.offset_for_timedemandgroup_uri: Dict[int, int] = {}
         tp_offset = 0
         for i in range(0, len(tentative)):
@@ -761,7 +930,7 @@ class Index2:
                 # TODO must write
                 self.out.write_timedemandgroup(tpp[0] >> 2, tpp[1] >> 2)
                 tp_offset += 1
-        self.n_tpp = tp_offset
+        self.index.n_tpp = tp_offset
 
     @staticmethod
     def get_service_journey(service_journey: ServiceJourney) -> (int, int):
@@ -808,18 +977,18 @@ class Index2:
         service_journey_service_journey_pattern_group = self.netex_timetable.get_service_journey_service_journey_pattern_group()
 
         self.out.write_text_comment("VEHICLE JOURNEYS USING JOURNEY_PATTERN")
-        self.loc_vehicle_journeys = self.out.tell()
-        tioffset = 0
+        self.index.loc_vehicle_journeys = self.out.tell()
+        self.index.n_vj = 0
         self.vj_ids_offsets = []
         for service_journey_pattern_ref, service_journeys in service_journey_service_journey_pattern_group.items():
-            self.vj_ids_offsets.append(tioffset)
+            self.vj_ids_offsets.append(self.index.n_vj)
             for service_journey in service_journeys:
                 departure_time, vj_attr = Index2.get_service_journey(service_journey)
                 # TODO
-                # assert (tioffset - index.vj_ids_offsets[vj._jp_idx]) == vj._jpvjoffset
+                # assert (self.index.n_vj - index.vj_ids_offsets[vj._jp_idx]) == vj._jpvjoffset
                 self.out.write_vj(self.offset_for_timedemandgroup_uri[self.sj_to_tdt[service_journey.id]],
                                          (departure_time + self.global_utc_offset) >> 2, vj_attr)
-                tioffset += 1
+                self.index.n_vj += 1
 
     def export_jpp_at_sp(self):
         journey_patterns_at_stop_point = {}
@@ -833,7 +1002,7 @@ class Index2:
         service_journey_patterns_idx = [service_journey_pattern.id for service_journey_pattern in service_journey_patterns]
 
         self.out.write_text_comment("JOURNEY_PATTERNS AT STOP")
-        self.loc_jp_at_sp = self.out.tell()
+        self.index.loc_jp_at_sp = self.out.tell()
         self.jpp_at_sp_offsets = []
         n_offset = 0
         for scheduled_stop_point in self.netex_timetable.scheduled_stop_points.values():
@@ -843,7 +1012,7 @@ class Index2:
                 self.out.writeshort(service_journey_patterns_idx.index(journey_pattern_ref))
                 n_offset += 1
         self.jpp_at_sp_offsets.append(n_offset) #sentinel
-        self.n_jpp_at_sp = n_offset
+        self.index.n_jpp_at_sp = n_offset
 
     def export_transfers(self):
         # passenger_stop_assignments = self.netex_timetable.get_passenger_stop_assignments()
@@ -866,9 +1035,11 @@ class Index2:
             k: list(v) for k, v in groupby(connections, operator.attrgetter('from_value.scheduled_stop_point_ref_or_vehicle_meeting_point_ref.ref'))
         }
 
+        self.index.n_connections = len(connections)
+
         print("saving transfer stops (footpaths)")
         self.out.write_text_comment("TRANSFER TARGET STOPS")
-        self.loc_transfer_target_stop_points = self.out.tell()
+        self.index.loc_transfer_target_stop_points = self.out.tell()
 
         self.transfers_offsets = []
         offset = 0
@@ -894,13 +1065,13 @@ class Index2:
 
         print("saving transfer times (footpaths)")
         self.out.write_text_comment("TRANSFER TIMES")
-        self.loc_transfer_dist_meters = self.out.tell()
+        self.index.loc_transfer_dist_meters = self.out.tell()
 
         for transfer_time in transfertimes:
             self.out.writeshort((int(transfer_time) >> 2))
 
         self.out.write_text_comment("MIN WAIT TIMES")
-        self.loc_stop_point_waittime = self.out.tell()
+        self.index.loc_stop_point_waittime = self.out.tell()
         for scheduled_stop_point in self.netex_timetable.get_scheduled_stop_points().values():
             _wait_time = stop_point_waittimes.get(scheduled_stop_point.id, MIN_WAITTIME)
             self.out.writeshort((int(_wait_time) >> 2))
@@ -943,7 +1114,7 @@ class Index2:
             vj_interline_counterclockwise[(to_vj._utc_offset, to_vj.id)] = (from_vj._jp_idx, from_vj._jpvjoffset)
 
         self.out.write_text_comment("INTERLINE BACKWARD")
-        self.loc_vj_interline_backward = self.out.tell()
+        self.index.loc_vj_interline_backward = self.out.tell()
         n_vjtransfers = 0
 
         for service_journey_pattern_ref, service_journeys in service_journey_service_journey_pattern_group.items():
@@ -957,7 +1128,7 @@ class Index2:
                 n_vjtransfers += 1
 
         self.out.write_text_comment("INTERLINE FORWARD")
-        self.loc_vj_interline_forward = self.out.tell()
+        self.index.loc_vj_interline_forward = self.out.tell()
         n_vjtransfers_forward = 0
 
         for service_journey_pattern_ref, service_journeys in service_journey_service_journey_pattern_group.items():
@@ -974,7 +1145,7 @@ class Index2:
     def export_stop_indices(self):
         print("saving stop indexes")
         self.out.write_text_comment("STOP STRUCTS")
-        self.loc_stop_points = self.out.tell()
+        self.index.loc_stop_points = self.out.tell()
         print(len(self.jpp_at_sp_offsets), len(self.transfers_offsets))
         assert len(self.jpp_at_sp_offsets) == len(self.transfers_offsets)
         for stop in zip (self.jpp_at_sp_offsets, self.transfers_offsets):
@@ -1015,7 +1186,7 @@ class Index2:
         r_idx = list(routes.keys())
 
         self.out.write_text_comment("ROUTE STRUCTS")
-        self.loc_journey_patterns = self.out.tell()
+        self.index.loc_journey_patterns = self.out.tell()
         jpp_offsets = self.offset_jpp
         trip_ids_offsets = self.vj_ids_offsets
         jp_attributes = []
@@ -1061,7 +1232,7 @@ class Index2:
         print("writing bitfields indicating which days each trip is active")
         # note that bitfields are ordered identically to the trip_ids table, and offsets into that table can be reused
         self.out.write_text_comment("VJ ACTIVE BITFIELDS")
-        self.loc_vj_active = self.out.tell()
+        self.index.loc_vj_active = self.out.tell()
 
         for service_journey_pattern, service_journeys in service_journey_service_journey_pattern_group.items():
             for service_journey in service_journeys:
@@ -1076,7 +1247,7 @@ class Index2:
         print("writing bitfields indicating which days each trip is active")
         # note that bitfields are ordered identically to the trip_ids table, and offsets into that table can be reused
         self.out.write_text_comment("JP ACTIVE BITFIELDS")
-        self.loc_jp_active = self.out.tell()
+        self.index.loc_jp_active = self.out.tell()
         n_zeros = 0
         for service_journey_pattern_ref, _vjs in service_journey_service_journey_pattern_group.items():
             availability_condition: AvailabilityCondition = service_journey_patterns[service_journey_pattern_ref].validity_conditions_or_valid_between[0].choice[0]
@@ -1095,13 +1266,14 @@ class Index2:
                 platform_codes.append('')
 
         # Check ift
-        self.loc_platformcodes = self.write_list_of_strings(platform_codes)
+        self.index.loc_platformcodes = self.write_list_of_strings(platform_codes)
 
     def export_sa_coords(self):
         stop_places = self.netex_timetable.get_stop_places()
+        self.index.n_stop_areas = len(stop_places.keys())
 
         self.out.write_text_comment("STOP AREA COORDS")
-        self.loc_stop_area_coords = self.out.tell()
+        self.index.loc_stop_area_coords = self.out.tell()
         for sp in stop_places.values():
             self.out.write2floats(sp.centroid.location.latitude or 0.0, sp.centroid.location.longitude or 0.0)
 
@@ -1110,7 +1282,7 @@ class Index2:
         scheduled_stop_point_ref_to_physical = self.netex_timetable.get_scheduled_stop_point_ref_to_physical()
 
         self.out.write_text_comment("STOP_POINT -> STOP_AREA")
-        self.loc_sa_for_sp = self.out.tell()
+        self.index.loc_sa_for_sp = self.out.tell()
 
         for scheduled_stop_point in scheduled_stop_points.values():
             quay: Quay
@@ -1123,18 +1295,20 @@ class Index2:
         self.out.write_text_comment("STOP AREA NAMES")
 
         stop_area_names = [stop_place.name.value for stop_place in self.netex_timetable.get_stop_places().values()]
-        self.loc_stop_areaidx = self.write_list_of_strings(stop_area_names)
+        self.index.loc_stop_areaidx = self.write_list_of_strings(stop_area_names)
 
     def export_operators(self):
         operators = self.netex_timetable.get_operators()
 
         print("writing out opreators to string pool")
         self.out.write_text_comment("OPERATOR IDS")
-        self.loc_operator_ids = self.write_list_of_strings([op.id for op in operators.values()])
+        self.index.loc_operator_ids = self.write_list_of_strings([op.id for op in operators.values()])
         self.out.write_text_comment("OPERATOR NAMES")
-        self.loc_operator_names = self.write_list_of_strings([op.name.value for op in operators.values()])
+        self.index.loc_operator_names = self.write_list_of_strings([op.name.value for op in operators.values()])
         self.out.write_text_comment("OPERATOR URLS")
-        self.loc_operator_urls = self.write_list_of_strings([op.contact_details.url or '' for op in operators.values()])
+        self.index.loc_operator_urls = self.write_list_of_strings([op.contact_details.url or '' for op in operators.values()])
+
+        self.index.n_operators = len(operators.values())
 
     # TODO: rrrr stores a commercial mode per JourneyPattern
     def export_commercialmodes(self):
@@ -1145,12 +1319,14 @@ class Index2:
 
         print("writing out commercial_mode to string table")
         self.out.write_text_comment("CCMODE IDS")
-        self.loc_commercialmode_ids = self.write_list_of_strings([cc.id for cc in commercial_modes.values()])
+        self.index.loc_commercialmode_ids = self.write_list_of_strings([cc.id for cc in commercial_modes.values()])
         self.out.write_text_comment("CCMODE NAMES")
-        self.loc_commercialmode_names = self.write_list_of_strings([cc.name.value for cc in commercial_modes.values()])
+        self.index.loc_commercialmode_names = self.write_list_of_strings([cc.name.value for cc in commercial_modes.values()])
+
+        self.index.n_commercial_modes = len(commercial_modes.values())
 
         self.out.write_text_comment("COMMERCIAL MODE FOR JOURNEY PATTERN")
-        self.loc_commercial_mode_for_jp = self.out.tell()
+        self.index.loc_commercial_mode_for_jp = self.out.tell()
 
         routeref_to_lineref = {route.id : route.line_ref.ref for route in routes.values()}
 
@@ -1158,6 +1334,8 @@ class Index2:
         for sjp in service_journey_patterns.values():
             line: Line = lines[routeref_to_lineref[sjp.route_ref_or_route_view.ref]]
             self.out.writeshort(cc_idx.index(line.type_of_product_category_ref.ref))
+
+        self.index.n_commerical_mode_for_jp = len(service_journey_patterns.values())
 
     # TODO: Review
     def export_physicalmodes(self):
@@ -1167,10 +1345,12 @@ class Index2:
 
         print("writing out physical_mode to string table")
         self.out.write_text_comment("PHYSICAL MODE IDS")
-        self.loc_physicalmode_ids = self.write_list_of_strings([pc.id for pc in type_of_productcategories.values()])
+        self.index.loc_physicalmode_ids = self.write_list_of_strings([pc.id for pc in type_of_productcategories.values()])
         self.out.write_text_comment("PHYSICAL MODE NAMES")
-        self.loc_physicalmode_names = self.write_list_of_strings([pc.name.value for pc in type_of_productcategories.values()])
-        self.loc_physical_mode_for_line = self.out.tell()
+        self.index.loc_physicalmode_names = self.write_list_of_strings([pc.name.value for pc in type_of_productcategories.values()])
+        self.index.loc_physical_mode_for_line = self.out.tell()
+
+        self.index.n_physical_modes = len(type_of_productcategories.values())
 
         self.out.write_text_comment("PHYSICAL MODE FOR LINE")
         pc_idx = list(type_of_productcategories.keys())
@@ -1184,9 +1364,11 @@ class Index2:
         l_idx = list(lines.keys())
 
         self.out.write_text_comment("LINE FOR ROUTE")
-        self.loc_line_for_route = self.out.tell()
+        self.index.loc_line_for_route = self.out.tell()
         for r in routes.values():
             self.out.writeshort(l_idx.index(r.line_ref.ref))
+
+        self.index.n_line_for_route = len(routes.values())
 
     @staticmethod
     def get_colour_or_empty(presentation: PresentationStructure, attr: str):
@@ -1201,6 +1383,8 @@ class Index2:
         print("Writing line attributes")
 
         lines = self.netex_timetable.get_lines()
+        self.index.n_lines = len(lines.keys())
+
         operators = self.netex_timetable.get_operators()
 
         o_idx = list(operators.keys())
@@ -1208,24 +1392,24 @@ class Index2:
         # TODO assert that len(o_idx) <= 255 (less or equal than 255 operators)
 
         self.out.write_text_comment("OPERATOR FOR LINE")
-        self.loc_operator_for_line = self.out.tell()
+        self.index.loc_operator_for_line = self.out.tell()
         for l in lines.values():
             self.out.writebyte(o_idx.index(l.operator_ref.ref))
 
         self.out.write_text_comment("LINE CODES")
-        self.loc_line_codes = self.write_list_of_strings([line.public_code.value or '' for line in lines.values()])
+        self.index.loc_line_codes = self.write_list_of_strings([line.public_code.value or '' for line in lines.values()])
 
         self.out.write_text_comment("LINE COLOR")
-        self.loc_line_color = self.write_list_of_strings([self.get_colour_or_empty(line.presentation, 'colour') for line in lines.values()])
+        self.index.loc_line_color = self.write_list_of_strings([self.get_colour_or_empty(line.presentation, 'colour') for line in lines.values()])
 
         self.out.write_text_comment("LINE COLOR_TEXT")
-        self.loc_line_color_text = self.write_list_of_strings([self.get_colour_or_empty(line.presentation, 'text_colour') for line in lines.values()])
+        self.index.loc_line_color_text = self.write_list_of_strings([self.get_colour_or_empty(line.presentation, 'text_colour') for line in lines.values()])
 
         self.out.write_text_comment("LINE NAMES")
-        self.loc_line_names = self.write_list_of_strings([line.name.value or '' for line in lines.values()])
+        self.index.loc_line_names = self.write_list_of_strings([line.name.value or '' for line in lines.values()])
 
         self.out.write_text_comment("LINE IDS")
-        self.loc_line_uris = self.write_list_of_strings([line.id for line in lines.values()])
+        self.index.loc_line_uris = self.write_list_of_strings([line.id for line in lines.values()])
 
     def export_sa_attributes(self):
         print("Writing StopPlace attributes")
@@ -1233,10 +1417,10 @@ class Index2:
         stop_places = self.netex_timetable.get_stop_places()
 
         self.out.write_text_comment("STOP_AREA IDS")
-        self.loc_stop_area_uris = self.write_list_of_strings([sa.id for sa in stop_places.values()])
+        self.index.loc_stop_area_uris = self.write_list_of_strings([sa.id for sa in stop_places.values()])
 
         self.out.write_text_comment("STOP_AREA TIMEZONES")
-        self.loc_stop_area_timezones = self.write_list_of_strings([sa.locale.time_zone for sa in stop_places.values()])
+        self.index.loc_stop_area_timezones = self.write_list_of_strings([sa.locale.time_zone for sa in stop_places.values()])
 
 
     # TODO: Rework
@@ -1244,7 +1428,7 @@ class Index2:
         service_journey_service_journey_pattern_group = self.netex_timetable.get_service_journey_service_journey_pattern_group()
 
         print('Timetable offset from UTC {index.global_utc_offset}')
-        self.loc_vj_time_offsets = self.out.tell()
+        self.index.loc_vj_time_offsets = self.out.tell()
 
         self.out.write_text_comment("VJ OFFSET")
 
@@ -1263,13 +1447,13 @@ class Index2:
         print("writing trip ids to string table")
         # note that trip_ids are ordered by departure time within trip bundles (routes), which are themselves in arbitrary order.
         self.out.write_text_comment("VJ IDS")
-        self.loc_vj_uris = self.write_list_of_strings(all_vj_ids)
+        self.index.loc_vj_uris = self.write_list_of_strings(all_vj_ids)
         self.n_vj = len(all_vj_ids)
 
     def export_stringpool(self):
         print("writing out stringpool")
         self.out.write_text_comment("STRINGPOOL")
-        self.loc_stringpool = self.out.tell()
+        self.index.loc_stringpool = self.out.tell()
         written_length = 0
         for string in self.out.strings.keys():
             self.out.write_string(string)
@@ -1277,6 +1461,10 @@ class Index2:
         # assert written_length == self.string_length
 
     def export(self):
+        self.index.loc_time_zone = self.out.put_string(self.netex_timetable.get_time_zone())
+        self.index.calendar_start_time = (self.netex_timetable.get_valid_between()[0].toordinal() - datetime.date(1970, 1, 1).toordinal()) * 24 * 60 * 60
+        self.index.n_days = NUMBER_OF_DAYS
+
         self.export_sp_coords()
         self.export_journey_pattern_point_stop()
         self.export_journey_pattern_point_attributes()
@@ -1307,14 +1495,15 @@ class Index2:
         self.export_vj_uris()
         self.export_stringpool()
         self.out.write_text_comment("END TTABLEV4")
-        index.loc_eof = self.out.tell()
-        self.out.write_header()
+        self.index.loc_eof = self.out.tell()
+
+        self.out.write_header(self.index, self.global_utc_offset)
 
 netex_timetable = NeTExTimetable("/tmp/timetable4.xml")
-jw = JSONWriter("/tmp/timetable4.json")
-index = Index2(netex_timetable, jw)
-index.export()
-jw.save()
+# jw = JSONWriter("/tmp/timetable4.json")
+# index = Index2(netex_timetable, jw)
+# index.export()
+# jw.save()
 
 bw = BinaryWriter("/tmp/timetable4.dat")
 index = Index2(netex_timetable, bw)
