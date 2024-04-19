@@ -33,7 +33,7 @@ from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, Timin
     ValidBetween, Connection, ConnectionEndStructure, TransfersInFrameRelStructure, \
     JourneyInterchangesInFrameRelStructure, ServiceJourneyInterchange, VehicleJourneyRefStructure, ServiceJourneyRef, \
     PublicCodeType, RouteRef, Route, RoutesInFrameRelStructure, TypeOfProductCategoryRef, TypeOfProductCategory, \
-    TypesOfValueInFrameRelStructure
+    TypesOfValueInFrameRelStructure, OperatorView, VersionFrameDefaultsStructure, LocaleStructure
 
 # Missing: BicycleRent
 
@@ -423,6 +423,7 @@ timetable_frame = TimetableFrame(
 
 composite_frame: CompositeFrame = CompositeFrame(id="1", version="1",
                                                  validity_conditions_or_valid_between=[ValidBetween(from_date=XmlDateTime.from_string("2014-01-01T00:00:00"), to_date=XmlDateTime.from_string("2014-01-01T00:00:00"))],
+                                                 frame_defaults=VersionFrameDefaultsStructure(default_locale=LocaleStructure(time_zone="Europe/Amsterdam")),
                                                  frames=FramesRelStructure(common_frame=[resource_frame, site_frame, service_frame, timetable_frame]))
 
 publication_delivery: PublicationDelivery = PublicationDelivery(
