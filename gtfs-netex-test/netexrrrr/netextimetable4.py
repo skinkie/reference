@@ -1,4 +1,5 @@
 import collections
+import copy
 import datetime
 
 from itertools import groupby
@@ -526,9 +527,21 @@ class NeTExTimetable:
 
         return self.passenger_stop_assignments
 
+    import copy
     def get_connections(self) -> List[Connection]:
         if self.connections is None:
-            self.connections = [self.parser.parse(element, Connection) for element in self.tree.findall(".//{http://www.netex.org.uk/netex}Connection")]
+            self.connections = []
+
+            for element in self.tree.findall(".//{http://www.netex.org.uk/netex}Connection"):
+                connection = self.parser.parse(element, Connection)
+                assert(connection.both_ways)
+
+                connection_reversed = copy.deepcopy(connection)
+                _from_value = connection_reversed.from_value
+                connection_reversed.from_value = connection_reversed.to
+                connection_reversed.to = _from_value
+                self.connections.append(connection)
+                self.connections.append(connection_reversed)
         
         return self.connections
 
@@ -1028,7 +1041,10 @@ class Index2:
         # path_links2.sort(key=operator.itemgetter(1))
         # path_links_by_scheduled_stop_point_ref = groupby(path_links2, operator.itemgetter(1))
 
+        # RRRR requires symmetric connections. We must proces them in both directions.
+
         connections = self.netex_timetable.get_connections()
+
         connections.sort(key=operator.attrgetter('from_value.scheduled_stop_point_ref_or_vehicle_meeting_point_ref.ref'))
         connections_by_scheduled_stop_point_ref: Dict[str, Iterable[Connection]] = {
             k: list(v) for k, v in groupby(connections, operator.attrgetter('from_value.scheduled_stop_point_ref_or_vehicle_meeting_point_ref.ref'))
