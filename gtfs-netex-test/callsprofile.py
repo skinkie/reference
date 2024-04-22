@@ -27,7 +27,7 @@ class CallsProfile:
         if not duration:
             return 0
 
-        return ((duration.days or 0) * 86400) + ((duration.hours or 0) * 3600) + ((duration.minutes or 0) * 60) + ((duration.seconds or 0))
+        return ((duration.days or 0) * 86400) + ((duration.hours or 0) * 3600) + ((duration.minutes or 0) * 60) + ((int(duration.seconds or 0)))
 
     @staticmethod
     def getDeparture(spijp: StopPointInJourneyPattern, departure: int, offset: int = 0) -> DepartureStructure:
@@ -90,23 +90,24 @@ class CallsProfile:
 
         tdt_point: dict[str, JourneyWaitTime] = {}
         if time_demand_type.wait_times:
-            tdt_point = getIndex(time_demand_type.wait_times, 'journey_wait_time.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref')
+            tdt_point = getIndex(time_demand_type.wait_times.journey_wait_time, 'timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref')
 
-        i = 0
-        for lis in service_journey_pattern.links_in_sequence.service_link_in_journey_pattern_or_timing_link_in_journey_pattern:
-            if isinstance(lis, ServiceLinkInJourneyPattern):
-                for journey_run_time in lis.run_times.journey_run_time:
-                    tdt_tl[lis.service_link_ref.ref] = journey_run_time
-                    # TODO: Guard begin point equeals assigned value
-                    service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_service_link_ref = lis.service_link_ref
+        if service_journey_pattern.links_in_sequence is not None:
+            i = 0
+            for lis in service_journey_pattern.links_in_sequence.service_link_in_journey_pattern_or_timing_link_in_journey_pattern:
+                if isinstance(lis, ServiceLinkInJourneyPattern):
+                    for journey_run_time in lis.run_times.journey_run_time:
+                        tdt_tl[lis.service_link_ref.ref] = journey_run_time
+                        # TODO: Guard begin point equeals assigned value
+                        service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_service_link_ref = lis.service_link_ref
 
-            elif isinstance(lis, TimingLinkInJourneyPattern):
-                for journey_run_time in lis.run_times.journey_run_time:
-                    tdt_tl[lis.timing_link_ref.ref] = journey_run_time
-                    # TODO: Guard begin point equeals assigned value
-                    service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_timing_link_ref = lis.timing_link_ref
+                elif isinstance(lis, TimingLinkInJourneyPattern):
+                    for journey_run_time in lis.run_times.journey_run_time:
+                        tdt_tl[lis.timing_link_ref.ref] = journey_run_time
+                        # TODO: Guard begin point equeals assigned value
+                        service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_timing_link_ref = lis.timing_link_ref
 
-            i += 1
+                i += 1
 
         departure: int = CallsProfile.getDepartureTime(service_journey)
         arrival: int = departure

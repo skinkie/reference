@@ -1,3 +1,4 @@
+from callsprofile import CallsProfile
 from netex import ServiceJourney, ServiceJourneyPattern, StopPointInJourneyPattern, TimetabledPassingTime, \
     PointsInJourneyPatternRelStructure, Codespace, TimetabledPassingTimesRelStructure, \
     PointInJourneyPatternRef, ServiceJourneyPatternRef, Call, MultilingualString, RouteView, DestinationDisplayView, \
@@ -9,11 +10,12 @@ import hashlib
 class TimetablePassingTimesProfile:
     codespace: Codespace
     service_journeys: list[ServiceJourney]
-    def __init__(self, codespace, version, service_journeys, service_journey_patterns):
+    def __init__(self, codespace, version, service_journeys, service_journey_patterns, time_demand_types):
         self.codespace = codespace
         # self.version = version
         self.service_journeys = service_journeys
         self.service_journey_patterns = service_journey_patterns
+        self.time_demand_types = time_demand_types
 
     @staticmethod
     def mapCallToStopPointInJourneyPattern(call: Call, codespace: Codespace) -> StopPointInJourneyPattern:
@@ -69,17 +71,30 @@ class TimetablePassingTimesProfile:
 
     @staticmethod
     def sjp_hash(points_in_sequence: PointsInJourneyPatternRelStructure):
-        spijp: StopPointInJourneyPattern
+
         m = hashlib.sha256()
 
         # TODO: RouteView/LineRef may be different, and should therefore create a different SJP
 
-        key = ('\n'.join([(TimetablePassingTimesProfile.getProperty(spijp.scheduled_stop_point_ref, 'ref') + ',' +
-                           str(spijp.for_alighting) + ',' + str(spijp.for_boarding) + ',' +
-                           TimetablePassingTimesProfile.getProperty(spijp.onward_timing_link_ref, 'ref') + ',' +
-                           TimetablePassingTimesProfile.getProperty(spijp.onward_service_link_ref, 'ref') + ',' +
-                           TimetablePassingTimesProfile.getDestination(spijp.destination_display_ref_or_destination_display_view))
-                   for spijp in points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern])).encode('utf-8')
+        elements = []
+
+        for pijp in points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
+            if isinstance(pijp, StopPointInJourneyPattern):
+                spijp: StopPointInJourneyPattern = pijp
+                elements.append(TimetablePassingTimesProfile.getProperty(spijp.scheduled_stop_point_ref, 'ref') + ',' +
+                 str(spijp.for_alighting) + ',' + str(spijp.for_boarding) + ',' +
+                 TimetablePassingTimesProfile.getProperty(spijp.onward_timing_link_ref, 'ref') + ',' +
+                 TimetablePassingTimesProfile.getProperty(spijp.onward_service_link_ref, 'ref') + ',' +
+                 TimetablePassingTimesProfile.getDestination(spijp.destination_display_ref_or_destination_display_view))
+            elif isinstance(pijp, TimingPointInJourneyPattern):
+                tpijp: TimingPointInJourneyPattern = pijp
+                elements.append(TimetablePassingTimesProfile.getProperty(tpijp.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref, 'ref') + ',' +
+                 str(False) + ',' + str(False) + ',' +
+                 TimetablePassingTimesProfile.getProperty(tpijp.onward_timing_link_ref, 'ref') + ',' +
+                 '' + ',' +
+                 '')
+
+        key = ('\n'.join(elements)).encode('utf-8')
 
         m.update(key)
         return m.hexdigest()[0:8].upper()
@@ -202,6 +217,8 @@ class TimetablePassingTimesProfile:
 
         sj: ServiceJourney
         for sj in self.service_journeys:
+            # if there is a servicejourneypattern, departure time, timedemandtype it can be expanded
+
             if sj.passing_times and not force:
                 if clean:
                     sj.calls = None
@@ -213,8 +230,14 @@ class TimetablePassingTimesProfile:
 
                 continue
 
+            if sj.calls is None and sj.journey_pattern_ref and sj.departure_time and sj.time_demand_type_ref:
+                # For VDV462 we need to differentiate
+                service_journey_pattern: ServiceJourneyPattern = existing_sjps[sj.journey_pattern_ref.ref]
+                time_demand_type: TimeDemandType = existing_tdts[sj.time_demand_type_ref.ref]
+                CallsProfile.getCallsFromTimeDemandType(sj, service_journey_pattern, time_demand_type)
+
             # if there are calls -> create service journey patterns
-            elif sj.calls:
+            if sj.calls:
                 service_journey_pattern: ServiceJourneyPattern = None
                 if not sj.journey_pattern_ref:
                     if len(sj.calls.call) <= 1:
@@ -262,12 +285,6 @@ class TimetablePassingTimesProfile:
                     if len(ttpt) > 0:
                         sj.passing_times = TimetabledPassingTimesRelStructure(timetabled_passing_time=ttpt)
 
-            # if there is a servicejourneypattern, departure time, timedemandtype it can be expanded
-            elif sj.journey_pattern_ref and sj.departure_time and sj.time_demand_type_ref:
-                # For VDV462 we need to differentiate
-                service_journey_pattern: ServiceJourneyPattern = existing_sjps[sj.journey_pattern_ref]
-                time_demand_type: TimeDemandType = existing_tdts[sj.time_demand_types]
-                pass
 
             # if there are servicejourneypattern, departure time, waittimes, runtimes they can be expanded
             elif sj.journey_pattern_ref and sj.departure_time and sj.run_times:
