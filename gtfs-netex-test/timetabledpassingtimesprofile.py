@@ -234,10 +234,10 @@ class TimetablePassingTimesProfile:
                 # For VDV462 we need to differentiate
                 service_journey_pattern: ServiceJourneyPattern = existing_sjps[sj.journey_pattern_ref.ref]
                 time_demand_type: TimeDemandType = existing_tdts[sj.time_demand_type_ref.ref]
-                CallsProfile.getCallsFromTimeDemandType(sj, service_journey_pattern, time_demand_type)
+                CallsProfile.getPassingTimesFromTimeDemandType(sj, service_journey_pattern, time_demand_type)
 
             # if there are calls -> create service journey patterns
-            if sj.calls:
+            elif sj.calls:
                 service_journey_pattern: ServiceJourneyPattern = None
                 if not sj.journey_pattern_ref:
                     if len(sj.calls.call) <= 1:
@@ -298,4 +298,5 @@ class TimetablePassingTimesProfile:
                 sj.time_demand_types = None
                 sj.validity_conditions_or_valid_between = None
 
-        self.service_journey_patterns += sjps.values()
+        # TODO: only do this for the newly created ones
+        # self.service_journey_patterns += sjps.values()

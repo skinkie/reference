@@ -8,7 +8,8 @@ from netex import ServiceJourney, StopPointInJourneyPattern, ServiceJourneyPatte
     StopPointInJourneyPatternRef, StopPointInJourneyPatternRefStructure, PointInJourneyPatternRefStructure, \
     OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, TimeDemandTypeRef, \
     TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint, Route, CallsRelStructure, TimingPointInJourneyPattern, \
-    ScheduledStopPointRef, ServiceLinkInJourneyPattern, TimingLinkInJourneyPattern, JourneyPatternWaitTimesRelStructure
+    ScheduledStopPointRef, ServiceLinkInJourneyPattern, TimingLinkInJourneyPattern, JourneyPatternWaitTimesRelStructure, \
+    TimetabledPassingTime, TimetabledPassingTimesRelStructure
 from refs import setIdVersion, getRef, getIndex, getIdByRef
 from utils import project
 
@@ -22,6 +23,14 @@ class CallsProfile:
         second = (arrival % 60)
         return ArrivalStructure(time=XmlTime(hour=hour, minute=minute, second=second, offset=offset), day_offset=day_offset,
                                 for_alighting=spijp.for_alighting, notice_assignments=spijp.notice_assignments)
+
+    @staticmethod
+    def getArrivalTime(arrival: int, offset: int = 0) -> (XmlTime, int):
+        day_offset = arrival // 86400
+        hour = (arrival % 86400) // 3600
+        minute = (arrival % 3600) // 60
+        second = (arrival % 60)
+        return XmlTime(hour=hour, minute=minute, second=second, offset=offset), day_offset
 
     def getDuration(duration: XmlDuration) -> int:
         if not duration:
@@ -37,6 +46,14 @@ class CallsProfile:
         second = (departure % 60)
         return DepartureStructure(time=XmlTime(hour=hour, minute=minute, second=second, offset=offset), day_offset=day_offset,
                                 for_boarding=spijp.for_boarding, notice_assignments=spijp.notice_assignments)
+
+    @staticmethod
+    def getDepartureTimeOffset(departure: int, offset: int = 0) -> (XmlTime, int):
+        day_offset = departure // 86400
+        hour = (departure % 86400) // 3600
+        minute = (departure % 3600) // 60
+        second = (departure % 60)
+        return XmlTime(hour=hour, minute=minute, second=second, offset=offset), day_offset
 
     @staticmethod
     def getRunTime(departure: DepartureStructure, arrival: ArrivalStructure) -> int:
@@ -176,6 +193,114 @@ class CallsProfile:
 
         service_journey.calls = calls
 
+    @staticmethod
+    def getPassingTimesFromTimeDemandType(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern, time_demand_type: TimeDemandType):
+        # If calls are present, we don't have to do anything
+        if service_journey.passing_times is not None:
+            return
+
+        # Guard that the provided ServiceJourneyPattern equals to the ref
+        if service_journey.journey_pattern_ref.ref != service_journey_pattern.id:
+            return
+
+        # Guard that the provided TimeDemandType equals to the ref
+        if service_journey.time_demand_type_ref.ref != time_demand_type.id:
+            return
+
+        # TODO: Check for ambiguities, for example due to Timebands or points having the same name
+        tdt_tl: dict[str, JourneyRunTime] = {}
+        if time_demand_type.run_times:
+            tdt_tl = getIndex(time_demand_type.run_times.journey_run_time, 'timing_link_ref.ref')
+
+        tdt_point: dict[str, JourneyWaitTime] = {}
+        if time_demand_type.wait_times:
+            tdt_point = getIndex(time_demand_type.wait_times.journey_wait_time, 'timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref')
+
+        if service_journey_pattern.links_in_sequence is not None:
+            i = 0
+            for lis in service_journey_pattern.links_in_sequence.service_link_in_journey_pattern_or_timing_link_in_journey_pattern:
+                if isinstance(lis, ServiceLinkInJourneyPattern):
+                    for journey_run_time in lis.run_times.journey_run_time:
+                        tdt_tl[lis.service_link_ref.ref] = journey_run_time
+                        # TODO: Guard begin point equeals assigned value
+                        service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_service_link_ref = lis.service_link_ref
+
+                elif isinstance(lis, TimingLinkInJourneyPattern):
+                    for journey_run_time in lis.run_times.journey_run_time:
+                        tdt_tl[lis.timing_link_ref.ref] = journey_run_time
+                        # TODO: Guard begin point equeals assigned value
+                        service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_timing_link_ref = lis.timing_link_ref
+
+                i += 1
+
+        departure: int = CallsProfile.getDepartureTime(service_journey)
+        arrival: int = departure
+        offset: int = service_journey.departure_time.offset
+
+
+        tpts = TimetabledPassingTimesRelStructure(timetabled_passing_time = [])
+
+        # If there are no onward timing links, we must consider links in sequence
+        for pis in service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
+            wait_time = None
+            run_time = None
+            ssp_ref = None
+            spijp = None
+            # TODO: handle the VDV462 case, but then also handle the service_journey input
+            # pis.wait_time_or_wait_times.journey_pattern_wait_time_ref_or_journey_pattern_wait_time
+            if isinstance(pis, StopPointInJourneyPattern):
+                ssp_ref = pis.scheduled_stop_point_ref
+                spijp = pis
+
+                wait_time = CallsProfile.getWaitTimesFromPointInJourneyPattern(pis.wait_time_or_wait_times, time_demand_type)
+
+                if wait_time is None:
+                    wait_time = tdt_point.get(pis.scheduled_stop_point_ref.ref, None)
+                    if wait_time is not None:
+                        wait_time = wait_time.wait_time
+
+                if pis.onward_timing_link_ref:
+                    run_time = tdt_tl[pis.onward_timing_link_ref.ref]
+                elif pis.onward_service_link_ref:
+                    run_time = tdt_tl[pis.onward_service_link_ref.ref]
+
+            elif isinstance(pis, TimingPointInJourneyPattern):
+                if isinstance(pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref, ScheduledStopPointRef):
+                    spijp = project(pis, StopPointInJourneyPattern)
+                    ssp_ref = pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref
+                    spijp.for_alighting = True
+                    spijp.for_boarding = True
+
+                wait_time = tdt_point.get(pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref.ref, None)
+                if wait_time is not None:
+                    wait_time = wait_time.wait_time
+
+                if pis.onward_timing_link_ref:
+                    run_time = tdt_tl[pis.onward_timing_link_ref.ref]
+
+            departure += CallsProfile.getDuration(wait_time)
+            if spijp is not None:
+                arrival_time, arrival_day_offset = CallsProfile.getArrivalTime(arrival, offset)
+                departure_time, departure_day_offset = CallsProfile.getDepartureTimeOffset(arrival, offset)
+                timetabled_passing_time = TimetabledPassingTime(id=service_journey.id.replace(":ServiceJourney:", ":TimetabledPassingTime:") + '-' + str(pis.order),
+                            version=service_journey.version,
+                                point_in_journey_pattern_ref=getRef(spijp),
+                                                                arrival_time=arrival_time,
+                                                                arrival_day_offset=arrival_day_offset,
+                                                                departure_time=departure_time,
+                                                                departure_day_offset=departure_day_offset)
+                tpts.timetabled_passing_time.append(timetabled_passing_time)
+
+            if run_time is not None:
+                arrival = departure + CallsProfile.getDuration(run_time.run_time)
+                departure = arrival
+
+        # for lis in service_journey_pattern.links_in_sequence.service_link_in_journey_pattern_or_timing_link_in_journey_pattern:
+            # TODO: handle the VDV462 case
+            # lis.run_times.journey_run_time
+            # pass
+
+        service_journey.passing_times = tpts
 
 
     @staticmethod

@@ -64,7 +64,7 @@ def conversion(input_filename: str, output_filename: str):
 
     used_direction_types = [sjp.direction_type for sjp in service_journey_patterns]
     for used_direction_type in used_direction_types:
-        direction: Direction = Direction(id=getId(Direction, codespace, used_direction_type.value), version=version.version, name=MultilingualString(value=str(used_direction_type)), direction_type=used_direction_type)
+        direction: Direction = Direction(id=getId(Direction, codespace, used_direction_type.value), version=version.version, name=MultilingualString(value=str(used_direction_type.value)), direction_type=used_direction_type)
         directions[used_direction_type] = direction
 
     for sjp in service_journey_patterns:
@@ -89,8 +89,8 @@ def conversion(input_filename: str, output_filename: str):
     service_frame: ServiceFrame
     service_frame = parser.parse(tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
     #if not has_servicejourney_patterns:
-    # service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
-    # service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
+    service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
+    service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
 
     # for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPoint"):
     #    scheduled_stop_point: ScheduledStopPoint
@@ -98,20 +98,21 @@ def conversion(input_filename: str, output_filename: str):
     #     scheduled_stop_points.append(scheduled_stop_point)
 
     # service_frame.stop_assignments = StopAssignmentsInFrameRelStructure(
-    #     stop_assignment=SiteFrameEPIP.getPassengerStopAssignments(service_frame.scheduled_stop_points.scheduled_stop_point))
+    #    stop_assignment=SiteFrameEPIP.getPassengerStopAssignments(service_frame.scheduled_stop_points.scheduled_stop_point))
 
     site_frame_epip = SiteFrameEPIP(codespace)
     site_frame = site_frame_epip.getSiteFrame(service_frame.scheduled_stop_points.scheduled_stop_point)
 
     sjs = getIndex(service_journeys)
     keys = set(sjs.keys())
-    lxml_serializer = LxmlTreeSerializer()
+    # lxml_serializer = LxmlTreeSerializer()
     parser = lxml.etree.XMLParser(remove_blank_text=True)
     tree = lxml.etree.parse(input_filename, parser=parser)
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourney"):
         # TODO iets met 'modified' timestamp meenemen?
         if element.attrib['id'] in keys:
-            element.getparent().replace(element, lxml_serializer.render(sjs[element.attrib['id']]))
+            element.getparent().replace(element, lxml.etree.fromstring(serializer.render(sjs[element.attrib['id']], ns_map).encode('utf-8'), parser))
+            # element.getparent().replace(element, lxml_serializer.render(sjs[element.attrib['id']]))
 
     # if not has_servicejourney_patterns:
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
@@ -119,9 +120,10 @@ def conversion(input_filename: str, output_filename: str):
     # element.getparent().replace(element, lxml_serializer.render(service_frame))
 
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
-    element.getparent().append(lxml_serializer.render(service_calendar_frame))
+    # element.getparent().append(lxml_serializer.render(service_calendar_frame))
     # element.getparent().append(lxml_serializer.render(site_frame))
 
+    element.getparent().append(lxml.etree.fromstring(serializer.render(service_calendar_frame, ns_map).encode('utf-8'), parser))
     element.getparent().append(lxml.etree.fromstring(serializer.render(site_frame, ns_map).encode('utf-8'), parser))
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}versions"):
@@ -149,6 +151,9 @@ def conversion(input_filename: str, output_filename: str):
         element.getparent().remove(element)
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}timeDemandTypes"):
+        element.getparent().remove(element)
+
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}OperationalContextRef"):
         element.getparent().remove(element)
 
     for element in tree.iterfind(".//*"):
