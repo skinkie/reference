@@ -32,7 +32,7 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     RoutesInFrameRelStructure, RouteLink, RouteLinksInFrameRelStructure, __all__, DayTypesRelStructure, DayType, \
     PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, Block, ServiceFacilitySetsRelStructure, \
     ServiceFacilitySet, LuggageCarriageEnumeration, LinkSequenceProjection, LinkSequenceProjectionRef, LineString, \
-    PosList, CodespaceRefStructure, DataSourceRefStructure
+    PosList, CodespaceRefStructure, DataSourceRefStructure, ParticipantRef
 from refs import setIdVersion, getRef, getIndex, getIdByRef, getBitString2, getFakeRef, getOptionalString, getId
 
 
@@ -833,7 +833,7 @@ class GtfsNeTexProfile(CallsProfile):
         publication_delivery = PublicationDelivery(
             publication_timestamp=XmlDateTime.from_datetime(datetime.datetime.now()),
             version = "ntx:1.1",
-            participant_ref = "NDOV",
+            participant_ref = ParticipantRef(value="NDOV"),
             description = MultilingualString(value="NeTEx export")
         )
         publication_delivery.data_objects = DataObjectsRelStructure(choice=[composite_frame])
