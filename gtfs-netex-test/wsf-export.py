@@ -260,10 +260,10 @@ timing_links = [tl_vb, tl_bv]
 
 stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "V"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_v),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:76600010", QuayRef, "any")),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:76600010", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "B"), version=version.version, order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_b),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NDOV:NL:Q:79600015", QuayRef, "any"))]
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:79600015", QuayRef, "any"))]
 
 sjp_dhtx = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "V-B"), version=version.version,
                                  route_ref_or_route_view=getRef(route_vb),

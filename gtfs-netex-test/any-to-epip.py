@@ -10,11 +10,12 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from netex import ServiceJourney, ServiceJourneyPattern, Codespace, Version, ServiceFrame, \
     JourneyPatternsInFrameRelStructure, AvailabilityCondition, ServiceCalendarFrame, TypeOfFrameRef, ScheduledStopPoint, \
     StopAssignmentsInFrameRelStructure, TimeDemandType, DirectionRef, Direction, MultilingualString, \
-    DirectionsInFrameRelStructure
+    DirectionsInFrameRelStructure, StopPlacesInFrameRelStructure
 from refs import getIndex, getId, getRef
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from siteframeepip import SiteFrameEPIP
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
+from xpathselection import get_stop_place_for_quayref
 
 ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -36,6 +37,7 @@ def conversion(input_filename: str, output_filename: str):
     # scheduled_stop_points = []
     has_servicejourney_patterns = False
 
+    epiap_tree = lxml.etree.parse("/tmp/NeTEx_DOVA_epiap_20240423013251.xml.gz")
     tree = lxml.etree.parse(input_filename)
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}AvailabilityCondition"):
@@ -103,6 +105,16 @@ def conversion(input_filename: str, output_filename: str):
     site_frame_epip = SiteFrameEPIP(codespace)
     site_frame = site_frame_epip.getSiteFrame(service_frame.scheduled_stop_points.scheduled_stop_point)
 
+    stop_places = {}
+
+    for stop_assignment in service_frame.stop_assignments.stop_assignment:
+        stop_place = get_stop_place_for_quayref(epiap_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
+        stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
+        stop_places[stop_place.id] = stop_place
+
+    if len(stop_places.values()) > 0:
+        site_frame.stop_places = StopPlacesInFrameRelStructure(stop_place=list(stop_places.values()))
+
     sjs = getIndex(service_journeys)
     keys = set(sjs.keys())
     # lxml_serializer = LxmlTreeSerializer()
@@ -125,6 +137,7 @@ def conversion(input_filename: str, output_filename: str):
 
     element.getparent().append(lxml.etree.fromstring(serializer.render(service_calendar_frame, ns_map).encode('utf-8'), parser))
     element.getparent().append(lxml.etree.fromstring(serializer.render(site_frame, ns_map).encode('utf-8'), parser))
+
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}versions"):
         element.getparent().remove(element)
@@ -160,15 +173,25 @@ def conversion(input_filename: str, output_filename: str):
         if element.text is None and len(element) == 0 and len(element.attrib.keys()) == 0:
             element.getparent().remove(element)
 
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}responsibilitySets"):
+        element.getparent().remove(element)
+
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}DefaultResponsibilitySetRef"):
+        element.getparent().remove(element)
+
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}TypeOfServiceRef"):
+        element.getparent().remove(element)
+
     for x in tree.iterfind(".//{http://www.netex.org.uk/netex}*"):
         x.attrib.pop("derivedFromVersionRef", None)
         x.attrib.pop("derivedFromObjectRef", None)
+        x.attrib.pop("responsibilitySetRef", None)
 
     tree.write(output_filename, pretty_print=True, strip_text=True)
 
 if __name__ == '__main__':
-    for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240415_20240415.xml.gz"):
-    # for input_filename in glob.glob("/tmp/NeTEx_ARR_NL_20240421_20240422_1416.xml.gz"):
+    for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240423_20240423.xml.gz"):
+    # for input_filename in glob.glob("/tmp/NeTEx_ARR_NL_20240422_20240423_1416.xml.gz"):
         print(input_filename)
         output_filename = input_filename.replace('/tmp/', 'netex-output-epip/').replace('.xml.gz', '.xml')
         conversion(input_filename, output_filename)
