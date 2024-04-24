@@ -19,7 +19,38 @@ from xpathselection import get_stop_place_for_quayref
 
 ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
-def conversion(input_filename: str, output_filename: str):
+def loadBaseTree():
+    serializer_config = SerializerConfig(ignore_default_attributes=True)
+    serializer_config.pretty_print = True
+    serializer_config.ignore_default_attributes = True
+    serializer = XmlSerializer(config=serializer_config)
+
+    context = XmlContext()
+    config = ParserConfig(fail_on_unknown_properties=False)
+    parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
+    base_tree = lxml.etree.ElementTree()
+    root = base_tree.getroot()
+    basefilelist = [
+        "./netex-input/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_COMMON_1_1_202404140804.xml",
+        "./netex-input/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_RESOURCE_1_1_202404140804.xml",
+        "./netex-input/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SERVICE_1_1_202404140804.xml",
+        "./netex-input/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SERVICECALENDAR_1_1_202404140804.xml",
+        "./netex-input/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SITE_1_1_202404140804.xml",
+    ]
+
+
+    for filename in basefilelist:
+        print(f"""Processing base file: {filename}""")
+        if root == None:
+            base_tree = lxml.etree.parse(filename)
+            root = base_tree.getroot()
+        else:
+            atree = lxml.etree.parse(filename)
+            root2 = atree.getroot()
+            root.extend(root2)
+    return base_tree
+
+def conversion(base_tree: lxml.etree,input_filename: str, output_filename: str):
     serializer_config = SerializerConfig(ignore_default_attributes=True)
     serializer_config.pretty_print = True
     serializer_config.ignore_default_attributes = True
@@ -37,7 +68,6 @@ def conversion(input_filename: str, output_filename: str):
     # scheduled_stop_points = []
     has_servicejourney_patterns = False
 
-    epiap_tree = lxml.etree.parse("/tmp/NeTEx_DOVA_epiap_20240423013251.xml.gz")
     tree = lxml.etree.parse(input_filename)
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}AvailabilityCondition"):
@@ -90,6 +120,9 @@ def conversion(input_filename: str, output_filename: str):
 
     service_frame: ServiceFrame
     service_frame = parser.parse(tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
+    if service_frame==None:
+        print("ServiceFrame taken from base_tree")
+        service_frame = parser.parse(base_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
     #if not has_servicejourney_patterns:
     service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
     service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
@@ -108,7 +141,7 @@ def conversion(input_filename: str, output_filename: str):
     stop_places = {}
 
     for stop_assignment in service_frame.stop_assignments.stop_assignment:
-        stop_place = get_stop_place_for_quayref(epiap_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
+        stop_place = get_stop_place_for_quayref(base_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
         stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
         stop_places[stop_place.id] = stop_place
 
@@ -128,10 +161,16 @@ def conversion(input_filename: str, output_filename: str):
 
     # if not has_servicejourney_patterns:
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    if service_frame==None:
+        print("ServiceFrame taken from base_tree")
+        service_frame = parser.parse(base_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
     element.getparent().replace(element, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
     # element.getparent().replace(element, lxml_serializer.render(service_frame))
 
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    if service_frame==None:
+        print("ServiceFrame taken from base_tree")
+        service_frame = parser.parse(base_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
     # element.getparent().append(lxml_serializer.render(service_calendar_frame))
     # element.getparent().append(lxml_serializer.render(site_frame))
 
@@ -190,8 +229,9 @@ def conversion(input_filename: str, output_filename: str):
     tree.write(output_filename, pretty_print=True, strip_text=True)
 
 if __name__ == '__main__':
-    for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240423_20240423.xml.gz"):
+    base_tree=loadBaseTree()
+    for input_filename in glob.glob("C:/Users/ue71603/Downloads/netex_ch/*.xml"):
     # for input_filename in glob.glob("/tmp/NeTEx_ARR_NL_20240422_20240423_1416.xml.gz"):
         print(input_filename)
-        output_filename = input_filename.replace('/tmp/', 'netex-output-epip/').replace('.xml.gz', '.xml')
-        conversion(input_filename, output_filename)
+        output_filename = input_filename.replace('C:/Users/ue71603/Downloads/netex_ch/', './netex-output-epip/').replace('.xml.gz', '.xml')
+        conversion(base_tree,input_filename, output_filename)
