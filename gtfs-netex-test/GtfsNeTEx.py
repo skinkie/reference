@@ -239,7 +239,7 @@ class GtfsNeTexProfile(CallsProfile):
 
 
             for i in range(0, len(stop_ids)):
-                stop_area = StopArea(id=getId(StopArea, self.codespace, stop_ids[i]),
+                stop_area = StopArea(id=getId(StopArea, self.codespace, stop_ids[i]),version=self.version.version,
                                      name=MultilingualString(value=stop_names[i]),
                                      public_code=get_or_none(stop_codes, i),
                                      description=getOptionalString(get_or_none(stop_descs, i)),
