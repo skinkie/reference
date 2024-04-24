@@ -117,7 +117,7 @@ def conversion(input_filename: str, output_filename: str):
 
     sjs = getIndex(service_journeys)
     keys = set(sjs.keys())
-    # lxml_serializer = LxmlTreeSerializer()
+    lxml_serializer = LxmlTreeSerializer()
     parser = lxml.etree.XMLParser(remove_blank_text=True)
     tree = lxml.etree.parse(input_filename, parser=parser)
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourney"):

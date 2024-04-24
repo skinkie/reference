@@ -1,26 +1,27 @@
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
-from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
+from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
+from xsdata.formats.dataclass.serializers import LxmlTreeSerializer
 
-import lxml
-
-from netex import RouteLink, TargetPassingTime
+from netex import ServiceFrame
 
 context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
 parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
 
-"""
-tree = lxml.etree.parse("/tmp/NeTEx_CXX_HWGO_20240213_2024-02-18_202400046_baseline.xml.gz")
+tree = lxml.etree.parse("NeTEx_WSF_WSF_20240415_20240415.xml.gz")
 
-for element in tree.iterfind(".//{http://www.netex.org.uk/netex}RouteLink"):
-    route_link: RouteLink = parser.parse(element, RouteLink)
-    print("1", route_link.id)
+service_frame: ServiceFrame
 
-for element in tree.iterfind(".//{http://www.netex.org.uk/netex}RouteLink"):
-    route_link: RouteLink = parser.parse(element, RouteLink)
-    print("2", route_link.id)
-"""
+for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceFrame"):
+    service_frame = parser.parse(element, ServiceFrame)
 
-TargetPassingTime()
+lxml_serializer = LxmlTreeSerializer(context)
+
+# tree = lxml.etree.parse("/tmp/NeTEx_WSF_WSF_20240415_20240415.xml.gz")
+
+element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+element.getparent().replace(element, lxml_serializer.render(service_frame))
+
+tree.write("test-output.xml", pretty_print=True, strip_text=True)
