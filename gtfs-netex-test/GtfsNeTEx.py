@@ -61,34 +61,62 @@ class GtfsNeTexProfile(CallsProfile):
         with self.conn.cursor() as cur:
             cur.execute(feed_info_sql)
             df = cur.df()
+            # load dummy feed_info
+            print("feed_info.txt missing. Loading dummy values.")
+            short_name=self.getShortName("UNKNOWN")
+            codespace=Codespace(id="{}:Codespace:{}".format(short_name, short_name), xmlns=short_name,
+                                  xmlns_url="https://unknown.net", description="Unknown")
 
-            short_name = self.getShortName(df['feed_publisher_name'][0])
-            codespace = Codespace(id="{}:Codespace:{}".format(short_name, short_name), xmlns=short_name,
+            start_date = datetime.datetime.combine(gtfs_date('19000101'), datetime.datetime.min.time())
+            end_date = datetime.datetime.combine(gtfs_date('29991231'), datetime.datetime.min.time())
+
+            version = Version(id="{}:Version:{}".format(short_name, "0.0"),
+                  version="0.0",
+                  start_date=XmlDateTime.from_datetime(start_date),
+                  end_date=XmlDateTime.from_datetime(end_date),
+                  version_type=VersionTypeEnumeration.BASELINE)
+
+            data_source = DataSource(id="{}:DataSource:{}".format(short_name, short_name),
+                         version=version.version,
+                         name=MultilingualString(value="Unknown"),
+                         short_name=MultilingualString(value=short_name),
+                         description=MultilingualString(value="Unknown"))
+
+            frame_defaults = VersionFrameDefaultsStructure(default_codespace_ref=getRef(codespace, CodespaceRefStructure),
+                                               default_data_source_ref=getRef(data_source, DataSourceRefStructure),
+                                               default_locale=LocaleStructure(default_language="en"),
+                                               default_location_system="EPSG:4326",
+                                               default_system_of_units=SystemOfUnits.SI_METRES
+                                               )
+
+            if df.empty==False:
+                short_name = self.getShortName(df['feed_publisher_name'][0])
+                codespace = Codespace(id="{}:Codespace:{}".format(short_name, short_name), xmlns=short_name,
                                   xmlns_url=df['feed_publisher_url'][0], description=df['feed_publisher_name'][0])
 
-            start_date = datetime.datetime.combine(gtfs_date(df['feed_start_date'][0]), datetime.datetime.min.time())
-            end_date = datetime.datetime.combine(gtfs_date(df['feed_end_date'][0]), datetime.datetime.min.time())
+                start_date = datetime.datetime.combine(gtfs_date(df['feed_start_date'][0]), datetime.datetime.min.time())
+                end_date = datetime.datetime.combine(gtfs_date(df['feed_end_date'][0]), datetime.datetime.min.time())
 
-            version = Version(id="{}:Version:{}".format(short_name, df['feed_version'][0]),
+                version = Version(id="{}:Version:{}".format(short_name, df['feed_version'][0]),
                               version=df['feed_version'][0],
                               start_date=XmlDateTime.from_datetime(start_date),
                               end_date=XmlDateTime.from_datetime(end_date),
                               version_type=VersionTypeEnumeration.BASELINE)
 
-            data_source = DataSource(id="{}:DataSource:{}".format(short_name, short_name),
+                data_source = DataSource(id="{}:DataSource:{}".format(short_name, short_name),
                                      version=version.version,
                                      name=MultilingualString(value=df['feed_publisher_name'][0]),
                                      short_name=MultilingualString(value=short_name),
                                      description=MultilingualString(value=df['feed_publisher_name'][0]))
 
-            frame_defaults = VersionFrameDefaultsStructure(default_codespace_ref=getRef(codespace, CodespaceRefStructure),
+                frame_defaults = VersionFrameDefaultsStructure(default_codespace_ref=getRef(codespace, CodespaceRefStructure),
                                                            default_data_source_ref=getRef(data_source, DataSourceRefStructure),
                                                            default_locale=LocaleStructure(default_language=df['feed_lang'][0]),
                                                            default_location_system="EPSG:4326",
                                                            default_system_of_units=SystemOfUnits.SI_METRES
                                                            )
 
-            return (codespace, data_source, version, frame_defaults)
+        return (codespace, data_source, version, frame_defaults)
 
     def getResourceFrame(self, operators, id="ResourceFrame") -> ResourceFrame:
         resource_frame = ResourceFrame(id=getId(ResourceFrame, self.codespace, id), version=self.version.version)
