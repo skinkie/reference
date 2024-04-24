@@ -10,7 +10,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from netex import ServiceJourney, ServiceJourneyPattern, Codespace, Version, ServiceFrame, \
     JourneyPatternsInFrameRelStructure, AvailabilityCondition, ServiceCalendarFrame, TypeOfFrameRef, ScheduledStopPoint, \
     StopAssignmentsInFrameRelStructure, TimeDemandType, DirectionRef, Direction, MultilingualString, \
-    DirectionsInFrameRelStructure, StopPlacesInFrameRelStructure
+    DirectionsInFrameRelStructure, StopPlacesInFrameRelStructure, CodespacesRelStructure
 from refs import getIndex, getId, getRef
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from siteframeepip import SiteFrameEPIP
@@ -33,6 +33,7 @@ def conversion(input_filename: str, output_filename: str):
     service_journey_patterns = []
     availability_conditions = []
     time_demand_types = []
+    codespaces = {}
     directions = {}
     # scheduled_stop_points = []
     has_servicejourney_patterns = False
@@ -59,9 +60,21 @@ def conversion(input_filename: str, output_filename: str):
         time_demand_type: TimeDemandType = parser.parse(element, TimeDemandType)
         time_demand_types.append(time_demand_type)
 
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}Codespace"):
+        codespace: Codespace = parser.parse(element, Codespace)
+        codespaces[codespace.id] = codespace
 
+    codespace: Codespace
+    if 'OPENOV' not in codespaces:
+        codespace = Codespace(id="OPENOV", xmlns="OPENOV", xmlns_url="http://openov.nl/")
+        codespaces[codespace.id] = codespace
+    else:
+        codespace = codespaces.get('OPENOV')
 
-    codespace = Codespace(id="OPENOV", xmlns="OPENOV", xmlns_url="http://openov.nl/")
+    if 'epip_metadata' not in codespaces:
+        epip_metadata = Codespace(id="epip_metadata", xmlns="epip", xmlns_url="http://netex-cen.eu/epip", description=MultilingualString(value="EPIP metadata"))
+        codespaces[codespace.id] = epip_metadata
+
     version = Version(id="OPENOV:Version:1", version="1")
 
     used_direction_types = [sjp.direction_type for sjp in service_journey_patterns]
@@ -103,6 +116,7 @@ def conversion(input_filename: str, output_filename: str):
     #    stop_assignment=SiteFrameEPIP.getPassengerStopAssignments(service_frame.scheduled_stop_points.scheduled_stop_point))
 
     site_frame_epip = SiteFrameEPIP(codespace)
+    # TODO: don't create quays, if this is available. **1
     site_frame = site_frame_epip.getSiteFrame(service_frame.scheduled_stop_points.scheduled_stop_point)
 
     stop_places = {}
@@ -112,6 +126,7 @@ def conversion(input_filename: str, output_filename: str):
         stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
         stop_places[stop_place.id] = stop_place
 
+    # TODO: don't create quays, if this is available. **1
     if len(stop_places.values()) > 0:
         site_frame.stop_places = StopPlacesInFrameRelStructure(stop_place=list(stop_places.values()))
 
@@ -131,13 +146,18 @@ def conversion(input_filename: str, output_filename: str):
     element.getparent().replace(element, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
     # element.getparent().replace(element, lxml_serializer.render(service_frame))
 
+    element = tree.find(".//{http://www.netex.org.uk/netex}codespaces")
+    # codespaces = CodespacesRelStructure(codespace_ref_or_codespace=list(codespaces.values()))
+    element.clear()
+    for codespace in codespaces.values():
+        element.append(lxml.etree.fromstring(serializer.render(codespace, ns_map).encode('utf-8'), parser))
+
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     # element.getparent().append(lxml_serializer.render(service_calendar_frame))
     # element.getparent().append(lxml_serializer.render(site_frame))
 
     element.getparent().append(lxml.etree.fromstring(serializer.render(service_calendar_frame, ns_map).encode('utf-8'), parser))
     element.getparent().append(lxml.etree.fromstring(serializer.render(site_frame, ns_map).encode('utf-8'), parser))
-
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}versions"):
         element.getparent().remove(element)
@@ -186,6 +206,43 @@ def conversion(input_filename: str, output_filename: str):
         x.attrib.pop("derivedFromVersionRef", None)
         x.attrib.pop("derivedFromObjectRef", None)
         x.attrib.pop("responsibilitySetRef", None)
+
+    # RouteLinks are not part of EPIP.
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}OnwardRouteLinkRef"):
+        element.getparent().remove(element)
+
+    for element in tree.iterfind(".//{http://www.netex.org.uk/netex}routeLinks"):
+        element.getparent().remove(element)
+
+    composite_frame_tof = tree.find(".//{http://www.netex.org.uk/netex}CompositeFrame/{http://www.netex.org.uk/netex}TypeOfFrameRef")
+    if composite_frame_tof is not None:
+        composite_frame_tof.attrib['ref'] = 'epip:EU_PI_NETWORK_OFFER'
+        composite_frame_tof.attrib['versionRef'] = '1.0'
+        composite_frame_tof.attrib.pop('version', None)
+
+    site_frame_tof = tree.find(".//{http://www.netex.org.uk/netex}SiteFrame/{http://www.netex.org.uk/netex}TypeOfFrameRef")
+    if site_frame_tof is not None:
+        site_frame_tof.attrib['ref'] = 'epip:EU_PI_STOP'
+        site_frame_tof.attrib['versionRef'] = '1.0'
+        site_frame_tof.attrib.pop('version', None)
+
+    service_frame_tof = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame/{http://www.netex.org.uk/netex}TypeOfFrameRef")
+    if service_frame_tof is not None:
+        service_frame_tof.attrib['ref'] = 'epip:EU_PI_NETWORK'
+        service_frame_tof.attrib['versionRef'] = '1.0'
+        service_frame_tof.attrib.pop('version', None)
+
+    timetable_frame_tof = tree.find(".//{http://www.netex.org.uk/netex}TimetableFrame/{http://www.netex.org.uk/netex}TypeOfFrameRef")
+    if timetable_frame_tof is not None:
+        timetable_frame_tof.attrib['ref'] = 'epip:EU_PI_TIMETABLE'
+        timetable_frame_tof.attrib['versionRef'] = '1.0'
+        timetable_frame_tof.attrib.pop('version', None)
+
+    resource_frame_tof = tree.find(".//{http://www.netex.org.uk/netex}ResourceFrame/{http://www.netex.org.uk/netex}TypeOfFrameRef")
+    if resource_frame_tof is not None:
+        resource_frame_tof.attrib['ref'] = 'epip:EU_PI_COMMON'
+        resource_frame_tof.attrib['versionRef'] = '1.0'
+        resource_frame_tof.attrib.pop('version', None)
 
     tree.write(output_filename, pretty_print=True, strip_text=True)
 

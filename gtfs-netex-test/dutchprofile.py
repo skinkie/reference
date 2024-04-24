@@ -55,7 +55,7 @@ class DutchProfile:
         if data_sources is not None or responsibility_sets is not None or organisations is not None or \
                 operational_contexts is not None or vehicle_types is not None or zones is not None:
             resource_frame = ResourceFrame(
-                id=getId(ServiceFrame, self.codespace, id),
+                id=getId(ResourceFrame, self.codespace, id),
                 version=self.version.version,
                 type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_RESOURCE", version="9.3.0"),
                 data_sources=data_sources,

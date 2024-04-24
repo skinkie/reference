@@ -2,7 +2,7 @@ from typing import List
 
 from netex import Codespace, ScheduledStopPoint, StopPlace, SiteFrame, StopPlacesInFrameRelStructure, \
     PassengerStopAssignment, StopPlaceRef, SimplePointVersionStructure, StopTypeEnumeration, QuaysRelStructure, Quay, \
-    QuayTypeEnumeration, QuayRef
+    QuayTypeEnumeration, QuayRef, TypeOfFrameRef
 from refs import getId, getRef
 
 
@@ -56,6 +56,7 @@ class SiteFrameEPIP:
     def getSiteFrame(self, scheduled_stop_points: List[ScheduledStopPoint]):
         site_frame = SiteFrame(id=getId(SiteFrame, self.codespace, "SiteFrame"),
                                version=scheduled_stop_points[0].version,
+                               type_of_frame_ref=TypeOfFrameRef(ref="epip:EU_PI_STOP", version_ref="1.0"),
                                stop_places=StopPlacesInFrameRelStructure(stop_place=SiteFrameEPIP.getStopPlaces(scheduled_stop_points)))
         return site_frame
 
