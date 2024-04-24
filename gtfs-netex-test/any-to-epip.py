@@ -119,8 +119,9 @@ def conversion(base_tree: lxml.etree,input_filename: str, output_filename: str):
     timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
 
     service_frame: ServiceFrame
-    service_frame = parser.parse(tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
-    if service_frame==None:
+    if (tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame") != None):
+        service_frame = parser.parse(tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
+    else:
         print("ServiceFrame taken from base_tree")
         service_frame = parser.parse(base_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
     #if not has_servicejourney_patterns:
@@ -161,16 +162,16 @@ def conversion(base_tree: lxml.etree,input_filename: str, output_filename: str):
 
     # if not has_servicejourney_patterns:
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
-    if service_frame==None:
+    if element==None:
         print("ServiceFrame taken from base_tree")
-        service_frame = parser.parse(base_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
+        element=base_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     element.getparent().replace(element, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
     # element.getparent().replace(element, lxml_serializer.render(service_frame))
 
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
-    if service_frame==None:
+    if element==None:
         print("ServiceFrame taken from base_tree")
-        service_frame = parser.parse(base_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
+        element = base_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     # element.getparent().append(lxml_serializer.render(service_calendar_frame))
     # element.getparent().append(lxml_serializer.render(site_frame))
 
