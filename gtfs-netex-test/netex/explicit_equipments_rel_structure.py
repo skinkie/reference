@@ -3,11 +3,13 @@ from typing import List, Union
 
 from .access_vehicle_equipment import AccessVehicleEquipment
 from .access_vehicle_equipment_ref import AccessVehicleEquipmentRef
+from .actual_vehicle_equipment import ActualVehicleEquipment
 from .assistance_booking_service import AssistanceBookingService
 from .assistance_booking_service_ref import AssistanceBookingServiceRef
 from .assistance_service import AssistanceService
 from .assistance_service_ref import AssistanceServiceRef
 from .battery_equipment import BatteryEquipment
+from .bed_equipment import BedEquipment
 from .catering_service import CateringService
 from .catering_service_ref import CateringServiceRef
 from .communication_service import CommunicationService
@@ -23,6 +25,7 @@ from .cycle_storage_equipment import CycleStorageEquipment
 from .cycle_storage_equipment_ref import CycleStorageEquipmentRef
 from .entrance_equipment import EntranceEquipment
 from .entrance_equipment_ref import EntranceEquipmentRef
+from .entrance_sensor import EntranceSensor
 from .escalator_equipment import EscalatorEquipment
 from .escalator_equipment_ref import EscalatorEquipmentRef
 from .general_sign import GeneralSign
@@ -39,12 +42,12 @@ from .lift_call_equipment import LiftCallEquipment
 from .lift_call_equipment_ref import LiftCallEquipmentRef
 from .lift_equipment import LiftEquipment
 from .lift_equipment_ref import LiftEquipmentRef
-from .local_service_ref import LocalServiceRef
 from .lost_property_service import LostPropertyService
 from .lost_property_service_ref import LostPropertyServiceRef
 from .luggage_locker_equipment_ref import LuggageLockerEquipmentRef
 from .luggage_service import LuggageService
 from .luggage_service_ref import LuggageServiceRef
+from .luggage_spot_equipment import LuggageSpotEquipment
 from .meeting_point_service import MeetingPointService
 from .meeting_point_service_ref import MeetingPointServiceRef
 from .money_service import MoneyService
@@ -75,13 +78,18 @@ from .rubbish_disposal_equipment import RubbishDisposalEquipment
 from .rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
 from .sanitary_equipment import SanitaryEquipment
 from .sanitary_equipment_ref import SanitaryEquipmentRef
+from .seat_equipment import SeatEquipment
 from .seating_equipment import SeatingEquipment
 from .seating_equipment_ref import SeatingEquipmentRef
+from .sensor_equipment import SensorEquipment
 from .shelter_equipment import ShelterEquipment
 from .shelter_equipment_ref import ShelterEquipmentRef
 from .sign_equipment import SignEquipment
 from .sign_equipment_ref import SignEquipmentRef
 from .site_equipment_ref import SiteEquipmentRef
+from .spot_equipment_1 import SpotEquipment1
+from .spot_equipment_2 import SpotEquipment2
+from .spot_sensor import SpotSensor
 from .staircase_equipment import StaircaseEquipment
 from .staircase_equipment_ref import StaircaseEquipmentRef
 from .ticket_validator_equipment import TicketValidatorEquipment
@@ -99,6 +107,7 @@ from .waiting_equipment_ref import WaitingEquipmentRef
 from .waiting_room_equipment import WaitingRoomEquipment
 from .waiting_room_equipment_ref import WaitingRoomEquipmentRef
 from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+from .wheelchair_vehicle_equipment_ref import WheelchairVehicleEquipmentRef
 from .wheelchair_vehicle_ref import WheelchairVehicleRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -140,12 +149,21 @@ class ExplicitEquipmentsRelStructure(ContainmentAggregationStructure):
             HelpPointEquipmentRef,
             PassengerSafetyEquipmentRef,
             SanitaryEquipmentRef,
+            WheelchairVehicleEquipmentRef,
             WheelchairVehicleRef,
             AccessVehicleEquipmentRef,
             VehicleEquipmentRef,
             PassengerEquipmentRef,
             RetailDevice,
             BatteryEquipment,
+            EntranceSensor,
+            SpotSensor,
+            SensorEquipment,
+            LuggageSpotEquipment,
+            BedEquipment,
+            SeatEquipment,
+            SpotEquipment1,
+            SpotEquipment2,
             VehicleReleaseEquipment,
             RefuellingEquipment,
             VehicleChargingEquipment,
@@ -179,6 +197,7 @@ class ExplicitEquipmentsRelStructure(ContainmentAggregationStructure):
             TicketingEquipment,
             WheelchairVehicleEquipment,
             AccessVehicleEquipment,
+            ActualVehicleEquipment,
             AssistanceBookingServiceRef,
             CateringServiceRef,
             RetailServiceRef,
@@ -193,7 +212,6 @@ class ExplicitEquipmentsRelStructure(ContainmentAggregationStructure):
             CustomerServiceRef,
             AssistanceServiceRef,
             TicketingServiceRef,
-            LocalServiceRef,
             AssistanceBookingService,
             CateringService,
             RetailService,
@@ -361,6 +379,11 @@ class ExplicitEquipmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "WheelchairVehicleEquipmentRef",
+                    "type": WheelchairVehicleEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "WheelchairVehicleRef",
                     "type": WheelchairVehicleRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -388,6 +411,46 @@ class ExplicitEquipmentsRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "BatteryEquipment",
                     "type": BatteryEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EntranceSensor",
+                    "type": EntranceSensor,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotSensor",
+                    "type": SpotSensor,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SensorEquipment",
+                    "type": SensorEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LuggageSpotEquipment",
+                    "type": LuggageSpotEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BedEquipment",
+                    "type": BedEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SeatEquipment",
+                    "type": SeatEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotEquipment",
+                    "type": SpotEquipment1,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotEquipment_",
+                    "type": SpotEquipment2,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -556,6 +619,11 @@ class ExplicitEquipmentsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "ActualVehicleEquipment",
+                    "type": ActualVehicleEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "AssistanceBookingServiceRef",
                     "type": AssistanceBookingServiceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -623,11 +691,6 @@ class ExplicitEquipmentsRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "TicketingServiceRef",
                     "type": TicketingServiceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "LocalServiceRef",
-                    "type": LocalServiceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

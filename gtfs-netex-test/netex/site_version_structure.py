@@ -20,6 +20,7 @@ from .site_element_version_structure import SiteElementVersionStructure
 from .site_entrances_rel_structure import SiteEntrancesRelStructure
 from .site_ref_structure import SiteRefStructure
 from .site_refs_rel_structure import SiteRefsRelStructure
+from .site_structures_rel_structure import SiteStructuresRelStructure
 from .site_type_enumeration import SiteTypeEnumeration
 from .topographic_place_ref import TopographicPlaceRef
 from .topographic_place_ref_structure import TopographicPlaceRefStructure
@@ -182,6 +183,14 @@ class SiteVersionStructure(SiteElementVersionStructure):
     entrances: Optional[SiteEntrancesRelStructure] = field(
         default=None,
         metadata={
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    site_structures: Optional[SiteStructuresRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "siteStructures",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

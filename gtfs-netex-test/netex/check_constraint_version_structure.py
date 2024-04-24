@@ -8,6 +8,7 @@ from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .assistance_booking_service_ref import AssistanceBookingServiceRef
 from .assistance_service_ref import AssistanceServiceRef
 from .battery_equipment_ref import BatteryEquipmentRef
+from .bed_equipment_ref import BedEquipmentRef
 from .car_pooling_service_ref import CarPoolingServiceRef
 from .catering_service_ref import CateringServiceRef
 from .chauffeured_vehicle_service_ref import ChauffeuredVehicleServiceRef
@@ -24,6 +25,7 @@ from .crossing_equipment_ref import CrossingEquipmentRef
 from .customer_service_ref import CustomerServiceRef
 from .cycle_storage_equipment_ref import CycleStorageEquipmentRef
 from .entrance_equipment_ref import EntranceEquipmentRef
+from .entrance_sensor_ref import EntranceSensorRef
 from .equipment_ref import EquipmentRef
 from .escalator_equipment_ref import EscalatorEquipmentRef
 from .facility_ref import FacilityRef
@@ -34,10 +36,10 @@ from .hire_service_ref import HireServiceRef
 from .left_luggage_service_ref import LeftLuggageServiceRef
 from .lift_call_equipment_ref import LiftCallEquipmentRef
 from .lift_equipment_ref import LiftEquipmentRef
-from .local_service_ref import LocalServiceRef
 from .lost_property_service_ref import LostPropertyServiceRef
 from .luggage_locker_equipment_ref import LuggageLockerEquipmentRef
 from .luggage_service_ref import LuggageServiceRef
+from .luggage_spot_equipment_ref import LuggageSpotEquipmentRef
 from .meeting_point_service_ref import MeetingPointServiceRef
 from .money_service_ref import MoneyServiceRef
 from .online_service_ref import OnlineServiceRef
@@ -56,10 +58,14 @@ from .retail_service_ref import RetailServiceRef
 from .rough_surface_ref import RoughSurfaceRef
 from .rubbish_disposal_equipment_ref import RubbishDisposalEquipmentRef
 from .sanitary_equipment_ref import SanitaryEquipmentRef
+from .seat_equipment_ref import SeatEquipmentRef
 from .seating_equipment_ref import SeatingEquipmentRef
+from .sensor_equipment_ref import SensorEquipmentRef
 from .shelter_equipment_ref import ShelterEquipmentRef
 from .sign_equipment_ref import SignEquipmentRef
 from .site_equipment_ref import SiteEquipmentRef
+from .spot_equipment_ref import SpotEquipmentRef
+from .spot_sensor_ref import SpotSensorRef
 from .staircase_equipment_ref import StaircaseEquipmentRef
 from .taxi_service_ref import TaxiServiceRef
 from .ticket_validator_equipment_ref import TicketValidatorEquipmentRef
@@ -76,6 +82,7 @@ from .vehicle_rental_service_ref import VehicleRentalServiceRef
 from .vehicle_sharing_service_ref import VehicleSharingServiceRef
 from .waiting_equipment_ref import WaitingEquipmentRef
 from .waiting_room_equipment_ref import WaitingRoomEquipmentRef
+from .wheelchair_vehicle_equipment_ref import WheelchairVehicleEquipmentRef
 from .wheelchair_vehicle_ref import WheelchairVehicleRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -179,6 +186,13 @@ class CheckConstraintVersionStructure(AssignmentVersionStructure1):
             BatteryEquipmentRef,
             RefuellingEquipmentRef,
             VehicleChargingEquipmentRef,
+            EntranceSensorRef,
+            SpotSensorRef,
+            SensorEquipmentRef,
+            LuggageSpotEquipmentRef,
+            BedEquipmentRef,
+            SeatEquipmentRef,
+            SpotEquipmentRef,
             AssistanceBookingServiceRef,
             CateringServiceRef,
             RetailServiceRef,
@@ -193,7 +207,6 @@ class CheckConstraintVersionStructure(AssignmentVersionStructure1):
             CustomerServiceRef,
             AssistanceServiceRef,
             TicketingServiceRef,
-            LocalServiceRef,
             VehicleReleaseEquipmentRef,
             TicketValidatorEquipmentRef,
             TicketingEquipmentRef,
@@ -226,6 +239,7 @@ class CheckConstraintVersionStructure(AssignmentVersionStructure1):
             HelpPointEquipmentRef,
             PassengerSafetyEquipmentRef,
             SanitaryEquipmentRef,
+            WheelchairVehicleEquipmentRef,
             WheelchairVehicleRef,
             AccessVehicleEquipmentRef,
             VehicleEquipmentRef,
@@ -290,6 +304,41 @@ class CheckConstraintVersionStructure(AssignmentVersionStructure1):
                 {
                     "name": "VehicleChargingEquipmentRef",
                     "type": VehicleChargingEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EntranceSensorRef",
+                    "type": EntranceSensorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotSensorRef",
+                    "type": SpotSensorRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SensorEquipmentRef",
+                    "type": SensorEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LuggageSpotEquipmentRef",
+                    "type": LuggageSpotEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BedEquipmentRef",
+                    "type": BedEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SeatEquipmentRef",
+                    "type": SeatEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotEquipmentRef",
+                    "type": SpotEquipmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -360,11 +409,6 @@ class CheckConstraintVersionStructure(AssignmentVersionStructure1):
                 {
                     "name": "TicketingServiceRef",
                     "type": TicketingServiceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "LocalServiceRef",
-                    "type": LocalServiceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -525,6 +569,11 @@ class CheckConstraintVersionStructure(AssignmentVersionStructure1):
                 {
                     "name": "SanitaryEquipmentRef",
                     "type": SanitaryEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "WheelchairVehicleEquipmentRef",
+                    "type": WheelchairVehicleEquipmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

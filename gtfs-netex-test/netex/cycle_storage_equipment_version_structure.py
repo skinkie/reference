@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
+from .covered_enumeration import CoveredEnumeration
 from .cycle_storage_enumeration import CycleStorageEnumeration
 from .place_equipment_version_structure import PlaceEquipmentVersionStructure
 
@@ -36,7 +37,7 @@ class CycleStorageEquipmentVersionStructure(PlaceEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    covered: Optional[bool] = field(
+    covered: Optional[CoveredEnumeration] = field(
         default=None,
         metadata={
             "name": "Covered",

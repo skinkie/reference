@@ -25,6 +25,7 @@ from .complaints_service_ref import ComplaintsServiceRef
 from .compound_train_ref import CompoundTrainRef
 from .customer_service_ref import CustomerServiceRef
 from .cycle_model_profile_ref import CycleModelProfileRef
+from .deck_plan_ref import DeckPlanRef
 from .discounting_rule_ref import DiscountingRuleRef
 from .distribution_channel_ref import DistributionChannelRef
 from .entrance_ref import EntranceRef
@@ -42,14 +43,16 @@ from .group_of_lines_ref import GroupOfLinesRef
 from .group_of_operators_ref import GroupOfOperatorsRef
 from .group_of_services_ref import GroupOfServicesRef
 from .group_of_single_journeys_ref import GroupOfSingleJourneysRef
+from .group_of_sites_ref import GroupOfSitesRef
 from .group_of_tariff_zones_ref import GroupOfTariffZonesRef
 from .hire_service_ref import HireServiceRef
 from .left_luggage_service_ref import LeftLuggageServiceRef
+from .level_ref import LevelRef
 from .limiting_rule_ref import LimitingRuleRef
 from .line_ref import LineRef
-from .local_service_ref import LocalServiceRef
 from .lost_property_service_ref import LostPropertyServiceRef
 from .luggage_service_ref import LuggageServiceRef
+from .luggage_spot_ref import LuggageSpotRef
 from .management_agent_ref import ManagementAgentRef
 from .meeting_point_service_ref import MeetingPointServiceRef
 from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneRef
@@ -61,6 +64,7 @@ from .online_service_operator_ref import OnlineServiceOperatorRef
 from .online_service_ref import OnlineServiceRef
 from .operator_ref import OperatorRef
 from .organisation_ref import OrganisationRef
+from .other_deck_space_ref import OtherDeckSpaceRef
 from .other_organisation_ref import OtherOrganisationRef
 from .parking_area_ref import ParkingAreaRef
 from .parking_bay_ref import ParkingBayRef
@@ -68,7 +72,11 @@ from .parking_entrance_for_vehicles_ref import ParkingEntranceForVehiclesRef
 from .parking_entrance_ref import ParkingEntranceRef
 from .parking_passenger_entrance_ref import ParkingPassengerEntranceRef
 from .parking_ref import ParkingRef
+from .parking_tariff_ref import ParkingTariffRef
 from .passenger_seat_ref import PassengerSeatRef
+from .passenger_space_ref import PassengerSpaceRef
+from .passenger_spot_ref import PassengerSpotRef
+from .passenger_vehicle_spot_ref import PassengerVehicleSpotRef
 from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
 from .place_use_enumeration import PlaceUseEnumeration
 from .point_of_interest_classification_ref import PointOfInterestClassificationRef
@@ -77,6 +85,7 @@ from .point_of_interest_ref import PointOfInterestRef
 from .point_of_interest_space_ref import PointOfInterestSpaceRef
 from .point_of_interest_vehicle_entrance_ref import PointOfInterestVehicleEntranceRef
 from .postal_address_ref import PostalAddressRef
+from .powered_train_ref import PoweredTrainRef
 from .pricing_rule_ref import PricingRuleRef
 from .quay_ref import QuayRef
 from .relative_direction_enumeration import RelativeDirectionEnumeration
@@ -101,10 +110,13 @@ from .site_component_ref import SiteComponentRef
 from .site_element_ref import SiteElementRef
 from .site_facility_set_ref import SiteFacilitySetRef
 from .site_ref import SiteRef
+from .spot_column_ref import SpotColumnRef
+from .spot_row_ref import SpotRowRef
 from .stop_place_entrance_ref import StopPlaceEntranceRef
 from .stop_place_ref import StopPlaceRef
 from .stop_place_space_ref import StopPlaceSpaceRef
 from .stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
+from .tariff_ref import TariffRef
 from .tariff_zone_ref import TariffZoneRef
 from .taxi_parking_area_ref import TaxiParkingAreaRef
 from .taxi_rank_ref import TaxiRankRef
@@ -126,15 +138,19 @@ from .type_of_fare_product_ref import TypeOfFareProductRef
 from .type_of_fare_structure_element_ref import TypeOfFareStructureElementRef
 from .type_of_fare_structure_factor_ref import TypeOfFareStructureFactorRef
 from .type_of_line_ref import TypeOfLineRef
+from .type_of_locatable_spot_ref import TypeOfLocatableSpotRef
 from .type_of_machine_readability_ref import TypeOfMachineReadabilityRef
+from .type_of_medium_access_device_ref import TypeOfMediumAccessDeviceRef
 from .type_of_payment_method_ref import TypeOfPaymentMethodRef
 from .type_of_pricing_rule_ref import TypeOfPricingRuleRef
 from .type_of_product_category_ref import TypeOfProductCategoryRef
+from .type_of_proof_ref import TypeOfProofRef
 from .type_of_sales_offer_package_ref import TypeOfSalesOfferPackageRef
 from .type_of_service_ref import TypeOfServiceRef
 from .type_of_tariff_ref import TypeOfTariffRef
 from .type_of_travel_document_ref import TypeOfTravelDocumentRef
 from .type_of_usage_parameter_ref import TypeOfUsageParameterRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_entrance_ref import VehicleEntranceRef
 from .vehicle_meeting_link_ref import VehicleMeetingLinkRef
 from .vehicle_meeting_place_ref import VehicleMeetingPlaceRef
@@ -519,15 +535,19 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
+    group_of_sites_ref: List[GroupOfSitesRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "GroupOfSitesRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
     choice: List[
         Union[
             VehicleStoppingPositionRef,
             VehicleStoppingPlaceRef,
-            BoardingPositionRef,
-            AccessSpaceRef,
-            TaxiStandRef,
-            QuayRef,
-            StopPlaceSpaceRef,
             VehiclePoolingParkingBayRef,
             MonitoredVehicleSharingParkingBayRef,
             VehicleSharingParkingBayRef,
@@ -537,20 +557,25 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             TaxiParkingAreaRef,
             ParkingAreaRef,
             PointOfInterestSpaceRef,
-            StopPlaceVehicleEntranceRef,
-            StopPlaceEntranceRef,
+            BoardingPositionRef,
+            AccessSpaceRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceSpaceRef,
             ParkingEntranceForVehiclesRef,
             ParkingPassengerEntranceRef,
             ParkingEntranceRef,
             PointOfInterestVehicleEntranceRef,
             PointOfInterestEntranceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
             VehicleEntranceRef,
             EntranceRef,
             SiteComponentRef,
-            TaxiRankRef,
-            StopPlaceRef,
             ParkingRef,
             PointOfInterestRef,
+            TaxiRankRef,
+            StopPlaceRef,
             ServiceSiteRef,
             SiteRef,
             SiteElementRef,
@@ -568,31 +593,6 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "VehicleStoppingPlaceRef",
                     "type": VehicleStoppingPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "BoardingPositionRef",
-                    "type": BoardingPositionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "AccessSpaceRef",
-                    "type": AccessSpaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TaxiStandRef",
-                    "type": TaxiStandRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "QuayRef",
-                    "type": QuayRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceSpaceRef",
-                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -641,13 +641,28 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceVehicleEntranceRef",
-                    "type": StopPlaceVehicleEntranceRef,
+                    "name": "BoardingPositionRef",
+                    "type": BoardingPositionRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceEntranceRef",
-                    "type": StopPlaceEntranceRef,
+                    "name": "AccessSpaceRef",
+                    "type": AccessSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiStandRef",
+                    "type": TaxiStandRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "QuayRef",
+                    "type": QuayRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceSpaceRef",
+                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -676,6 +691,16 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "StopPlaceVehicleEntranceRef",
+                    "type": StopPlaceVehicleEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceEntranceRef",
+                    "type": StopPlaceEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "VehicleEntranceRef",
                     "type": VehicleEntranceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -691,16 +716,6 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TaxiRankRef",
-                    "type": TaxiRankRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceRef",
-                    "type": StopPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "ParkingRef",
                     "type": ParkingRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -708,6 +723,16 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "PointOfInterestRef",
                     "type": PointOfInterestRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiRankRef",
+                    "type": TaxiRankRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceRef",
+                    "type": StopPlaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -726,6 +751,15 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
+        },
+    )
+    level_ref: List[LevelRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "LevelRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
         },
     )
     point_of_interest_classification_ref: List[PointOfInterestClassificationRef] = field(
@@ -931,7 +965,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    transport_type_ref_or_vehicle_type_ref: List[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
+    transport_type_ref_or_vehicle_type_ref_or_train_ref: List[Union[SimpleVehicleTypeRef, CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -944,6 +978,16 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1022,7 +1066,6 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             CustomerServiceRef,
             AssistanceServiceRef,
             TicketingServiceRef,
-            LocalServiceRef,
         ]
     ] = field(
         default_factory=list,
@@ -1129,11 +1172,6 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
                     "type": TicketingServiceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
-                {
-                    "name": "LocalServiceRef",
-                    "type": LocalServiceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
             ),
         },
     )
@@ -1150,6 +1188,83 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
         default_factory=list,
         metadata={
             "name": "TrainComponentLabelAssignmentRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    deck_plan_ref: List[DeckPlanRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "DeckPlanRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    deck_space_ref: List[Union[OtherDeckSpaceRef, PassengerSpaceRef]] = field(
+        default_factory=list,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "OtherDeckSpaceRef",
+                    "type": OtherDeckSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerSpaceRef",
+                    "type": PassengerSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
+    )
+    spot_column_ref: List[SpotColumnRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "SpotColumnRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    spot_row_ref: List[SpotRowRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "SpotRowRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    locatable_spot_ref: List[Union[LuggageSpotRef, PassengerVehicleSpotRef, PassengerSpotRef]] = field(
+        default_factory=list,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "LuggageSpotRef",
+                    "type": LuggageSpotRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerVehicleSpotRef",
+                    "type": PassengerVehicleSpotRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerSpotRef",
+                    "type": PassengerSpotRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
+    )
+    type_of_locatable_spot_ref: List[TypeOfLocatableSpotRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "TypeOfLocatableSpotRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "sequence": 1,
@@ -1198,6 +1313,24 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "sequence": 1,
+        },
+    )
+    tariff_ref: List[Union[ParkingTariffRef, TariffRef]] = field(
+        default_factory=list,
+        metadata={
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "ParkingTariffRef",
+                    "type": ParkingTariffRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TariffRef",
+                    "type": TariffRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
     discounting_rule_ref_or_pricing_rule_ref: List[Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]] = field(
@@ -1268,6 +1401,15 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
+    type_of_proof_ref: List[TypeOfProofRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "TypeOfProofRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
     type_of_sales_offer_package_ref: List[TypeOfSalesOfferPackageRef] = field(
         default_factory=list,
         metadata={
@@ -1290,6 +1432,15 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
         default_factory=list,
         metadata={
             "name": "TypeOfMachineReadabilityRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    type_of_medium_access_device_ref: List[TypeOfMediumAccessDeviceRef] = field(
+        default_factory=list,
+        metadata={
+            "name": "TypeOfMediumAccessDeviceRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "sequence": 1,

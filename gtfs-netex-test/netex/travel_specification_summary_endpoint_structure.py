@@ -31,21 +31,11 @@ class TravelSpecificationSummaryEndpointStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    stop_place_ref_or_site_ref: Optional[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
+    site_ref_or_stop_place_ref: Optional[Union[ParkingRef, PointOfInterestRef, TaxiRankRef, StopPlaceRef, ServiceSiteRef, SiteRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
-                {
-                    "name": "TaxiRankRef",
-                    "type": TaxiRankRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceRef",
-                    "type": StopPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
                 {
                     "name": "ParkingRef",
                     "type": ParkingRef,
@@ -54,6 +44,16 @@ class TravelSpecificationSummaryEndpointStructure:
                 {
                     "name": "PointOfInterestRef",
                     "type": PointOfInterestRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiRankRef",
+                    "type": TaxiRankRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceRef",
+                    "type": StopPlaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

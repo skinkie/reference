@@ -39,6 +39,7 @@ from .type_of_point_ref import TypeOfPointRef
 from .type_of_pricing_rule_ref import TypeOfPricingRuleRef
 from .type_of_projection_ref import TypeOfProjectionRef
 from .type_of_retail_device_ref import TypeOfRetailDeviceRef
+from .type_of_rolling_stock_ref import TypeOfRollingStockRef
 from .type_of_sales_offer_package_ref import TypeOfSalesOfferPackageRef
 from .type_of_security_list_ref import TypeOfSecurityListRef
 from .type_of_service_feature_ref import TypeOfServiceFeatureRef
@@ -83,6 +84,7 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
             TypeOfPassengerInformationEquipmentRef,
             TypeOfTimeDemandTypeRef,
             TypeOfJourneyPatternRef,
+            TypeOfRollingStockRef,
             TypeOfSecurityListRef,
             TypeOfPlugRef,
             TypeOfBatteryChemistryRef,
@@ -102,12 +104,12 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
             TypeOfEquipmentRef,
             TypeOfPlaceRef,
             TypeOfTransferRef,
-            TypeOfProjectionRef,
-            TypeOfFeatureRef,
-            TypeOfLinkSequenceRef,
             TypeOfOrganisationPartRef,
             TypeOfOrganisationRef,
             TypeOfZoneRef,
+            TypeOfProjectionRef,
+            TypeOfFeatureRef,
+            TypeOfLinkSequenceRef,
             TypeOfLinkRef,
             TypeOfPointRef,
             TypeOfLineRef,
@@ -220,6 +222,11 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfRollingStockRef",
+                    "type": TypeOfRollingStockRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TypeOfSecurityListRef",
                     "type": TypeOfSecurityListRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -315,21 +322,6 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfProjectionRef",
-                    "type": TypeOfProjectionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfFeatureRef",
-                    "type": TypeOfFeatureRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfLinkSequenceRef",
-                    "type": TypeOfLinkSequenceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "TypeOfOrganisationPartRef",
                     "type": TypeOfOrganisationPartRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -342,6 +334,21 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "TypeOfZoneRef",
                     "type": TypeOfZoneRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfProjectionRef",
+                    "type": TypeOfProjectionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfFeatureRef",
+                    "type": TypeOfFeatureRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfLinkSequenceRef",
+                    "type": TypeOfLinkSequenceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

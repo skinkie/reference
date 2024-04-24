@@ -8,11 +8,16 @@ from .beacon_point import BeaconPoint
 from .beacon_point_ref import BeaconPointRef
 from .border_point import BorderPoint
 from .border_point_ref import BorderPointRef
+from .deck_path_junction import DeckPathJunction
+from .deck_path_link_ref import DeckPathLinkRef
 from .fare_scheduled_stop_point import FareScheduledStopPoint
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .garage_point import GaragePoint
 from .garage_point_ref import GaragePointRef
+from .generic_path_junction import GenericPathJunction
+from .generic_path_link_ref import GenericPathLinkRef
 from .line_link_ref import LineLinkRef
+from .off_site_path_link_ref import OffSitePathLinkRef
 from .onward_vehicle_meeting_link_ref import OnwardVehicleMeetingLinkRef
 from .parking_point import ParkingPoint
 from .parking_point_ref import ParkingPointRef
@@ -35,6 +40,8 @@ from .route_point_ref import RoutePointRef
 from .scheduled_stop_point import ScheduledStopPoint
 from .scheduled_stop_point_ref import ScheduledStopPointRef
 from .service_link_ref import ServiceLinkRef
+from .site_path_junction import SitePathJunction
+from .site_path_link_ref import SitePathLinkRef
 from .timing_link_ref import TimingLinkRef
 from .timing_point import TimingPoint
 from .timing_point_ref import TimingPointRef
@@ -77,7 +84,6 @@ class PointOnSectionVersionedChildStructure(PointInLinkSequenceVersionedChildStr
             BorderPoint,
             FareScheduledStopPoint,
             ScheduledStopPoint,
-            PathJunction,
             RoutePoint,
             ParkingPoint,
             GaragePoint,
@@ -89,6 +95,10 @@ class PointOnSectionVersionedChildStructure(PointInLinkSequenceVersionedChildStr
             TrafficControlPoint,
             BeaconPoint,
             ActivationPoint,
+            DeckPathJunction,
+            PathJunction,
+            SitePathJunction,
+            GenericPathJunction,
             Point2,
         ]
     ] = field(
@@ -197,11 +207,6 @@ class PointOnSectionVersionedChildStructure(PointInLinkSequenceVersionedChildStr
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "PathJunction",
-                    "type": PathJunction,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "RoutePoint",
                     "type": RoutePoint,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -257,6 +262,26 @@ class PointOnSectionVersionedChildStructure(PointInLinkSequenceVersionedChildStr
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "DeckPathJunction",
+                    "type": DeckPathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PathJunction",
+                    "type": PathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SitePathJunction",
+                    "type": SitePathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathJunction",
+                    "type": GenericPathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "Point",
                     "type": Point2,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -264,7 +289,9 @@ class PointOnSectionVersionedChildStructure(PointInLinkSequenceVersionedChildStr
             ),
         },
     )
-    link_ref_or_infrastructure_link_ref: Optional[Union[OnwardVehicleMeetingLinkRef, VehicleMeetingLinkRef, ServiceLinkRef, LineLinkRef, TimingLinkRef, WireLinkRef, RoadLinkRef, RailwayLinkRef, ActivationLinkRef, PathLinkRef, RouteLinkRef]] = field(
+    link_ref_or_infrastructure_link_ref_or_generic_path_link_ref: Optional[
+        Union[OnwardVehicleMeetingLinkRef, VehicleMeetingLinkRef, ServiceLinkRef, LineLinkRef, TimingLinkRef, WireLinkRef, RoadLinkRef, RailwayLinkRef, ActivationLinkRef, RouteLinkRef, DeckPathLinkRef, OffSitePathLinkRef, PathLinkRef, SitePathLinkRef, GenericPathLinkRef]
+    ] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -315,13 +342,33 @@ class PointOnSectionVersionedChildStructure(PointInLinkSequenceVersionedChildStr
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "RouteLinkRef",
+                    "type": RouteLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckPathLinkRef",
+                    "type": DeckPathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OffSitePathLinkRef",
+                    "type": OffSitePathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "PathLinkRef",
                     "type": PathLinkRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "RouteLinkRef",
-                    "type": RouteLinkRef,
+                    "name": "SitePathLinkRef",
+                    "type": SitePathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathLinkRef",
+                    "type": GenericPathLinkRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

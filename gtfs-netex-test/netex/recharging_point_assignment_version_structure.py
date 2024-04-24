@@ -145,15 +145,10 @@ class RechargingPointAssignmentVersionStructure(AssignmentVersionStructure1):
             ),
         },
     )
-    site_component_ref_or_stop_place_space_ref_or_quay_ref_or_parking_bay_ref_or_vehicle_sharing_parking_bay_ref_or_parking_area_ref_or_entrance_ref_or_parking_entrance_ref: Optional[
+    site_component_ref_or_parking_bay_ref_or_vehicle_sharing_parking_bay_ref_or_parking_area_ref_or_stop_place_space_ref_or_quay_ref_or_parking_entrance_ref_or_entrance_ref: Optional[
         Union[
             VehicleStoppingPositionRef,
             VehicleStoppingPlaceRef,
-            BoardingPositionRef,
-            AccessSpaceRef,
-            TaxiStandRef,
-            QuayRef,
-            StopPlaceSpaceRef,
             VehiclePoolingParkingBayRef,
             MonitoredVehicleSharingParkingBayRef,
             VehicleSharingParkingBayRef,
@@ -163,13 +158,18 @@ class RechargingPointAssignmentVersionStructure(AssignmentVersionStructure1):
             TaxiParkingAreaRef,
             ParkingAreaRef,
             PointOfInterestSpaceRef,
-            StopPlaceVehicleEntranceRef,
-            StopPlaceEntranceRef,
+            BoardingPositionRef,
+            AccessSpaceRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceSpaceRef,
             ParkingEntranceForVehiclesRef,
             ParkingPassengerEntranceRef,
             ParkingEntranceRef,
             PointOfInterestVehicleEntranceRef,
             PointOfInterestEntranceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
             VehicleEntranceRef,
             EntranceRef,
             SiteComponentRef,
@@ -187,31 +187,6 @@ class RechargingPointAssignmentVersionStructure(AssignmentVersionStructure1):
                 {
                     "name": "VehicleStoppingPlaceRef",
                     "type": VehicleStoppingPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "BoardingPositionRef",
-                    "type": BoardingPositionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "AccessSpaceRef",
-                    "type": AccessSpaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TaxiStandRef",
-                    "type": TaxiStandRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "QuayRef",
-                    "type": QuayRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceSpaceRef",
-                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -260,13 +235,28 @@ class RechargingPointAssignmentVersionStructure(AssignmentVersionStructure1):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceVehicleEntranceRef",
-                    "type": StopPlaceVehicleEntranceRef,
+                    "name": "BoardingPositionRef",
+                    "type": BoardingPositionRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceEntranceRef",
-                    "type": StopPlaceEntranceRef,
+                    "name": "AccessSpaceRef",
+                    "type": AccessSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiStandRef",
+                    "type": TaxiStandRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "QuayRef",
+                    "type": QuayRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceSpaceRef",
+                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -292,6 +282,16 @@ class RechargingPointAssignmentVersionStructure(AssignmentVersionStructure1):
                 {
                     "name": "PointOfInterestEntranceRef",
                     "type": PointOfInterestEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceVehicleEntranceRef",
+                    "type": StopPlaceVehicleEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceEntranceRef",
+                    "type": StopPlaceEntranceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

@@ -10,7 +10,7 @@ from .funicular_submode import FunicularSubmode
 from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .metro_submode import MetroSubmode
 from .polygon import Polygon
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .rail_submode import RailSubmode
 from .simple_point_version_structure import SimplePointVersionStructure
 from .snow_and_ice_submode import SnowAndIceSubmode
@@ -24,7 +24,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class GroupOfStopPlacesStructure(GroupOfEntitiesVersionStructure):
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

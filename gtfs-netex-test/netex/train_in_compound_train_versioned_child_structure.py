@@ -4,8 +4,10 @@ from typing import Optional, Union
 from .compound_train_ref import CompoundTrainRef
 from .entity_in_version_structure import VersionedChildStructure
 from .multilingual_string import MultilingualString
+from .powered_train_ref import PoweredTrainRef
 from .train import Train
 from .train_ref import TrainRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_orientation_enumeration import VehicleOrientationEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -32,11 +34,21 @@ class TrainInCompoundTrainVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    train_ref_or_train: Optional[Union[TrainRef, Train]] = field(
+    unpowered_train_ref_or_powered_train_ref_or_train_ref_or_train: Optional[Union[UnpoweredTrainRef, PoweredTrainRef, TrainRef, Train]] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
                 {
                     "name": "TrainRef",
                     "type": TrainRef,

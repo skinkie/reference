@@ -12,10 +12,10 @@ from .parking_properties_rel_structure import ParkingPropertiesRelStructure
 from .parking_reservation_enumeration import ParkingReservationEnumeration
 from .parking_type_enumeration import ParkingTypeEnumeration
 from .parking_vehicle_enumeration import ParkingVehicleEnumeration
-from .path_junctions_rel_structure import PathJunctionsRelStructure
 from .payment_by_mobile_structure import PaymentByMobileStructure
 from .payment_method_enumeration import PaymentMethodEnumeration
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
+from .site_path_junctions_rel_structure import SitePathJunctionsRelStructure
 from .site_path_links_rel_structure import SitePathLinksRelStructure
 from .site_version_structure import SiteVersionStructure
 from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
@@ -38,7 +38,7 @@ class ParkingVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    path_junctions: Optional[PathJunctionsRelStructure] = field(
+    path_junctions: Optional[SitePathJunctionsRelStructure] = field(
         default=None,
         metadata={
             "name": "pathJunctions",
@@ -61,7 +61,7 @@ class ParkingVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

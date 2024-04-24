@@ -27,15 +27,15 @@ class SiteEntrancesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "siteEntrances_RelStructure"
 
-    entrance_ref_or_parking_entrance_ref_or_entrance: List[
+    parking_entrance_ref_or_entrance_ref_or_entrance: List[
         Union[
-            StopPlaceVehicleEntranceRef,
-            StopPlaceEntranceRef,
             ParkingEntranceForVehiclesRef,
             ParkingPassengerEntranceRef,
             ParkingEntranceRef,
             PointOfInterestVehicleEntranceRef,
             PointOfInterestEntranceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
             VehicleEntranceRef,
             EntranceRef,
             PointOfInterestVehicleEntrance,
@@ -51,16 +51,6 @@ class SiteEntrancesRelStructure(ContainmentAggregationStructure):
         metadata={
             "type": "Elements",
             "choices": (
-                {
-                    "name": "StopPlaceVehicleEntranceRef",
-                    "type": StopPlaceVehicleEntranceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceEntranceRef",
-                    "type": StopPlaceEntranceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
                 {
                     "name": "ParkingEntranceForVehiclesRef",
                     "type": ParkingEntranceForVehiclesRef,
@@ -84,6 +74,16 @@ class SiteEntrancesRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "PointOfInterestEntranceRef",
                     "type": PointOfInterestEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceVehicleEntranceRef",
+                    "type": StopPlaceVehicleEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceEntranceRef",
+                    "type": StopPlaceEntranceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

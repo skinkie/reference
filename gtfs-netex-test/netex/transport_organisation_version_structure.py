@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, List, Optional, Type, Union
+from typing import Any, ForwardRef, List, Optional, Union
 
 from .air_submode import AirSubmode
 from .all_modes_enumeration import AllModesEnumeration
@@ -63,7 +63,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
                 },
                 {
                     "name": "Address",
-                    "type": Type["TransportOrganisationVersionStructure.Address"],
+                    "type": ForwardRef("TransportOrganisationVersionStructure.Address"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -218,13 +218,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
 
     @dataclass(kw_only=True)
     class Address(PostalAddressVersionStructure):
-        validity_conditions_or_valid_between: Any = field(
-            init=False,
-            metadata={
-                "type": "Ignore",
-            },
-        )
-        alternative_texts: Any = field(
+        members: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",
@@ -254,7 +248,13 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
                 "type": "Ignore",
             },
         )
-        members: Any = field(
+        validity_conditions_or_valid_between: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        alternative_texts: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",

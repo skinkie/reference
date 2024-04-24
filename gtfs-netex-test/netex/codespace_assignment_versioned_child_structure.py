@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from xsdata.models.datatype import XmlDate
 
@@ -83,12 +83,12 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
             "choices": (
                 {
                     "name": "StartValue",
-                    "type": Type["CodespaceAssignmentVersionedChildStructure.StartValue"],
+                    "type": ForwardRef("CodespaceAssignmentVersionedChildStructure.StartValue"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "EndValue",
-                    "type": Type["CodespaceAssignmentVersionedChildStructure.EndValue"],
+                    "type": ForwardRef("CodespaceAssignmentVersionedChildStructure.EndValue"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

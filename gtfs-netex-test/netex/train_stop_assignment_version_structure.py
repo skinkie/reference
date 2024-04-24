@@ -2,13 +2,16 @@ from dataclasses import dataclass, field
 from typing import Optional, Union
 
 from .boarding_position_ref_structure import BoardingPositionRefStructure
+from .deck_entrance_assignments_rel_structure import DeckEntranceAssignmentsRelStructure
 from .dynamic_stop_assignment_ref import DynamicStopAssignmentRef
 from .multilingual_string import MultilingualString
 from .passenger_stop_assignment_ref import PassengerStopAssignmentRef
+from .powered_train_ref import PoweredTrainRef
 from .stop_assignment_version_structure import StopAssignmentVersionStructure
 from .train_component_ref import TrainComponentRef
 from .train_component_view import TrainComponentView
 from .train_ref import TrainRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -42,12 +45,27 @@ class TrainStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    train_ref: Optional[TrainRef] = field(
+    train_ref: Optional[Union[UnpoweredTrainRef, PoweredTrainRef, TrainRef]] = field(
         default=None,
         metadata={
-            "name": "TrainRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TrainRef",
+                    "type": TrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
     train_component_ref_or_train_component_view: Optional[Union[TrainComponentRef, TrainComponentView]] = field(
@@ -84,10 +102,26 @@ class TrainStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    is_allowed: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "IsAllowed",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     entrance_to_vehicle: Optional[MultilingualString] = field(
         default=None,
         metadata={
             "name": "EntranceToVehicle",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    deck_entrance_assignments: Optional[DeckEntranceAssignmentsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "deckEntranceAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

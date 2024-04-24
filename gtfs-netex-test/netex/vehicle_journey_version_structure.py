@@ -15,6 +15,8 @@ from .journey_parts_rel_structure import JourneyPartsRelStructure
 from .journey_pattern_ref import JourneyPatternRef
 from .journey_version_structure import JourneyVersionStructure
 from .operational_context_ref import OperationalContextRef
+from .passenger_at_stop_times_rel_structure import PassengerAtStopTimesRelStructure
+from .powered_train_ref import PoweredTrainRef
 from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
 from .route_ref import RouteRef
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
@@ -26,6 +28,7 @@ from .timing_algorithm_type_ref import TimingAlgorithmTypeRef
 from .train_block_ref import TrainBlockRef
 from .train_component_label_assignments_rel_structure import TrainComponentLabelAssignmentsRelStructure
 from .train_ref import TrainRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_journey_layovers_rel_structure import VehicleJourneyLayoversRelStructure
 from .vehicle_journey_run_times_rel_structure import VehicleJourneyRunTimesRelStructure
 from .vehicle_journey_stop_assignments_rel_structure import VehicleJourneyStopAssignmentsRelStructure
@@ -155,7 +158,7 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
+    vehicle_type_ref_or_train_ref: Optional[Union[CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -163,6 +166,16 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -278,6 +291,14 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
         default=None,
         metadata={
             "name": "passingTimes",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    passenger_at_stop_times: Optional[PassengerAtStopTimesRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "passengerAtStopTimes",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

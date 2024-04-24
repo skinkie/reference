@@ -11,6 +11,12 @@ class AlternativeQuayDescriptor(AlternativeQuayDescriptorVersionedChildStructure
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
+    name_type: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
     validity_conditions_or_valid_between: Any = field(
         init=False,
         metadata={
@@ -18,12 +24,6 @@ class AlternativeQuayDescriptor(AlternativeQuayDescriptorVersionedChildStructure
         },
     )
     alternative_texts: Any = field(
-        init=False,
-        metadata={
-            "type": "Ignore",
-        },
-    )
-    name_type: Any = field(
         init=False,
         metadata={
             "type": "Ignore",

@@ -12,6 +12,7 @@ from .interchange_rules_rel_structure import InterchangeRulesRelStructure
 from .journey_meeting_views_rel_structure import JourneyMeetingViewsRelStructure
 from .journey_part_ref import JourneyPartRef
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
+from .passenger_at_stop_times_rel_structure import PassengerAtStopTimesRelStructure
 from .passenger_stop_assignment_ref import PassengerStopAssignmentRef
 from .quay_assignment_view import QuayAssignmentView
 from .service_journey_interchanges_rel_structure import ServiceJourneyInterchangesRelStructure
@@ -177,6 +178,14 @@ class DepartureStructure:
         default=None,
         metadata={
             "name": "noticeAssignments",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    passenger_at_stop_times: Optional[PassengerAtStopTimesRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "passengerAtStopTimes",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

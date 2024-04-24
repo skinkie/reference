@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -31,22 +31,22 @@ class ObservedPassingTimeViewStructure(PassingTimeViewStructure):
             "choices": (
                 {
                     "name": "ActualArrivalTime",
-                    "type": Type["ObservedPassingTimeViewStructure.ActualArrivalTime"],
+                    "type": ForwardRef("ObservedPassingTimeViewStructure.ActualArrivalTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ArrivalDayOffset",
-                    "type": Type["ObservedPassingTimeViewStructure.ArrivalDayOffset"],
+                    "type": ForwardRef("ObservedPassingTimeViewStructure.ArrivalDayOffset"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ActualDepartureTime",
-                    "type": Type["ObservedPassingTimeViewStructure.ActualDepartureTime"],
+                    "type": ForwardRef("ObservedPassingTimeViewStructure.ActualDepartureTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DepartureDayOffset",
-                    "type": Type["ObservedPassingTimeViewStructure.DepartureDayOffset"],
+                    "type": ForwardRef("ObservedPassingTimeViewStructure.DepartureDayOffset"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -56,12 +56,12 @@ class ObservedPassingTimeViewStructure(PassingTimeViewStructure):
                 },
                 {
                     "name": "ActualNonstopPassingTime",
-                    "type": Type["ObservedPassingTimeViewStructure.ActualNonstopPassingTime"],
+                    "type": ForwardRef("ObservedPassingTimeViewStructure.ActualNonstopPassingTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "PassingTimeDayOffset",
-                    "type": Type["ObservedPassingTimeViewStructure.PassingTimeDayOffset"],
+                    "type": ForwardRef("ObservedPassingTimeViewStructure.PassingTimeDayOffset"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

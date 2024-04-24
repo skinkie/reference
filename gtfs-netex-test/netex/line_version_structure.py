@@ -22,7 +22,7 @@ from .payment_method_enumeration import PaymentMethodEnumeration
 from .presentation_structure import PresentationStructure
 from .print_presentation_structure import PrintPresentationStructure
 from .private_code import PrivateCode
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .purchase_moment_enumeration import PurchaseMomentEnumeration
 from .route_refs_rel_structure import RouteRefsRelStructure
 from .transport_organisation_refs_rel_structure import TransportOrganisationRefsRelStructure
@@ -89,7 +89,7 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

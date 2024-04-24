@@ -83,11 +83,6 @@ class DefaultConnectionVersionStructure(TransferVersionStructure):
         Union[
             VehicleStoppingPositionRef,
             VehicleStoppingPlaceRef,
-            BoardingPositionRef,
-            AccessSpaceRef,
-            TaxiStandRef,
-            QuayRef,
-            StopPlaceSpaceRef,
             VehiclePoolingParkingBayRef,
             MonitoredVehicleSharingParkingBayRef,
             VehicleSharingParkingBayRef,
@@ -97,20 +92,25 @@ class DefaultConnectionVersionStructure(TransferVersionStructure):
             TaxiParkingAreaRef,
             ParkingAreaRef,
             PointOfInterestSpaceRef,
-            StopPlaceVehicleEntranceRef,
-            StopPlaceEntranceRef,
+            BoardingPositionRef,
+            AccessSpaceRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceSpaceRef,
             ParkingEntranceForVehiclesRef,
             ParkingPassengerEntranceRef,
             ParkingEntranceRef,
             PointOfInterestVehicleEntranceRef,
             PointOfInterestEntranceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
             VehicleEntranceRef,
             EntranceRef,
             SiteComponentRef,
-            TaxiRankRef,
-            StopPlaceRef,
             ParkingRef,
             PointOfInterestRef,
+            TaxiRankRef,
+            StopPlaceRef,
             ServiceSiteRef,
             SiteRef,
             SiteElementRef,
@@ -128,31 +128,6 @@ class DefaultConnectionVersionStructure(TransferVersionStructure):
                 {
                     "name": "VehicleStoppingPlaceRef",
                     "type": VehicleStoppingPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "BoardingPositionRef",
-                    "type": BoardingPositionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "AccessSpaceRef",
-                    "type": AccessSpaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TaxiStandRef",
-                    "type": TaxiStandRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "QuayRef",
-                    "type": QuayRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceSpaceRef",
-                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -201,13 +176,28 @@ class DefaultConnectionVersionStructure(TransferVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceVehicleEntranceRef",
-                    "type": StopPlaceVehicleEntranceRef,
+                    "name": "BoardingPositionRef",
+                    "type": BoardingPositionRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceEntranceRef",
-                    "type": StopPlaceEntranceRef,
+                    "name": "AccessSpaceRef",
+                    "type": AccessSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiStandRef",
+                    "type": TaxiStandRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "QuayRef",
+                    "type": QuayRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceSpaceRef",
+                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -236,6 +226,16 @@ class DefaultConnectionVersionStructure(TransferVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "StopPlaceVehicleEntranceRef",
+                    "type": StopPlaceVehicleEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceEntranceRef",
+                    "type": StopPlaceEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "VehicleEntranceRef",
                     "type": VehicleEntranceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -251,16 +251,6 @@ class DefaultConnectionVersionStructure(TransferVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TaxiRankRef",
-                    "type": TaxiRankRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceRef",
-                    "type": StopPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "ParkingRef",
                     "type": ParkingRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -268,6 +258,16 @@ class DefaultConnectionVersionStructure(TransferVersionStructure):
                 {
                     "name": "PointOfInterestRef",
                     "type": PointOfInterestRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiRankRef",
+                    "type": TaxiRankRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceRef",
+                    "type": StopPlaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

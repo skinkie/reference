@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional, Union
+from typing import ForwardRef, List, Optional, Union
 
 from .boarding_position import BoardingPosition
 from .boarding_position_ref import BoardingPositionRef
@@ -84,11 +84,29 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    train_elements: Optional[TrainStopAssignmentsRelStructure] = field(
-        default=None,
+    train_stop_assignments_or_train_elements: List[Union["PassengerStopAssignmentVersionStructure.TrainStopAssignments", "PassengerStopAssignmentVersionStructure.TrainElements"]] = field(
+        default_factory=list,
         metadata={
-            "name": "trainElements",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "trainStopAssignments",
+                    "type": ForwardRef("PassengerStopAssignmentVersionStructure.TrainStopAssignments"),
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "trainElements",
+                    "type": ForwardRef("PassengerStopAssignmentVersionStructure.TrainElements"),
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
+
+    @dataclass(kw_only=True)
+    class TrainStopAssignments(TrainStopAssignmentsRelStructure):
+        pass
+
+    @dataclass(kw_only=True)
+    class TrainElements(TrainStopAssignmentsRelStructure):
+        pass

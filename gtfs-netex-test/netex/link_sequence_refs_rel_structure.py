@@ -5,6 +5,8 @@ from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .dead_run_ref import DeadRunRef
+from .deck_navigation_path_ref import DeckNavigationPathRef
+from .generic_navigation_path_ref import GenericNavigationPathRef
 from .journey_pattern_ref import JourneyPatternRef
 from .link_sequence_ref import LinkSequenceRef
 from .navigation_path_ref import NavigationPathRef
@@ -16,6 +18,7 @@ from .service_journey_ref import ServiceJourneyRef
 from .service_pattern_ref import ServicePatternRef
 from .single_journey_path_ref import SingleJourneyPathRef
 from .single_journey_ref import SingleJourneyRef
+from .site_navigation_path_ref import SiteNavigationPathRef
 from .special_service_ref import SpecialServiceRef
 from .template_service_journey_ref import TemplateServiceJourneyRef
 from .timing_pattern_ref import TimingPatternRef
@@ -31,7 +34,7 @@ class LinkSequenceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "linkSequenceRefs_RelStructure"
 
-    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref: List[
+    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref_or_generic_navigation_path_ref: List[
         Union[
             TripRef,
             TripPatternTripRef,
@@ -50,8 +53,11 @@ class LinkSequenceRefsRelStructure(OneToManyRelationshipStructure):
             DeadRunJourneyPatternRef,
             JourneyPatternRef,
             TimingPatternRef,
-            NavigationPathRef,
             RouteRef,
+            DeckNavigationPathRef,
+            NavigationPathRef,
+            SiteNavigationPathRef,
+            GenericNavigationPathRef,
             LinkSequenceRef,
         ]
     ] = field(
@@ -145,13 +151,28 @@ class LinkSequenceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "RouteRef",
+                    "type": RouteRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckNavigationPathRef",
+                    "type": DeckNavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "NavigationPathRef",
                     "type": NavigationPathRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "RouteRef",
-                    "type": RouteRef,
+                    "name": "SiteNavigationPathRef",
+                    "type": SiteNavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericNavigationPathRef",
+                    "type": GenericNavigationPathRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

@@ -1,11 +1,15 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 
+from .deck_path_link_ref import DeckPathLinkRef
+from .generic_path_link_ref import GenericPathLinkRef
 from .link_in_link_sequence_versioned_child_structure import LinkInLinkSequenceVersionedChildStructure
 from .multilingual_string import MultilingualString
+from .off_site_path_link_ref import OffSitePathLinkRef
 from .path_heading_enumeration import PathHeadingEnumeration
 from .path_link_ref import PathLinkRef
 from .path_link_view import PathLinkView
+from .site_path_link_ref import SitePathLinkRef
 from .transition_enumeration import TransitionEnumeration
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -16,13 +20,38 @@ class PathLinkInSequenceVersionedChildStructure(LinkInLinkSequenceVersionedChild
     class Meta:
         name = "PathLinkInSequence_VersionedChildStructure"
 
-    path_link_ref: PathLinkRef = field(
+    generic_path_link_ref: Optional[Union[DeckPathLinkRef, OffSitePathLinkRef, PathLinkRef, SitePathLinkRef, GenericPathLinkRef]] = field(
+        default=None,
         metadata={
-            "name": "PathLinkRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "required": True,
-        }
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "DeckPathLinkRef",
+                    "type": DeckPathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OffSitePathLinkRef",
+                    "type": OffSitePathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PathLinkRef",
+                    "type": PathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SitePathLinkRef",
+                    "type": SitePathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathLinkRef",
+                    "type": GenericPathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
+        },
     )
     reverse: Optional[bool] = field(
         default=None,

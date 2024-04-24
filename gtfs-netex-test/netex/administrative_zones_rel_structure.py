@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from .administrative_zone_ref import AdministrativeZoneRef
 from .all_modes_enumeration import AllModesEnumeration
@@ -12,7 +12,7 @@ from .online_service_operator_ref import OnlineServiceOperatorRef
 from .operator_ref import OperatorRef
 from .organisation_ref import OrganisationRef
 from .other_organisation_ref import OtherOrganisationRef
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .responsibility_sets_rel_structure import ResponsibilitySetsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .serviced_organisation_ref import ServicedOrganisationRef
@@ -39,12 +39,12 @@ class AdministrativeZonesRelStructure(ContainmentAggregationStructure):
                 },
                 {
                     "name": "TransportAdministrativeZone",
-                    "type": Type["TransportAdministrativeZone"],
+                    "type": ForwardRef("TransportAdministrativeZone"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "AdministrativeZone",
-                    "type": Type["AdministrativeZone"],
+                    "type": ForwardRef("AdministrativeZone"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -57,7 +57,7 @@ class AdministrativeZoneVersionStructure(ZoneVersionStructure):
     class Meta:
         name = "AdministrativeZone_VersionStructure"
 
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

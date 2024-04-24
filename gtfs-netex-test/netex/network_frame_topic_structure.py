@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from xsdata.models.datatype import XmlDateTime
 
@@ -48,12 +48,12 @@ class NetworkFrameTopicStructure(TopicStructure):
                 },
                 {
                     "name": "ChangedSince",
-                    "type": Type["NetworkFrameTopicStructure.ChangedSince"],
+                    "type": ForwardRef("NetworkFrameTopicStructure.ChangedSince"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "CurrentAt",
-                    "type": Type["NetworkFrameTopicStructure.CurrentAt"],
+                    "type": ForwardRef("NetworkFrameTopicStructure.CurrentAt"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -63,7 +63,7 @@ class NetworkFrameTopicStructure(TopicStructure):
                 },
                 {
                     "name": "selectionValidityConditions",
-                    "type": Type["NetworkFrameTopicStructure.SelectionValidityConditions"],
+                    "type": ForwardRef("NetworkFrameTopicStructure.SelectionValidityConditions"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

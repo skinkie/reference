@@ -26,7 +26,6 @@ from .hire_service_ref import HireServiceRef
 from .info_links_rel_structure import InfoLinksRelStructure
 from .left_luggage_service_ref import LeftLuggageServiceRef
 from .line_ref import LineRef
-from .local_service_ref import LocalServiceRef
 from .lost_property_service_ref import LostPropertyServiceRef
 from .luggage_service_ref import LuggageServiceRef
 from .management_agent_ref import ManagementAgentRef
@@ -230,7 +229,6 @@ class TariffVersionStructure(DataManagedObjectStructure):
             CustomerServiceRef,
             AssistanceServiceRef,
             TicketingServiceRef,
-            LocalServiceRef,
         ]
     ] = field(
         default=None,
@@ -335,11 +333,6 @@ class TariffVersionStructure(DataManagedObjectStructure):
                 {
                     "name": "TicketingServiceRef",
                     "type": TicketingServiceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "LocalServiceRef",
-                    "type": LocalServiceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

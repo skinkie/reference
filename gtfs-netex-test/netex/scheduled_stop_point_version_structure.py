@@ -7,7 +7,7 @@ from .multilingual_string import MultilingualString
 from .presentation_structure import PresentationStructure
 from .private_code import PrivateCode
 from .private_code_structure import PrivateCodeStructure
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .request_method_type_enumeration import RequestMethodTypeEnumeration
 from .stop_area_refs_rel_structure import StopAreaRefsRelStructure
 from .stop_type_enumeration import StopTypeEnumeration
@@ -81,7 +81,7 @@ class ScheduledStopPointVersionStructure(TimingPointVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

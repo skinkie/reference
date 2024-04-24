@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .stop_area_ref_structure import StopAreaRefStructure
 from .topographic_place_ref import TopographicPlaceRef
 from .topographic_place_view import TopographicPlaceView
@@ -15,7 +15,7 @@ class StopAreaVersionStructure(ZoneVersionStructure):
     class Meta:
         name = "StopArea_VersionStructure"
 
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

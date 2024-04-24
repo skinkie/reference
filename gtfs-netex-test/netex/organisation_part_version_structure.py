@@ -15,7 +15,7 @@ from .organisation_ref import OrganisationRef
 from .organisation_refs_rel_structure import OrganisationRefsRelStructure
 from .other_organisation_ref import OtherOrganisationRef
 from .private_code import PrivateCode
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .responsibility_sets_rel_structure import ResponsibilitySetsRelStructure
 from .retail_consortium_ref import RetailConsortiumRef
 from .serviced_organisation_ref import ServicedOrganisationRef
@@ -54,7 +54,7 @@ class OrganisationPartVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

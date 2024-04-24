@@ -39,6 +39,14 @@ class AccessVehicleEquipmentVersionStructure(ActualVehicleEquipmentVersionStruct
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    hoist_operating_radius: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "HoistOperatingRadius",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     ramp: Optional[bool] = field(
         default=None,
         metadata={

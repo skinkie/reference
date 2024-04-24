@@ -3,9 +3,9 @@ from typing import Optional
 
 from .accesses_rel_structure import AccessesRelStructure
 from .navigation_paths_rel_structure import NavigationPathsRelStructure
-from .path_junctions_rel_structure import PathJunctionsRelStructure
 from .point_of_interest_classifications_views_rel_structure import PointOfInterestClassificationsViewsRelStructure
 from .point_of_interest_spaces_rel_structure import PointOfInterestSpacesRelStructure
+from .site_path_junctions_rel_structure import SitePathJunctionsRelStructure
 from .site_path_links_rel_structure import SitePathLinksRelStructure
 from .site_version_structure import SiteVersionStructure
 from .topographic_place_refs_rel_structure import TopographicPlaceRefsRelStructure
@@ -48,7 +48,7 @@ class PointOfInterestVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    path_junctions: Optional[PathJunctionsRelStructure] = field(
+    path_junctions: Optional[SitePathJunctionsRelStructure] = field(
         default=None,
         metadata={
             "name": "pathJunctions",

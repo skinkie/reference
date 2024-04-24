@@ -9,3 +9,5 @@ class CoveredEnumeration(Enum):
     COVERED = "covered"
     MIXED = "mixed"
     UNKNOWN = "unknown"
+    TRUE = "true"
+    FALSE = "false"

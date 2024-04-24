@@ -11,6 +11,7 @@ class AccessFeatureEnumeration(Enum):
     RAMP = "ramp"
     STAIRS = "stairs"
     SERIES_OF_STAIRS = "seriesOfStairs"
+    LADDER = "ladder"
     SHUTTLE = "shuttle"
     CROSSING = "crossing"
     BARRIER = "barrier"

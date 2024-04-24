@@ -49,11 +49,13 @@ from .abstract_subscription_structure import AbstractSubscriptionStructure
 from .abstract_surface import AbstractSurface
 from .abstract_surface_type import AbstractSurfaceType
 from .abstract_tracked_request import AbstractTrackedRequest
-from .accepted_driver_permit import AcceptedDriverPermit
 from .accepted_driver_permit_ref import AcceptedDriverPermitRef
 from .accepted_driver_permit_ref_structure import AcceptedDriverPermitRefStructure
-from .accepted_driver_permit_version_structure import AcceptedDriverPermitVersionStructure
-from .accepted_driver_permits_rel_structure import AcceptedDriverPermitsRelStructure
+from .accepted_driver_permits_rel_structure import (
+    AcceptedDriverPermit,
+    AcceptedDriverPermitsRelStructure,
+    AcceptedDriverPermitVersionStructure,
+)
 from .access import Access
 from .access_end_structure import AccessEndStructure
 from .access_equipment import AccessEquipment
@@ -161,6 +163,7 @@ from .activation_points_in_frame_rel_structure import ActivationPointsInFrameRel
 from .activation_type_refs_rel_structure import ActivationTypeRefsRelStructure
 from .actual_vehicle_equipment import ActualVehicleEquipment
 from .actual_vehicle_equipment_version_structure import ActualVehicleEquipmentVersionStructure
+from .actual_vehicle_equipments_rel_structure import ActualVehicleEquipmentsRelStructure
 from .additional_driver_option import AdditionalDriverOption
 from .additional_driver_option_ref import AdditionalDriverOptionRef
 from .additional_driver_option_ref_structure import AdditionalDriverOptionRefStructure
@@ -203,6 +206,7 @@ from .all_organisations_ref import AllOrganisationsRef
 from .all_organisations_ref_structure import AllOrganisationsRefStructure
 from .all_public_transport_organisations_ref import AllPublicTransportOrganisationsRef
 from .all_public_transport_organisations_ref_structure import AllPublicTransportOrganisationsRefStructure
+from .all_road_vehicle_category_enumeration import AllRoadVehicleCategoryEnumeration
 from .all_submode_structure import AllSubmodeStructure
 from .all_transport_organisations_ref import AllTransportOrganisationsRef
 from .all_transport_organisations_ref_structure import AllTransportOrganisationsRefStructure
@@ -286,6 +290,11 @@ from .beacon_point_ref_structure import BeaconPointRefStructure
 from .beacon_point_version_structure import BeaconPointVersionStructure
 from .beacon_protocol_enumeration import BeaconProtocolEnumeration
 from .beacon_type_enumeration import BeaconTypeEnumeration
+from .bed_equipment import BedEquipment
+from .bed_equipment_ref import BedEquipmentRef
+from .bed_equipment_ref_structure import BedEquipmentRefStructure
+from .bed_equipment_version_structure import BedEquipmentVersionStructure
+from .bed_type_enumeration import BedTypeEnumeration
 from .berth_facility import BerthFacility
 from .berth_facility_enumeration import BerthFacilityEnumeration
 from .beyond_data_horizon import BeyondDataHorizon
@@ -542,6 +551,7 @@ from .complex_feature_ref import ComplexFeatureRef
 from .complex_feature_ref_structure import ComplexFeatureRefStructure
 from .complex_feature_refs_rel_structure import ComplexFeatureRefsRelStructure
 from .complex_feature_version_structure import ComplexFeatureVersionStructure
+from .component_orientation_enumeration import ComponentOrientationEnumeration
 from .composite_frame_ref import CompositeFrameRef
 from .composite_frame_ref_structure import CompositeFrameRefStructure
 from .composite_prices_rel_structure import CompositePricesRelStructure
@@ -586,6 +596,7 @@ from .contract_ref import ContractRef
 from .contract_ref_rel_structure import ContractRefRelStructure
 from .contract_ref_structure import ContractRefStructure
 from .contract_refs_rel_structure import ContractRefsRelStructure
+from .contract_type_enumeration import ContractTypeEnumeration
 from .contract_version_structure import ContractVersionStructure
 from .contracts_in_frame_rel_structure import ContractsInFrameRelStructure
 from .control_centre import ControlCentre
@@ -813,6 +824,101 @@ from .dead_run_ref_structure import DeadRunRefStructure
 from .dead_run_type_enumeration import DeadRunTypeEnumeration
 from .dead_run_version_structure import DeadRunVersionStructure
 from .dead_run_with_calls_version_structure import DeadRunWithCallsVersionStructure
+from .deck import Deck
+from .deck_component import DeckComponent
+from .deck_component_ref import DeckComponentRef
+from .deck_component_ref_structure import DeckComponentRefStructure
+from .deck_component_version_structure import DeckComponentVersionStructure
+from .deck_entrance_1 import DeckEntrance1
+from .deck_entrance_2 import DeckEntrance2
+from .deck_entrance_assignment import DeckEntranceAssignment
+from .deck_entrance_assignment_ref import DeckEntranceAssignmentRef
+from .deck_entrance_assignment_ref_structure import DeckEntranceAssignmentRefStructure
+from .deck_entrance_assignment_refs_rel_structure import DeckEntranceAssignmentRefsRelStructure
+from .deck_entrance_assignment_version_structure import DeckEntranceAssignmentVersionStructure
+from .deck_entrance_assignments_rel_structure import DeckEntranceAssignmentsRelStructure
+from .deck_entrance_couple import DeckEntranceCouple
+from .deck_entrance_couple_ref import DeckEntranceCoupleRef
+from .deck_entrance_couple_ref_structure import DeckEntranceCoupleRefStructure
+from .deck_entrance_couple_versioned_child_structure import DeckEntranceCoupleVersionedChildStructure
+from .deck_entrance_couples_rel_structure import DeckEntranceCouplesRelStructure
+from .deck_entrance_ref import DeckEntranceRef
+from .deck_entrance_ref_structure import DeckEntranceRefStructure
+from .deck_entrance_type_enumeration import DeckEntranceTypeEnumeration
+from .deck_entrance_usage import DeckEntranceUsage
+from .deck_entrance_usage_ref import DeckEntranceUsageRef
+from .deck_entrance_usage_ref_structure import DeckEntranceUsageRefStructure
+from .deck_entrance_usage_versioned_child_structure import DeckEntranceUsageVersionedChildStructure
+from .deck_entrance_usages_rel_structure import DeckEntranceUsagesRelStructure
+from .deck_entrance_version_structure import DeckEntranceVersionStructure
+from .deck_entrances_rel_structure import DeckEntrancesRelStructure
+from .deck_level import DeckLevel
+from .deck_level_ref import DeckLevelRef
+from .deck_level_ref_structure import DeckLevelRefStructure
+from .deck_level_version_structure import DeckLevelVersionStructure
+from .deck_levels_rel_structure import DeckLevelsRelStructure
+from .deck_navigation_path import DeckNavigationPath
+from .deck_navigation_path_ref import DeckNavigationPathRef
+from .deck_navigation_path_ref_structure import DeckNavigationPathRefStructure
+from .deck_navigation_path_refs_rel_structure import DeckNavigationPathRefsRelStructure
+from .deck_navigation_path_type_enumeration import DeckNavigationPathTypeEnumeration
+from .deck_navigation_path_version_structure import DeckNavigationPathVersionStructure
+from .deck_navigation_paths_rel_structure import DeckNavigationPathsRelStructure
+from .deck_path_junction import DeckPathJunction
+from .deck_path_junction_ref import DeckPathJunctionRef
+from .deck_path_junction_ref_structure import DeckPathJunctionRefStructure
+from .deck_path_junction_refs_rel_structure import DeckPathJunctionRefsRelStructure
+from .deck_path_junction_version_structure import DeckPathJunctionVersionStructure
+from .deck_path_link import DeckPathLink
+from .deck_path_link_end_structure import DeckPathLinkEndStructure
+from .deck_path_link_ref import DeckPathLinkRef
+from .deck_path_link_ref_structure import DeckPathLinkRefStructure
+from .deck_path_link_refs_rel_structure import DeckPathLinkRefsRelStructure
+from .deck_path_link_version_structure import DeckPathLinkVersionStructure
+from .deck_place_in_sequence import DeckPlaceInSequence
+from .deck_place_in_sequence_ref import DeckPlaceInSequenceRef
+from .deck_place_in_sequence_ref_structure import DeckPlaceInSequenceRefStructure
+from .deck_place_in_sequence_versioned_child_structure import DeckPlaceInSequenceVersionedChildStructure
+from .deck_places_in_sequence_rel_structure import DeckPlacesInSequenceRelStructure
+from .deck_plan import DeckPlan
+from .deck_plan_assignment import DeckPlanAssignment
+from .deck_plan_assignment_ref import DeckPlanAssignmentRef
+from .deck_plan_assignment_ref_structure import DeckPlanAssignmentRefStructure
+from .deck_plan_assignment_refs_rel_structure import DeckPlanAssignmentRefsRelStructure
+from .deck_plan_assignment_version_structure import DeckPlanAssignmentVersionStructure
+from .deck_plan_assignments_rel_structure import DeckPlanAssignmentsRelStructure
+from .deck_plan_ref import DeckPlanRef
+from .deck_plan_ref_structure import DeckPlanRefStructure
+from .deck_plan_refs_rel_structure import DeckPlanRefsRelStructure
+from .deck_plan_version_structure import DeckPlanVersionStructure
+from .deck_plans_rel_structure import DeckPlansRelStructure
+from .deck_point_structure import DeckPointStructure
+from .deck_ref import DeckRef
+from .deck_ref_structure import DeckRefStructure
+from .deck_refs_rel_structure import DeckRefsRelStructure
+from .deck_space_1 import DeckSpace1
+from .deck_space_2 import DeckSpace2
+from .deck_space_capacities_rel_structure import DeckSpaceCapacitiesRelStructure
+from .deck_space_capacity import DeckSpaceCapacity
+from .deck_space_capacity_ref import DeckSpaceCapacityRef
+from .deck_space_capacity_ref_structure import DeckSpaceCapacityRefStructure
+from .deck_space_capacity_versioned_child_structure import DeckSpaceCapacityVersionedChildStructure
+from .deck_space_ref import DeckSpaceRef
+from .deck_space_ref_structure import DeckSpaceRefStructure
+from .deck_space_version_structure import DeckSpaceVersionStructure
+from .deck_spaces_rel_structure import DeckSpacesRelStructure
+from .deck_vehicle_entrance import DeckVehicleEntrance
+from .deck_vehicle_entrance_ref import DeckVehicleEntranceRef
+from .deck_vehicle_entrance_ref_structure import DeckVehicleEntranceRefStructure
+from .deck_vehicle_entrance_version_structure import DeckVehicleEntranceVersionStructure
+from .deck_version_structure import DeckVersionStructure
+from .deck_window import DeckWindow
+from .deck_window_ref import DeckWindowRef
+from .deck_window_ref_structure import DeckWindowRefStructure
+from .deck_window_type_enumeration import DeckWindowTypeEnumeration
+from .deck_window_version_structure import DeckWindowVersionStructure
+from .deck_windows_rel_structure import DeckWindowsRelStructure
+from .decks_rel_structure import DecksRelStructure
 from .default_code_space import DefaultCodeSpace
 from .default_connection import DefaultConnection
 from .default_connection_end_structure import DefaultConnectionEndStructure
@@ -935,6 +1041,7 @@ from .distribution_channel_version_structure import DistributionChannelVersionSt
 from .distribution_channels_in_frame_rel_structure import DistributionChannelsInFrameRelStructure
 from .distribution_rights_enumeration import DistributionRightsEnumeration
 from .door_handle_enumeration import DoorHandleEnumeration
+from .door_type_enumeration import DoorTypeEnumeration
 from .driver_ref import DriverRef
 from .driver_ref_structure import DriverRefStructure
 from .driver_schedule_frame import DriverScheduleFrame
@@ -1062,9 +1169,19 @@ from .entrance_purpose_enumeration import EntrancePurposeEnumeration
 from .entrance_ref import EntranceRef
 from .entrance_ref_structure import EntranceRefStructure
 from .entrance_refs_rel_structure import EntranceRefsRelStructure
+from .entrance_sensor import EntranceSensor
+from .entrance_sensor_ref import EntranceSensorRef
+from .entrance_sensor_ref_structure import EntranceSensorRefStructure
+from .entrance_sensor_version_structure import EntranceSensorVersionStructure
+from .entrance_setting_enumeration import EntranceSettingEnumeration
 from .entrance_turning_space_position_enumeration import EntranceTurningSpacePositionEnumeration
+from .entrance_usage_enumeration import EntranceUsageEnumeration
 from .envelope import Envelope
 from .envelope_type import EnvelopeType
+from .equipable_space import EquipableSpace
+from .equipable_space_ref import EquipableSpaceRef
+from .equipable_space_ref_structure import EquipableSpaceRefStructure
+from .equipable_space_version_structure import EquipableSpaceVersionStructure
 from .equipment import Equipment
 from .equipment_place import EquipmentPlace
 from .equipment_place_ref import EquipmentPlaceRef
@@ -1385,6 +1502,7 @@ from .general_organisation import GeneralOrganisation
 from .general_organisation_ref import GeneralOrganisationRef
 from .general_organisation_ref_structure import GeneralOrganisationRefStructure
 from .general_organisation_version_structure import GeneralOrganisationVersionStructure
+from .general_path_junction_refs_rel_structure import GeneralPathJunctionRefsRelStructure
 from .general_section_ref import GeneralSectionRef
 from .general_section_ref_structure import GeneralSectionRefStructure
 from .general_sections_in_frame_rel_structure import GeneralSectionsInFrameRelStructure
@@ -1405,6 +1523,11 @@ from .general_version_frame_structure import (
 )
 from .general_zone import GeneralZone
 from .general_zone_version_structure import GeneralZoneVersionStructure
+from .generic_navigation import GenericNavigation
+from .generic_navigation_path_ref import GenericNavigationPathRef
+from .generic_navigation_path_ref_structure import GenericNavigationPathRefStructure
+from .generic_navigation_path_refs_rel_structure import GenericNavigationPathRefsRelStructure
+from .generic_navigation_path_version_structure import GenericNavigationPathVersionStructure
 from .generic_parameter_assignment_ref_structure import GenericParameterAssignmentRefStructure
 from .generic_parameter_assignments_rel_structure import (
     GenericParameterAssignment,
@@ -1412,6 +1535,16 @@ from .generic_parameter_assignments_rel_structure import (
     GenericParameterAssignmentsRelStructure,
     GenericParameterAssignmentVersionStructure,
 )
+from .generic_path_junction import GenericPathJunction
+from .generic_path_junction_ref import GenericPathJunctionRef
+from .generic_path_junction_ref_structure import GenericPathJunctionRefStructure
+from .generic_path_junction_version_structure import GenericPathJunctionVersionStructure
+from .generic_path_link import GenericPathLink
+from .generic_path_link_derived_view_structure import GenericPathLinkDerivedViewStructure
+from .generic_path_link_ref import GenericPathLinkRef
+from .generic_path_link_ref_structure import GenericPathLinkRefStructure
+from .generic_path_link_refs_rel_structure import GenericPathLinkRefsRelStructure
+from .generic_path_link_version_structure import GenericPathLinkVersionStructure
 from .geographical_interval import GeographicalInterval
 from .geographical_interval_price import GeographicalIntervalPrice
 from .geographical_interval_price_ref import GeographicalIntervalPriceRef
@@ -1515,10 +1648,15 @@ from .group_of_single_journeys import GroupOfSingleJourneys
 from .group_of_single_journeys_ref import GroupOfSingleJourneysRef
 from .group_of_single_journeys_ref_structure import GroupOfSingleJourneysRefStructure
 from .group_of_single_journeys_version_structure import GroupOfSingleJourneysVersionStructure
+from .group_of_sites import GroupOfSites
+from .group_of_sites_ref import GroupOfSitesRef
+from .group_of_sites_ref_structure import GroupOfSitesRefStructure
+from .group_of_sites_version_structure import GroupOfSitesVersionStructure
 from .group_of_stop_places import GroupOfStopPlaces
 from .group_of_stop_places_ref import GroupOfStopPlacesRef
 from .group_of_stop_places_ref_structure import GroupOfStopPlacesRefStructure
 from .group_of_stop_places_structure import GroupOfStopPlacesStructure
+from .group_of_tariff_zone_refs_rel_structure import GroupOfTariffZoneRefsRelStructure
 from .group_of_tariff_zones import GroupOfTariffZones
 from .group_of_tariff_zones_ref import GroupOfTariffZonesRef
 from .group_of_tariff_zones_ref_structure import GroupOfTariffZonesRefStructure
@@ -1551,6 +1689,7 @@ from .groups_of_places_in_frame_rel_structure import GroupsOfPlacesInFrameRelStr
 from .groups_of_sales_offer_packages_in_frame_rel_structure import GroupsOfSalesOfferPackagesInFrameRelStructure
 from .groups_of_services_in_frame_rel_structure import GroupsOfServicesInFrameRelStructure
 from .groups_of_single_journeys_rel_structure import GroupsOfSingleJourneysRelStructure
+from .groups_of_sites_rel_structure import GroupsOfSitesRelStructure
 from .groups_of_stop_places_in_frame_rel_structure import GroupsOfStopPlacesInFrameRelStructure
 from .groups_of_tariff_zones_in_frame_rel_structure import GroupsOfTariffZonesInFrameRelStructure
 from .guide_dog_access import GuideDogAccess
@@ -1768,9 +1907,14 @@ from .left_luggage_service_version_structure import LeftLuggageServiceVersionStr
 from .legal_status_enumeration import LegalStatusEnumeration
 from .level import Level
 from .level_access_into_vehicle import LevelAccessIntoVehicle
+from .level_in_structure import LevelInStructure
+from .level_in_structure_ref import LevelInStructureRef
+from .level_in_structure_ref_structure import LevelInStructureRefStructure
+from .level_in_structure_version_structure import LevelInStructureVersionStructure
 from .level_ref import LevelRef
 from .level_ref_structure import LevelRefStructure
 from .level_version_structure import LevelVersionStructure
+from .levels_in_structure_rel_structure import LevelsInStructureRelStructure
 from .levels_rel_structure import LevelsRelStructure
 from .licence_requirements_enumeration import LicenceRequirementsEnumeration
 from .lift_call_equipment import LiftCallEquipment
@@ -1869,6 +2013,11 @@ from .local_service_version_structure import LocalServiceVersionStructure
 from .local_services_rel_structure import LocalServicesRelStructure
 from .locale import Locale
 from .locale_structure import LocaleStructure
+from .locatable_spot import LocatableSpot
+from .locatable_spot_ref import LocatableSpotRef
+from .locatable_spot_ref_structure import LocatableSpotRefStructure
+from .locatable_spot_refs_rel_structure import LocatableSpotRefsRelStructure
+from .locatable_spot_version_structure import LocatableSpotVersionStructure
 from .location_structure_1 import LocationStructure1
 from .location_structure_2 import LocationStructure2
 from .locker_type_enumeration import LockerTypeEnumeration
@@ -1916,6 +2065,16 @@ from .luggage_service_facility_list import LuggageServiceFacilityList
 from .luggage_service_ref import LuggageServiceRef
 from .luggage_service_ref_structure import LuggageServiceRefStructure
 from .luggage_service_version_structure import LuggageServiceVersionStructure
+from .luggage_spot import LuggageSpot
+from .luggage_spot_equipment import LuggageSpotEquipment
+from .luggage_spot_equipment_ref import LuggageSpotEquipmentRef
+from .luggage_spot_equipment_ref_structure import LuggageSpotEquipmentRefStructure
+from .luggage_spot_equipment_version_structure import LuggageSpotEquipmentVersionStructure
+from .luggage_spot_ref import LuggageSpotRef
+from .luggage_spot_ref_structure import LuggageSpotRefStructure
+from .luggage_spot_type_enumeration import LuggageSpotTypeEnumeration
+from .luggage_spot_version_structure import LuggageSpotVersionStructure
+from .luggage_spots_rel_structure import LuggageSpotsRelStructure
 from .machine_readable_enumeration import MachineReadableEnumeration
 from .management_agent import ManagementAgent
 from .management_agent_ref import ManagementAgentRef
@@ -2053,9 +2212,6 @@ from .navigation_path import NavigationPath
 from .navigation_path_assignment import NavigationPathAssignment
 from .navigation_path_assignment_version_structure import NavigationPathAssignmentVersionStructure
 from .navigation_path_ref import NavigationPathRef
-from .navigation_path_ref_structure import NavigationPathRefStructure
-from .navigation_path_refs_rel_structure import NavigationPathRefsRelStructure
-from .navigation_path_version_structure import NavigationPathVersionStructure
 from .navigation_paths_in_frame_rel_structure import NavigationPathsInFrameRelStructure
 from .navigation_paths_rel_structure import NavigationPathsRelStructure
 from .navigation_type_enumeration import NavigationTypeEnumeration
@@ -2112,6 +2268,11 @@ from .observed_passing_time_versioned_child_structure import ObservedPassingTime
 from .observed_passing_time_view import ObservedPassingTimeView
 from .observed_passing_time_view_structure import ObservedPassingTimeViewStructure
 from .observed_passing_times_rel_structure import ObservedPassingTimesRelStructure
+from .off_site_path_link import OffSitePathLink
+from .off_site_path_link_ref import OffSitePathLinkRef
+from .off_site_path_link_ref_structure import OffSitePathLinkRefStructure
+from .off_site_path_link_refs_rel_structure import OffSitePathLinkRefsRelStructure
+from .off_site_path_link_version_structure import OffSitePathLinkVersionStructure
 from .offered_travel_specification import OfferedTravelSpecification
 from .offered_travel_specification_ref import OfferedTravelSpecificationRef
 from .offered_travel_specification_ref_structure import OfferedTravelSpecificationRefStructure
@@ -2192,6 +2353,7 @@ from .organisation_part_ref_structure import OrganisationPartRefStructure
 from .organisation_part_version_structure import OrganisationPartVersionStructure
 from .organisation_parts_rel_structure import OrganisationPartsRelStructure
 from .organisation_ref import OrganisationRef
+from .organisation_ref_abstract import OrganisationRefAbstract
 from .organisation_ref_structure import OrganisationRefStructure
 from .organisation_refs_rel_structure import OrganisationRefsRelStructure
 from .organisation_role_enumeration import OrganisationRoleEnumeration
@@ -2205,6 +2367,15 @@ from .organisational_unit_refs_rel_structure import OrganisationalUnitRefsRelStr
 from .organisational_unit_version_structure import OrganisationalUnitVersionStructure
 from .organisational_units_rel_structure import OrganisationalUnitsRelStructure
 from .organisations_in_frame_rel_structure import OrganisationsInFrameRelStructure
+from .other_deck_entrance import OtherDeckEntrance
+from .other_deck_entrance_ref import OtherDeckEntranceRef
+from .other_deck_entrance_ref_structure import OtherDeckEntranceRefStructure
+from .other_deck_entrance_version_structure import OtherDeckEntranceVersionStructure
+from .other_deck_space import OtherDeckSpace
+from .other_deck_space_ref import OtherDeckSpaceRef
+from .other_deck_space_ref_structure import OtherDeckSpaceRefStructure
+from .other_deck_space_version_structure import OtherDeckSpaceVersionStructure
+from .other_deck_spaces_rel_structure import OtherDeckSpacesRelStructure
 from .other_error import OtherError
 from .other_error_structure import OtherErrorStructure
 from .other_organisation import OtherOrganisation
@@ -2310,6 +2481,11 @@ from .participant_ref_structure import ParticipantRefStructure
 from .passage_type_enumeration import PassageTypeEnumeration
 from .passenger_accessibility_needs import PassengerAccessibilityNeeds
 from .passenger_accessibility_needs_structure import PassengerAccessibilityNeedsStructure
+from .passenger_at_stop_time import PassengerAtStopTime
+from .passenger_at_stop_time_ref import PassengerAtStopTimeRef
+from .passenger_at_stop_time_ref_structure import PassengerAtStopTimeRefStructure
+from .passenger_at_stop_time_versioned_child_structure import PassengerAtStopTimeVersionedChildStructure
+from .passenger_at_stop_times_rel_structure import PassengerAtStopTimesRelStructure
 from .passenger_beacon_equipment import PassengerBeaconEquipment
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_beacon_equipment_ref_structure import PassengerBeaconEquipmentRefStructure
@@ -2329,6 +2505,10 @@ from .passenger_carrying_requirements_view import PassengerCarryingRequirementsV
 from .passenger_comms_facility import PassengerCommsFacility
 from .passenger_comms_facility_enumeration import PassengerCommsFacilityEnumeration
 from .passenger_comms_facility_list import PassengerCommsFacilityList
+from .passenger_entrance import PassengerEntrance
+from .passenger_entrance_ref import PassengerEntranceRef
+from .passenger_entrance_ref_structure import PassengerEntranceRefStructure
+from .passenger_entrance_version_structure import PassengerEntranceVersionStructure
 from .passenger_equipment import PassengerEquipment
 from .passenger_equipment_ref import PassengerEquipmentRef
 from .passenger_equipment_ref_structure import PassengerEquipmentRefStructure
@@ -2352,12 +2532,31 @@ from .passenger_safety_equipment_ref_structure import PassengerSafetyEquipmentRe
 from .passenger_safety_equipment_version_structure import PassengerSafetyEquipmentVersionStructure
 from .passenger_seat_ref import PassengerSeatRef
 from .passenger_seat_ref_structure import PassengerSeatRefStructure
+from .passenger_space import PassengerSpace
+from .passenger_space_ref import PassengerSpaceRef
+from .passenger_space_ref_structure import PassengerSpaceRefStructure
+from .passenger_space_version_structure import PassengerSpaceVersionStructure
+from .passenger_spaces_rel_structure import PassengerSpacesRelStructure
+from .passenger_spot import PassengerSpot
+from .passenger_spot_ref import PassengerSpotRef
+from .passenger_spot_ref_structure import PassengerSpotRefStructure
+from .passenger_spot_version_structure import PassengerSpotVersionStructure
+from .passenger_spots_rel_structure import PassengerSpotsRelStructure
 from .passenger_stop_assignment import PassengerStopAssignment
 from .passenger_stop_assignment_derived_view_structure import PassengerStopAssignmentDerivedViewStructure
 from .passenger_stop_assignment_ref import PassengerStopAssignmentRef
 from .passenger_stop_assignment_ref_structure import PassengerStopAssignmentRefStructure
 from .passenger_stop_assignment_version_structure import PassengerStopAssignmentVersionStructure
 from .passenger_stop_assignment_view import PassengerStopAssignmentView
+from .passenger_vehicle_capacity import PassengerVehicleCapacity
+from .passenger_vehicle_capacity_ref import PassengerVehicleCapacityRef
+from .passenger_vehicle_capacity_ref_structure import PassengerVehicleCapacityRefStructure
+from .passenger_vehicle_capacity_structure import PassengerVehicleCapacityStructure
+from .passenger_vehicle_spot import PassengerVehicleSpot
+from .passenger_vehicle_spot_ref import PassengerVehicleSpotRef
+from .passenger_vehicle_spot_ref_structure import PassengerVehicleSpotRefStructure
+from .passenger_vehicle_spot_version_structure import PassengerVehicleSpotVersionStructure
+from .passenger_vehicle_spots_rel_structure import PassengerVehicleSpotsRelStructure
 from .passing_time import PassingTime
 from .passing_time_ref import PassingTimeRef
 from .passing_time_ref_structure import PassingTimeRefStructure
@@ -2368,14 +2567,14 @@ from .path_assignment_ref import PathAssignmentRef
 from .path_assignment_ref_structure import PathAssignmentRefStructure
 from .path_direction_enumeration import PathDirectionEnumeration
 from .path_heading_enumeration import PathHeadingEnumeration
+from .path_instruction import PathInstruction
+from .path_instruction_ref import PathInstructionRef
+from .path_instruction_ref_structure import PathInstructionRefStructure
+from .path_instruction_versioned_child_structure import PathInstructionVersionedChildStructure
+from .path_instructions_rel_structure import PathInstructionsRelStructure
 from .path_junction import PathJunction
 from .path_junction_ref import PathJunctionRef
-from .path_junction_ref_structure import PathJunctionRefStructure
-from .path_junction_version_structure import PathJunctionVersionStructure
-from .path_junctions_in_frame_rel_structure import PathJunctionsInFrameRelStructure
-from .path_junctions_rel_structure import PathJunctionsRelStructure
 from .path_link import PathLink
-from .path_link_derived_view_structure import PathLinkDerivedViewStructure
 from .path_link_end_structure import PathLinkEndStructure
 from .path_link_in_sequence import PathLinkInSequence
 from .path_link_in_sequence_ref import PathLinkInSequenceRef
@@ -2384,11 +2583,8 @@ from .path_link_in_sequence_versioned_child_structure import PathLinkInSequenceV
 from .path_link_ref import PathLinkRef
 from .path_link_ref_by_value import PathLinkRefByValue
 from .path_link_ref_by_value_structure import PathLinkRefByValueStructure
-from .path_link_ref_structure import PathLinkRefStructure
-from .path_link_refs_rel_structure import PathLinkRefsRelStructure
-from .path_link_version_structure import PathLinkVersionStructure
 from .path_link_view import PathLinkView
-from .path_links_in_frame_rel_structure import PathLinksInFrameRelStructure
+from .path_links_in_sequence_refs_rel_structure import PathLinksInSequenceRefsRelStructure
 from .path_links_in_sequence_rel_structure import PathLinksInSequenceRelStructure
 from .payment_by_mobile_structure import PaymentByMobileStructure
 from .payment_method_enumeration import PaymentMethodEnumeration
@@ -2531,6 +2727,10 @@ from .postal_address import PostalAddress
 from .postal_address_ref import PostalAddressRef
 from .postal_address_ref_structure import PostalAddressRefStructure
 from .postal_address_version_structure import PostalAddressVersionStructure
+from .powered_train import PoweredTrain
+from .powered_train_ref import PoweredTrainRef
+from .powered_train_ref_structure import PoweredTrainRefStructure
+from .powered_train_version_structure import PoweredTrainVersionStructure
 from .preassigned_fare_product import PreassignedFareProduct
 from .preassigned_fare_product_enumeration import PreassignedFareProductEnumeration
 from .preassigned_fare_product_ref import PreassignedFareProductRef
@@ -2613,7 +2813,7 @@ from .properties_of_day_rel_structure import PropertiesOfDayRelStructure
 from .property_of_day import PropertyOfDay
 from .property_of_day_structure import PropertyOfDayStructure
 from .propulsion_type_enumeration import PropulsionTypeEnumeration
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .public_use_enumeration import PublicUseEnumeration
 from .publication_delivery import PublicationDelivery
 from .publication_delivery_structure import PublicationDeliveryStructure
@@ -2870,6 +3070,19 @@ from .road_number_range_structure import RoadNumberRangeStructure
 from .road_point_ref import RoadPointRef
 from .road_point_ref_structure import RoadPointRefStructure
 from .road_vehicle_mode import RoadVehicleMode
+from .rolling_stock_inventories_rel_structure import RollingStockInventoriesRelStructure
+from .rolling_stock_inventory import RollingStockInventory
+from .rolling_stock_inventory_ref import RollingStockInventoryRef
+from .rolling_stock_inventory_ref_structure import RollingStockInventoryRefStructure
+from .rolling_stock_inventory_refs_rel_structure import RollingStockInventoryRefsRelStructure
+from .rolling_stock_inventory_version_structure import RollingStockInventoryVersionStructure
+from .rolling_stock_item import RollingStockItem
+from .rolling_stock_item_dummy_type import RollingStockItemDummyType
+from .rolling_stock_item_ref import RollingStockItemRef
+from .rolling_stock_item_ref_structure import RollingStockItemRefStructure
+from .rolling_stock_item_refs_rel_structure import RollingStockItemRefsRelStructure
+from .rolling_stock_item_version_structure import RollingStockItemVersionStructure
+from .rolling_stock_items_rel_structure import RollingStockItemsRelStructure
 from .rough_surface import RoughSurface
 from .rough_surface_ref import RoughSurfaceRef
 from .rough_surface_ref_structure import RoughSurfaceRefStructure
@@ -3033,6 +3246,11 @@ from .scope_of_ticket_list import ScopeOfTicketList
 from .scoping_method_enumeration import ScopingMethodEnumeration
 from .season_enumeration import SeasonEnumeration
 from .seat_allocation_method_enumeration import SeatAllocationMethodEnumeration
+from .seat_context_enumeration import SeatContextEnumeration
+from .seat_equipment import SeatEquipment
+from .seat_equipment_ref import SeatEquipmentRef
+from .seat_equipment_ref_structure import SeatEquipmentRefStructure
+from .seat_equipment_version_structure import SeatEquipmentVersionStructure
 from .seating_equipment import SeatingEquipment
 from .seating_equipment_ref import SeatingEquipmentRef
 from .seating_equipment_ref_structure import SeatingEquipmentRefStructure
@@ -3074,6 +3292,22 @@ from .security_lists_rel_structure import SecurityListsRelStructure
 from .securitylist_refs_rel_structure import SecuritylistRefsRelStructure
 from .self_drive_submode import SelfDriveSubmode
 from .self_drive_submode_enumeration import SelfDriveSubmodeEnumeration
+from .sensor_communications_enumeration import SensorCommunicationsEnumeration
+from .sensor_equipment import SensorEquipment
+from .sensor_equipment_abstract import SensorEquipmentAbstract
+from .sensor_equipment_ref import SensorEquipmentRef
+from .sensor_equipment_ref_structure import SensorEquipmentRefStructure
+from .sensor_equipment_version_structure import SensorEquipmentVersionStructure
+from .sensor_in_entrance import SensorInEntrance
+from .sensor_in_entrance_ref import SensorInEntranceRef
+from .sensor_in_entrance_ref_structure import SensorInEntranceRefStructure
+from .sensor_in_entrance_versioned_child_structure import SensorInEntranceVersionedChildStructure
+from .sensor_in_spot import SensorInSpot
+from .sensor_in_spot_ref import SensorInSpotRef
+from .sensor_in_spot_ref_structure import SensorInSpotRefStructure
+from .sensor_in_spot_versioned_child_structure import SensorInSpotVersionedChildStructure
+from .sensors_in_entrance_rel_structure import SensorsInEntranceRelStructure
+from .sensors_in_spot_rel_structure import SensorsInSpotRelStructure
 from .series_constraint import SeriesConstraint
 from .series_constraint_price import SeriesConstraintPrice
 from .series_constraint_price_ref import SeriesConstraintPriceRef
@@ -3260,13 +3494,34 @@ from .site_facility_sets_rel_structure import SiteFacilitySetsRelStructure
 from .site_frame import SiteFrame
 from .site_frame_ref import SiteFrameRef
 from .site_frame_ref_structure import SiteFrameRefStructure
+from .site_navigation_path import SiteNavigationPath
+from .site_navigation_path_ref import SiteNavigationPathRef
+from .site_navigation_path_ref_structure import SiteNavigationPathRefStructure
+from .site_navigation_path_refs_rel_structure import SiteNavigationPathRefsRelStructure
+from .site_navigation_path_version_structure import SiteNavigationPathVersionStructure
+from .site_path_junction import SitePathJunction
+from .site_path_junction_ref import SitePathJunctionRef
+from .site_path_junction_ref_structure import SitePathJunctionRefStructure
+from .site_path_junction_version_structure import SitePathJunctionVersionStructure
+from .site_path_junctions_in_frame_rel_structure import SitePathJunctionsInFrameRelStructure
+from .site_path_junctions_rel_structure import SitePathJunctionsRelStructure
 from .site_path_link import SitePathLink
+from .site_path_link_end_structure import SitePathLinkEndStructure
+from .site_path_link_ref import SitePathLinkRef
 from .site_path_link_ref_structure import SitePathLinkRefStructure
+from .site_path_link_refs_rel_structure import SitePathLinkRefsRelStructure
 from .site_path_link_version_structure import SitePathLinkVersionStructure
+from .site_path_links_in_frame_rel_structure import SitePathLinksInFrameRelStructure
 from .site_path_links_rel_structure import SitePathLinksRelStructure
 from .site_ref import SiteRef
 from .site_ref_structure import SiteRefStructure
 from .site_refs_rel_structure import SiteRefsRelStructure
+from .site_structure import SiteStructure
+from .site_structure_ref import SiteStructureRef
+from .site_structure_ref_structure import SiteStructureRefStructure
+from .site_structure_refs_rel_structure import SiteStructureRefsRelStructure
+from .site_structure_version_structure import SiteStructureVersionStructure
+from .site_structures_rel_structure import SiteStructuresRelStructure
 from .site_type_enumeration import SiteTypeEnumeration
 from .site_version_frame_structure import SiteVersionFrameStructure
 from .site_version_structure import SiteVersionStructure
@@ -3291,6 +3546,33 @@ from .specific_parameter_assignments_rel_structure import (
     SpecificParameterAssignmentsRelStructure,
     SpecificParameterAssignmentVersionStructure,
 )
+from .spot_affinities_rel_structure import SpotAffinitiesRelStructure
+from .spot_affinity import SpotAffinity
+from .spot_affinity_ref import SpotAffinityRef
+from .spot_affinity_ref_structure import SpotAffinityRefStructure
+from .spot_affinity_type_enumeration import SpotAffinityTypeEnumeration
+from .spot_affinity_version_structure import SpotAffinityVersionStructure
+from .spot_column import SpotColumn
+from .spot_column_ref import SpotColumnRef
+from .spot_column_ref_structure import SpotColumnRefStructure
+from .spot_column_refs_rel_structure import SpotColumnRefsRelStructure
+from .spot_column_version_structure import SpotColumnVersionStructure
+from .spot_columns_rel_structure import SpotColumnsRelStructure
+from .spot_equipment_1 import SpotEquipment1
+from .spot_equipment_2 import SpotEquipment2
+from .spot_equipment_ref import SpotEquipmentRef
+from .spot_equipment_ref_structure import SpotEquipmentRefStructure
+from .spot_equipment_version_structure import SpotEquipmentVersionStructure
+from .spot_row import SpotRow
+from .spot_row_ref import SpotRowRef
+from .spot_row_ref_structure import SpotRowRefStructure
+from .spot_row_refs_rel_structure import SpotRowRefsRelStructure
+from .spot_row_version_structure import SpotRowVersionStructure
+from .spot_rows_rel_structure import SpotRowsRelStructure
+from .spot_sensor import SpotSensor
+from .spot_sensor_ref import SpotSensorRef
+from .spot_sensor_ref_structure import SpotSensorRefStructure
+from .spot_sensor_version_structure import SpotSensorVersionStructure
 from .srs_name_1 import SrsName1
 from .srs_name_2 import SrsName2
 from .staffing import Staffing
@@ -3343,7 +3625,6 @@ from .stop_event_request_ref import StopEventRequestRef
 from .stop_event_request_ref_structure import StopEventRequestRefStructure
 from .stop_finder_request_ref import StopFinderRequestRef
 from .stop_finder_request_ref_structure import StopFinderRequestRefStructure
-from .stop_path_link_ref_structure import StopPathLinkRefStructure
 from .stop_place import StopPlace
 from .stop_place_abstract import StopPlaceAbstract
 from .stop_place_component import StopPlaceComponent
@@ -3425,6 +3706,7 @@ from .suspending_ref_structure import SuspendingRefStructure
 from .suspending_version_structure import SuspendingVersionStructure
 from .suspension_policy_enumeration import SuspensionPolicyEnumeration
 from .system_of_units import SystemOfUnits
+from .table_type_enumeration import TableTypeEnumeration
 from .tactile_guidance_available import TactileGuidanceAvailable
 from .tactile_guiding_strip_status_enumeration import TactileGuidingStripStatusEnumeration
 from .tactile_warning_strip_enumeration import TactileWarningStripEnumeration
@@ -3501,6 +3783,7 @@ from .third_party_product_ref import ThirdPartyProductRef
 from .third_party_product_ref_structure import ThirdPartyProductRefStructure
 from .third_party_product_refs_rel_structure import ThirdPartyProductRefsRelStructure
 from .third_party_product_version_structure import ThirdPartyProductVersionStructure
+from .through_access_enumeration import ThroughAccessEnumeration
 from .ticket_type_enumeration import TicketTypeEnumeration
 from .ticket_validator_enumeration import TicketValidatorEnumeration
 from .ticket_validator_equipment import TicketValidatorEquipment
@@ -3640,11 +3923,27 @@ from .topographic_projection_version_structure import TopographicProjectionVersi
 from .trace import Trace
 from .trace_structure import TraceStructure
 from .traces_rel_structure import TracesRelStructure
+from .tractive_element_type import TractiveElementType
+from .tractive_element_type_ref import TractiveElementTypeRef
+from .tractive_element_type_ref_structure import TractiveElementTypeRefStructure
+from .tractive_element_type_version_structure import TractiveElementTypeVersionStructure
+from .tractive_rolling_stock_item import TractiveRollingStockItem
+from .tractive_rolling_stock_item_ref import TractiveRollingStockItemRef
+from .tractive_rolling_stock_item_ref_structure import TractiveRollingStockItemRefStructure
+from .tractive_rolling_stock_item_version_structure import TractiveRollingStockItemVersionStructure
 from .traffic_control_point import TrafficControlPoint
 from .traffic_control_point_ref import TrafficControlPointRef
 from .traffic_control_point_ref_structure import TrafficControlPointRefStructure
 from .traffic_control_point_version_structure import TrafficControlPointVersionStructure
 from .traffic_control_points_in_frame_rel_structure import TrafficControlPointsInFrameRelStructure
+from .trailing_element_type import TrailingElementType
+from .trailing_element_type_ref import TrailingElementTypeRef
+from .trailing_element_type_ref_structure import TrailingElementTypeRefStructure
+from .trailing_element_type_version_structure import TrailingElementTypeVersionStructure
+from .trailing_rolling_stock_item import TrailingRollingStockItem
+from .trailing_rolling_stock_item_ref import TrailingRollingStockItemRef
+from .trailing_rolling_stock_item_ref_structure import TrailingRollingStockItemRefStructure
+from .trailing_rolling_stock_item_version_structure import TrailingRollingStockItemVersionStructure
 from .train import Train
 from .train_block import TrainBlock
 from .train_block_part import TrainBlockPart
@@ -3655,6 +3954,7 @@ from .train_block_ref import TrainBlockRef
 from .train_block_ref_structure import TrainBlockRefStructure
 from .train_block_version_structure import TrainBlockVersionStructure
 from .train_component import TrainComponent
+from .train_component_coupling_structure import TrainComponentCouplingStructure
 from .train_component_derived_view_structure import TrainComponentDerivedViewStructure
 from .train_component_label_assignment import TrainComponentLabelAssignment
 from .train_component_label_assignment_ref import TrainComponentLabelAssignmentRef
@@ -3669,9 +3969,12 @@ from .train_component_view import TrainComponentView
 from .train_components_rel_structure import TrainComponentsRelStructure
 from .train_element import TrainElement
 from .train_element_ref import TrainElementRef
-from .train_element_ref_structure import TrainElementRefStructure
-from .train_element_type_enumeration import TrainElementTypeEnumeration
-from .train_element_version_structure import TrainElementVersionStructure
+from .train_element_type_dummy_type import TrainElementTypeDummyType
+from .train_element_type_ref import TrainElementTypeRef
+from .train_element_type_ref_structure import TrainElementTypeRefStructure
+from .train_element_type_type_enumeration import TrainElementTypeTypeEnumeration
+from .train_element_type_version_structure import TrainElementTypeVersionStructure
+from .train_element_types_in_frame_rel_structure import TrainElementTypesInFrameRelStructure
 from .train_in_compound_train_ref import TrainInCompoundTrainRef
 from .train_in_compound_train_ref_structure import TrainInCompoundTrainRefStructure
 from .train_in_compound_train_versioned_child_structure import TrainInCompoundTrainVersionedChildStructure
@@ -3692,6 +3995,7 @@ from .train_stop_assignment_ref import TrainStopAssignmentRef
 from .train_stop_assignment_ref_structure import TrainStopAssignmentRefStructure
 from .train_stop_assignment_version_structure import TrainStopAssignmentVersionStructure
 from .train_stop_assignments_rel_structure import TrainStopAssignmentsRelStructure
+from .train_type import TrainType
 from .train_version_structure import TrainVersionStructure
 from .trains_in_compound_train_rel_structure import TrainsInCompoundTrainRelStructure
 from .tram_submode import TramSubmode
@@ -3731,7 +4035,7 @@ from .transport_organisation_version_structure import TransportOrganisationVersi
 from .transport_submode import TransportSubmode
 from .transport_submode_structure import TransportSubmodeStructure
 from .transport_type import TransportType
-from .transport_type_abstract import TransportTypeAbstract
+from .transport_type_dummy_type import TransportTypeDummyType
 from .transport_type_ref import TransportTypeRef
 from .transport_type_ref_structure import TransportTypeRefStructure
 from .transport_type_refs_rel_structure import TransportTypeRefsRelStructure
@@ -3814,12 +4118,19 @@ from .type_of_congestion import TypeOfCongestion
 from .type_of_congestion_ref import TypeOfCongestionRef
 from .type_of_congestion_ref_structure import TypeOfCongestionRefStructure
 from .type_of_congestion_value_structure import TypeOfCongestionValueStructure
-from .type_of_contract_enumeration import TypeOfContractEnumeration
 from .type_of_customer_account import TypeOfCustomerAccount
 from .type_of_customer_account_ref import TypeOfCustomerAccountRef
 from .type_of_customer_account_ref_structure import TypeOfCustomerAccountRefStructure
 from .type_of_customer_account_refs_rel_structure import TypeOfCustomerAccountRefsRelStructure
 from .type_of_customer_account_version_structure import TypeOfCustomerAccountVersionStructure
+from .type_of_deck_entrance import TypeOfDeckEntrance
+from .type_of_deck_entrance_ref import TypeOfDeckEntranceRef
+from .type_of_deck_entrance_ref_structure import TypeOfDeckEntranceRefStructure
+from .type_of_deck_entrance_value_structure import TypeOfDeckEntranceValueStructure
+from .type_of_deck_space import TypeOfDeckSpace
+from .type_of_deck_space_profile_ref_structure import TypeOfDeckSpaceProfileRefStructure
+from .type_of_deck_space_ref import TypeOfDeckSpaceRef
+from .type_of_deck_space_value_structure import TypeOfDeckSpaceValueStructure
 from .type_of_delivery_variant import TypeOfDeliveryVariant
 from .type_of_delivery_variant_ref import TypeOfDeliveryVariantRef
 from .type_of_delivery_variant_ref_structure import TypeOfDeliveryVariantRefStructure
@@ -3901,6 +4212,11 @@ from .type_of_link_sequence_ref import TypeOfLinkSequenceRef
 from .type_of_link_sequence_ref_structure import TypeOfLinkSequenceRefStructure
 from .type_of_link_sequence_value_structure import TypeOfLinkSequenceValueStructure
 from .type_of_link_value_structure import TypeOfLinkValueStructure
+from .type_of_locatable_spot import TypeOfLocatableSpot
+from .type_of_locatable_spot_enumeration import TypeOfLocatableSpotEnumeration
+from .type_of_locatable_spot_ref import TypeOfLocatableSpotRef
+from .type_of_locatable_spot_ref_structure import TypeOfLocatableSpotRefStructure
+from .type_of_locatable_spot_value_structure import TypeOfLocatableSpotValueStructure
 from .type_of_machine_readability import TypeOfMachineReadability
 from .type_of_machine_readability_ref import TypeOfMachineReadabilityRef
 from .type_of_machine_readability_ref_structure import TypeOfMachineReadabilityRefStructure
@@ -3989,6 +4305,10 @@ from .type_of_retail_device_ref import TypeOfRetailDeviceRef
 from .type_of_retail_device_ref_structure import TypeOfRetailDeviceRefStructure
 from .type_of_retail_device_refs_rel_structure import TypeOfRetailDeviceRefsRelStructure
 from .type_of_retail_device_version_structure import TypeOfRetailDeviceVersionStructure
+from .type_of_rolling_stock import TypeOfRollingStock
+from .type_of_rolling_stock_ref import TypeOfRollingStockRef
+from .type_of_rolling_stock_ref_structure import TypeOfRollingStockRefStructure
+from .type_of_rolling_stock_value_structure import TypeOfRollingStockValueStructure
 from .type_of_sales_offer_package import TypeOfSalesOfferPackage
 from .type_of_sales_offer_package_ref import TypeOfSalesOfferPackageRef
 from .type_of_sales_offer_package_ref_structure import TypeOfSalesOfferPackageRefStructure
@@ -4090,6 +4410,10 @@ from .unknown_subscriber_error import UnknownSubscriberError
 from .unknown_subscriber_error_structure import UnknownSubscriberErrorStructure
 from .unknown_subscription_error import UnknownSubscriptionError
 from .unknown_subscription_error_structure import UnknownSubscriptionErrorStructure
+from .unpowered_train import UnpoweredTrain
+from .unpowered_train_ref import UnpoweredTrainRef
+from .unpowered_train_ref_structure import UnpoweredTrainRefStructure
+from .unpowered_train_version_structure import UnpoweredTrainVersionStructure
 from .usage_discount_right import UsageDiscountRight
 from .usage_discount_right_enumeration import UsageDiscountRightEnumeration
 from .usage_discount_right_ref import UsageDiscountRightRef
@@ -4380,6 +4704,7 @@ from .vehicle_sharing_service_ref import VehicleSharingServiceRef
 from .vehicle_sharing_service_ref_structure import VehicleSharingServiceRefStructure
 from .vehicle_sharing_service_version_structure import VehicleSharingServiceVersionStructure
 from .vehicle_sharing_type_enumeration import VehicleSharingTypeEnumeration
+from .vehicle_side_enumeration import VehicleSideEnumeration
 from .vehicle_stopping_place import VehicleStoppingPlace
 from .vehicle_stopping_place_ref import VehicleStoppingPlaceRef
 from .vehicle_stopping_place_ref_structure import VehicleStoppingPlaceRefStructure
@@ -4455,6 +4780,8 @@ from .water_submode_enumeration import WaterSubmodeEnumeration
 from .week_of_month_enumeration import WeekOfMonthEnumeration
 from .wheelchair_access import WheelchairAccess
 from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+from .wheelchair_vehicle_equipment_ref import WheelchairVehicleEquipmentRef
+from .wheelchair_vehicle_equipment_ref_structure import WheelchairVehicleEquipmentRefStructure
 from .wheelchair_vehicle_equipment_version_structure import WheelchairVehicleEquipmentVersionStructure
 from .wheelchair_vehicle_ref import WheelchairVehicleRef
 from .wheelchair_vehicle_ref_structure import WheelchairVehicleRefStructure
@@ -4548,9 +4875,9 @@ __all__ = [
     "AbstractSurface",
     "AbstractSurfaceType",
     "AbstractTrackedRequest",
-    "AcceptedDriverPermit",
     "AcceptedDriverPermitRef",
     "AcceptedDriverPermitRefStructure",
+    "AcceptedDriverPermit",
     "AcceptedDriverPermitVersionStructure",
     "AcceptedDriverPermitsRelStructure",
     "Access",
@@ -4660,6 +4987,7 @@ __all__ = [
     "ActivationTypeRefsRelStructure",
     "ActualVehicleEquipment",
     "ActualVehicleEquipmentVersionStructure",
+    "ActualVehicleEquipmentsRelStructure",
     "AdditionalDriverOption",
     "AdditionalDriverOptionRef",
     "AdditionalDriverOptionRefStructure",
@@ -4700,6 +5028,7 @@ __all__ = [
     "AllOrganisationsRefStructure",
     "AllPublicTransportOrganisationsRef",
     "AllPublicTransportOrganisationsRefStructure",
+    "AllRoadVehicleCategoryEnumeration",
     "AllSubmodeStructure",
     "AllTransportOrganisationsRef",
     "AllTransportOrganisationsRefStructure",
@@ -4783,6 +5112,11 @@ __all__ = [
     "BeaconPointVersionStructure",
     "BeaconProtocolEnumeration",
     "BeaconTypeEnumeration",
+    "BedEquipment",
+    "BedEquipmentRef",
+    "BedEquipmentRefStructure",
+    "BedEquipmentVersionStructure",
+    "BedTypeEnumeration",
     "BerthFacility",
     "BerthFacilityEnumeration",
     "BeyondDataHorizon",
@@ -5039,6 +5373,7 @@ __all__ = [
     "ComplexFeatureRefStructure",
     "ComplexFeatureRefsRelStructure",
     "ComplexFeatureVersionStructure",
+    "ComponentOrientationEnumeration",
     "CompositeFrameRef",
     "CompositeFrameRefStructure",
     "CompositePricesRelStructure",
@@ -5083,6 +5418,7 @@ __all__ = [
     "ContractRefRelStructure",
     "ContractRefStructure",
     "ContractRefsRelStructure",
+    "ContractTypeEnumeration",
     "ContractVersionStructure",
     "ContractsInFrameRelStructure",
     "ControlCentre",
@@ -5310,6 +5646,101 @@ __all__ = [
     "DeadRunTypeEnumeration",
     "DeadRunVersionStructure",
     "DeadRunWithCallsVersionStructure",
+    "Deck",
+    "DeckComponent",
+    "DeckComponentRef",
+    "DeckComponentRefStructure",
+    "DeckComponentVersionStructure",
+    "DeckEntrance1",
+    "DeckEntrance2",
+    "DeckEntranceAssignment",
+    "DeckEntranceAssignmentRef",
+    "DeckEntranceAssignmentRefStructure",
+    "DeckEntranceAssignmentRefsRelStructure",
+    "DeckEntranceAssignmentVersionStructure",
+    "DeckEntranceAssignmentsRelStructure",
+    "DeckEntranceCouple",
+    "DeckEntranceCoupleRef",
+    "DeckEntranceCoupleRefStructure",
+    "DeckEntranceCoupleVersionedChildStructure",
+    "DeckEntranceCouplesRelStructure",
+    "DeckEntranceRef",
+    "DeckEntranceRefStructure",
+    "DeckEntranceTypeEnumeration",
+    "DeckEntranceUsage",
+    "DeckEntranceUsageRef",
+    "DeckEntranceUsageRefStructure",
+    "DeckEntranceUsageVersionedChildStructure",
+    "DeckEntranceUsagesRelStructure",
+    "DeckEntranceVersionStructure",
+    "DeckEntrancesRelStructure",
+    "DeckLevel",
+    "DeckLevelRef",
+    "DeckLevelRefStructure",
+    "DeckLevelVersionStructure",
+    "DeckLevelsRelStructure",
+    "DeckNavigationPath",
+    "DeckNavigationPathRef",
+    "DeckNavigationPathRefStructure",
+    "DeckNavigationPathRefsRelStructure",
+    "DeckNavigationPathTypeEnumeration",
+    "DeckNavigationPathVersionStructure",
+    "DeckNavigationPathsRelStructure",
+    "DeckPathJunction",
+    "DeckPathJunctionRef",
+    "DeckPathJunctionRefStructure",
+    "DeckPathJunctionRefsRelStructure",
+    "DeckPathJunctionVersionStructure",
+    "DeckPathLink",
+    "DeckPathLinkEndStructure",
+    "DeckPathLinkRef",
+    "DeckPathLinkRefStructure",
+    "DeckPathLinkRefsRelStructure",
+    "DeckPathLinkVersionStructure",
+    "DeckPlaceInSequence",
+    "DeckPlaceInSequenceRef",
+    "DeckPlaceInSequenceRefStructure",
+    "DeckPlaceInSequenceVersionedChildStructure",
+    "DeckPlacesInSequenceRelStructure",
+    "DeckPlan",
+    "DeckPlanAssignment",
+    "DeckPlanAssignmentRef",
+    "DeckPlanAssignmentRefStructure",
+    "DeckPlanAssignmentRefsRelStructure",
+    "DeckPlanAssignmentVersionStructure",
+    "DeckPlanAssignmentsRelStructure",
+    "DeckPlanRef",
+    "DeckPlanRefStructure",
+    "DeckPlanRefsRelStructure",
+    "DeckPlanVersionStructure",
+    "DeckPlansRelStructure",
+    "DeckPointStructure",
+    "DeckRef",
+    "DeckRefStructure",
+    "DeckRefsRelStructure",
+    "DeckSpace1",
+    "DeckSpace2",
+    "DeckSpaceCapacitiesRelStructure",
+    "DeckSpaceCapacity",
+    "DeckSpaceCapacityRef",
+    "DeckSpaceCapacityRefStructure",
+    "DeckSpaceCapacityVersionedChildStructure",
+    "DeckSpaceRef",
+    "DeckSpaceRefStructure",
+    "DeckSpaceVersionStructure",
+    "DeckSpacesRelStructure",
+    "DeckVehicleEntrance",
+    "DeckVehicleEntranceRef",
+    "DeckVehicleEntranceRefStructure",
+    "DeckVehicleEntranceVersionStructure",
+    "DeckVersionStructure",
+    "DeckWindow",
+    "DeckWindowRef",
+    "DeckWindowRefStructure",
+    "DeckWindowTypeEnumeration",
+    "DeckWindowVersionStructure",
+    "DeckWindowsRelStructure",
+    "DecksRelStructure",
     "DefaultCodeSpace",
     "DefaultConnection",
     "DefaultConnectionEndStructure",
@@ -5432,6 +5863,7 @@ __all__ = [
     "DistributionChannelsInFrameRelStructure",
     "DistributionRightsEnumeration",
     "DoorHandleEnumeration",
+    "DoorTypeEnumeration",
     "DriverRef",
     "DriverRefStructure",
     "DriverScheduleFrame",
@@ -5557,9 +5989,19 @@ __all__ = [
     "EntranceRef",
     "EntranceRefStructure",
     "EntranceRefsRelStructure",
+    "EntranceSensor",
+    "EntranceSensorRef",
+    "EntranceSensorRefStructure",
+    "EntranceSensorVersionStructure",
+    "EntranceSettingEnumeration",
     "EntranceTurningSpacePositionEnumeration",
+    "EntranceUsageEnumeration",
     "Envelope",
     "EnvelopeType",
+    "EquipableSpace",
+    "EquipableSpaceRef",
+    "EquipableSpaceRefStructure",
+    "EquipableSpaceVersionStructure",
     "Equipment",
     "EquipmentPlace",
     "EquipmentPlaceRef",
@@ -5876,6 +6318,7 @@ __all__ = [
     "GeneralOrganisationRef",
     "GeneralOrganisationRefStructure",
     "GeneralOrganisationVersionStructure",
+    "GeneralPathJunctionRefsRelStructure",
     "GeneralSectionRef",
     "GeneralSectionRefStructure",
     "GeneralSectionsInFrameRelStructure",
@@ -5894,11 +6337,26 @@ __all__ = [
     "GeneralFrameMembersRelStructure",
     "GeneralZone",
     "GeneralZoneVersionStructure",
+    "GenericNavigation",
+    "GenericNavigationPathRef",
+    "GenericNavigationPathRefStructure",
+    "GenericNavigationPathRefsRelStructure",
+    "GenericNavigationPathVersionStructure",
     "GenericParameterAssignmentRefStructure",
     "GenericParameterAssignment",
     "GenericParameterAssignmentInContext",
     "GenericParameterAssignmentVersionStructure",
     "GenericParameterAssignmentsRelStructure",
+    "GenericPathJunction",
+    "GenericPathJunctionRef",
+    "GenericPathJunctionRefStructure",
+    "GenericPathJunctionVersionStructure",
+    "GenericPathLink",
+    "GenericPathLinkDerivedViewStructure",
+    "GenericPathLinkRef",
+    "GenericPathLinkRefStructure",
+    "GenericPathLinkRefsRelStructure",
+    "GenericPathLinkVersionStructure",
     "GeographicalInterval",
     "GeographicalIntervalPrice",
     "GeographicalIntervalPriceRef",
@@ -6000,10 +6458,15 @@ __all__ = [
     "GroupOfSingleJourneysRef",
     "GroupOfSingleJourneysRefStructure",
     "GroupOfSingleJourneysVersionStructure",
+    "GroupOfSites",
+    "GroupOfSitesRef",
+    "GroupOfSitesRefStructure",
+    "GroupOfSitesVersionStructure",
     "GroupOfStopPlaces",
     "GroupOfStopPlacesRef",
     "GroupOfStopPlacesRefStructure",
     "GroupOfStopPlacesStructure",
+    "GroupOfTariffZoneRefsRelStructure",
     "GroupOfTariffZones",
     "GroupOfTariffZonesRef",
     "GroupOfTariffZonesRefStructure",
@@ -6036,6 +6499,7 @@ __all__ = [
     "GroupsOfSalesOfferPackagesInFrameRelStructure",
     "GroupsOfServicesInFrameRelStructure",
     "GroupsOfSingleJourneysRelStructure",
+    "GroupsOfSitesRelStructure",
     "GroupsOfStopPlacesInFrameRelStructure",
     "GroupsOfTariffZonesInFrameRelStructure",
     "GuideDogAccess",
@@ -6253,9 +6717,14 @@ __all__ = [
     "LegalStatusEnumeration",
     "Level",
     "LevelAccessIntoVehicle",
+    "LevelInStructure",
+    "LevelInStructureRef",
+    "LevelInStructureRefStructure",
+    "LevelInStructureVersionStructure",
     "LevelRef",
     "LevelRefStructure",
     "LevelVersionStructure",
+    "LevelsInStructureRelStructure",
     "LevelsRelStructure",
     "LicenceRequirementsEnumeration",
     "LiftCallEquipment",
@@ -6354,6 +6823,11 @@ __all__ = [
     "LocalServicesRelStructure",
     "Locale",
     "LocaleStructure",
+    "LocatableSpot",
+    "LocatableSpotRef",
+    "LocatableSpotRefStructure",
+    "LocatableSpotRefsRelStructure",
+    "LocatableSpotVersionStructure",
     "LocationStructure1",
     "LocationStructure2",
     "LockerTypeEnumeration",
@@ -6401,6 +6875,16 @@ __all__ = [
     "LuggageServiceRef",
     "LuggageServiceRefStructure",
     "LuggageServiceVersionStructure",
+    "LuggageSpot",
+    "LuggageSpotEquipment",
+    "LuggageSpotEquipmentRef",
+    "LuggageSpotEquipmentRefStructure",
+    "LuggageSpotEquipmentVersionStructure",
+    "LuggageSpotRef",
+    "LuggageSpotRefStructure",
+    "LuggageSpotTypeEnumeration",
+    "LuggageSpotVersionStructure",
+    "LuggageSpotsRelStructure",
     "MachineReadableEnumeration",
     "ManagementAgent",
     "ManagementAgentRef",
@@ -6538,9 +7022,6 @@ __all__ = [
     "NavigationPathAssignment",
     "NavigationPathAssignmentVersionStructure",
     "NavigationPathRef",
-    "NavigationPathRefStructure",
-    "NavigationPathRefsRelStructure",
-    "NavigationPathVersionStructure",
     "NavigationPathsInFrameRelStructure",
     "NavigationPathsRelStructure",
     "NavigationTypeEnumeration",
@@ -6597,6 +7078,11 @@ __all__ = [
     "ObservedPassingTimeView",
     "ObservedPassingTimeViewStructure",
     "ObservedPassingTimesRelStructure",
+    "OffSitePathLink",
+    "OffSitePathLinkRef",
+    "OffSitePathLinkRefStructure",
+    "OffSitePathLinkRefsRelStructure",
+    "OffSitePathLinkVersionStructure",
     "OfferedTravelSpecification",
     "OfferedTravelSpecificationRef",
     "OfferedTravelSpecificationRefStructure",
@@ -6677,6 +7163,7 @@ __all__ = [
     "OrganisationPartVersionStructure",
     "OrganisationPartsRelStructure",
     "OrganisationRef",
+    "OrganisationRefAbstract",
     "OrganisationRefStructure",
     "OrganisationRefsRelStructure",
     "OrganisationRoleEnumeration",
@@ -6690,6 +7177,15 @@ __all__ = [
     "OrganisationalUnitVersionStructure",
     "OrganisationalUnitsRelStructure",
     "OrganisationsInFrameRelStructure",
+    "OtherDeckEntrance",
+    "OtherDeckEntranceRef",
+    "OtherDeckEntranceRefStructure",
+    "OtherDeckEntranceVersionStructure",
+    "OtherDeckSpace",
+    "OtherDeckSpaceRef",
+    "OtherDeckSpaceRefStructure",
+    "OtherDeckSpaceVersionStructure",
+    "OtherDeckSpacesRelStructure",
     "OtherError",
     "OtherErrorStructure",
     "OtherOrganisation",
@@ -6795,6 +7291,11 @@ __all__ = [
     "PassageTypeEnumeration",
     "PassengerAccessibilityNeeds",
     "PassengerAccessibilityNeedsStructure",
+    "PassengerAtStopTime",
+    "PassengerAtStopTimeRef",
+    "PassengerAtStopTimeRefStructure",
+    "PassengerAtStopTimeVersionedChildStructure",
+    "PassengerAtStopTimesRelStructure",
     "PassengerBeaconEquipment",
     "PassengerBeaconEquipmentRef",
     "PassengerBeaconEquipmentRefStructure",
@@ -6814,6 +7315,10 @@ __all__ = [
     "PassengerCommsFacility",
     "PassengerCommsFacilityEnumeration",
     "PassengerCommsFacilityList",
+    "PassengerEntrance",
+    "PassengerEntranceRef",
+    "PassengerEntranceRefStructure",
+    "PassengerEntranceVersionStructure",
     "PassengerEquipment",
     "PassengerEquipmentRef",
     "PassengerEquipmentRefStructure",
@@ -6837,12 +7342,31 @@ __all__ = [
     "PassengerSafetyEquipmentVersionStructure",
     "PassengerSeatRef",
     "PassengerSeatRefStructure",
+    "PassengerSpace",
+    "PassengerSpaceRef",
+    "PassengerSpaceRefStructure",
+    "PassengerSpaceVersionStructure",
+    "PassengerSpacesRelStructure",
+    "PassengerSpot",
+    "PassengerSpotRef",
+    "PassengerSpotRefStructure",
+    "PassengerSpotVersionStructure",
+    "PassengerSpotsRelStructure",
     "PassengerStopAssignment",
     "PassengerStopAssignmentDerivedViewStructure",
     "PassengerStopAssignmentRef",
     "PassengerStopAssignmentRefStructure",
     "PassengerStopAssignmentVersionStructure",
     "PassengerStopAssignmentView",
+    "PassengerVehicleCapacity",
+    "PassengerVehicleCapacityRef",
+    "PassengerVehicleCapacityRefStructure",
+    "PassengerVehicleCapacityStructure",
+    "PassengerVehicleSpot",
+    "PassengerVehicleSpotRef",
+    "PassengerVehicleSpotRefStructure",
+    "PassengerVehicleSpotVersionStructure",
+    "PassengerVehicleSpotsRelStructure",
     "PassingTime",
     "PassingTimeRef",
     "PassingTimeRefStructure",
@@ -6853,14 +7377,14 @@ __all__ = [
     "PathAssignmentRefStructure",
     "PathDirectionEnumeration",
     "PathHeadingEnumeration",
+    "PathInstruction",
+    "PathInstructionRef",
+    "PathInstructionRefStructure",
+    "PathInstructionVersionedChildStructure",
+    "PathInstructionsRelStructure",
     "PathJunction",
     "PathJunctionRef",
-    "PathJunctionRefStructure",
-    "PathJunctionVersionStructure",
-    "PathJunctionsInFrameRelStructure",
-    "PathJunctionsRelStructure",
     "PathLink",
-    "PathLinkDerivedViewStructure",
     "PathLinkEndStructure",
     "PathLinkInSequence",
     "PathLinkInSequenceRef",
@@ -6869,11 +7393,8 @@ __all__ = [
     "PathLinkRef",
     "PathLinkRefByValue",
     "PathLinkRefByValueStructure",
-    "PathLinkRefStructure",
-    "PathLinkRefsRelStructure",
-    "PathLinkVersionStructure",
     "PathLinkView",
-    "PathLinksInFrameRelStructure",
+    "PathLinksInSequenceRefsRelStructure",
     "PathLinksInSequenceRelStructure",
     "PaymentByMobileStructure",
     "PaymentMethodEnumeration",
@@ -7016,6 +7537,10 @@ __all__ = [
     "PostalAddressRef",
     "PostalAddressRefStructure",
     "PostalAddressVersionStructure",
+    "PoweredTrain",
+    "PoweredTrainRef",
+    "PoweredTrainRefStructure",
+    "PoweredTrainVersionStructure",
     "PreassignedFareProduct",
     "PreassignedFareProductEnumeration",
     "PreassignedFareProductRef",
@@ -7096,7 +7621,7 @@ __all__ = [
     "PropertyOfDay",
     "PropertyOfDayStructure",
     "PropulsionTypeEnumeration",
-    "PublicCodeType",
+    "PublicCodeStructure",
     "PublicUseEnumeration",
     "PublicationDelivery",
     "PublicationDeliveryStructure",
@@ -7353,6 +7878,19 @@ __all__ = [
     "RoadPointRef",
     "RoadPointRefStructure",
     "RoadVehicleMode",
+    "RollingStockInventoriesRelStructure",
+    "RollingStockInventory",
+    "RollingStockInventoryRef",
+    "RollingStockInventoryRefStructure",
+    "RollingStockInventoryRefsRelStructure",
+    "RollingStockInventoryVersionStructure",
+    "RollingStockItem",
+    "RollingStockItemDummyType",
+    "RollingStockItemRef",
+    "RollingStockItemRefStructure",
+    "RollingStockItemRefsRelStructure",
+    "RollingStockItemVersionStructure",
+    "RollingStockItemsRelStructure",
     "RoughSurface",
     "RoughSurfaceRef",
     "RoughSurfaceRefStructure",
@@ -7516,6 +8054,11 @@ __all__ = [
     "ScopingMethodEnumeration",
     "SeasonEnumeration",
     "SeatAllocationMethodEnumeration",
+    "SeatContextEnumeration",
+    "SeatEquipment",
+    "SeatEquipmentRef",
+    "SeatEquipmentRefStructure",
+    "SeatEquipmentVersionStructure",
     "SeatingEquipment",
     "SeatingEquipmentRef",
     "SeatingEquipmentRefStructure",
@@ -7555,6 +8098,22 @@ __all__ = [
     "SecuritylistRefsRelStructure",
     "SelfDriveSubmode",
     "SelfDriveSubmodeEnumeration",
+    "SensorCommunicationsEnumeration",
+    "SensorEquipment",
+    "SensorEquipmentAbstract",
+    "SensorEquipmentRef",
+    "SensorEquipmentRefStructure",
+    "SensorEquipmentVersionStructure",
+    "SensorInEntrance",
+    "SensorInEntranceRef",
+    "SensorInEntranceRefStructure",
+    "SensorInEntranceVersionedChildStructure",
+    "SensorInSpot",
+    "SensorInSpotRef",
+    "SensorInSpotRefStructure",
+    "SensorInSpotVersionedChildStructure",
+    "SensorsInEntranceRelStructure",
+    "SensorsInSpotRelStructure",
     "SeriesConstraint",
     "SeriesConstraintPrice",
     "SeriesConstraintPriceRef",
@@ -7741,13 +8300,34 @@ __all__ = [
     "SiteFrame",
     "SiteFrameRef",
     "SiteFrameRefStructure",
+    "SiteNavigationPath",
+    "SiteNavigationPathRef",
+    "SiteNavigationPathRefStructure",
+    "SiteNavigationPathRefsRelStructure",
+    "SiteNavigationPathVersionStructure",
+    "SitePathJunction",
+    "SitePathJunctionRef",
+    "SitePathJunctionRefStructure",
+    "SitePathJunctionVersionStructure",
+    "SitePathJunctionsInFrameRelStructure",
+    "SitePathJunctionsRelStructure",
     "SitePathLink",
+    "SitePathLinkEndStructure",
+    "SitePathLinkRef",
     "SitePathLinkRefStructure",
+    "SitePathLinkRefsRelStructure",
     "SitePathLinkVersionStructure",
+    "SitePathLinksInFrameRelStructure",
     "SitePathLinksRelStructure",
     "SiteRef",
     "SiteRefStructure",
     "SiteRefsRelStructure",
+    "SiteStructure",
+    "SiteStructureRef",
+    "SiteStructureRefStructure",
+    "SiteStructureRefsRelStructure",
+    "SiteStructureVersionStructure",
+    "SiteStructuresRelStructure",
     "SiteTypeEnumeration",
     "SiteVersionFrameStructure",
     "SiteVersionStructure",
@@ -7770,6 +8350,33 @@ __all__ = [
     "SpecificParameterAssignment",
     "SpecificParameterAssignmentVersionStructure",
     "SpecificParameterAssignmentsRelStructure",
+    "SpotAffinitiesRelStructure",
+    "SpotAffinity",
+    "SpotAffinityRef",
+    "SpotAffinityRefStructure",
+    "SpotAffinityTypeEnumeration",
+    "SpotAffinityVersionStructure",
+    "SpotColumn",
+    "SpotColumnRef",
+    "SpotColumnRefStructure",
+    "SpotColumnRefsRelStructure",
+    "SpotColumnVersionStructure",
+    "SpotColumnsRelStructure",
+    "SpotEquipment1",
+    "SpotEquipment2",
+    "SpotEquipmentRef",
+    "SpotEquipmentRefStructure",
+    "SpotEquipmentVersionStructure",
+    "SpotRow",
+    "SpotRowRef",
+    "SpotRowRefStructure",
+    "SpotRowRefsRelStructure",
+    "SpotRowVersionStructure",
+    "SpotRowsRelStructure",
+    "SpotSensor",
+    "SpotSensorRef",
+    "SpotSensorRefStructure",
+    "SpotSensorVersionStructure",
     "SrsName1",
     "SrsName2",
     "Staffing",
@@ -7822,7 +8429,6 @@ __all__ = [
     "StopEventRequestRefStructure",
     "StopFinderRequestRef",
     "StopFinderRequestRefStructure",
-    "StopPathLinkRefStructure",
     "StopPlace",
     "StopPlaceAbstract",
     "StopPlaceComponent",
@@ -7904,6 +8510,7 @@ __all__ = [
     "SuspendingVersionStructure",
     "SuspensionPolicyEnumeration",
     "SystemOfUnits",
+    "TableTypeEnumeration",
     "TactileGuidanceAvailable",
     "TactileGuidingStripStatusEnumeration",
     "TactileWarningStripEnumeration",
@@ -7980,6 +8587,7 @@ __all__ = [
     "ThirdPartyProductRefStructure",
     "ThirdPartyProductRefsRelStructure",
     "ThirdPartyProductVersionStructure",
+    "ThroughAccessEnumeration",
     "TicketTypeEnumeration",
     "TicketValidatorEnumeration",
     "TicketValidatorEquipment",
@@ -8119,11 +8727,27 @@ __all__ = [
     "Trace",
     "TraceStructure",
     "TracesRelStructure",
+    "TractiveElementType",
+    "TractiveElementTypeRef",
+    "TractiveElementTypeRefStructure",
+    "TractiveElementTypeVersionStructure",
+    "TractiveRollingStockItem",
+    "TractiveRollingStockItemRef",
+    "TractiveRollingStockItemRefStructure",
+    "TractiveRollingStockItemVersionStructure",
     "TrafficControlPoint",
     "TrafficControlPointRef",
     "TrafficControlPointRefStructure",
     "TrafficControlPointVersionStructure",
     "TrafficControlPointsInFrameRelStructure",
+    "TrailingElementType",
+    "TrailingElementTypeRef",
+    "TrailingElementTypeRefStructure",
+    "TrailingElementTypeVersionStructure",
+    "TrailingRollingStockItem",
+    "TrailingRollingStockItemRef",
+    "TrailingRollingStockItemRefStructure",
+    "TrailingRollingStockItemVersionStructure",
     "Train",
     "TrainBlock",
     "TrainBlockPart",
@@ -8134,6 +8758,7 @@ __all__ = [
     "TrainBlockRefStructure",
     "TrainBlockVersionStructure",
     "TrainComponent",
+    "TrainComponentCouplingStructure",
     "TrainComponentDerivedViewStructure",
     "TrainComponentLabelAssignment",
     "TrainComponentLabelAssignmentRef",
@@ -8148,9 +8773,12 @@ __all__ = [
     "TrainComponentsRelStructure",
     "TrainElement",
     "TrainElementRef",
-    "TrainElementRefStructure",
-    "TrainElementTypeEnumeration",
-    "TrainElementVersionStructure",
+    "TrainElementTypeDummyType",
+    "TrainElementTypeRef",
+    "TrainElementTypeRefStructure",
+    "TrainElementTypeTypeEnumeration",
+    "TrainElementTypeVersionStructure",
+    "TrainElementTypesInFrameRelStructure",
     "TrainInCompoundTrainRef",
     "TrainInCompoundTrainRefStructure",
     "TrainInCompoundTrainVersionedChildStructure",
@@ -8171,6 +8799,7 @@ __all__ = [
     "TrainStopAssignmentRefStructure",
     "TrainStopAssignmentVersionStructure",
     "TrainStopAssignmentsRelStructure",
+    "TrainType",
     "TrainVersionStructure",
     "TrainsInCompoundTrainRelStructure",
     "TramSubmode",
@@ -8210,7 +8839,7 @@ __all__ = [
     "TransportSubmode",
     "TransportSubmodeStructure",
     "TransportType",
-    "TransportTypeAbstract",
+    "TransportTypeDummyType",
     "TransportTypeRef",
     "TransportTypeRefStructure",
     "TransportTypeRefsRelStructure",
@@ -8293,12 +8922,19 @@ __all__ = [
     "TypeOfCongestionRef",
     "TypeOfCongestionRefStructure",
     "TypeOfCongestionValueStructure",
-    "TypeOfContractEnumeration",
     "TypeOfCustomerAccount",
     "TypeOfCustomerAccountRef",
     "TypeOfCustomerAccountRefStructure",
     "TypeOfCustomerAccountRefsRelStructure",
     "TypeOfCustomerAccountVersionStructure",
+    "TypeOfDeckEntrance",
+    "TypeOfDeckEntranceRef",
+    "TypeOfDeckEntranceRefStructure",
+    "TypeOfDeckEntranceValueStructure",
+    "TypeOfDeckSpace",
+    "TypeOfDeckSpaceProfileRefStructure",
+    "TypeOfDeckSpaceRef",
+    "TypeOfDeckSpaceValueStructure",
     "TypeOfDeliveryVariant",
     "TypeOfDeliveryVariantRef",
     "TypeOfDeliveryVariantRefStructure",
@@ -8380,6 +9016,11 @@ __all__ = [
     "TypeOfLinkSequenceRefStructure",
     "TypeOfLinkSequenceValueStructure",
     "TypeOfLinkValueStructure",
+    "TypeOfLocatableSpot",
+    "TypeOfLocatableSpotEnumeration",
+    "TypeOfLocatableSpotRef",
+    "TypeOfLocatableSpotRefStructure",
+    "TypeOfLocatableSpotValueStructure",
     "TypeOfMachineReadability",
     "TypeOfMachineReadabilityRef",
     "TypeOfMachineReadabilityRefStructure",
@@ -8468,6 +9109,10 @@ __all__ = [
     "TypeOfRetailDeviceRefStructure",
     "TypeOfRetailDeviceRefsRelStructure",
     "TypeOfRetailDeviceVersionStructure",
+    "TypeOfRollingStock",
+    "TypeOfRollingStockRef",
+    "TypeOfRollingStockRefStructure",
+    "TypeOfRollingStockValueStructure",
     "TypeOfSalesOfferPackage",
     "TypeOfSalesOfferPackageRef",
     "TypeOfSalesOfferPackageRefStructure",
@@ -8567,6 +9212,10 @@ __all__ = [
     "UnknownSubscriberErrorStructure",
     "UnknownSubscriptionError",
     "UnknownSubscriptionErrorStructure",
+    "UnpoweredTrain",
+    "UnpoweredTrainRef",
+    "UnpoweredTrainRefStructure",
+    "UnpoweredTrainVersionStructure",
     "UsageDiscountRight",
     "UsageDiscountRightEnumeration",
     "UsageDiscountRightRef",
@@ -8857,6 +9506,7 @@ __all__ = [
     "VehicleSharingServiceRefStructure",
     "VehicleSharingServiceVersionStructure",
     "VehicleSharingTypeEnumeration",
+    "VehicleSideEnumeration",
     "VehicleStoppingPlace",
     "VehicleStoppingPlaceRef",
     "VehicleStoppingPlaceRefStructure",
@@ -8932,6 +9582,8 @@ __all__ = [
     "WeekOfMonthEnumeration",
     "WheelchairAccess",
     "WheelchairVehicleEquipment",
+    "WheelchairVehicleEquipmentRef",
+    "WheelchairVehicleEquipmentRefStructure",
     "WheelchairVehicleEquipmentVersionStructure",
     "WheelchairVehicleRef",
     "WheelchairVehicleRefStructure",

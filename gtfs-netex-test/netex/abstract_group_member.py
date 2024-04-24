@@ -11,6 +11,12 @@ class AbstractGroupMember(AbstractGroupMemberVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
+    description: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )
     validity_conditions_or_valid_between: Any = field(
         init=False,
         metadata={
@@ -18,12 +24,6 @@ class AbstractGroupMember(AbstractGroupMemberVersionedChildStructure):
         },
     )
     alternative_texts: Any = field(
-        init=False,
-        metadata={
-            "type": "Ignore",
-        },
-    )
-    description: Any = field(
         init=False,
         metadata={
             "type": "Ignore",

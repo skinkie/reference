@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from .cell_ref import CellRef
 from .fare_price_versioned_child_structure import FarePriceVersionedChildStructure
@@ -27,7 +27,7 @@ class GeographicalUnitPricesRelStructure(StrictContainmentAggregationStructure):
                 },
                 {
                     "name": "GeographicalUnitPrice",
-                    "type": Type["GeographicalUnitPriceVersionedChildStructure"],
+                    "type": ForwardRef("GeographicalUnitPriceVersionedChildStructure"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

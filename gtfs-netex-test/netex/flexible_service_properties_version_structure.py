@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -177,12 +177,12 @@ class FlexibleServicePropertiesVersionStructure(DataManagedObjectStructure):
                 },
                 {
                     "name": "MinimumBookingPeriod",
-                    "type": Type["FlexibleServicePropertiesVersionStructure.MinimumBookingPeriod"],
+                    "type": ForwardRef("FlexibleServicePropertiesVersionStructure.MinimumBookingPeriod"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "MaximumBookingPeriod",
-                    "type": Type["FlexibleServicePropertiesVersionStructure.MaximumBookingPeriod"],
+                    "type": ForwardRef("FlexibleServicePropertiesVersionStructure.MaximumBookingPeriod"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

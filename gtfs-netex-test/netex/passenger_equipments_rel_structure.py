@@ -3,6 +3,7 @@ from typing import List, Union
 
 from .access_vehicle_equipment import AccessVehicleEquipment
 from .access_vehicle_equipment_ref import AccessVehicleEquipmentRef
+from .actual_vehicle_equipment import ActualVehicleEquipment
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .help_point_equipment import HelpPointEquipment
 from .help_point_equipment_ref import HelpPointEquipmentRef
@@ -20,6 +21,7 @@ from .ticket_validator_equipment import TicketValidatorEquipment
 from .ticketing_equipment import TicketingEquipment
 from .vehicle_equipment_ref import VehicleEquipmentRef
 from .wheelchair_vehicle_equipment import WheelchairVehicleEquipment
+from .wheelchair_vehicle_equipment_ref import WheelchairVehicleEquipmentRef
 from .wheelchair_vehicle_ref import WheelchairVehicleRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -37,6 +39,7 @@ class PassengerEquipmentsRelStructure(ContainmentAggregationStructure):
             HelpPointEquipmentRef,
             PassengerSafetyEquipmentRef,
             SanitaryEquipmentRef,
+            WheelchairVehicleEquipmentRef,
             WheelchairVehicleRef,
             AccessVehicleEquipmentRef,
             VehicleEquipmentRef,
@@ -51,6 +54,7 @@ class PassengerEquipmentsRelStructure(ContainmentAggregationStructure):
             TicketingEquipment,
             WheelchairVehicleEquipment,
             AccessVehicleEquipment,
+            ActualVehicleEquipment,
         ]
     ] = field(
         default_factory=list,
@@ -80,6 +84,11 @@ class PassengerEquipmentsRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "SanitaryEquipmentRef",
                     "type": SanitaryEquipmentRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "WheelchairVehicleEquipmentRef",
+                    "type": WheelchairVehicleEquipmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -150,6 +159,11 @@ class PassengerEquipmentsRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "AccessVehicleEquipment",
                     "type": AccessVehicleEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ActualVehicleEquipment",
+                    "type": ActualVehicleEquipment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

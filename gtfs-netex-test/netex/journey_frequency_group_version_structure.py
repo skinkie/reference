@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from xsdata.models.datatype import XmlTime
 
@@ -32,29 +32,29 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
             "choices": (
                 {
                     "name": "FirstDayOffset",
-                    "type": Type["JourneyFrequencyGroupVersionStructure.FirstDayOffset"],
+                    "type": ForwardRef("JourneyFrequencyGroupVersionStructure.FirstDayOffset"),
                     "namespace": "http://www.netex.org.uk/netex",
                     "max_occurs": 2,
                 },
                 {
                     "name": "LastDepartureTime",
-                    "type": Type["JourneyFrequencyGroupVersionStructure.LastDepartureTime"],
+                    "type": ForwardRef("JourneyFrequencyGroupVersionStructure.LastDepartureTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "LastDayOffset",
-                    "type": Type["JourneyFrequencyGroupVersionStructure.LastDayOffset"],
+                    "type": ForwardRef("JourneyFrequencyGroupVersionStructure.LastDayOffset"),
                     "namespace": "http://www.netex.org.uk/netex",
                     "max_occurs": 2,
                 },
                 {
                     "name": "FirstArrivalTime",
-                    "type": Type["JourneyFrequencyGroupVersionStructure.FirstArrivalTime"],
+                    "type": ForwardRef("JourneyFrequencyGroupVersionStructure.FirstArrivalTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "LastArrivalTime",
-                    "type": Type["JourneyFrequencyGroupVersionStructure.LastArrivalTime"],
+                    "type": ForwardRef("JourneyFrequencyGroupVersionStructure.LastArrivalTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

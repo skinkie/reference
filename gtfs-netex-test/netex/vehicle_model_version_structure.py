@@ -7,9 +7,11 @@ from .compound_train_ref import CompoundTrainRef
 from .cycle_model_profile_ref import CycleModelProfileRef
 from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
+from .powered_train_ref import PoweredTrainRef
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
 from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_equipment_profile_refs_rel_structure import VehicleEquipmentProfileRefsRelStructure
 from .vehicle_type_ref import VehicleTypeRef
 
@@ -45,7 +47,7 @@ class VehicleModelVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
+    transport_type_ref_or_vehicle_type_ref_or_train_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -58,6 +60,16 @@ class VehicleModelVersionStructure(DataManagedObjectStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

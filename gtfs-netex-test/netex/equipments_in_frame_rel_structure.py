@@ -2,9 +2,11 @@ from dataclasses import dataclass, field
 from typing import List, Union
 
 from .access_vehicle_equipment import AccessVehicleEquipment
+from .actual_vehicle_equipment import ActualVehicleEquipment
 from .assistance_booking_service import AssistanceBookingService
 from .assistance_service import AssistanceService
 from .battery_equipment import BatteryEquipment
+from .bed_equipment import BedEquipment
 from .car_pooling_service import CarPoolingService
 from .catering_service import CateringService
 from .chauffeured_vehicle_service import ChauffeuredVehicleService
@@ -15,6 +17,7 @@ from .crossing_equipment import CrossingEquipment
 from .customer_service import CustomerService
 from .cycle_storage_equipment import CycleStorageEquipment
 from .entrance_equipment import EntranceEquipment
+from .entrance_sensor import EntranceSensor
 from .escalator_equipment import EscalatorEquipment
 from .general_sign import GeneralSign
 from .heading_sign import HeadingSign
@@ -25,6 +28,7 @@ from .lift_call_equipment import LiftCallEquipment
 from .lift_equipment import LiftEquipment
 from .lost_property_service import LostPropertyService
 from .luggage_service import LuggageService
+from .luggage_spot_equipment import LuggageSpotEquipment
 from .meeting_point_service import MeetingPointService
 from .money_service import MoneyService
 from .online_service import OnlineService
@@ -41,9 +45,14 @@ from .retail_service import RetailService
 from .rough_surface import RoughSurface
 from .rubbish_disposal_equipment import RubbishDisposalEquipment
 from .sanitary_equipment import SanitaryEquipment
+from .seat_equipment import SeatEquipment
 from .seating_equipment import SeatingEquipment
+from .sensor_equipment import SensorEquipment
 from .shelter_equipment import ShelterEquipment
 from .sign_equipment import SignEquipment
+from .spot_equipment_1 import SpotEquipment1
+from .spot_equipment_2 import SpotEquipment2
+from .spot_sensor import SpotSensor
 from .staircase_equipment import StaircaseEquipment
 from .taxi_service import TaxiService
 from .ticket_validator_equipment import TicketValidatorEquipment
@@ -90,6 +99,14 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
             TicketingService,
             RetailDevice,
             BatteryEquipment,
+            EntranceSensor,
+            SpotSensor,
+            SensorEquipment,
+            LuggageSpotEquipment,
+            BedEquipment,
+            SeatEquipment,
+            SpotEquipment1,
+            SpotEquipment2,
             VehicleReleaseEquipment,
             RefuellingEquipment,
             VehicleChargingEquipment,
@@ -123,6 +140,7 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
             TicketingEquipment,
             WheelchairVehicleEquipment,
             AccessVehicleEquipment,
+            ActualVehicleEquipment,
         ]
     ] = field(
         default_factory=list,
@@ -237,6 +255,46 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "BatteryEquipment",
                     "type": BatteryEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EntranceSensor",
+                    "type": EntranceSensor,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotSensor",
+                    "type": SpotSensor,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SensorEquipment",
+                    "type": SensorEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LuggageSpotEquipment",
+                    "type": LuggageSpotEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BedEquipment",
+                    "type": BedEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SeatEquipment",
+                    "type": SeatEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotEquipment",
+                    "type": SpotEquipment1,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotEquipment_",
+                    "type": SpotEquipment2,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -402,6 +460,11 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "AccessVehicleEquipment",
                     "type": AccessVehicleEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ActualVehicleEquipment",
+                    "type": ActualVehicleEquipment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

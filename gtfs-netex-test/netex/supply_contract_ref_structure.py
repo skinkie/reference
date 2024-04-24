@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from .version_of_object_ref_structure import VersionOfObjectRefStructure
+from .contract_ref_structure import ContractRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class SupplyContractRefStructure(VersionOfObjectRefStructure):
+class SupplyContractRefStructure(ContractRefStructure):
     pass

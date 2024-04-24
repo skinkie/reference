@@ -8,6 +8,7 @@ from .parking_ref import ParkingRef
 from .point_of_interest_ref import PointOfInterestRef
 from .service_site_ref import ServiceSiteRef
 from .site_connection_ref import SiteConnectionRef
+from .site_navigation_path_ref import SiteNavigationPathRef
 from .site_ref import SiteRef
 from .stop_assignment_version_structure import StopAssignmentVersionStructure
 from .stop_place_ref import StopPlaceRef
@@ -44,21 +45,11 @@ class NavigationPathAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    stop_place_ref_or_site_ref: Optional[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
+    site_ref_or_stop_place_ref: Optional[Union[ParkingRef, PointOfInterestRef, TaxiRankRef, StopPlaceRef, ServiceSiteRef, SiteRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
-                {
-                    "name": "TaxiRankRef",
-                    "type": TaxiRankRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceRef",
-                    "type": StopPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
                 {
                     "name": "ParkingRef",
                     "type": ParkingRef,
@@ -67,6 +58,16 @@ class NavigationPathAssignmentVersionStructure(StopAssignmentVersionStructure):
                 {
                     "name": "PointOfInterestRef",
                     "type": PointOfInterestRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiRankRef",
+                    "type": TaxiRankRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceRef",
+                    "type": StopPlaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -82,11 +83,21 @@ class NavigationPathAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    navigation_path_ref: Optional[NavigationPathRef] = field(
+    site_navigation_path_ref_or_navigation_path_ref: Optional[Union[SiteNavigationPathRef, NavigationPathRef]] = field(
         default=None,
         metadata={
-            "name": "NavigationPathRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "SiteNavigationPathRef",
+                    "type": SiteNavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NavigationPathRef",
+                    "type": NavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )

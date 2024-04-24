@@ -17,21 +17,11 @@ class SiteRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "siteRefs_RelStructure"
 
-    stop_place_ref_or_site_ref: List[Union[TaxiRankRef, StopPlaceRef, ParkingRef, PointOfInterestRef, ServiceSiteRef, SiteRef]] = field(
+    site_ref_or_stop_place_ref: List[Union[ParkingRef, PointOfInterestRef, TaxiRankRef, StopPlaceRef, ServiceSiteRef, SiteRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
-                {
-                    "name": "TaxiRankRef",
-                    "type": TaxiRankRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceRef",
-                    "type": StopPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
                 {
                     "name": "ParkingRef",
                     "type": ParkingRef,
@@ -40,6 +30,16 @@ class SiteRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "PointOfInterestRef",
                     "type": PointOfInterestRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiRankRef",
+                    "type": TaxiRankRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceRef",
+                    "type": StopPlaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

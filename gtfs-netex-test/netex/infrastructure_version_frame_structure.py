@@ -13,11 +13,7 @@ from .network_restrictions_in_frame_rel_structure import NetworkRestrictionsInFr
 from .relief_points_in_frame_rel_structure import ReliefPointsInFrameRelStructure
 from .spatial_features_in_frame_rel_structure import SpatialFeaturesInFrameRelStructure
 from .traffic_control_points_in_frame_rel_structure import TrafficControlPointsInFrameRelStructure
-from .vehicle_equipmen_profiles_in_frame_rel_structure import VehicleEquipmenProfilesInFrameRelStructure
-from .vehicle_model_profiles_in_frame_rel_structure import VehicleModelProfilesInFrameRelStructure
-from .vehicle_models_in_frame_rel_structure import VehicleModelsInFrameRelStructure
 from .vehicle_types_in_frame_rel_structure import VehicleTypesInFrameRelStructure
-from .vehicles_in_frame_rel_structure import VehiclesInFrameRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -139,37 +135,6 @@ class InfrastructureVersionFrameStructure(CommonVersionFrameStructure):
         default=None,
         metadata={
             "name": "vehicleTypes",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    vehicle_models: Optional[VehicleModelsInFrameRelStructure] = field(
-        default=None,
-        metadata={
-            "name": "vehicleModels",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    vehicle_equipment_profiles: Optional[VehicleEquipmenProfilesInFrameRelStructure] = field(
-        default=None,
-        metadata={
-            "name": "vehicleEquipmentProfiles",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    vehicle_model_profiles: Optional[VehicleModelProfilesInFrameRelStructure] = field(
-        default=None,
-        metadata={
-            "name": "vehicleModelProfiles",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-        },
-    )
-    vehicles: Optional[VehiclesInFrameRelStructure] = field(
-        default=None,
-        metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

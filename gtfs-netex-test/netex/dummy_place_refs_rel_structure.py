@@ -5,6 +5,7 @@ from .access_space_ref import AccessSpaceRef
 from .address_ref import AddressRef
 from .addressable_place_ref import AddressablePlaceRef
 from .boarding_position_ref import BoardingPositionRef
+from .deck_path_junction_ref import DeckPathJunctionRef
 from .entrance_ref import EntranceRef
 from .equipment_place_ref import EquipmentPlaceRef
 from .equipment_position_ref import EquipmentPositionRef
@@ -12,6 +13,7 @@ from .flexible_area_ref import FlexibleAreaRef
 from .flexible_quay_ref import FlexibleQuayRef
 from .flexible_stop_place_ref import FlexibleStopPlaceRef
 from .garage_ref import GarageRef
+from .generic_path_junction_ref import GenericPathJunctionRef
 from .hail_and_ride_area_ref import HailAndRideAreaRef
 from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -32,6 +34,7 @@ from .road_address_ref import RoadAddressRef
 from .service_site_ref import ServiceSiteRef
 from .site_component_ref import SiteComponentRef
 from .site_element_ref import SiteElementRef
+from .site_path_junction_ref import SitePathJunctionRef
 from .site_ref import SiteRef
 from .stop_place_entrance_ref import StopPlaceEntranceRef
 from .stop_place_ref import StopPlaceRef
@@ -65,7 +68,6 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
             FlexibleAreaRef,
             FlexibleQuayRef,
             FlexibleStopPlaceRef,
-            PathJunctionRef,
             EquipmentPlaceRef,
             EquipmentPositionRef,
             TopographicPlaceRef,
@@ -74,11 +76,6 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
             GarageRef,
             VehicleStoppingPositionRef,
             VehicleStoppingPlaceRef,
-            BoardingPositionRef,
-            AccessSpaceRef,
-            TaxiStandRef,
-            QuayRef,
-            StopPlaceSpaceRef,
             VehiclePoolingParkingBayRef,
             MonitoredVehicleSharingParkingBayRef,
             VehicleSharingParkingBayRef,
@@ -88,20 +85,25 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
             TaxiParkingAreaRef,
             ParkingAreaRef,
             PointOfInterestSpaceRef,
-            StopPlaceVehicleEntranceRef,
-            StopPlaceEntranceRef,
+            BoardingPositionRef,
+            AccessSpaceRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceSpaceRef,
             ParkingEntranceForVehiclesRef,
             ParkingPassengerEntranceRef,
             ParkingEntranceRef,
             PointOfInterestVehicleEntranceRef,
             PointOfInterestEntranceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
             VehicleEntranceRef,
             EntranceRef,
             SiteComponentRef,
-            TaxiRankRef,
-            StopPlaceRef,
             ParkingRef,
             PointOfInterestRef,
+            TaxiRankRef,
+            StopPlaceRef,
             ServiceSiteRef,
             SiteRef,
             SiteElementRef,
@@ -109,6 +111,10 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
             PostalAddressRef,
             RoadAddressRef,
             AddressRef,
+            DeckPathJunctionRef,
+            PathJunctionRef,
+            SitePathJunctionRef,
+            GenericPathJunctionRef,
         ]
     ] = field(
         default_factory=list,
@@ -133,11 +139,6 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "FlexibleStopPlaceRef",
                     "type": FlexibleStopPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "PathJunctionRef",
-                    "type": PathJunctionRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -178,31 +179,6 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "VehicleStoppingPlaceRef",
                     "type": VehicleStoppingPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "BoardingPositionRef",
-                    "type": BoardingPositionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "AccessSpaceRef",
-                    "type": AccessSpaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TaxiStandRef",
-                    "type": TaxiStandRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "QuayRef",
-                    "type": QuayRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceSpaceRef",
-                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -251,13 +227,28 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceVehicleEntranceRef",
-                    "type": StopPlaceVehicleEntranceRef,
+                    "name": "BoardingPositionRef",
+                    "type": BoardingPositionRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceEntranceRef",
-                    "type": StopPlaceEntranceRef,
+                    "name": "AccessSpaceRef",
+                    "type": AccessSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiStandRef",
+                    "type": TaxiStandRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "QuayRef",
+                    "type": QuayRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceSpaceRef",
+                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -286,6 +277,16 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "StopPlaceVehicleEntranceRef",
+                    "type": StopPlaceVehicleEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceEntranceRef",
+                    "type": StopPlaceEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "VehicleEntranceRef",
                     "type": VehicleEntranceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -301,16 +302,6 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TaxiRankRef",
-                    "type": TaxiRankRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceRef",
-                    "type": StopPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "ParkingRef",
                     "type": ParkingRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -318,6 +309,16 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "PointOfInterestRef",
                     "type": PointOfInterestRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiRankRef",
+                    "type": TaxiRankRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceRef",
+                    "type": StopPlaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -353,6 +354,26 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "AddressRef",
                     "type": AddressRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckPathJunctionRef",
+                    "type": DeckPathJunctionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PathJunctionRef",
+                    "type": PathJunctionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SitePathJunctionRef",
+                    "type": SitePathJunctionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathJunctionRef",
+                    "type": GenericPathJunctionRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

@@ -8,8 +8,10 @@ from .entity_in_version_structure import DataManagedObjectStructure
 from .journey_part_couple_ref import JourneyPartCoupleRef
 from .journey_part_refs_rel_structure import JourneyPartRefsRelStructure
 from .multilingual_string import MultilingualString
+from .powered_train_ref import PoweredTrainRef
 from .train_block_ref import TrainBlockRef
 from .train_ref import TrainRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_type_ref import VehicleTypeRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -54,7 +56,7 @@ class BlockPartVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
+    vehicle_type_ref_or_train_ref: Optional[Union[CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -62,6 +64,16 @@ class BlockPartVersionStructure(DataManagedObjectStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

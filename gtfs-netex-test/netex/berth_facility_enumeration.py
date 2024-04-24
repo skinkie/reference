@@ -4,6 +4,8 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 class BerthFacilityEnumeration(Enum):
-    UPPER = "upper"
     LOWER = "lower"
+    MIDDLE = "middle"
+    UPPER = "upper"
     BOTH = "both"
+    ALL = "all"

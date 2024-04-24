@@ -7,7 +7,7 @@ from .flexible_line_ref import FlexibleLineRef
 from .line_ref import LineRef
 from .multilingual_string import MultilingualString
 from .operator_ref import OperatorRef
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .transport_submode import TransportSubmode
 from .type_of_line_ref import TypeOfLineRef
 
@@ -37,7 +37,7 @@ class LineDerivedViewStructure(DerivedViewStructure):
             ),
         },
     )
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

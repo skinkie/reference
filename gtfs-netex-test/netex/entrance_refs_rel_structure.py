@@ -20,21 +20,11 @@ class EntranceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "entranceRefs_RelStructure"
 
-    entrance_ref_or_parking_entrance_ref: List[Union[StopPlaceVehicleEntranceRef, StopPlaceEntranceRef, ParkingEntranceForVehiclesRef, ParkingPassengerEntranceRef, ParkingEntranceRef, PointOfInterestVehicleEntranceRef, PointOfInterestEntranceRef, VehicleEntranceRef, EntranceRef]] = field(
+    parking_entrance_ref_or_entrance_ref: List[Union[ParkingEntranceForVehiclesRef, ParkingPassengerEntranceRef, ParkingEntranceRef, PointOfInterestVehicleEntranceRef, PointOfInterestEntranceRef, StopPlaceVehicleEntranceRef, StopPlaceEntranceRef, VehicleEntranceRef, EntranceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
-                {
-                    "name": "StopPlaceVehicleEntranceRef",
-                    "type": StopPlaceVehicleEntranceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceEntranceRef",
-                    "type": StopPlaceEntranceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
                 {
                     "name": "ParkingEntranceForVehiclesRef",
                     "type": ParkingEntranceForVehiclesRef,
@@ -58,6 +48,16 @@ class EntranceRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "PointOfInterestEntranceRef",
                     "type": PointOfInterestEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceVehicleEntranceRef",
+                    "type": StopPlaceVehicleEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceEntranceRef",
+                    "type": StopPlaceEntranceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

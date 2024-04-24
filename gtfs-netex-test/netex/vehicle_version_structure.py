@@ -6,15 +6,18 @@ from xsdata.models.datatype import XmlDate
 from .authority_ref import AuthorityRef
 from .car_model_profile_ref import CarModelProfileRef
 from .compound_train_ref import CompoundTrainRef
+from .contact_ref import ContactRef
 from .cycle_model_profile_ref import CycleModelProfileRef
 from .entity_in_version_structure import DataManagedObjectStructure
 from .equipments_rel_structure import EquipmentsRelStructure
 from .multilingual_string import MultilingualString
 from .operator_ref import OperatorRef
+from .powered_train_ref import PoweredTrainRef
 from .private_code import PrivateCode
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
 from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_model_ref import VehicleModelRef
 from .vehicle_type_ref import VehicleTypeRef
 
@@ -46,6 +49,22 @@ class VehicleVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "Description",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    build_date: Optional[XmlDate] = field(
+        default=None,
+        metadata={
+            "name": "BuildDate",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    chassis_number: Optional[str] = field(
+        default=None,
+        metadata={
+            "name": "ChassisNumber",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
@@ -100,7 +119,15 @@ class VehicleVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
+    contact_ref: Optional[ContactRef] = field(
+        default=None,
+        metadata={
+            "name": "ContactRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    transport_type_ref_or_vehicle_type_ref_or_train_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -113,6 +140,16 @@ class VehicleVersionStructure(DataManagedObjectStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

@@ -5,7 +5,9 @@ from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .dead_run_ref import DeadRunRef
+from .deck_navigation_path_ref import DeckNavigationPathRef
 from .entity_in_version_structure import VersionedChildStructure
+from .generic_navigation_path_ref import GenericNavigationPathRef
 from .journey_pattern_ref import JourneyPatternRef
 from .link_sequence_ref import LinkSequenceRef
 from .multilingual_string import MultilingualString
@@ -18,6 +20,7 @@ from .service_journey_ref import ServiceJourneyRef
 from .service_pattern_ref import ServicePatternRef
 from .single_journey_path_ref import SingleJourneyPathRef
 from .single_journey_ref import SingleJourneyRef
+from .site_navigation_path_ref import SiteNavigationPathRef
 from .special_service_ref import SpecialServiceRef
 from .template_service_journey_ref import TemplateServiceJourneyRef
 from .timing_pattern_ref import TimingPatternRef
@@ -33,7 +36,7 @@ class PointInLinkSequenceVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "PointInLinkSequence_VersionedChildStructure"
 
-    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref: Optional[
+    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref_or_generic_navigation_path_ref: Optional[
         Union[
             TripRef,
             TripPatternTripRef,
@@ -52,8 +55,11 @@ class PointInLinkSequenceVersionedChildStructure(VersionedChildStructure):
             DeadRunJourneyPatternRef,
             JourneyPatternRef,
             TimingPatternRef,
-            NavigationPathRef,
             RouteRef,
+            DeckNavigationPathRef,
+            NavigationPathRef,
+            SiteNavigationPathRef,
+            GenericNavigationPathRef,
             LinkSequenceRef,
         ]
     ] = field(
@@ -147,13 +153,28 @@ class PointInLinkSequenceVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "RouteRef",
+                    "type": RouteRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckNavigationPathRef",
+                    "type": DeckNavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "NavigationPathRef",
                     "type": NavigationPathRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "RouteRef",
-                    "type": RouteRef,
+                    "name": "SiteNavigationPathRef",
+                    "type": SiteNavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericNavigationPathRef",
+                    "type": GenericNavigationPathRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

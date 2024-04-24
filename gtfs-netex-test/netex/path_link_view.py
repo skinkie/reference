@@ -1,19 +1,11 @@
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 
-from .path_link_derived_view_structure import PathLinkDerivedViewStructure
+from .generic_path_link_derived_view_structure import GenericPathLinkDerivedViewStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PathLinkView(PathLinkDerivedViewStructure):
+class PathLinkView(GenericPathLinkDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
-
-    branding_ref: Any = field(
-        init=False,
-        metadata={
-            "type": "Ignore",
-        },
-    )

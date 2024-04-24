@@ -4,9 +4,11 @@ from typing import Optional, Union
 from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .compound_train_ref import CompoundTrainRef
 from .dead_run_ref import DeadRunRef
+from .powered_train_ref import PoweredTrainRef
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
 from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_journey_ref import VehicleJourneyRef
 from .vehicle_orientation_enumeration import VehicleOrientationEnumeration
 from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
@@ -54,7 +56,7 @@ class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
             ),
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
+    transport_type_ref_or_vehicle_type_ref_or_train_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -67,6 +69,16 @@ class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

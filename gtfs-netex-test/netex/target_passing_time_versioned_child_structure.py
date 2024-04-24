@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -31,22 +31,22 @@ class TargetPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildStr
             "choices": (
                 {
                     "name": "AimedArrivalTime",
-                    "type": Type["TargetPassingTimeVersionedChildStructure.AimedArrivalTime"],
+                    "type": ForwardRef("TargetPassingTimeVersionedChildStructure.AimedArrivalTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "ArrivalDayOffset",
-                    "type": Type["TargetPassingTimeVersionedChildStructure.ArrivalDayOffset"],
+                    "type": ForwardRef("TargetPassingTimeVersionedChildStructure.ArrivalDayOffset"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "AimedDepartureTime",
-                    "type": Type["TargetPassingTimeVersionedChildStructure.AimedDepartureTime"],
+                    "type": ForwardRef("TargetPassingTimeVersionedChildStructure.AimedDepartureTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "DepartureDayOffset",
-                    "type": Type["TargetPassingTimeVersionedChildStructure.DepartureDayOffset"],
+                    "type": ForwardRef("TargetPassingTimeVersionedChildStructure.DepartureDayOffset"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -56,12 +56,12 @@ class TargetPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildStr
                 },
                 {
                     "name": "AimedNonstopPassingTime",
-                    "type": Type["TargetPassingTimeVersionedChildStructure.AimedNonstopPassingTime"],
+                    "type": ForwardRef("TargetPassingTimeVersionedChildStructure.AimedNonstopPassingTime"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "PassingDayOffset",
-                    "type": Type["TargetPassingTimeVersionedChildStructure.PassingDayOffset"],
+                    "type": ForwardRef("TargetPassingTimeVersionedChildStructure.PassingDayOffset"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

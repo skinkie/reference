@@ -14,7 +14,7 @@ from .organisation_parts_rel_structure import OrganisationPartsRelStructure
 from .organisation_refs_rel_structure import OrganisationRefsRelStructure
 from .organisation_type_enumeration import OrganisationTypeEnumeration
 from .private_code import PrivateCode
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .related_organisations_rel_structure import RelatedOrganisationsRelStructure
 from .responsibility_sets_rel_structure import ResponsibilitySetsRelStructure
 from .type_of_organisation_refs_rel_structure import TypeOfOrganisationRefsRelStructure
@@ -27,7 +27,7 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "Organisation_VersionStructure"
 
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -222,13 +222,25 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
 
     @dataclass(kw_only=True)
     class ValidityPeriod(ValidBetweenVersionStructure):
-        validity_conditions_or_valid_between: Any = field(
+        name: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",
             },
         )
-        alternative_texts: Any = field(
+        description: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        conditioned_object_ref: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        with_condition_ref: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",
@@ -258,25 +270,13 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
                 "type": "Ignore",
             },
         )
-        name: Any = field(
+        validity_conditions_or_valid_between: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",
             },
         )
-        description: Any = field(
-            init=False,
-            metadata={
-                "type": "Ignore",
-            },
-        )
-        conditioned_object_ref: Any = field(
-            init=False,
-            metadata={
-                "type": "Ignore",
-            },
-        )
-        with_condition_ref: Any = field(
+        alternative_texts: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",

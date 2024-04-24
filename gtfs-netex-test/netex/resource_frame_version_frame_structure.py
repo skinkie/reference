@@ -8,6 +8,7 @@ from .contacts_rel_structure import ContactsRelStructure
 from .contracts_in_frame_rel_structure import ContractsInFrameRelStructure
 from .control_centres_in_frame_rel_structure import ControlCentresInFrameRelStructure
 from .data_sources_in_frame_rel_structure import DataSourcesInFrameRelStructure
+from .deck_plans_rel_structure import DeckPlansRelStructure
 from .equipments_in_frame_rel_structure import EquipmentsInFrameRelStructure
 from .group_of_entities_in_frame_rel_structure import GroupOfEntitiesInFrameRelStructure
 from .groups_of_operators_in_frame_rel_structure import GroupsOfOperatorsInFrameRelStructure
@@ -17,10 +18,12 @@ from .operational_contexts_in_frame_rel_structure import OperationalContextsInFr
 from .organisations_in_frame_rel_structure import OrganisationsInFrameRelStructure
 from .responsibility_roles_in_frame_rel_structure import ResponsibilityRolesInFrameRelStructure
 from .responsibility_sets_in_frame_rel_structure import ResponsibilitySetsInFrameRelStructure
+from .rolling_stock_inventories_rel_structure import RollingStockInventoriesRelStructure
 from .schematic_maps_in_frame_rel_structure import SchematicMapsInFrameRelStructure
 from .service_booking_arrangements_in_frame_rel_structure import ServiceBookingArrangementsInFrameRelStructure
 from .service_facility_sets_in_frame_rel_structure import ServiceFacilitySetsInFrameRelStructure
 from .site_facility_sets_in_frame_rel_structure import SiteFacilitySetsInFrameRelStructure
+from .train_element_types_in_frame_rel_structure import TrainElementTypesInFrameRelStructure
 from .types_of_value_in_frame_rel_structure import TypesOfValueInFrameRelStructure
 from .vehicle_equipmen_profiles_in_frame_rel_structure import VehicleEquipmenProfilesInFrameRelStructure
 from .vehicle_model_profiles_in_frame_rel_structure import VehicleModelProfilesInFrameRelStructure
@@ -186,9 +189,33 @@ class ResourceFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    train_element_types: Optional[TrainElementTypesInFrameRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "trainElementTypes",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     vehicles: Optional[VehiclesInFrameRelStructure] = field(
         default=None,
         metadata={
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    rolling_stock_inventories: Optional[RollingStockInventoriesRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "rollingStockInventories",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    deck_plans: Optional[DeckPlansRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "deckPlans",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

@@ -6,6 +6,7 @@ from .common_version_frame_structure import CommonVersionFrameStructure
 from .compound_train_ref import CompoundTrainRef
 from .contained_availability_conditions_rel_structure import ContainedAvailabilityConditionsRelStructure
 from .coupled_journeys_in_frame_rel_structure import CoupledJourneysInFrameRelStructure
+from .deck_plan_assignments_rel_structure import DeckPlanAssignmentsRelStructure
 from .default_interchangse_in_frame_rel_structure import DefaultInterchangseInFrameRelStructure
 from .flexible_service_properties_in_frame_rel_structure import FlexibleServicePropertiesInFrameRelStructure
 from .frequency_groups_in_frame_rel_structure import FrequencyGroupsInFrameRelStructure
@@ -23,6 +24,7 @@ from .network_view import NetworkView
 from .notice_assignments_in_frame_rel_structure import NoticeAssignmentsInFrameRelStructure
 from .notices_in_frame_rel_structure import NoticesInFrameRelStructure
 from .operator_view import OperatorView
+from .powered_train_ref import PoweredTrainRef
 from .service_calendar_frame_ref import ServiceCalendarFrameRef
 from .service_facility_sets_in_frame_rel_structure import ServiceFacilitySetsInFrameRelStructure
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
@@ -32,6 +34,7 @@ from .train_numbers_in_frame_rel_structure import TrainNumbersInFrameRelStructur
 from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
 from .types_of_service_in_frame_rel_structure import TypesOfServiceInFrameRelStructure
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_journey_stop_assignments_in_frame_rel_structure import VehicleJourneyStopAssignmentsInFrameRelStructure
 from .vehicle_mode_enumeration import VehicleModeEnumeration
 from .vehicle_type_ref import VehicleTypeRef
@@ -134,7 +137,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
+    transport_type_ref_or_vehicle_type_ref_or_train_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -147,6 +150,16 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -243,6 +256,14 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
         default=None,
         metadata={
             "name": "serviceFacilitySets",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    deck_plan_assignments: Optional[DeckPlanAssignmentsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "deckPlanAssignments",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

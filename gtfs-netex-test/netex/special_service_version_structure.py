@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -18,12 +18,14 @@ from .journey_endpoint_structure import JourneyEndpointStructure
 from .journey_pattern_ref import JourneyPatternRef
 from .journey_version_structure import JourneyVersionStructure
 from .multilingual_string import MultilingualString
+from .powered_train_ref import PoweredTrainRef
 from .purchase_moment_enumeration import PurchaseMomentEnumeration
 from .purchase_when_enumeration import PurchaseWhenEnumeration
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
 from .service_pattern_ref import ServicePatternRef
 from .train_ref import TrainRef
 from .type_of_flexible_service_ref import TypeOfFlexibleServiceRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_type_ref import VehicleTypeRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -110,7 +112,7 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-    vehicle_type_ref: Optional[Union[CompoundTrainRef, TrainRef, VehicleTypeRef]] = field(
+    vehicle_type_ref_or_train_ref: Optional[Union[CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -118,6 +120,16 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -257,12 +269,12 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
                 },
                 {
                     "name": "MinimumBookingPeriod",
-                    "type": Type["SpecialServiceVersionStructure.MinimumBookingPeriod"],
+                    "type": ForwardRef("SpecialServiceVersionStructure.MinimumBookingPeriod"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "MaximumBookingPeriod",
-                    "type": Type["SpecialServiceVersionStructure.MaximumBookingPeriod"],
+                    "type": ForwardRef("SpecialServiceVersionStructure.MaximumBookingPeriod"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

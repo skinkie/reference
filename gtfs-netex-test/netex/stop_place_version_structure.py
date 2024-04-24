@@ -14,12 +14,12 @@ from .interchange_weighting_enumeration import InterchangeWeightingEnumeration
 from .limited_use_type_enumeration import LimitedUseTypeEnumeration
 from .metro_submode import MetroSubmode
 from .navigation_paths_rel_structure import NavigationPathsRelStructure
-from .path_junctions_rel_structure import PathJunctionsRelStructure
 from .personal_mode_of_operation_ref import PersonalModeOfOperationRef
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .quays_rel_structure import QuaysRelStructure
 from .rail_submode import RailSubmode
 from .scheduled_mode_of_operation_ref import ScheduledModeOfOperationRef
+from .site_path_junctions_rel_structure import SitePathJunctionsRelStructure
 from .site_path_links_rel_structure import SitePathLinksRelStructure
 from .site_version_structure import SiteVersionStructure
 from .snow_and_ice_submode import SnowAndIceSubmode
@@ -44,7 +44,7 @@ class StopPlaceVersionStructure(SiteVersionStructure):
     class Meta:
         name = "StopPlace_VersionStructure"
 
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -262,7 +262,7 @@ class StopPlaceVersionStructure(SiteVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    path_junctions: Optional[PathJunctionsRelStructure] = field(
+    path_junctions: Optional[SitePathJunctionsRelStructure] = field(
         default=None,
         metadata={
             "name": "pathJunctions",

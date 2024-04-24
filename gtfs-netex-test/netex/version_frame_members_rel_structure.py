@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Union
 
-from .accepted_driver_permit import AcceptedDriverPermit
+from .accepted_driver_permits_rel_structure import AcceptedDriverPermit
 from .access import Access
 from .access_right_parameter_assignment import AccessRightParameterAssignment
 from .access_space import AccessSpace
@@ -11,6 +11,7 @@ from .accountable_element import AccountableElement
 from .activation_assignment import ActivationAssignment
 from .activation_link import ActivationLink
 from .activation_point import ActivationPoint
+from .actual_vehicle_equipment import ActualVehicleEquipment
 from .additional_driver_option import AdditionalDriverOption
 from .addressable_place import AddressablePlace
 from .administrative_zones_rel_structure import (
@@ -25,6 +26,7 @@ from .assistance_service import AssistanceService
 from .authority import Authority
 from .battery_equipment import BatteryEquipment
 from .beacon_point import BeaconPoint
+from .bed_equipment import BedEquipment
 from .blacklist import Blacklist
 from .block import Block
 from .block_part import BlockPart
@@ -56,6 +58,7 @@ from .compound_train import CompoundTrain
 from .connection import Connection
 from .contact import Contact
 from .containment_aggregation_structure import ContainmentAggregationStructure
+from .contract import Contract
 from .control_centre import ControlCentre
 from .controllable_element import ControllableElement
 from .country import Country
@@ -79,6 +82,15 @@ from .dated_vehicle_journey import DatedVehicleJourney
 from .day_type_assignment import DayTypeAssignment
 from .dead_run import DeadRun
 from .dead_run_journey_pattern import DeadRunJourneyPattern
+from .deck import Deck
+from .deck_entrance_assignment import DeckEntranceAssignment
+from .deck_level import DeckLevel
+from .deck_path_junction import DeckPathJunction
+from .deck_path_link import DeckPathLink
+from .deck_plan import DeckPlan
+from .deck_plan_assignment import DeckPlanAssignment
+from .deck_vehicle_entrance import DeckVehicleEntrance
+from .deck_window import DeckWindow
 from .default_connection import DefaultConnection
 from .default_interchange import DefaultInterchange
 from .delivery_variant import DeliveryVariant
@@ -119,6 +131,7 @@ from .entity_in_version_structure import (
 )
 from .entrance import Entrance
 from .entrance_equipment import EntranceEquipment
+from .entrance_sensor import EntranceSensor
 from .equipment_place import EquipmentPlace
 from .equipment_position import EquipmentPosition
 from .escalator_equipment import EscalatorEquipment
@@ -160,6 +173,8 @@ from .generic_parameter_assignments_rel_structure import (
     GenericParameterAssignment,
     GenericParameterAssignmentInContext,
 )
+from .generic_path_junction import GenericPathJunction
+from .generic_path_link import GenericPathLink
 from .geographical_interval import GeographicalInterval
 from .geographical_structure_factor import GeographicalStructureFactor
 from .geographical_unit import GeographicalUnit
@@ -174,6 +189,7 @@ from .group_of_points import GroupOfPoints
 from .group_of_sales_offer_packages import GroupOfSalesOfferPackages
 from .group_of_services import GroupOfServices
 from .group_of_single_journeys import GroupOfSingleJourneys
+from .group_of_sites import GroupOfSites
 from .group_of_tariff_zones import GroupOfTariffZones
 from .group_of_timebands import GroupOfTimebands
 from .group_of_timing_links import GroupOfTimingLinks
@@ -208,6 +224,8 @@ from .logical_display import LogicalDisplay
 from .lost_property_service import LostPropertyService
 from .luggage_allowance import LuggageAllowance
 from .luggage_service import LuggageService
+from .luggage_spot import LuggageSpot
+from .luggage_spot_equipment import LuggageSpotEquipment
 from .management_agent import ManagementAgent
 from .medium_access_device import MediumAccessDevice
 from .meeting_point_service import MeetingPointService
@@ -227,6 +245,7 @@ from .network import Network
 from .normal_dated_vehicle_journey import NormalDatedVehicleJourney
 from .notice import Notice
 from .notice_assignment import NoticeAssignment
+from .off_site_path_link import OffSitePathLink
 from .offered_travel_specification import OfferedTravelSpecification
 from .online_service import OnlineService
 from .online_service_operator import OnlineServiceOperator
@@ -237,6 +256,8 @@ from .operational_context import OperationalContext
 from .operator import Operator
 from .organisation_part import OrganisationPart
 from .organisational_unit import OrganisationalUnit
+from .other_deck_entrance import OtherDeckEntrance
+from .other_deck_space import OtherDeckSpace
 from .other_organisation import OtherOrganisation
 from .overtaking_possibility import OvertakingPossibility
 from .parking import Parking
@@ -252,9 +273,13 @@ from .parking_tariff import ParkingTariff
 from .passenger_beacon_equipment import PassengerBeaconEquipment
 from .passenger_carrying_requirement import PassengerCarryingRequirement
 from .passenger_carrying_requirements_view import PassengerCarryingRequirementsView
+from .passenger_entrance import PassengerEntrance
 from .passenger_information_equipment import PassengerInformationEquipment
 from .passenger_safety_equipment import PassengerSafetyEquipment
+from .passenger_space import PassengerSpace
+from .passenger_spot import PassengerSpot
 from .passenger_stop_assignment import PassengerStopAssignment
+from .passenger_vehicle_spot import PassengerVehicleSpot
 from .passing_time_view import PassingTimeView
 from .path_junction import PathJunction
 from .path_link import PathLink
@@ -272,6 +297,7 @@ from .point_of_interest_vehicle_entrance import PointOfInterestVehicleEntrance
 from .point_projection import PointProjection
 from .pool_of_vehicles import PoolOfVehicles
 from .postal_address import PostalAddress
+from .powered_train import PoweredTrain
 from .preassigned_fare_product import PreassignedFareProduct
 from .price_unit import PriceUnit
 from .priceable_object_version_structure import (
@@ -317,6 +343,7 @@ from .rhythmical_journey_group import RhythmicalJourneyGroup
 from .road_address import RoadAddress
 from .road_element import RoadElement
 from .road_junction import RoadJunction
+from .rolling_stock_inventory import RollingStockInventory
 from .rough_surface import RoughSurface
 from .round_trip import RoundTrip
 from .rounding import Rounding
@@ -340,8 +367,10 @@ from .sanitary_equipment import SanitaryEquipment
 from .scheduled_operation import ScheduledOperation
 from .scheduled_stop_point import ScheduledStopPoint
 from .schematic_map import SchematicMap
+from .seat_equipment import SeatEquipment
 from .seating_equipment import SeatingEquipment
 from .sections_in_sequence_rel_structure import JourneyPattern
+from .sensor_equipment import SensorEquipment
 from .series_constraint import SeriesConstraint
 from .service_access_code import ServiceAccessCode
 from .service_access_right_1 import ServiceAccessRight1
@@ -367,11 +396,18 @@ from .single_journey import SingleJourney
 from .single_journey_path import SingleJourneyPath
 from .site_connection import SiteConnection
 from .site_frame import SiteFrame
+from .site_navigation_path import SiteNavigationPath
+from .site_path_junction import SitePathJunction
 from .site_path_link import SitePathLink
+from .site_structure import SiteStructure
 from .smartcard import Smartcard
 from .spatial_feature import SpatialFeature
 from .special_service import SpecialService
 from .specific_parameter_assignments_rel_structure import SpecificParameterAssignment
+from .spot_affinity import SpotAffinity
+from .spot_equipment_1 import SpotEquipment1
+from .spot_equipment_2 import SpotEquipment2
+from .spot_sensor import SpotSensor
 from .staircase_equipment import StaircaseEquipment
 from .standard_fare_table import StandardFareTable
 from .step_limit import StepLimit
@@ -410,13 +446,16 @@ from .timing_pattern import TimingPattern
 from .timing_point import TimingPoint
 from .topographic_place import TopographicPlace
 from .topographic_projection import TopographicProjection
+from .tractive_rolling_stock_item import TractiveRollingStockItem
 from .traffic_control_point import TrafficControlPoint
+from .trailing_rolling_stock_item import TrailingRollingStockItem
 from .train import Train
 from .train_block import TrainBlock
 from .train_block_part import TrainBlockPart
 from .train_component import TrainComponent
 from .train_component_label_assignment import TrainComponentLabelAssignment
 from .train_element import TrainElement
+from .train_element_type_dummy_type import TrainElementTypeDummyType
 from .train_number import TrainNumber
 from .train_stop_assignment import TrainStopAssignment
 from .transfer_restriction import TransferRestriction
@@ -435,6 +474,8 @@ from .type_of_codespace_assignment import TypeOfCodespaceAssignment
 from .type_of_concession import TypeOfConcession
 from .type_of_congestion import TypeOfCongestion
 from .type_of_customer_account import TypeOfCustomerAccount
+from .type_of_deck_entrance import TypeOfDeckEntrance
+from .type_of_deck_space import TypeOfDeckSpace
 from .type_of_delivery_variant import TypeOfDeliveryVariant
 from .type_of_driver_permit import TypeOfDriverPermit
 from .type_of_entity import TypeOfEntity
@@ -453,6 +494,7 @@ from .type_of_journey_pattern import TypeOfJourneyPattern
 from .type_of_line import TypeOfLine
 from .type_of_link import TypeOfLink
 from .type_of_link_sequence import TypeOfLinkSequence
+from .type_of_locatable_spot import TypeOfLocatableSpot
 from .type_of_machine_readability import TypeOfMachineReadability
 from .type_of_medium_access_device import TypeOfMediumAccessDevice
 from .type_of_mobility_service import TypeOfMobilityService
@@ -473,6 +515,7 @@ from .type_of_projection import TypeOfProjection
 from .type_of_proof import TypeOfProof
 from .type_of_responsibility_role import TypeOfResponsibilityRole
 from .type_of_retail_device import TypeOfRetailDevice
+from .type_of_rolling_stock import TypeOfRollingStock
 from .type_of_sales_offer_package import TypeOfSalesOfferPackage
 from .type_of_security_list import TypeOfSecurityList
 from .type_of_service import TypeOfService
@@ -487,6 +530,7 @@ from .type_of_version import TypeOfVersion
 from .type_of_zone import TypeOfZone
 from .types_of_frame_rel_structure import TypeOfFrame
 from .uic_operating_period import UicOperatingPeriod
+from .unpowered_train import UnpoweredTrain
 from .usage_discount_right import UsageDiscountRight
 from .usage_validity_period import UsageValidityPeriod
 from .user_profile import UserProfile
@@ -552,7 +596,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
     choice: List[
         Union[
             EntityInVersionInFrameRefStructure,
-            Fleet,
             IndividualPassengerInfo,
             VehiclePoolingDriverInfo,
             IndividualTraveller,
@@ -704,10 +747,27 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             LineNetwork,
             ModeRestrictionAssessment,
             RouteInstruction,
+            Fleet,
+            RollingStockInventory,
+            TractiveRollingStockItem,
+            TrailingRollingStockItem,
+            Vehicle,
+            DeckLevel,
+            Deck,
+            DeckPlan,
+            SpotAffinity,
+            DeckWindow,
+            OtherDeckEntrance,
+            DeckVehicleEntrance,
+            PassengerEntrance,
+            OtherDeckSpace,
+            PassengerSpace,
+            LuggageSpot,
+            PassengerVehicleSpot,
+            PassengerSpot,
             TrainComponent,
             TrainElement,
-            CompoundTrain,
-            Train,
+            TrainElementTypeDummyType,
             CycleModelProfile,
             CarModelProfile,
             Whitelist,
@@ -723,16 +783,20 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             RechargingEquipmentProfile,
             VehicleEquipmentProfile,
             VehicleModel,
-            Vehicle,
             PassengerCarryingRequirementsView,
             FacilityRequirement,
             VehicleManoeuvringRequirement,
             PassengerCarryingRequirement,
             AcceptedDriverPermit,
+            CompoundTrain,
+            UnpoweredTrain,
+            PoweredTrain,
+            Train,
             SimpleVehicleType,
             VehicleType,
             TransportType,
             EquipmentPosition,
+            SiteStructure,
             Level,
             AllowedLineDirection,
             DestinationDisplayVariant,
@@ -766,6 +830,14 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TicketingService,
             RetailDevice,
             BatteryEquipment,
+            EntranceSensor,
+            SpotSensor,
+            SensorEquipment,
+            LuggageSpotEquipment,
+            BedEquipment,
+            SeatEquipment,
+            SpotEquipment1,
+            SpotEquipment2,
             VehicleReleaseEquipment,
             RefuellingEquipment,
             VehicleChargingEquipment,
@@ -799,11 +871,13 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TicketingEquipment,
             WheelchairVehicleEquipment,
             AccessVehicleEquipment,
+            ActualVehicleEquipment,
             ComplexFeature,
             SimpleFeature,
             SpatialFeature,
             SingleJourneyPath,
             ServicePattern,
+            SiteNavigationPath,
             NavigationPath,
             ServiceJourneyPattern,
             DeadRunJourneyPattern,
@@ -850,11 +924,13 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             GenericParameterAssignment,
             ValidityParameterAssignment,
             AccessRightParameterAssignment,
+            DeckPlanAssignment,
             JourneyAccounting,
             RechargingPointAssignment,
             TimeDemandTypeAssignment,
             TransferRestriction,
             ServiceExclusion,
+            DeckEntranceAssignment,
             DisplayAssignment,
             OvertakingPossibility,
             MeetingRestriction,
@@ -872,6 +948,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             FareDayType,
             OrganisationDayType,
             DayType,
+            Contract,
             ResponsibilitySet,
             Contact,
             ControlCentre,
@@ -890,19 +967,21 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             Operator,
             VehicleMeetingLink,
             ServiceLink,
-            SitePathLink,
-            PathLink,
             RouteLink,
             TimingLink,
             WireElement,
             RoadElement,
             RailwayElement,
             ActivationLink,
+            DeckPathLink,
+            PathLink,
+            SitePathLink,
+            OffSitePathLink,
+            GenericPathLink,
             VehicleMeetingPoint,
             BorderPoint,
             FareScheduledStopPoint,
             ScheduledStopPoint,
-            PathJunction,
             RoutePoint,
             ParkingPoint,
             GaragePoint,
@@ -914,6 +993,10 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TrafficControlPoint,
             BeaconPoint,
             ActivationPoint,
+            DeckPathJunction,
+            PathJunction,
+            SitePathJunction,
+            GenericPathJunction,
             Point2,
             LineShape,
             TopographicProjection,
@@ -935,6 +1018,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             HeadwayJourneyGroup,
             CrewBase,
             GroupOfTimingLinks,
+            GroupOfSites,
             Network,
             GroupOfLines,
             GroupOfOperators,
@@ -998,7 +1082,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             GroupOfPoints,
             GeneralGroupOfEntities,
             ValueSet,
-            TypeOfFleet,
             ParkingBayStatus,
             TypeOfMediumAccessDevice,
             TypeOfMachineReadability,
@@ -1015,6 +1098,10 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TypeOfParking,
             TypeOfServiceFeature,
             Direction,
+            TypeOfFleet,
+            TypeOfDeckEntrance,
+            TypeOfDeckSpace,
+            TypeOfLocatableSpot,
             TypeOfSecurityList,
             TypeOfDriverPermit,
             PurposeOfEquipmentProfile,
@@ -1046,6 +1133,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TypeOfPassengerInformationEquipment,
             TypeOfJourneyPattern,
             TypeOfActivation,
+            TypeOfRollingStock,
             TypeOfModeOfOperation,
             TypeOfPlug,
             TypeOfBatteryChemistry,
@@ -1088,11 +1176,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "EntityInVersionInFrameRef",
                     "type": EntityInVersionInFrameRefStructure,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "Fleet",
-                    "type": Fleet,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1851,6 +1934,96 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "Fleet",
+                    "type": Fleet,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RollingStockInventory",
+                    "type": RollingStockInventory,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TractiveRollingStockItem",
+                    "type": TractiveRollingStockItem,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TrailingRollingStockItem",
+                    "type": TrailingRollingStockItem,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Vehicle",
+                    "type": Vehicle,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckLevel",
+                    "type": DeckLevel,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Deck",
+                    "type": Deck,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckPlan",
+                    "type": DeckPlan,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotAffinity",
+                    "type": SpotAffinity,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckWindow",
+                    "type": DeckWindow,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OtherDeckEntrance",
+                    "type": OtherDeckEntrance,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckVehicleEntrance",
+                    "type": DeckVehicleEntrance,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerEntrance",
+                    "type": PassengerEntrance,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OtherDeckSpace",
+                    "type": OtherDeckSpace,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerSpace",
+                    "type": PassengerSpace,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LuggageSpot",
+                    "type": LuggageSpot,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerVehicleSpot",
+                    "type": PassengerVehicleSpot,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerSpot",
+                    "type": PassengerSpot,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TrainComponent",
                     "type": TrainComponent,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -1861,13 +2034,8 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "CompoundTrain",
-                    "type": CompoundTrain,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "Train",
-                    "type": Train,
+                    "name": "TrainElementType_DummyType",
+                    "type": TrainElementTypeDummyType,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1946,11 +2114,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "Vehicle",
-                    "type": Vehicle,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "PassengerCarryingRequirementsView",
                     "type": PassengerCarryingRequirementsView,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -1976,6 +2139,26 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "CompoundTrain",
+                    "type": CompoundTrain,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrain",
+                    "type": UnpoweredTrain,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrain",
+                    "type": PoweredTrain,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Train",
+                    "type": Train,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "SimpleVehicleType",
                     "type": SimpleVehicleType,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -1993,6 +2176,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "EquipmentPosition",
                     "type": EquipmentPosition,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SiteStructure",
+                    "type": SiteStructure,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2161,6 +2349,46 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "EntranceSensor",
+                    "type": EntranceSensor,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotSensor",
+                    "type": SpotSensor,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SensorEquipment",
+                    "type": SensorEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LuggageSpotEquipment",
+                    "type": LuggageSpotEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BedEquipment",
+                    "type": BedEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SeatEquipment",
+                    "type": SeatEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotEquipment",
+                    "type": SpotEquipment1,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotEquipment_",
+                    "type": SpotEquipment2,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "VehicleReleaseEquipment",
                     "type": VehicleReleaseEquipment,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2326,6 +2554,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "ActualVehicleEquipment",
+                    "type": ActualVehicleEquipment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "ComplexFeature",
                     "type": ComplexFeature,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2348,6 +2581,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "ServicePattern",
                     "type": ServicePattern,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SiteNavigationPath",
+                    "type": SiteNavigationPath,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2581,6 +2819,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "DeckPlanAssignment",
+                    "type": DeckPlanAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "JourneyAccounting",
                     "type": JourneyAccounting,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2603,6 +2846,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "ServiceExclusion",
                     "type": ServiceExclusion,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckEntranceAssignment",
+                    "type": DeckEntranceAssignment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2688,6 +2936,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "DayType",
                     "type": DayType,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "Contract",
+                    "type": Contract,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2781,16 +3034,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "SitePathLink",
-                    "type": SitePathLink,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "PathLink",
-                    "type": PathLink,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "RouteLink",
                     "type": RouteLink,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2821,6 +3064,31 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "DeckPathLink",
+                    "type": DeckPathLink,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PathLink",
+                    "type": PathLink,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SitePathLink",
+                    "type": SitePathLink,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OffSitePathLink",
+                    "type": OffSitePathLink,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathLink",
+                    "type": GenericPathLink,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "VehicleMeetingPoint",
                     "type": VehicleMeetingPoint,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2838,11 +3106,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "ScheduledStopPoint",
                     "type": ScheduledStopPoint,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "PathJunction",
-                    "type": PathJunction,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2898,6 +3161,26 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "ActivationPoint",
                     "type": ActivationPoint,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckPathJunction",
+                    "type": DeckPathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PathJunction",
+                    "type": PathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SitePathJunction",
+                    "type": SitePathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathJunction",
+                    "type": GenericPathJunction,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -3003,6 +3286,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "GroupOfTimingLinks",
                     "type": GroupOfTimingLinks,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupOfSites",
+                    "type": GroupOfSites,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -3321,11 +3609,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfFleet",
-                    "type": TypeOfFleet,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "ParkingBayStatus",
                     "type": ParkingBayStatus,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3403,6 +3686,26 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "Direction",
                     "type": Direction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfFleet",
+                    "type": TypeOfFleet,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfDeckEntrance",
+                    "type": TypeOfDeckEntrance,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfDeckSpace",
+                    "type": TypeOfDeckSpace,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfLocatableSpot",
+                    "type": TypeOfLocatableSpot,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -3558,6 +3861,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "TypeOfActivation",
                     "type": TypeOfActivation,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfRollingStock",
+                    "type": TypeOfRollingStock,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

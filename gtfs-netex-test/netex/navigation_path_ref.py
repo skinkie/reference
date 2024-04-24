@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from .navigation_path_ref_structure import NavigationPathRefStructure
+from .site_navigation_path_ref_structure import SiteNavigationPathRefStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class NavigationPathRef(NavigationPathRefStructure):
+class NavigationPathRef(SiteNavigationPathRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

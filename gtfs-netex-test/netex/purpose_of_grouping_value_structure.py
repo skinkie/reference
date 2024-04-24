@@ -36,6 +36,7 @@ from .type_of_point import TypeOfPoint
 from .type_of_projection import TypeOfProjection
 from .type_of_responsibility_role import TypeOfResponsibilityRole
 from .type_of_retail_device import TypeOfRetailDevice
+from .type_of_rolling_stock import TypeOfRollingStock
 from .type_of_sales_offer_package import TypeOfSalesOfferPackage
 from .type_of_service import TypeOfService
 from .type_of_tariff import TypeOfTariff
@@ -81,6 +82,7 @@ class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
             TypeOfPassengerInformationEquipment,
             TypeOfJourneyPattern,
             TypeOfActivation,
+            TypeOfRollingStock,
             TypeOfModeOfOperation,
             TypeOfPlug,
             TypeOfBatteryChemistry,
@@ -199,6 +201,11 @@ class PurposeOfGroupingValueStructure(TypeOfValueVersionStructure):
                 {
                     "name": "TypeOfActivation",
                     "type": TypeOfActivation,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfRollingStock",
+                    "type": TypeOfRollingStock,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

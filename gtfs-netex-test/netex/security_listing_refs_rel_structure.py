@@ -17,7 +17,7 @@ class SecurityListingRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "SecurityListingRefs_RelStructure"
 
-    security_listing_ref: List[Union[TravelDocumentSecurityListingRef, MediumAccessDeviceSecurityListingRef, RetailDeviceSecurityListingRef, CustomerAccountSecurityListingRef, FareContractSecurityListingRef, CustomerSecurityListingRef]] = field(
+    security_listing_ref: List[Union[TravelDocumentSecurityListingRef, RetailDeviceSecurityListingRef, CustomerAccountSecurityListingRef, FareContractSecurityListingRef, CustomerSecurityListingRef, MediumAccessDeviceSecurityListingRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -25,11 +25,6 @@ class SecurityListingRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "TravelDocumentSecurityListingRef",
                     "type": TravelDocumentSecurityListingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "MediumAccessDeviceSecurityListingRef",
-                    "type": MediumAccessDeviceSecurityListingRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -50,6 +45,11 @@ class SecurityListingRefsRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "CustomerSecurityListingRef",
                     "type": CustomerSecurityListingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MediumAccessDeviceSecurityListingRef",
+                    "type": MediumAccessDeviceSecurityListingRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

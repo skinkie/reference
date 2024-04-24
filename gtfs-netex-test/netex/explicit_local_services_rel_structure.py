@@ -18,7 +18,6 @@ from .hire_service import HireService
 from .hire_service_ref import HireServiceRef
 from .left_luggage_service import LeftLuggageService
 from .left_luggage_service_ref import LeftLuggageServiceRef
-from .local_service_ref import LocalServiceRef
 from .lost_property_service import LostPropertyService
 from .lost_property_service_ref import LostPropertyServiceRef
 from .luggage_service import LuggageService
@@ -56,7 +55,6 @@ class ExplicitLocalServicesRelStructure(ContainmentAggregationStructure):
             CustomerServiceRef,
             AssistanceServiceRef,
             TicketingServiceRef,
-            LocalServiceRef,
             AssistanceBookingService,
             CateringService,
             RetailService,
@@ -145,11 +143,6 @@ class ExplicitLocalServicesRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "TicketingServiceRef",
                     "type": TicketingServiceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "LocalServiceRef",
-                    "type": LocalServiceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

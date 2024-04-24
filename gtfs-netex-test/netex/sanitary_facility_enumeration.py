@@ -6,6 +6,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 class SanitaryFacilityEnumeration(Enum):
     NONE = "none"
     TOILET = "toilet"
+    WASHBASIN = "washbasin"
     WHEELCHAIR_ACCESS_TOILET = "wheelchairAccessToilet"
     SHOWER = "shower"
     WASHING_AND_CHANGE_FACILITIES = "washingAndChangeFacilities"

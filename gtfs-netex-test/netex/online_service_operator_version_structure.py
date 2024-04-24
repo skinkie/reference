@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Optional, Type, Union
+from typing import Any, ForwardRef, Optional, Union
 
 from .country_ref import CountryRef
 from .online_service_refs_rel_structure import OnlineServiceRefsRelStructure
@@ -41,7 +41,7 @@ class OnlineServiceOperatorVersionStructure(OrganisationVersionStructure):
                 },
                 {
                     "name": "Address",
-                    "type": Type["OnlineServiceOperatorVersionStructure.Address"],
+                    "type": ForwardRef("OnlineServiceOperatorVersionStructure.Address"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -57,13 +57,7 @@ class OnlineServiceOperatorVersionStructure(OrganisationVersionStructure):
 
     @dataclass(kw_only=True)
     class Address(PostalAddressVersionStructure):
-        validity_conditions_or_valid_between: Any = field(
-            init=False,
-            metadata={
-                "type": "Ignore",
-            },
-        )
-        alternative_texts: Any = field(
+        members: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",
@@ -93,7 +87,13 @@ class OnlineServiceOperatorVersionStructure(OrganisationVersionStructure):
                 "type": "Ignore",
             },
         )
-        members: Any = field(
+        validity_conditions_or_valid_between: Any = field(
+            init=False,
+            metadata={
+                "type": "Ignore",
+            },
+        )
+        alternative_texts: Any = field(
             init=False,
             metadata={
                 "type": "Ignore",

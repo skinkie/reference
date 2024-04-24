@@ -5,6 +5,7 @@ from typing import Optional
 from .access_equipment_version_structure import AccessEquipmentVersionStructure
 from .compass_bearing8_enumeration import CompassBearing8Enumeration
 from .door_handle_enumeration import DoorHandleEnumeration
+from .door_type_enumeration import DoorTypeEnumeration
 from .entrance_attention_enumeration import EntranceAttentionEnumeration
 from .entrance_turning_space_position_enumeration import EntranceTurningSpacePositionEnumeration
 from .necessary_force_enumeration import NecessaryForceEnumeration
@@ -62,6 +63,14 @@ class EntranceEquipmentVersionStructure(AccessEquipmentVersionStructure):
         default=None,
         metadata={
             "name": "RevolvingDoor",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    door_type: Optional[DoorTypeEnumeration] = field(
+        default=None,
+        metadata={
+            "name": "DoorType",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

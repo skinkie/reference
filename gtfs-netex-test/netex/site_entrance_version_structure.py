@@ -5,7 +5,7 @@ from typing import Optional
 from .entrance_enumeration import EntranceEnumeration
 from .entrance_purpose_enumeration import EntrancePurposeEnumeration
 from .multilingual_string import MultilingualString
-from .public_code_type import PublicCodeType
+from .public_code_structure import PublicCodeStructure
 from .site_component_version_structure import SiteComponentVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -16,7 +16,7 @@ class SiteEntranceVersionStructure(SiteComponentVersionStructure):
     class Meta:
         name = "SiteEntrance_VersionStructure"
 
-    public_code: Optional[PublicCodeType] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

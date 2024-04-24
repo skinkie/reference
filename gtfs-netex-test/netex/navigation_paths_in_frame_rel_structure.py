@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .navigation_path import NavigationPath
+from .site_navigation_path import SiteNavigationPath
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -12,12 +13,21 @@ class NavigationPathsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "navigationPathsInFrame_RelStructure"
 
-    navigation_path: List[NavigationPath] = field(
+    site_navigation_path_or_navigation_path: List[Union[SiteNavigationPath, NavigationPath]] = field(
         default_factory=list,
         metadata={
-            "name": "NavigationPath",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "min_occurs": 1,
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "SiteNavigationPath",
+                    "type": SiteNavigationPath,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "NavigationPath",
+                    "type": NavigationPath,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )

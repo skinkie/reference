@@ -1,11 +1,19 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 
-from .path_junction_version_structure import PathJunctionVersionStructure
+from .site_path_junction_version_structure import SitePathJunctionVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class PathJunction(PathJunctionVersionStructure):
+class PathJunction(SitePathJunctionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
+
+    path_instructions: Any = field(
+        init=False,
+        metadata={
+            "type": "Ignore",
+        },
+    )

@@ -8,11 +8,13 @@ from .beacon_point import BeaconPoint
 from .beacon_point_ref import BeaconPointRef
 from .border_point import BorderPoint
 from .border_point_ref import BorderPointRef
+from .deck_path_junction import DeckPathJunction
 from .entity_in_version_structure import VersionedChildStructure
 from .fare_scheduled_stop_point import FareScheduledStopPoint
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
 from .garage_point import GaragePoint
 from .garage_point_ref import GaragePointRef
+from .generic_path_junction import GenericPathJunction
 from .link_ref_structure import LinkRefStructure
 from .multilingual_string import MultilingualString
 from .parking_point import ParkingPoint
@@ -30,6 +32,7 @@ from .route_point import RoutePoint
 from .route_point_ref import RoutePointRef
 from .scheduled_stop_point import ScheduledStopPoint
 from .scheduled_stop_point_ref import ScheduledStopPointRef
+from .site_path_junction import SitePathJunction
 from .timing_point import TimingPoint
 from .timing_point_ref import TimingPointRef
 from .traffic_control_point import TrafficControlPoint
@@ -93,7 +96,6 @@ class PointOnLinkVersionedChildStructure(VersionedChildStructure):
             BorderPoint,
             FareScheduledStopPoint,
             ScheduledStopPoint,
-            PathJunction,
             RoutePoint,
             ParkingPoint,
             GaragePoint,
@@ -105,6 +107,10 @@ class PointOnLinkVersionedChildStructure(VersionedChildStructure):
             TrafficControlPoint,
             BeaconPoint,
             ActivationPoint,
+            DeckPathJunction,
+            PathJunction,
+            SitePathJunction,
+            GenericPathJunction,
             Point2,
         ]
     ] = field(
@@ -213,11 +219,6 @@ class PointOnLinkVersionedChildStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "PathJunction",
-                    "type": PathJunction,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "RoutePoint",
                     "type": RoutePoint,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -270,6 +271,26 @@ class PointOnLinkVersionedChildStructure(VersionedChildStructure):
                 {
                     "name": "ActivationPoint",
                     "type": ActivationPoint,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckPathJunction",
+                    "type": DeckPathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PathJunction",
+                    "type": PathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SitePathJunction",
+                    "type": SitePathJunction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathJunction",
+                    "type": GenericPathJunction,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

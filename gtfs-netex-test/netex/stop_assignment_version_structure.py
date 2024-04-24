@@ -62,3 +62,35 @@ class StopAssignmentVersionStructure(AssignmentVersionStructure1):
             ),
         },
     )
+    arrives_forwards: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "ArrivesForwards",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    departs_forwards: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "DepartsForwards",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    arrives_from_left: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "ArrivesFromLeft",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    departs_to_right: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "DepartsToRight",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )

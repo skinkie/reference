@@ -76,6 +76,17 @@ from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .day_type_ref import DayTypeRef
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .dead_run_ref import DeadRunRef
+from .deck_entrance_couple_ref import DeckEntranceCoupleRef
+from .deck_entrance_usage_ref import DeckEntranceUsageRef
+from .deck_level_ref import DeckLevelRef
+from .deck_navigation_path_ref import DeckNavigationPathRef
+from .deck_path_junction_ref import DeckPathJunctionRef
+from .deck_path_link_ref import DeckPathLinkRef
+from .deck_plan_ref import DeckPlanRef
+from .deck_ref import DeckRef
+from .deck_space_capacity_ref import DeckSpaceCapacityRef
+from .deck_vehicle_entrance_ref import DeckVehicleEntranceRef
+from .deck_window_ref import DeckWindowRef
 from .default_connection_ref import DefaultConnectionRef
 from .default_dead_run_run_time_ref import DefaultDeadRunRunTimeRef
 from .default_interchange_ref import DefaultInterchangeRef
@@ -148,6 +159,9 @@ from .general_frame_ref import GeneralFrameRef
 from .general_group_of_entities_ref import GeneralGroupOfEntitiesRef
 from .general_organisation_ref import GeneralOrganisationRef
 from .general_section_ref import GeneralSectionRef
+from .generic_navigation_path_ref import GenericNavigationPathRef
+from .generic_path_junction_ref import GenericPathJunctionRef
+from .generic_path_link_ref import GenericPathLinkRef
 from .geographical_interval_price_ref import GeographicalIntervalPriceRef
 from .geographical_interval_ref import GeographicalIntervalRef
 from .geographical_structure_factor_ref import GeographicalStructureFactorRef
@@ -162,6 +176,7 @@ from .group_of_places_ref import GroupOfPlacesRef
 from .group_of_sales_offer_packages_ref import GroupOfSalesOfferPackagesRef
 from .group_of_services_ref import GroupOfServicesRef
 from .group_of_single_journeys_ref import GroupOfSingleJourneysRef
+from .group_of_sites_ref import GroupOfSitesRef
 from .group_of_stop_places_ref import GroupOfStopPlacesRef
 from .group_of_tariff_zones_ref import GroupOfTariffZonesRef
 from .group_of_timebands_ref import GroupOfTimebandsRef
@@ -187,6 +202,7 @@ from .journey_pattern_run_time_ref import JourneyPatternRunTimeRef
 from .journey_pattern_wait_time_ref import JourneyPatternWaitTimeRef
 from .journey_timing_ref import JourneyTimingRef
 from .layer_ref import LayerRef
+from .level_in_structure_ref import LevelInStructureRef
 from .level_ref import LevelRef
 from .limiting_rule_ref import LimitingRuleRef
 from .line_link_ref import LineLinkRef
@@ -200,6 +216,7 @@ from .log_entry_ref import LogEntryRef
 from .log_ref import LogRef
 from .logical_display_ref import LogicalDisplayRef
 from .luggage_allowance_ref import LuggageAllowanceRef
+from .luggage_spot_ref import LuggageSpotRef
 from .management_agent_ref import ManagementAgentRef
 from .medium_access_device_security_listing_ref import MediumAccessDeviceSecurityListingRef
 from .medium_application_instance_ref import MediumApplicationInstanceRef
@@ -218,6 +235,7 @@ from .network_ref import NetworkRef
 from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .notice_ref import NoticeRef
 from .observed_passing_time_ref import ObservedPassingTimeRef
+from .off_site_path_link_ref import OffSitePathLinkRef
 from .offered_travel_specification_ref import OfferedTravelSpecificationRef
 from .onboard_stay_ref import OnboardStayRef
 from .online_service_operator_ref import OnlineServiceOperatorRef
@@ -231,6 +249,8 @@ from .operator_ref import OperatorRef
 from .organisation_part_ref import OrganisationPartRef
 from .organisation_ref import OrganisationRef
 from .organisational_unit_ref import OrganisationalUnitRef
+from .other_deck_entrance_ref import OtherDeckEntranceRef
+from .other_deck_space_ref import OtherDeckSpaceRef
 from .other_organisation_ref import OtherOrganisationRef
 from .parent_common_section_ref import ParentCommonSectionRef
 from .parent_section_ref import ParentSectionRef
@@ -248,10 +268,16 @@ from .parking_price_ref import ParkingPriceRef
 from .parking_properties_ref import ParkingPropertiesRef
 from .parking_ref import ParkingRef
 from .parking_tariff_ref import ParkingTariffRef
+from .passenger_at_stop_time_ref import PassengerAtStopTimeRef
 from .passenger_capacity_ref import PassengerCapacityRef
 from .passenger_carrying_requirement_ref import PassengerCarryingRequirementRef
+from .passenger_entrance_ref import PassengerEntranceRef
 from .passenger_seat_ref import PassengerSeatRef
-from .passing_time_ref import PassingTimeRef
+from .passenger_space_ref import PassengerSpaceRef
+from .passenger_spot_ref import PassengerSpotRef
+from .passenger_vehicle_capacity_ref import PassengerVehicleCapacityRef
+from .passenger_vehicle_spot_ref import PassengerVehicleSpotRef
+from .path_instruction_ref import PathInstructionRef
 from .path_junction_ref import PathJunctionRef
 from .path_link_ref import PathLinkRef
 from .penalty_policy_ref import PenaltyPolicyRef
@@ -267,6 +293,7 @@ from .point_projection_ref import PointProjectionRef
 from .point_ref import PointRef
 from .pool_of_vehicles_ref import PoolOfVehiclesRef
 from .postal_address_ref import PostalAddressRef
+from .powered_train_ref import PoweredTrainRef
 from .preassigned_fare_product_ref import PreassignedFareProductRef
 from .price_group_ref import PriceGroupRef
 from .price_unit_ref import PriceUnitRef
@@ -309,6 +336,7 @@ from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
 from .road_address_ref import RoadAddressRef
 from .road_link_ref import RoadLinkRef
 from .road_point_ref import RoadPointRef
+from .rolling_stock_inventory_ref import RollingStockInventoryRef
 from .round_trip_ref import RoundTripRef
 from .rounding_ref import RoundingRef
 from .rounding_step_ref import RoundingStepRef
@@ -332,6 +360,8 @@ from .scheduled_stop_point_ref import ScheduledStopPointRef
 from .schematic_map_member_ref import SchematicMapMemberRef
 from .schematic_map_ref import SchematicMapRef
 from .section_ref import SectionRef
+from .sensor_in_entrance_ref import SensorInEntranceRef
+from .sensor_in_spot_ref import SensorInSpotRef
 from .series_constraint_price_ref import SeriesConstraintPriceRef
 from .series_constraint_ref import SeriesConstraintRef
 from .service_access_code_ref import ServiceAccessCodeRef
@@ -357,9 +387,16 @@ from .site_connection_ref import SiteConnectionRef
 from .site_element_ref import SiteElementRef
 from .site_facility_set_ref import SiteFacilitySetRef
 from .site_frame_ref import SiteFrameRef
+from .site_navigation_path_ref import SiteNavigationPathRef
+from .site_path_junction_ref import SitePathJunctionRef
+from .site_path_link_ref import SitePathLinkRef
 from .site_ref import SiteRef
+from .site_structure_ref import SiteStructureRef
 from .smartcard_ref import SmartcardRef
 from .special_service_ref import SpecialServiceRef
+from .spot_affinity_ref import SpotAffinityRef
+from .spot_column_ref import SpotColumnRef
+from .spot_row_ref import SpotRowRef
 from .standard_fare_table_ref import StandardFareTableRef
 from .start_time_at_stop_point_ref import StartTimeAtStopPointRef
 from .step_limit_ref import StepLimitRef
@@ -373,7 +410,6 @@ from .stop_place_vehicle_entrance_ref import StopPlaceVehicleEntranceRef
 from .submode_ref import SubmodeRef
 from .subscribing_ref import SubscribingRef
 from .supplement_product_ref import SupplementProductRef
-from .supply_contract_ref import SupplyContractRef
 from .suspending_ref import SuspendingRef
 from .target_passing_time_ref import TargetPassingTimeRef
 from .tariff_object_ref import TariffObjectRef
@@ -400,11 +436,16 @@ from .timing_pattern_ref import TimingPatternRef
 from .timing_point_ref import TimingPointRef
 from .topographic_place_ref import TopographicPlaceRef
 from .topographic_projection_ref import TopographicProjectionRef
+from .tractive_element_type_ref import TractiveElementTypeRef
+from .tractive_rolling_stock_item_ref import TractiveRollingStockItemRef
 from .traffic_control_point_ref import TrafficControlPointRef
+from .trailing_element_type_ref import TrailingElementTypeRef
+from .trailing_rolling_stock_item_ref import TrailingRollingStockItemRef
 from .train_block_part_ref import TrainBlockPartRef
 from .train_block_ref import TrainBlockRef
 from .train_component_ref import TrainComponentRef
 from .train_element_ref import TrainElementRef
+from .train_element_type_ref import TrainElementTypeRef
 from .train_in_compound_train_ref import TrainInCompoundTrainRef
 from .train_number_ref import TrainNumberRef
 from .train_ref import TrainRef
@@ -427,6 +468,8 @@ from .type_of_codespace_assignment_ref import TypeOfCodespaceAssignmentRef
 from .type_of_concession_ref import TypeOfConcessionRef
 from .type_of_congestion_ref import TypeOfCongestionRef
 from .type_of_customer_account_ref import TypeOfCustomerAccountRef
+from .type_of_deck_entrance_ref import TypeOfDeckEntranceRef
+from .type_of_deck_space_ref import TypeOfDeckSpaceRef
 from .type_of_delivery_variant_ref import TypeOfDeliveryVariantRef
 from .type_of_driver_permit_ref import TypeOfDriverPermitRef
 from .type_of_equipment_ref import TypeOfEquipmentRef
@@ -445,6 +488,7 @@ from .type_of_journey_pattern_ref import TypeOfJourneyPatternRef
 from .type_of_line_ref import TypeOfLineRef
 from .type_of_link_ref import TypeOfLinkRef
 from .type_of_link_sequence_ref import TypeOfLinkSequenceRef
+from .type_of_locatable_spot_ref import TypeOfLocatableSpotRef
 from .type_of_machine_readability_ref import TypeOfMachineReadabilityRef
 from .type_of_medium_access_device_ref import TypeOfMediumAccessDeviceRef
 from .type_of_mobility_service_ref import TypeOfMobilityServiceRef
@@ -465,6 +509,7 @@ from .type_of_projection_ref import TypeOfProjectionRef
 from .type_of_proof_ref import TypeOfProofRef
 from .type_of_responsibility_role_ref import TypeOfResponsibilityRoleRef
 from .type_of_retail_device_ref import TypeOfRetailDeviceRef
+from .type_of_rolling_stock_ref import TypeOfRollingStockRef
 from .type_of_sales_offer_package_ref import TypeOfSalesOfferPackageRef
 from .type_of_security_list_ref import TypeOfSecurityListRef
 from .type_of_service_feature_ref import TypeOfServiceFeatureRef
@@ -477,6 +522,7 @@ from .type_of_usage_parameter_ref import TypeOfUsageParameterRef
 from .type_of_validity_ref import TypeOfValidityRef
 from .type_of_zone_ref import TypeOfZoneRef
 from .uic_operating_period_ref import UicOperatingPeriodRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .usage_discount_right_ref import UsageDiscountRightRef
 from .usage_parameter_price_ref import UsageParameterPriceRef
 from .usage_validity_period_ref import UsageValidityPeriodRef
@@ -557,10 +603,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             ScheduleRequestRef,
             TripPlanRequestRef,
             CustomerPaymentMeansRef,
-            MediumApplicationInstanceRef,
-            MobileDeviceRef,
-            EmvCardRef,
-            SmartcardRef,
             ResidentialQualificationEligibilityRef,
             CommercialProfileEligibilityRef,
             UserProfileEligibilityRef,
@@ -568,6 +610,10 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             FareContractRef,
             CustomerRef,
             VehicleTypeZoneRestrictionRef,
+            MediumApplicationInstanceRef,
+            MobileDeviceRef,
+            EmvCardRef,
+            SmartcardRef,
             StartTimeAtStopPointRef,
             ZoneInSeriesRef,
             TariffObjectRef,
@@ -610,11 +656,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             JourneyPartCoupleRef,
             CoupledJourneyRef,
             JourneyPartRef,
-            TimetabledPassingTimeRef,
-            EstimatedPassingTimeRef,
-            ObservedPassingTimeRef,
-            TargetPassingTimeRef,
-            PassingTimeRef,
             InterchangeRuleTimingRef,
             InterchangeRuleRef,
             ServiceJourneyPatternInterchangeRef,
@@ -622,7 +663,11 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             DefaultInterchangeRef,
             InterchangeRef,
             JourneyMeetingRef,
-            SupplyContractRef,
+            PassengerAtStopTimeRef,
+            TimetabledPassingTimeRef,
+            EstimatedPassingTimeRef,
+            ObservedPassingTimeRef,
+            TargetPassingTimeRef,
             TrainNumberRef,
             RoutingConstraintZoneRef,
             VehiclePositionAlignmentRef,
@@ -646,22 +691,49 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             TurnaroundTimeLimitTimeRef,
             JourneyTimingRef,
             CrewBaseRef,
+            RollingStockInventoryRef,
+            TrailingRollingStockItemRef,
+            TractiveRollingStockItemRef,
+            VehicleRef,
+            SpotAffinityRef,
             TrainComponentRef,
             TrainElementRef,
+            TrailingElementTypeRef,
+            TractiveElementTypeRef,
+            TrainElementTypeRef,
             TrainInCompoundTrainRef,
             PassengerSeatRef,
             TravelDocumentSecurityListingRef,
-            MediumAccessDeviceSecurityListingRef,
             RetailDeviceSecurityListingRef,
             CustomerAccountSecurityListingRef,
             FareContractSecurityListingRef,
             CustomerSecurityListingRef,
+            MediumAccessDeviceSecurityListingRef,
             WhitelistRef,
             BlacklistRef,
             SchematicMapMemberRef,
             SchematicMapRef,
             CycleModelProfileRef,
             CarModelProfileRef,
+            DeckSpaceCapacityRef,
+            DeckLevelRef,
+            DeckEntranceCoupleRef,
+            DeckEntranceUsageRef,
+            DeckRef,
+            DeckPlanRef,
+            DeckWindowRef,
+            OtherDeckEntranceRef,
+            DeckVehicleEntranceRef,
+            PassengerEntranceRef,
+            OtherDeckSpaceRef,
+            PassengerSpaceRef,
+            LuggageSpotRef,
+            PassengerVehicleSpotRef,
+            PassengerSpotRef,
+            SpotColumnRef,
+            SpotRowRef,
+            SensorInEntranceRef,
+            SensorInSpotRef,
             ModeRestrictionAssessmentRef,
             ResidentialQualificationRef,
             TypeOfConcessionRef,
@@ -758,7 +830,7 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             RechargingEquipmentProfileRef,
             VehicleEquipmentProfileRef,
             VehicleModelRef,
-            VehicleRef,
+            PassengerVehicleCapacityRef,
             PassengerCapacityRef,
             FacilityRequirementRef,
             VehicleManoeuvringRequirementRef,
@@ -766,6 +838,8 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             VehicleRequirementRef,
             SimpleVehicleTypeRef,
             CompoundTrainRef,
+            UnpoweredTrainRef,
+            PoweredTrainRef,
             TrainRef,
             VehicleTypeRef,
             TransportTypeRef,
@@ -777,10 +851,13 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             FacilityRef,
             OperatingDepartmentRef,
             OperationalContextRef,
+            LevelInStructureRef,
+            SiteStructureRef,
             LevelRef,
             ModeRef,
             SubmodeRef,
             OpenTransportModeRef,
+            PathInstructionRef,
             SalesTransactionRef,
             OfferedTravelSpecificationRef,
             RequestedTravelSpecificationRef,
@@ -798,7 +875,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             FlexibleAreaRef,
             FlexibleQuayRef,
             FlexibleStopPlaceRef,
-            PathJunctionRef,
             EquipmentPlaceRef,
             EquipmentPositionRef,
             TopographicPlaceRef,
@@ -807,11 +883,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             GarageRef,
             VehicleStoppingPositionRef,
             VehicleStoppingPlaceRef,
-            BoardingPositionRef,
-            AccessSpaceRef,
-            TaxiStandRef,
-            QuayRef,
-            StopPlaceSpaceRef,
             VehiclePoolingParkingBayRef,
             MonitoredVehicleSharingParkingBayRef,
             VehicleSharingParkingBayRef,
@@ -821,20 +892,25 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             TaxiParkingAreaRef,
             ParkingAreaRef,
             PointOfInterestSpaceRef,
-            StopPlaceVehicleEntranceRef,
-            StopPlaceEntranceRef,
+            BoardingPositionRef,
+            AccessSpaceRef,
+            TaxiStandRef,
+            QuayRef,
+            StopPlaceSpaceRef,
             ParkingEntranceForVehiclesRef,
             ParkingPassengerEntranceRef,
             ParkingEntranceRef,
             PointOfInterestVehicleEntranceRef,
             PointOfInterestEntranceRef,
+            StopPlaceVehicleEntranceRef,
+            StopPlaceEntranceRef,
             VehicleEntranceRef,
             EntranceRef,
             SiteComponentRef,
-            TaxiRankRef,
-            StopPlaceRef,
             ParkingRef,
             PointOfInterestRef,
+            TaxiRankRef,
+            StopPlaceRef,
             ServiceSiteRef,
             SiteRef,
             SiteElementRef,
@@ -842,10 +918,15 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             PostalAddressRef,
             RoadAddressRef,
             AddressRef,
+            DeckPathJunctionRef,
+            PathJunctionRef,
+            SitePathJunctionRef,
+            GenericPathJunctionRef,
             UicOperatingPeriodRef,
             OperatingPeriodRef,
             OperatingDayRef,
             ServiceCalendarRef,
+            ContactRef,
             TopographicProjectionRef,
             ComplexFeatureProjectionRef,
             LinkSequenceProjectionRef,
@@ -869,10 +950,12 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             DeadRunJourneyPatternRef,
             JourneyPatternRef,
             TimingPatternRef,
-            NavigationPathRef,
             RouteRef,
+            DeckNavigationPathRef,
+            NavigationPathRef,
+            SiteNavigationPathRef,
+            GenericNavigationPathRef,
             LinkSequenceRef,
-            ContactRef,
             OnwardVehicleMeetingLinkRef,
             VehicleMeetingLinkRef,
             ServiceLinkRef,
@@ -882,8 +965,12 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             RoadLinkRef,
             RailwayLinkRef,
             ActivationLinkRef,
-            PathLinkRef,
             RouteLinkRef,
+            DeckPathLinkRef,
+            OffSitePathLinkRef,
+            PathLinkRef,
+            SitePathLinkRef,
+            GenericPathLinkRef,
             VehicleMeetingPointRef,
             WirePointRef,
             RoadPointRef,
@@ -900,13 +987,13 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             TimingPointRef,
             RoutePointRef,
             PointRef,
+            ResponsibilityRoleRef,
             AlternativeNameRef,
             AlternativeTextRef,
             AvailabilityConditionRef,
             ValidityRuleParameterRef,
             ValidityTriggerRef,
             ValidityConditionRef,
-            ResponsibilityRoleRef,
             ControlCentreRef,
             OrganisationalUnitRef,
             DepartmentRef,
@@ -944,12 +1031,13 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             HeadwayJourneyGroupRef,
             JourneyFrequencyGroupRef,
             GroupOfServicesRef,
-            GroupOfStopPlacesRef,
             PointOfInterestHierarchyRef,
             GroupOfTimingLinksRef,
             FleetRef,
+            GroupOfStopPlacesRef,
             PriceGroupRef,
             GroupOfOperatorsRef,
+            GroupOfSitesRef,
             GroupOfPlacesRef,
             ParentSectionRef,
             ParentCommonSectionRef,
@@ -1001,6 +1089,9 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             PointOfInterestClassificationRef,
             TypeOfActivationRef,
             TypeOfFleetRef,
+            TypeOfDeckEntranceRef,
+            TypeOfDeckSpaceRef,
+            TypeOfLocatableSpotRef,
             DirectionRef,
             TypeOfProofRef,
             TypeOfDriverPermitRef,
@@ -1034,6 +1125,7 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             TypeOfPassengerInformationEquipmentRef,
             TypeOfTimeDemandTypeRef,
             TypeOfJourneyPatternRef,
+            TypeOfRollingStockRef,
             TypeOfSecurityListRef,
             TypeOfPlugRef,
             TypeOfBatteryChemistryRef,
@@ -1053,12 +1145,12 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             TypeOfEquipmentRef,
             TypeOfPlaceRef,
             TypeOfTransferRef,
-            TypeOfProjectionRef,
-            TypeOfFeatureRef,
-            TypeOfLinkSequenceRef,
             TypeOfOrganisationPartRef,
             TypeOfOrganisationRef,
             TypeOfZoneRef,
+            TypeOfProjectionRef,
+            TypeOfFeatureRef,
+            TypeOfLinkSequenceRef,
             TypeOfLinkRef,
             TypeOfPointRef,
             TypeOfLineRef,
@@ -1144,26 +1236,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "MediumApplicationInstanceRef",
-                    "type": MediumApplicationInstanceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "MobileDeviceRef",
-                    "type": MobileDeviceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "EmvCardRef",
-                    "type": EmvCardRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "SmartcardRef",
-                    "type": SmartcardRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "ResidentialQualificationEligibilityRef",
                     "type": ResidentialQualificationEligibilityRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -1196,6 +1268,26 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "VehicleTypeZoneRestrictionRef",
                     "type": VehicleTypeZoneRestrictionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MediumApplicationInstanceRef",
+                    "type": MediumApplicationInstanceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MobileDeviceRef",
+                    "type": MobileDeviceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EmvCardRef",
+                    "type": EmvCardRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SmartcardRef",
+                    "type": SmartcardRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1409,31 +1501,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TimetabledPassingTimeRef",
-                    "type": TimetabledPassingTimeRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "EstimatedPassingTimeRef",
-                    "type": EstimatedPassingTimeRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ObservedPassingTimeRef",
-                    "type": ObservedPassingTimeRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TargetPassingTimeRef",
-                    "type": TargetPassingTimeRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "PassingTimeRef",
-                    "type": PassingTimeRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "InterchangeRuleTimingRef",
                     "type": InterchangeRuleTimingRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -1469,8 +1536,28 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "SupplyContractRef",
-                    "type": SupplyContractRef,
+                    "name": "PassengerAtStopTimeRef",
+                    "type": PassengerAtStopTimeRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TimetabledPassingTimeRef",
+                    "type": TimetabledPassingTimeRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "EstimatedPassingTimeRef",
+                    "type": EstimatedPassingTimeRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ObservedPassingTimeRef",
+                    "type": ObservedPassingTimeRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TargetPassingTimeRef",
+                    "type": TargetPassingTimeRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1589,6 +1676,31 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "RollingStockInventoryRef",
+                    "type": RollingStockInventoryRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TrailingRollingStockItemRef",
+                    "type": TrailingRollingStockItemRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TractiveRollingStockItemRef",
+                    "type": TractiveRollingStockItemRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleRef",
+                    "type": VehicleRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotAffinityRef",
+                    "type": SpotAffinityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TrainComponentRef",
                     "type": TrainComponentRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -1596,6 +1708,21 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "TrainElementRef",
                     "type": TrainElementRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TrailingElementTypeRef",
+                    "type": TrailingElementTypeRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TractiveElementTypeRef",
+                    "type": TractiveElementTypeRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TrainElementTypeRef",
+                    "type": TrainElementTypeRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1611,11 +1738,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "TravelDocumentSecurityListingRef",
                     "type": TravelDocumentSecurityListingRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "MediumAccessDeviceSecurityListingRef",
-                    "type": MediumAccessDeviceSecurityListingRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1636,6 +1758,11 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "CustomerSecurityListingRef",
                     "type": CustomerSecurityListingRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "MediumAccessDeviceSecurityListingRef",
+                    "type": MediumAccessDeviceSecurityListingRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1666,6 +1793,101 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "CarModelProfileRef",
                     "type": CarModelProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckSpaceCapacityRef",
+                    "type": DeckSpaceCapacityRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckLevelRef",
+                    "type": DeckLevelRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckEntranceCoupleRef",
+                    "type": DeckEntranceCoupleRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckEntranceUsageRef",
+                    "type": DeckEntranceUsageRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckRef",
+                    "type": DeckRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckPlanRef",
+                    "type": DeckPlanRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckWindowRef",
+                    "type": DeckWindowRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OtherDeckEntranceRef",
+                    "type": OtherDeckEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckVehicleEntranceRef",
+                    "type": DeckVehicleEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerEntranceRef",
+                    "type": PassengerEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OtherDeckSpaceRef",
+                    "type": OtherDeckSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerSpaceRef",
+                    "type": PassengerSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LuggageSpotRef",
+                    "type": LuggageSpotRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerVehicleSpotRef",
+                    "type": PassengerVehicleSpotRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PassengerSpotRef",
+                    "type": PassengerSpotRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotColumnRef",
+                    "type": SpotColumnRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SpotRowRef",
+                    "type": SpotRowRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SensorInEntranceRef",
+                    "type": SensorInEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SensorInSpotRef",
+                    "type": SensorInSpotRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2149,8 +2371,8 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "VehicleRef",
-                    "type": VehicleRef,
+                    "name": "PassengerVehicleCapacityRef",
+                    "type": PassengerVehicleCapacityRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2186,6 +2408,16 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2244,6 +2476,16 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "LevelInStructureRef",
+                    "type": LevelInStructureRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SiteStructureRef",
+                    "type": SiteStructureRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "LevelRef",
                     "type": LevelRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2261,6 +2503,11 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "OpenTransportModeRef",
                     "type": OpenTransportModeRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PathInstructionRef",
+                    "type": PathInstructionRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2349,11 +2596,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "PathJunctionRef",
-                    "type": PathJunctionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "EquipmentPlaceRef",
                     "type": EquipmentPlaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2391,31 +2633,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "VehicleStoppingPlaceRef",
                     "type": VehicleStoppingPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "BoardingPositionRef",
-                    "type": BoardingPositionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "AccessSpaceRef",
-                    "type": AccessSpaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TaxiStandRef",
-                    "type": TaxiStandRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "QuayRef",
-                    "type": QuayRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceSpaceRef",
-                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2464,13 +2681,28 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceVehicleEntranceRef",
-                    "type": StopPlaceVehicleEntranceRef,
+                    "name": "BoardingPositionRef",
+                    "type": BoardingPositionRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "StopPlaceEntranceRef",
-                    "type": StopPlaceEntranceRef,
+                    "name": "AccessSpaceRef",
+                    "type": AccessSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiStandRef",
+                    "type": TaxiStandRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "QuayRef",
+                    "type": QuayRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceSpaceRef",
+                    "type": StopPlaceSpaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2499,6 +2731,16 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "StopPlaceVehicleEntranceRef",
+                    "type": StopPlaceVehicleEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceEntranceRef",
+                    "type": StopPlaceEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "VehicleEntranceRef",
                     "type": VehicleEntranceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2514,16 +2756,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TaxiRankRef",
-                    "type": TaxiRankRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "StopPlaceRef",
-                    "type": StopPlaceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "ParkingRef",
                     "type": ParkingRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2531,6 +2763,16 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "PointOfInterestRef",
                     "type": PointOfInterestRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TaxiRankRef",
+                    "type": TaxiRankRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "StopPlaceRef",
+                    "type": StopPlaceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2569,6 +2811,26 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "DeckPathJunctionRef",
+                    "type": DeckPathJunctionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PathJunctionRef",
+                    "type": PathJunctionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SitePathJunctionRef",
+                    "type": SitePathJunctionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathJunctionRef",
+                    "type": GenericPathJunctionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "UicOperatingPeriodRef",
                     "type": UicOperatingPeriodRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2586,6 +2848,11 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "ServiceCalendarRef",
                     "type": ServiceCalendarRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ContactRef",
+                    "type": ContactRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2704,23 +2971,33 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "NavigationPathRef",
-                    "type": NavigationPathRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "RouteRef",
                     "type": RouteRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "LinkSequenceRef",
-                    "type": LinkSequenceRef,
+                    "name": "DeckNavigationPathRef",
+                    "type": DeckNavigationPathRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "ContactRef",
-                    "type": ContactRef,
+                    "name": "NavigationPathRef",
+                    "type": NavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "SiteNavigationPathRef",
+                    "type": SiteNavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericNavigationPathRef",
+                    "type": GenericNavigationPathRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "LinkSequenceRef",
+                    "type": LinkSequenceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2769,13 +3046,33 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "RouteLinkRef",
+                    "type": RouteLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckPathLinkRef",
+                    "type": DeckPathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OffSitePathLinkRef",
+                    "type": OffSitePathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "PathLinkRef",
                     "type": PathLinkRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "RouteLinkRef",
-                    "type": RouteLinkRef,
+                    "name": "SitePathLinkRef",
+                    "type": SitePathLinkRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GenericPathLinkRef",
+                    "type": GenericPathLinkRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2859,6 +3156,11 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "ResponsibilityRoleRef",
+                    "type": ResponsibilityRoleRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "AlternativeNameRef",
                     "type": AlternativeNameRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -2886,11 +3188,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "ValidityConditionRef",
                     "type": ValidityConditionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ResponsibilityRoleRef",
-                    "type": ResponsibilityRoleRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -3079,11 +3376,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "GroupOfStopPlacesRef",
-                    "type": GroupOfStopPlacesRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "PointOfInterestHierarchyRef",
                     "type": PointOfInterestHierarchyRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3099,6 +3391,11 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "GroupOfStopPlacesRef",
+                    "type": GroupOfStopPlacesRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "PriceGroupRef",
                     "type": PriceGroupRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3106,6 +3403,11 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "GroupOfOperatorsRef",
                     "type": GroupOfOperatorsRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupOfSitesRef",
+                    "type": GroupOfSitesRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -3364,6 +3666,21 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfDeckEntranceRef",
+                    "type": TypeOfDeckEntranceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfDeckSpaceRef",
+                    "type": TypeOfDeckSpaceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfLocatableSpotRef",
+                    "type": TypeOfLocatableSpotRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "DirectionRef",
                     "type": DirectionRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3529,6 +3846,11 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "TypeOfRollingStockRef",
+                    "type": TypeOfRollingStockRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "TypeOfSecurityListRef",
                     "type": TypeOfSecurityListRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3624,21 +3946,6 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "TypeOfProjectionRef",
-                    "type": TypeOfProjectionRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfFeatureRef",
-                    "type": TypeOfFeatureRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfLinkSequenceRef",
-                    "type": TypeOfLinkSequenceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
                     "name": "TypeOfOrganisationPartRef",
                     "type": TypeOfOrganisationPartRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -3651,6 +3958,21 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "TypeOfZoneRef",
                     "type": TypeOfZoneRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfProjectionRef",
+                    "type": TypeOfProjectionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfFeatureRef",
+                    "type": TypeOfFeatureRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfLinkSequenceRef",
+                    "type": TypeOfLinkSequenceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

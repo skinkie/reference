@@ -24,6 +24,8 @@ from .type_of_codespace_assignment import TypeOfCodespaceAssignment
 from .type_of_concession import TypeOfConcession
 from .type_of_congestion import TypeOfCongestion
 from .type_of_customer_account import TypeOfCustomerAccount
+from .type_of_deck_entrance import TypeOfDeckEntrance
+from .type_of_deck_space import TypeOfDeckSpace
 from .type_of_delivery_variant import TypeOfDeliveryVariant
 from .type_of_driver_permit import TypeOfDriverPermit
 from .type_of_entity import TypeOfEntity
@@ -42,6 +44,7 @@ from .type_of_journey_pattern import TypeOfJourneyPattern
 from .type_of_line import TypeOfLine
 from .type_of_link import TypeOfLink
 from .type_of_link_sequence import TypeOfLinkSequence
+from .type_of_locatable_spot import TypeOfLocatableSpot
 from .type_of_machine_readability import TypeOfMachineReadability
 from .type_of_medium_access_device import TypeOfMediumAccessDevice
 from .type_of_mobility_service import TypeOfMobilityService
@@ -62,6 +65,7 @@ from .type_of_projection import TypeOfProjection
 from .type_of_proof import TypeOfProof
 from .type_of_responsibility_role import TypeOfResponsibilityRole
 from .type_of_retail_device import TypeOfRetailDevice
+from .type_of_rolling_stock import TypeOfRollingStock
 from .type_of_sales_offer_package import TypeOfSalesOfferPackage
 from .type_of_security_list import TypeOfSecurityList
 from .type_of_service import TypeOfService
@@ -88,7 +92,6 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
     choice: List[
         Union[
             ValueSet,
-            TypeOfFleet,
             ParkingBayStatus,
             TypeOfMediumAccessDevice,
             TypeOfMachineReadability,
@@ -105,6 +108,10 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
             TypeOfParking,
             TypeOfServiceFeature,
             Direction,
+            TypeOfFleet,
+            TypeOfDeckEntrance,
+            TypeOfDeckSpace,
+            TypeOfLocatableSpot,
             TypeOfSecurityList,
             TypeOfDriverPermit,
             PurposeOfEquipmentProfile,
@@ -136,6 +143,7 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
             TypeOfPassengerInformationEquipment,
             TypeOfJourneyPattern,
             TypeOfActivation,
+            TypeOfRollingStock,
             TypeOfModeOfOperation,
             TypeOfPlug,
             TypeOfBatteryChemistry,
@@ -170,11 +178,6 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "ValueSet",
                     "type": ValueSet,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TypeOfFleet",
-                    "type": TypeOfFleet,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -255,6 +258,26 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "Direction",
                     "type": Direction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfFleet",
+                    "type": TypeOfFleet,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfDeckEntrance",
+                    "type": TypeOfDeckEntrance,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfDeckSpace",
+                    "type": TypeOfDeckSpace,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfLocatableSpot",
+                    "type": TypeOfLocatableSpot,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -410,6 +433,11 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "TypeOfActivation",
                     "type": TypeOfActivation,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TypeOfRollingStock",
+                    "type": TypeOfRollingStock,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

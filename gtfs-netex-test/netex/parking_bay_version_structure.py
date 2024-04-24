@@ -12,10 +12,12 @@ from .parking_stay_enumeration import ParkingStayEnumeration
 from .parking_user_enumeration import ParkingUserEnumeration
 from .parking_vehicle_enumeration import ParkingVehicleEnumeration
 from .parking_visibility_enumeration import ParkingVisibilityEnumeration
+from .powered_train_ref import PoweredTrainRef
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
 from .taxi_parking_area_ref import TaxiParkingAreaRef
 from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
+from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_pooling_parking_area_ref import VehiclePoolingParkingAreaRef
 from .vehicle_sharing_parking_area_ref import VehicleSharingParkingAreaRef
 from .vehicle_type_ref import VehicleTypeRef
@@ -73,7 +75,7 @@ class ParkingBayVersionStructure(ParkingComponentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    transport_type_ref_or_vehicle_type_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
+    transport_type_ref_or_vehicle_type_ref_or_train_ref: Optional[Union[SimpleVehicleTypeRef, CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -86,6 +88,16 @@ class ParkingBayVersionStructure(ParkingComponentVersionStructure):
                 {
                     "name": "CompoundTrainRef",
                     "type": CompoundTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UnpoweredTrainRef",
+                    "type": UnpoweredTrainRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "PoweredTrainRef",
+                    "type": PoweredTrainRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

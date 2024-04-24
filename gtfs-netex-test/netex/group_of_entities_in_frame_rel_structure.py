@@ -31,6 +31,7 @@ from .group_of_places import GroupOfPlaces
 from .group_of_points import GroupOfPoints
 from .group_of_services import GroupOfServices
 from .group_of_single_journeys import GroupOfSingleJourneys
+from .group_of_sites import GroupOfSites
 from .group_of_tariff_zones import GroupOfTariffZones
 from .group_of_timing_links import GroupOfTimingLinks
 from .hail_and_ride_area import HailAndRideArea
@@ -105,6 +106,7 @@ class GroupOfEntitiesInFrameRelStructure(ContainmentAggregationStructure):
             HeadwayJourneyGroup,
             CrewBase,
             GroupOfTimingLinks,
+            GroupOfSites,
             Network,
             GroupOfLines,
             GroupOfOperators,
@@ -236,6 +238,11 @@ class GroupOfEntitiesInFrameRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "GroupOfTimingLinks",
                     "type": GroupOfTimingLinks,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupOfSites",
+                    "type": GroupOfSites,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

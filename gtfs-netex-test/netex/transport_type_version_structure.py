@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional, Type, Union
+from typing import ForwardRef, List, Optional, Union
 
 from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
+from .deck_plan_ref import DeckPlanRef
 from .entity_in_version_structure import DataManagedObjectStructure
 from .fuel_type_enumeration import FuelTypeEnumeration
 from .multilingual_string import MultilingualString
@@ -90,12 +91,12 @@ class TransportTypeVersionStructure(DataManagedObjectStructure):
             "choices": (
                 {
                     "name": "FuelType",
-                    "type": Type["TransportTypeVersionStructure.FuelType"],
+                    "type": ForwardRef("TransportTypeVersionStructure.FuelType"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "TypeOfFuel",
-                    "type": Type["TransportTypeVersionStructure.TypeOfFuel"],
+                    "type": ForwardRef("TransportTypeVersionStructure.TypeOfFuel"),
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
@@ -129,6 +130,14 @@ class TransportTypeVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "PassengerCapacity",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    deck_plan_ref: Optional[DeckPlanRef] = field(
+        default=None,
+        metadata={
+            "name": "DeckPlanRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
