@@ -75,7 +75,17 @@ def conversion(base_tree: lxml.etree,input_filename: str, output_filename: str):
         availability_condition = parser.parse(element, AvailabilityCondition)
         availability_conditions.append(availability_condition)
 
+    for element in base_tree.iterfind(".//{http://www.netex.org.uk/netex}AvailabilityCondition"):
+        availability_condition: AvailabilityCondition
+        availability_condition = parser.parse(element, AvailabilityCondition)
+        availability_conditions.append(availability_condition)
+
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourney"):
+        service_journey: ServiceJourney
+        service_journey = parser.parse(element, ServiceJourney)
+        service_journeys.append(service_journey)
+
+    for element in base_tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourney"):
         service_journey: ServiceJourney
         service_journey = parser.parse(element, ServiceJourney)
         service_journeys.append(service_journey)
@@ -85,13 +95,20 @@ def conversion(base_tree: lxml.etree,input_filename: str, output_filename: str):
         service_journey_pattern = parser.parse(element, ServiceJourneyPattern)
         service_journey_patterns.append(service_journey_pattern)
 
+    for element in base_tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourneyPattern"):
+        service_journey_pattern: ServiceJourneyPattern
+        service_journey_pattern = parser.parse(element, ServiceJourneyPattern)
+        service_journey_patterns.append(service_journey_pattern)
+
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}TimeDemandType"):
         time_demand_type: TimeDemandType = parser.parse(element, TimeDemandType)
         time_demand_types.append(time_demand_type)
 
+    for element in base_tree.iterfind(".//{http://www.netex.org.uk/netex}TimeDemandType"):
+        time_demand_type: TimeDemandType = parser.parse(element, TimeDemandType)
+        time_demand_types.append(time_demand_type)
 
-
-    codespace = Codespace(id="OPENOV", xmlns="OPENOV", xmlns_url="http://openov.nl/")
+    codespace = Codespace(id="OPENOV", xmlns="OPENOV", xmlns_url="http://openov.nl/") TODO take from file
     version = Version(id="OPENOV:Version:1", version="1")
 
     used_direction_types = [sjp.direction_type for sjp in service_journey_patterns]
