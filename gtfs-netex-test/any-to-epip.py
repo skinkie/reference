@@ -38,7 +38,7 @@ def conversion(input_filename: str, output_filename: str):
     # scheduled_stop_points = []
     has_servicejourney_patterns = False
 
-    epiap_tree = lxml.etree.parse("/tmp/NeTEx_DOVA_epiap_20240423013251.xml.gz")
+    epiap_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SITE_1_1_202404140804.xml")
     tree = lxml.etree.parse(input_filename)
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}AvailabilityCondition"):
@@ -92,6 +92,11 @@ def conversion(input_filename: str, output_filename: str):
 
     # has_servicejourney_patterns = len(service_journey_patterns) > 0
 
+    service_calendar_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SERVICECALENDAR_1_1_202404140804.xml")
+    for element in service_calendar_tree.iterfind(".//{http://www.netex.org.uk/netex}AvailabilityCondition"):
+        availability_condition: AvailabilityCondition
+        availability_condition = parser.parse(element, AvailabilityCondition)
+        availability_conditions.append(availability_condition)
 
     servicecalendarepip = ServiceCalendarEPIPFrame(codespace)
     service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
@@ -102,10 +107,19 @@ def conversion(input_filename: str, output_filename: str):
     timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
 
     service_frame: ServiceFrame
-    service_frame = parser.parse(tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame"), ServiceFrame)
-    #if not has_servicejourney_patterns:
-    service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
-    service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
+    service_frame_xml = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    if service_frame_xml is not None:
+        service_frame = parser.parse(service_frame_xml, ServiceFrame)
+        #if not has_servicejourney_patterns:
+        service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
+        service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
+    else:
+        service_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SERVICE_1_1_202404140804.xml")
+        service_frame_xml = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+        if service_frame_xml is not None:
+            service_frame = parser.parse(service_frame_xml, ServiceFrame)
+        else:
+            service_frame = ServiceFrame(id=getId(ServiceFrame, codespace, "1"), version="1")
 
     # for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPoint"):
     #    scheduled_stop_point: ScheduledStopPoint
@@ -121,10 +135,15 @@ def conversion(input_filename: str, output_filename: str):
 
     stop_places = {}
 
+    epiap_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SITE_1_1_202404140804.xml")
+
     for stop_assignment in service_frame.stop_assignments.stop_assignment:
-        stop_place = get_stop_place_for_quayref(epiap_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
-        stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
-        stop_places[stop_place.id] = stop_place
+        # TODO: When a quay is part of a stop place already parsed, we cannot parse it again, hence we must maintain a reverse list directly
+        if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay is not None:
+            stop_place = get_stop_place_for_quayref(epiap_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
+            if stop_place is not None:
+                stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
+                stop_places[stop_place.id] = stop_place
 
     # TODO: don't create quays, if this is available. **1
     if len(stop_places.values()) > 0:
@@ -247,7 +266,8 @@ def conversion(input_filename: str, output_filename: str):
     tree.write(output_filename, pretty_print=True, strip_text=True)
 
 if __name__ == '__main__':
-    for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240424_20240424.xml.gz"):
+    for input_filename in glob.glob("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_TIMETABLE_84_270_202404140804.xml"):
+    # for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240424_20240424.xml.gz"):
     # for input_filename in glob.glob("/tmp/NeTEx_ARR_NL_20240422_20240423_1416.xml.gz"):
         print(input_filename)
         output_filename = input_filename.replace('/tmp/', 'netex-output-epip/').replace('.xml.gz', '.xml')

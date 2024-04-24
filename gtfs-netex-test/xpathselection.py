@@ -11,8 +11,11 @@ parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
 
 def get_stop_place_for_quayref(tree, quayref):
     found = tree.find(".//{http://www.netex.org.uk/netex}Quay[@id='" + quayref + "']")
-    stop_place: StopPlace = parser.parse(found.getparent().getparent(), StopPlace)
-    return stop_place
+    if found is not None:
+        stop_place: StopPlace = parser.parse(found.getparent().getparent(), StopPlace)
+        return stop_place
+    else:
+        print(f"Missing {quayref}")
 
 def main():
     context = XmlContext()

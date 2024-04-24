@@ -27,8 +27,10 @@ class TimetablePassingTimesProfile:
             derived_from_version_ref_attribute=call.version
         )
         stop_point_in_journey_pattern.scheduled_stop_point_ref = call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view
-        stop_point_in_journey_pattern.for_alighting = call.arrival.for_alighting
-        stop_point_in_journey_pattern.for_boarding = call.departure.for_boarding
+        if call.arrival:
+            stop_point_in_journey_pattern.for_alighting = call.arrival.for_alighting
+        if call.departure:
+            stop_point_in_journey_pattern.for_boarding = call.departure.for_boarding
         stop_point_in_journey_pattern.onward_timing_link_ref = call.onward_timing_link_view
         stop_point_in_journey_pattern.destination_display_ref_or_destination_display_view = call.destination_display_ref_or_destination_display_view
         stop_point_in_journey_pattern.onward_service_link_ref = call.onward_service_link_ref_or_onward_service_link_view  # TODO: select only the service_link_ref
@@ -247,7 +249,7 @@ class TimetablePassingTimesProfile:
                         # TODO: replace with a function that can compute the hash of a service journey pattern without creating it first
                         call: Call
                         spijps = PointsInJourneyPatternRelStructure(
-                            point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[self.mapCallToStopPointInJourneyPattern(call) for call in sj.calls.call])
+                            point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[self.mapCallToStopPointInJourneyPattern(call, self.codespace) for call in sj.calls.call])
                         spijp_hash = TimetablePassingTimesProfile.sjp_hash(spijps)
                         for x in spijps.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern:
                             x.id = x.id.replace('-XXX-', spijp_hash + '-')
