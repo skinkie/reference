@@ -122,7 +122,7 @@ vehicle_type_rottummonnik = VehicleType(id=getId(VehicleType, codespace, "ROTTUM
                            name=MultilingualString(value="Rottum en Monnik"),
                            description=MultilingualString(value="Rottum en Monnik"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "ROTTUMMONNIK"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=1000)),
                            length=Decimal(value='58'), width=Decimal(value='13.82'), height=Decimal(value='5.45'),
@@ -153,7 +153,7 @@ vehicle_type_fostaborg = VehicleType(id=getId(VehicleType, codespace, "FOSTABORG
                            name=MultilingualString(value="Fostaborg"),
                            description=MultilingualString(value="Fostaborg"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "FOSTABORG"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=48)),
                            length=Decimal(value='21.5'), width=Decimal(value='7.00'),
@@ -179,7 +179,7 @@ vehicle_type_esonborg = VehicleType(id=getId(VehicleType, codespace, "ESONBORG")
                            name=MultilingualString(value="Esonborg"),
                            description=MultilingualString(value="Esonborg"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "ESONBORG"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=48)),
                            length=Decimal(value='22'), width=Decimal(value='6.10'),

@@ -7,7 +7,7 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
     ScheduledStopPoint, StopPlace, AccessibilityAssessment, LimitationStatusEnumeration, TariffZoneRefsRelStructure, \
     PrivateCode, PrivateCodeStructure, Quay, PresentationStructure, Authority, Branding, Operator, ServiceJourney, \
     ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
-    ServiceLink, PublicCodeType
+    ServiceLink, PublicCodeStructure
 
 import operator as operator_f
 
@@ -50,7 +50,7 @@ class GtfsProfile:
         return None
 
     @staticmethod
-    def getOptionalPrivateCode(private_code: Union[PrivateCodeStructure, PrivateCode, PublicCodeType]):
+    def getOptionalPrivateCode(private_code: Union[PrivateCodeStructure, PrivateCode, PublicCodeStructure]):
         if private_code is not None:
             return private_code.value
 

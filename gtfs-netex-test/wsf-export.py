@@ -27,7 +27,7 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ServiceJourney, \
     MobilityFacilityList, SanitaryFacilityList, \
     TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
-    TransportTypeVersionStructure, PublicCodeType
+    TransportTypeVersionStructure, PublicCodeStructure
 
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
@@ -106,7 +106,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "PMPWA"), version=ve
                            name=MultilingualString(value="Prinses Maxima en Prins Willem Alexander"),
                            description=MultilingualString(value="Prinses Maxima en Prins Willem Alexander"),
                            fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "PMPWA"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=186, seating_capacity=186)]),
                            length=Decimal(value='37.71'), width=Decimal(value='17.31'), height=Decimal(value='4.20'),
@@ -138,7 +138,7 @@ line = Line(id=getId(Line, codespace, "WSF"), version=version.version, name=Mult
               description=MultilingualString(value="Veer tussen Vlissingen en Breskens"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
-              public_code=PublicCodeType(value="WSF"),
+              public_code=PublicCodeStructure(value="WSF"),
               private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "WSF"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)

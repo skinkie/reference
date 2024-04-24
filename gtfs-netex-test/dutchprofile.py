@@ -47,7 +47,7 @@ class DutchProfile:
             operational_contexts = OperationalContextsInFrameRelStructure(operational_context=operational_contexts)
 
         if vehicle_types is not None and len(vehicle_types) > 0:
-            vehicle_types = VehicleTypesInFrameRelStructure(compound_train_or_train_or_vehicle_type_or_simple_vehicle_type=vehicle_types)
+            vehicle_types = VehicleTypesInFrameRelStructure(transport_type_dummy_type_or_train_type=vehicle_types)
 
         if zones is not None and len(zones) > 0:
             zones = ZonesInFrameRelStructure(choice=zones)

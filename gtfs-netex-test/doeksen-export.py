@@ -110,7 +110,7 @@ vehicle_type_wdv = VehicleType(id=getId(VehicleType, codespace, "WDV"), version=
                            name=MultilingualString(value="Willem de Vlamingh"),
                            description=MultilingualString(value="Willem de Vlamingh"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.NATURAL_GAS,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "WDV"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=692)),
                            length=Decimal(value='70'), width=Decimal(value='17.3'),
@@ -140,7 +140,7 @@ vehicle_type_wb = VehicleType(id=getId(VehicleType, codespace, "WB"), version=ve
                            name=MultilingualString(value="Willem Barentsz"),
                            description=MultilingualString(value="Willem Barentsz"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.NATURAL_GAS,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "WB"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=692)),
                            length=Decimal(value='70'), width=Decimal(value='17.3'),
@@ -171,7 +171,7 @@ vehicle_type_friesland = VehicleType(id=getId(VehicleType, codespace, "FR"), ver
                            name=MultilingualString(value="Friesland"),
                            description=MultilingualString(value="Friesland"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "FRIESLAND"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=1100)),
                            length=Decimal(value='69'), width=Decimal(value='16'),
@@ -201,7 +201,7 @@ vehicle_type_vlieland = VehicleType(id=getId(VehicleType, codespace, "VL"), vers
                            name=MultilingualString(value="Vlieland"),
                            description=MultilingualString(value="Vlieland"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "VL"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=950)),
                            length=Decimal(value='68'), width=Decimal(value='17'),
@@ -231,7 +231,7 @@ vehicle_type_koegelwieck = VehicleType(id=getId(VehicleType, codespace, "KW"), v
                            name=MultilingualString(value="Koegelwieck"),
                            description=MultilingualString(value="Koegelwieck"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "KW"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=312)),
                            length=Decimal(value='35.5'), width=Decimal(value='17'),
@@ -257,7 +257,7 @@ vehicle_type_tiger = VehicleType(id=getId(VehicleType, codespace, "TI"), version
                            name=MultilingualString(value="Tiger"),
                            description=MultilingualString(value="Tiger"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "TI"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=414)),
                            length=Decimal(value='52'), width=Decimal(value='12'),
@@ -283,7 +283,7 @@ vehicle_type_zeehond = VehicleType(id=getId(VehicleType, codespace, "ZEE"), vers
                            name=MultilingualString(value="Zeehond"),
                            description=MultilingualString(value="Zeehond"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "ZEE"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=12)),
                            length=Decimal(value='13'), width=Decimal(value='5'),

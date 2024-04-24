@@ -85,7 +85,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), ver
                            name=MultilingualString(value="Texelstroom (2)"),
                            description=MultilingualString(value="Hybride CNG/diesel-elektrische Ro-Ro ferry"),
                            fuel_type_or_type_of_fuel=FuelTypeEnumeration.NATURAL_GAS,
-                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity=[
+                           capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=[
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "Texelstroom2"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=1750, seating_capacity=1750)]),
                            length=Decimal(value='135'), width=Decimal(value='27.90'), height=Decimal(value='7.18'),

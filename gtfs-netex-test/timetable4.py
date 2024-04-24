@@ -32,7 +32,7 @@ from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, Timin
     DestinationDisplayView, TimetabledPassingTimesRelStructure, TimetabledPassingTime, StopPointInJourneyPatternRef, \
     ValidBetween, Connection, ConnectionEndStructure, TransfersInFrameRelStructure, \
     JourneyInterchangesInFrameRelStructure, ServiceJourneyInterchange, VehicleJourneyRefStructure, ServiceJourneyRef, \
-    PublicCodeType, RouteRef, Route, RoutesInFrameRelStructure, TypeOfProductCategoryRef, TypeOfProductCategory, \
+    PublicCodeStructure, RouteRef, Route, RoutesInFrameRelStructure, TypeOfProductCategoryRef, TypeOfProductCategory, \
     TypesOfValueInFrameRelStructure, OperatorView, VersionFrameDefaultsStructure, LocaleStructure
 
 # Missing: BicycleRent
@@ -46,7 +46,7 @@ stop_places: List[StopPlace] = [StopPlace(
     centroid=SimplePointVersionStructure(location=LocationStructure2(latitude=Decimal('1.0'), longitude=Decimal('2.0'))),
     locale=Locale(time_zone_offset=Decimal('2.0')),
     covered=CoveredEnumeration.COVERED,
-    adjacent_sites=SiteRefsRelStructure(stop_place_ref_or_site_ref=[ParkingRef(ref="1", version="1"), ParkingRef(ref="2", version="1")]),
+    adjacent_sites=SiteRefsRelStructure(site_ref_or_stop_place_ref=[ParkingRef(ref="1", version="1"), ParkingRef(ref="2", version="1")]),
     quays=QuaysRelStructure(taxi_stand_ref_or_quay_ref_or_quay=[Quay(id="1a1", version="1", accessibility_assessment=AccessibilityAssessment(
         id="1a1", version="1",
         mobility_impaired_access=LimitationStatusEnumeration.TRUE,
@@ -133,7 +133,7 @@ passenger_stop_assignments: List[PassengerStopAssignment] = [
 scheduled_stop_points: List[ScheduledStopPoint] = [ScheduledStopPoint(
     id="1a1", version="1",
     name=MultilingualString(value='Stop 1a1'),
-    public_code=PublicCodeType(value="Platform code"),
+    public_code=PublicCodeStructure(value="Platform code"),
     location=LocationStructure2(latitude=Decimal('1.101'), longitude=Decimal('1.1')),
 ),
     ScheduledStopPoint(
@@ -167,7 +167,7 @@ lines: List[Line] = [Line(
     id="1a|bus", version="1",
     name=MultilingualString(value="Bus"),
     transport_mode=AllVehicleModesOfTransportEnumeration.BUS,
-    public_code=PublicCodeType(value="Bus"),
+    public_code=PublicCodeStructure(value="Bus"),
     operator_ref=OperatorRef(ref="MMRI", version="1"),
     type_of_product_category_ref=TypeOfProductCategoryRef(ref="Standaard", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
@@ -176,7 +176,7 @@ Line(
     id="1a|ferry", version="1",
     name=MultilingualString(value="Ferry"),
     transport_mode=AllVehicleModesOfTransportEnumeration.FERRY,
-    public_code=PublicCodeType(value="Ferry"),
+    public_code=PublicCodeStructure(value="Ferry"),
     operator_ref=OperatorRef(ref="MMRI", version="1"),
     type_of_product_category_ref=TypeOfProductCategoryRef(ref="Standaard", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
@@ -185,7 +185,7 @@ Line(
     id="1a|rail", version="1",
     name=MultilingualString(value="Rail"),
     transport_mode=AllVehicleModesOfTransportEnumeration.RAIL,
-    public_code=PublicCodeType(value="Rail"),
+    public_code=PublicCodeStructure(value="Rail"),
     operator_ref=OperatorRef(ref="MMRI", version="1"),
     type_of_product_category_ref=TypeOfProductCategoryRef(ref="Standaard", version="1"),
     presentation=PresentationStructure(text_colour="000000", background_colour="FFFFFF")
