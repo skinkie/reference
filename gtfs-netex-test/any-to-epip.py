@@ -116,6 +116,8 @@ def conversion(input_filename: str, output_filename: str):
         service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
     else:
         service_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SERVICE_1_1_202404140804.xml")
+        # Implement here the filtering, so we only take the reference that are used and are relevant to EPIP
+
         service_frame_xml = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
         if service_frame_xml is not None:
             service_frame = parser.parse(service_frame_xml, ServiceFrame)
@@ -171,9 +173,15 @@ def conversion(input_filename: str, output_filename: str):
             # element.getparent().replace(element, lxml_serializer.render(sjs[element.attrib['id']]))
 
     # if not has_servicejourney_patterns:
-    element = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
-    element.getparent().replace(element, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
-    # element.getparent().replace(element, lxml_serializer.render(service_frame))
+    element_from_service = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+
+    element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    if element:
+        element.getparent().replace(element_from_service, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
+        # element.getparent().replace(element, lxml_serializer.render(service_frame))
+    else:
+        element = tree.find(".//{http://www.netex.org.uk/netex}TimetableFrame")
+        element.append(lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
 
     element = tree.find(".//{http://www.netex.org.uk/netex}codespaces")
     if element is not None:
@@ -182,7 +190,7 @@ def conversion(input_filename: str, output_filename: str):
         for codespace in codespaces.values():
             element.append(lxml.etree.fromstring(serializer.render(codespace, ns_map).encode('utf-8'), parser))
 
-    element = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     # element.getparent().append(lxml_serializer.render(service_calendar_frame))
     # element.getparent().append(lxml_serializer.render(site_frame))
 
