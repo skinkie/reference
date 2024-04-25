@@ -111,9 +111,6 @@ def conversion(input_filename: str, output_filename: str):
     service_frame_xml = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     if service_frame_xml is not None:
         service_frame = parser.parse(service_frame_xml, ServiceFrame)
-        #if not has_servicejourney_patterns:
-        service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
-        service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
     else:
         service_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SERVICE_1_1_202404140804.xml")
         # Implement here the filtering, so we only take the reference that are used and are relevant to EPIP
@@ -123,6 +120,10 @@ def conversion(input_filename: str, output_filename: str):
             service_frame = parser.parse(service_frame_xml, ServiceFrame)
         else:
             service_frame = ServiceFrame(id=getId(ServiceFrame, codespace, "1"), version="1")
+
+    #if not has_servicejourney_patterns:
+    service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
+    service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
 
     # for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPoint"):
     #    scheduled_stop_point: ScheduledStopPoint
@@ -173,11 +174,11 @@ def conversion(input_filename: str, output_filename: str):
             # element.getparent().replace(element, lxml_serializer.render(sjs[element.attrib['id']]))
 
     # if not has_servicejourney_patterns:
-    element_from_service = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    # element_from_service = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
 
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     if element:
-        element.getparent().replace(element_from_service, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
+        element.getparent().replace(element, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
         # element.getparent().replace(element, lxml_serializer.render(service_frame))
     else:
         element = tree.find(".//{http://www.netex.org.uk/netex}TimetableFrame")
