@@ -138,7 +138,7 @@ def conversion(input_filename: str, output_filename: str):
 
     epiap_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SITE_1_1_202404140804.xml")
 
-    processed_quays = Set[str] = set([])
+    processed_quays: Set[str] = set([])
 
     for stop_assignment in service_frame.stop_assignments.stop_assignment:
         if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay is not None:
@@ -171,17 +171,18 @@ def conversion(input_filename: str, output_filename: str):
             # element.getparent().replace(element, lxml_serializer.render(sjs[element.attrib['id']]))
 
     # if not has_servicejourney_patterns:
-    element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    element = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     element.getparent().replace(element, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
     # element.getparent().replace(element, lxml_serializer.render(service_frame))
 
     element = tree.find(".//{http://www.netex.org.uk/netex}codespaces")
-    # codespaces = CodespacesRelStructure(codespace_ref_or_codespace=list(codespaces.values()))
-    element.clear()
-    for codespace in codespaces.values():
-        element.append(lxml.etree.fromstring(serializer.render(codespace, ns_map).encode('utf-8'), parser))
+    if element is not None:
+        # codespaces = CodespacesRelStructure(codespace_ref_or_codespace=list(codespaces.values()))
+        element.clear()
+        for codespace in codespaces.values():
+            element.append(lxml.etree.fromstring(serializer.render(codespace, ns_map).encode('utf-8'), parser))
 
-    element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
+    element = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
     # element.getparent().append(lxml_serializer.render(service_calendar_frame))
     # element.getparent().append(lxml_serializer.render(site_frame))
 
@@ -280,5 +281,5 @@ if __name__ == '__main__':
     # for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240424_20240424.xml.gz"):
     # for input_filename in glob.glob("/tmp/NeTEx_ARR_NL_20240422_20240423_1416.xml.gz"):
         print(input_filename)
-        output_filename = input_filename.replace('/tmp/', 'netex-output-epip/').replace('.xml.gz', '.xml')
+        output_filename = input_filename.replace('/home/netex/sbb/', 'netex-output-epip/').replace('.xml.gz', '.xml')
         conversion(input_filename, output_filename)
