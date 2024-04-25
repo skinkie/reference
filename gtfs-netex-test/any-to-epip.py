@@ -1,4 +1,5 @@
 import glob
+from typing import Set
 
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
@@ -137,13 +138,22 @@ def conversion(input_filename: str, output_filename: str):
 
     epiap_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SITE_1_1_202404140804.xml")
 
+    processed_quays = Set[str] = set([])
+
     for stop_assignment in service_frame.stop_assignments.stop_assignment:
-        # TODO: When a quay is part of a stop place already parsed, we cannot parse it again, hence we must maintain a reverse list directly
         if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay is not None:
+            if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref in processed_quays:
+                # Already processed, stop place is already stored
+                continue
+
             stop_place = get_stop_place_for_quayref(epiap_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
             if stop_place is not None:
+                for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
+                    if hasattr(quay, 'id'):
+                        processed_quays.add(quay.id)
                 stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
                 stop_places[stop_place.id] = stop_place
+
 
     # TODO: don't create quays, if this is available. **1
     if len(stop_places.values()) > 0:
