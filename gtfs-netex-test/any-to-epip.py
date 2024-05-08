@@ -1,6 +1,8 @@
 import glob
+from decimal import Decimal, ROUND_HALF_UP
 from typing import Set
 
+from pyproj import Transformer
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
@@ -20,7 +22,7 @@ from xpathselection import get_stop_place_for_quayref
 
 ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
-def conversion(input_filename: str, output_filename: str):
+def conversion(input_filename: str, epiap_filename: str, output_filename: str):
     serializer_config = SerializerConfig(ignore_default_attributes=True)
     serializer_config.pretty_print = True
     serializer_config.ignore_default_attributes = True
@@ -39,8 +41,16 @@ def conversion(input_filename: str, output_filename: str):
     # scheduled_stop_points = []
     has_servicejourney_patterns = False
 
-    epiap_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SITE_1_1_202404140804.xml")
+    epiap_tree = lxml.etree.parse(epiap_filename)
+
     tree = lxml.etree.parse(input_filename)
+    epiap_tree.find(".//{http://www.netex.org.uk/netex}DefaultLocationSystem").text
+
+
+    transformers = {}
+    epiap_default_locationsystem = epiap_tree.find(".//{http://www.netex.org.uk/netex}DefaultLocationSystem").text
+    if epiap_default_locationsystem not in transformers:
+        transformers[epiap_default_locationsystem] = Transformer.from_crs("EPSG:28992", "EPSG:4326")
 
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}AvailabilityCondition"):
         availability_condition: AvailabilityCondition
@@ -67,14 +77,14 @@ def conversion(input_filename: str, output_filename: str):
 
     codespace: Codespace
     if 'OPENOV' not in codespaces:
-        codespace = Codespace(id="OPENOV", xmlns="OPENOV", xmlns_url="http://openov.nl/")
+        codespace = Codespace(id="OPENOV", xmlns="OPENOV", xmlns_url="http://openov.nl/", description=MultilingualString(value="Values added during conversion"))
         codespaces[codespace.id] = codespace
     else:
         codespace = codespaces.get('OPENOV')
 
     if 'epip_metadata' not in codespaces:
         epip_metadata = Codespace(id="epip_metadata", xmlns="epip", xmlns_url="http://netex-cen.eu/epip", description=MultilingualString(value="EPIP metadata"))
-        codespaces[codespace.id] = epip_metadata
+        codespaces[epip_metadata.id] = epip_metadata
 
     version = Version(id="OPENOV:Version:1", version="1")
 
@@ -93,7 +103,7 @@ def conversion(input_filename: str, output_filename: str):
 
     # has_servicejourney_patterns = len(service_journey_patterns) > 0
 
-    service_calendar_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SERVICECALENDAR_1_1_202404140804.xml")
+    service_calendar_tree = tree
     for element in service_calendar_tree.iterfind(".//{http://www.netex.org.uk/netex}AvailabilityCondition"):
         availability_condition: AvailabilityCondition
         availability_condition = parser.parse(element, AvailabilityCondition)
@@ -112,7 +122,7 @@ def conversion(input_filename: str, output_filename: str):
     if service_frame_xml is not None:
         service_frame = parser.parse(service_frame_xml, ServiceFrame)
     else:
-        service_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SERVICE_1_1_202404140804.xml")
+        service_tree = tree
         # Implement here the filtering, so we only take the reference that are used and are relevant to EPIP
 
         service_frame_xml = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
@@ -124,6 +134,21 @@ def conversion(input_filename: str, output_filename: str):
     #if not has_servicejourney_patterns:
     service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
     service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
+
+    for route_point in service_frame.route_points.route_point:
+        latitude, longitude = transformers[epiap_default_locationsystem].transform(
+            route_point.location.pos.value[0], route_point.location.pos.value[1])
+        route_point.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+        route_point.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+        route_point.location.pos = None
+
+    for ssp in service_frame.scheduled_stop_points.scheduled_stop_point:
+        latitude, longitude = transformers[epiap_default_locationsystem].transform(
+            ssp.location.pos.value[0], ssp.location.pos.value[1])
+        ssp.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+        ssp.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+        ssp.location.pos = None
+
 
     # for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPoint"):
     #    scheduled_stop_point: ScheduledStopPoint
@@ -139,7 +164,8 @@ def conversion(input_filename: str, output_filename: str):
 
     stop_places = {}
 
-    epiap_tree = lxml.etree.parse("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_SITE_1_1_202404140804.xml")
+    epiap_tree = lxml.etree.parse(epiap_filename)
+
 
     processed_quays: Set[str] = set([])
 
@@ -151,10 +177,25 @@ def conversion(input_filename: str, output_filename: str):
 
             stop_place = get_stop_place_for_quayref(epiap_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
             if stop_place is not None:
+
+                # TODO: I want the handling of defaults differently, also take in account the local projection on this object
+                if stop_place.centroid.location.longitude is None and stop_place.centroid.location.pos is not None:
+                    latitude, longitude = transformers[epiap_default_locationsystem].transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
+                    stop_place.centroid.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+                    stop_place.centroid.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+                    stop_place.centroid.location.pos = None
+
                 for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
                     if hasattr(quay, 'id'):
                         processed_quays.add(quay.id)
+
+                    latitude, longitude = transformers[epiap_default_locationsystem].transform(quay.centroid.location.pos.value[0], quay.centroid.location.pos.value[1])
+                    quay.centroid.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+                    quay.centroid.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+                    quay.centroid.location.pos = None
+
                 stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
+
                 stop_places[stop_place.id] = stop_place
 
 
@@ -177,7 +218,7 @@ def conversion(input_filename: str, output_filename: str):
     # element_from_service = service_tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
 
     element = tree.find(".//{http://www.netex.org.uk/netex}ServiceFrame")
-    if element:
+    if element is not None:
         element.getparent().replace(element, lxml.etree.fromstring(serializer.render(service_frame, ns_map).encode('utf-8'), parser))
         # element.getparent().replace(element, lxml_serializer.render(service_frame))
     else:
@@ -283,12 +324,20 @@ def conversion(input_filename: str, output_filename: str):
         resource_frame_tof.attrib['versionRef'] = '1.0'
         resource_frame_tof.attrib.pop('version', None)
 
+    for epiap_default_locationsystem in tree.iterfind(".//{http://www.netex.org.uk/netex}DefaultLocationSystem"):
+        epiap_default_locationsystem.text = 'EPSG:4326'
+
     tree.write(output_filename, pretty_print=True, strip_text=True)
 
 if __name__ == '__main__':
-    for input_filename in glob.glob("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_TIMETABLE_84_270_202404140804.xml"):
+    # for input_filename in glob.glob("/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_TIMETABLE_84_270_202404140804.xml"):
     # for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240424_20240424.xml.gz"):
-    # for input_filename in glob.glob("/tmp/NeTEx_ARR_NL_20240422_20240423_1416.xml.gz"):
+    # for input_filename in glob.glob("/tmp/NeTEx_ARR_NL_20240430_20240501_1418.xml.gz"):
+    #    print(input_filename)
+    #     output_filename = input_filename.replace('/home/netex/sbb/', 'netex-output-epip/').replace('.xml.gz', '.xml')
+    #     conversion(input_filename, output_filename)
+
+    for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240415_20240415.xml.gz"):
         print(input_filename)
-        output_filename = input_filename.replace('/home/netex/sbb/', 'netex-output-epip/').replace('.xml.gz', '.xml')
-        conversion(input_filename, output_filename)
+        output_filename = input_filename.replace('/tmp/', 'netex-output-epip/').replace('.xml.gz', '.xml')
+        conversion(input_filename, '/tmp/NeTEx_DOVA_epiap_20240423013251.xml.gz', output_filename)

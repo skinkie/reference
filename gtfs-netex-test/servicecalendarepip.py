@@ -137,6 +137,7 @@ class ServiceCalendarEPIPFrame:
 
         for service_journey in service_journeys:
             acs = []
+
             for ac in service_journey.validity_conditions_or_valid_between:
                 ac: ValidityConditionsRelStructure
                 for a in ac.choice:

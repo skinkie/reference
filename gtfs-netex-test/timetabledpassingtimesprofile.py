@@ -298,7 +298,6 @@ class TimetablePassingTimesProfile:
                 sj.run_times = None
                 sj.time_demand_type_ref = None
                 sj.time_demand_types = None
-                sj.validity_conditions_or_valid_between = None
 
         # TODO: only do this for the newly created ones
         # self.service_journey_patterns += sjps.values()

@@ -5,7 +5,7 @@ agency_txt = {'agency_id': 'VARCHAR', 'agency_name': 'VARCHAR', 'agency_url': 'V
 stops_txt = {'stop_id': 'VARCHAR', 'stop_code': 'VARCHAR', 'stop_name': 'VARCHAR', 'tts_stop_name': 'VARCHAR', 'stop_desc': 'VARCHAR', 'stop_lat': 'FLOAT', 'stop_lon': 'FLOAT', 'zone_id': 'VARCHAR', 'stop_url': 'VARCHAR', 'location_type': 'INTEGER', 'parent_station': 'VARCHAR', 'stop_timezone': 'VARCHAR', 'wheelchair_boarding': 'INTEGER', 'level_id': 'VARCHAR', 'platform_code': 'VARCHAR'}
 routes_txt = {'route_id': 'VARCHAR', 'agency_id': 'VARCHAR', 'route_long_name': 'VARCHAR', 'route_type': 'INTEGER', 'route_url': 'VARCHAR', 'route_color': 'CHAR(6)', 'route_text_color': 'CHAR(6)', 'route_sort_order': 'INTEGER', 'continuous_pickup': 'INTEGER',  'continuous_drop_off': 'INTEGER', 'network_id': 'VARCHAR'}
 trips_txt = {'route_id': 'VARCHAR', 'service_id': 'VARCHAR', 'trip_id': 'VARCHAR', 'trip_headsign': 'VARCHAR', 'trip_short_name': 'VARCHAR', 'direction_id': 'INTEGER', 'block_id': 'VARCHAR', 'shape_id': 'VARCHAR', 'wheelchair_accessible': 'INTEGER', 'bikes_allowed': 'INTEGER'}
-stop_times_txt = {'trip_id': 'VARCHAR', 'arrival_time': 'VARCHAR', 'departure_time': 'VARCHAR', 'stop_id': 'VARCHAR', 'location_group_id': 'VARCHAR',  'location_id': 'VARCHAR',  'stop_sequence': 'VARCHAR',  'stop_headsign': 'VARCHAR', 'start_pickup_drop_off_window': 'VARCHAR', 'end_pickup_drop_off_window': 'VARCHAR', 'pickup_type': 'INTEGER', 'drop_off_type': 'INTEGER', 'continuous_pickup': 'INTEGER', 'continuous_drop_off': 'INTEGER', 'shape_dist_traveled': 'FLOAT', 'timepoint': 'INTEGER', 'drop_off_booking_rule_id': 'VARCHAR'}
+stop_times_txt = {'trip_id': 'VARCHAR', 'arrival_time': 'VARCHAR', 'departure_time': 'VARCHAR', 'stop_id': 'VARCHAR', 'location_group_id': 'VARCHAR',  'location_id': 'VARCHAR',  'stop_sequence': 'INTEGER',  'stop_headsign': 'VARCHAR', 'start_pickup_drop_off_window': 'VARCHAR', 'end_pickup_drop_off_window': 'VARCHAR', 'pickup_type': 'INTEGER', 'drop_off_type': 'INTEGER', 'continuous_pickup': 'INTEGER', 'continuous_drop_off': 'INTEGER', 'shape_dist_traveled': 'FLOAT', 'timepoint': 'INTEGER', 'drop_off_booking_rule_id': 'VARCHAR'}
 calendar_txt = {'service_id': 'VARCHAR', 'monday': 'INTEGER', 'tuesday': 'INTEGER', 'wednesday': 'INTEGER', 'thursday': 'INTEGER', 'friday': 'INTEGER', 'saturday': 'INTEGER', 'sunday': 'INTEGER', 'start_date': 'CHAR(8)', 'end_date': 'CHAR(8)' }
 calendar_dates_txt = {'service_id': 'VARCHAR', 'date': 'CHAR(8)', 'exception_type': 'INTEGER'}
 feed_info_txt = {'feed_publisher_name': 'VARCHAR', 'feed_publisher_url': 'VARCHAR', 'feed_lang': 'VARCHAR', 'default_lang': 'VARCHAR', 'feed_start_date': 'CHAR(8)', 'feed_end_date': 'CHAR(8)', 'feed_version': 'VARCHAR', 'feed_contact_email': 'VARCHAR', 'feed_contact_url': 'VARCHAR'}
@@ -144,7 +144,7 @@ def handle_file(filename: str, column_mapping: dict):
 
     con.close()
 
-base_path = './'
+base_path = '/tmp/avv/'
 handle_file(base_path + 'gtfs/feed_info.txt', feed_info_txt)
 handle_file(base_path + 'gtfs/agency.txt', agency_txt)
 handle_file(base_path + 'gtfs/calendar_dates.txt', calendar_dates_txt)
