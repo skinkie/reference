@@ -71,7 +71,7 @@ class GeneratorTester:
         self._has_value = None
         self.value = value
 
-    def has_value(self):
+    def has_value(self) -> bool:
         if self._has_value is not None:
             return self._has_value
 
@@ -84,7 +84,7 @@ class GeneratorTester:
 
         return self._has_value
 
-    def generator(self):
+    def generator(self) -> Generator | None:
         if self._has_value is None:
             return self.value
 
@@ -92,31 +92,34 @@ class GeneratorTester:
             return chain([self.first], self.value)
 
         return None
+con_orig = sqlite3.connect("/tmp/netex.sqlite")
+con_target = sqlite3.connect("/tmp/target.sqlite")
 
-with sqlite3.connect("/tmp/target.sqlite") as con:
-    codespace_ref_or_codespace = GeneratorTester(load_generator(con, Codespace))
-    data_source = GeneratorTester(load_generator(con, DataSource))
-    organisation_or_transport_organisation = GeneratorTester(chain(load_generator(con, Authority), load_generator(con, Operator)))
-    transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con, VehicleType))
-    responsibility_set = GeneratorTester(load_generator(con, ResponsibilitySet))
+codespace_ref_or_codespace = GeneratorTester(load_generator(con_orig, Codespace))
+data_source = GeneratorTester(load_generator(con_orig, DataSource))
+organisation_or_transport_organisation = GeneratorTester(chain(load_generator(con_orig, Authority), load_generator(con_orig, Operator)))
+transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con_orig, VehicleType))
+responsibility_set = GeneratorTester(load_generator(con_orig, ResponsibilitySet))
 
-    stop_place = GeneratorTester(load_generator(con, StopPlace))
+stop_place = GeneratorTester(load_generator(con_orig, StopPlace))
 
-    direction = GeneratorTester(load_generator(con, Direction))
-    route_point = GeneratorTester(load_generator(con, RoutePoint))
-    route_link = GeneratorTester(load_generator(con, RouteLink))
-    route = GeneratorTester(load_generator(con, Route))
-    line = GeneratorTester(chain(load_generator(con, Line), load_generator(con, FlexibleLine)))
-    destination_display = GeneratorTester(load_generator(con, DestinationDisplay))
-    scheduled_stop_point = GeneratorTester(load_generator(con, ScheduledStopPoint))
-    service_link = GeneratorTester(load_generator(con, ServiceLink))
-    journey_pattern = GeneratorTester(load_generator(con, ServiceJourneyPattern))
-    transfer = GeneratorTester(chain(load_generator(con, Connection), load_generator(con, SiteConnection), load_generator(con, DefaultConnection)))
-    stop_assignment = GeneratorTester(load_generator(con, PassengerStopAssignment))
+direction = GeneratorTester(load_generator(con_orig, Direction))
+route_point = GeneratorTester(load_generator(con_target, RoutePoint))
+route_link = GeneratorTester(load_generator(con_target, RouteLink))
+route = GeneratorTester(load_generator(con_orig, Route))
+line = GeneratorTester(chain(load_generator(con_orig, Line), load_generator(con_orig, FlexibleLine)))
+network = GeneratorTester(load_generator(con_orig, Network, 1))
+destination_display = GeneratorTester(load_generator(con_orig, DestinationDisplay))
+scheduled_stop_point = GeneratorTester(load_generator(con_target, ScheduledStopPoint))
+service_link = GeneratorTester(load_generator(con_target, ServiceLink))
+journey_pattern = GeneratorTester(load_generator(con_target, ServiceJourneyPattern))
+transfer = GeneratorTester(chain(load_generator(con_target, Connection), load_generator(con_target, SiteConnection), load_generator(con_target, DefaultConnection)))
+stop_assignment = GeneratorTester(load_generator(con_orig, PassengerStopAssignment))
 
-    service_journey = GeneratorTester(load_generator(con, ServiceJourney, 10))
+service_journey = GeneratorTester(load_generator(con_target, ServiceJourney, 10))
 
-    day_type = GeneratorTester(load_generator(con, DayType))
+day_type = GeneratorTester(load_generator(con_target, DayType))
+service_calendar = GeneratorTester(load_generator(con_target, ServiceCalendar, 1))
 
 publication_delivery = PublicationDelivery(
                 version="ntx:1.1",
@@ -150,7 +153,7 @@ publication_delivery = PublicationDelivery(
                                      route_links=RouteLinksInFrameRelStructure(route_link=route_link.generator()) if route_link.has_value() else None,
                                      routes=RoutesInFrameRelStructure(route=route.generator()) if route.has_value() else None,
                                      lines=LinesInFrameRelStructure(line=line.generator()) if line.has_value() else None,
-                                     # network=list(load_generator(con, Network, 1))[0], # Warning; we must handle multiple stuff
+                                     network=list(network.generator())[0] if network.has_value() else None, # Warning; we must handle multiple stuff
                                      destination_displays=DestinationDisplaysInFrameRelStructure(destination_display=destination_display.generator()) if destination_display.has_value() else None,
                                      scheduled_stop_points=ScheduledStopPointsInFrameRelStructure(scheduled_stop_point=scheduled_stop_point.generator()) if scheduled_stop_point.has_value() else None,
                                      service_links=ServiceLinksInFrameRelStructure(service_link=service_link.generator()) if service_link.has_value() else None,
@@ -165,7 +168,7 @@ publication_delivery = PublicationDelivery(
                                 ServiceCalendarFrame(
                                      type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_CALENDAR', version_ref='1.0'),
                                      day_types=DayTypesInFrameRelStructure(day_type=day_type.generator()) if day_type.has_value() else None,
-                                     service_calendar=list(load_generator(con, ServiceCalendar, 1))[0], # Warning; we must handle multiple stuff
+                                     service_calendar=list(service_calendar.generator())[0] if service_calendar.has_value() else None, # Warning; we must handle multiple stuff
                                 ),
                             ]
                         )
