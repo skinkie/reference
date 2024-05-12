@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 from typing import Generator
 
 from xsdata.formats.dataclass.context import XmlContext
@@ -8,6 +9,8 @@ from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime
+from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
+
 
 from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataObjectsRelStructure, GeneralFrame, \
     GeneralFrameMembersRelStructure, ServiceJourney, StopPlace, CompositeFrame, FramesRelStructure, TimetableFrame, \
@@ -21,12 +24,13 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     NetworksInFrameRelStructure, DestinationDisplaysInFrameRelStructure, DestinationDisplay, \
     ServiceLinksInFrameRelStructure, ServiceLink, TransfersInFrameRelStructure, StopAssignmentsInFrameRelStructure, \
     PassengerStopAssignment, Connection, SiteConnection, DefaultConnection, ServiceCalendarFrame, \
-    DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine
+    DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine, VersionFrameDefaultsStructure, SystemOfUnits, \
+    LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure
 
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
-serializer = XmlSerializer(config=serializer_config)
+serializer = XmlSerializer(config=serializer_config, writer=XmlEventWriter)
 
 context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
@@ -92,34 +96,41 @@ class GeneratorTester:
             return chain([self.first], self.value)
 
         return None
-con_orig = sqlite3.connect("/tmp/netex.sqlite")
-con_target = sqlite3.connect("/tmp/target.sqlite")
 
-codespace_ref_or_codespace = GeneratorTester(load_generator(con_orig, Codespace))
+con_orig = sqlite3.connect("/home/netex/netex.sqlite")
+con_target = sqlite3.connect("/home/netex/target.sqlite")
+
+codespace_ref_or_codespace = GeneratorTester(load_generator(con_target, Codespace))
 data_source = GeneratorTester(load_generator(con_orig, DataSource))
 organisation_or_transport_organisation = GeneratorTester(chain(load_generator(con_orig, Authority), load_generator(con_orig, Operator)))
 transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con_orig, VehicleType))
 responsibility_set = GeneratorTester(load_generator(con_orig, ResponsibilitySet))
 
-stop_place = GeneratorTester(load_generator(con_orig, StopPlace))
+stop_place = GeneratorTester(load_generator(con_target, StopPlace))
 
-direction = GeneratorTester(load_generator(con_orig, Direction))
+direction = GeneratorTester(load_generator(con_target, Direction))
 route_point = GeneratorTester(load_generator(con_target, RoutePoint))
 route_link = GeneratorTester(load_generator(con_target, RouteLink))
 route = GeneratorTester(load_generator(con_orig, Route))
-line = GeneratorTester(chain(load_generator(con_orig, Line), load_generator(con_orig, FlexibleLine)))
+line = GeneratorTester(chain(load_generator(con_target, Line), load_generator(con_orig, FlexibleLine)))
 network = GeneratorTester(load_generator(con_orig, Network, 1))
 destination_display = GeneratorTester(load_generator(con_orig, DestinationDisplay))
 scheduled_stop_point = GeneratorTester(load_generator(con_target, ScheduledStopPoint))
 service_link = GeneratorTester(load_generator(con_target, ServiceLink))
 journey_pattern = GeneratorTester(load_generator(con_target, ServiceJourneyPattern))
 transfer = GeneratorTester(chain(load_generator(con_target, Connection), load_generator(con_target, SiteConnection), load_generator(con_target, DefaultConnection)))
-stop_assignment = GeneratorTester(load_generator(con_orig, PassengerStopAssignment))
+stop_assignment = GeneratorTester(load_generator(con_target, PassengerStopAssignment))
+notice = GeneratorTester(load_generator(con_orig, Notice))
+notice_assignment = GeneratorTester(load_generator(con_orig, NoticeAssignment))
 
-service_journey = GeneratorTester(load_generator(con_target, ServiceJourney, 10))
+service_journey = GeneratorTester(load_generator(con_target, ServiceJourney))
 
 day_type = GeneratorTester(load_generator(con_target, DayType))
 service_calendar = GeneratorTester(load_generator(con_target, ServiceCalendar, 1))
+
+from datetime import date
+    
+version = date.today().strftime("%Y%m%d")
 
 publication_delivery = PublicationDelivery(
                 version="ntx:1.1",
@@ -128,11 +139,17 @@ publication_delivery = PublicationDelivery(
                 description=MultilingualString(value="Huge XML Serializer test"),
                 data_objects=DataObjectsRelStructure(choice=[
                     CompositeFrame(
+                        id="EU_PI_NETWORK_OFFER", version=version,
                         type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_NETWORK_OFFER', version_ref='1.0'),
+                        frame_defaults=VersionFrameDefaultsStructure(default_location_system="urn:ogc:def:crs:EPSG::4326",
+                                                                     default_system_of_units=SystemOfUnits.SI_METRES,
+                                                                     default_locale=LocaleStructure(default_language="nl", time_zone="Europe/Amsterdam") # TODO: fix hardcoded
+                                                                     ),
                         codespaces=CodespacesRelStructure(codespace_ref_or_codespace=codespace_ref_or_codespace.generator()) if codespace_ref_or_codespace.has_value() else None,
                         frames=FramesRelStructure(
                             common_frame=[
                                 ResourceFrame(
+                                    id="COMMON", version=version,
                                     type_of_frame_ref=TypeOfFrameRef(ref='epip:COMMON', version_ref='1.0'),
                                     data_sources=DataSourcesInFrameRelStructure(data_source=data_source.generator()) if data_source.has_value() else None,
                                     organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=organisation_or_transport_organisation.generator()) if organisation_or_transport_organisation.has_value() else None,
@@ -142,12 +159,14 @@ publication_delivery = PublicationDelivery(
                                 ),
 
                                 SiteFrame(
-                                     type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_STOP', version_ref='1.0'),
-                                     stop_places=StopPlacesInFrameRelStructure(stop_place=stop_place.generator()) if stop_place.has_value() else None,
+                                    id="EU_PI_STOP", version=version,
+                                    type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_STOP', version_ref='1.0'),
+                                    stop_places=StopPlacesInFrameRelStructure(stop_place=stop_place.generator()) if stop_place.has_value() else None,
                                 ),
 
                                 ServiceFrame(
-                                     type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_NETWORK', version_ref='1.0'),
+                                    id="EU_PI_NETWORK", version=version,
+                                    type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_NETWORK', version_ref='1.0'),
                                      directions=DirectionsInFrameRelStructure(direction=direction.generator()) if direction.has_value() else None,
                                      route_points=RoutePointsInFrameRelStructure(route_point=route_point.generator()) if route_point.has_value() else None,
                                      route_links=RouteLinksInFrameRelStructure(route_link=route_link.generator()) if route_link.has_value() else None,
@@ -160,13 +179,17 @@ publication_delivery = PublicationDelivery(
                                      journey_patterns=JourneyPatternsInFrameRelStructure(journey_pattern=journey_pattern.generator()) if journey_pattern.has_value() else None,
                                      connections=TransfersInFrameRelStructure(transfer=transfer.generator()) if transfer.has_value() else None,
                                      stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment=stop_assignment.generator()) if stop_assignment.has_value() else None,
+                                     notices=NoticesInFrameRelStructure(notice=notice.generator()) if notice.has_value() else None,
+                                     notice_assignments=NoticeAssignmentsInFrameRelStructure(notice_assignment=notice_assignment.generator()) if notice_assignment.has_value() else None,
                                 ),
                                 TimetableFrame(
-                                     type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_TIMETABLE', version_ref='1.0'),
+                                    id="EU_PI_TIMETABLE", version=version,
+                                    type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_TIMETABLE', version_ref='1.0'),
                                      vehicle_journeys=JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journey.generator()) if service_journey.has_value() else None,
                                 ),
                                 ServiceCalendarFrame(
-                                     type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_CALENDAR', version_ref='1.0'),
+                                    id="EU_PI_CALENDAR", version=version,
+                                    type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_CALENDAR', version_ref='1.0'),
                                      day_types=DayTypesInFrameRelStructure(day_type=day_type.generator()) if day_type.has_value() else None,
                                      service_calendar=list(service_calendar.generator())[0] if service_calendar.has_value() else None, # Warning; we must handle multiple stuff
                                 ),
@@ -175,6 +198,8 @@ publication_delivery = PublicationDelivery(
                     )
                 ]))
 
+from isal import igzip_threaded
+import gzip
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
-with open('netex-output/huge.xml', 'w') as out:
+with igzip_threaded.open('netex-output/huge.xml.gz', 'wt', compresslevel=3, threads=3, block_size=2*10**8) as out:
     serializer.write(out, publication_delivery, ns_map)

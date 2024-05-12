@@ -2,3 +2,4 @@ xsdata[cli,lxml,soap]
 duckdb
 pyproj
 chardet
+isal

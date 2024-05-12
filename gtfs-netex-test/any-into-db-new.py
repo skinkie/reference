@@ -31,16 +31,20 @@ general_frame_members = netex.GeneralFrameMembersRelStructure.__dataclass_fields
 clean_element_names = sorted([x[0] for x in entitiesinversion if not x[0].endswith('Frame')])
 interesting_element_names =  set([get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')])
 
+timetable = '/tmp/NeTEx_ARR_NL_20240430_20240501_1418.xml.gz'
+filename  = '/tmp/NeTEx_DOVA_epiap_20240510013000.xml.gz'
+
 with sqlite3.connect("/tmp/netex.sqlite") as con:
     cur = con.cursor()
 
-    for objectname in clean_element_names:
-        sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
-        cur.execute(sql_drop_table)
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
-        cur.execute(sql_create_table)
+    if False:
+        for objectname in clean_element_names:
+            sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
+            cur.execute(sql_drop_table)
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+            cur.execute(sql_create_table)
 
-    with gzip.open('/tmp/NeTEx_ARR_NL_20240430_20240501_1418.xml.gz', 'rb') as f:
+    with gzip.open(filename, 'rb') as f:
         events = ("start", "end")
         context = etree.iterparse(f, events=events, remove_blank_text=True)
         current_element = None
