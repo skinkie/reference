@@ -29,4 +29,4 @@ def load(input_filename: str):
         load_type(cur, tree, '{http://www.netex.org.uk/netex}AvailabilityCondition', empty_db=True)
 
 # load('/tmp/NeTEx_ARR_NL_20240430_20240501_1418.xml.gz')
-load('/tmp/NeTEx_DOVA_epiap_20240510013000.xml.gz')
+# load('/tmp/NeTEx_DOVA_epiap_20240510013000.xml.gz')
