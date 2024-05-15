@@ -120,7 +120,8 @@ def write_objects(con, objs, empty=False, many=False):
             else:
                 cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')))
 
-            print('\r', objectname, str(i), end = '')
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end = '')
         print('\r', objectname, len(objs), end='')
 
 def infer_directions_from_sjps_and_apply(con, service_journey_patterns: Iterable[ServiceJourneyPattern], generator_defaults):
@@ -415,38 +416,42 @@ def transform_timinglinks_to_servicelinks(con, service_journey_pattern: ServiceJ
 
     return service_links
 
+import sys
+
+def bison_codespaces(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(write_database) as write_con:
+        codespaces = []
+        codespaces.append(Codespace(id="BISON:Codespace:ARR", xmlns_url="http://bison.dova.nu/ns/ARR", xmlns="ARR",
+                                    description=MultilingualString(value="Arriva")))
+        codespaces.append(Codespace(id="BISON:Codespace:OPENOV", xmlns_url="http://bison.dova.nu/ns/OPENOV", xmlns="OPENOV",
+                                    description=MultilingualString(value="openOV")))
+        codespaces.append(Codespace(id="BISON:Codespace:CHB", xmlns_url="http://bison.dova.nu/ns/CHB", xmlns="NL:CHB",
+                                    description=MultilingualString(value="CHB")))
+        write_objects(write_con, codespaces, True, True)
 
 
-generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1, 'DefaultLocationsystem': 'EPSG:28992'} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
+def epip_site_frame(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(write_database) as write_con:
+            refs = set([])
 
-with (sqlite3.connect("/home/netex/netex.sqlite") as con):
-    if False:
-        with sqlite3.connect("/home/netex/target.sqlite") as con2:
-            codespaces = []
-            codespaces.append(Codespace(id="BISON:Codespace:ARR", xmlns_url="http://bison.dova.nu/ns/ARR", xmlns="ARR", description=MultilingualString(value="Arriva")))
-            codespaces.append(Codespace(id="BISON:Codespace:OPENOV", xmlns_url="http://bison.dova.nu/ns/OPENOV", xmlns="OPENOV", description=MultilingualString(value="openOV")))
-            codespaces.append(Codespace(id="BISON:Codespace:CHB", xmlns_url="http://bison.dova.nu/ns/CHB", xmlns="NL:CHB", description=MultilingualString(value="CHB")))
-            write_objects(con2, codespaces, True, True)
-
-
-    if False:
-        refs = set([])
-        with sqlite3.connect("/home/netex/target.sqlite") as con2:
-            stop_assignments: List[PassengerStopAssignment] = load_local(con, PassengerStopAssignment)
+            stop_assignments: List[PassengerStopAssignment] = load_local(read_con, PassengerStopAssignment)
             retain_stop_assignments = []
             for stop_assignment in stop_assignments:
-                if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay is not None: # and 'NL:Q:' in stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref:
+                if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay is not None:  # and 'NL:Q:' in stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref:
                     stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref.replace('NL:Q:', 'NL:CHB:Quay:')
-                    quay: Quay = stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.get(con)
+                    quay: Quay = stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.get(read_con)
                     if quay is not None:
                         stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = quay.version
                         refs.add(quay.id)
                     else:
                         stop_assignment.taxi_stand_ref_or_quay_ref_or_quay = None
 
-                if stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place is not None: # and 'NL:S:' in stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref:
+                if stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place is not None:  # and 'NL:S:' in stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref:
                     stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref.replace('NL:S:', 'NL:CHB:StopPlace:')
-                    stop_place: StopPlace = stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place.get(con)
+                    stop_place: StopPlace = stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place.get(read_con)
                     if stop_place is not None:
                         stop_assignment.taxi_rank_ref_or_stop_place_ref_or_stop_place.version = stop_place.version
                         refs.add(stop_place.id)
@@ -457,11 +462,9 @@ with (sqlite3.connect("/home/netex/netex.sqlite") as con):
                     retain_stop_assignments.append(stop_assignment)
 
             if len(retain_stop_assignments) > 0:
-                write_objects(con2, retain_stop_assignments, True, True)
+                write_objects(write_con, retain_stop_assignments, True, True)
 
-    if False:
-        with sqlite3.connect("/home/netex/target.sqlite") as con2:
-            stop_places: List[StopPlace] = load_local(con, StopPlace)
+            stop_places: List[StopPlace] = load_local(read_con, StopPlace)
             quays: List[Quay] = []
             for stop_place in stop_places:
                 keep = False
@@ -484,9 +487,11 @@ with (sqlite3.connect("/home/netex/netex.sqlite") as con):
                             access_space: AccessSpace
                             if access_space.polygon_or_multi_surface:
                                 access_space.polygon_or_multi_surface.srsName = "urn:ogc:def:crs:EPSG::4326"
-                                access_space.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[0].value = [
+                                access_space.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[
+                                    0].value = [
                                     Decimal(value).quantize(Decimal('0.000001'), ROUND_HALF_UP) for value in
-                                    access_space.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[0].value]
+                                    access_space.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[
+                                        0].value]
 
                 if stop_place.quays:
                     for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
@@ -495,86 +500,102 @@ with (sqlite3.connect("/home/netex/netex.sqlite") as con):
                             quays.append(quay)
                             if quay.polygon_or_multi_surface:
                                 # Reverse order of elements
-                                yy = quay.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[0].value[0::2]
-                                xx = quay.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[0].value[1::2]
-                                quay.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list = [PosList(value=list(chain(*zip(xx, yy))))]
+                                yy = quay.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[
+                                         0].value[0::2]
+                                xx = quay.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[
+                                         0].value[1::2]
+                                quay.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list = [
+                                    PosList(value=list(chain(*zip(xx, yy))))]
 
                                 project_polygon(quay.polygon_or_multi_surface, generator_defaults, 'EPSG:4326')
 
             project_location(stop_places, generator_defaults, 'EPSG:4326')
             project_location(quays, generator_defaults, 'EPSG:4326')
 
-            write_objects(con2, stop_places, True, True)
+            write_objects(write_con, stop_places, True, True)
 
-    # Voor alle PointsInJourneyPattern, als TimingLink een ServiceLink zou kunnen zijn, haal op basis van PointProjection de RouteLink op waar deze informatie
-    # in zou kunnen zitten. Doe dit niet exclusief op basis van From/To maar neem de Route die in het ServiceJourneyPattern staat mee als referentie.
-    # In het geval dat er sprake is van een TimingPointInJourneyPattern, haal dan de route op tot de eerst volgende ScheduledStopPoint en voeg de verschillende
-    # RouteLinks samen, houdt er rekening mee dat bij het samen voegen het laatste punt op de lijn gelijk is aan het eerste, en daarmee overgeslagen zou
-    # moeten worden.
-
-    if False:
-        route_links: List[RouteLink] = load_local(con, RouteLink)
-        with sqlite3.connect("/home/netex/target.sqlite") as con2:
-            for route_link in route_links:
-                 route_link.line_string = None
-                 route_link.operational_context_ref = None
-                 route_link.responsibility_set_ref_attribute = None
-
-            write_objects(con2, route_links, True, True)
-            route_links = None
-
-        route_points = load_local(con, RoutePoint)
-        with sqlite3.connect("/home/netex/target.sqlite") as con2:
+def epip_route_point(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(write_database) as write_con:
+            route_points = load_local(read_con, RoutePoint)
             project_location(route_points, generator_defaults, 'EPSG:4326')
-            write_objects(con2, route_points, True, True)
-            route_points = None
+            write_objects(write_con, route_points, True, True)
 
-        scheduled_stop_points = load_local(con, ScheduledStopPoint)
-        with sqlite3.connect("/home/netex/target.sqlite") as con2:
+def epip_route_link(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(write_database) as write_con:
+            route_links: List[RouteLink] = load_local(read_con, RouteLink)
+            for route_link in route_links:
+                route_link.line_string = None
+                route_link.operational_context_ref = None
+
+            write_objects(write_con, route_links, True, True)
+
+def epip_line(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(write_database) as write_con:
+            lines: List[Line] = load_local(read_con, Line)
+            for line in lines:
+                line.branding_ref = None
+                line.type_of_service_ref = None
+                line.type_of_product_category_ref = None
+            write_objects(write_con, lines, True, True)
+
+def epip_scheduled_stop_point(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(write_database) as write_con:
+            scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
             for ssp in scheduled_stop_points:
                 ssp: ScheduledStopPoint
                 ssp.stop_areas = None
             project_location(scheduled_stop_points, generator_defaults, 'EPSG:4326')
-            write_objects(con2, scheduled_stop_points, True, True)
-            scheduled_stop_points = None
+            write_objects(write_con, scheduled_stop_points, True, True)
 
-        service_journey_patterns = load_local(con, ServiceJourneyPattern)
-        time_demand_types = load_local(con, TimeDemandType)
-        # service_journeys = load_local(con, ServiceJourney)
+def epip_timetabled_passing_times(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(write_database) as write_con:
+            # TODO: Maybe do this on the fly, per servicejourney?
+            service_journey_patterns = load_local(read_con, ServiceJourneyPattern)
+            time_demand_types = load_local(read_con, TimeDemandType)
+            service_journeys = load_local(read_con, ServiceJourney)
 
-        # timetabledpassingtimesprofile = TimetablePassingTimesProfile(generator_defaults['codespace'], generator_defaults['version'], service_journeys, service_journey_patterns, time_demand_types)
+            timetabledpassingtimesprofile = TimetablePassingTimesProfile(generator_defaults['codespace'], generator_defaults['version'], service_journeys, service_journey_patterns, time_demand_types)
 
-        # TODO: Implement getTimetabledPassingTimes incrementally. As generator won't work, since it has to store the result (directly).
-        # timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
-        time_demand_types = None
+            # TODO: Implement getTimetabledPassingTimes incrementally. As generator won't work, since it has to store the result (directly).
+            timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
+            time_demand_types = None
 
-        availability_conditions = load_local(con, AvailabilityCondition)
-        servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
+            availability_conditions = load_local(read_con, AvailabilityCondition)
+            servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
+            service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
+            write_objects(write_con, [service_calendar], True, False)
 
-    if True:
-        service_journey_patterns = load_local(con, ServiceJourneyPattern)
+            for sj in service_journeys:
+                sj: ServiceJourney
+                sj.validity_conditions_or_valid_between = None
+                sj.key_list = None
+                sj.private_code = None
 
-        with sqlite3.connect("/home/netex/target.sqlite") as con2:
-            # service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
-            # availability_conditions = None
-            # write_objects(con2, [service_calendar], True, False)
-            # service_calendar = None
-            infer_directions_from_sjps_and_apply(con2, service_journey_patterns, generator_defaults)
-            # for sj in service_journeys:
-            #     sj: ServiceJourney
-            #      sj.validity_conditions_or_valid_between = None
-            #    sj.key_list = None
-            #    sj.private_code = None
+            write_objects(write_con, service_journeys, True, False)
 
-            # write_objects(con2, service_journeys, True, False)
-            # service_journeys = None
+def epip_service_journey_patterns(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(write_database) as write_con:
+            service_journey_patterns = load_local(read_con, ServiceJourneyPattern)
+            infer_directions_from_sjps_and_apply(write_con, service_journey_patterns, generator_defaults)
 
             tmp_service_links = []
             for service_journey_pattern in service_journey_patterns:
                 # The problem that may appear is that there are multiple routes, for single timing_links, dependend on the ServiceJourneyPattern
                 # so in the case where this may happen, the academic correct way would change the id, and incorporate the route as well. This would
                 # bring Route unique ServiceLinks, not a bad idea, but edge case.
-                tmp_service_links += transform_timinglinks_to_servicelinks(con, service_journey_pattern)
+                tmp_service_links += transform_timinglinks_to_servicelinks(read_con, service_journey_pattern)
 
             sls = {}
             for sl in tmp_service_links:
@@ -585,16 +606,43 @@ with (sqlite3.connect("/home/netex/netex.sqlite") as con):
 
             service_links = list(sls.values())
             project_linestring(service_links, generator_defaults, 'EPSG:4326')
-            write_objects(con2, service_links, True, True)
-            service_links = None
+            write_objects(write_con, service_links, True, True)
+            write_objects(write_con, service_journey_patterns, True, True)
 
-            write_objects(con2, service_journey_patterns, True, True)
-            service_journey_patterns = None
 
-            if False:
-                lines: List[Line] = load_local(con, Line)
-                for line in lines:
-                    line.branding_ref = None
-                    line.type_of_service_ref = None
-                    line.type_of_product_category_ref = None
-                write_objects(con2, lines, True, True)
+generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1, 'DefaultLocationsystem': 'EPSG:28992'} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
+
+def wrapper(func, kwargs):
+    func(**kwargs)
+
+from multiprocessing import Pool, freeze_support
+
+with Pool(5) as pool:
+    kwargs = {'read_database': "/home/netex/netex.sqlite", 'write_database': "/home/netex/target.sqlite", 'generator_defaults': generator_defaults}
+    # bison_codespaces(**kwargs)
+    # epip_line(**kwargs)
+    # epip_site_frame(**kwargs)
+    # epip_route_point(**kwargs)
+    # epip_route_link(**kwargs)
+    # epip_scheduled_stop_point(**kwargs)
+    # epip_timetabled_passing_times(**kwargs)
+    # epip_service_journey_patterns(**kwargs)
+
+    # with Pool() as pool:
+    pool.starmap(wrapper, [(bison_codespaces, kwargs),
+                           (epip_site_frame, kwargs),
+                           (epip_site_frame, kwargs),
+                           (epip_route_point, kwargs),
+                           (epip_route_link, kwargs),
+                           (epip_scheduled_stop_point, kwargs),
+                           (epip_timetabled_passing_times, kwargs),
+                           (epip_service_journey_patterns, kwargs),
+                           ])
+
+
+
+# Voor alle PointsInJourneyPattern, als TimingLink een ServiceLink zou kunnen zijn, haal op basis van PointProjection de RouteLink op waar deze informatie
+# in zou kunnen zitten. Doe dit niet exclusief op basis van From/To maar neem de Route die in het ServiceJourneyPattern staat mee als referentie.
+# In het geval dat er sprake is van een TimingPointInJourneyPattern, haal dan de route op tot de eerst volgende ScheduledStopPoint en voeg de verschillende
+# RouteLinks samen, houdt er rekening mee dat bij het samen voegen het laatste punt op de lijn gelijk is aan het eerste, en daarmee overgeslagen zou
+# moeten worden.
