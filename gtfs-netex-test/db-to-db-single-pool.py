@@ -1,5 +1,6 @@
 import sqlite3
 from decimal import Decimal, ROUND_HALF_UP
+from functools import partial
 from itertools import chain
 from typing import List, Iterable, T, Generator
 
@@ -11,6 +12,7 @@ from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
+from callsprofile import CallsProfile
 from netex import ServiceJourneyPattern, Direction, Codespace, MultilingualString, DirectionType, ServiceJourney, \
     AvailabilityCondition, TimeDemandType, ScheduledStopPoint, Pos, PointVersionStructure, RoutePoint, RouteLink, \
     StopPointInJourneyPattern, TimingPointInJourneyPattern, ScheduledStopPointRef, TimingLink, ServiceLink, \
@@ -210,12 +212,37 @@ def project_location2(transformer, location):
             location.srs_name = transformer.name
             location.pos = Pos(value=[x, y])
 
-def project_location_4326(transformer, location):
+def get_transformer_by_srs_name(location, crs_to) -> Transformer:
     if location.pos is not None:
-        latitude, longitude = transformer.transform(location.pos.value[0], location.pos.value[1])
+        srs_name = location.srs_name or location.pos.srs_name or generator_defaults.get('DefaultLocationsystem', 'EPSG:4326')
+    else:
+        srs_name = location.srs_name or generator_defaults.get('DefaultLocationsystem', 'EPSG:4326')
+
+    if srs_name == crs_to:
+        return None
+
+    mapping = f"{srs_name}_{crs_to}"
+    transformer = transformers.setdefault(mapping, None)
+    if transformer is None:
+        transformer = Transformer.from_crs(srs_name, crs_to)
+        transformers[mapping] = transformer
+    return transformer
+
+def project_location_4326(location, generator_defaults: dict):
+    if location.pos is not None:
+        transformer = get_transformer_by_srs_name(location, 'urn:ogc:def:crs:EPSG::4326')
+        if transformer is not None:
+            latitude, longitude = transformer.transform(location.pos.value[0], location.pos.value[1])
+        else:
+            latitude = location.pos.value[0]
+            longitude = location.pos.value[1]
+
         location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
         location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
         location.pos = None
+
+    elif location.srs_name not in (None, 'EPSG:4326', 'urn:ogc:def:crs:EPSG::4326') and generator_defaults['DefaultLocationsystem'] not in ('EPSG:4326', 'urn:ogc:def:crs:EPSG::4326'):
+        print("TODO: Crazy not WGS84")
 
 def project_location(points: Iterable[PointVersionStructure], generator_defaults, crs_to):
     transformer = transformers.get(generator_defaults['DefaultLocationsystem'], Transformer.from_crs(generator_defaults['DefaultLocationsystem'], crs_to))
@@ -242,6 +269,35 @@ def project_location(points: Iterable[PointVersionStructure], generator_defaults
 
             if location is not None and location.srs_name != crs_to:
                 project_location2(transformer, location)
+
+
+
+def project_location(points: Iterable[PointVersionStructure], generator_defaults, crs_to):
+    transformer = transformers.get(generator_defaults['DefaultLocationsystem'], Transformer.from_crs(generator_defaults['DefaultLocationsystem'], crs_to))
+    transformers[generator_defaults['DefaultLocationsystem']] = transformer
+    if crs_to == 'EPSG:4326':
+        for point in points:
+            location = None
+            if hasattr(point, 'centroid'):
+                if point.centroid is not None:
+                    location = point.centroid.location
+            else:
+                location = point.location
+
+            if location is not None and location.srs_name != crs_to:
+                project_location_4326(transformer, location)
+    else:
+        for point in points:
+            location = None
+            if hasattr(point, 'centroid'):
+                if point.centroid is not None:
+                    location = point.centroid.location
+            else:
+                location = point.location
+
+            if location is not None and location.srs_name != crs_to:
+                project_location2(transformer, location)
+
 
 def project_linestring2(transformer, linestring):
     srs_dimension = linestring.srs_dimension if hasattr(linestring, 'srs_dimension') and linestring.srs_dimension else 2
@@ -304,11 +360,14 @@ def load_local(con, clazz: T, limit=None) -> List[T]:
 
     return objs
 
-def load_generator(con, clazz):
+def load_generator(con, clazz, limit=None):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     cur = con.cursor()
-    cur.execute(f"SELECT object FROM {type};")
+    if limit is not None:
+        cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
+    else:
+        cur.execute(f"SELECT object FROM {type};")
 
     while True:
         xml = cur.fetchone()
@@ -482,7 +541,7 @@ def bison_codespaces(read_database, write_database, generator_defaults):
         write_objects(write_con, codespaces, True, True)
 
 
-def epip_site_frame(read_database, write_database, generator_defaults):
+def epip_site_frame_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
@@ -565,7 +624,7 @@ def epip_site_frame(read_database, write_database, generator_defaults):
 
             write_objects(write_con, stop_places, True, True)
 
-def epip_route_point(read_database, write_database, generator_defaults):
+def epip_route_point_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
@@ -573,7 +632,7 @@ def epip_route_point(read_database, write_database, generator_defaults):
             project_location(route_points, generator_defaults, 'EPSG:4326')
             write_objects(write_con, route_points, True, True)
 
-def epip_route_link(read_database, write_database, generator_defaults):
+def epip_route_link_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
@@ -586,25 +645,84 @@ def epip_route_link(read_database, write_database, generator_defaults):
 
 import time
 
-def epip_line(read_database, write_database, generator_defaults, pool: Pool):
+def epip_line_generator(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
     print(sys._getframe().f_code.co_name)
 
-    def process_line(line):
+    def process(line: Line):
         line.branding_ref = None
         line.type_of_service_ref = None
         line.type_of_product_category_ref = None
         return line
 
-    def query_lines(read_database) -> Generator:
+    def query(read_database) -> Generator:
         with sqlite3.connect(read_database, check_same_thread=False) as read_con:
             _load_generator = load_generator(read_con, Line)
-            for line in pool.imap_unordered(process_line, _load_generator, chunksize=100):
+            for line in pool.imap_unordered(process, _load_generator, chunksize=100):
                 yield line
 
     with sqlite3.connect(write_database) as write_con:
-        write_generator(write_con, Line, query_lines(read_database), True)
+        write_generator(write_con, Line, query(read_database), True)
 
-def epip_scheduled_stop_point(read_database, write_database, generator_defaults):
+def epip_line_memory(read_database, write_database, generator_defaults):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(write_database) as write_con:
+            lines: List[Line] = load_local(read_con, Line)
+            for line in lines:
+                line.branding_ref = None
+                line.type_of_service_ref = None
+                line.type_of_product_category_ref = None
+            write_objects(write_con, lines, True, True)
+
+def epip_scheduled_stop_point_generator(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
+    print(sys._getframe().f_code.co_name)
+
+    def process(ssp: ScheduledStopPoint, generator_defaults: dict):
+        ssp.stop_areas = None
+        project_location_4326(ssp.location, generator_defaults)
+        return ssp
+
+    def query(read_database) -> Generator:
+        with sqlite3.connect(read_database, check_same_thread=False) as read_con:
+            _load_generator = load_generator(read_con, ScheduledStopPoint)
+            for ssp in pool.imap_unordered(partial(process, generator_defaults=generator_defaults), _load_generator, chunksize=100):
+                yield ssp
+
+    with sqlite3.connect(write_database) as write_con:
+        write_generator(write_con, ScheduledStopPoint, query(read_database), True)
+
+# def epip_scheduled_stop_point2(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
+#     print(sys._getframe().f_code.co_name)
+#
+#     with sqlite3.connect(read_database) as read_con:
+#         with sqlite3.connect(write_database) as write_con:
+#             scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
+#             for ssp in scheduled_stop_points:
+#                 ssp: ScheduledStopPoint
+#                 ssp.stop_areas = None
+#                 project_location_4326(ssp.location, generator_defaults)
+#             print("processed")
+#             write_objects(write_con, scheduled_stop_points, True, True)
+#
+# def epip_scheduled_stop_point3(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
+#     print(sys._getframe().f_code.co_name)
+#
+#     def process(ssp: ScheduledStopPoint, generator_defaults: dict):
+#         ssp.stop_areas = None
+#         # project_location_4326(ssp.location, generator_defaults)
+#         return ssp
+#
+#     def query(read_database) -> Generator:
+#         with sqlite3.connect(read_database, check_same_thread=False) as read_con:
+#             scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
+#             for ssp in pool.imap_unordered(partial(process, generator_defaults=generator_defaults), scheduled_stop_points, chunksize=100):
+#                 yield ssp
+#
+#     with sqlite3.connect(write_database) as write_con:
+#         write_generator(write_con, ScheduledStopPoint, query(read_database), True)
+
+
+def epip_scheduled_stop_point_memory(read_database: str, write_database: str, generator_defaults: dict):
     print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
@@ -612,10 +730,12 @@ def epip_scheduled_stop_point(read_database, write_database, generator_defaults)
             for ssp in scheduled_stop_points:
                 ssp: ScheduledStopPoint
                 ssp.stop_areas = None
-            project_location(scheduled_stop_points, generator_defaults, 'EPSG:4326')
+                project_location_4326(ssp.location, generator_defaults)
+
             write_objects(write_con, scheduled_stop_points, True, True)
 
-def epip_timetabled_passing_times(read_database, write_database, generator_defaults):
+
+def epip_timetabled_passing_times_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
@@ -642,6 +762,49 @@ def epip_timetabled_passing_times(read_database, write_database, generator_defau
                 sj.private_code = None
 
             write_objects(write_con, service_journeys, True, False)
+
+def epip_timetabled_passing_times_generator2(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
+    print(sys._getframe().f_code.co_name)
+
+    def process(sj: ServiceJourney, read_database, write_database, generator_defaults: dict):
+        sj: ServiceJourney
+
+        # Prototype, just: TimeDemandType -> PassingTimes
+        with sqlite3.connect(read_database, check_same_thread=False) as read_con:
+            service_journey_pattern: ServiceJourneyPattern = get_single(read_con, ServiceJourneyPattern, sj.journey_pattern_ref.ref, sj.journey_pattern_ref.version)
+            time_demand_type: TimeDemandType = get_single(read_con, TimeDemandType, sj.time_demand_type_ref.ref, sj.time_demand_type_ref.version)
+            CallsProfile.getPassingTimesFromTimeDemandType(sj, service_journey_pattern, time_demand_type)
+
+        # TODO: AvailabilityCondition -> Uic
+
+        sj.validity_conditions_or_valid_between = None
+        sj.key_list = None
+        sj.private_code = None
+        return sj
+
+    def query(read_database) -> Generator:
+        with sqlite3.connect(read_database, check_same_thread=False) as read_con:
+            _load_generator = load_generator(read_con, ServiceJourney)
+            # for sj in _load_generator:
+            #     yield process(sj, read_con, write_con, generator_defaults)
+            for sj in pool.imap_unordered(partial(process, read_database=read_database, write_database=write_database, generator_defaults=generator_defaults), _load_generator, chunksize=100):
+                yield sj
+
+    with sqlite3.connect(write_database) as write_con:
+        write_generator(write_con, ServiceJourney, query(read_database), True)
+
+
+            # timetabledpassingtimesprofile = TimetablePassingTimesProfile(generator_defaults['codespace'], generator_defaults['version'], service_journeys, service_journey_patterns, time_demand_types)
+
+            # TODO: Implement getTimetabledPassingTimes incrementally. As generator won't work, since it has to store the result (directly).
+            # timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
+
+            # availability_conditions = load_local(read_con, AvailabilityCondition)
+            # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
+            # service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
+            # write_objects(write_con, [service_calendar], True, False)
+
+
 
 def epip_service_journey_patterns(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
@@ -676,16 +839,29 @@ def wrapper(func, kwargs):
     func(**kwargs)
 
 
-with Pool(5) as pool:
-    kwargs = {'read_database': "/home/netex/netex.sqlite", 'write_database': "/home/netex/target.sqlite", 'generator_defaults': generator_defaults}
+with Pool(10) as pool:
+    # kwargs = {'read_database': "/home/netex/netex.sqlite", 'write_database': "/home/netex/target.sqlite", 'generator_defaults': generator_defaults}
     # bison_codespaces(**kwargs)
-    epip_line("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
-    # epip_site_frame(**kwargs)
-    # epip_route_point(**kwargs)
-    # epip_route_link(**kwargs)
-    # epip_scheduled_stop_point(**kwargs)
+    # epip_line_generator("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+    # epip_line_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
+
+    # epip_scheduled_stop_point_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
+    # epip_scheduled_stop_point_generator("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+
+    # epip_scheduled_stop_point("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+    # epip_scheduled_stop_point2("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+    # epip_scheduled_stop_point3("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+
+    # epip_site_frame_memory(**kwargs)
+    # epip_route_point_memory(**kwargs)
+    # epip_route_link_memory(**kwargs)
+
     # epip_timetabled_passing_times(**kwargs)
-    # epip_service_journey_patterns(**kwargs)
+
+    # epip_service_journey_patterns("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+
+    # epip_timetabled_passing_times_generator("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+    epip_timetabled_passing_times_generator2("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
 
     # pool.starmap(wrapper, [(bison_codespaces, kwargs),
     #                        (epip_site_frame, kwargs),

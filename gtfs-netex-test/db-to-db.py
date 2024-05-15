@@ -625,19 +625,19 @@ with Pool(5) as pool:
     # epip_route_point(**kwargs)
     # epip_route_link(**kwargs)
     # epip_scheduled_stop_point(**kwargs)
-    # epip_timetabled_passing_times(**kwargs)
+    epip_timetabled_passing_times(**kwargs)
     # epip_service_journey_patterns(**kwargs)
 
-    pool.starmap(wrapper, [(bison_codespaces, kwargs),
-                           (epip_site_frame, kwargs),
-                           (epip_site_frame, kwargs),
-                           (epip_route_point, kwargs),
-                           (epip_route_link, kwargs),
-                           (epip_scheduled_stop_point, kwargs),
-                           (epip_timetabled_passing_times, kwargs),
-                           (epip_service_journey_patterns, kwargs),
-                           ])
-
+    # pool.starmap(wrapper, [(bison_codespaces, kwargs),
+    #                        (epip_site_frame, kwargs),
+    #                        (epip_site_frame, kwargs),
+    #                        (epip_route_point, kwargs),
+    #                        (epip_route_link, kwargs),
+    #                        (epip_scheduled_stop_point, kwargs),
+    #                        (epip_timetabled_passing_times, kwargs),
+    #                        (epip_service_journey_patterns, kwargs),
+    #                        ])
+    #
 
 
 # Voor alle PointsInJourneyPattern, als TimingLink een ServiceLink zou kunnen zijn, haal op basis van PointProjection de RouteLink op waar deze informatie
