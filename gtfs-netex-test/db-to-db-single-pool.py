@@ -1,7 +1,7 @@
 import sqlite3
 from decimal import Decimal, ROUND_HALF_UP
 from itertools import chain
-from typing import List, Iterable, T
+from typing import List, Iterable, T, Generator
 
 from pyproj import Transformer, CRS
 from xsdata.formats.dataclass.context import XmlContext
@@ -22,6 +22,7 @@ from refs import getId, getRef
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from utils import project
+from multiprocess import Pool, freeze_support
 
 # First monkey patching test
 def get_route(self, con) -> Route:
@@ -123,6 +124,56 @@ def write_objects(con, objs, empty=False, many=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end = '')
         print('\r', objectname, len(objs), end='')
+
+
+def write_generator(con, clazz, generator: Generator, empty=False):
+    cur = con.cursor()
+    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+
+    if empty:
+        sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
+        cur.execute(sql_drop_table)
+
+    if hasattr(clazz, 'version'):
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+    else:
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
+
+    cur.execute(sql_create_table)
+
+    def _prepare4(generator4, objectname):
+        i = 0
+        for obj in generator4:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+        print('\r', objectname, i, end='')
+
+    def _prepare3(generator3, objectname):
+        i = 0
+        for obj in generator3:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+        print('\r', objectname, i, end='')
+
+    def _prepare2(generator2, objectname):
+        i = 0
+        for obj in generator2:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+        print('\r', objectname, i, end='')
+
+    if hasattr(clazz, 'order'):
+        cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+    elif hasattr(clazz, 'version'):
+        cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+    else:
+        cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
 
 def infer_directions_from_sjps_and_apply(con, service_journey_patterns: Iterable[ServiceJourneyPattern], generator_defaults):
     used_direction_types = {sjp.direction_type for sjp in service_journey_patterns if sjp.direction_type is not None}
@@ -533,16 +584,25 @@ def epip_route_link(read_database, write_database, generator_defaults):
 
             write_objects(write_con, route_links, True, True)
 
-def epip_line(read_database, write_database, generator_defaults):
+import time
+
+def epip_line(read_database, write_database, generator_defaults, pool: Pool):
     print(sys._getframe().f_code.co_name)
-    with sqlite3.connect(read_database) as read_con:
-        with sqlite3.connect(write_database) as write_con:
-            lines: List[Line] = load_local(read_con, Line)
-            for line in lines:
-                line.branding_ref = None
-                line.type_of_service_ref = None
-                line.type_of_product_category_ref = None
-            write_objects(write_con, lines, True, True)
+
+    def process_line(line):
+        line.branding_ref = None
+        line.type_of_service_ref = None
+        line.type_of_product_category_ref = None
+        return line
+
+    def query_lines(read_database) -> Generator:
+        with sqlite3.connect(read_database, check_same_thread=False) as read_con:
+            _load_generator = load_generator(read_con, Line)
+            for line in pool.imap_unordered(process_line, _load_generator, chunksize=100):
+                yield line
+
+    with sqlite3.connect(write_database) as write_con:
+        write_generator(write_con, Line, query_lines(read_database), True)
 
 def epip_scheduled_stop_point(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
@@ -615,12 +675,11 @@ generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1, 'Def
 def wrapper(func, kwargs):
     func(**kwargs)
 
-from multiprocessing import Pool, freeze_support
 
 with Pool(5) as pool:
     kwargs = {'read_database': "/home/netex/netex.sqlite", 'write_database': "/home/netex/target.sqlite", 'generator_defaults': generator_defaults}
     # bison_codespaces(**kwargs)
-    # epip_line(**kwargs)
+    epip_line("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
     # epip_site_frame(**kwargs)
     # epip_route_point(**kwargs)
     # epip_route_link(**kwargs)
@@ -628,15 +687,15 @@ with Pool(5) as pool:
     # epip_timetabled_passing_times(**kwargs)
     # epip_service_journey_patterns(**kwargs)
 
-    pool.starmap(wrapper, [(bison_codespaces, kwargs),
-                           (epip_site_frame, kwargs),
-                           (epip_site_frame, kwargs),
-                           (epip_route_point, kwargs),
-                           (epip_route_link, kwargs),
-                           (epip_scheduled_stop_point, kwargs),
-                           (epip_timetabled_passing_times, kwargs),
-                           (epip_service_journey_patterns, kwargs),
-                           ])
+    # pool.starmap(wrapper, [(bison_codespaces, kwargs),
+    #                        (epip_site_frame, kwargs),
+    #                        (epip_site_frame, kwargs),
+    #                        (epip_route_point, kwargs),
+    #                        (epip_route_link, kwargs),
+    #                        (epip_scheduled_stop_point, kwargs),
+    #                        (epip_timetabled_passing_times, kwargs),
+    #                        (epip_service_journey_patterns, kwargs),
+    #                        ])
 
 
 
