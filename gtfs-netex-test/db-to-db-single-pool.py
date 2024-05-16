@@ -575,7 +575,7 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
                 write_objects(write_con, retain_stop_assignments, True, True)
 
             stop_places: List[StopPlace] = load_local(read_con, StopPlace)
-            quays: List[Quay] = []
+            retained_stop_places: List[StopPlace] = []
             for stop_place in stop_places:
                 keep = False
                 if stop_place.id in refs:
@@ -607,7 +607,6 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
                     for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
                         if isinstance(quay, Quay):
                             quay: Quay
-                            quays.append(quay)
                             if quay.polygon_or_multi_surface:
                                 # Reverse order of elements
                                 yy = quay.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[
@@ -619,10 +618,12 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
 
                                 project_polygon(quay.polygon_or_multi_surface, generator_defaults, 'EPSG:4326')
 
-            project_location(stop_places, generator_defaults, 'EPSG:4326')
-            project_location(quays, generator_defaults, 'EPSG:4326')
+                            project_location_4326(quay.centroid.location, generator_defaults)
 
-            write_objects(write_con, stop_places, True, True)
+                project_location_4326(stop_place.centroid.location, generator_defaults)
+                retained_stop_places.append(stop_place)
+
+            write_objects(write_con, retained_stop_places, True, True)
 
 def epip_route_point_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
@@ -839,7 +840,7 @@ def wrapper(func, kwargs):
     func(**kwargs)
 
 
-with Pool(10) as pool:
+# with Pool(10) as pool:
     # kwargs = {'read_database': "/home/netex/netex.sqlite", 'write_database': "/home/netex/target.sqlite", 'generator_defaults': generator_defaults}
     # bison_codespaces(**kwargs)
     # epip_line_generator("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
@@ -852,7 +853,7 @@ with Pool(10) as pool:
     # epip_scheduled_stop_point2("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
     # epip_scheduled_stop_point3("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
 
-    # epip_site_frame_memory(**kwargs)
+epip_site_frame_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
     # epip_route_point_memory(**kwargs)
     # epip_route_link_memory(**kwargs)
 
@@ -861,7 +862,7 @@ with Pool(10) as pool:
     # epip_service_journey_patterns("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
 
     # epip_timetabled_passing_times_generator("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
-    epip_timetabled_passing_times_generator2("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+    # epip_timetabled_passing_times_generator2("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
 
     # pool.starmap(wrapper, [(bison_codespaces, kwargs),
     #                        (epip_site_frame, kwargs),
