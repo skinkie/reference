@@ -112,6 +112,15 @@ class SimpleTimetable:
         availability_conditions = {}
         sjs = []
 
+        from_ssps = []
+
+        for key, operating_dates in simple_timetable.items():
+            from_ssp, _to_ssp, _time = key.split('_')
+            if from_ssp not in from_ssps:
+                from_ssps.append(from_ssp)
+
+        from_ssps = sorted(from_ssps)
+
         for key, operating_dates in simple_timetable.items():
             from_ssp, to_ssp, time = key.split('_')
             ac_hash = hash(tuple(operating_dates))
@@ -128,7 +137,7 @@ class SimpleTimetable:
                 availability_conditions[str(ac_hash)] = ac
 
             sj = ServiceJourney(id=getId(ServiceJourney, self.codespace, key), version=self.version.version,
-                                private_code=PrivateCode(type_value="JourneyNumber", value="{:04d}".format(int(time.replace(':', '')))),
+                                private_code=PrivateCode(type_value="JourneyNumber", value="{:d}{:06d}".format(from_ssps.index(from_ssp) + 1, int(time.replace(':', '')))),
                                 time_demand_type_ref=TimeDemandTypeRef(ref=getId(TimeDemandType, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 departure_time=XmlTime(hour=int(time[0:2]), minute=int(time[3:5]), second=0),

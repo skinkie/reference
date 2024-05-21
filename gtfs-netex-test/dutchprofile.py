@@ -18,7 +18,7 @@ from netex import Codespace, VehicleScheduleFrame, Version, ServiceCalendarFrame
     TimingLinksInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure, \
     CodespacesInFrameRelStructure, CodespacesRelStructure, TransportAdministrativeZone, ZonesInFrameRelStructure, \
     NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, ServiceJourney, \
-    Authority, Operator, ParticipantRef
+    Authority, Operator, ParticipantRef, ExternalObjectRefStructure
 from refs import getId, getRef
 
 
@@ -95,6 +95,9 @@ class DutchProfile:
             routes = RoutesInFrameRelStructure(route=routes)
 
         if lines is not None and len(lines) > 0:
+            for line in lines:
+                if line.external_line_ref is None:
+                    line.external_line_ref = ExternalObjectRefStructure(ref="0", type_value="VetagLineNumber")
             lines = LinesInFrameRelStructure(line=lines)
 
         if destination_displays is not None and len(destination_displays) > 0:
@@ -257,7 +260,7 @@ class DutchProfile:
                 default_currency="EUR",
             ),
             versions=versions,
-            codespaces=codespaces,
+            # codespaces=codespaces,
             frames=FramesRelStructure(common_frame=resource_frames + service_frames +
                                               timetable_frames + service_calendar_frames +
                                               vehicle_schedule_frames)
@@ -265,8 +268,10 @@ class DutchProfile:
         return composite_frame
 
     def getPublicationDelivery(self, composite_frame: CompositeFrame, description: str):
+        import pytz
+        tz = pytz.timezone('Europe/Amsterdam')
         publication_delivery = PublicationDelivery(
-            publication_timestamp=XmlDateTime.now(),
+            publication_timestamp=XmlDateTime.now(tz=tz).replace(fractional_second=0),
             participant_ref=ParticipantRef(value="NDOV"),
             description=MultilingualString(value=description),
             data_objects=DataObjectsRelStructure(choice=[composite_frame]),
