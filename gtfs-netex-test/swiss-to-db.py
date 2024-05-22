@@ -7,7 +7,8 @@ SWISS_ZIP_FILE = "/home/skinkie/Downloads/prod_netex_tt_1.10_che_ski_2024_oev-sc
 CLEAN_DATABASE = True
 
 with sqlite3.connect(DATABASE_FILE) as con:
-    classes = get_interesting_classes()
+    # EPIP: "Codespace", "StopPlace", "RoutePoint", "RouteLink", "Routes", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "ServiceJourneyPattern", "PassengerStopAssignment", "Notice", "NoticeAssignment", "AvailabilityCondition"
+    classes = get_interesting_classes(["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney"])
 
     if CLEAN_DATABASE:
         setup_database(con, classes, CLEAN_DATABASE)
