@@ -19,7 +19,7 @@ from servicecalendarepip import ServiceCalendarEPIPFrame
 from siteframeepip import SiteFrameEPIP
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from xpathselection import get_stop_place_for_quayref
-
+from configuration import ANY2EPIPINPUT,EPIAPFILENAME
 ns_map={'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
 def conversion(input_filename: str, epiap_filename: str, output_filename: str):
@@ -135,19 +135,22 @@ def conversion(input_filename: str, epiap_filename: str, output_filename: str):
     service_frame.journey_patterns = JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)
     service_frame.directions = DirectionsInFrameRelStructure(direction=list(directions.values()))
 
-    for route_point in service_frame.route_points.route_point:
-        latitude, longitude = transformers[epiap_default_locationsystem].transform(
-            route_point.location.pos.value[0], route_point.location.pos.value[1])
-        route_point.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-        route_point.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-        route_point.location.pos = None
-
+    if not(service_frame.route_points==None):
+        #No routes when doing GTFS->NeTEx
+        for route_point in service_frame.route_points.route_point:
+            latitude, longitude = transformers[epiap_default_locationsystem].transform(
+                route_point.location.pos.value[0], route_point.location.pos.value[1])
+            route_point.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+            route_point.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+            route_point.location.pos = None
     for ssp in service_frame.scheduled_stop_points.scheduled_stop_point:
-        latitude, longitude = transformers[epiap_default_locationsystem].transform(
+        if not(ssp.location.pos==None):
+            #Changed: Does not occur when mapped from GTFS.
+            latitude, longitude = transformers[epiap_default_locationsystem].transform(
             ssp.location.pos.value[0], ssp.location.pos.value[1])
-        ssp.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-        ssp.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-        ssp.location.pos = None
+            ssp.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+            ssp.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+            ssp.location.pos = None
 
 
     # for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ScheduledStopPoint"):
@@ -169,34 +172,36 @@ def conversion(input_filename: str, epiap_filename: str, output_filename: str):
 
     processed_quays: Set[str] = set([])
 
-    for stop_assignment in service_frame.stop_assignments.stop_assignment:
-        if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay is not None:
-            if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref in processed_quays:
-                # Already processed, stop place is already stored
-                continue
+    if not(service_frame.stop_assignments==None):
+        #No Stop Assignments when transformation from GTFS
+        for stop_assignment in service_frame.stop_assignments.stop_assignment:
+            if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay is not None:
+                if stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref in processed_quays:
+                    # Already processed, stop place is already stored
+                    continue
 
-            stop_place = get_stop_place_for_quayref(epiap_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
-            if stop_place is not None:
+                stop_place = get_stop_place_for_quayref(epiap_tree, stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.ref)
+                if stop_place is not None:
 
-                # TODO: I want the handling of defaults differently, also take in account the local projection on this object
-                if stop_place.centroid.location.longitude is None and stop_place.centroid.location.pos is not None:
-                    latitude, longitude = transformers[epiap_default_locationsystem].transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
-                    stop_place.centroid.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-                    stop_place.centroid.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-                    stop_place.centroid.location.pos = None
+                    # TODO: I want the handling of defaults differently, also take in account the local projection on this object
+                    if stop_place.centroid.location.longitude is None and stop_place.centroid.location.pos is not None:
+                        latitude, longitude = transformers[epiap_default_locationsystem].transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
+                        stop_place.centroid.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+                        stop_place.centroid.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+                        stop_place.centroid.location.pos = None
 
-                for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
-                    if hasattr(quay, 'id'):
-                        processed_quays.add(quay.id)
+                    for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
+                        if hasattr(quay, 'id'):
+                            processed_quays.add(quay.id)
 
-                    latitude, longitude = transformers[epiap_default_locationsystem].transform(quay.centroid.location.pos.value[0], quay.centroid.location.pos.value[1])
-                    quay.centroid.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-                    quay.centroid.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-                    quay.centroid.location.pos = None
+                        latitude, longitude = transformers[epiap_default_locationsystem].transform(quay.centroid.location.pos.value[0], quay.centroid.location.pos.value[1])
+                        quay.centroid.location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+                        quay.centroid.location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+                        quay.centroid.location.pos = None
 
-                stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
+                    stop_assignment.taxi_stand_ref_or_quay_ref_or_quay.version = stop_place.version
 
-                stop_places[stop_place.id] = stop_place
+                    stop_places[stop_place.id] = stop_place
 
 
     # TODO: don't create quays, if this is available. **1
@@ -337,7 +342,7 @@ if __name__ == '__main__':
     #     output_filename = input_filename.replace('/home/netex/sbb/', 'netex-output-epip/').replace('.xml.gz', '.xml')
     #     conversion(input_filename, output_filename)
 
-    for input_filename in glob.glob("/tmp/NeTEx_WSF_WSF_20240415_20240415.xml.gz"):
-        print(input_filename)
-        output_filename = input_filename.replace('/tmp/', 'netex-output-epip/').replace('.xml.gz', '.xml')
-        conversion(input_filename, '/tmp/NeTEx_DOVA_epiap_20240423013251.xml.gz', output_filename)
+    for input_filename in glob.glob(ANY2EPIPINPUT+"*.xml"):
+        output_filename = input_filename.replace('netex-output', 'netex-output-epip').replace('.xml.gz', '.xml')
+        print(input_filename+"->"+output_filename)
+        conversion(input_filename, EPIAPFILENAME, output_filename)

@@ -1,5 +1,7 @@
 import duckdb
 import csv
+from configuration import BASEDIR, DUCKDB
+
 
 agency_txt = {'agency_id': 'VARCHAR', 'agency_name': 'VARCHAR', 'agency_url': 'VARCHAR', 'agency_timezone': 'VARCHAR', 'agency_lang': 'VARCHAR', 'agency_phone': 'VARCHAR', 'agency_fare_url': 'VARCHAR', 'agency_email': 'VARCHAR'}
 stops_txt = {'stop_id': 'VARCHAR', 'stop_code': 'VARCHAR', 'stop_name': 'VARCHAR', 'tts_stop_name': 'VARCHAR', 'stop_desc': 'VARCHAR', 'stop_lat': 'FLOAT', 'stop_lon': 'FLOAT', 'zone_id': 'VARCHAR', 'stop_url': 'VARCHAR', 'location_type': 'INTEGER', 'parent_station': 'VARCHAR', 'stop_timezone': 'VARCHAR', 'wheelchair_boarding': 'INTEGER', 'level_id': 'VARCHAR', 'platform_code': 'VARCHAR'}
@@ -93,7 +95,7 @@ from chardet.universaldetector import UniversalDetector
 
 def handle_file(filename: str, column_mapping: dict):
     table = filename.split('/')[-1].replace('.txt', '')
-    con = duckdb.connect(database='gtfs2.duckdb')
+    con = duckdb.connect(database=DUCKDB)
     with duckdb.cursor(con) as cur:
         cur.execute(f"""DROP TABLE IF EXISTS {table};""")
 
@@ -144,7 +146,7 @@ def handle_file(filename: str, column_mapping: dict):
 
     con.close()
 
-base_path = '/tmp/avv/'
+base_path = BASEDIR
 handle_file(base_path + 'gtfs/feed_info.txt', feed_info_txt)
 handle_file(base_path + 'gtfs/agency.txt', agency_txt)
 handle_file(base_path + 'gtfs/calendar_dates.txt', calendar_dates_txt)
