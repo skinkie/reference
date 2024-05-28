@@ -34,7 +34,7 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     ServiceFacilitySet, LuggageCarriageEnumeration, LinkSequenceProjection, LinkSequenceProjectionRef, LineString, \
     PosList, CodespaceRefStructure, DataSourceRefStructure, ParticipantRef
 from refs import setIdVersion, getRef, getIndex, getIdByRef, getBitString2, getFakeRef, getOptionalString, getId
-
+from configuration  import DUCKDB,NETEXOUTPUTDIR
 
 def get_or_none(l: list, i: int):
     if l is None:
@@ -61,7 +61,6 @@ class GtfsNeTexProfile(CallsProfile):
         with self.conn.cursor() as cur:
             cur.execute(feed_info_sql)
             df = cur.df()
-
             short_name = self.getShortName(df['feed_publisher_name'][0])
             codespace = Codespace(id="{}:Codespace:{}".format(short_name, short_name), xmlns=short_name,
                                   xmlns_url=df['feed_publisher_url'][0], description=df['feed_publisher_name'][0])
@@ -842,12 +841,12 @@ class GtfsNeTexProfile(CallsProfile):
 
     def full(self):
         self.service_journeys = self.getServiceJourneys()
-        with open('netex-output/out.xml', 'w',encoding='utf-8') as out:
+        with open(NETEXOUTPUTDIR+'/out.xml', 'w',encoding='utf-8') as out:
             self.serializer.write(out, gtfs.getPublicationDelivery(), self.ns_map)
 
     def incremental(self):
         for line in self.lines:
-            with open('netex-output/{}.xml'.format(line.id.replace(':', '_')), 'w', encoding='utf-8') as out:
+            with open(NETEXOUTPUTDIR+'/{}.xml'.format(line.id.replace(':', '_')), 'w', encoding='utf-8') as out:
                 operators = self.getOperators({'query': """select distinct agency.* from agency join routes using (agency_id) where route_id = ? ;""", 'parameters': (line.private_code.value,)})
                 stop_areas = self.getStopAreas({'query': """select stops.* from stops where stop_id in (select distinct stops.parent_station from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and parent_station is not null and route_id = ?) order by stop_id;""", 'parameters': (line.private_code.value,)})
                 scheduled_stop_points = self.getScheduledStopPoints(stop_areas, {'query': """select distinct stops.* from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and route_id = ? order by stop_id;""", 'parameters': (line.private_code.value,)})
@@ -892,5 +891,5 @@ if __name__ == '__main__':
     serializer_config.ignore_default_attributes = True
     serializer = XmlSerializer(config=serializer_config)
 
-    gtfs = GtfsNeTexProfile(conn=duckdb.connect(database='gtfs2.duckdb', read_only=True), serializer=serializer, full=False)
+    gtfs = GtfsNeTexProfile(conn=duckdb.connect(database=DUCKDB, read_only=True), serializer=serializer, full=False)
 
