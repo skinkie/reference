@@ -147,6 +147,7 @@ def handle_file(filename: str, column_mapping: dict):
     con.close()
 
 base_path = BASEDIR
+print(base_path)
 handle_file(base_path + 'gtfs/feed_info.txt', feed_info_txt)
 handle_file(base_path + 'gtfs/agency.txt', agency_txt)
 handle_file(base_path + 'gtfs/calendar_dates.txt', calendar_dates_txt)
