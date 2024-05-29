@@ -70,6 +70,13 @@ transport_administrative_zone = TransportAdministrativeZone(id=getId(TransportAd
                                                             short_name=MultilingualString(value="FFVB"),
                                                             vehicle_modes=[AllModesEnumeration.WATER])
 
+transport_administrative_zone_partitie = TransportAdministrativeZone(id=getId(TransportAdministrativeZone, codespace, "WSF"),
+                                                            version=version.version,
+                                                            name=MultilingualString(value="Westerschelde Ferry"),
+                                                            short_name=MultilingualString(value="WSF"),
+                                                            vehicle_modes=[AllModesEnumeration.WATER])
+
+
 operator = Operator(id=getId(Operator, codespace, "WSF"), version=version.version,
                         company_number="61547336",
                         name=MultilingualString(value="WSF"),
@@ -83,18 +90,33 @@ operator = Operator(id=getId(Operator, codespace, "WSF"), version=version.versio
 
 authority = Authority(id=getId(Authority, dova_codespace, "ZLD"), version="any", name=MultilingualString(value="Zeeland"), short_name=MultilingualString(value="ZLD"), description=MultilingualString(value="Provincie Zeeland"))
 
-responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
+responsibility_set_concessie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, "Concessie"),
                                        version=version.version,
-                                       name=MultilingualString(value=short_name),
+                                       name=MultilingualString(value="Concessie"),
+                                       roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
+                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "Concessie"),
+                                                                        version=version.version,
+                                                                        responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
+                                       ]))
+
+responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, "Financier"),
+                                       version=version.version,
+                                       name=MultilingualString(value="Financier"),
                                        roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
                                            ResponsibilityRoleAssignment(
-                                               id=getId(ResponsibilityRoleAssignment, codespace, "ZLD"),
+                                               id=getId(ResponsibilityRoleAssignment, codespace, "Financier"),
                                                version=version.version,
                                                type_of_responsibility_role_ref_or_responsibility_role_ref=TypeOfResponsibilityRoleRef(ref="BISON:TypeOfResponsibilityRole:financing", version="any"),
                                                responsible_organisation_ref=getRef(authority, OrganisationRefStructure)),
-                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "FFVB"),
+                                       ]))
+
+responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
+                                       version=version.version,
+                                       name=MultilingualString(value="Partitie"),
+                                       roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
+                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "Partitie"),
                                                                         version=version.version,
-                                                                        responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
+                                                                        responsible_area_ref=getRef(transport_administrative_zone_partitie, VersionOfObjectRefStructure))
                                        ]))
 
 
@@ -129,9 +151,9 @@ for sj in service_journeys:
     sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type)
 
 dutchprofile = DutchProfile(codespace, data_source, version)
-resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set],
+resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set_concessie, responsibility_set_financier, responsibility_set_partitie],
                                                  organisations=[operator, authority], operational_contexts=[operational_context],
-                                                 vehicle_types=[vehicle_type], zones=[transport_administrative_zone])
+                                                 vehicle_types=[vehicle_type], zones=[transport_administrative_zone_partitie])
 
 line = Line(id=getId(Line, codespace, "WSF"), version=version.version, name=MultilingualString(value="WSF"),
               monitored=False,
@@ -322,7 +344,7 @@ service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
 composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version],
-                                                 responsibility_set=responsibility_set,
+                                                 responsibility_set=responsibility_set_partitie,
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste WSF export")
 
