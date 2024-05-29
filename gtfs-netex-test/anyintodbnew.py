@@ -3,11 +3,14 @@ import sqlite3
 from lxml import etree
 import sys
 
+from netex import JourneyPart
+
+
 def get_element_name_with_ns(clazz):
     name = getattr(clazz.Meta, 'name', clazz.__name__)
     return "{" + clazz.Meta.namespace + "}" + name
 
-def get_interesting_classes():
+def get_interesting_classes(filter=None):
     import inspect
     import netex
 
@@ -31,8 +34,12 @@ def get_interesting_classes():
     # envi = [x[0] for x in entitiesinversion]
     # set(geme) - set(envi)
 
-    clean_element_names = sorted([x[0] for x in entitiesinversion if not x[0].endswith('Frame')])
-    interesting_element_names =  set([get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')])
+    if filter is not None:
+        clean_element_names = sorted([x[0] for x in entitiesinversion if x[0] in filter])
+        interesting_element_names =  set([get_element_name_with_ns(x[1]) for x in entitiesinversion if x[0] in filter])
+    else:
+        clean_element_names = sorted([x[0] for x in entitiesinversion if not x[0].endswith('Frame')])
+        interesting_element_names =  set([get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')])
 
     return clean_element_names, interesting_element_names
 
@@ -41,9 +48,15 @@ def setup_database(con, classes, clean=False):
     clean_element_names, interesting_element_names = classes
 
     if clean:
-        for objectname in clean_element_names:
-            sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
-            cur.execute(sql_drop_table)
+        cur.execute("PRAGMA writable_schema = 1;")
+        cur.execute("DELETE FROM sqlite_master WHERE type IN ('table', 'index', 'trigger');")
+        cur.execute("PRAGMA writable_schema = 0;")
+        con.commit()
+
+        # for objectname in clean_element_names:
+        #     sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
+        #     cur.execute(sql_drop_table)
+        cur.execute("VACUUM;")
 
     for objectname in clean_element_names:
         # TODO: optimize
@@ -128,7 +141,7 @@ def open_netex_file(filename):
             yield zip.open(zipfilename)
 
 if __name__ == "__main__":
-    filename = '/home/netex/sbb/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_TIMETABLE_209_270_202404140804.xml'
+    filenames = ['/home/netex/NeTEx_ARR_NL_20240516_20240517_1418.xml.gz', '/home/netex/NeTEx_DOVA_epiap_20240517013000.xml.gz']
 
     classes = get_interesting_classes()
 
@@ -136,8 +149,9 @@ if __name__ == "__main__":
         if True:
             setup_database(con, classes, True)
 
-        for file in open_netex_file(filename):
-            insert_database(con, classes, file)
+        for filename in filenames:
+            for sub_file in open_netex_file(filename):
+                insert_database(con, classes, sub_file)
 
 """
 Er zijn twee echte todo's:

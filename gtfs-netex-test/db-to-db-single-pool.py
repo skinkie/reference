@@ -12,6 +12,7 @@ from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
+from anyintodbnew import setup_database, get_interesting_classes
 from callsprofile import CallsProfile
 from netex import ServiceJourneyPattern, Direction, Codespace, MultilingualString, DirectionType, ServiceJourney, \
     AvailabilityCondition, TimeDemandType, ScheduledStopPoint, Pos, PointVersionStructure, RoutePoint, RouteLink, \
@@ -19,12 +20,27 @@ from netex import ServiceJourneyPattern, Direction, Codespace, MultilingualStrin
     TimingLinkRefStructure, ServiceLinkRefStructure, RouteRef, Route, RouteLinkRef, RouteLinkRefStructure, \
     RouteRefStructure, ScheduledStopPointRefStructure, RoutePointRef, RoutePointRefStructure, PointProjection, \
     TimingPoint, TimingPointRefStructure, LineString, Link, LinkVersionStructure, PosList, Line, StopPlace, AccessSpace, \
-    Quay, Polygon, PassengerStopAssignment, QuayRefStructure, StopPlaceRefStructure
-from refs import getId, getRef
+    Quay, Polygon, PassengerStopAssignment, QuayRefStructure, StopPlaceRefStructure, Block, ServiceJourneyRef, \
+    VehicleTypeRef, VersionOfObjectRefStructure, ServiceJourneyPatternRef, LineRef
+
+from refs import getId, getRef, getIndex
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from utils import project
 from multiprocess import Pool, freeze_support
+
+def ref_version_hash(self):
+    return hash(self.ref + ';' + self.version)
+
+VersionOfObjectRefStructure.__hash__ = ref_version_hash
+ServiceJourneyRef.__hash__ = ref_version_hash
+ServiceJourneyPatternRef.__hash__ = ref_version_hash
+
+def id_version_hash(self):
+    return hash(self.id + ';' + self.version)
+
+ServiceJourney.__hash__ = id_version_hash
+ServiceJourneyPattern.__hash__ = id_version_hash
 
 # First monkey patching test
 def get_route(self, con) -> Route:
@@ -284,8 +300,8 @@ def project_location(points: Iterable[PointVersionStructure], generator_defaults
             else:
                 location = point.location
 
-            if location is not None and location.srs_name != crs_to:
-                project_location_4326(transformer, location)
+            if location is not None:
+                project_location_4326(location, generator_defaults)
     else:
         for point in points:
             location = None
@@ -295,7 +311,7 @@ def project_location(points: Iterable[PointVersionStructure], generator_defaults
             else:
                 location = point.location
 
-            if location is not None and location.srs_name != crs_to:
+            if location is not None and location.srs_name is not None and location.srs_name != crs_to:
                 project_location2(transformer, location)
 
 
@@ -629,7 +645,7 @@ def epip_route_point_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
-            route_points = load_local(read_con, RoutePoint)
+            route_points = load_local(read_con, RoutePoint )
             project_location(route_points, generator_defaults, 'EPSG:4326')
             write_objects(write_con, route_points, True, True)
 
@@ -736,12 +752,12 @@ def epip_scheduled_stop_point_memory(read_database: str, write_database: str, ge
             write_objects(write_con, scheduled_stop_points, True, True)
 
 
-def epip_timetabled_passing_times_memory(read_database, write_database, generator_defaults):
+def epip_timetabled_passing_times_memory(read_database, write_database, generator_defaults, dynamics=[]):
     print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
             # TODO: Maybe do this on the fly, per servicejourney?
-            service_journey_patterns = load_local(read_con, ServiceJourneyPattern)
+            service_journey_patterns: List[ServiceJourneyPattern] = load_local(read_con, ServiceJourneyPattern)
             time_demand_types = load_local(read_con, TimeDemandType)
             service_journeys = load_local(read_con, ServiceJourney)
 
@@ -762,7 +778,18 @@ def epip_timetabled_passing_times_memory(read_database, write_database, generato
                 sj.key_list = None
                 sj.private_code = None
 
+                # TODO: Benchmark
+                any(map(lambda x: x(sj), dynamics))
+                # for dynamic in dynamics:
+                #     dynamic(sj)
+
             write_objects(write_con, service_journeys, True, False)
+
+def apply_vehicle_type_to_sj(vt_by_sj: dict[ServiceJourneyRef, VehicleTypeRef], sj: ServiceJourney):
+    sj.vehicle_type_ref_or_train_ref = vt_by_sj[getRef(sj)]
+
+def apply_line_ref_to_sj(line_ref_by_sjp: dict[ServiceJourneyPatternRef, LineRef], sj: ServiceJourney):
+    sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view = line_ref_by_sjp.get(sj.journey_pattern_ref)
 
 def epip_timetabled_passing_times_generator2(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
     print(sys._getframe().f_code.co_name)
@@ -833,6 +860,29 @@ def epip_service_journey_patterns(read_database, write_database, generator_defau
             write_objects(write_con, service_links, True, True)
             write_objects(write_con, service_journey_patterns, True, True)
 
+def vehicle_type_from_block(read_database):
+    print(sys._getframe().f_code.co_name)
+    with sqlite3.connect(read_database) as read_con:
+        blocks: List[Block] = load_local(read_con, Block)
+        sjs: dict[ServiceJourneyRef, VehicleTypeRef] = {}
+        for block in blocks:
+            vehicle_type: VehicleTypeRef = block.vehicle_type_ref_or_train_ref
+            for journey in block.journeys.choice:
+                if isinstance(journey, ServiceJourneyRef):
+                    sjs[journey] = vehicle_type
+
+        return sjs
+
+def line_ref_from_route(read_database):
+    with sqlite3.connect(read_database) as read_con:
+        service_journey_patterns: List[ServiceJourneyPattern] = load_local(read_con, ServiceJourneyPattern)
+        routes = getIndex(load_local(read_con, Route))
+        line_ref_by_sjp: dict[ServiceJourneyPatternRef, LineRef] = {}
+        for sjp in service_journey_patterns:
+            line_ref_by_sjp[getRef(sjp)] = routes[sjp.route_ref_or_route_view.ref].line_ref
+
+        return line_ref_by_sjp
+
 
 generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1, 'DefaultLocationsystem': 'EPSG:28992'} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
 
@@ -840,32 +890,47 @@ def wrapper(func, kwargs):
     func(**kwargs)
 
 
+#classes = get_interesting_classes()
+#with sqlite3.connect("/tmp/target.sqlite") as con:
+#    setup_database(con, classes, True)
+
 # with Pool(10) as pool:
     # kwargs = {'read_database': "/home/netex/netex.sqlite", 'write_database': "/home/netex/target.sqlite", 'generator_defaults': generator_defaults}
-    # bison_codespaces(**kwargs)
+#bison_codespaces("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
     # epip_line_generator("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
-    # epip_line_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
+#epip_line_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
 
-    # epip_scheduled_stop_point_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
+#epip_route_point_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
+
+#epip_route_link_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
+
+#epip_scheduled_stop_point_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
     # epip_scheduled_stop_point_generator("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
 
     # epip_scheduled_stop_point("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
     # epip_scheduled_stop_point2("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
     # epip_scheduled_stop_point3("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
 
-epip_site_frame_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
+#epip_site_frame_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
     # epip_route_point_memory(**kwargs)
     # epip_route_link_memory(**kwargs)
 
-    # epip_timetabled_passing_times(**kwargs)
 
-    # epip_service_journey_patterns("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
+vt_by_sj = vehicle_type_from_block("/home/netex/netex.sqlite")
+line_ref_by_sjp = line_ref_from_route("/home/netex/netex.sqlite")
+epip_timetabled_passing_times_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults,
+                                     [
+                                         partial(apply_vehicle_type_to_sj, vt_by_sj),
+                                         partial(apply_line_ref_to_sj, line_ref_by_sjp)
+                                      ])
+
+epip_service_journey_patterns("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults)
+
 
     # epip_timetabled_passing_times_generator("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
     # epip_timetabled_passing_times_generator2("/home/netex/netex.sqlite", "/home/netex/target.sqlite", generator_defaults, pool)
 
     # pool.starmap(wrapper, [(bison_codespaces, kwargs),
-    #                        (epip_site_frame, kwargs),
     #                        (epip_site_frame, kwargs),
     #                        (epip_route_point, kwargs),
     #                        (epip_route_link, kwargs),
@@ -881,3 +946,5 @@ epip_site_frame_memory("/home/netex/netex.sqlite", "/home/netex/target.sqlite", 
 # In het geval dat er sprake is van een TimingPointInJourneyPattern, haal dan de route op tot de eerst volgende ScheduledStopPoint en voeg de verschillende
 # RouteLinks samen, houdt er rekening mee dat bij het samen voegen het laatste punt op de lijn gelijk is aan het eerste, en daarmee overgeslagen zou
 # moeten worden.
+
+# TODO: Mentz verzoek voor LineRef

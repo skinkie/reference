@@ -25,7 +25,8 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     ServiceLinksInFrameRelStructure, ServiceLink, TransfersInFrameRelStructure, StopAssignmentsInFrameRelStructure, \
     PassengerStopAssignment, Connection, SiteConnection, DefaultConnection, ServiceCalendarFrame, \
     DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine, VersionFrameDefaultsStructure, SystemOfUnits, \
-    LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure
+    LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, \
+    TopographicPlacesInFrameRelStructure, TopographicPlace
 
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
@@ -97,8 +98,8 @@ class GeneratorTester:
 
         return None
 
-con_orig = sqlite3.connect("/home/netex/netex.sqlite")
-con_target = sqlite3.connect("/home/netex/target.sqlite")
+con_orig = sqlite3.connect("/home/netex/swiss.sqlite")
+con_target = sqlite3.connect("/home/netex/swiss-target.sqlite")
 
 codespace_ref_or_codespace = GeneratorTester(load_generator(con_target, Codespace))
 data_source = GeneratorTester(load_generator(con_orig, DataSource))
@@ -107,6 +108,7 @@ transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con_ori
 responsibility_set = GeneratorTester(load_generator(con_orig, ResponsibilitySet))
 
 stop_place = GeneratorTester(load_generator(con_target, StopPlace))
+topographic_place = GeneratorTester(load_generator(con_orig, TopographicPlace))
 
 direction = GeneratorTester(load_generator(con_target, Direction))
 route_point = GeneratorTester(load_generator(con_target, RoutePoint))
@@ -162,6 +164,7 @@ publication_delivery = PublicationDelivery(
                                     id="EU_PI_STOP", version=version,
                                     type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_STOP', version_ref='1.0'),
                                     stop_places=StopPlacesInFrameRelStructure(stop_place=stop_place.generator()) if stop_place.has_value() else None,
+                                    topographic_places=TopographicPlacesInFrameRelStructure(topographic_place=topographic_place.generator()) if topographic_place.has_value() else None,
                                 ),
 
                                 ServiceFrame(
