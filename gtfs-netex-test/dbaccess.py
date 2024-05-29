@@ -50,6 +50,71 @@ def load_generator(con, clazz, limit=None):
             break
         yield parser.from_bytes(xml[0], clazz)
 
+from lxml import etree
+def load_lxml_generator(con, clazz, limit=None):
+    type = getattr(clazz.Meta, 'name', clazz.__name__)
+
+    cur = con.cursor()
+    if limit is not None:
+        cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
+    else:
+        cur.execute(f"SELECT object FROM {type};")
+
+    while True:
+        xml = cur.fetchone()
+        if xml is None:
+            break
+        yield etree.fromstring(xml[0])
+
+def write_lxml_generator(con, clazz, generator: Generator):
+    cur = con.cursor()
+    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+
+    if hasattr(clazz, 'order'):
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+    elif hasattr(clazz, 'version'):
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+    else:
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
+
+    cur.execute(sql_create_table)
+
+    def _prepare4(generator4, objectname):
+        i = 0
+        for obj in generator4:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.attrib['id'], obj.attrib['version'], obj.attrib['order'], etree.tostring(obj)
+        print('\r', objectname, i, end='')
+
+    def _prepare3(generator3, objectname):
+        i = 0
+        for obj in generator3:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.attrib['id'], obj.attrib['version'], etree.tostring(obj)
+        print('\r', objectname, i, end='')
+
+    def _prepare2(generator2, objectname):
+        i = 0
+        for obj in generator2:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.attrib['id'], etree.tostring(obj)
+        print('\r', objectname, i, end='')
+
+    if hasattr(clazz, 'order'):
+        cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+    elif hasattr(clazz, 'version'):
+        cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+    else:
+        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
+
+    print('\n')
+
 def get_single(con, clazz: T, id, version) -> T:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
     cur = con.cursor()
@@ -73,7 +138,9 @@ def write_objects(con, objs, empty=False, many=False):
         sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
         cur.execute(sql_drop_table)
 
-    if hasattr(clazz, 'version'):
+    if hasattr(clazz, 'order'):
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+    elif hasattr(clazz, 'version'):
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
     else:
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
@@ -82,7 +149,9 @@ def write_objects(con, objs, empty=False, many=False):
 
     if many:
         print(objectname, len(objs))
-        if hasattr(clazz, 'version'):
+        if hasattr(clazz, 'order'):
+            cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')) for obj in objs])
+        elif hasattr(clazz, 'version'):
             cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')) for obj in objs])
         else:
             cur.executemany(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);',
@@ -90,7 +159,9 @@ def write_objects(con, objs, empty=False, many=False):
     else:
         for i in range(0, len(objs)):
             obj = objs[i]
-            if hasattr(clazz, 'version'):
+            if hasattr(clazz, 'order'):
+                cur.execute(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')))
+            elif hasattr(clazz, 'version'):
                 cur.execute(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')))
             else:
                 cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')))
@@ -108,7 +179,9 @@ def write_generator(con, clazz, generator: Generator, empty=False):
         sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
         cur.execute(sql_drop_table)
 
-    if hasattr(clazz, 'version'):
+    if hasattr(clazz, 'order'):
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+    elif hasattr(clazz, 'version'):
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
     else:
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
@@ -148,5 +221,54 @@ def write_generator(con, clazz, generator: Generator, empty=False):
         cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
     else:
         cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
+
+    print('\n')
+
+def update_generator(con, clazz, generator: Generator):
+    cur = con.cursor()
+    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+
+    if hasattr(clazz, 'order'):
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+    elif hasattr(clazz, 'version'):
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+    else:
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
+
+    cur.execute(sql_create_table)
+
+    def _prepare4(generator4, objectname):
+        i = 0
+        for obj in generator4:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+        print('\r', objectname, i, end='')
+
+    def _prepare3(generator3, objectname):
+        i = 0
+        for obj in generator3:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+        print('\r', objectname, i, end='')
+
+    def _prepare2(generator2, objectname):
+        i = 0
+        for obj in generator2:
+            if i % 13 == 0:
+                print('\r', objectname, str(i), end='')
+            i += 1
+            yield obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+        print('\r', objectname, i, end='')
+
+    if hasattr(clazz, 'order'):
+        cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+    elif hasattr(clazz, 'version'):
+        cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+    else:
+        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
 
     print('\n')

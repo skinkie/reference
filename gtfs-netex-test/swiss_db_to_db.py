@@ -14,6 +14,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from anyintodbnew import setup_database, get_interesting_classes
 from callsprofile import CallsProfile
+from dbaccess import load_generator
 from netex import ServiceJourneyPattern, Direction, Codespace, MultilingualString, DirectionType, ServiceJourney, \
     AvailabilityCondition, TimeDemandType, ScheduledStopPoint, Pos, PointVersionStructure, RoutePoint, RouteLink, \
     StopPointInJourneyPattern, TimingPointInJourneyPattern, ScheduledStopPointRef, TimingLink, ServiceLink, \
@@ -26,6 +27,7 @@ from netex import ServiceJourneyPattern, Direction, Codespace, MultilingualStrin
 from refs import getId, getRef, getIndex
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
+from transformers.direction import infer_directions_from_sjps_and_apply
 from utils import project
 from multiprocess import Pool
 
@@ -41,7 +43,7 @@ serializer = XmlSerializer(config=serializer_config)
 
 import netex_monkeypatching
 from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory, epip_site_frame_memory, \
-    epip_service_journey_generator
+    epip_service_journey_generator, epip_remove_keylist_extensions
 from transformers.epip import EPIP_CLASSES
 
 from swiss_to_db import SWISS_CLASSES
@@ -59,8 +61,13 @@ def main():
         # epip_scheduled_stop_point_memory(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
         # epip_site_frame_memory(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
 
-    with Pool(1) as pool:
-        epip_service_journey_generator(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults, pool)
+    # with Pool(1) as pool:
+    #    epip_service_journey_generator(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults, pool)
+
+
+    # infer_directions_from_sjps_and_apply(TARGET_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
+    # epip_remove_keylist_extensions(TARGET_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
+
 
     # with Pool(10) as pool:
         # kwargs = {'read_database': "/home/netex/netex.sqlite", 'write_database': "/home/netex/target.sqlite", 'generator_defaults': generator_defaults}
@@ -109,7 +116,11 @@ def main():
     # RouteLinks samen, houdt er rekening mee dat bij het samen voegen het laatste punt op de lijn gelijk is aan het eerste, en daarmee overgeslagen zou
     # moeten worden.
 
-    # TODO: Mentz verzoek voor LineRef
+    # TODO: In EPIP noticeAssignments should be embedded in the object, and not separate.
+
+    # TODO: Swiss NoticeAssignments on Call level now end up at StopPointInJourneyPattern.
+    # They might be there at the correct location, but I guess they should be at TimetabledPassingTime.
+
 
 if __name__ == '__main__':
     main()

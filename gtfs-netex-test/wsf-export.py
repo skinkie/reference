@@ -71,7 +71,7 @@ transport_administrative_zone = TransportAdministrativeZone(id=getId(TransportAd
                                                             vehicle_modes=[AllModesEnumeration.WATER])
 
 transport_administrative_zone_partitie = TransportAdministrativeZone(id=getId(TransportAdministrativeZone, codespace, "WSF"),
-                                                            version=version.version,
+                                                            version="any",
                                                             name=MultilingualString(value="Westerschelde Ferry"),
                                                             short_name=MultilingualString(value="WSF"),
                                                             vehicle_modes=[AllModesEnumeration.WATER])
@@ -157,7 +157,7 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
 
 line = Line(id=getId(Line, codespace, "WSF"), version=version.version, name=MultilingualString(value="WSF"),
               monitored=False,
-              responsibility_set_ref_attribute=getId(ResponsibilitySet, codespace, short_name),
+              responsibility_set_ref_attribute=responsibility_set_concessie.id,
               description=MultilingualString(value="Veer tussen Vlissingen en Breskens"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
@@ -353,11 +353,18 @@ serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
-with open('netex-output/wsf.xml', 'w', encoding='utf-8') as out:
+from isal import igzip_threaded
+import gzip
+ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
+with igzip_threaded.open(f"/tmp/NeTEx_WSF_WSF_{from_date}_{from_date}.xml.gz", 'wt', compresslevel=3, threads=3, block_size=2*10**8) as out:
     serializer.write(out, publication_delivery, ns_map)
 
-with open('netex-output/wsf.xml', 'rb') as f_in, gzip.open(f"/tmp/NeTEx_WSF_WSF_{from_date}_{from_date}.xml.gz", 'wb') as f_out:
-    f_out.writelines(f_in)
+
+# with open('netex-output/wsf.xml', 'w', encoding='utf-8') as out:
+#    serializer.write(out, publication_delivery, ns_map)
+
+# with open('netex-output/wsf.xml', 'rb') as f_in, gzip.open(f"/tmp/NeTEx_WSF_WSF_{from_date}_{from_date}.xml.gz", 'wb') as f_out:
+#   f_out.writelines(f_in)
 
 """
 parser = lxml.etree.XMLParser(remove_blank_text=True)

@@ -18,7 +18,8 @@ from netex import Line, ScheduledStopPoint, PassengerStopAssignment, Quay, StopP
     ServiceCalendar, DayTypeRefsRelStructure, DayTypesRelStructure, OperatingPeriodsRelStructure, \
     DayTypeAssignmentsRelStructure, OperatingPeriodRef, RouteView
 
-from dbaccess import load_generator, load_local, write_generator, write_objects, get_single
+from dbaccess import load_generator, load_local, write_generator, write_objects, get_single, load_lxml_generator, \
+    write_lxml_generator
 from refs import getIndex, getRef, getId
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
@@ -61,6 +62,8 @@ def epip_scheduled_stop_point_generator(read_database: str, write_database: str,
 
     def process(ssp: ScheduledStopPoint, generator_defaults: dict):
         ssp.stop_areas = None
+        ssp.key_list = None
+        ssp.extensions = None
         project_location_4326(ssp.location, generator_defaults)
         return ssp
 
@@ -144,6 +147,9 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
                 if not keep:
                     continue
 
+                stop_place.extensions = None
+                stop_place.key_list = None
+
                 stop_place.equipment_places = None
                 if stop_place.access_spaces is not None:
                     for access_space in stop_place.access_spaces.access_space_ref_or_access_space:
@@ -224,6 +230,7 @@ def service_journey_pattern_from_calls(sj: ServiceJourney, generator_defaults: d
     l_ssp = [sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view.ref]
 
     for call in sj.calls.call:
+        call.extensions = None
         pis: StopPointInJourneyPattern = project(call, StopPointInJourneyPattern)
         pis.scheduled_stop_point_ref = call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view
         piss.append(pis)
@@ -394,3 +401,43 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
             # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
             # service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
             # write_objects(write_con, [service_calendar], True, False)
+
+def epip_remove_keylist_extensions(read_database: str, write_database: str, generator_defaults: dict):
+    def process(tree, keys: List):
+        for key in keys:
+            for element in tree.iterfind(key):
+                element.getparent().remove(element)
+        return tree
+
+    def query1(read_con) -> Generator:
+        _load_generator = load_generator(read_con, StopPlace)
+        for tree in load_lxml_generator(write_con, StopPlace):
+            yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
+
+
+    def query2(read_con) -> Generator:
+        _load_generator = load_generator(read_con, ScheduledStopPoint)
+        for tree in load_lxml_generator(write_con, ScheduledStopPoint):
+            yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
+
+    def query3(read_con) -> Generator:
+        _load_generator = load_generator(read_con, ServiceJourneyPattern)
+        for tree in load_lxml_generator(write_con, ServiceJourneyPattern):
+            yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
+
+    def query4(read_con) -> Generator:
+        _load_generator = load_generator(read_con, ServiceJourney)
+        for tree in load_lxml_generator(write_con, ServiceJourney):
+            yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
+
+    # TODO: Make the database access pattern generic.
+    with sqlite3.connect(write_database, check_same_thread=False) as write_con:
+        if write_database == read_database:
+            read_con = write_con
+        else:
+            read_con = sqlite3.connect(read_database, check_same_thread=False)
+
+        write_lxml_generator(write_con, StopPlace, query1(read_con))
+        write_lxml_generator(write_con, ScheduledStopPoint, query2(read_con))
+        write_lxml_generator(write_con, ServiceJourneyPattern, query3(read_con))
+        write_lxml_generator(write_con, ServiceJourney, query4(read_con))
