@@ -137,7 +137,7 @@ class SimpleTimetable:
                 availability_conditions[str(ac_hash)] = ac
 
             sj = ServiceJourney(id=getId(ServiceJourney, self.codespace, key), version=self.version.version,
-                                private_code=PrivateCode(type_value="JourneyNumber", value="{:d}{:06d}".format(from_ssps.index(from_ssp) + 1, int(time.replace(':', '')))),
+                                private_code=PrivateCode(type_value="JourneyNumber", value="{:d}{}".format(from_ssps.index(from_ssp) + 1, "{:06d}".format(int(time.replace(':', '')))[0:4])),
                                 time_demand_type_ref=TimeDemandTypeRef(ref=getId(TimeDemandType, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 departure_time=XmlTime(hour=int(time[0:2]), minute=int(time[3:5]), second=0),
