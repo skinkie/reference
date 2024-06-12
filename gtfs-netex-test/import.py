@@ -1,3 +1,4 @@
+import io
 import duckdb
 import csv
 
@@ -91,27 +92,34 @@ import json
 from chardet.universaldetector import UniversalDetector
 
 
-def handle_file(filename: str, column_mapping: dict):
+def handle_file(zip, filename, column_mapping: dict):
     table = filename.split('/')[-1].replace('.txt', '')
     con = duckdb.connect(database='gtfs2.duckdb')
     with duckdb.cursor(con) as cur:
         cur.execute(f"""DROP TABLE IF EXISTS {table};""")
 
-        if os.path.isfile(filename):
+        if filename in [x.filename for x in zip.filelist]:
             detector = UniversalDetector()
-            for line in open(filename, 'rb'):
+            for line in zip.open(filename, 'r'):
                 detector.feed(line)
                 if detector.done: break
             detector.close()
 
-            with open(filename, mode='r', encoding=detector.result['encoding']) as f:
-                reader = csv.reader(f)
+            with zip.open(filename, mode='r') as f:
+                g = io.TextIOWrapper(f, detector.result['encoding'])
+                reader = csv.reader(g)
                 header = next(reader)
 
             if detector.result['encoding'].lower() not in ('utf-8', 'utf-8-sig,', 'ascii'):
-                with open(filename, 'r', encoding=detector.result['encoding']) as f_in, open("_tmp", 'w', encoding='UTF-8') as f_out:
-                    f_out.writelines(f_in)
-                filename = '_tmp'
+                with open(filename, 'r') as f_in:
+                    g = io.TextIOWrapper(f, detector.result['encoding'])
+                    with open("_tmp", 'w', encoding='UTF-8') as f_out:
+                        f_out.writelines(g)
+            else:
+                zip.extract(filename)
+                os.rename(filename, '_tmp')
+
+            filename = '_tmp'
 
             this_mapping = {}
             for column in header:
@@ -144,17 +152,21 @@ def handle_file(filename: str, column_mapping: dict):
 
     con.close()
 
-base_path = '/tmp/avv/'
-handle_file(base_path + 'gtfs/feed_info.txt', feed_info_txt)
-handle_file(base_path + 'gtfs/agency.txt', agency_txt)
-handle_file(base_path + 'gtfs/calendar_dates.txt', calendar_dates_txt)
-handle_file(base_path + 'gtfs/calendar.txt', calendar_txt)
-handle_file(base_path + 'gtfs/routes.txt', routes_txt)
-handle_file(base_path + 'gtfs/levels.txt', levels_txt)
-handle_file(base_path + 'gtfs/stops.txt', stops_txt)
-handle_file(base_path + 'gtfs/shapes.txt', shapes_txt)
-handle_file(base_path + 'gtfs/trips.txt', trips_txt)
-handle_file(base_path + 'gtfs/transfers.txt', transfers_txt)
-handle_file(base_path + 'gtfs/stop_times.txt', stop_times_txt)
-handle_file(base_path + 'gtfs/frequencies.txt', frequencies_txt)
-handle_file(base_path + 'gtfs/pathways.txt', pathways_txt)
+filename = '/tmp/gtfs_generic_eu.zip'
+
+import zipfile
+zip = zipfile.ZipFile(filename)
+
+handle_file(zip, 'feed_info.txt', feed_info_txt)
+handle_file(zip, 'agency.txt', agency_txt)
+handle_file(zip, 'calendar_dates.txt', calendar_dates_txt)
+handle_file(zip, 'calendar.txt', calendar_txt)
+handle_file(zip, 'routes.txt', routes_txt)
+handle_file(zip, 'levels.txt', levels_txt)
+handle_file(zip, 'stops.txt', stops_txt)
+handle_file(zip, 'shapes.txt', shapes_txt)
+handle_file(zip, 'trips.txt', trips_txt)
+handle_file(zip, 'transfers.txt', transfers_txt)
+handle_file(zip, 'stop_times.txt', stop_times_txt)
+handle_file(zip, 'frequencies.txt', frequencies_txt)
+handle_file(zip, 'pathways.txt', pathways_txt)
