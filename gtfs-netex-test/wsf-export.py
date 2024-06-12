@@ -45,8 +45,10 @@ dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="
 start_date = datetime.datetime(year=2023, month=11, day=29)
 end_date = datetime.datetime(year=2023, month=12, day=29)
 
-version = Version(id=getId(Version, codespace, str(1)),
-                  version=str(1),
+today = str(datetime.date.today()).replace('-', '')
+
+version = Version(id=getId(Version, codespace, today),
+                  version=today,
                   start_date=XmlDateTime.from_datetime(start_date),
                   end_date=XmlDateTime.from_datetime(end_date),
                   version_type=VersionTypeEnumeration.BASELINE)
@@ -237,7 +239,7 @@ sa_v = StopArea(id=getId(StopArea, codespace, "V"),
                  version=version.version,
                  name=MultilingualString(value="Vlissingen"),
                  private_code=PrivateCode(value="1", type_value="UserStopAreaCode"),
-                 topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Breskens"))
+                 topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Vlissingen"))
                  )
 
 sa_b = StopArea(id=getId(StopArea, codespace, "B"),

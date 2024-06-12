@@ -2,23 +2,19 @@ from typing import Dict, List
 
 import requests
 import datetime
-import json
 import time
 
-from xsdata.formats.dataclass.context import XmlContext
-from xsdata.formats.dataclass.parsers import XmlParser
-from xsdata.formats.dataclass.parsers.config import ParserConfig
-from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlTime, XmlDate, XmlDuration, XmlDateTime
 
 from netex import ServiceJourney, Codespace, MultilingualString, Version, Route, VehicleType, VehicleTypeRef, RouteRef, \
-    StatusEnumeration, CallsRelStructure, DatedCall, ScheduledStopPointView, ScheduledStopPointRef, ScheduledStopPoint, \
+    StatusEnumeration, CallsRelStructure, ScheduledStopPointView, ScheduledStopPointRef, ScheduledStopPoint, \
     ArrivalStructure, DepartureStructure, ServiceJourneyPatternRef, ServiceJourneyPattern, OnwardTimingLinkView, \
     PublicationDelivery, DataObjectsRelStructure, GeneralFrame, CodespacesRelStructure, VersionsRelStructure, \
     GeneralFrameMembersRelStructure, DataSource, Operator, OrganisationTypeEnumeration, AllModesEnumeration, \
-    ContactStructure, OperatorActivitiesEnumeration, VersionTypeEnumeration, ParticipantRef
+    ContactStructure, OperatorActivitiesEnumeration, VersionTypeEnumeration, ParticipantRef, DatedServiceJourney, \
+    UicOperatingPeriod, Call
 from refs import getId, getFakeRef, getRef
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
@@ -90,20 +86,24 @@ class WagenborgTimetable():
 
         duration_secs = journey['duration'] * 60
 
-        return ServiceJourney(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}"), version=self.version.version,
-                       vehicle_type_ref=getFakeRef(getId(VehicleType, self.codespace, journey['resourceType']), VehicleTypeRef, self.version.version),
+        departure_date = XmlDate.from_string(journey['departureDate'].split('T')[0])
+        arrival_date = XmlDate.from_string(journey['arrivalDate'].split('T')[0])
+        offset = (arrival_date.to_datetime() - departure_date.to_datetime()).days
+
+        return DatedServiceJourney(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}"), version=self.version.version,
+                       vehicle_type_ref_or_train_ref=getFakeRef(getId(VehicleType, self.codespace, journey['resourceType']), VehicleTypeRef, self.version.version),
                        status_attribute=WagenborgTimetable.mapStatus(journey['isUnavailable']),
+                       uic_operating_period=UicOperatingPeriod(from_operating_day_ref_or_from_date=XmlDateTime.from_string(journey['departureDate']),
+                                                               to_operating_day_ref_or_to_date=XmlDateTime.from_string(journey['departureDate']),
+                                                               valid_day_bits=str(int(journey['isUnavailable']))),
                        calls=CallsRelStructure(call=[
-                           # TODO: Remove DatedCalls
-                           DatedCall(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}-{origin}"), version=self.version.version,
-                                               departure_date = XmlDate.from_string(journey['departureDate'].split('T')[0]),
+                           Call(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}-{origin}"), version=self.version.version,
                                                departure = DepartureStructure(time=XmlTime.from_string(journey['departureDate'].split('T')[1]), for_boarding=True),
                                                 onward_timing_link_view=OnwardTimingLinkView(run_time=XmlDuration(f"PT{duration_secs}S")),
                                                fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getRef(self.ssps[origin])),
-                           DatedCall(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}-{destination}"), version=self.version.version,
+                           Call(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}-{destination}"), version=self.version.version,
                                      fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getRef(self.ssps[destination]),
-                                     arrival_date=XmlDate.from_string(journey['arrivalDate'].split('T')[0]),
-                                     arrival=ArrivalStructure(time=XmlTime.from_string(journey['arrivalDate'].split('T')[1]), for_alighting=True))]),
+                                     arrival=ArrivalStructure(time=XmlTime.from_string(journey['arrivalDate'].split('T')[1]), day_offset=offset if offset != 0 else None, for_alighting=True))]),
                        journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, journey['route']))
                        )
 
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     days = 60
 
     codespace = Codespace(id="BISON:Codespace:WPD", xmlns_url="http://bison.dova.nu/ns/WPD", xmlns="WPD", description=MultilingualString(value="Wagenborg Passagiers Diensten"))
-    version = Version(id=getId(Version, codespace, "1"), version="1",
+    version = Version(id=getId(Version, codespace, "1"), version=str(firstdate).replace('-', ''),
                       version_type=VersionTypeEnumeration.BASELINE,
                       start_date=XmlDateTime.from_datetime(datetime.datetime.combine(firstdate, datetime.time.min)),
                       end_date=XmlDateTime.from_datetime(datetime.datetime.combine(firstdate + datetime.timedelta(days=days), datetime.time.min)))

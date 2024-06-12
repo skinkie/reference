@@ -22,7 +22,10 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     PointsInJourneyPatternRelStructure, StopPointInJourneyPattern, JourneyRunTimesRelStructure, JourneyRunTime, \
     TimingLinkRefStructure, PointRefStructure, RoutePointRefStructure, TimingPointRefStructure, LineString, PosList, \
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
-    ContactStructure, ServiceJourney
+    ContactStructure, ServiceJourney, MobilityFacilityList, PassengerCommsFacilityList, VehicleAccessFacilityList, \
+    SanitaryFacilityList, MealFacilityList, AssistanceFacilityList, PublicCodeStructure, DirectionType, \
+    TransportTypeVersionStructure, TypeOfResponsibilityRoleRef, OrganisationRefStructure
+
 import datetime
 
 from refs import getId, getRef, getFakeRef
@@ -33,13 +36,15 @@ ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gm
 short_name = "TESO"
 
 codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
-                      xmlns_url="http://bison.dova.nu/ns/TESO", description="Texels Eigen Stoomboot Onderneming")
+                      xmlns_url="http://bison.dova.nu/ns/TESO", description=MultilingualString(value="Texels Eigen Stoomboot Onderneming"))
 
 start_date = datetime.datetime(year=2023, month=11, day=29)
 end_date = datetime.datetime(year=2023, month=12, day=29)
 
-version = Version(id=getId(Version, codespace, str(1)),
-                  version=str(1),
+today = str(int(str(datetime.date.today()).replace('-', '')) + 2)
+
+version = Version(id=getId(Version, codespace, today),
+                  version=today,
                   start_date=XmlDateTime.from_datetime(start_date),
                   end_date=XmlDateTime.from_datetime(end_date),
                   version_type=VersionTypeEnumeration.BASELINE)
@@ -50,21 +55,6 @@ data_source = DataSource(id=getId(DataSource, codespace, short_name),
                          short_name=MultilingualString(value=short_name),
                          description=MultilingualString(value=short_name))
 
-transport_administrative_zone = TransportAdministrativeZone(id=getId(TransportAdministrativeZone, codespace, "TESO"),
-                                                            version="any",
-                                                            name=MultilingualString(value="TESO"),
-                                                            short_name=MultilingualString(value="TESO"),
-                                                            description=[MultilingualString(value="TESO")],
-                                                            vehicle_modes=[AllModesEnumeration.WATER])
-
-responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
-                                       version=version.version,
-                                       name=MultilingualString(value=short_name),
-                                       roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
-                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "TESO"),
-                                                                        version=version.version,
-                                                                        responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
-                                       ]))
 
 operator = Operator(id=getId(Operator, codespace, "TESO"), version=version.version,
                         company_number="37000097",
@@ -77,6 +67,44 @@ operator = Operator(id=getId(Operator, codespace, "TESO"), version=version.versi
                         customer_service_contact_details=ContactStructure(email="info@teso.nl", phone="+31222369600", url="https://teso.nl/"),
                         operator_activities=[OperatorActivitiesEnumeration.PASSENGER])
 
+transport_administrative_zone = TransportAdministrativeZone(id=getId(TransportAdministrativeZone, codespace, "TESO"),
+                                                            version="any",
+                                                            name=MultilingualString(value="TESO"),
+                                                            short_name=MultilingualString(value="TESO"),
+                                                            description=[MultilingualString(value="TESO")],
+                                                            vehicle_modes=[AllModesEnumeration.WATER])
+
+transport_administrative_zone_partitie = transport_administrative_zone
+
+responsibility_set_concessie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, "Concessie"),
+                                       version=version.version,
+                                       name=MultilingualString(value="TESO"),
+                                       roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
+                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "TESO"),
+                                                                        version=version.version,
+                                                                        responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
+                                       ]))
+
+responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, "Financier"),
+                                       version=version.version,
+                                       name=MultilingualString(value="Financier"),
+                                       roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
+                                           ResponsibilityRoleAssignment(
+                                               id=getId(ResponsibilityRoleAssignment, codespace, "Financier"),
+                                               version=version.version,
+                                               type_of_responsibility_role_ref_or_responsibility_role_ref=TypeOfResponsibilityRoleRef(ref="BISON:TypeOfResponsibilityRole:financing", version="any"),
+                                               responsible_organisation_ref=getRef(operator, OrganisationRefStructure)),
+                                       ]))
+
+responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
+                                       version=version.version,
+                                       name=MultilingualString(value="Partitie"),
+                                       roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
+                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "Partitie"),
+                                                                        version=version.version,
+                                                                        responsible_area_ref=getRef(transport_administrative_zone_partitie, VersionOfObjectRefStructure))
+                                       ]))
+
 operational_context = OperationalContext(id=getId(OperationalContext, codespace, "WATER"), version=version.version,
                                        name=MultilingualString(value="WATER"), short_name=MultilingualString(value="WATER"),
                                          vehicle_mode=AllVehicleModesOfTransportEnumeration.WATER)
@@ -84,7 +112,7 @@ operational_context = OperationalContext(id=getId(OperationalContext, codespace,
 vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), version=version.version,
                            name=MultilingualString(value="Texelstroom (2)"),
                            description=MultilingualString(value="Hybride CNG/diesel-elektrische Ro-Ro ferry"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.NATURAL_GAS,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.NATURAL_GAS),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=[
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "Texelstroom2"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=1750, seating_capacity=1750)]),
@@ -95,27 +123,27 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), ver
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "Texelstroom2"), version=version.version,
-                                                  mobility_facility_list=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                  passenger_comms_facility_list=[PassengerCommsFacilityEnumeration.FREE_WIFI],
-                                                   sanitary_facility_list=[SanitaryFacilityEnumeration.TOILET, SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET],
-                                                   meal_facility_list=[MealFacilityEnumeration.LUNCH, MealFacilityEnumeration.BREAKFAST, MealFacilityEnumeration.SNACK, MealFacilityEnumeration.DRINKS],
-                                                   assistance_facility_list=[AssistanceFacilityEnumeration.BOARDING_ASSISTANCE],
-                                                   vehicle_access_facility_list=[VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]
+                                                  mobility_facility_list=MobilityFacilityList(value=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                  passenger_comms_facility_list=PassengerCommsFacilityList(value=[PassengerCommsFacilityEnumeration.FREE_WIFI]),
+                                                   sanitary_facility_list=SanitaryFacilityList(value=[SanitaryFacilityEnumeration.TOILET, SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET]),
+                                                   meal_facility_list=MealFacilityList(value=[MealFacilityEnumeration.LUNCH, MealFacilityEnumeration.BREAKFAST, MealFacilityEnumeration.SNACK, MealFacilityEnumeration.DRINKS]),
+                                                   assistance_facility_list=AssistanceFacilityList(value=[AssistanceFacilityEnumeration.BOARDING_ASSISTANCE]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP])
                                                   )]
                            ))
 
 dutchprofile = DutchProfile(codespace, data_source, version)
-resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set],
+resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set_concessie, responsibility_set_financier, responsibility_set_partitie],
                                                  organisations=[operator], operational_contexts=[operational_context],
                                                  vehicle_types=[vehicle_type], zones=[transport_administrative_zone])
 
 line = Line(id=getId(Line, codespace, "TESO"), version=version.version, name=MultilingualString(value="TESO"),
-            responsibility_set_ref_attribute=getId(ResponsibilitySet, codespace, short_name),
+            responsibility_set_ref_attribute=responsibility_set_financier.id,
               monitored=False,
               description=MultilingualString(value="Veer tussen Den Helder en Texel"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
-              public_code="TESO",
+              public_code=PublicCodeStructure(value="TESO"),
               private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "TESO"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
@@ -148,7 +176,7 @@ route_links = [rl_dhtx, rl_txdh]
 route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
                    distance=Decimal('4000'),
                    line_ref=getRef(line),
-                   direction_type=DirectionTypeEnumeration.INBOUND,
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
                        PointOnRoute(id=getId(PointOnRoute, codespace, "DH-TX-DH"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_dh), onward_route_link_ref=getRef(rl_dhtx, RouteLinkRefStructure)),
                        PointOnRoute(id=getId(PointOnRoute, codespace, "DH-TX-TX"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_tx)),
@@ -158,7 +186,7 @@ route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
 route_txdh = Route(id=getId(Route, codespace, "TX-DH"), version=version.version,
                    distance=Decimal('4000'),
                    line_ref=getRef(line),
-                   direction_type=DirectionTypeEnumeration.OUTBOUND,
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
                        PointOnRoute(id=getId(PointOnRoute, codespace, "TX-DH-TX"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_tx), onward_route_link_ref=getRef(rl_txdh, RouteLinkRefStructure)),
                        PointOnRoute(id=getId(PointOnRoute, codespace, "TX-DH-DH"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_dh)),
@@ -316,7 +344,11 @@ service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_
                                               notices=None, notice_assignments=None)
 
 stt = SimpleTimetable(codespace, version)
-service_journeys, availability_conditions = stt.simple_timetable('/tmp/teso-20240105.csv')
+from_date = datetime.date.today().isoformat().replace('-', '')
+service_journeys, availability_conditions = stt.simple_timetable(f"../teso/scrape-output/teso-{from_date}.csv")
+
+version.start_date = min(d.from_date for d in availability_conditions)
+version.end_date = max(d.to_date for d in availability_conditions)
 
 sj: ServiceJourney
 for sj in service_journeys:
@@ -324,7 +356,7 @@ for sj in service_journeys:
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], responsibility_set=responsibility_set,
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], responsibility_set=responsibility_set_partitie,
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste TESO export")
 
@@ -333,6 +365,7 @@ serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
+"""
 with open('netex-output/teso.xml', 'w') as out:
     serializer.write(out, publication_delivery, ns_map)
 
@@ -342,3 +375,10 @@ for element in tree.iterfind(".//*"):
     if element.text is None and len(element) == 0 and len(element.attrib.keys()) == 0:
         element.getparent().remove(element)
 tree.write("netex-output/teso-filter.xml", pretty_print=True, strip_text=True)
+"""
+from isal import igzip_threaded
+import gzip
+ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
+with igzip_threaded.open(f"/tmp/NeTEx_TESO_TESO_{from_date}_{from_date}.xml.gz", 'wt', compresslevel=3, threads=3, block_size=2*10**8) as out:
+    serializer.write(out, publication_delivery, ns_map)
+

@@ -95,9 +95,10 @@ class DutchProfile:
             routes = RoutesInFrameRelStructure(route=routes)
 
         if lines is not None and len(lines) > 0:
-            for line in lines:
-                if line.external_line_ref is None:
-                    line.external_line_ref = ExternalObjectRefStructure(ref="0", type_value="VetagLineNumber")
+            # Hoeft niet meer!
+            # for line in lines:
+                # if line.external_line_ref is None:
+                #     line.external_line_ref = ExternalObjectRefStructure(ref="0", type_value="VetagLineNumber")
             lines = LinesInFrameRelStructure(line=lines)
 
         if destination_displays is not None and len(destination_displays) > 0:
