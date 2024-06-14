@@ -1,4 +1,4 @@
-import sqlite3
+import duckdb as sqlite3
 from datetime import datetime
 from typing import Generator
 
@@ -48,12 +48,17 @@ def load_generator(con, clazz, limit=None):
             cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
     except sqlite3.OperationalError:
         return None
+    except sqlite3.duckdb.InvalidInputException:
+        return None
 
     while True:
         xml = cur.fetchone()
         if xml is None:
             break
-        yield parser.from_bytes(xml[0], clazz)
+        if isinstance(xml[0], str):
+            yield parser.from_string(xml[0], clazz)
+        else:
+            yield parser.from_bytes(xml[0], clazz)
 
 def chain(*iterables) -> Generator:
     for it in iterables:
@@ -98,10 +103,10 @@ class GeneratorTester:
 
         return None
 
-con_orig = sqlite3.connect("/home/netex/swiss.sqlite")
-con_target = sqlite3.connect("/home/netex/swiss-target.sqlite")
+con_orig = sqlite3.connect("/home/netex/gtfs-source.duckdb")
+con_target = sqlite3.connect("/home/netex/gtfs-target.duckdb")
 
-codespace_ref_or_codespace = GeneratorTester(load_generator(con_target, Codespace))
+codespace_ref_or_codespace = GeneratorTester(load_generator(con_orig, Codespace))
 data_source = GeneratorTester(load_generator(con_orig, DataSource))
 organisation_or_transport_organisation = GeneratorTester(chain(load_generator(con_orig, Authority), load_generator(con_orig, Operator)))
 transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con_orig, VehicleType))

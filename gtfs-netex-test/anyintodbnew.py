@@ -48,14 +48,16 @@ def setup_database(con, classes, clean=False):
     clean_element_names, interesting_element_names = classes
 
     if clean:
-        cur.execute("PRAGMA writable_schema = 1;")
-        cur.execute("DELETE FROM sqlite_master WHERE type IN ('table', 'index', 'trigger');")
-        cur.execute("PRAGMA writable_schema = 0;")
-        con.commit()
+        # SQLITE
+        # cur.execute("PRAGMA writable_schema = 1;")
+        # cur.execute("DELETE FROM sqlite_master WHERE type IN ('table', 'index', 'trigger');")
+        # cur.execute("PRAGMA writable_schema = 0;")
+        # con.commit()
 
-        # for objectname in clean_element_names:
-        #     sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
-        #     cur.execute(sql_drop_table)
+        # DuckDB
+        for objectname in clean_element_names:
+            sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
+            cur.execute(sql_drop_table)
         cur.execute("VACUUM;")
 
     for objectname in clean_element_names:

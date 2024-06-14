@@ -1,4 +1,4 @@
-import sqlite3
+import duckdb as sqlite3
 from typing import Iterable, Dict, Generator
 
 from dbaccess import write_objects, load_generator, write_generator, update_generator
@@ -32,10 +32,10 @@ def infer_directions_from_sjps_and_apply(read_database, write_database, generato
                 yield new_sjp
 
     # TODO: Make the database access pattern generic.
-    with sqlite3.connect(write_database, check_same_thread=False) as write_con:
+    with sqlite3.connect(write_database) as write_con:
         if write_database == read_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database, check_same_thread=False)
+            read_con = sqlite3.connect(read_database)
         update_generator(write_con, ServiceJourneyPattern, query(read_con))
         write_objects(write_con, list(directions.values()), True)

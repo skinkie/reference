@@ -30,7 +30,10 @@ def load_local(con, clazz: T, limit=None) -> List[T]:
 
     objs: List[T] = []
     for xml, in cur.fetchall():
-        obj = parser.from_bytes(xml, clazz)
+        if isinstance(xml, str):
+            obj = parser.from_string(xml, clazz)
+        else:
+            obj = parser.from_bytes(xml, clazz)
         objs.append(obj)
 
     return objs
@@ -48,7 +51,10 @@ def load_generator(con, clazz, limit=None):
         xml = cur.fetchone()
         if xml is None:
             break
-        yield parser.from_bytes(xml[0], clazz)
+        if isinstance(xml[0], str):
+            yield parser.from_string(xml[0], clazz)
+        else:
+            yield parser.from_bytes(xml[0], clazz)
 
 from lxml import etree
 def load_lxml_generator(con, clazz, limit=None):
@@ -107,9 +113,9 @@ def write_lxml_generator(con, clazz, generator: Generator):
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
     else:
         cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
 
@@ -125,7 +131,11 @@ def get_single(con, clazz: T, id, version) -> T:
 
     row = cur.fetchone()
     if row is not None:
-        obj = parser.from_bytes(row[0], clazz)
+        if isinstance(row[0], str):
+            obj = parser.from_string(row[0], clazz)
+        else:
+            obj = parser.from_bytes(row[0], clazz)
+
         return obj
 
 
@@ -153,21 +163,21 @@ def write_objects(con, objs, empty=False, many=False):
     if many:
         print(objectname, len(objs))
         if hasattr(clazz, 'order'):
-            cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')) for obj in objs])
+            cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
         elif hasattr(clazz, 'version'):
-            cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')) for obj in objs])
+            cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
         else:
             cur.executemany(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);',
-                            [(obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')) for obj in objs])
+                            [(obj.id, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
     else:
         for i in range(0, len(objs)):
             obj = objs[i]
             if hasattr(clazz, 'order'):
-                cur.execute(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')))
+                cur.execute(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')))
             elif hasattr(clazz, 'version'):
-                cur.execute(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')))
+                cur.execute(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')))
             else:
-                cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')))
+                cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '')))
 
             if i % 13 == 0:
                 print('\r', objectname, str(i), end = '')
@@ -197,7 +207,7 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+            yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')
         print('\r', objectname, i, end='')
 
     def _prepare3(generator3, objectname):
@@ -206,7 +216,7 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+            yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')
         print('\r', objectname, i, end='')
 
     def _prepare2(generator2, objectname):
@@ -215,15 +225,27 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+            yield obj.id, serializer.render(obj, ns_map).replace('\n', '')
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+        if con.__class__.__name__ == 'DuckDBPyConnection':
+            for a in _prepare4(generator, objectname):
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', a)
+        else:
+            cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+        if con.__class__.__name__ == 'DuckDBPyConnection':
+            for a in _prepare3(generator, objectname):
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', a)
+        else:
+            cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
     else:
-        cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
+        if con.__class__.__name__ == 'DuckDBPyConnection':
+            for a in _prepare2(generator, objectname):
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', a)
+        else:
+            cur.executemany(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
 
     print('\n')
 
@@ -246,7 +268,7 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+            yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')
         print('\r', objectname, i, end='')
 
     def _prepare3(generator3, objectname):
@@ -255,7 +277,7 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+            yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')
         print('\r', objectname, i, end='')
 
     def _prepare2(generator2, objectname):
@@ -264,14 +286,26 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
+            yield obj.id, serializer.render(obj, ns_map).replace('\n', '')
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+        if con.__class__.__name__ == 'DuckDBPyConnection':
+            for a in _prepare4(generator, objectname):
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', a)
+        else:
+            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+        if con.__class__.__name__ == 'DuckDBPyConnection':
+            for a in _prepare3(generator, objectname):
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', a)
+        else:
+            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
     else:
-        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
+        if con.__class__.__name__ == 'DuckDBPyConnection':
+            for a in _prepare2(generator, objectname):
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', a)
+        else:
+            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
 
     print('\n')

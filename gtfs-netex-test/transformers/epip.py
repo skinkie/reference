@@ -1,4 +1,5 @@
-import sqlite3
+# import sqlite3
+import duckdb as sqlite3
 import sys
 import warnings
 from datetime import datetime
@@ -37,14 +38,18 @@ def epip_line_generator(read_database: str, write_database: str, generator_defau
         line.type_of_product_category_ref = None
         return line
 
-    def query(read_database) -> Generator:
-        with sqlite3.connect(read_database, check_same_thread=False) as read_con:
-            _load_generator = load_generator(read_con, Line)
-            for line in pool.imap_unordered(process, _load_generator, chunksize=100):
-                yield line
+    def query(read_con) -> Generator:
+        _load_generator = load_generator(read_con, Line)
+        for line in pool.imap_unordered(process, _load_generator, chunksize=100):
+            yield line
 
     with sqlite3.connect(write_database) as write_con:
-        write_generator(write_con, Line, query(read_database), True)
+        if read_database == write_database:
+            read_con = write_con
+        else:
+            read_con = sqlite3.connect(read_database)
+
+        write_generator(write_con, Line, query(read_con), True)
 
 def epip_line_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
@@ -67,14 +72,18 @@ def epip_scheduled_stop_point_generator(read_database: str, write_database: str,
         project_location_4326(ssp.location, generator_defaults)
         return ssp
 
-    def query(read_database) -> Generator:
-        with sqlite3.connect(read_database, check_same_thread=False) as read_con:
-            _load_generator = load_generator(read_con, ScheduledStopPoint)
-            for ssp in pool.imap_unordered(partial(process, generator_defaults=generator_defaults), _load_generator, chunksize=100):
-                yield ssp
+    def query(read_con) -> Generator:
+        _load_generator = load_generator(read_con, ScheduledStopPoint)
+        for ssp in pool.imap_unordered(partial(process, generator_defaults=generator_defaults), _load_generator, chunksize=100):
+            yield ssp
 
     with sqlite3.connect(write_database) as write_con:
-        write_generator(write_con, ScheduledStopPoint, query(read_database), True)
+        if read_database == write_database:
+            read_con = write_con
+        else:
+            read_con = sqlite3.connect(read_database)
+
+        write_generator(write_con, ScheduledStopPoint, query(read_con), True)
 
 def epip_scheduled_stop_point_memory(read_database: str, write_database: str, generator_defaults: dict):
     print(sys._getframe().f_code.co_name)
@@ -330,7 +339,7 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
         sj: ServiceJourney
 
         # Prototype, just: TimeDemandType -> PassingTimes
-        with sqlite3.connect(read_database, check_same_thread=False) as read_con:
+        with sqlite3.connect(read_database) as read_con:
             if sj.passing_times:
                 pass
 
@@ -367,19 +376,23 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
         sj.calls = None
         return sj
 
-    def query(read_database) -> Generator:
-        with sqlite3.connect(read_database, check_same_thread=False) as read_con:
-            _load_generator = load_generator(read_con, ServiceJourney)
-            for sj in _load_generator:
-                yield process(sj, read_database, write_database, generator_defaults)
-            # for sj in pool.imap_unordered(partial(process, read_database=read_database, write_database=write_database, generator_defaults=generator_defaults), _load_generator, chunksize=100):
-            #     yield sj
+    def query(read_con) -> Generator:
+        _load_generator = load_generator(read_con, ServiceJourney)
+        for sj in _load_generator:
+            yield process(sj, read_database, write_database, generator_defaults)
+        # for sj in pool.imap_unordered(partial(process, read_database=read_database, write_database=write_database, generator_defaults=generator_defaults), _load_generator, chunksize=100):
+        #     yield sj
 
-    with sqlite3.connect(read_database, check_same_thread=False) as read_con:
+    with sqlite3.connect(read_database) as read_con:
         availability_conditions = getIndex(load_local(read_con, AvailabilityCondition))
 
     with sqlite3.connect(write_database) as write_con:
-        write_generator(write_con, ServiceJourney, query(read_database), True)
+        if read_database == write_database:
+            read_con = write_con
+        else:
+            read_con = sqlite3.connect(read_database)
+
+        write_generator(write_con, ServiceJourney, query(read_con), True)
         write_objects(write_con, list(sjps.values()), True, True)
 
         service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
@@ -431,11 +444,11 @@ def epip_remove_keylist_extensions(read_database: str, write_database: str, gene
             yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
 
     # TODO: Make the database access pattern generic.
-    with sqlite3.connect(write_database, check_same_thread=False) as write_con:
+    with sqlite3.connect(write_database) as write_con:
         if write_database == read_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database, check_same_thread=False)
+            read_con = sqlite3.connect(read_database)
 
         write_lxml_generator(write_con, StopPlace, query1(read_con))
         write_lxml_generator(write_con, ScheduledStopPoint, query2(read_con))
