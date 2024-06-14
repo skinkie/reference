@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 from typing import List, Dict, Tuple
 
@@ -14,13 +15,18 @@ from GtfsNeTEx import date_to_xmldatetime
 from netex import ServiceJourney, ServiceJourneyPattern, StopPointInJourneyPattern, TimetabledPassingTime, \
     PointsInJourneyPatternRelStructure, Codespace, TimetabledPassingTimesRelStructure, \
     PointInJourneyPatternRef, ServiceJourneyPatternRef, Call, MultilingualString, RouteView, Version, TimeDemandType, \
-    DepartureStructure, ArrivalStructure, DatedCall, TimingLink, ScheduledStopPoint, TimingPointRefStructure, \
+    DepartureStructure, ArrivalStructure, TimingLink, ScheduledStopPoint, TimingPointRefStructure, \
     JourneyRunTime, JourneyWaitTime, JourneyRunTimesRelStructure, TimingLinkRef, JourneyWaitTimesRelStructure, \
     ScheduledStopPointRef, TimingLinkRefStructure, PublicationDelivery, GeneralFrame, AvailabilityCondition, \
-    ValidityConditionsRelStructure, AvailabilityConditionRef, ServiceCalendar, UicOperatingPeriod, UicOperatingPeriodRef
+    ValidityConditionsRelStructure, AvailabilityConditionRef, ServiceCalendar, UicOperatingPeriod, \
+    UicOperatingPeriodRef, DatedServiceJourney
 from refs import getRef, getIndex, getId, getFakeRef, getBitString2
 import sys
 import copy
+
+from utils import project
+
+
 class AvailabilityConditionsProfile:
     codespace: Codespace
     version: Version
@@ -32,20 +38,29 @@ class AvailabilityConditionsProfile:
     def getHexHash(hash_in: int):
         return ("%0.2X" % (hash_in**2))[0:8]
 
-    def deduplicate(self, sjs: List[ServiceJourney]) -> (List[ServiceJourney], List[AvailabilityCondition]):
+    def deduplicate(self, sjs: List[DatedServiceJourney]) -> (List[ServiceJourney], List[AvailabilityCondition]):
         sjs_operating_days = {}
         sjs_filtered = {}
         acs: Dict[str, AvailabilityCondition] = {}
-        if sjs[0].calls and isinstance(sjs[0].calls.choice[0], DatedCall):
+        if sjs[0].calls and isinstance(sjs[0].calls.call[0], Call):
             for sj in sjs:
-                dated_call: DatedCall = sj.calls.choice[0]
-                key = '-'.join([sj.choice.ref, str(sj.departure_time).replace(':', '')])
+                call: Call = sj.calls.call[0]
+
+                key = '-'.join([sj.journey_pattern_ref.ref, str(sj.departure_time).replace(':', '')])
+
+                operating_dates_this = [sj.uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i) for i in
+                                     range(0, len(sj.uic_operating_period.valid_day_bits)) if
+                                     sj.uic_operating_period.valid_day_bits[i] == '1']
+                # TODO
+                # sj.uic_operating_period.
+
                 operating_dates = sjs_operating_days.get(key, set([]))
-                operating_dates.add(dated_call.departure_date.to_datetime())
+                operating_dates = operating_dates.union(operating_dates_this)
                 sjs_operating_days[key] = operating_dates
 
                 if key not in sjs_filtered:
-                    sj = copy.deepcopy(sj)
+                    # sj = copy.deepcopy(sj)
+                    sj = project(sj, ServiceJourney)
                     sj.calls = None
                     sj.id = key.replace('ServiceJourneyPattern', 'ServiceJourney')
                     sjs_filtered[key] = sj

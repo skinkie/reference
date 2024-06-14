@@ -59,7 +59,10 @@ with open('scrape-output/doeksen-{}.csv'.format(from_date.isoformat().replace('-
 
                     if 'departures' in document:
                         for departure in document['departures']:
-                            writer.writerow(flatten(departure))
+                            flattened = flatten(departure)
+                            if flattened['duration'] > 200:
+                                print("..")
+                            writer.writerow(flattened)
                         csvfile.flush()
                     else:
                         nomoredata = True

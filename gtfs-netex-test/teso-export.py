@@ -76,15 +76,6 @@ transport_administrative_zone = TransportAdministrativeZone(id=getId(TransportAd
 
 transport_administrative_zone_partitie = transport_administrative_zone
 
-responsibility_set_concessie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, "Concessie"),
-                                       version=version.version,
-                                       name=MultilingualString(value="TESO"),
-                                       roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
-                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "TESO"),
-                                                                        version=version.version,
-                                                                        responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
-                                       ]))
-
 responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, "Financier"),
                                        version=version.version,
                                        name=MultilingualString(value="Financier"),
@@ -133,7 +124,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), ver
                            ))
 
 dutchprofile = DutchProfile(codespace, data_source, version)
-resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set_concessie, responsibility_set_financier, responsibility_set_partitie],
+resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set_financier, responsibility_set_partitie],
                                                  organisations=[operator], operational_contexts=[operational_context],
                                                  vehicle_types=[vehicle_type], zones=[transport_administrative_zone])
 

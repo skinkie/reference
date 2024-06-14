@@ -51,10 +51,6 @@ with sqlite3.connect("/tmp/netex.sqlite") as con:
                 if 'id' not in element.attrib:
                     print(xml)
 
-                id = element.attrib['id']
-                if id == 'ARR:ServiceJourneyPattern:372:1076#NN:P427':
-                    print("..")
-
                 version = element.attrib.get('version', 'any')
                 localname = element.tag.split('}')[-1] # localname
                 sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""

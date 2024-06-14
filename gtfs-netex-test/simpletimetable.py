@@ -45,6 +45,15 @@ class SimpleTimetable:
         tdts = {}
         sjs = []
 
+        from_ssps = []
+
+        for key, operating_dates in simple_timetable.items():
+            from_ssp, _to_ssp, _time, _duration, _vessel = key.split('_')
+            if from_ssp not in from_ssps:
+                from_ssps.append(from_ssp)
+
+        from_ssps = sorted(from_ssps)
+
         for key, operating_dates in simple_timetable.items():
             from_ssp, to_ssp, time, duration, vessel = key.split('_')
             ac_hash = hash(tuple(operating_dates)) # TODO replace with hashlib.sha256
@@ -64,6 +73,9 @@ class SimpleTimetable:
             tdt_key = '-'.join([from_ssp, to_ssp, duration])
             duration_secs = int(duration) * 60
 
+            if duration_secs > 7200:
+                print("..")
+
             tdt = TimeDemandType(id=getId(TimeDemandType, self.codespace, tdt_key), version=self.version.version,
                            run_times=JourneyRunTimesRelStructure(
                                journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, self.codespace, '-'.join([from_ssp, to_ssp, duration])),
@@ -74,11 +86,14 @@ class SimpleTimetable:
 
 
             sj = ServiceJourney(id=getId(ServiceJourney, self.codespace, key), version=self.version.version,
-                                private_code=PrivateCode(type_value="JourneyNumber", value="{:04d}".format(int(time.replace(':', '')))),
+                                private_code=PrivateCode(type_value="JourneyNumber",
+                                                         value="{:d}{}".format(from_ssps.index(from_ssp) + 1,
+                                                                               "{:06d}".format(
+                                                                                   int(time.replace(':', '')))[0:4])),
                                 time_demand_type_ref=getRef(tdt),
                                 journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 departure_time=XmlTime(hour=int(time[0:2]), minute=int(time[3:5]), second=0),
-                                vehicle_type_ref=VehicleTypeRef(ref=getId(VehicleType, self.codespace, vessel), version=self.version.version),
+                                vehicle_type_ref_or_train_ref=VehicleTypeRef(ref=getId(VehicleType, self.codespace, vessel), version=self.version.version),
                            validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=getRef(ac))])
 
             sjs.append(sj)

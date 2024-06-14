@@ -13,7 +13,7 @@ from xsdata.models.datatype import XmlDuration, XmlTime
 from netex import ServiceJourney, ServiceJourneyPattern, StopPointInJourneyPattern, TimetabledPassingTime, \
     PointsInJourneyPatternRelStructure, Codespace, TimetabledPassingTimesRelStructure, \
     PointInJourneyPatternRef, ServiceJourneyPatternRef, Call, MultilingualString, RouteView, Version, TimeDemandType, \
-    DepartureStructure, ArrivalStructure, DatedCall, TimingLink, ScheduledStopPoint, TimingPointRefStructure, \
+    DepartureStructure, ArrivalStructure, TimingLink, ScheduledStopPoint, TimingPointRefStructure, \
     JourneyRunTime, JourneyWaitTime, JourneyRunTimesRelStructure, TimingLinkRef, JourneyWaitTimesRelStructure, \
     ScheduledStopPointRef, TimingLinkRefStructure, PublicationDelivery, GeneralFrame, ServiceLink, \
     TimingPointInJourneyPattern
@@ -28,21 +28,23 @@ class TimeDemandTypesProfile:
         return ((arrival.arrival.day_offset or 0) * 86400 + arrival.arrival.time.hour * 3600 + arrival.arrival.time.minute * 60 + arrival.arrival.time.second) - ((departure.departure.day_offset or 0) * 86400 + departure.departure.time.hour * 3600 +  departure.departure.time.minute * 60 + departure.departure.time.second)
 
 
-    @staticmethod
-    def getWaitTimeCall(call: DatedCall) -> int:
+    # @staticmethod
+    def getWaitTimeCall(call: Call) -> int:
         if call.arrival is not None and call.departure is not None:
-            return (86400 * (call.departure_date.to_datetime() - call.arrival_date.to_datetime()).days) + ((call.departure.day_offset or 0) * 86400 + call.departure.time.hour * 3600 + call.departure.time.minute * 60 + call.departure.time.second) - ((call.arrival.day_offset or 0) * 86400 + call.arrival.time.hour * 3600 +  call.arrival.time.minute * 60 + call.arrival.time.second)
-
-    @staticmethod
-    def getWaitTimeDatedCall(dated_call: DatedCall) -> int:
-        if dated_call.arrival is not None and dated_call.departure is not None:
-            return (86400 * (dated_call.departure_date.to_datetime() - dated_call.arrival_date.to_datetime()).days) + ((dated_call.departure.day_offset or 0) * 86400 + dated_call.departure.time.hour * 3600 + dated_call.departure.time.minute * 60 + dated_call.departure.time.second) - ((dated_call.arrival.day_offset or 0) * 86400 + dated_call.arrival.time.hour * 3600 +  dated_call.arrival.time.minute * 60 + dated_call.arrival.time.second)
-
+            waiting_time_secs = ((call.departure.day_offset or 0) * 86400 + call.departure.time.hour * 3600 + call.departure.time.minute * 60 + call.departure.time.second) - ((call.arrival.day_offset or 0) * 86400 + call.arrival.time.hour * 3600 +  call.arrival.time.minute * 60 + call.time.arrival_time.second)
+            return waiting_time_secs
         return 0
 
-    @staticmethod
-    def getRunTimeDatedCall(departure: DatedCall, arrival: DatedCall) -> int:
-        return (86400 * (arrival.arrival_date.to_datetime() - departure.departure_date.to_datetime()).days) + ((arrival.arrival.day_offset or 0) * 86400 + arrival.arrival.time.hour * 3600 + arrival.arrival.time.minute * 60 + arrival.arrival.time.second) - ((departure.departure.day_offset or 0) * 86400 + departure.departure.time.hour * 3600 +  departure.departure.time.minute * 60 + departure.departure.time.second)
+    # @staticmethod
+    # def getWaitTimeDatedCall(dated_call: DatedCall) -> int:
+    #    if dated_call.arrival is not None and dated_call.departure is not None:
+    #        return (86400 * (dated_call.departure_date.to_datetime() - dated_call.arrival_date.to_datetime()).days) + ((dated_call.departure.day_offset or 0) * 86400 + dated_call.departure.time.hour * 3600 + dated_call.departure.time.minute * 60 + dated_call.departure.time.second) - ((dated_call.arrival.day_offset or 0) * 86400 + dated_call.arrival.time.hour * 3600 +  dated_call.arrival.time.minute * 60 + dated_call.arrival.time.second)
+
+    #    return 0
+
+    # @staticmethod
+    # def getRunTimeDatedCall(departure: DatedCall, arrival: DatedCall) -> int:
+    #     return (86400 * (arrival.arrival_date.to_datetime() - departure.departure_date.to_datetime()).days) + ((arrival.arrival.day_offset or 0) * 86400 + arrival.arrival.time.hour * 3600 + arrival.arrival.time.minute * 60 + arrival.arrival.time.second) - ((departure.departure.day_offset or 0) * 86400 + departure.departure.time.hour * 3600 +  departure.departure.time.minute * 60 + departure.departure.time.second)
 
 
     @staticmethod
@@ -155,7 +157,7 @@ class TimeDemandTypesProfile:
         for i in range(0, len(calls) - 1):
             run_time = XmlDuration(
                 value="PT{:d}S".format(TimeDemandTypesProfile.getRunTimeCall(calls[i], calls[i + 1])))
-            wait_time = XmlDuration(value="PT{:d}S".format(TimeDemandTypesProfile.getWaitTimeDatedCall(calls[i])))
+            wait_time = XmlDuration(value="PT{:d}S".format(TimeDemandTypesProfile.getWaitTimeCall(calls[i])))
             ssp = ssps[calls[
                 i].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref]
             ssp_next = ssps[calls[
@@ -241,9 +243,9 @@ class TimeDemandTypesProfile:
             return time_demand_types[service_journey.time_demand_type_ref.ref]
 
         if service_journey.calls is not None:
-            if isinstance(service_journey.calls.call[0], DatedCall):
-                self.getTimeDemandTypeByDatedCalls(service_journey, time_demand_types, time_demand_types_hash, ssps, tls)
-            elif isinstance(service_journey.calls.call[0], Call):
+            # if isinstance(service_journey.calls.call[0], DatedCall):
+            #    self.getTimeDemandTypeByDatedCalls(service_journey, time_demand_types, time_demand_types_hash, ssps, tls)
+            if isinstance(service_journey.calls.call[0], Call):
                 self.getTimeDemandTypeByCalls(service_journey, time_demand_types, time_demand_types_hash, ssps, tls)
         elif service_journey.passing_times is not None:
             self.getTimeDemandTypeByTimetabledPassingTimes(service_journey, service_journey_patterns, time_demand_types, time_demand_types_hash, ssps, tls, sls)
@@ -285,17 +287,17 @@ class TimeDemandTypesProfile:
 
             return sjp
 
-        if isinstance(service_journey.calls.call[0], DatedCall):
-            dated_calls: List[DatedCall] = service_journey.calls.call
+        if isinstance(service_journey.calls.call[0], Call):
+            calls: List[Call] = service_journey.calls.call
             ssps_in_seq: List[TimingPointRefStructure] = []
             onward_tls: List[str] = []
 
-            for i in range(0, len(dated_calls)-1):
-                ssp = getRef(ssps[dated_calls[i].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure)
-                ssp_next = getRef(ssps[dated_calls[i+1].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure)
+            for i in range(0, len(calls)-1):
+                ssp = getRef(ssps[calls[i].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure)
+                ssp_next = getRef(ssps[calls[i+1].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure)
 
-                if dated_calls[i].onward_timing_link_view and dated_calls[i].onward_timing_link_view.timing_link_ref and dated_calls[i].onward_timing_link_view.timing_link_ref in tls:
-                    tl_ref = dated_calls[i].onward_timing_link_view.timing_link_ref
+                if calls[i].onward_timing_link_view and calls[i].onward_timing_link_view.timing_link_ref and calls[i].onward_timing_link_view.timing_link_ref in tls:
+                    tl_ref = calls[i].onward_timing_link_view.timing_link_ref
                 else:
                     tl_ref = getId(TimingLink, self.codespace, TimeDemandTypesProfile.getHexHash(hash(ssp.ref + "-" + ssp_next.ref)))
 
@@ -306,7 +308,7 @@ class TimeDemandTypesProfile:
                 ssps_in_seq.append(ssp)
                 onward_tls.append(tl_ref)
 
-            ssps_in_seq.append(getRef(ssps[dated_calls[-1].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure))
+            ssps_in_seq.append(getRef(ssps[calls[-1].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure))
 
             sjp_hash = hash('-'.join(x.ref for x in ssps_in_seq))
             sjp_hash_hex = TimeDemandTypesProfile.getHexHash(sjp_hash)

@@ -23,7 +23,8 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     TimingLinkRefStructure, PointRefStructure, RoutePointRefStructure, TimingPointRefStructure, LineString, PosList, \
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, AuthorityRef, OrganisationRefStructure, ServiceJourney, \
-    DirectionType
+    DirectionType, TransportTypeVersionStructure, MobilityFacilityList, PassengerCommsFacilityList, \
+    SanitaryFacilityList, MealFacilityList, AssistanceFacilityList, VehicleAccessFacilityList, PublicCodeStructure
 import datetime
 
 from refs import getId, getRef, getFakeRef
@@ -34,10 +35,10 @@ ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gm
 short_name = "DOEKSEN"
 
 codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
-                      xmlns_url="http://bison.dova.nu/ns/DOEKSEN", description="Rederij Doeksen")
+                      xmlns_url="http://bison.dova.nu/ns/DOEKSEN", description=MultilingualString(value="Rederij Doeksen"))
 
 dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
-                      xmlns_url="http://bison.dova.nu/ns/DOVA", description="'Centrale' lijsten bijgehouden door DOVA")
+                      xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
 start_date = datetime.datetime(year=2023, month=11, day=29)
 end_date = datetime.datetime(year=2023, month=12, day=29)
@@ -49,7 +50,8 @@ version = Version(id=getId(Version, codespace, str(1)),
                   version_type=VersionTypeEnumeration.BASELINE)
 
 stt = SimpleTimetable(codespace, version)
-service_journeys, availability_conditions, time_demand_types = stt.simple_timetable2('../doeksen/scrape-output/doeksen-20231206.csv')
+from_date = datetime.date.today().isoformat().replace('-', '')
+service_journeys, availability_conditions, time_demand_types = stt.simple_timetable2(f"../doeksen/scrape-output/doeksen-{from_date}.csv")
 
 for ac in availability_conditions:
     if version.start_date.to_datetime() > ac.from_date.to_datetime():
@@ -68,7 +70,9 @@ transport_administrative_zone = TransportAdministrativeZone(id=getId(TransportAd
                                                             version="any",
                                                             name=MultilingualString(value="Veerdienst Harlingen-Vlieland-Terschelling"),
                                                             short_name=MultilingualString(value="DOEKSEN"),
-                                                            vehicle_modes=[AllModesEnumeration.FERRY])
+                                                            vehicle_modes=[AllModesEnumeration.WATER])
+
+transport_administrative_zone_partitie = transport_administrative_zone
 
 operator = Operator(id=getId(Operator, codespace, "DOEKSEN"), version=version.version,
                         company_number="01002252",
@@ -76,43 +80,46 @@ operator = Operator(id=getId(Operator, codespace, "DOEKSEN"), version=version.ve
                         short_name=MultilingualString(value="Doeksen"),
                         legal_name=MultilingualString(value="B.V. Rederij G. Doeksen en Zonen"),
                         organisation_type=[OrganisationTypeEnumeration.OPERATOR],
-                        primary_mode=AllModesEnumeration.FERRY,
+                        primary_mode=AllModesEnumeration.WATER,
                         contact_details=ContactStructure(url="https://www.rederij-doeksen.nl/"),
                         customer_service_contact_details=ContactStructure(email="info@rederij-doeksen.nl", phone="+31889000888", url="https://www.rederij-doeksen.nl/"),
                         operator_activities=[OperatorActivitiesEnumeration.PASSENGER])
 
-authority = Authority(id=getId(Authority, codespace, "Rijk"), version="any", name=MultilingualString(value="Rijksoverheid"), short_name=MultilingualString(value="RIJK"), description=MultilingualString(value="Rijksoverheid"))
 
-responsibility_set = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
+responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, "Financier"),
                                        version=version.version,
-                                       name=MultilingualString(value=short_name),
+                                       name=MultilingualString(value="Financier"),
                                        roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
                                            ResponsibilityRoleAssignment(
-                                               id=getId(ResponsibilityRoleAssignment, codespace, "RIJK"),
+                                               id=getId(ResponsibilityRoleAssignment, codespace, "Financier"),
                                                version=version.version,
-                                               data_role_type=None,
-                                               stakeholder_role_type=None,
                                                type_of_responsibility_role_ref_or_responsibility_role_ref=TypeOfResponsibilityRoleRef(ref="BISON:TypeOfResponsibilityRole:financing", version="any"),
-                                               responsible_organisation_ref=getRef(authority, OrganisationRefStructure)),
-                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "DOEKSEN"),
+                                               responsible_organisation_ref=getRef(operator, OrganisationRefStructure)),
+                                       ]))
+
+responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
+                                       version=version.version,
+                                       name=MultilingualString(value="Partitie"),
+                                       roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
+                                           ResponsibilityRoleAssignment(id=getId(ResponsibilityRoleAssignment, codespace, "Partitie"),
                                                                         version=version.version,
-                                                                        data_role_type=None,
-                                                                        stakeholder_role_type=None,
-                                                                        responsible_area_ref=getRef(transport_administrative_zone, VersionOfObjectRefStructure))
+                                                                        responsible_area_ref=getRef(transport_administrative_zone_partitie, VersionOfObjectRefStructure))
                                        ]))
 
 
+# authority = Authority(id=getId(Authority, codespace, "Rijk"), version="any", name=MultilingualString(value="Rijksoverheid"), short_name=MultilingualString(value="RIJK"), description=MultilingualString(value="Rijksoverheid"))
+
 operational_context = OperationalContext(id=getId(OperationalContext, codespace, "WATER"), version=version.version,
                                        name=MultilingualString(value="WATER"), short_name=MultilingualString(value="WATER"),
-                                         vehicle_mode=AllVehicleModesOfTransportEnumeration.FERRY)
+                                         vehicle_mode=AllVehicleModesOfTransportEnumeration.WATER)
 
 vehicle_type_wdv = VehicleType(id=getId(VehicleType, codespace, "WDV"), version=version.version,
                            name=MultilingualString(value="Willem de Vlamingh"),
                            description=MultilingualString(value="Willem de Vlamingh"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.NATURAL_GAS,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.NATURAL_GAS),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "WDV"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=692)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "WDV"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=692)]),
                            length=Decimal(value='70'), width=Decimal(value='17.3'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -120,29 +127,29 @@ vehicle_type_wdv = VehicleType(id=getId(VehicleType, codespace, "WDV"), version=
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "WDV"), version=version.version,
-                                                   mobility_facility_list=[
-                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                   passenger_comms_facility_list=[
-                                                       PassengerCommsFacilityEnumeration.FREE_WIFI],
-                                                   sanitary_facility_list=[SanitaryFacilityEnumeration.TOILET,
-                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET],
-                                                   meal_facility_list=[MealFacilityEnumeration.LUNCH,
+                                                   mobility_facility_list=MobilityFacilityList(value=[
+                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                   passenger_comms_facility_list=PassengerCommsFacilityList(value=[
+                                                       PassengerCommsFacilityEnumeration.FREE_WIFI]),
+                                                   sanitary_facility_list=SanitaryFacilityList(value=[SanitaryFacilityEnumeration.TOILET,
+                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET]),
+                                                   meal_facility_list=MealFacilityList(value=[MealFacilityEnumeration.LUNCH,
                                                                        MealFacilityEnumeration.BREAKFAST,
                                                                        MealFacilityEnumeration.SNACK,
-                                                                       MealFacilityEnumeration.DRINKS],
-                                                   assistance_facility_list=[
-                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE],
-                                                   vehicle_access_facility_list=[
-                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]
+                                                                       MealFacilityEnumeration.DRINKS]),
+                                                   assistance_facility_list=AssistanceFacilityList(value=[
+                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[
+                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP])
                            )]))
 
 vehicle_type_wb = VehicleType(id=getId(VehicleType, codespace, "WB"), version=version.version,
                            name=MultilingualString(value="Willem Barentsz"),
                            description=MultilingualString(value="Willem Barentsz"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.NATURAL_GAS,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.NATURAL_GAS),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "WB"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=692)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "WB"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=692)]),
                            length=Decimal(value='70'), width=Decimal(value='17.3'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -150,30 +157,30 @@ vehicle_type_wb = VehicleType(id=getId(VehicleType, codespace, "WB"), version=ve
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "WB"), version=version.version,
-                                                   mobility_facility_list=[
-                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                   passenger_comms_facility_list=[
-                                                       PassengerCommsFacilityEnumeration.FREE_WIFI],
-                                                   sanitary_facility_list=[SanitaryFacilityEnumeration.TOILET,
-                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET],
-                                                   meal_facility_list=[MealFacilityEnumeration.LUNCH,
+                                                   mobility_facility_list=MobilityFacilityList(value=[
+                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                   passenger_comms_facility_list=PassengerCommsFacilityList(value=[
+                                                       PassengerCommsFacilityEnumeration.FREE_WIFI]),
+                                                   sanitary_facility_list=SanitaryFacilityList(value=[SanitaryFacilityEnumeration.TOILET,
+                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET]),
+                                                   meal_facility_list=MealFacilityList(value=[MealFacilityEnumeration.LUNCH,
                                                                        MealFacilityEnumeration.BREAKFAST,
                                                                        MealFacilityEnumeration.SNACK,
-                                                                       MealFacilityEnumeration.DRINKS],
-                                                   assistance_facility_list=[
-                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE],
-                                                   vehicle_access_facility_list=[
-                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]
+                                                                       MealFacilityEnumeration.DRINKS]),
+                                                   assistance_facility_list=AssistanceFacilityList(value=[
+                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[
+                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP])
                            )]))
 
 
 vehicle_type_friesland = VehicleType(id=getId(VehicleType, codespace, "FR"), version=version.version,
                            name=MultilingualString(value="Friesland"),
                            description=MultilingualString(value="Friesland"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "FRIESLAND"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=1100)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "FRIESLAND"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=1100)]),
                            length=Decimal(value='69'), width=Decimal(value='16'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -181,29 +188,29 @@ vehicle_type_friesland = VehicleType(id=getId(VehicleType, codespace, "FR"), ver
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "FRIESLAND"), version=version.version,
-                                                   mobility_facility_list=[
-                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                   passenger_comms_facility_list=[
-                                                       PassengerCommsFacilityEnumeration.FREE_WIFI],
-                                                   sanitary_facility_list=[SanitaryFacilityEnumeration.TOILET,
-                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET],
-                                                   meal_facility_list=[MealFacilityEnumeration.LUNCH,
+                                                   mobility_facility_list=MobilityFacilityList(value=[
+                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                   passenger_comms_facility_list=PassengerCommsFacilityList(value=[
+                                                       PassengerCommsFacilityEnumeration.FREE_WIFI]),
+                                                   sanitary_facility_list=SanitaryFacilityList(value=[SanitaryFacilityEnumeration.TOILET,
+                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET]),
+                                                   meal_facility_list=MealFacilityList(value=[MealFacilityEnumeration.LUNCH,
                                                                        MealFacilityEnumeration.BREAKFAST,
                                                                        MealFacilityEnumeration.SNACK,
-                                                                       MealFacilityEnumeration.DRINKS],
-                                                   assistance_facility_list=[
-                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE],
-                                                   vehicle_access_facility_list=[
-                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]
+                                                                       MealFacilityEnumeration.DRINKS]),
+                                                   assistance_facility_list=AssistanceFacilityList(value=[
+                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[
+                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP])
                            )]))
 
 vehicle_type_vlieland = VehicleType(id=getId(VehicleType, codespace, "VL"), version=version.version,
                            name=MultilingualString(value="Vlieland"),
                            description=MultilingualString(value="Vlieland"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "VL"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=950)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "VL"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=950)]),
                            length=Decimal(value='68'), width=Decimal(value='17'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -211,29 +218,29 @@ vehicle_type_vlieland = VehicleType(id=getId(VehicleType, codespace, "VL"), vers
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "VL"), version=version.version,
-                                                   mobility_facility_list=[
-                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                   passenger_comms_facility_list=[
-                                                       PassengerCommsFacilityEnumeration.FREE_WIFI],
-                                                   sanitary_facility_list=[SanitaryFacilityEnumeration.TOILET,
-                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET],
-                                                   meal_facility_list=[MealFacilityEnumeration.LUNCH,
+                                                   mobility_facility_list=MobilityFacilityList(value=[
+                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                   passenger_comms_facility_list=PassengerCommsFacilityList(value=[
+                                                       PassengerCommsFacilityEnumeration.FREE_WIFI]),
+                                                   sanitary_facility_list=SanitaryFacilityList(value=[SanitaryFacilityEnumeration.TOILET,
+                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET]),
+                                                   meal_facility_list=MealFacilityList(value=[MealFacilityEnumeration.LUNCH,
                                                                        MealFacilityEnumeration.BREAKFAST,
                                                                        MealFacilityEnumeration.SNACK,
-                                                                       MealFacilityEnumeration.DRINKS],
-                                                   assistance_facility_list=[
-                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE],
-                                                   vehicle_access_facility_list=[
-                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]
+                                                                       MealFacilityEnumeration.DRINKS]),
+                                                   assistance_facility_list=AssistanceFacilityList(value=[
+                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[
+                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP])
                            )]))
 
 vehicle_type_koegelwieck = VehicleType(id=getId(VehicleType, codespace, "KW"), version=version.version,
                            name=MultilingualString(value="Koegelwieck"),
                            description=MultilingualString(value="Koegelwieck"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "KW"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=312)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "KW"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=312)]),
                            length=Decimal(value='35.5'), width=Decimal(value='17'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -241,25 +248,25 @@ vehicle_type_koegelwieck = VehicleType(id=getId(VehicleType, codespace, "KW"), v
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "KW"), version=version.version,
-                                                   mobility_facility_list=[
-                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                   passenger_comms_facility_list=[
-                                                       PassengerCommsFacilityEnumeration.FREE_WIFI],
-                                                   sanitary_facility_list=[SanitaryFacilityEnumeration.TOILET,
-                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET],
-                                                   assistance_facility_list=[
-                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE],
-                                                   vehicle_access_facility_list=[
-                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]
+                                                   mobility_facility_list=MobilityFacilityList(value=[
+                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                   passenger_comms_facility_list=PassengerCommsFacilityList(value=[
+                                                       PassengerCommsFacilityEnumeration.FREE_WIFI]),
+                                                   sanitary_facility_list=SanitaryFacilityList(value=[SanitaryFacilityEnumeration.TOILET,
+                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET]),
+                                                   assistance_facility_list=AssistanceFacilityList(value=[
+                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[
+                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP])
                            )]))
 
 vehicle_type_tiger = VehicleType(id=getId(VehicleType, codespace, "TI"), version=version.version,
                            name=MultilingualString(value="Tiger"),
                            description=MultilingualString(value="Tiger"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "TI"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=414)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "TI"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=414)]),
                            length=Decimal(value='52'), width=Decimal(value='12'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -267,25 +274,25 @@ vehicle_type_tiger = VehicleType(id=getId(VehicleType, codespace, "TI"), version
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "TI"), version=version.version,
-                                                   mobility_facility_list=[
-                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                   passenger_comms_facility_list=[
-                                                       PassengerCommsFacilityEnumeration.FREE_WIFI],
-                                                   sanitary_facility_list=[SanitaryFacilityEnumeration.TOILET,
-                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET],
-                                                   assistance_facility_list=[
-                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE],
-                                                   vehicle_access_facility_list=[
-                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]
+                                                   mobility_facility_list=MobilityFacilityList(value=[
+                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                   passenger_comms_facility_list=PassengerCommsFacilityList(value=[
+                                                       PassengerCommsFacilityEnumeration.FREE_WIFI]),
+                                                   sanitary_facility_list=SanitaryFacilityList(value=[SanitaryFacilityEnumeration.TOILET,
+                                                                           SanitaryFacilityEnumeration.WHEELCHAIR_ACCESS_TOILET]),
+                                                   assistance_facility_list=AssistanceFacilityList(value=[
+                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[
+                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP])
                            )]))
 
 vehicle_type_zeehond = VehicleType(id=getId(VehicleType, codespace, "ZEE"), version=version.version,
                            name=MultilingualString(value="Zeehond"),
                            description=MultilingualString(value="Zeehond"),
-                           fuel_type_or_type_of_fuel=FuelTypeEnumeration.DIESEL,
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
-                                                                      PassengerCapacity(id=getId(PassengerCapacity, codespace, "ZEE"), version=version.version,
-                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=12)),
+                                                                      [PassengerCapacity(id=getId(PassengerCapacity, codespace, "ZEE"), version=version.version,
+                                                                          fare_class=FareClassEnumeration.ANY, total_capacity=12)]),
                            length=Decimal(value='13'), width=Decimal(value='5'),
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
@@ -293,17 +300,17 @@ vehicle_type_zeehond = VehicleType(id=getId(VehicleType, codespace, "ZEE"), vers
                            facilities=ServiceFacilitySetsRelStructure(
                                service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "ZEE"), version=version.version,
-                                                   mobility_facility_list=[
-                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS],
-                                                   assistance_facility_list=[
-                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE],
-                                                   vehicle_access_facility_list=[
-                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP]
+                                                   mobility_facility_list=MobilityFacilityList(value=[
+                                                       MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
+                                                   assistance_facility_list=AssistanceFacilityList(value=[
+                                                       AssistanceFacilityEnumeration.BOARDING_ASSISTANCE]),
+                                                   vehicle_access_facility_list=VehicleAccessFacilityList(value=[
+                                                       VehicleAccessFacilityEnumeration.AUTOMATIC_RAMP])
                            )]))
 
 dutchprofile = DutchProfile(codespace, data_source, version)
-resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set],
-                                                 organisations=[operator, authority], operational_contexts=[operational_context],
+resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set_financier, responsibility_set_partitie],
+                                                 organisations=[operator], operational_contexts=[operational_context],
                                                  vehicle_types=[vehicle_type_tiger,
                                                                 vehicle_type_koegelwieck,
                                                                 vehicle_type_zeehond,
@@ -314,11 +321,11 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
 
 line_ht = Line(id=getId(Line, codespace, "HT"), version=version.version, name=MultilingualString(value="Harlingen - Terschelling"),
               monitored=False,
-              responsibility_set_ref_attribute=getId(ResponsibilitySet, codespace, short_name),
+              responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Veer tussen Harlingen en Terschelling"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
-              public_code="HT",
+              public_code=PublicCodeStructure(value="HT"),
               private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "HT"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
@@ -326,11 +333,11 @@ line_ht = Line(id=getId(Line, codespace, "HT"), version=version.version, name=Mu
 
 line_hv = Line(id=getId(Line, codespace, "HV"), version=version.version, name=MultilingualString(value="Harlingen - Vlieland"),
               monitored=False,
-              responsibility_set_ref_attribute=getId(ResponsibilitySet, codespace, short_name),
+              responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Veer tussen Harlingen en Vlieland"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
-              public_code="HT",
+              public_code=PublicCodeStructure(value="HT"),
               private_code=PrivateCode(value="2", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "HV"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
@@ -338,11 +345,11 @@ line_hv = Line(id=getId(Line, codespace, "HV"), version=version.version, name=Mu
 
 line_tv = Line(id=getId(Line, codespace, "TV"), version=version.version, name=MultilingualString(value="Terschelling - Vlieland"),
               monitored=False,
-              responsibility_set_ref_attribute=getId(ResponsibilitySet, codespace, short_name),
+              responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Veer tussen Terschelling en Vlieland"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
-              public_code="HT",
+              public_code=PublicCodeStructure(value="HT"),
               private_code=PrivateCode(value="3", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "TV"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
@@ -746,7 +753,7 @@ service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
 composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version],
-                                                 responsibility_set=responsibility_set,
+                                                 responsibility_set=responsibility_set_partitie,
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste Doeksen export")
 
@@ -755,6 +762,12 @@ serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
+from isal import igzip_threaded
+ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
+with igzip_threaded.open(f"/tmp/NeTEx_DOEKSEN_DOEKSEN_{from_date}_{from_date}.xml.gz", 'wt', compresslevel=3, threads=3, block_size=2*10**8) as out:
+    serializer.write(out, publication_delivery, ns_map)
+
+"""
 with open('netex-output/doeksen.xml', 'w') as out:
     serializer.write(out, publication_delivery, ns_map)
 
@@ -764,3 +777,4 @@ for element in tree.iterfind(".//*"):
     if element.text is None and len(element) == 0 and len(element.attrib.keys()) == 0:
         element.getparent().remove(element)
 tree.write("netex-output/doeksen-filter.xml", pretty_print=True, strip_text=True)
+"""

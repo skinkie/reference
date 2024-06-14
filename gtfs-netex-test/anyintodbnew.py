@@ -75,6 +75,7 @@ def setup_database(con, classes, clean=False):
         cur.execute(sql_create_table)
 
 
+
 def insert_database(con, classes, f=None):
     if f is None:
         return

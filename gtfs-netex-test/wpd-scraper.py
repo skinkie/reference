@@ -59,7 +59,7 @@ class WagenborgTimetable():
 
     @staticmethod
     def shortenHarbor(name):
-        if name == "Holwerd":
+        if name == "Holwert":
             return "HO"
         elif name == "Ameland":
             return "AM"
@@ -90,18 +90,18 @@ class WagenborgTimetable():
         arrival_date = XmlDate.from_string(journey['arrivalDate'].split('T')[0])
         offset = (arrival_date.to_datetime() - departure_date.to_datetime()).days
 
-        return DatedServiceJourney(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}"), version=self.version.version,
+        return DatedServiceJourney(id=getId(DatedServiceJourney, self.codespace, f"{origin}-{destination}-{departure}"), version=self.version.version,
                        vehicle_type_ref_or_train_ref=getFakeRef(getId(VehicleType, self.codespace, journey['resourceType']), VehicleTypeRef, self.version.version),
                        status_attribute=WagenborgTimetable.mapStatus(journey['isUnavailable']),
-                       uic_operating_period=UicOperatingPeriod(from_operating_day_ref_or_from_date=XmlDateTime.from_string(journey['departureDate']),
-                                                               to_operating_day_ref_or_to_date=XmlDateTime.from_string(journey['departureDate']),
-                                                               valid_day_bits=str(int(journey['isUnavailable']))),
+                       uic_operating_period=UicOperatingPeriod(from_operating_day_ref_or_from_date=XmlDateTime.from_string(journey['departureDate'].split('T')[0] + 'T00:00:00'),
+                                                               to_operating_day_ref_or_to_date=XmlDateTime.from_string(journey['departureDate'].split('T')[0] + 'T00:00:00'),
+                                                               valid_day_bits=str(int(journey['isUnavailable'] == False))),
                        calls=CallsRelStructure(call=[
-                           Call(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}-{origin}"), version=self.version.version,
+                           Call(id=getId(Call, self.codespace, f"{origin}-{destination}-{departure}-{origin}"), version=self.version.version, order=1,
                                                departure = DepartureStructure(time=XmlTime.from_string(journey['departureDate'].split('T')[1]), for_boarding=True),
                                                 onward_timing_link_view=OnwardTimingLinkView(run_time=XmlDuration(f"PT{duration_secs}S")),
                                                fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getRef(self.ssps[origin])),
-                           Call(id=getId(ServiceJourney, self.codespace, f"{origin}-{destination}-{departure}-{destination}"), version=self.version.version,
+                           Call(id=getId(Call, self.codespace, f"{origin}-{destination}-{departure}-{destination}"), version=self.version.version, order=2,
                                      fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getRef(self.ssps[destination]),
                                      arrival=ArrivalStructure(time=XmlTime.from_string(journey['arrivalDate'].split('T')[1]), day_offset=offset if offset != 0 else None, for_alighting=True))]),
                        journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, journey['route']))
@@ -131,7 +131,7 @@ if __name__ == '__main__':
                         short_name=MultilingualString(value="WPD"),
                         legal_name=MultilingualString(value="Wagenborg Passagiersdiensten B.V."),
                         organisation_type=[OrganisationTypeEnumeration.OPERATOR],
-                        primary_mode=AllModesEnumeration.FERRY,
+                        primary_mode=AllModesEnumeration.WATER,
                         contact_details=ContactStructure(url="https://www.wpd.nl/"),
                         customer_service_contact_details=ContactStructure(email="info@wpd.nl",
                                                                           phone="+31881031000",

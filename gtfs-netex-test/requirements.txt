@@ -3,3 +3,4 @@ duckdb
 pyproj
 chardet
 isal
+pandas

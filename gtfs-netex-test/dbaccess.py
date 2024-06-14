@@ -130,6 +130,9 @@ def get_single(con, clazz: T, id, version) -> T:
 
 
 def write_objects(con, objs, empty=False, many=False):
+    if len(objs) == 0:
+        return
+
     cur = con.cursor()
     clazz = objs[0].__class__
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
