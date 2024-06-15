@@ -23,10 +23,13 @@ def load_local(con, clazz: T, limit=None) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     cur = con.cursor()
-    if limit is not None:
-        cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
-    else:
-        cur.execute(f"SELECT object FROM {type};")
+    try:
+        if limit is not None:
+            cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
+        else:
+            cur.execute(f"SELECT object FROM {type};")
+    except:
+        return []
 
     objs: List[T] = []
     for xml, in cur.fetchall():

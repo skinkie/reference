@@ -53,14 +53,18 @@ def epip_line_generator(read_database: str, write_database: str, generator_defau
 
 def epip_line_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
-    with sqlite3.connect(read_database) as read_con:
-        with sqlite3.connect(write_database) as write_con:
-            lines: List[Line] = load_local(read_con, Line)
-            for line in lines:
-                line.branding_ref = None
-                line.type_of_service_ref = None
-                line.type_of_product_category_ref = None
-            write_objects(write_con, lines, True, True)
+    with sqlite3.connect(write_database) as write_con:
+        if read_database == write_database:
+            read_con = write_con
+        else:
+            read_con = sqlite3.connect(read_database)
+
+        lines: List[Line] = load_local(read_con, Line)
+        for line in lines:
+            line.branding_ref = None
+            line.type_of_service_ref = None
+            line.type_of_product_category_ref = None
+        write_objects(write_con, lines, True, True)
 
 def epip_scheduled_stop_point_generator(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
     print(sys._getframe().f_code.co_name)
@@ -87,21 +91,26 @@ def epip_scheduled_stop_point_generator(read_database: str, write_database: str,
 
 def epip_scheduled_stop_point_memory(read_database: str, write_database: str, generator_defaults: dict):
     print(sys._getframe().f_code.co_name)
-    with sqlite3.connect(read_database) as read_con:
-        with sqlite3.connect(write_database) as write_con:
-            scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
-            for ssp in scheduled_stop_points:
-                ssp: ScheduledStopPoint
-                ssp.stop_areas = None
-                if ssp.location is not None:
-                    project_location_4326(ssp.location, generator_defaults)
-                else:
-                    print(f"ScheduledStopPoint {ssp.id} does not have a location.")
+    with sqlite3.connect(write_database) as write_con:
+        if read_database == write_database:
+            read_con = write_con
+        else:
+            read_con = sqlite3.connect(read_database)
 
-            write_objects(write_con, scheduled_stop_points, True, True)
+        scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
+        for ssp in scheduled_stop_points:
+            ssp: ScheduledStopPoint
+            ssp.stop_areas = None
+            if ssp.location is not None:
+                project_location_4326(ssp.location, generator_defaults)
+            else:
+                print(f"ScheduledStopPoint {ssp.id} does not have a location.")
+
+        write_objects(write_con, scheduled_stop_points, True, True)
 
 def epip_site_frame_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
+
     with sqlite3.connect(read_database) as read_con:
         stop_places: dict[str, StopPlace] = getIndex(load_local(read_con, StopPlace))
 

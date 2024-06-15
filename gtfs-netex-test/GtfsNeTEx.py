@@ -332,6 +332,12 @@ class GtfsNeTexProfile(CallsProfile):
                 """
 
         return scheduled_stop_points
+
+    # TODO: implement
+    # def getStopPlaces(self, stop_places_sql={'query': """select * from stops group by parent_id order by parent_id, stop_id;"""}):
+
+
+
     #
     # def getPaths(self):
     #     pl = PathLink()
