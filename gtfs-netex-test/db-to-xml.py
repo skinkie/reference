@@ -11,7 +11,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime
 from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
 
-
+from dbaccess import load_local
 from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataObjectsRelStructure, GeneralFrame, \
     GeneralFrameMembersRelStructure, ServiceJourney, StopPlace, CompositeFrame, FramesRelStructure, TimetableFrame, \
     JourneysInFrameRelStructure, TypeOfFrame, TypeOfFrameRef, ServiceFrame, JourneyPatternsInFrameRelStructure, \
@@ -26,7 +26,9 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     PassengerStopAssignment, Connection, SiteConnection, DefaultConnection, ServiceCalendarFrame, \
     DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine, VersionFrameDefaultsStructure, SystemOfUnits, \
     LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, \
-    TopographicPlacesInFrameRelStructure, TopographicPlace
+    TopographicPlacesInFrameRelStructure, TopographicPlace, TransportOrganisationVersionStructure, Locale
+
+import netex_monkeypatching
 
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
@@ -108,7 +110,12 @@ con_target = sqlite3.connect("/home/netex/gtfs-target.duckdb")
 
 codespace_ref_or_codespace = GeneratorTester(load_generator(con_orig, Codespace))
 data_source = GeneratorTester(load_generator(con_orig, DataSource))
-organisation_or_transport_organisation = GeneratorTester(chain(load_generator(con_orig, Authority), load_generator(con_orig, Operator)))
+organisation_or_transport_organisation = load_local(con_orig, Authority) + load_local(con_orig, Operator)
+
+all_locales = {org.locale for org in organisation_or_transport_organisation}
+if len(all_locales) > 1:
+    print("TODO: Test case for multiple TimetableFrames!")
+
 transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con_orig, VehicleType))
 responsibility_set = GeneratorTester(load_generator(con_orig, ResponsibilitySet))
 
@@ -139,6 +146,12 @@ from datetime import date
     
 version = date.today().strftime("%Y%m%d")
 
+from utils import project
+
+default_locale: LocaleStructure = project(list(all_locales)[0], LocaleStructure)
+if default_locale.languages is not None and len(default_locale.languages.language_usage) == 1:
+    default_locale.default_language = default_locale.languages.language_usage[0].language
+
 publication_delivery = PublicationDelivery(
                 version="ntx:1.1",
                 publication_timestamp=XmlDateTime.now(),
@@ -150,7 +163,7 @@ publication_delivery = PublicationDelivery(
                         type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_NETWORK_OFFER', version_ref='1.0'),
                         frame_defaults=VersionFrameDefaultsStructure(default_location_system="urn:ogc:def:crs:EPSG::4326",
                                                                      default_system_of_units=SystemOfUnits.SI_METRES,
-                                                                     default_locale=LocaleStructure(default_language="nl", time_zone="Europe/Amsterdam") # TODO: fix hardcoded
+                                                                     default_locale=default_locale
                                                                      ),
                         codespaces=CodespacesRelStructure(codespace_ref_or_codespace=codespace_ref_or_codespace.generator()) if codespace_ref_or_codespace.has_value() else None,
                         frames=FramesRelStructure(
@@ -159,7 +172,7 @@ publication_delivery = PublicationDelivery(
                                     id="COMMON", version=version,
                                     type_of_frame_ref=TypeOfFrameRef(ref='epip:COMMON', version_ref='1.0'),
                                     data_sources=DataSourcesInFrameRelStructure(data_source=data_source.generator()) if data_source.has_value() else None,
-                                    organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=organisation_or_transport_organisation.generator()) if organisation_or_transport_organisation.has_value() else None,
+                                    organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=organisation_or_transport_organisation) if len(organisation_or_transport_organisation) > 0 else None,
                                     vehicle_types=VehicleTypesInFrameRelStructure(transport_type_dummy_type_or_train_type=transport_type_dummy_type_or_train_type.generator()) if transport_type_dummy_type_or_train_type.has_value() else None,
                                     responsibility_sets=ResponsibilitySetsInFrameRelStructure(responsibility_set=responsibility_set.generator()) if responsibility_set.has_value() else None,
                                     # brandings=BrandingsInFrameRelStructure(branding=load_generator(con, Branding)) # TODO: must be added to a ValueSet

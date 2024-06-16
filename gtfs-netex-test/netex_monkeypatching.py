@@ -1,7 +1,7 @@
 from netex import VersionOfObjectRefStructure, ServiceJourneyRef, ServiceJourneyPatternRef, ServiceJourney, \
     ServiceJourneyPattern, RouteRefStructure, RouteLinkRefStructure, ScheduledStopPointRefStructure, ScheduledStopPoint, \
     RouteLink, Route, Quay, QuayRefStructure, StopPlaceRefStructure, StopPlace, TimingPoint, TimingPointRefStructure, \
-    ServiceLink, ServiceLinkRefStructure, TimingLink, TimingLinkRefStructure
+    ServiceLink, ServiceLinkRefStructure, TimingLink, TimingLinkRefStructure, Locale, LocaleStructure
 
 from dbaccess import get_single
 
@@ -68,3 +68,9 @@ def get_timinglink(self, con) -> TimingLink:
     return get_single(con, TimingLink, self.ref, self.version)
 
 TimingLinkRefStructure.get = get_timinglink
+
+def hash_locale(self):
+    return hash((self.time_zone_offset, self.time_zone, self.summer_time_zone_offset, self.summer_time_zone, self.default_language,))
+
+Locale.__hash__ = hash_locale
+LocaleStructure.__hash__ = hash_locale
