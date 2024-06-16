@@ -57,13 +57,12 @@ TARGET_DATABASE_FILE = "/home/netex/gtfs-target.duckdb"
 def main():
     classes = get_interesting_classes(filter=EPIP_CLASSES)
     with sqlite3.connect(TARGET_DATABASE_FILE) as con:
-        # setup_database(con, classes, True)
-        # epip_line_memory(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
-        epip_scheduled_stop_point_memory(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
-        infer_stop_places(TARGET_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
-        epip_site_frame_memory(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
-        # epip_service_journey_generator(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults, None)
-        # infer_directions_from_sjps_and_apply(TARGET_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
+        setup_database(con, classes, True)
+    epip_line_memory(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
+    epip_scheduled_stop_point_memory(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
+    epip_site_frame_memory(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
+    epip_service_journey_generator(SOURCE_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults, None)
+    infer_directions_from_sjps_and_apply(TARGET_DATABASE_FILE, TARGET_DATABASE_FILE, generator_defaults)
 
 if __name__ == '__main__':
     main()

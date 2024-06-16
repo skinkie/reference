@@ -33,7 +33,11 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     RoutesInFrameRelStructure, RouteLink, RouteLinksInFrameRelStructure, __all__, DayTypesRelStructure, DayType, \
     PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, Block, ServiceFacilitySetsRelStructure, \
     ServiceFacilitySet, LuggageCarriageEnumeration, LinkSequenceProjection, LinkSequenceProjectionRef, LineString, \
-    PosList, CodespaceRefStructure, DataSourceRefStructure, ParticipantRef, LuggageCarriageFacilityList
+    PosList, CodespaceRefStructure, DataSourceRefStructure, ParticipantRef, LuggageCarriageFacilityList, StopPlace, \
+    ZoneRefStructure, InfoLinksRelStructure, InfoLink, TypeOfInfoLinkEnumeration, QuaysRelStructure, \
+    SiteEntrancesRelStructure, Quay, StopPlaceEntrance, LevelRef, AccessSpacesRelStructure, AccessSpace, \
+    PassengerStopAssignment
+
 from refs import setIdVersion, getRef, getIndex, getIdByRef, getBitString2, getFakeRef, getOptionalString, getId
 
 
@@ -245,6 +249,7 @@ class GtfsNeTexProfile(CallsProfile):
 
             for i in range(0, len(stop_ids)):
                 stop_area = StopArea(id=getId(StopArea, self.codespace, stop_ids[i]),
+                                     version=self.version.version,
                                      name=MultilingualString(value=stop_names[i]),
                                      public_code=get_or_none(stop_codes, i),
                                      description=getOptionalString(get_or_none(stop_descs, i)),
@@ -334,9 +339,138 @@ class GtfsNeTexProfile(CallsProfile):
         return scheduled_stop_points
 
     # TODO: implement
-    # def getStopPlaces(self, stop_places_sql={'query': """select * from stops group by parent_id order by parent_id, stop_id;"""}):
+    def getStopPlaces(self, stop_places_sql={'query': """select * from stops order by parent_station, stop_id;"""}) -> (List[StopPlace], List[PassengerStopAssignment]):
+        stop_places = {}
+        passenger_stop_assignments = []
+        with self.conn.cursor() as cur:
+            cur.execute(**stop_places_sql)
+            df = cur.df()
 
+            stop_ids = df.get('stop_id')
+            stop_names = df.get('stop_name')
+            stop_lats = df.get('stop_lat')
+            stop_lons = df.get('stop_lon')
+            stop_codes = df.get('stop_code')
+            stop_descs = df.get('stop_desc')
+            zone_ids = df.get('zone_id')
+            stop_urls = df.get('stop_url')
+            location_types = df.get('location_type')
+            parent_stations = df.get('parent_station')
+            wheelchair_boardings = df.get('wheelchair_boarding')
+            stop_timezones = df.get('stop_timezone')
+            platform_codes = df.get('platform_code')
+            level_ids = df.get('level_id')
 
+            for i in range(0, len(stop_ids)):
+                # Every stop that does not have a parent_station, will become a StopPlace
+                if parent_stations[i] is None:
+                    stop_place = StopPlace(id=getId(StopPlace, self.codespace, stop_ids[i]),
+                                           version=self.version.version,
+                                           name=MultilingualString(value=stop_names[i]),
+                                           public_code=get_or_none(stop_codes, i),
+                                           description=getOptionalString(get_or_none(stop_descs, i)),
+                                           private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                           locale=Locale(time_zone=stop_timezones[i]) if stop_timezones[i] is not None else None,
+                                           parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
+                                           accessibility_assessment=AccessibilityAssessment(id=getId(StopPlace, self.codespace, stop_ids[i]),
+                                                                                            version=self.version.version,
+                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if wheelchair_boardings[i] is not None else None,
+                                           info_links=InfoLinksRelStructure(info_link=[InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE], value=stop_urls[i])]) if stop_urls[i] is not None else None,
+                                           centroid=SimplePointVersionStructure(location=
+                                                                              LocationStructure2(latitude=Decimal(str(stop_lats[i])),
+                                                                                                 longitude=Decimal(str(stop_lons[i])),
+                                                                                                 srs_name="EPSG:4326")),
+                                           )
+                    stop_places[stop_place.id] = stop_place
+                else:
+                    stop_place = stop_places[getId(StopPlace, self.codespace, parent_stations[i])]
+
+                if location_types[i] == 1:
+                    # Nothing to do, we already created the StopPlace
+                    continue
+
+                if location_types[i] != location_types[i] or location_types[i] == 0 or location_types[i] == 4:
+                    # Stop or Platform or BoardingArea, to Quay
+                    if stop_place.quays is None:
+                        stop_place.quays = QuaysRelStructure()
+
+                    quay = Quay(id=getId(Quay, self.codespace, stop_ids[i]),
+                                version=self.version.version,
+                                name=MultilingualString(value=stop_names[i]),
+                                public_code=get_or_none(stop_codes, i),
+                                description=getOptionalString(get_or_none(stop_descs, i)),
+                                private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
+                                accessibility_assessment=AccessibilityAssessment(id=getId(StopPlace, self.codespace, stop_ids[i]), version=self.version.version,
+                                                                                 mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if wheelchair_boardings[i] is not None else None,
+                                info_links=InfoLinksRelStructure(info_link=[InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE], value=stop_urls[i])]) if stop_urls[i] is not None else None,
+                                centroid=SimplePointVersionStructure(location=
+                                                                     LocationStructure2(
+                                                                         latitude=Decimal(str(stop_lats[i])),
+                                                                         longitude=Decimal(str(stop_lons[i])),
+                                                                         srs_name="EPSG:4326")),
+                                level_ref=LevelRef(ref=level_ids[0], version=self.version.version) if level_ids[i] is not None else None,
+                                )
+
+                    stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay.append(quay)
+
+                    passenger_stop_assignment = PassengerStopAssignment(id=getId(PassengerStopAssignment, self.codespace, stop_ids[i]),
+                                                                        version=self.version.version,
+                                                                        order=1,
+                                                                        fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getFakeRef(getId(ScheduledStopPoint, self.codespace, stop_ids[i]), ScheduledStopPointRef, self.version.version),
+                                                                        taxi_stand_ref_or_quay_ref_or_quay=getRef(quay))
+                    passenger_stop_assignments.append(passenger_stop_assignment)
+
+                elif location_types[i] == 2:
+                    # Entrance or Exit
+                    if stop_place.entrances is None:
+                        stop_place.entrances = SiteEntrancesRelStructure()
+
+                    stop_place_entrance = StopPlaceEntrance(id=getId(StopPlaceEntrance, self.codespace, stop_ids[i]),
+                                           version=self.version.version,
+                                           name=MultilingualString(value=stop_names[i]),
+                                           public_code=get_or_none(stop_codes, i),
+                                           description=getOptionalString(get_or_none(stop_descs, i)),
+                                           private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                           parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
+                                           accessibility_assessment=AccessibilityAssessment(id=getId(StopPlace, self.codespace, stop_ids[i]),
+                                                                                            version=self.version.version,
+                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if wheelchair_boardings[i] is not None else None,
+                                           info_links=InfoLinksRelStructure(info_link=[InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE], value=stop_urls[i])]) if stop_urls[i] is not None else None,
+                                           centroid=SimplePointVersionStructure(location=
+                                                                              LocationStructure2(latitude=Decimal(str(stop_lats[i])),
+                                                                                                 longitude=Decimal(str(stop_lons[i])),
+                                                                                                 srs_name="EPSG:4326")),
+                                           level_ref=LevelRef(ref=level_ids[0], version=self.version.version) if level_ids[i] is not None else None,
+                                           )
+
+                    stop_place.entrances.parking_entrance_ref_or_entrance_ref_or_entrance.append(stop_place_entrance)
+
+                elif location_types[i] == 3:
+                    # Generic Node
+                    if stop_place.access_spaces is None:
+                        stop_place.access_spaces = AccessSpacesRelStructure()
+
+                    access_space = AccessSpace(id=getId(AccessSpace, self.codespace, stop_ids[i]),
+                                           version=self.version.version,
+                                           name=MultilingualString(value=stop_names[i]),
+                                           description=getOptionalString(get_or_none(stop_descs, i)),
+                                           private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                           parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
+                                           accessibility_assessment=AccessibilityAssessment(id=getId(StopPlace, self.codespace, stop_ids[i]),
+                                                                                            version=self.version.version,
+                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if wheelchair_boardings[i] is not None else None,
+                                           info_links=InfoLinksRelStructure(info_link=[InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE], value=stop_urls[i])]) if stop_urls[i] is not None else None,
+                                           centroid=SimplePointVersionStructure(location=
+                                                                              LocationStructure2(latitude=Decimal(str(stop_lats[i])),
+                                                                                                 longitude=Decimal(str(stop_lons[i])),
+                                                                                                 srs_name="EPSG:4326")),
+                                           level_ref=LevelRef(ref=level_ids[0], version=self.version.version) if level_ids[i] is not None else None,
+                                           )
+
+                    stop_place.access_spaces.access_space_ref_or_access_space.append(access_space)
+
+        return list(stop_places.values()), passenger_stop_assignments
 
     #
     # def getPaths(self):
@@ -911,6 +1045,12 @@ class GtfsNeTexProfile(CallsProfile):
         write_objects(con, stop_areas, empty=True, many=True)
         write_objects(con, self.getScheduledStopPoints(stop_areas), empty=True, many=True)
         stop_areas = None
+
+        stop_places, passenger_stop_assignments = self.getStopPlaces()
+        write_objects(con, stop_places, empty=True, many=True)
+        write_objects(con, passenger_stop_assignments, empty=True, many=True)
+        stop_places = stop_passenger_stop_assignments = None
+
         availability_conditions = self.getAvailabilityConditions()
         write_objects(con, availability_conditions, empty=True, many=True)
         write_objects(con, self.getServiceJourneys(availability_conditions), empty=True, many=True)
