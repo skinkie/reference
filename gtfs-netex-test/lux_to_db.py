@@ -3,7 +3,7 @@ import sqlite3
 from anyintodbnew import  get_interesting_classes, setup_database, open_netex_file, insert_database
 
 DATABASE_FILE = "/home/netex/lux.sqlite"
-LUX_ZIP_FILE = "/tmp/netex-20240326-20240531.zip"
+LUX_ZIP_FILE = "/home/skinkie/Downloads/netex-20240916-20240705.zip"
 CLEAN_DATABASE = True
 
 LUX_CLASSES = [ "Authority", "AvailabilityCondition", "Codespace", "DataSource", "DayType", "DayTypeAssignment", "Direction", "Level", "Line", "Notice", "Operator", "PassengerStopAssignment", "ResponsibilitySet", "ScheduledStopPoint", "ServiceCalendar", "ServiceJourney", "ServiceJourneyInterchange", "ServiceJourneyPattern", "ServiceLink", "SiteConnection",  "StopPlace", "TopographicPlace", "UicOperatingPeriod", "VehicleType" ]

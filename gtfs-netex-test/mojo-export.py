@@ -42,8 +42,8 @@ codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=sh
 dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
                       xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
-start_date = datetime.datetime(year=2024, month=6, day=18)
-end_date = datetime.datetime(year=2024, month=6, day=19)
+start_date = datetime.datetime(year=2024, month=6, day=27)
+end_date = datetime.datetime(year=2024, month=6, day=29)
 
 today = str(datetime.date.today()).replace('-', '')
 
@@ -57,10 +57,10 @@ stt = SimpleTimetable(codespace, version)
 from_date = datetime.date.today().isoformat().replace('-', '')
 
 simple_timetable = {}
-stt.simple_timetable_interval(simple_timetable, "N", "G", datetime.datetime(2024, 6, 18, 13, 00, 00), datetime.datetime(2024, 6, 18, 21, 00, 00), datetime.timedelta(minutes=5))
-stt.simple_timetable_interval(simple_timetable,"N", "G", datetime.datetime(2024, 6, 19, 13, 00, 00), datetime.datetime(2024, 6, 19, 21, 00, 00), datetime.timedelta(minutes=5))
-stt.simple_timetable_interval(simple_timetable,"G", "N", datetime.datetime(2024, 6, 18, 13, 00, 00), datetime.datetime(2024, 6, 19, 1, 00, 00), datetime.timedelta(minutes=5))
-stt.simple_timetable_interval(simple_timetable,"G", "N", datetime.datetime(2024, 6, 19, 13, 00, 00), datetime.datetime(2024, 6, 20, 1, 00, 00), datetime.timedelta(minutes=5))
+stt.simple_timetable_interval(simple_timetable, "N", "G", datetime.datetime(2024, 6, 27, 13, 00, 00), datetime.datetime(2024, 6, 27, 21, 00, 00), datetime.timedelta(minutes=5))
+stt.simple_timetable_interval(simple_timetable,"N", "G", datetime.datetime(2024, 6, 29, 13, 00, 00), datetime.datetime(2024, 6, 29, 21, 00, 00), datetime.timedelta(minutes=5))
+stt.simple_timetable_interval(simple_timetable,"G", "N", datetime.datetime(2024, 6, 27, 13, 00, 00), datetime.datetime(2024, 6, 28, 1, 00, 00), datetime.timedelta(minutes=5))
+stt.simple_timetable_interval(simple_timetable,"G", "N", datetime.datetime(2024, 6, 29, 13, 00, 00), datetime.datetime(2024, 6, 30, 1, 00, 00), datetime.timedelta(minutes=5))
 
 
 service_journeys, availability_conditions = stt.simple_timetable_from_dict(simple_timetable)
@@ -148,7 +148,7 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
 line = Line(id=getId(Line, codespace, "MOJO"), version=version.version, name=MultilingualString(value="MOJO"),
               monitored=False,
               responsibility_set_ref_attribute=responsibility_set_financier.id,
-              description=MultilingualString(value="Festival vervoer Rammstein"),
+              description=MultilingualString(value="Festival vervoer Bruce Springsteen"),
               transport_mode=AllVehicleModesOfTransportEnumeration.BUS,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="MOJO"),
@@ -163,18 +163,23 @@ rp_g = RoutePoint(id=getId(RoutePoint, codespace, "G"), version=version.version,
 
 route_points = [rp_n, rp_g]
 
+linestring_ng = [187132, 428462, 187130, 428452, 187171, 428440, 187162, 428417, 187147, 428366, 187127, 428302, 187111, 428249, 187085, 428164, 187055, 428066, 187051, 428054, 187042, 428025, 187032, 428005, 187016, 427974, 187001, 427948, 186988, 427929, 186976, 427917, 186936, 427888, 186908, 427870, 186897, 427863, 186893, 427853, 186889, 427841, 186889, 427827, 186891, 427819, 186895, 427810, 186893, 427798, 186882, 427766, 186874, 427728, 186803, 427282, 186799, 427276, 186794, 427274, 186696, 427283, 186684, 427283, 186675, 427283, 186668, 427280, 186663, 427276, 186662, 427271, 186662, 427266, 186662, 427259, 186685, 427091, 186685, 427086, 186684, 427082, 186680, 427078, 186673, 427075, 186632, 427080, 186544, 427092, 186512, 427096, 186489, 427097, 186466, 427096, 186443, 427090, 186425, 427087, 186228, 427061, 185948, 427025, 185922, 427020, 185901, 427010, 185879, 426994, 185868, 426983, 185814, 426926, 185851, 426885, 185872, 426863, 185899, 426833, 185907, 426823, 185960, 426724, 186039, 426733, 186052, 426733]
+
 rl_ng = RouteLink(id=getId(RouteLink, codespace, "N-G"), version=version.version,
                   distance=Decimal('3500'), # TODO
                   from_point_ref=getRef(rp_n, RoutePointRefStructure), to_point_ref=getRef(rp_g, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "N-G").replace(":", "_").replace("-", "_"),
-                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=(rp_n.location.pos.value + rp_g.location.pos.value))]),
+                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=len(linestring_ng) // 2, value=linestring_ng)]),
                     operational_context_ref=getRef(operational_context))
+
+
+linestring_gn = [186054, 426733, 186058, 426735, 186213, 426755, 186263, 426760, 186351, 426754, 186363, 426797, 186410, 426939, 186464, 427089, 186477, 427091, 186497, 427093, 186513, 427092, 186549, 427086, 186605, 427078, 186696, 427067, 186759, 427060, 186763, 427082, 186766, 427095, 186766, 427106, 186768, 427122, 186784, 427238, 186787, 427266, 186800, 427266, 186808, 427271, 186811, 427283, 186818, 427340, 186837, 427467, 186857, 427591, 186881, 427743, 186883, 427752, 186898, 427791, 186904, 427813, 186902, 427831, 186902, 427856, 186908, 427864, 186916, 427871, 186960, 427900, 186987, 427920, 187007, 427949, 187040, 428013, 187048, 428029, 187126, 428286, 187174, 428437, 187185, 428475, 187140, 428489, 187133, 428466]
 
 rl_gn = RouteLink(id=getId(RouteLink, codespace, "G-N"), version=version.version,
                 distance=Decimal('3500'), # TODO
                     from_point_ref=getRef(rp_g, RoutePointRefStructure), to_point_ref=getRef(rp_n, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "G-N").replace(":", "_").replace("-", "_"),
-                        pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=rp_g.location.pos.value + rp_n.location.pos.value)]),
+                        pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=len(linestring_gn) // 2, value=linestring_gn)]),
                     operational_context_ref=getRef(operational_context))
 
 route_links = [rl_ng, rl_gn]
@@ -215,8 +220,8 @@ dd_n = DestinationDisplay(id=getId(DestinationDisplay, codespace, "N"), version=
 setVariants(dd_n)
 
 dd_g = DestinationDisplay(id=getId(DestinationDisplay, codespace, "G"), version=version.version,
-                           name=MultilingualString(value="Rammstein"),
-                           front_text=MultilingualString(value="Rammstein"),
+                           name=MultilingualString(value="Bruce Springsteen"),
+                           front_text=MultilingualString(value="Bruce Springsteen"),
                            private_code=PrivateCode(value="2", type_value="DestinationCode"))
 setVariants(dd_g)
 
