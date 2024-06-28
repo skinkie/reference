@@ -11,7 +11,7 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDuration, XmlTime
 
-from GtfsNeTEx import date_to_xmldatetime
+from gtfs_convert_to_db import date_to_xmldatetime
 from netex import ServiceJourney, ServiceJourneyPattern, StopPointInJourneyPattern, TimetabledPassingTime, \
     PointsInJourneyPatternRelStructure, Codespace, TimetabledPassingTimesRelStructure, \
     PointInJourneyPatternRef, ServiceJourneyPatternRef, Call, MultilingualString, RouteView, Version, TimeDemandType, \

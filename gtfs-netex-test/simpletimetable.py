@@ -3,7 +3,7 @@ from typing import List
 
 from xsdata.models.datatype import XmlTime, XmlDuration
 
-from GtfsNeTEx import date_to_xmldatetime, gtfs_date
+from gtfs_convert_to_db import date_to_xmldatetime, gtfs_date
 from netex import AvailabilityCondition, Codespace, ServiceJourney, ValidityConditionsRelStructure, Version, \
     PrivateCode, TimeDemandTypeRef, TimeDemandType, ServiceJourneyPatternRef, ServiceJourneyPattern, \
     JourneyRunTimesRelStructure, JourneyRunTime, VehicleTypeRef, VehicleType, TimingLinkRef, TimingLink

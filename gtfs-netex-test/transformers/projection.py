@@ -3,7 +3,7 @@ from itertools import chain
 
 from pyproj import Transformer
 
-from netex import Polygon, PosList, Pos
+from netex import Polygon, PosList, Pos, LocationStructure2
 
 transformers = {}
 
@@ -23,7 +23,7 @@ def get_transformer_by_srs_name(location, crs_to, generator_defaults: dict) -> T
         transformers[mapping] = transformer
     return transformer
 
-def project_location_4326(location, generator_defaults: dict):
+def project_location_4326(location, generator_defaults: dict, quantize='0.000001'):
     if location.pos is not None:
         transformer = get_transformer_by_srs_name(location, 'urn:ogc:def:crs:EPSG::4326')
         if transformer is not None:
@@ -32,12 +32,33 @@ def project_location_4326(location, generator_defaults: dict):
             latitude = location.pos.value[0]
             longitude = location.pos.value[1]
 
-        location.longitude = Decimal(longitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
-        location.latitude = Decimal(latitude).quantize(Decimal('0.000001'), ROUND_HALF_UP)
+        location.longitude = Decimal(longitude).quantize(Decimal(quantize), ROUND_HALF_UP)
+        location.latitude = Decimal(latitude).quantize(Decimal(quantize), ROUND_HALF_UP)
         location.pos = None
 
     elif location.srs_name not in (None, 'EPSG:4326', 'urn:ogc:def:crs:EPSG::4326') and generator_defaults['DefaultLocationsystem'] not in ('EPSG:4326', 'urn:ogc:def:crs:EPSG::4326'):
         print("TODO: Crazy not WGS84")
+
+def project_location(location: LocationStructure2, crs_to: str, generator_defaults: dict, quantize='0.000001'):
+    if location.pos is not None:
+        transformer = get_transformer_by_srs_name(location, crs_to, generator_defaults['DefaultLocationsystem'])
+        if transformer is not None:
+            x, y = transformer.transform(location.pos.value[0], location.pos.value[1])
+            x = Decimal(x).quantize(Decimal(quantize), ROUND_HALF_UP)
+            y = Decimal(y).quantize(Decimal(quantize), ROUND_HALF_UP)
+            location.pos = Pos(value=[x, y], srs_name=crs_to, srs_dimension=2)
+
+    elif location.longitude is not None and location.latitude is not None:
+        transformer = get_transformer_by_srs_name(location, crs_to, generator_defaults['DefaultLocationsystem'])
+        if transformer is not None:
+            x, y = transformer.transform(location.latitude, location.longitude)
+            x = Decimal(x).quantize(Decimal(quantize), ROUND_HALF_UP)
+            y = Decimal(y).quantize(Decimal(quantize), ROUND_HALF_UP)
+            location.pos = Pos(value=[x, y], srs_name=crs_to, srs_dimension=2)
+
+    else:
+        print("TODO: Crazy not WGS84")
+
 
 def project_linestring2(transformer, linestring):
     srs_dimension = linestring.srs_dimension if hasattr(linestring, 'srs_dimension') and linestring.srs_dimension else 2

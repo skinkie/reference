@@ -6,8 +6,7 @@ DATABASE_FILE = "/home/netex/swiss.sqlite"
 SWISS_ZIP_FILE = "/home/skinkie/Downloads/prod_netex_tt_1.10_che_ski_2024_oev-schweiz__1_1_202404140804.zip"
 CLEAN_DATABASE = False
 
-SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "PassengerStopAssignment", "AvailabilityCondition"]
-SWISS_CLASSES = ["TopographicPlace"]
+SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace"]
 def main():
     with sqlite3.connect(DATABASE_FILE) as con:
         classes = get_interesting_classes(SWISS_CLASSES)

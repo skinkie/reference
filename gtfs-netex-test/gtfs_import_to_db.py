@@ -92,11 +92,12 @@ import json
 from chardet.universaldetector import UniversalDetector
 
 
-def handle_file(zip, filename, column_mapping: dict):
+def handle_file(con, zip, filename, column_mapping: dict):
     table = filename.split('/')[-1].replace('.txt', '')
-    con = duckdb.connect(database='gtfs2.duckdb')
-    with duckdb.cursor(con) as cur:
-        cur.execute(f"""DROP TABLE IF EXISTS {table};""")
+    with con.cursor() as cur:
+        sql_drop_table = f"""DROP TABLE IF EXISTS {table};"""
+        # print(sql_drop_table)
+        cur.execute(sql_drop_table)
 
         if filename in [x.filename for x in zip.filelist]:
             detector = UniversalDetector()
@@ -131,7 +132,9 @@ def handle_file(zip, filename, column_mapping: dict):
 
             this_mapping_str = json.dumps(this_mapping)
 
-            cur.execute(f"""CREATE TABLE {table} AS SELECT * FROM read_csv('{filename}', delim=',', header=true, auto_detect=true, columns = {this_mapping_str});""")
+            sql_create_table = f"""CREATE TABLE {table} AS SELECT * FROM read_csv('{filename}', delim=',', header=true, auto_detect=true, columns = {this_mapping_str});"""
+            # print(sql_create_table)
+            cur.execute(sql_create_table)
 
             if filename == '_tmp':
                 os.remove('_tmp')
@@ -148,25 +151,47 @@ def handle_file(zip, filename, column_mapping: dict):
 
             data_types = ', '.join(data_types)
 
-            cur.execute(f"""CREATE TABLE {table} ({data_types});""")
+            sql_create_table = f"""CREATE TABLE {table} ({data_types});"""
+            cur.execute(sql_create_table)
 
-    con.close()
+import datetime
 
-filename = '/tmp/gtfs_generic_eu.zip'
+def create_feed_info(con):
+    with con.cursor() as cur:
+        cur.execute("""SELECT count(*) FROM feed_info;""")
+        data = cur.fetchall()
+
+        if data[0][0] == 0:
+            cur.execute("""INSERT INTO feed_info (SELECT X.*, Y.*, REPLACE(CAST(today() AS TEXT), '-', '') AS feed_version, '' AS feed_contact_email, '' AS feed_contact_url  FROM (SELECT agency_name AS feed_publisher_name, agency_url AS feed_publisher_url, agency_lang AS feed_lang, agency_lang AS default_lang FROM agency LIMIT 1) AS X, (SELECT MIN(start_date) AS feed_start_date, MAX(end_date) AS feed_end_date FROM (SELECT MIN(start_date) AS start_date, MAX(end_date) AS end_date FROM calendar UNION ALL SELECT MIN(date) AS start_date, MAX(date) AS end_date FROM calendar_dates) WHERE start_date <> '' and end_date <> '') AS Y);""")
+
+filename = '/tmp/gtfs_transit.zip'
+database = '/home/netex/delijn.duckdb'
+
+# Workaround for https://github.com/duckdb/duckdb/issues/8261
+try:
+    os.remove(database)
+except:
+    pass
 
 import zipfile
+
+con = duckdb.connect(database=database)
+
+
 zip = zipfile.ZipFile(filename)
 
-handle_file(zip, 'feed_info.txt', feed_info_txt)
-handle_file(zip, 'agency.txt', agency_txt)
-handle_file(zip, 'calendar_dates.txt', calendar_dates_txt)
-handle_file(zip, 'calendar.txt', calendar_txt)
-handle_file(zip, 'routes.txt', routes_txt)
-handle_file(zip, 'levels.txt', levels_txt)
-handle_file(zip, 'stops.txt', stops_txt)
-handle_file(zip, 'shapes.txt', shapes_txt)
-handle_file(zip, 'trips.txt', trips_txt)
-handle_file(zip, 'transfers.txt', transfers_txt)
-handle_file(zip, 'stop_times.txt', stop_times_txt)
-handle_file(zip, 'frequencies.txt', frequencies_txt)
-handle_file(zip, 'pathways.txt', pathways_txt)
+handle_file(con, zip, 'feed_info.txt', feed_info_txt)
+handle_file(con, zip, 'agency.txt', agency_txt)
+handle_file(con, zip, 'calendar_dates.txt', calendar_dates_txt)
+handle_file(con, zip, 'calendar.txt', calendar_txt)
+handle_file(con, zip, 'routes.txt', routes_txt)
+handle_file(con, zip, 'levels.txt', levels_txt)
+handle_file(con, zip, 'stops.txt', stops_txt)
+handle_file(con, zip, 'shapes.txt', shapes_txt)
+handle_file(con, zip, 'trips.txt', trips_txt)
+handle_file(con, zip, 'transfers.txt', transfers_txt)
+handle_file(con, zip, 'stop_times.txt', stop_times_txt)
+handle_file(con, zip, 'frequencies.txt', frequencies_txt)
+handle_file(con, zip, 'pathways.txt', pathways_txt)
+
+create_feed_info(con)

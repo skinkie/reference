@@ -31,7 +31,7 @@ class TimeDemandTypesProfile:
     # @staticmethod
     def getWaitTimeCall(call: Call) -> int:
         if call.arrival is not None and call.departure is not None:
-            waiting_time_secs = ((call.departure.day_offset or 0) * 86400 + call.departure.time.hour * 3600 + call.departure.time.minute * 60 + call.departure.time.second) - ((call.arrival.day_offset or 0) * 86400 + call.arrival.time.hour * 3600 +  call.arrival.time.minute * 60 + call.time.arrival_time.second)
+            waiting_time_secs = ((call.departure.day_offset or 0) * 86400 + call.departure.time.hour * 3600 + call.departure.time.minute * 60 + call.departure.time.second) - ((call.arrival.day_offset or 0) * 86400 + call.arrival.time.hour * 3600 +  call.arrival.time.minute * 60 + call.arrival.time.second)
             return waiting_time_secs
         return 0
 
@@ -313,7 +313,7 @@ class TimeDemandTypesProfile:
             sjp_hash = hash('-'.join(x.ref for x in ssps_in_seq))
             sjp_hash_hex = TimeDemandTypesProfile.getHexHash(sjp_hash)
 
-            if sjp_hash not in service_journey_patterns_hash or service_journey_patterns[service_journey_patterns_hash[sjp_hash]].id != service_journey.journey_pattern_ref.ref:
+            if sjp_hash not in service_journey_patterns_hash or service_journey.journey_pattern_ref is None or service_journey_patterns[service_journey_patterns_hash[sjp_hash]].id != service_journey.journey_pattern_ref.ref:
                 piss = [(i, ssps_in_seq[i], getFakeRef(onward_tls[i], TimingLinkRefStructure, version=self.version.version)) for i in range(0, len(ssps_in_seq) - 1)]
                 piss.append((len(ssps_in_seq) - 1, ssps_in_seq[-1], None))
 

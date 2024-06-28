@@ -1,7 +1,8 @@
 import datetime
 import math
+import os
 from _decimal import Decimal
-from typing import List
+from typing import List, Generator
 
 import duckdb
 import numpy
@@ -13,7 +14,7 @@ from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate
 # xsdata generate -p netex  --unsafe-hash -ss clusters --compound-fields  ~/Sources/NeTEx-master/xsd/NeTEx_publication.xsd
 
 from callsprofile import CallsProfile
-from dbaccess import write_objects
+from dbaccess import write_objects, write_generator
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
     VersionTypeEnumeration, LocaleStructure, SystemOfUnits, Operator, ContactStructure, Locale, LanguageUsageStructure, \
     LanguageUseEnumeration, Line, PresentationStructure, AllVehicleModesOfTransportEnumeration, PrivateCode, \
@@ -72,19 +73,21 @@ class GtfsNeTexProfile(CallsProfile):
             df = cur.df()
 
             short_name = self.getShortName(df['feed_publisher_name'][0])
-            codespace = Codespace(id="{}:Codespace:{}".format(short_name, short_name), xmlns=short_name,
+            codespace_name = short_name.replace(' ', '')
+
+            codespace = Codespace(id="{}:Codespace:{}".format(codespace_name, codespace_name), xmlns=codespace_name,
                                   xmlns_url=df['feed_publisher_url'][0], description=df['feed_publisher_name'][0])
 
             start_date = datetime.datetime.combine(gtfs_date(df['feed_start_date'][0]), datetime.datetime.min.time())
             end_date = datetime.datetime.combine(gtfs_date(df['feed_end_date'][0]), datetime.datetime.min.time())
 
-            version = Version(id="{}:Version:{}".format(short_name, df['feed_version'][0]),
+            version = Version(id="{}:Version:{}".format(codespace_name, df['feed_version'][0]),
                               version=df['feed_version'][0] if df['feed_version'][0] not in ('', None) else str(datetime.date.today()).replace('-', ''),
                               start_date=XmlDateTime.from_datetime(start_date),
                               end_date=XmlDateTime.from_datetime(end_date),
                               version_type=VersionTypeEnumeration.BASELINE)
 
-            data_source = DataSource(id="{}:DataSource:{}".format(short_name, short_name),
+            data_source = DataSource(id="{}:DataSource:{}".format(codespace_name, codespace_name),
                                      version=version.version,
                                      name=MultilingualString(value=df['feed_publisher_name'][0]),
                                      short_name=MultilingualString(value=short_name),
@@ -611,7 +614,7 @@ class GtfsNeTexProfile(CallsProfile):
             if len(pos_list) > 0:
                 de_distance = None
                 if prev_distance is not None and not numpy.isnan(prev_distance):
-                    de_distance = Decimal(prev_distance)
+                    de_distance = Decimal(str(prev_distance))
 
                 link_sequence_projection.append(
                     LinkSequenceProjection(id=getId(LinkSequenceProjection, self.codespace, prev_shape_id),
@@ -805,7 +808,7 @@ class GtfsNeTexProfile(CallsProfile):
         with self.conn.cursor() as cur:
             cur.execute(**shape_sql)
 
-    def getServiceJourneys(self, availability_conditions, trips_sql={'query': """select * from trips order by trip_id;"""}, stop_times_sql = {'query': """select * from stop_times order by trip_id, stop_sequence;"""}) -> list[ServiceJourney]:
+    def getServiceJourneys(self, availability_conditions, trips_sql={'query': """select * from trips order by trip_id;"""}, stop_times_sql = {'query': """select * from stop_times order by trip_id, stop_sequence;"""}) -> Generator[ServiceJourney, None, None]:
         availability_conditions = getIndex(availability_conditions)
 
         service_journeys = {}
@@ -921,6 +924,10 @@ class GtfsNeTexProfile(CallsProfile):
 
             for i in range(0, len(trip_ids)):
                 if trip_ids[i] != trip_id:
+                    if trip_id is not None:
+                        yield service_journey
+                        service_journey.calls = None # Free memory
+
                     trip_id = trip_ids[i]
                     service_journey = service_journeys[trip_id]
                     service_journey.calls = CallsRelStructure()
@@ -959,8 +966,160 @@ class GtfsNeTexProfile(CallsProfile):
                 prev_shape_traveled = shape_dist_traveled
                 prev_order += 1
 
-        return list(service_journeys.values())
+            if trip_id is not None:
+                yield service_journey
 
+
+    def getServiceJourneys2(self, availability_conditions, trips_sql={'query': """select * from trips order by trip_id;"""}) -> Generator[ServiceJourney, None, None]:
+        availability_conditions = getIndex(availability_conditions)
+
+        shape_used = set([])
+
+        with self.conn.cursor() as cur:
+            cur.execute(**trips_sql)
+
+            df = cur.df()
+
+            route_ids = df.get('route_id')
+            trip_ids = df.get('trip_id')
+            service_ids = df.get('service_id')
+            trip_short_names = df.get('trip_short_name')
+            trip_headsigns = df.get('trip_headsign')
+            # route_short_names = df.get('route_short_name')
+            direction_ids = df.get('direction_id')
+            block_ids = df.get('block_id')
+            shape_ids = df.get('shape_id')
+            wheelchair_accessibles = df.get('wheelchair_accessible')
+            # trip_bikes_alloweds = df.get('trip_bikes_allowed')
+            bikes_alloweds = df.get('bikes_allowed')
+            ticketing_trip_ids = df.get('ticketing_trip_id')
+            ticketing_types = df.get('ticketing_type')
+
+            for i in range(0, len(route_ids)):
+                availability_condition_key = getId(AvailabilityCondition, self.codespace, service_ids[i])
+
+                availability_conditions_journey = [availability_conditions.get(availability_condition_key, None),
+                                                   availability_conditions.get(availability_condition_key + "_1", None),
+                                                   availability_conditions.get(availability_condition_key + "_2", None)]
+
+                journey_pattern_view = None
+                if trip_headsigns[i] is not None:
+                    journey_pattern_view = JourneyPatternView(
+                        destination_display_ref_or_destination_display_view=DestinationDisplayView(
+                            name=MultilingualString(value=trip_headsigns[i]), front_text=MultilingualString(value=trip_headsigns[i])))
+
+                accessibility_assessment = None
+                if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
+                    accessibility_assessment = AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, trip_ids[i]),
+                                                                       version=self.version.version,
+                                                                       mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
+
+                block_ref = None
+                if block_ids[i] is not None:
+                    block_ref = getFakeRef(getId(Block, self.codespace, block_ids[i]), BlockRef, None)
+
+                route_ref = None
+                lsp = None
+                shape_id = get_or_none(shape_ids, i)
+                if shape_id is not None:
+                    if shape_id in shape_used:
+                        lsp = getFakeRef(getId(LinkSequenceProjection, self.codespace, shape_id), LinkSequenceProjectionRef, self.version.version)
+                    else:
+                        lsps = self.getLineStrings({'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence, shape_dist_traveled from shapes where shape_id = ? order by shape_id, shape_pt_sequence, shape_dist_traveled;""", 'parameters': (shape_id,)})
+                        if len(lsps) > 0:
+                            lsp = lsps[0]
+
+                        shape_used.add(shape_id)
+
+                luggage_carriage_facility_list = []
+                facitities = None
+                bikes_allowed = get_or_none(bikes_alloweds, i)
+                if bikes_allowed is not None:
+                    if bikes_allowed == 1:
+                        luggage_carriage_facility_list.append(LuggageCarriageEnumeration.CYCLES_ALLOWED)
+                    elif bikes_allowed == 2:
+                        luggage_carriage_facility_list.append(LuggageCarriageEnumeration.NO_CYCLES)
+
+                if len(luggage_carriage_facility_list) > 0:
+                    facitities = ServiceFacilitySetsRelStructure(
+                            service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
+                                id=getId(ServiceFacilitySet, self.codespace, trip_ids[i]), version=self.version.version,
+                                luggage_carriage_facility_list=LuggageCarriageFacilityList(value=luggage_carriage_facility_list))])
+
+                calls = CallsRelStructure()
+
+                with self.conn.cursor() as cur2:
+                    cur2.execute(**{'query': """select * from stop_times where trip_id = ? order by stop_sequence;""", 'parameters': (trip_ids[i],)})
+                    trip_id = None
+                    service_journey = None
+                    prev_call = None
+                    prev_shape_traveled = 0
+                    prev_order = 1
+
+                    df2 = cur2.df()
+
+                    stop_headsigns = df2.get('stop_headsign')
+                    stop_ids = df2.get('stop_id')
+                    arrival_times = df2.get('arrival_time')
+                    departure_times = df2.get('departure_time')
+                    shape_dist_traveleds = df2.get('shape_dist_traveled')
+                    drop_off_types = df2.get('drop_off_type')
+                    pickup_types = df2.get('pickup_type')
+                    stop_sequences = df2.get('stop_sequence')
+
+                    for i in range(0, len(stop_ids)):
+                        destination_display_view = None
+                        stop_headsign = get_or_none(stop_headsigns, i)
+                        if stop_headsign is not None:
+                            destination_display_view = DestinationDisplayView(
+                                name=MultilingualString(value=stop_headsign),
+                                front_text=MultilingualString(value=stop_headsign))
+
+                        from_point_ref = getId(ScheduledStopPoint, self.codespace, stop_ids[i])
+                        arrival_time, arrival_dayoffset = self.noonTimeToNeTEx(arrival_times[i])
+                        departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[i])
+
+                        shape_dist_traveled = get_or_none(shape_dist_traveleds, i)
+                        if prev_call and shape_dist_traveled:
+                            distance = shape_dist_traveled - prev_shape_traveled
+                            prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
+
+                        call = Call(id=getId(Call, self.codespace, "{}_{}".format(trip_ids[i], stop_sequences[i])),
+                                    version=self.version.version,
+                                    fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getFakeRef(
+                                        from_point_ref, ScheduledStopPointRef, self.version.version),
+                                    destination_display_ref_or_destination_display_view=destination_display_view,
+                                    arrival=ArrivalStructure(time=arrival_time, day_offset=arrival_dayoffset,
+                                                             for_alighting=bool(drop_off_types[i] != 1)),
+                                    departure=DepartureStructure(time=departure_time, day_offset=departure_dayoffset,
+                                                                 for_boarding=bool(pickup_types[i] != 1)),
+                                    request_stop=bool(
+                                        pickup_types[i] == 2 or pickup_types[i] == 3 or drop_off_types[i] == 2 or
+                                        drop_off_types[i] == 3),
+                                    order=prev_order)  # stop_sequence is non-negative integer
+
+                        calls.call.append(call)
+
+                        prev_call = call
+                        prev_shape_traveled = shape_dist_traveled
+                        prev_order += 1
+
+                service_journey = ServiceJourney(id=getId(ServiceJourney, self.codespace, trip_ids[i]),
+                                                 version=self.version.version,
+                                                 flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
+                                                 private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
+                                                 short_name=getOptionalString(get_or_none(trip_short_names, i)),
+                                                 validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None])],
+                                                 journey_pattern_view=journey_pattern_view,
+                                                 direction_type=self.directionToNeTEx(get_or_none(direction_ids, i)),
+                                                 block_ref=block_ref,
+                                                 accessibility_assessment=accessibility_assessment,
+                                                 facilities=facitities,
+                                                 link_sequence_projection_ref_or_link_sequence_projection=lsp,
+                                                 calls=calls
+                                                 )
+
+                yield service_journey
 
     def getTimetableFrame(self, availability_conditions, service_journeys, id="TimetableFrame") -> TimetableFrame:
         timetable_frame = TimetableFrame(id=getId(TimetableFrame, self.codespace, id), version=self.version.version)
@@ -1051,9 +1210,11 @@ class GtfsNeTexProfile(CallsProfile):
         write_objects(con, passenger_stop_assignments, empty=True, many=True)
         stop_places = stop_passenger_stop_assignments = None
 
+
         availability_conditions = self.getAvailabilityConditions()
         write_objects(con, availability_conditions, empty=True, many=True)
-        write_objects(con, self.getServiceJourneys(availability_conditions), empty=True, many=True)
+
+        write_generator(con, ServiceJourney, self.getServiceJourneys2(availability_conditions), empty=True)
 
 
     def __init__(self, conn, serializer):
@@ -1086,9 +1247,18 @@ if __name__ == '__main__':
     serializer_config.ignore_default_attributes = True
     serializer = XmlSerializer(config=serializer_config)
 
-    gtfs = GtfsNeTexProfile(conn=duckdb.connect(database='gtfs2.duckdb', read_only=True), serializer=serializer)
+    gtfs = GtfsNeTexProfile(conn=duckdb.connect(database='/home/netex/delijn.duckdb', read_only=True), serializer=serializer)
 
-    with duckdb.connect("/home/netex/gtfs-source.duckdb") as con:
+    target_database_file = "/home/netex/delijn-netex.duckdb"
+    # Workaround for https://github.com/duckdb/duckdb/issues/8261
+    """
+    try:
+        os.remove(target_database_file)
+    except:
+        pass
+    """
+
+    with duckdb.connect(target_database_file) as con:
         gtfs.database(con)
 
 

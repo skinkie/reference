@@ -27,7 +27,7 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ServiceJourney, \
     MobilityFacilityList, SanitaryFacilityList, \
     TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
-    TransportTypeVersionStructure, PublicCodeStructure
+    TransportTypeVersionStructure, PublicCodeStructure, Vehicle, DatedServiceJourney
 
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
@@ -376,3 +376,4 @@ for element in tree.iterfind(".//*"):
         element.getparent().remove(element)
 tree.write(f"/tmp/NeTEx_WSF_{from_date}_{from_date}.xml", pretty_print=True, strip_text=True)
 """
+
