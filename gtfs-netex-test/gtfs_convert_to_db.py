@@ -131,7 +131,7 @@ class GtfsNeTexProfile(CallsProfile):
                                     name=MultilingualString(value=get_or_none(agency_names, i)),
                                     locale=Locale(time_zone=get_or_none(agency_timezones, i),
                                                   languages=LocaleStructure.Languages(language_usage=[LanguageUsageStructure(language=get_or_none(agency_langs, i),
-                                                                                                                             language_use=[LanguageUseEnumeration.NORMALLY_USED])])),
+                                                                                                                             language_use=[LanguageUseEnumeration.NORMALLY_USED])]) if get_or_none(agency_langs, i) is not None else None),
                                     customer_service_contact_details=ContactStructure(url=get_or_none(agency_urls, i),
                                                                                       phone=get_or_none(agency_phones, i),
                                                                                       email=get_or_none(agency_emails, i)))
