@@ -1258,7 +1258,7 @@ def main(database_gtfs: str, database_netex: str):
 
 if __name__ == '__main__':
     import argparse
-    parser = argparse.ArgumentParser(description='GTFS import into DuckDB')
+    parser = argparse.ArgumentParser(description='Convert a GTFS database to a NeTEx database')
     parser.add_argument('gtfs', type=str, help='GTFS database to convert, for example: gtfs-import.duckdb')
     parser.add_argument('database', type=str, help='DuckDB file to overwrite and store contents of the conversion.')
     args = parser.parse_args()
