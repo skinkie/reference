@@ -1,17 +1,14 @@
 import datetime
 import math
-import os
 from _decimal import Decimal
 from typing import List, Generator
+import os
 
 import duckdb
 import numpy
-# import psycopg2, psycopg2.extras
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate
-
-# xsdata generate -p netex  --unsafe-hash -ss clusters --compound-fields  ~/Sources/NeTEx-master/xsd/NeTEx_publication.xsd
 
 from callsprofile import CallsProfile
 from dbaccess import write_objects, write_generator
@@ -21,25 +18,25 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     PublicationDelivery, DataObjectsRelStructure, OperationalContext, ResourceFrame, TypeOfFrameRef, \
     DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, OperationalContextsInFrameRelStructure, \
     CompositeFrame, VersionsRelStructure, FramesRelStructure, ServiceFrame, LinesInFrameRelStructure, \
-    OperatorRefStructure, OperatorRef, StopArea, LocationStructure2, SimplePointVersionStructure, PrivateCodeStructure, \
-    ScheduledStopPoint, StopTypeEnumeration, StopAreaRefsRelStructure, StopAreaRefStructure, \
+    OperatorRef, StopArea, LocationStructure2, SimplePointVersionStructure, PrivateCodeStructure, \
+    ScheduledStopPoint, StopAreaRefsRelStructure, StopAreaRefStructure, \
     StopAreasInFrameRelStructure, ScheduledStopPointsInFrameRelStructure, AvailabilityCondition, ServiceJourneyPattern, \
-    StopPointInJourneyPattern, DestinationDisplayView, ScheduledStopPointRef, Call, ArrivalStructure, \
+    DestinationDisplayView, ScheduledStopPointRef, Call, ArrivalStructure, \
     DepartureStructure, CallsRelStructure, ValidityConditionsRelStructure, AvailabilityConditionRef, BlockRef, \
     DirectionTypeEnumeration, AccessibilityAssessment, LimitationStatusEnumeration, TimetableFrame, \
     JourneysInFrameRelStructure, LineRef, JourneyPatternView, CodespacesRelStructure, \
-    JourneyPatternsInFrameRelStructure, ServiceJourney, TimingLinksInFrameRelStructure, \
-    TimeDemandTypesInFrameRelStructure, OnwardTimingLinkView, OnwardServiceLinkView, PathLink, RouteRef, Route, \
-    RoutePoint, PointsOnRouteRelStructure, RoutePointRef, PointOnRoute, RoutePointsInFrameRelStructure, \
-    RoutesInFrameRelStructure, RouteLink, RouteLinksInFrameRelStructure, __all__, DayTypesRelStructure, DayType, \
+    ServiceJourney, \
+    OnwardServiceLinkView, Route, \
+    RoutePoint, PointsOnRouteRelStructure, RoutePointRef, PointOnRoute, \
+    RouteLink, DayTypesRelStructure, DayType, \
     PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, Block, ServiceFacilitySetsRelStructure, \
     ServiceFacilitySet, LuggageCarriageEnumeration, LinkSequenceProjection, LinkSequenceProjectionRef, LineString, \
     PosList, CodespaceRefStructure, DataSourceRefStructure, ParticipantRef, LuggageCarriageFacilityList, StopPlace, \
     ZoneRefStructure, InfoLinksRelStructure, InfoLink, TypeOfInfoLinkEnumeration, QuaysRelStructure, \
     SiteEntrancesRelStructure, Quay, StopPlaceEntrance, LevelRef, AccessSpacesRelStructure, AccessSpace, \
-    PassengerStopAssignment
+    PassengerStopAssignment, ZonesInFrameRelStructure
 
-from refs import setIdVersion, getRef, getIndex, getIdByRef, getBitString2, getFakeRef, getOptionalString, getId
+from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
 
 
 def get_or_none(l: list, i: int, cast_clazz=None):
@@ -1241,24 +1238,29 @@ class GtfsNeTexProfile(CallsProfile):
         # self.service_journey_patterns, self.timing_links = self.getServiceJourneyPatterns()
         # self.time_demand_types = self.getTimeDemandTypes()
 
-if __name__ == '__main__':
+def main(database_gtfs: str, database_netex: str):
     serializer_config = SerializerConfig(ignore_default_attributes=True)
     serializer_config.pretty_print = True
     serializer_config.ignore_default_attributes = True
     serializer = XmlSerializer(config=serializer_config)
 
-    gtfs = GtfsNeTexProfile(conn=duckdb.connect(database='/home/netex/delijn.duckdb', read_only=True), serializer=serializer)
+    gtfs = GtfsNeTexProfile(conn=duckdb.connect(database=database_gtfs, read_only=True),
+                            serializer=serializer)
 
-    target_database_file = "/home/netex/delijn-netex.duckdb"
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
-    """
     try:
-        os.remove(target_database_file)
+        os.remove(database_netex)
     except:
         pass
-    """
 
-    with duckdb.connect(target_database_file) as con:
+    with duckdb.connect(database_netex) as con:
         gtfs.database(con)
 
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description='GTFS import into DuckDB')
+    parser.add_argument('gtfs', type=str, help='GTFS database to convert, for example: gtfs-import.duckdb')
+    parser.add_argument('database', type=str, help='DuckDB file to overwrite and store contents of the conversion.')
+    args = parser.parse_args()
 
+    main(args.gtfs, args.database)
