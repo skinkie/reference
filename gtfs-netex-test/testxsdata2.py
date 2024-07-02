@@ -6,9 +6,9 @@ from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
-from xsdata.formats.dataclass.serializers import LxmlTreeSerializer
+from xsdata.formats.dataclass.serializers.tree import TreeSerializer
 
-serializer = LxmlTreeSerializer()
+serializer = TreeSerializer()
 result = serializer.render(books)
 
 open("/tmp/test.xml", "wb").write(etree.tostring(result, pretty_print=True))
@@ -27,7 +27,7 @@ for book_xml in tree.finditer(".//{urn:books}book"):
     book: books.BookForm = xml_parser.parse(book_xml, books.BookForm)
     books_list.append(book)
 
-lxml_serializer = LxmlTreeSerializer(context)
+lxml_serializer = TreeSerializer(context)
 
 element = tree.find(".//{urn:books}book")
-element.getparent().append(element, lxml_serializer.render(service_frame))
+element.getparent().append(element, lxml_serializer.render(service_frame).getroot())

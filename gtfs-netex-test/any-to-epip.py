@@ -7,7 +7,8 @@ from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
-from xsdata.formats.dataclass.serializers import XmlSerializer, LxmlTreeSerializer
+from xsdata.formats.dataclass.serializers import XmlSerializer
+from xsdata.formats.dataclass.serializers.tree import TreeSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from netex import ServiceJourney, ServiceJourneyPattern, Codespace, Version, ServiceFrame, \
@@ -205,7 +206,7 @@ def conversion(input_filename: str, epiap_filename: str, output_filename: str):
 
     sjs = getIndex(service_journeys)
     keys = set(sjs.keys())
-    lxml_serializer = LxmlTreeSerializer()
+    lxml_serializer = TreeSerializer()
     parser = lxml.etree.XMLParser(remove_blank_text=True)
     tree = lxml.etree.parse(input_filename, parser=parser)
     for element in tree.iterfind(".//{http://www.netex.org.uk/netex}ServiceJourney"):
