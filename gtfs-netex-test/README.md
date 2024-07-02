@@ -12,3 +12,6 @@
 
 # Conversion of NeTEx EPIP database to XML
 `python epip_db_to_xml.py /path/to/netex-import.duckdb /path/to/netex-import-epip.duckdb /path/to/netex.xml.gz`
+
+# Import a Swiss NeTEx ZIP file
+`python swiss_to_db.py /path/to/swiss-netex-file.zip /path/to/swiss-import.duckdb`
