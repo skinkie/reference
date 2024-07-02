@@ -164,34 +164,41 @@ def create_feed_info(con):
         if data[0][0] == 0:
             cur.execute("""INSERT INTO feed_info (SELECT X.*, Y.*, REPLACE(CAST(today() AS TEXT), '-', '') AS feed_version, '' AS feed_contact_email, '' AS feed_contact_url  FROM (SELECT agency_name AS feed_publisher_name, agency_url AS feed_publisher_url, agency_lang AS feed_lang, agency_lang AS default_lang FROM agency LIMIT 1) AS X, (SELECT MIN(start_date) AS feed_start_date, MAX(end_date) AS feed_end_date FROM (SELECT MIN(start_date) AS start_date, MAX(end_date) AS end_date FROM calendar UNION ALL SELECT MIN(date) AS start_date, MAX(date) AS end_date FROM calendar_dates) WHERE start_date <> '' and end_date <> '') AS Y);""")
 
-filename = '/tmp/gtfs_transit.zip'
-database = '/home/netex/delijn.duckdb'
 
-# Workaround for https://github.com/duckdb/duckdb/issues/8261
-try:
-    os.remove(database)
-except:
-    pass
+def main(gtfs: str, database: str):
+    # Workaround for https://github.com/duckdb/duckdb/issues/8261
+    try:
+        os.remove(database)
+    except:
+        pass
 
-import zipfile
+    import zipfile
 
-con = duckdb.connect(database=database)
+    con = duckdb.connect(database=database)
 
+    zip = zipfile.ZipFile(gtfs)
 
-zip = zipfile.ZipFile(filename)
+    handle_file(con, zip, 'feed_info.txt', feed_info_txt)
+    handle_file(con, zip, 'agency.txt', agency_txt)
+    handle_file(con, zip, 'calendar_dates.txt', calendar_dates_txt)
+    handle_file(con, zip, 'calendar.txt', calendar_txt)
+    handle_file(con, zip, 'routes.txt', routes_txt)
+    handle_file(con, zip, 'levels.txt', levels_txt)
+    handle_file(con, zip, 'stops.txt', stops_txt)
+    handle_file(con, zip, 'shapes.txt', shapes_txt)
+    handle_file(con, zip, 'trips.txt', trips_txt)
+    handle_file(con, zip, 'transfers.txt', transfers_txt)
+    handle_file(con, zip, 'stop_times.txt', stop_times_txt)
+    handle_file(con, zip, 'frequencies.txt', frequencies_txt)
+    handle_file(con, zip, 'pathways.txt', pathways_txt)
 
-handle_file(con, zip, 'feed_info.txt', feed_info_txt)
-handle_file(con, zip, 'agency.txt', agency_txt)
-handle_file(con, zip, 'calendar_dates.txt', calendar_dates_txt)
-handle_file(con, zip, 'calendar.txt', calendar_txt)
-handle_file(con, zip, 'routes.txt', routes_txt)
-handle_file(con, zip, 'levels.txt', levels_txt)
-handle_file(con, zip, 'stops.txt', stops_txt)
-handle_file(con, zip, 'shapes.txt', shapes_txt)
-handle_file(con, zip, 'trips.txt', trips_txt)
-handle_file(con, zip, 'transfers.txt', transfers_txt)
-handle_file(con, zip, 'stop_times.txt', stop_times_txt)
-handle_file(con, zip, 'frequencies.txt', frequencies_txt)
-handle_file(con, zip, 'pathways.txt', pathways_txt)
+    create_feed_info(con)
 
-create_feed_info(con)
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description='GTFS import into DuckDB')
+    parser.add_argument('gtfs', type=str, help='GTFS file to import, for example: gtfs.zip')
+    parser.add_argument('database', type=str, help='DuckDB file to overwrite and store contents of the import.')
+    args = parser.parse_args()
+
+    main(args.gtfs, args.database)
