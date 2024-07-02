@@ -4,3 +4,4 @@ pyproj
 chardet
 isal
 pandas
+multiprocess
