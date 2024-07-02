@@ -8,7 +8,7 @@
 `python gtfs_convert_to_db.py /path/to/gtfs-import.duckdb /path/to/netex-import.duckdb`
 
 # Transformation of NeTEx towards EPIP
-`python gtfs_convert_to_db.py /path/to/netex-import.duckdb /path/to/netex-import-epip.duckdb`
+`python epip_db_to_db.py /path/to/netex-import.duckdb /path/to/netex-import-epip.duckdb`
 
 # Conversion of NeTEx EPIP database to XML
 `python epip_db_to_xml.py /path/to/netex-import.duckdb /path/to/netex-import-epip.duckdb /path/to/netex.xml.gz`
