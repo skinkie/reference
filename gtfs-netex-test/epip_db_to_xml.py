@@ -226,10 +226,10 @@ def export_epip_network_offer(database_original, database_target, output_filenam
     ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
     if output_filename.endswith('.gz'):
-        with igzip_threaded.open(output_filename, 'wt', compresslevel=3, threads=3, block_size=2*10**8) as out:
+        with igzip_threaded.open(output_filename, 'wt', compresslevel=3, threads=3, block_size=2*10**8, encoding='utf-8') as out:
             serializer.write(out, publication_delivery, ns_map)
     else:
-        with open(output_filename, 'w') as out:
+        with open(output_filename, 'w', encoding='utf-8') as out:
             serializer.write(out, publication_delivery, ns_map)
 
 if __name__ == '__main__':
