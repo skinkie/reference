@@ -38,7 +38,7 @@ def main(filenames: List[str], database: str, clean_database: bool = True):
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Import any NeTEx source into DuckDB')
-    argument_parser.add_argument('netex', nargs='+', default=[], help='The original DuckDB NeTEx database')
+    argument_parser.add_argument('netex', nargs='+', default=[], help='NeTEx files')
     argument_parser.add_argument('database', type=str, help='The DuckDB to be overwritten with the NeTEx context')
     argument_parser.add_argument('clean_database', action="store_true", help='Clean the current file', default=True)
     args = argument_parser.parse_args()
