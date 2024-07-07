@@ -158,12 +158,17 @@ import datetime
 
 def create_feed_info(con):
     with con.cursor() as cur:
-        cur.execute("""SELECT count(*) FROM feed_info;""")
+        cur.execute("""SELECT feed_start_date, feed_end_date, feed_version FROM feed_info;""")
         data = cur.fetchall()
 
-        if data[0][0] == 0:
+        if len(data) == 0:
             cur.execute("""INSERT INTO feed_info (SELECT X.*, Y.*, REPLACE(CAST(today() AS TEXT), '-', '') AS feed_version, '' AS feed_contact_email, '' AS feed_contact_url  FROM (SELECT agency_name AS feed_publisher_name, agency_url AS feed_publisher_url, agency_lang AS feed_lang, agency_lang AS default_lang FROM agency LIMIT 1) AS X, (SELECT MIN(start_date) AS feed_start_date, MAX(end_date) AS feed_end_date FROM (SELECT MIN(start_date) AS start_date, MAX(end_date) AS end_date FROM calendar UNION ALL SELECT MIN(date) AS start_date, MAX(date) AS end_date FROM calendar_dates) WHERE start_date <> '' and end_date <> '') AS Y);""")
 
+        else:
+            if data[0][0] is None or data[0][1] is None or len(data[0][0]) == 0 or len(data[0][1]) == 0:
+                cur.execute("""UPDATE feed_info SET feed_start_date = start_date, feed_end_date = end_date FROM (SELECT start_date, end_date FROM (SELECT MIN(start_date) AS start_date, MAX(end_date) AS end_date FROM calendar UNION ALL SELECT MIN(date) AS start_date, MAX(date) AS end_date FROM calendar_dates) WHERE start_date <> '' and end_date <> '') AS Z;""")
+            if data[0][2] is None or len(data[0][2]) == 0:
+                cur.execute("""UPDATE feed_info SET feed_version = REPLACE(CAST(today() AS TEXT), '-', '');""")
 
 def main(gtfs: str, database: str):
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
