@@ -45,10 +45,13 @@ def load_generator(con, clazz, limit=None):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     cur = con.cursor()
-    if limit is not None:
-        cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
-    else:
-        cur.execute(f"SELECT object FROM {type};")
+    try:
+        if limit is not None:
+            cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
+        else:
+            cur.execute(f"SELECT object FROM {type};")
+    except:
+        return
 
     while True:
         xml = cur.fetchone()

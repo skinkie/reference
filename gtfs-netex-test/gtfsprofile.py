@@ -1,13 +1,14 @@
 import csv
 import datetime
 from typing import List, Union
+import io
 from pyproj import Transformer
 
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \
     ScheduledStopPoint, StopPlace, AccessibilityAssessment, LimitationStatusEnumeration, TariffZoneRefsRelStructure, \
     PrivateCode, PrivateCodeStructure, Quay, PresentationStructure, Authority, Branding, Operator, ServiceJourney, \
     ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
-    ServiceLink, PublicCodeStructure
+    ServiceLink, PublicCodeStructure, StopPlaceEntrance
 
 import operator as operator_f
 
@@ -35,6 +36,35 @@ class GtfsProfile:
                     writer.writeheader()
                 if data[0][list(data[0].keys())[0]] is not None:
                     writer.writerows(data)
+
+    @staticmethod
+    def writeToFile(filename: str, data: List[dict], write_header=False):
+        mode = 'a'
+        if write_header:
+            mode = 'w'
+
+        if len(data) > 0:
+            with open(filename, mode) as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
+                if write_header:
+                    writer.writeheader()
+                if data[0][list(data[0].keys())[0]] is not None:
+                    writer.writerows(data)
+    @staticmethod
+    def writeToZipFile(archive, filename: str, data: List[dict], write_header=False):
+        mode = 'a'
+        if write_header:
+            mode = 'w'
+
+        if len(data) > 0:
+            with archive.open(filename, mode) as f:
+                csvfile = io.TextIOWrapper(f, 'utf-8')
+                writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
+                if write_header:
+                    writer.writeheader()
+                if data[0][list(data[0].keys())[0]] is not None:
+                    writer.writerows(data)
+                csvfile.close()
 
     @staticmethod
     def getOptionalMultilingualString(multilingual_string: MultilingualString | List[MultilingualString]):
@@ -238,6 +268,38 @@ class GtfsProfile:
                 'wheelchair_boarding': '',
                 'level_id': '',
                 'platform_code': scheduled_stop_point.short_stop_code
+        }
+
+        return stop
+
+    @staticmethod
+    def projectStopEntranceToStop(stop_entrance: StopPlaceEntrance, parent: StopPlaceRef, transformer: Transformer = None):
+        # TODO: parent_station could be obtained from StopPlace or StopArea
+
+        if stop_entrance.centroid.location is None:
+            print(f"StopPlaceEntrance {stop_entrance.id} does not have a location.")
+            # TODO: Maybe by parent?
+            return None
+
+        if transformer:
+            latitude, longitude = transformer.transform(stop_entrance.centroid.location.pos.value[0], stop_entrance.centroid.location.pos.value[1])
+        else:
+            latitude, longitude = stop_entrance.centroid.location.latitude, stop_entrance.centroid.location.longitude
+
+        stop = {'stop_id': stop_entrance.id,
+                'stop_code': GtfsProfile.getOptionalPrivateCode(stop_entrance.public_code),
+                'stop_name': GtfsProfile.getOptionalMultilingualString(stop_entrance.name) or GtfsProfile.getOptionalMultilingualString(stop_entrance.short_name),
+                'stop_desc': GtfsProfile.getOptionalMultilingualString(stop_entrance.description),
+                'stop_lat': round(latitude, 7),
+                'stop_lon': round(longitude, 7),
+                'zone_id': GtfsProfile.getTariffZoneFromScheduledStopPoint(stop_entrance.tariff_zones),
+                'stop_url': stop_entrance.url or '',
+                'location_type': 2,
+                'parent_station': GtfsProfile.getOrNone(parent, 'ref'),
+                'stop_timezone': '',
+                'wheelchair_boarding': '',
+                'level_id': '',
+                'platform_code': ''
         }
 
         return stop
