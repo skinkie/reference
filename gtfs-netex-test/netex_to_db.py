@@ -3,20 +3,7 @@ from typing import List
 import duckdb as sqlite3
 import os
 
-from isal import igzip_threaded
-
 from anyintodbnew import  get_interesting_classes, setup_database, open_netex_file, insert_database
-
-def open_netex_file(filename):
-    if filename.endswith('.xml.gz'):
-        yield igzip_threaded.open(filename, 'rb', compresslevel=3, threads=3)
-    elif filename.endswith('.xml'):
-        yield open(filename, 'rb')
-    elif filename.endswith('.zip'):
-        import zipfile
-        zip = zipfile.ZipFile(filename)
-        for zipfilename in zip.filelist:
-            yield zip.open(zipfilename)
 
 def main(filenames: List[str], database: str, clean_database: bool = True):
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
