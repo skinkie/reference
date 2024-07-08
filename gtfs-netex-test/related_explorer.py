@@ -11,7 +11,7 @@ from dbaccess import load_local
 import netex
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
-    GeneralFrameMembersRelStructure
+    GeneralFrameMembersRelStructure, AvailabilityConditionRef
 import duckdb as sqlite3
 from mro_attributes import list_attributes
 import xsdata
@@ -33,7 +33,11 @@ def recursive_attributes(obj):
                     yield from recursive_attributes(v)
                 elif v.__class__ in (list, tuple):
                     for x in v:
-                        yield from recursive_attributes(x)
+                        if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__,
+                                                                                     VersionOfObjectRefStructure):
+                            yield x
+                        else:
+                            yield from recursive_attributes(x)
 
 
 def recursive_resolve(con, parent, resolved):
