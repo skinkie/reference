@@ -31,7 +31,6 @@ def load_local(con, clazz: T, limit=None, filter=None) -> List[T]:
         else:
             cur.execute(f"SELECT object FROM {type};")
     except:
-        raise
         return []
 
     objs: List[T] = []
