@@ -30,7 +30,7 @@ import csv
 import zipfile
 
 
-def convert(archive, database: str, gtfs: str):
+def convert(archive, database: str):
     agencies = {}
     used_agencies = set([])
     routes = {}
@@ -139,5 +139,5 @@ if __name__ == '__main__':
     argument_parser.add_argument('gtfs', type=str, help='The DuckDB to be overwritten with the NeTEx context')
     args = argument_parser.parse_args()
 
-    with zipfile.ZipFile('/tmp/test.zip', 'w') as archive:
-        convert(archive, args.netex, args.gtfs)
+    with zipfile.ZipFile(args.gtfs, 'w') as archive:
+        convert(archive, args.netex)

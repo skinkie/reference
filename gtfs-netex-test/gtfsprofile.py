@@ -58,7 +58,7 @@ class GtfsProfile:
 
         if len(data) > 0:
             with archive.open(filename, mode) as f:
-                csvfile = io.TextIOWrapper(f, 'utf-8')
+                csvfile = io.TextIOWrapper(f, 'utf-8', newline='')
                 writer = csv.DictWriter(csvfile, fieldnames=data[0].keys())
                 if write_header:
                     writer.writeheader()
