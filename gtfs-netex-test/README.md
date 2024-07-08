@@ -24,3 +24,6 @@ Currently regeneration of NeTEx must be done with the original xsData version, b
 
 # Import a Swiss NeTEx ZIP file
 `python swiss_to_db.py /path/to/swiss-netex-file.zip /path/to/swiss-import.duckdb`
+
+# Exploring instances and their dependencies
+`python related_explorer.py /path/to/netex.duckdb ServiceJourney the:id`
