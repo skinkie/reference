@@ -47,8 +47,9 @@ def recursive_resolve(con, parent, resolved):
         if obj in resolved:
             continue
 
-        resolved_obj = load_local(con, getattr(netex, obj.name_of_ref_class), 1)[0]
-        recursive_resolve(con, resolved_obj, resolved)
+        resolved_objs = load_local(con, getattr(netex, obj.name_of_ref_class), filter=obj.ref)
+        if len(resolved_objs) > 0:
+            recursive_resolve(con, resolved_objs[0], resolved)
 
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
