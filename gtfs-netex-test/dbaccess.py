@@ -19,16 +19,19 @@ serializer_config.xml_declaration = False
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
-def load_local(con, clazz: T, limit=None) -> List[T]:
+def load_local(con, clazz: T, limit=None, filter=None) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     cur = con.cursor()
     try:
-        if limit is not None:
+        if filter is not None:
+            cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
+        elif limit is not None:
             cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
         else:
             cur.execute(f"SELECT object FROM {type};")
     except:
+        raise
         return []
 
     objs: List[T] = []
@@ -41,12 +44,14 @@ def load_local(con, clazz: T, limit=None) -> List[T]:
 
     return objs
 
-def load_generator(con, clazz, limit=None):
+def load_generator(con, clazz, limit=None, filter=None):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     cur = con.cursor()
     try:
-        if limit is not None:
+        if filter is not None:
+            cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
+        elif limit is not None:
             cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
         else:
             cur.execute(f"SELECT object FROM {type};")

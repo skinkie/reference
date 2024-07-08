@@ -50,39 +50,42 @@ def recursive_resolve(con, parent, resolved):
         resolved_obj = load_local(con, getattr(netex, obj.name_of_ref_class), 1)[0]
         recursive_resolve(con, resolved_obj, resolved)
 
-def fetch(database: str, output_filename: str):
+def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
-        service_journeys: List[ServiceJourney] = load_local(con, ServiceJourney, 1)
-        service_journey = service_journeys[0]
+        objs = load_local(con, getattr(netex, object_type), filter=object_filter)
+        if len(objs) > 0:
+            obj = objs[0]
 
-        resolved = []
-        recursive_resolve(con, service_journey, resolved)
+            resolved = []
+            recursive_resolve(con, obj, resolved)
 
-        publication_delivery = PublicationDelivery(
-            version="ntx:1.1",
-            publication_timestamp=XmlDateTime.now(),
-            participant_ref=ParticipantRef(value="PyNeTExConv"),
-            data_objects=DataObjectsRelStructure(choice=[
-                GeneralFrame(
-                    id="Results", version="1",
-                    members=GeneralFrameMembersRelStructure(choice=resolved))]))
+            publication_delivery = PublicationDelivery(
+                version="ntx:1.1",
+                publication_timestamp=XmlDateTime.now(),
+                participant_ref=ParticipantRef(value="PyNeTExConv"),
+                data_objects=DataObjectsRelStructure(choice=[
+                    GeneralFrame(
+                        id="Results", version="1",
+                        members=GeneralFrameMembersRelStructure(choice=resolved))]))
 
-        ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
+            ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
-        if output_filename.endswith('.gz'):
-            with igzip_threaded.open(output_filename, 'wt', compresslevel=3, threads=3, block_size=2*10**8, encoding='utf-8') as out:
-                serializer.write(out, publication_delivery, ns_map)
-        elif output_filename == '-':
-            print(serializer.render(publication_delivery, ns_map))
-        else:
-            with open(output_filename, 'w', encoding='utf-8') as out:
-                serializer.write(out, publication_delivery, ns_map)
+            if output_filename.endswith('.gz'):
+                with igzip_threaded.open(output_filename, 'wt', compresslevel=3, threads=3, block_size=2*10**8, encoding='utf-8') as out:
+                    serializer.write(out, publication_delivery, ns_map)
+            elif output_filename == '-':
+                print(serializer.render(publication_delivery, ns_map))
+            else:
+                with open(output_filename, 'w', encoding='utf-8') as out:
+                    serializer.write(out, publication_delivery, ns_map)
 
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Export a prepared EPIP  import into DuckDB')
     argument_parser.add_argument('netex', type=str, help='The original DuckDB NeTEx database')
+    argument_parser.add_argument('object_type', type=str, help='The NeTEx object type to filter, for example ServiceJourney')
+    argument_parser.add_argument('object_filter', type=str, help='The object filter to apply.')
     argument_parser.add_argument('output', type=str, nargs="?", default="-", help='The NeTEx output filename, for example: netex.xml.gz')
     args = argument_parser.parse_args()
 
-    fetch(args.netex, args.output)
+    fetch(args.netex, args.object_type, args.object_filter, args.output)
