@@ -60,8 +60,9 @@ def convert(archive, database: str):
         quay_to_sp = {}
         for stop_place in stop_places.values():
             stop_place: StopPlace
-            for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
-                quay_to_sp[quay.id] = stop_place
+            if stop_place.quays:
+                for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
+                    quay_to_sp[quay.id] = stop_place
 
         psas = {}
         for psa in load_generator(con, PassengerStopAssignment):
