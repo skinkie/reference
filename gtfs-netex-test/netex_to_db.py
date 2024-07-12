@@ -3,7 +3,7 @@ from typing import List
 import duckdb as sqlite3
 import os
 
-from dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database
+from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database
 
 def main(filenames: List[str], database: str, clean_database: bool = True):
     # Workaround for https://github.com/duckdb/duckdb/issues/8261

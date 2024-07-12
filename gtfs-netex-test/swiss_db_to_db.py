@@ -14,7 +14,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from anyintodbnew import setup_database, get_interesting_classes
 from callsprofile import CallsProfile
-from dbaccess import load_generator
+from netexio.dbaccess import load_generator
 from netex import ServiceJourneyPattern, Direction, Codespace, MultilingualString, DirectionType, ServiceJourney, \
     AvailabilityCondition, TimeDemandType, ScheduledStopPoint, Pos, PointVersionStructure, RoutePoint, RouteLink, \
     StopPointInJourneyPattern, TimingPointInJourneyPattern, ScheduledStopPointRef, TimingLink, ServiceLink, \

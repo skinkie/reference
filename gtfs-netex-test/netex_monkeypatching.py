@@ -3,7 +3,7 @@ from netex import VersionOfObjectRefStructure, ServiceJourneyRef, ServiceJourney
     RouteLink, Route, Quay, QuayRefStructure, StopPlaceRefStructure, StopPlace, TimingPoint, TimingPointRefStructure, \
     ServiceLink, ServiceLinkRefStructure, TimingLink, TimingLinkRefStructure, Locale, LocaleStructure
 
-from dbaccess import get_single
+from netexio.dbaccess import get_single
 
 def ref_version_hash(self):
     return hash(self.ref + ';' + self.version)

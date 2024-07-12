@@ -11,7 +11,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate
 
 from callsprofile import CallsProfile
-from dbaccess import write_objects, write_generator
+from netexio.dbaccess import write_objects, write_generator
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
     VersionTypeEnumeration, LocaleStructure, SystemOfUnits, Operator, ContactStructure, Locale, LanguageUsageStructure, \
     LanguageUseEnumeration, Line, PresentationStructure, AllVehicleModesOfTransportEnumeration, PrivateCode, \

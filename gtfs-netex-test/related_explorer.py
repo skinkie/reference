@@ -7,7 +7,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
 from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime
 
-from dbaccess import load_local
+from netexio.dbaccess import load_local
 import netex
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
