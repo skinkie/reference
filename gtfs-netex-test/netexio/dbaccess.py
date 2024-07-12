@@ -1,5 +1,7 @@
+import sys
 from typing import T, List, Generator
 
+from isal import igzip_threaded
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
@@ -320,3 +322,138 @@ def update_generator(con, clazz, generator: Generator):
             cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
 
     print('\n')
+
+def get_element_name_with_ns(clazz):
+    name = getattr(clazz.Meta, 'name', clazz.__name__)
+    return "{" + clazz.Meta.namespace + "}" + name
+
+def get_interesting_classes(filter=None):
+    import inspect
+    import netex
+
+    # Get all classes from the generated NeTEx Python Dataclasses
+    clsmembers = inspect.getmembers(netex, inspect.isclass)
+
+    # The interesting class members certainly will have a "Meta class" with a namespace
+    interesting_members = [x for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace')]
+
+    # Specifically we are interested in classes that are derived from "EntityInVersion", to find them, we exclude embedded child objects called "VersionedChild"
+    entitiesinversion = [x for x in interesting_members if netex.VersionedChildStructure not in x[1].__mro__ and netex.EntityInVersionStructure in x[1].__mro__]
+
+    # Obviously we want to have the VersionedChild too
+    versionedchild = [x for x in interesting_members if netex.VersionedChildStructure in x[1].__mro__]
+
+    # There is one particular container in NeTEx that should reflect almost the same our collection EntityInVersion namely the "GeneralFrame"
+    general_frame_members = netex.GeneralFrameMembersRelStructure.__dataclass_fields__['choice'].metadata['choices']
+
+    # The interesting part here is where the difference between the two lie.
+    # geme = [x['type'].Meta.getattr('name', x['type'].__name__) for x in general_frame_members]
+    # envi = [x[0] for x in entitiesinversion]
+    # set(geme) - set(envi)
+
+    if filter is not None:
+        clean_element_names = sorted([x[0] for x in entitiesinversion if x[0] in filter])
+        interesting_element_names =  set([get_element_name_with_ns(x[1]) for x in entitiesinversion if x[0] in filter])
+    else:
+        clean_element_names = sorted([x[0] for x in entitiesinversion if not x[0].endswith('Frame')])
+        interesting_element_names =  set([get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')])
+
+    return clean_element_names, interesting_element_names
+
+def setup_database(con, classes, clean=False):
+    cur = con.cursor()
+    clean_element_names, interesting_element_names = classes
+
+    if clean:
+        # SQLITE
+        # cur.execute("PRAGMA writable_schema = 1;")
+        # cur.execute("DELETE FROM sqlite_master WHERE type IN ('table', 'index', 'trigger');")
+        # cur.execute("PRAGMA writable_schema = 0;")
+        # con.commit()
+
+        # DuckDB
+        for objectname in clean_element_names:
+            sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
+            cur.execute(sql_drop_table)
+        cur.execute("VACUUM;")
+
+    for objectname in clean_element_names:
+        # TODO: optimize
+        clazz = getattr(sys.modules['netex'], objectname)
+
+        if hasattr(clazz, 'order'):
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+
+        elif hasattr(clazz, 'version'):
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+
+        else:
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL PRIMARY KEY (id));"
+
+        print(sql_create_table)
+        cur.execute(sql_create_table)
+
+def insert_database(con, classes, f=None):
+    if f is None:
+        return
+
+    cur = con.cursor()
+    clean_element_names, interesting_element_names = classes
+    events = ("start", "end")
+    context = etree.iterparse(f, events=events, remove_blank_text=True)
+    current_element = None
+    for event, element in context:
+        if event == 'end' and element.tag in interesting_element_names: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
+            # current_element = element.tag
+            xml = etree.tostring(element, encoding='unicode')
+            if 'id' not in element.attrib:
+                # print(xml)
+                continue
+
+            id = element.attrib['id']
+            version = element.attrib.get('version', None)
+            order = element.attrib.get('order', None)
+
+            localname = element.tag.split('}')[-1] # localname
+            if order is not None:
+                sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
+                try:
+                    cur.execute(sql_insert_object, (id, version, order, xml,))
+                except:
+                    print(xml)
+                    pass
+
+            elif version is not None:
+                sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
+                try:
+                    cur.execute(sql_insert_object, (id, version, xml,))
+                except:
+                    if localname == 'ServiceJourney':
+                        print(xml)
+                        raise
+
+                    pass
+
+            else:
+                sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?);"""
+                try:
+                    cur.execute(sql_insert_object, (id, xml,))
+                except:
+                    print(xml)
+                    pass
+
+
+        # elif event == 'end' and element.tag == current_element:
+        #    current_element = None
+
+
+def open_netex_file(filename):
+    if filename.endswith('.xml.gz'):
+        yield igzip_threaded.open(filename, 'rb', compresslevel=3, threads=3)
+    elif filename.endswith('.xml'):
+        yield open(filename, 'rb')
+    elif filename.endswith('.zip'):
+        import zipfile
+        zip = zipfile.ZipFile(filename)
+        for zipfilename in zip.filelist:
+            yield zip.open(zipfilename)
