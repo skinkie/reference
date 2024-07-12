@@ -386,7 +386,7 @@ class GtfsProfile:
             latitude, longitude = stop_area.centroid.location.latitude, stop_area.centroid.location.longitude
 
         stop = {'stop_id': stop_area.id,
-                'stop_code': GtfsProfile.getOptionalPrivateCode(stop_area.public_code.value),
+                'stop_code': GtfsProfile.getOptionalPrivateCode(stop_area.public_code),
                 'stop_name': GtfsProfile.getOptionalMultilingualString(stop_area.name) or GtfsProfile.getOptionalMultilingualString(stop_area.short_name),
                 'stop_desc': GtfsProfile.getOptionalMultilingualString(stop_area.description),
                 'stop_lat': round(latitude, 7),
@@ -403,6 +403,30 @@ class GtfsProfile:
 
         return stop
 
+    @staticmethod
+    def projectStopPlaceToStop(stop_place: StopPlace, transformer: Transformer = None) -> dict:
+        if transformer:
+            latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
+        else:
+            latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
+
+        stop = {'stop_id': stop_place.id,
+                'stop_code': GtfsProfile.getOptionalPrivateCode(stop_place.public_code),
+                'stop_name': GtfsProfile.getOptionalMultilingualString(stop_place.name) or GtfsProfile.getOptionalMultilingualString(stop_place.short_name),
+                'stop_desc': GtfsProfile.getOptionalMultilingualString(stop_place.description),
+                'stop_lat': round(latitude, 7),
+                'stop_lon': round(longitude, 7),
+                'zone_id': '',
+                'stop_url': '',
+                'location_type': 1, # Station
+                'parent_station': '',
+                'stop_timezone': GtfsProfile.getOrNone(stop_place, 'locale.time_zone'),
+                'wheelchair_boarding': '',
+                'level_id': stop_place.levels.level_ref_or_level if stop_place.levels is not None and stop_place.levels.level_ref_or_level is not None else '',
+                'platform_code': ''
+        }
+
+        return stop
 
     @staticmethod
     def projectQuayStop(stop_place: StopPlace, with_quays = False, transformer: Transformer = None) -> List[dict]:

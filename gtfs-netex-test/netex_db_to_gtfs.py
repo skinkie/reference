@@ -80,7 +80,13 @@ def convert(archive, database: str):
 
         for scheduled_stop_point in load_local(con, ScheduledStopPoint):
             stop_place = psas.get(scheduled_stop_point.id, None)
-            stop_place_ref = getRef(stop_place)
+            if stop_place is not None:
+                stop_place_ref = getRef(stop_place)
+                stop = GtfsProfile.projectStopPlaceToStop(stop_place)
+                stops[stop['stop_id']] = stop
+            else:
+                stop_place_ref = None
+
             stop = GtfsProfile.projectScheduledStopPointToStop(scheduled_stop_point, stop_place_ref)
             if stop is not None:
                 stops[stop['stop_id']] = stop
