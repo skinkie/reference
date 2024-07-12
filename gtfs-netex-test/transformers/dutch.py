@@ -4,7 +4,7 @@ from typing import Generator, Dict
 
 import duckdb as sqlite3
 
-from dbaccess import load_generator, write_generator, load_local, write_objects
+from netexio.dbaccess import load_generator, write_generator, load_local, write_objects
 from netex import ScheduledStopPoint, Codespace, Version, ServiceJourney
 from multiprocessing import Pool
 
@@ -66,17 +66,13 @@ def dutch_service_journey_pattern_time_demand_type_memory(read_database: str, wr
 
         tdtp = TimeDemandTypesProfile(codespace=codespaces[0], version=versions[0])
 
-        sjps = {}
-        sjps_hash = {}
-        tls = {}
-        tdts = {}
-        tdts_hash = {}
+        i = 0
 
         _load_generator = load_generator(read_con, ServiceJourney)
         for sj in _load_generator:
-            tdtp.getServiceJourneyPattern(sj, sjps, sjps_hash, ssps, tls)
-            tdtp.getTimeDemandType(sj, sjps, tdts, tdts_hash, ssps, tls, None)
-            write_objects(write_con, [sj], False, False)
-
-        write_objects(write_con, list(sjps.values()), True, True)
-        write_objects(write_con, list(tdts.values()), True, True)
+            sjp = tdtp.getServiceJourneyPatternGenerator(read_con, write_con, sj, ssps)
+            tdtp.getTimeDemandTypeGenerator(read_con, write_con, sj, ssps)
+            write_objects(write_con, [sj], False, False, silent=True)
+            i += 1
+            if i % 13 == 0:
+                print('\r', "ServiceJourney", str(i), end='')

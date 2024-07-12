@@ -14,7 +14,7 @@ def getRef(obj: object, klass=None):
     if hasattr(obj, 'id'):
         instance = klass(ref = obj.id)
     elif hasattr(obj, 'ref'):
-        instance = klass(obj.ref)
+        instance = klass(ref = obj.ref)
 
     if hasattr(instance, 'order'):
         instance.order = obj.order

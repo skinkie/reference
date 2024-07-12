@@ -152,7 +152,7 @@ def get_single(con, clazz: T, id, version) -> T:
         return obj
 
 
-def write_objects(con, objs, empty=False, many=False):
+def write_objects(con, objs, empty=False, many=False, silent=False):
     if len(objs) == 0:
         return
 
@@ -192,9 +192,11 @@ def write_objects(con, objs, empty=False, many=False):
             else:
                 cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '')))
 
-            if i % 13 == 0:
-                print('\r', objectname, str(i), end = '')
-        print('\r', objectname, len(objs), end='')
+            if not silent:
+                if i % 13 == 0:
+                    print('\r', objectname, str(i), end = '')
+        if not silent:
+            print('\r', objectname, len(objs), end='')
 
 
 def write_generator(con, clazz, generator: Generator, empty=False):

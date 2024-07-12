@@ -3,7 +3,7 @@ import duckdb as sqlite3
 from itertools import groupby
 from typing import List, Generator, Tuple
 
-from dbaccess import load_local, write_objects, write_generator
+from netexio.dbaccess import load_local, write_objects, write_generator
 from refs import getIndex, getRef
 from utils import project
 

@@ -1,7 +1,7 @@
 import duckdb as sqlite3
 from typing import Iterable, Dict, Generator
 
-from dbaccess import write_objects, load_generator, write_generator, update_generator
+from netexio.dbaccess import write_objects, load_generator, write_generator, update_generator
 from netex import ServiceJourneyPattern, Direction, MultilingualString, DirectionType, ServiceJourney, DirectionRef
 from refs import getId, getRef
 

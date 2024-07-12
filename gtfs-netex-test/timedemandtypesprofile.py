@@ -17,6 +17,7 @@ from netex import ServiceJourney, ServiceJourneyPattern, StopPointInJourneyPatte
     JourneyRunTime, JourneyWaitTime, JourneyRunTimesRelStructure, TimingLinkRef, JourneyWaitTimesRelStructure, \
     ScheduledStopPointRef, TimingLinkRefStructure, PublicationDelivery, GeneralFrame, ServiceLink, \
     TimingPointInJourneyPattern
+from netexio.dbaccess import load_local, write_objects
 from refs import getRef, getIndex, getId, getFakeRef
 import sys
 class TimeDemandTypesProfile:
@@ -79,6 +80,44 @@ class TimeDemandTypesProfile:
     def getServiceJourneyPatternHash(sjp: ServiceJourneyPattern):
         # TODO: This will work for the simple cases, but will fail for routes having the same sequence, but for example a different route_ref (for a different line_ref)
         return hash('-'.join([TimeDemandTypesProfile.getPointRefFromPointInJourneyPattern(x).ref for x in sjp.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern]))
+
+    def getTimeDemandTypeByTimesGenerator(self, read_con, write_con, service_journey: ServiceJourney, run_times: List[Tuple[XmlDuration, str,]], wait_times: List[Tuple[XmlDuration, str,]]):
+        tdt_hash = TimeDemandTypesProfile.getTimeDemandTypeHash2(run_times, wait_times)
+        tdt_hash_hex = TimeDemandTypesProfile.getHexHash(tdt_hash)
+        id = getId(TimeDemandType, self.codespace, tdt_hash_hex)
+
+        tdt = load_local(read_con, TimeDemandType, 1, id)
+        if len(tdt) == 0:
+            tdt = load_local(write_con, TimeDemandType, 1, id)
+            if len(tdt) == 0:
+                order = 0
+
+                tdt = TimeDemandType(id=id,
+                                     version=self.version.version,
+                                     run_times=JourneyRunTimesRelStructure(
+                                         journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, self.codespace,
+                                                                                   "{:s}-{:d}".format(tdt_hash_hex, (
+                                                                                       order := order + 1))),
+                                                                          # TODO make more elegant
+                                                                          version=self.version.version,
+                                                                          timing_link_ref=getFakeRef(x[1], TimingLinkRef, self.version.version),
+                                                                          run_time=x[0]) for x in run_times]),
+                                     wait_times=JourneyWaitTimesRelStructure(journey_wait_time=[JourneyWaitTime(
+                                         id=getId(JourneyWaitTime, self.codespace,
+                                                  "{:s}-{:d}".format(tdt_hash_hex, (order := order + 1))),
+                                         version=self.version.version,
+                                         timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref=getFakeRef(x[1], ScheduledStopPointRef, self.version.version),
+                                         wait_time=x[0]) for x in wait_times if x[0].seconds > 0]))
+
+                if len(tdt.wait_times.journey_wait_time) == 0:
+                    tdt.wait_times = None
+
+                write_objects(write_con, [tdt], False, False)
+            else:
+                tdt = tdt[0]
+
+        service_journey.time_demand_type_ref = getRef(tdt)
+        return tdt
 
     def getTimeDemandTypeByTimes(self, service_journey: ServiceJourney, time_demand_types: Dict[str, TimeDemandType], time_demand_types_hash: Dict[int, str], ssps: Dict[str, ScheduledStopPoint], tls: Dict[str, TimingLink], run_times: List[Tuple[XmlDuration, str,]], wait_times: List[Tuple[XmlDuration, str,]]):
         tdt_hash = TimeDemandTypesProfile.getTimeDemandTypeHash2(run_times, wait_times)
@@ -183,6 +222,44 @@ class TimeDemandTypesProfile:
         self.getTimeDemandTypeByTimes(service_journey, time_demand_types, time_demand_types_hash, ssps, tls, run_times, wait_times)
         service_journey.departure_time = calls[0].departure.time
 
+    def getTimeDemandTypeByCallsGenerator(self, read_con, write_con, service_journey: ServiceJourney,ssps: Dict[str, ScheduledStopPoint]):
+        calls: List[Call] = sorted(service_journey.calls.call, key=lambda c: c.order)
+        run_times: List[Tuple[XmlDuration, str,]] = []
+        wait_times: List[Tuple[XmlDuration, str,]] = []
+
+        for i in range(0, len(calls) - 1):
+            run_time = XmlDuration(
+                value="PT{:d}S".format(TimeDemandTypesProfile.getRunTimeCall(calls[i], calls[i + 1])))
+            wait_time = XmlDuration(value="PT{:d}S".format(TimeDemandTypesProfile.getWaitTimeCall(calls[i])))
+            ssp = ssps[calls[
+                i].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref]
+            ssp_next = ssps[calls[
+                i + 1].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref]
+
+            if calls[i].onward_timing_link_view and calls[i].onward_timing_link_view.timing_link_ref and \
+                    calls[i].onward_timing_link_view.timing_link_ref in tls:
+                tl_ref = calls[i].onward_timing_link_view.timing_link_ref
+            else:
+                tl_ref = getId(TimingLink, self.codespace,
+                               TimeDemandTypesProfile.getHexHash(hash(ssp.id + "-" + ssp_next.id)))
+
+            tl = load_local(read_con, TimingLink, 1, tl_ref)
+            if len(tl) == 0:
+                tl = load_local(write_con, TimingLink, 1, tl_ref)
+                if len(tl) == 0:
+                    tl = TimingLink(id=tl_ref,
+                                    version=self.version.version,
+                                    from_point_ref=getRef(ssp, TimingPointRefStructure),
+                                    to_point_ref=getRef(ssp_next, TimingPointRefStructure))
+
+                    write_objects(write_con, [tl], empty=False, many=False)
+
+            run_times.append((run_time, tl_ref,))
+            wait_times.append((wait_time, ssp.id,))
+
+        self.getTimeDemandTypeByTimesGenerator(read_con, write_con, service_journey, run_times, wait_times)
+        service_journey.departure_time = calls[0].departure.time
+
     @staticmethod
     def getObjectFromObject(obj, new_clazz, id=None):
         attributes = set([x.name for x in dataclasses.fields(new_clazz)]).intersection(set([x.name for x in dataclasses.fields(obj.__class__)]))
@@ -231,6 +308,71 @@ class TimeDemandTypesProfile:
         self.getTimeDemandTypeByTimes(service_journey, time_demand_types, time_demand_types_hash, ssps, tls, run_times, wait_times)
         service_journey.departure_time = pass_times[0].departure_time
 
+    def getTimeDemandTypeByTimetabledPassingTimesGenerator(self, read_con, write_con, service_journey: ServiceJourney,
+                                                  ssps: Dict[str, ScheduledStopPoint]):
+        pass_times: List[TimetabledPassingTime] = service_journey.passing_times.timetabled_passing_time
+        run_times: List[Tuple[XmlDuration, str,]] = []
+        wait_times: List[Tuple[XmlDuration, str,]] = []
+
+        sjp = load_local(read_con, ServiceJourneyPattern, 1, service_journey.journey_pattern_ref.ref)
+        if len(sjp) == 0:
+            sjp = load_local(write_con, ServiceJourneyPattern, 1, service_journey.journey_pattern_ref.ref)
+
+        sjp = sjp[0]
+
+        piss = {x.id: x for x in sjp.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern}
+
+        for i in range(0, len(pass_times) - 1):
+            run_time = TimeDemandTypesProfile.getRunTimePassingTime(pass_times[i], pass_times[i + 1])
+            wait_time = TimeDemandTypesProfile.getWaitTimePassingTime(pass_times[i])
+            # dit moet uit het journey pattern komen, waarbij ook nog een onward timing link beschikbaar is
+            pis = piss[pass_times[i].point_in_journey_pattern_ref.ref]
+            if isinstance(pis, StopPointInJourneyPattern):
+                pis: StopPointInJourneyPattern = pis
+                ssp = pis.scheduled_stop_point_ref
+                if pis.onward_timing_link_ref is not None:
+                    tl_ref = pis.onward_timing_link_ref.ref
+                elif pis.onward_service_link_ref is not None:
+                    sl: ServiceLink = sls[pis.onward_service_link_ref.ref]
+                    tl_ref = sl.id.replace('ServiceLink', 'TimingLink')
+                    tl = load_local(read_con, TimingLink, 1, tl_ref)
+                    if len(tl) == 0:
+                        tl = load_local(write_con, TimingLink, 1, tl_ref)
+                        if len(tl) == 0:
+                            tl = TimeDemandTypesProfile.getObjectFromObject(sl, TimingLink, tl_ref)
+                            write_objects(write_con, [tl], False, False)
+
+                    pis.onward_service_link_ref = None
+                else:
+                    # TODO should infer onwards
+                    pass
+            elif isinstance(pis, TimingPointRefStructure):
+                # TODO: wellicht iets doen waarbij ssps alle mogelijke 'points' direct al heeft
+                pass
+
+            run_times.append((run_time, tl_ref,))
+            wait_times.append((wait_time, ssp.ref,))
+
+        tdt = self.getTimeDemandTypeByTimesGenerator(read_con, write_con, service_journey, run_times, wait_times)
+        service_journey.departure_time = pass_times[0].departure_time
+        return tdt
+
+    def getTimeDemandTypeGenerator(self, read_con, write_con, service_journey: ServiceJourney,
+                          ssps: Dict[str, ScheduledStopPoint]):
+
+        if service_journey.time_demand_type_ref is not None:
+            tdt = load_local(write_con, TimeDemandType, 1, service_journey.time_demand_type_ref.ref)
+            if len(tdt) > 0:
+                return tdt[0]
+
+        if service_journey.calls is not None:
+            # if isinstance(service_journey.calls.call[0], DatedCall):
+            #    self.getTimeDemandTypeByDatedCalls(service_journey, time_demand_types, time_demand_types_hash, ssps, tls)
+            if isinstance(service_journey.calls.call[0], Call):
+                self.getTimeDemandTypeByCallsGenerator(read_con, write_con, service_journey, ssps)
+        elif service_journey.passing_times is not None:
+            self.getTimeDemandTypeByTimetabledPassingTimesGenerator(read_con, write_con, service_journey, ssps)
+
     def getTimeDemandType(self, service_journey: ServiceJourney,
                           service_journey_patterns: Dict[str, ServiceJourneyPattern],
                           time_demand_types: Dict[str, TimeDemandType],
@@ -260,6 +402,105 @@ class TimeDemandTypesProfile:
             return pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref
 
         return None
+
+    def getServiceJourneyPatternGenerator(self, read_con, write_con, service_journey: ServiceJourney, ssps: Dict[str, ScheduledStopPoint]) -> ServiceJourneyPattern:
+        tls = {}
+        if service_journey.journey_pattern_ref is not None:
+            # Have we already processed it?
+            sjp = load_local(write_con, ServiceJourneyPattern, 1, service_journey.journey_pattern_ref.ref)
+            if len(sjp) > 0:
+                return sjp[0]
+
+            sjp = load_local(read_con, ServiceJourneyPattern, 1, service_journey.journey_pattern_ref.ref)
+            if len(sjp) > 0:
+                sjp = sjp[0]
+                # TODO zorg er voor dat hier de onwards in ieder geval zijn gezet
+                piss = sjp.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern
+                for i in range(0, len(piss) - 1):
+                    if isinstance(piss[i], StopPointInJourneyPattern):
+                        pis: StopPointInJourneyPattern = piss[i]
+                        pis_next = piss[i+1]
+                        if pis.onward_timing_link_ref is None and pis.onward_timing_link_ref is None:
+                            ssp = ssps[TimeDemandTypesProfile.getPointRefFromPointInJourneyPattern(pis).ref]
+                            ssp_next = ssps[TimeDemandTypesProfile.getPointRefFromPointInJourneyPattern(pis_next).ref]
+                            tl_ref = getId(TimingLink, self.codespace,
+                                           TimeDemandTypesProfile.getHexHash(hash(ssp.id + "-" +
+                                                                                  ssp_next.id)))
+
+                            tl = load_local(read_con, TimingLink, 1, tl_ref)
+                            if len(tl) == 0:
+                                tl = load_local(write_con, TimingLink, 1, tl_ref)
+                                if len(tl) == 0:
+                                    tl = TimingLink(id=tl_ref,
+                                                             version=self.version.version,
+                                                             from_point_ref=getRef(ssp, TimingPointRefStructure),
+                                                             to_point_ref=getRef(ssp_next, TimingPointRefStructure))
+
+                                    write_objects(write_con, [tl], empty=False, many=False)
+
+                            pis.onward_timing_link_ref=getRef(tl, TimingLinkRefStructure)
+
+                write_objects(write_con, [sjp], empty=False, many=False)
+                return sjp
+
+        if isinstance(service_journey.calls.call[0], Call):
+            calls: List[Call] = service_journey.calls.call
+            ssps_in_seq: List[TimingPointRefStructure] = []
+            onward_tls: List[str] = []
+
+            for i in range(0, len(calls)-1):
+                ssp = getRef(ssps[calls[i].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure)
+                ssp_next = getRef(ssps[calls[i+1].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure)
+
+                if calls[i].onward_timing_link_view and calls[i].onward_timing_link_view.timing_link_ref and calls[i].onward_timing_link_view.timing_link_ref in tls:
+                    tl_ref = calls[i].onward_timing_link_view.timing_link_ref
+                else:
+                    tl_ref = getId(TimingLink, self.codespace, TimeDemandTypesProfile.getHexHash(hash(ssp.ref + "-" + ssp_next.ref)))
+
+                tl = load_local(read_con, TimingLink, 1, tl_ref)
+                if len(tl) == 0:
+                    tl = load_local(write_con, TimingLink, 1, tl_ref)
+                    if len(tl) == 0:
+                        tl = TimingLink(id=tl_ref,
+                                        version=self.version.version,
+                                        from_point_ref=getRef(ssp, TimingPointRefStructure),
+                                        to_point_ref=getRef(ssp_next, TimingPointRefStructure))
+
+                        write_objects(write_con, [tl], empty=False, many=False)
+
+                ssps_in_seq.append(ssp)
+                onward_tls.append(tl_ref)
+
+            ssps_in_seq.append(getRef(ssps[calls[-1].fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref], TimingPointRefStructure))
+
+            sjp_hash = hash('-'.join(x.ref for x in ssps_in_seq))
+            sjp_hash_hex = TimeDemandTypesProfile.getHexHash(sjp_hash)
+            id = getId(ServiceJourneyPattern, self.codespace, sjp_hash_hex)
+            if service_journey.journey_pattern_ref is not None:
+                id = service_journey.journey_pattern_ref.ref
+
+            sjp = load_local(write_con, ServiceJourneyPattern, 1, id)
+            if len(sjp) > 0:
+                return sjp[0]
+
+            suffix = id.split(':')[-1]
+
+            piss = [(i, ssps_in_seq[i], getFakeRef(onward_tls[i], TimingLinkRefStructure, version=self.version.version)) for i in range(0, len(ssps_in_seq) - 1)]
+            piss.append((len(ssps_in_seq) - 1, ssps_in_seq[-1], None))
+
+            sjp =  ServiceJourneyPattern(id=id,
+                                         version=self.version.version,
+                                         points_in_sequence=PointsInJourneyPatternRelStructure(
+                                             point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                                 StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, self.codespace, "{:s}-{:d}".format(suffix, x[0] + 1)),
+                                                                           version=self.version.version,
+                                                                           order=x[0] + 1,
+                                                     scheduled_stop_point_ref=getRef(ssps[x[1].ref]), onward_timing_link_ref=x[2]) for x in piss]))
+
+            service_journey.journey_pattern_ref = getRef(sjp)
+
+            write_objects(write_con, [sjp], empty=False, many=False)
+            return sjp
 
     def getServiceJourneyPattern(self, service_journey: ServiceJourney, service_journey_patterns: Dict[str, ServiceJourneyPattern], service_journey_patterns_hash: Dict[int, str],
                                  ssps: Dict[str, ScheduledStopPoint], tls: Dict[str, TimingLink]):
@@ -323,6 +564,7 @@ class TimeDemandTypesProfile:
                 suffix = id.split(':')[-1]
 
                 sjp =  ServiceJourneyPattern(id=id,
+                                             derived_from_object_ref=sj.id,
                                              version=self.version.version,
                                              points_in_sequence=PointsInJourneyPatternRelStructure(
                                                  point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
@@ -338,6 +580,8 @@ class TimeDemandTypesProfile:
                 sjp = service_journey_patterns[service_journey_patterns_hash[sjp_hash]]
 
             service_journey.journey_pattern_ref = getRef(sjp)
+
+            return sjp
 
     def __init__(self, codespace: Codespace, version: Version):
         self.codespace = codespace

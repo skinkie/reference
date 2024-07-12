@@ -19,7 +19,7 @@ from netex import Line, ScheduledStopPoint, PassengerStopAssignment, Quay, StopP
     ServiceCalendar, DayTypeRefsRelStructure, DayTypesRelStructure, OperatingPeriodsRelStructure, \
     DayTypeAssignmentsRelStructure, OperatingPeriodRef, RouteView
 
-from dbaccess import load_generator, load_local, write_generator, write_objects, get_single, load_lxml_generator, \
+from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, load_lxml_generator, \
     write_lxml_generator
 from refs import getIndex, getRef, getId
 from servicecalendarepip import ServiceCalendarEPIPFrame

@@ -60,9 +60,9 @@ def main(source_database_file: str, target_database_file: str):
         setup_database(con, classes, True)
 
 
-        with Pool(1) as pool:
+        # with Pool(1) as pool:
             # dutch_scheduled_stop_point_generator(source_database_file, target_database_file, generator_defaults, pool)
-            dutch_service_journey_pattern_time_demand_type_memory(source_database_file, target_database_file, generator_defaults)
+        dutch_service_journey_pattern_time_demand_type_memory(source_database_file, target_database_file, generator_defaults)
 
     # Add a single responsibility set and TransportAdministrativeZone
     # Infer OperationalContext from Line (Transportmode)
@@ -90,4 +90,12 @@ def main(source_database_file: str, target_database_file: str):
 
 
 if __name__ == '__main__':
-    main("/home/netex/delijn-netex.duckdb", "/home/netex/delijn-nl.duckdb")
+    import argparse
+    argument_parser = argparse.ArgumentParser(description='Convert a NeTEx file to Dutch objects')
+    argument_parser.add_argument('original', type=str, help='The original DuckDB NeTEx database')
+    argument_parser.add_argument('target', type=str, help='The transformed DuckDB NeTEx database')
+    args = argument_parser.parse_args()
+
+    main(args.original, args.target)
+
+
