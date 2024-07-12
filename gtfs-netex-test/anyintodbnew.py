@@ -90,7 +90,7 @@ def insert_database(con, classes, f=None):
     for event, element in context:
         if event == 'end' and element.tag in interesting_element_names: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
             # current_element = element.tag
-            xml = etree.tostring(element)
+            xml = etree.tostring(element, encoding='unicode')
             if 'id' not in element.attrib:
                 # print(xml)
                 continue

@@ -18,6 +18,7 @@ serializer_config.indent = None
 serializer_config.xml_declaration = False
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
+serializer.encoding = 'utf-8'
 
 def load_local(con, clazz: T, limit=None, filter=None) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
@@ -101,7 +102,7 @@ def write_lxml_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.attrib['id'], obj.attrib['version'], obj.attrib['order'], etree.tostring(obj)
+            yield obj.attrib['id'], obj.attrib['version'], obj.attrib['order'], etree.tostring(obj, encoding="unicode")
         print('\r', objectname, i, end='')
 
     def _prepare3(generator3, objectname):
@@ -110,7 +111,7 @@ def write_lxml_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.attrib['id'], obj.attrib['version'], etree.tostring(obj)
+            yield obj.attrib['id'], obj.attrib['version'], etree.tostring(obj, encoding="unicode")
         print('\r', objectname, i, end='')
 
     def _prepare2(generator2, objectname):
@@ -119,7 +120,7 @@ def write_lxml_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.attrib['id'], etree.tostring(obj)
+            yield obj.attrib['id'], etree.tostring(obj, encoding="unicode")
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
