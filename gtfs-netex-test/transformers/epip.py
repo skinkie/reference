@@ -288,18 +288,31 @@ def service_journey_ac_to_day_type(service_journey: ServiceJourney,
     if day_type_id not in day_types:
         valid_days, days_of_week = ServiceCalendarEPIPFrame.positiveAvailabilityCondition(acs)
 
-        uic_operating_period = UicOperatingPeriod(id=acs[0].id.replace('AvailabilityCondition', 'UicOperatingPeriod'),
-                                                  version=acs[0].version,
-                                                  derived_from_object_ref=acs[0].id,
-                                                  derived_from_version_ref_attribute=acs[0].version,
-                                                  from_operating_day_ref_or_from_date=XmlDateTime.from_datetime(
-                                                      valid_days[0]),
-                                                  to_operating_day_ref_or_to_date=XmlDateTime.from_datetime(
-                                                      valid_days[-1]),
-                                                  valid_day_bits=ServiceCalendarEPIPFrame.valid_days_to_bits(
-                                                      valid_days),
-                                                  days_of_week=days_of_week)
-        uic_operating_periods.append(uic_operating_period)
+        if len(valid_days) == 0:
+            warnings.warn(f"{day_type_id} does not have any valid days")
+            uic_operating_period = UicOperatingPeriod(id=acs[0].id.replace('AvailabilityCondition', 'UicOperatingPeriod'),
+                                                      version=acs[0].version,
+                                                      derived_from_object_ref=acs[0].id,
+                                                      derived_from_version_ref_attribute=acs[0].version,
+                                                      from_operating_day_ref_or_from_date=acs[0].from_date,
+                                                      to_operating_day_ref_or_to_date=acs[0].from_date, # Since the entire string is empty anyway?
+                                                      valid_day_bits="0",
+                                                      days_of_week=days_of_week)
+            uic_operating_periods.append(uic_operating_period)
+
+        else:
+            uic_operating_period = UicOperatingPeriod(id=acs[0].id.replace('AvailabilityCondition', 'UicOperatingPeriod'),
+                                                      version=acs[0].version,
+                                                      derived_from_object_ref=acs[0].id,
+                                                      derived_from_version_ref_attribute=acs[0].version,
+                                                      from_operating_day_ref_or_from_date=XmlDateTime.from_datetime(
+                                                          valid_days[0]),
+                                                      to_operating_day_ref_or_to_date=XmlDateTime.from_datetime(
+                                                          valid_days[-1]),
+                                                      valid_day_bits=ServiceCalendarEPIPFrame.valid_days_to_bits(
+                                                          valid_days),
+                                                      days_of_week=days_of_week)
+            uic_operating_periods.append(uic_operating_period)
 
         day_type = DayType(id=day_type_id, version=service_journey.version,
                            derived_from_object_ref=service_journey.id,
