@@ -152,7 +152,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
     version = date.today().strftime("%Y%m%d")
 
 
-    default_locale: LocaleStructure = project(list(all_locales)[0], LocaleStructure)
+    default_locale: LocaleStructure = project(list(all_locales)[0], LocaleStructure) if len(all_locales) > 0 else None
     if default_locale.languages is not None and len(default_locale.languages.language_usage) == 1:
         default_locale.default_language = default_locale.languages.language_usage[0].language
 
