@@ -339,6 +339,10 @@ def get_service_calendar(day_types: Dict[str, DayType],
                      generator_defaults: dict):
     from_date: datetime
     to_date: datetime
+
+    if len(uic_operating_periods) == 0:
+        warnings.warn("No uic_operating_periods available, submit this example to github")
+
     from_date = min([uic.from_operating_day_ref_or_from_date.to_datetime() for uic in uic_operating_periods])
     to_date = max([uic.to_operating_day_ref_or_to_date.to_datetime() for uic in uic_operating_periods])
 
