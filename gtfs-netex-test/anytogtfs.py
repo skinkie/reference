@@ -74,8 +74,9 @@ def convert():
         for element in tree.iterfind(".//{http://www.netex.org.uk/netex}Line"):
             line: Line = parser.parse(element, Line)
             route = GtfsProfile.projectLineToRoute(line)
-            routes[route['route_id']] = route
-            used_agencies.add(route['agency_id'])
+            if route is not None:
+                routes[route['route_id']] = route
+                used_agencies.add(route['agency_id'])
 
         trips = []
         stop_times = []
