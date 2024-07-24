@@ -363,9 +363,9 @@ class GtfsProfile:
                     if isinstance(element, JourneyFrequencyGroupVersionStructure.LastDayOffset):
                         last_day_offset = element
                     if isinstance(element, JourneyFrequencyGroupVersionStructure.LastArrivalTime):
-                        last_arrival_time = element
+                        last_arrival_time = element.value
                     if isinstance(element, JourneyFrequencyGroupVersionStructure.LastDepartureTime):
-                        last_departure_time = element
+                        last_departure_time = element.value
 
                 if last_departure_time is None:
                     warnings.warn("We can't handle LastArrivalTime yet.")
@@ -375,16 +375,16 @@ class GtfsProfile:
                     warnings.warn("We can't handle NonExactTimes yet.")
                     continue
 
-                headway_secs = datetime.timedelta(days=frequency_group.scheduled_headway_interval.days,
-                                   hours=frequency_group.scheduled_headway_interval.hours,
-                                   minutes=frequency_group.scheduled_headway_interval.minutes,
-                                   seconds=frequency_group.scheduled_headway_interval.seconds) # Technically not correct, practically: yes
+                headway_secs = datetime.timedelta(days=frequency_group.scheduled_headway_interval.days or 0,
+                                   hours=frequency_group.scheduled_headway_interval.hours or 0,
+                                   minutes=frequency_group.scheduled_headway_interval.minutes or 0,
+                                   seconds=frequency_group.scheduled_headway_interval.seconds or 0) # Technically not correct, practically: yes
 
                 frequency = {'trip_id': template_service_journey.id,
-                        'start_time': GtfsProfile.addDayOffset(frequency_group.first_departure_time, first_day_offset),
+                        'start_time': GtfsProfile.addDayOffset(frequency_group.first_departure_time.to_time(), first_day_offset),
                         'end_time': GtfsProfile.addDayOffset(last_departure_time, last_day_offset),
                         'headway_secs': int(headway_secs.total_seconds()),
-                        'exact_times': frequency_group.scheduled_headway_interval is not None
+                        'exact_times': int(frequency_group.scheduled_headway_interval is not None)
                         }
 
                 yield frequency
