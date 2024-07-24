@@ -563,7 +563,7 @@ class TimeDemandTypesProfile:
                 suffix = id.split(':')[-1]
 
                 sjp =  ServiceJourneyPattern(id=id,
-                                             derived_from_object_ref=sj.id,
+                                             derived_from_object_ref=service_journey.id,
                                              version=self.version.version,
                                              points_in_sequence=PointsInJourneyPatternRelStructure(
                                                  point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
