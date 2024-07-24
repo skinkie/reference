@@ -336,7 +336,7 @@ service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_
 
 stt = SimpleTimetable(codespace, version)
 from_date = datetime.date.today().isoformat().replace('-', '')
-service_journeys, availability_conditions = stt.simple_timetable(f"../teso/scrape-output/teso-{from_date}.csv")
+service_journeys, availability_conditions = stt.simple_timetable(f"/tmp/teso-{from_date}.csv")
 
 version.start_date = min(d.from_date for d in availability_conditions)
 version.end_date = max(d.to_date for d in availability_conditions)
