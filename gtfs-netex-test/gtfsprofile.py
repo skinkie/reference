@@ -1,5 +1,6 @@
 import csv
 import datetime
+import warnings
 from typing import List, Union
 import io
 from pyproj import Transformer
@@ -197,8 +198,11 @@ class GtfsProfile:
             agency_id = line.branding_ref.ref
         elif line.operator_ref is not None:
             agency_id = line.operator_ref.ref
-        else:
+        elif line.authority_ref is not None:
             agency_id = line.authority_ref.ref
+        else:
+            warnings.warn(f"Can't handle {line.id} because no agency can be found.")
+            return
 
         route = {'route_id': line.id,
                  'agency_id': agency_id,
@@ -356,6 +360,11 @@ class GtfsProfile:
     @staticmethod
     def projectServiceJourneyToStopTimes(service_journey: ServiceJourney) -> List[dict]:
         for call in service_journey.calls.call:
+            if call.arrival is None:
+                call.arrival = call.departure
+            elif call.departure is None:
+                call.departure = call.arrival
+
             arrival_time = GtfsProfile.addDayOffset(call.arrival.time, call.arrival.day_offset)
             departure_time = GtfsProfile.addDayOffset(call.departure.time, call.departure.day_offset)
             if arrival_time is None:
