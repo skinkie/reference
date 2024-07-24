@@ -12,6 +12,8 @@ from refs import getIndex
 from timedemandtypesprofile import TimeDemandTypesProfile
 from transformers.projection import project_location
 
+import time
+
 
 def dutch_scheduled_stop_point_generator(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
     print(sys._getframe().f_code.co_name)
@@ -68,11 +70,24 @@ def dutch_service_journey_pattern_time_demand_type_memory(read_database: str, wr
 
         i = 0
 
+        now = time.time()
+        print("_load_generator: ", now, int(0))
         _load_generator = load_generator(read_con, ServiceJourney)
+
+        _prev = now
+        now = time.time()
+        print("for loop: ", now, int(now - _prev))
         for sj in _load_generator:
             sjp = tdtp.getServiceJourneyPatternGenerator(read_con, write_con, sj, ssps)
             tdtp.getTimeDemandTypeGenerator(read_con, write_con, sj, ssps)
+            sj.calls = None
             write_objects(write_con, [sj], False, False, silent=True)
             i += 1
-            if i % 13 == 0:
-                print('\r', "ServiceJourney", str(i), end='')
+            if i % 100 == 0:
+                _prev = now
+                now = time.time()
+                print("\r", "ServiceJourney", str(i), str(now), str(int(now - _prev)))
+        print("\n")
+        _prev = now
+        now = time.time()
+        print("done: ", now, int(now - _prev))
