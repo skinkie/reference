@@ -138,7 +138,7 @@ def write_lxml_generator(con, clazz, generator: Generator):
 
     print('\n')
 
-def get_single(con, clazz: T, id, version, cursor=False) -> T:
+def get_single(con, clazz: T, id, version=None, cursor=False) -> T:
     if cursor:
         cur = con.cursor()
     else:
