@@ -25,7 +25,8 @@ serializer.encoding = 'utf-8'
 def load_local(con, clazz: T, limit=None, filter=None) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
-    cur = con.cursor()
+    # cur = con.cursor()
+    cur = con
     try:
         if filter is not None:
             cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
@@ -156,7 +157,8 @@ def write_objects(con, objs, empty=False, many=False, silent=False):
     if len(objs) == 0:
         return
 
-    cur = con.cursor()
+    # cur = con.cursor()
+    cur = con
     clazz = objs[0].__class__
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
@@ -173,30 +175,34 @@ def write_objects(con, objs, empty=False, many=False, silent=False):
 
     cur.execute(sql_create_table)
 
-    if many:
-        print(objectname, len(objs))
-        if hasattr(clazz, 'order'):
-            cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
-        elif hasattr(clazz, 'version'):
-            cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
-        else:
-            cur.executemany(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);',
-                            [(obj.id, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
-    else:
-        for i in range(0, len(objs)):
-            obj = objs[i]
+    try:
+        if many:
+            print(objectname, len(objs))
             if hasattr(clazz, 'order'):
-                cur.execute(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')))
+                cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
             elif hasattr(clazz, 'version'):
-                cur.execute(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')))
+                cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
             else:
-                cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '')))
+                cur.executemany(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);',
+                                [(obj.id, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
+        else:
+            for i in range(0, len(objs)):
+                obj = objs[i]
+                if hasattr(clazz, 'order'):
+                    cur.execute(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')))
+                elif hasattr(clazz, 'version'):
+                    cur.execute(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')))
+                else:
+                    cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '')))
 
-            if not silent:
-                if i % 13 == 0:
-                    print('\r', objectname, str(i), end = '')
+                if not silent:
+                    if i % 13 == 0:
+                        print('\r', objectname, str(i), end = '')
         if not silent:
             print('\r', objectname, len(objs), end='')
+    except:
+        raise
+        pass
 
 
 def write_generator(con, clazz, generator: Generator, empty=False):
