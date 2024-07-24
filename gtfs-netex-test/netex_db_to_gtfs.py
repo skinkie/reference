@@ -100,8 +100,9 @@ def convert(archive, database: str):
 
         for line in load_generator(con, Line):
             route = GtfsProfile.projectLineToRoute(line)
-            routes[route['route_id']] = route
-            used_agencies.add(route['agency_id'])
+            if route is not None:
+                routes[route['route_id']] = route
+                used_agencies.add(route['agency_id'])
 
         trips = []
         stop_times = []
