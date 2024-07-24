@@ -15,7 +15,7 @@ from netexio.dbaccess import load_local, load_generator
 from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
     Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
-    DataSource, StopPlaceEntrance
+    DataSource, StopPlaceEntrance, TemplateServiceJourney
 from nordicprofile import NordicProfile
 from refs import getId, getRef, getIndex
 
@@ -118,10 +118,24 @@ def convert(archive, database: str):
             CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
             stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
 
+        frequencies = []
+        for template_service_journey in load_generator(con, TemplateServiceJourney):
+            service_journey_pattern = service_journey_patterns_index.get(template_service_journey.journey_pattern_ref.ref) if template_service_journey.journey_pattern_ref else None
+            trip = GtfsProfile.projectServiceJourneyToTrip(template_service_journey, service_journey_pattern)
+            trips.append(trip)
+
+            CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
+            stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
+
+            frequencies += list(GtfsProfile.projectTemplateServiceJourneyToFrequency(template_service_journey))
+
         # TODO: maybe do this per trip?
         GtfsProfile.writeToZipFile(archive,'trips.txt', trips, write_header=True)
+        if len(frequencies) > 0:
+            GtfsProfile.writeToZipFile(archive, 'frequencies.txt', frequencies, write_header=True)
+
         GtfsProfile.writeToZipFile(archive,'stop_times.txt', stop_times, write_header=True)
-        trips = stop_times = None
+        trips = frequencies = stop_times = None
 
         GtfsProfile.writeToZipFile(archive,'routes.txt', list(routes.values()), write_header=True)
         GtfsProfile.writeToZipFile(archive,'agency.txt', [y for x, y in agencies.items() if x in used_agencies], write_header=True)
