@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Union
 
 from .route_instruction import RouteInstruction
+from .route_instruction_ref import RouteInstructionRef
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -12,12 +13,21 @@ class RouteInstructionsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "routeInstructions_RelStructure"
 
-    route_instruction: List[RouteInstruction] = field(
+    route_instruction_ref_or_route_instruction: List[Union[RouteInstructionRef, RouteInstruction]] = field(
         default_factory=list,
         metadata={
-            "name": "RouteInstruction",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "min_occurs": 1,
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "RouteInstructionRef",
+                    "type": RouteInstructionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "RouteInstruction",
+                    "type": RouteInstruction,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )

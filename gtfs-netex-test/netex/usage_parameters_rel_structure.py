@@ -79,7 +79,7 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "usageParameters_RelStructure"
 
-    usage_parameter_ref_or_reselling_ref_or_booking_policy_ref_or_profile_parameter_ref_or_user_profile_ref_or_usage_parameter: List[
+    usage_parameter_ref_or_profile_parameter_ref_or_user_profile_ref_or_reselling_ref_or_booking_policy_ref_or_usage_parameter: List[
         Union[
             AdditionalDriverOptionRef,
             RentalOptionRef,
@@ -97,6 +97,13 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
             LuggageAllowanceRef,
             EntitlementGivenRef,
             EntitlementRequiredRef,
+            EligibilityChangePolicyRef,
+            GroupTicketRef,
+            CommercialProfileRef,
+            VehiclePoolerProfileRef,
+            CompanionProfileRef,
+            UserProfileRef,
+            ProfileParameterRef,
             SubscribingRef,
             PenaltyPolicyRef,
             ChargingPolicyRef,
@@ -109,13 +116,6 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
             ReservingRef,
             BookingPolicyRef,
             PurchaseWindowRef,
-            EligibilityChangePolicyRef,
-            GroupTicketRef,
-            CommercialProfileRef,
-            VehiclePoolerProfileRef,
-            CompanionProfileRef,
-            UserProfileRef,
-            ProfileParameterRef,
             AdditionalDriverOption,
             RentalOption,
             RentalPenaltyPolicy,
@@ -236,6 +236,41 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "EligibilityChangePolicyRef",
+                    "type": EligibilityChangePolicyRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "GroupTicketRef",
+                    "type": GroupTicketRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CommercialProfileRef",
+                    "type": CommercialProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehiclePoolerProfileRef",
+                    "type": VehiclePoolerProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "CompanionProfileRef",
+                    "type": CompanionProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "UserProfileRef",
+                    "type": UserProfileRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ProfileParameterRef",
+                    "type": ProfileParameterRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "SubscribingRef",
                     "type": SubscribingRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -293,41 +328,6 @@ class UsageParametersRelStructure(OneToManyRelationshipStructure):
                 {
                     "name": "PurchaseWindowRef",
                     "type": PurchaseWindowRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "EligibilityChangePolicyRef",
-                    "type": EligibilityChangePolicyRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "GroupTicketRef",
-                    "type": GroupTicketRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CommercialProfileRef",
-                    "type": CommercialProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehiclePoolerProfileRef",
-                    "type": VehiclePoolerProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "CompanionProfileRef",
-                    "type": CompanionProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UserProfileRef",
-                    "type": UserProfileRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ProfileParameterRef",
-                    "type": ProfileParameterRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

@@ -7,7 +7,7 @@ from .compound_train_ref import CompoundTrainRef
 from .contained_availability_conditions_rel_structure import ContainedAvailabilityConditionsRelStructure
 from .coupled_journeys_in_frame_rel_structure import CoupledJourneysInFrameRelStructure
 from .deck_plan_assignments_rel_structure import DeckPlanAssignmentsRelStructure
-from .default_interchangse_in_frame_rel_structure import DefaultInterchangseInFrameRelStructure
+from .default_interchanges_in_frame_rel_structure import DefaultInterchangesInFrameRelStructure
 from .flexible_service_properties_in_frame_rel_structure import FlexibleServicePropertiesInFrameRelStructure
 from .frequency_groups_in_frame_rel_structure import FrequencyGroupsInFrameRelStructure
 from .group_of_links_in_frame_rel_structure import GroupOfLinksInFrameRelStructure
@@ -323,7 +323,7 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    default_interchanges: Optional[DefaultInterchangseInFrameRelStructure] = field(
+    default_interchanges: Optional[DefaultInterchangesInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "defaultInterchanges",

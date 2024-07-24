@@ -934,7 +934,7 @@ from .default_interchange import DefaultInterchange
 from .default_interchange_ref import DefaultInterchangeRef
 from .default_interchange_ref_structure import DefaultInterchangeRefStructure
 from .default_interchange_version_structure import DefaultInterchangeVersionStructure
-from .default_interchangse_in_frame_rel_structure import DefaultInterchangseInFrameRelStructure
+from .default_interchanges_in_frame_rel_structure import DefaultInterchangesInFrameRelStructure
 from .default_service_journey_run_time import DefaultServiceJourneyRunTime
 from .default_service_journey_run_time_versioned_child_structure import DefaultServiceJourneyRunTimeVersionedChildStructure
 from .default_service_journey_run_times_rel_structure import DefaultServiceJourneyRunTimesRelStructure
@@ -2813,6 +2813,7 @@ from .properties_of_day_rel_structure import PropertiesOfDayRelStructure
 from .property_of_day import PropertyOfDay
 from .property_of_day_structure import PropertyOfDayStructure
 from .propulsion_type_enumeration import PropulsionTypeEnumeration
+from .psychosensory_need_enumeration import PsychosensoryNeedEnumeration
 from .public_code_structure import PublicCodeStructure
 from .public_use_enumeration import PublicUseEnumeration
 from .publication_delivery import PublicationDelivery
@@ -2840,7 +2841,6 @@ from .purpose_of_journey_partition_ref import PurposeOfJourneyPartitionRef
 from .purpose_of_journey_partition_ref_structure import PurposeOfJourneyPartitionRefStructure
 from .purpose_of_journey_partition_value_structure import PurposeOfJourneyPartitionValueStructure
 from .purposes_of_grouping_in_frame_rel_structure import PurposesOfGroupingInFrameRelStructure
-from .pyschosensory_need_enumeration import PyschosensoryNeedEnumeration
 from .quality_structure_factor import QualityStructureFactor
 from .quality_structure_factor_abstract import QualityStructureFactorAbstract
 from .quality_structure_factor_price import QualityStructureFactorPrice
@@ -4512,7 +4512,8 @@ from .vehicle_equipment_profile import VehicleEquipmentProfile
 from .vehicle_equipment_profile_member import VehicleEquipmentProfileMember
 from .vehicle_equipment_profile_member_ref import VehicleEquipmentProfileMemberRef
 from .vehicle_equipment_profile_member_ref_structure import VehicleEquipmentProfileMemberRefStructure
-from .vehicle_equipment_profile_member_versioned_child_structure import VehicleEquipmentProfileMemberVersionedChildStructure
+from .vehicle_equipment_profile_member_refs_rel_structure import VehicleEquipmentProfileMemberRefsRelStructure
+from .vehicle_equipment_profile_member_version_structure import VehicleEquipmentProfileMemberVersionStructure
 from .vehicle_equipment_profile_members_rel_structure import VehicleEquipmentProfileMembersRelStructure
 from .vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
 from .vehicle_equipment_profile_ref_structure import VehicleEquipmentProfileRefStructure
@@ -5756,7 +5757,7 @@ __all__ = [
     "DefaultInterchangeRef",
     "DefaultInterchangeRefStructure",
     "DefaultInterchangeVersionStructure",
-    "DefaultInterchangseInFrameRelStructure",
+    "DefaultInterchangesInFrameRelStructure",
     "DefaultServiceJourneyRunTime",
     "DefaultServiceJourneyRunTimeVersionedChildStructure",
     "DefaultServiceJourneyRunTimesRelStructure",
@@ -7621,6 +7622,7 @@ __all__ = [
     "PropertyOfDay",
     "PropertyOfDayStructure",
     "PropulsionTypeEnumeration",
+    "PsychosensoryNeedEnumeration",
     "PublicCodeStructure",
     "PublicUseEnumeration",
     "PublicationDelivery",
@@ -7648,7 +7650,6 @@ __all__ = [
     "PurposeOfJourneyPartitionRefStructure",
     "PurposeOfJourneyPartitionValueStructure",
     "PurposesOfGroupingInFrameRelStructure",
-    "PyschosensoryNeedEnumeration",
     "QualityStructureFactor",
     "QualityStructureFactorAbstract",
     "QualityStructureFactorPrice",
@@ -9314,7 +9315,8 @@ __all__ = [
     "VehicleEquipmentProfileMember",
     "VehicleEquipmentProfileMemberRef",
     "VehicleEquipmentProfileMemberRefStructure",
-    "VehicleEquipmentProfileMemberVersionedChildStructure",
+    "VehicleEquipmentProfileMemberRefsRelStructure",
+    "VehicleEquipmentProfileMemberVersionStructure",
     "VehicleEquipmentProfileMembersRelStructure",
     "VehicleEquipmentProfileRef",
     "VehicleEquipmentProfileRefStructure",

@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from .vehicle_equipment_profile_member_versioned_child_structure import VehicleEquipmentProfileMemberVersionedChildStructure
+from .vehicle_equipment_profile_member_version_structure import VehicleEquipmentProfileMemberVersionStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleEquipmentProfileMember(VehicleEquipmentProfileMemberVersionedChildStructure):
+class VehicleEquipmentProfileMember(VehicleEquipmentProfileMemberVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

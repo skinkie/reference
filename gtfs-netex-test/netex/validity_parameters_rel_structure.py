@@ -150,6 +150,7 @@ from .type_of_service_ref import TypeOfServiceRef
 from .type_of_tariff_ref import TypeOfTariffRef
 from .type_of_travel_document_ref import TypeOfTravelDocumentRef
 from .type_of_usage_parameter_ref import TypeOfUsageParameterRef
+from .types_of_proof_refs_rel_structure import TypesOfProofRefsRelStructure
 from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_entrance_ref import VehicleEntranceRef
 from .vehicle_meeting_link_ref import VehicleMeetingLinkRef
@@ -1405,6 +1406,15 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
         default_factory=list,
         metadata={
             "name": "TypeOfProofRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "sequence": 1,
+        },
+    )
+    types_of_proof_accepted_ref: List[TypesOfProofRefsRelStructure] = field(
+        default_factory=list,
+        metadata={
+            "name": "typesOfProofAcceptedRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
             "sequence": 1,

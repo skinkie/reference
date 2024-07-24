@@ -334,6 +334,7 @@ from .requested_travel_specification import RequestedTravelSpecification
 from .reselling import Reselling
 from .reserving import Reserving
 from .resource_frame import ResourceFrame
+from .responsibility_role import ResponsibilityRole
 from .responsibility_set import ResponsibilitySet
 from .restricted_manoeuvre import RestrictedManoeuvre
 from .retail_consortium import RetailConsortium
@@ -949,6 +950,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             OrganisationDayType,
             DayType,
             Contract,
+            ResponsibilityRole,
             ResponsibilitySet,
             Contact,
             ControlCentre,
@@ -2941,6 +2943,11 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "Contract",
                     "type": Contract,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ResponsibilityRole",
+                    "type": ResponsibilityRole,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

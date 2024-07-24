@@ -14,4 +14,5 @@ class TransportZoneUseEnumeration(Enum):
     MUST_PICK_UP_AND_DROP_OFF_IN_SAME_ZONE = "mustPickUpAndDropOffInSameZone"
     NO_PASS_THROUGH = "noPassThrough"
     PASS_THROUGH_USE_ONLY = "passThroughUseOnly"
+    MUST_PICK_UP_AND_DROP_OFF_AT_SAME_STOP = "mustPickUpAndDropOffAtSameStop"
     OTHER = "other"

@@ -79,3 +79,11 @@ class VehicleTypeZoneRestrictionVersionStructure(VersionedChildStructure):
             ),
         },
     )
+    floating_vehicles: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "FloatingVehicles",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )

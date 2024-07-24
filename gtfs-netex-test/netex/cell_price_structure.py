@@ -151,6 +151,7 @@ class CellPriceStructure:
             ValidableElementPriceRef,
             GeographicalIntervalPriceRef,
             GeographicalUnitPriceRef,
+            UsageParameterPriceRef,
             SeriesConstraintPriceRef,
             SalesOfferPackagePriceRef,
             DistanceMatrixElementPriceRef,
@@ -158,7 +159,6 @@ class CellPriceStructure:
             FulfilmentMethodPriceRef,
             CappingRulePriceRef,
             FareProductPriceRef,
-            UsageParameterPriceRef,
             FarePriceRef,
         ]
     ] = field(
@@ -212,6 +212,11 @@ class CellPriceStructure:
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "UsageParameterPriceRef",
+                    "type": UsageParameterPriceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "SeriesConstraintPriceRef",
                     "type": SeriesConstraintPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -244,11 +249,6 @@ class CellPriceStructure:
                 {
                     "name": "FareProductPriceRef",
                     "type": FareProductPriceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UsageParameterPriceRef",
-                    "type": UsageParameterPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

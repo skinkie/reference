@@ -127,6 +127,14 @@ class UserProfileVersionStructure(UsageParameterVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    types_of_proof_accepted_ref: Optional[TypesOfProofRefsRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "typesOfProofAcceptedRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     discount_basis: Optional[DiscountBasisEnumeration] = field(
         default=None,
         metadata={

@@ -61,6 +61,7 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
             ValidableElementPriceRef,
             GeographicalIntervalPriceRef,
             GeographicalUnitPriceRef,
+            UsageParameterPriceRef,
             SeriesConstraintPriceRef,
             SalesOfferPackagePriceRef,
             DistanceMatrixElementPriceRef,
@@ -68,7 +69,6 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
             FulfilmentMethodPriceRef,
             CappingRulePriceRef,
             FareProductPriceRef,
-            UsageParameterPriceRef,
             FarePriceRef,
             PriceGroupRef,
             CustomerPurchasePackagePrice,
@@ -141,6 +141,11 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "UsageParameterPriceRef",
+                    "type": UsageParameterPriceRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "SeriesConstraintPriceRef",
                     "type": SeriesConstraintPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
@@ -173,11 +178,6 @@ class CompositePricesRelStructure(StrictContainmentAggregationStructure):
                 {
                     "name": "FareProductPriceRef",
                     "type": FareProductPriceRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UsageParameterPriceRef",
-                    "type": UsageParameterPriceRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

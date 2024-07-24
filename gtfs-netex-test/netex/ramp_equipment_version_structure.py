@@ -80,6 +80,14 @@ class RampEquipmentVersionStructure(AccessEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    tactile_writing: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "TactileWriting",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     tactile_guidance_strips: Optional[bool] = field(
         default=None,
         metadata={

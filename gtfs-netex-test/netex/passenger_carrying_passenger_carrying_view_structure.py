@@ -45,6 +45,14 @@ class PassengerCarryingPassengerCarryingViewStructure(DerivedViewStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    hoist_operating_radius: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "HoistOperatingRadius",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     boarding_height: Optional[Decimal] = field(
         default=None,
         metadata={

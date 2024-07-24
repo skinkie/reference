@@ -193,15 +193,6 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    user_types: List[UserTypeEnumeration] = field(
-        default_factory=list,
-        metadata={
-            "name": "UserTypes",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
-            "tokens": True,
-        },
-    )
     access_modes: List[AccessModeEnumeration] = field(
         default_factory=list,
         metadata={
@@ -217,6 +208,15 @@ class LineVersionStructure(DataManagedObjectStructure):
             "name": "RestrictedLine",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    user_types: List[UserTypeEnumeration] = field(
+        default_factory=list,
+        metadata={
+            "name": "UserTypes",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+            "tokens": True,
         },
     )
     monitored: Optional[bool] = field(

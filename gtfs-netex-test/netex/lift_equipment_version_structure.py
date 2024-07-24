@@ -54,6 +54,14 @@ class LiftEquipmentVersionStructure(AccessEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    internal_height: Optional[Decimal] = field(
+        default=None,
+        metadata={
+            "name": "InternalHeight",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     handrail_type: Optional[HandrailEnumeration] = field(
         default=None,
         metadata={
@@ -74,6 +82,14 @@ class LiftEquipmentVersionStructure(AccessEquipmentVersionStructure):
         default=None,
         metadata={
             "name": "LowerHandrailHeight",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    tactile_writing: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "TactileWriting",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
