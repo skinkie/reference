@@ -146,10 +146,14 @@ def get_single(con, clazz: T, id, version=None, cursor=False) -> T:
 
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
-    if version == 'any' or version is None:
-        cur.execute(f"SELECT object FROM {type} WHERE id = ? ORDER BY version DESC LIMIT 1;", (id,))
-    else:
-        cur.execute(f"SELECT object FROM {type} WHERE id = ? AND version = ? LIMIT 1;", (id, version,))
+    try:
+        if version == 'any' or version is None:
+            cur.execute(f"SELECT object FROM {type} WHERE id = ? ORDER BY version DESC LIMIT 1;", (id,))
+        else:
+            cur.execute(f"SELECT object FROM {type} WHERE id = ? AND version = ? LIMIT 1;", (id, version,))
+    except:
+        pass
+        return
 
     row = cur.fetchone()
     if row is not None:
@@ -213,7 +217,7 @@ def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False
             print('\r', objectname, len(objs), end='')
     except:
         raise
-        pass
+        # pass
 
 
 def write_generator(con, clazz, generator: Generator, empty=False):
