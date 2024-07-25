@@ -111,14 +111,14 @@ def export_epip_network_offer(database_original, database_target, output_filenam
     # The way how con_orig, and con_target have been modelled, is too hardcoded.
     # An alternative would be to put all the contents in the con_target.
 
-    con_orig = sqlite3.connect(database_original)
-    con_target = sqlite3.connect(database_target)
+    con_orig = sqlite3.connect(database_original, read_only=True)
+    con_target = sqlite3.connect(database_target, read_only=True)
 
     codespace_ref_or_codespace = GeneratorTester(load_generator(con_orig, Codespace))
     data_source = GeneratorTester(load_generator(con_orig, DataSource))
     organisation_or_transport_organisation = load_local(con_orig, Authority) + load_local(con_orig, Operator)
 
-    all_locales = {org.locale for org in organisation_or_transport_organisation}
+    all_locales = {org.locale for org in organisation_or_transport_organisation if org.locale is not None}
     if len(all_locales) > 1:
         print("TODO: Test case for multiple TimetableFrames!")
 
@@ -153,7 +153,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
 
 
     default_locale: LocaleStructure = project(list(all_locales)[0], LocaleStructure) if len(all_locales) > 0 else None
-    if default_locale.languages is not None and len(default_locale.languages.language_usage) == 1:
+    if default_locale is not None and default_locale.languages is not None and len(default_locale.languages.language_usage) == 1:
         default_locale.default_language = default_locale.languages.language_usage[0].language
 
     publication_delivery = PublicationDelivery(
