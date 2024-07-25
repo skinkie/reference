@@ -487,4 +487,6 @@ def open_netex_file(filename):
         import zipfile
         zip = zipfile.ZipFile(filename)
         for zipfilename in zip.filelist:
-            yield zip.open(zipfilename)
+            l_zipfilename = zipfilename.filename.lower()
+            if l_zipfilename.endswith('.xml.gz') or l_zipfilename.endswith('.xml'):
+                yield zip.open(zipfilename)
