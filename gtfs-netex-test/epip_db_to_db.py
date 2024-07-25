@@ -12,6 +12,7 @@ from anyintodbnew import setup_database, get_interesting_classes
 from netex import Codespace
 
 from transformers.direction import infer_directions_from_sjps_and_apply
+from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
 
 context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
@@ -36,7 +37,8 @@ def main(source_database_file: str, target_database_file: str):
     with sqlite3.connect(target_database_file) as con:
         setup_database(con, classes, True)
     epip_line_memory(source_database_file, target_database_file, generator_defaults)
-    epip_scheduled_stop_point_memory(source_database_file, target_database_file, generator_defaults)
+    infer_locations_from_quay_or_stopplace_and_apply(source_database_file, target_database_file, generator_defaults)
+    epip_scheduled_stop_point_memory(target_database_file, target_database_file, generator_defaults)
     epip_site_frame_memory(source_database_file, target_database_file, generator_defaults)
     epip_service_journey_generator(source_database_file, target_database_file, generator_defaults, None)
     infer_directions_from_sjps_and_apply(target_database_file, target_database_file, generator_defaults)
