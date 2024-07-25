@@ -31,7 +31,7 @@ def dutch_scheduled_stop_point_generator(read_database: str, write_database: str
         if read_database == write_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         write_generator(write_con, ScheduledStopPoint, query(read_con), True)
 
@@ -41,7 +41,7 @@ def dutch_scheduled_stop_point_memory(read_database: str, write_database: str, g
         if read_database == write_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
         for ssp in scheduled_stop_points:
@@ -60,7 +60,7 @@ def dutch_service_journey_pattern_time_demand_type_memory(read_database: str, wr
         if read_database == write_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         codespaces = load_local(read_con, Codespace, 1)
         versions = load_local(read_con, Version, 1)

@@ -63,7 +63,7 @@ def infer_operator_from_responsibilityset_and_apply(read_database, write_databas
         if write_database == read_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         _mapping: Dict[str, Set] = {}
         # operators = getIndex(load_local(read_con, Operator))

@@ -47,7 +47,7 @@ def epip_line_generator(read_database: str, write_database: str, generator_defau
         if read_database == write_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         write_generator(write_con, Line, query(read_con), True)
 
@@ -57,7 +57,7 @@ def epip_line_memory(read_database, write_database, generator_defaults):
         if read_database == write_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         lines: List[Line] = load_local(read_con, Line)
         for line in lines:
@@ -85,7 +85,7 @@ def epip_scheduled_stop_point_generator(read_database: str, write_database: str,
         if read_database == write_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         write_generator(write_con, ScheduledStopPoint, query(read_con), True)
 
@@ -95,7 +95,7 @@ def epip_scheduled_stop_point_memory(read_database: str, write_database: str, ge
         if read_database == write_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
         for ssp in scheduled_stop_points:
@@ -111,7 +111,7 @@ def epip_scheduled_stop_point_memory(read_database: str, write_database: str, ge
 def epip_site_frame_memory(read_database, write_database, generator_defaults):
     print(sys._getframe().f_code.co_name)
 
-    with sqlite3.connect(read_database) as read_con:
+    with sqlite3.connect(read_database, read_only=True) as read_con:
         stop_places: dict[str, StopPlace] = getIndex(load_local(read_con, StopPlace))
 
         # Resolving a quay is very expensive. Either in the database it should be stored independently, or an index should be made available.
@@ -206,7 +206,7 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
 
 def epip_timetabled_passing_times_memory(read_database, write_database, generator_defaults, dynamics=[]):
     print(sys._getframe().f_code.co_name)
-    with sqlite3.connect(read_database) as read_con:
+    with sqlite3.connect(read_database, read_only=True) as read_con:
         with sqlite3.connect(write_database) as write_con:
             # TODO: Maybe do this on the fly, per servicejourney?
             service_journey_patterns: List[ServiceJourneyPattern] = load_local(read_con, ServiceJourneyPattern)
@@ -365,7 +365,7 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
         sj: ServiceJourney
 
         # Prototype, just: TimeDemandType -> PassingTimes
-        with sqlite3.connect(read_database) as read_con:
+        with sqlite3.connect(read_database, read_only=True) as read_con:
             if sj.passing_times:
                 pass
 
@@ -409,14 +409,14 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
         # for sj in pool.imap_unordered(partial(process, read_database=read_database, write_database=write_database, generator_defaults=generator_defaults), _load_generator, chunksize=100):
         #     yield sj
 
-    with sqlite3.connect(read_database) as read_con:
+    with sqlite3.connect(read_database, read_only=True) as read_con:
         availability_conditions = getIndex(load_local(read_con, AvailabilityCondition))
 
     with sqlite3.connect(write_database) as write_con:
         if read_database == write_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         write_generator(write_con, ServiceJourney, query(read_con), True)
         write_objects(write_con, list(sjps.values()), True, True)
@@ -474,7 +474,7 @@ def epip_remove_keylist_extensions(read_database: str, write_database: str, gene
         if write_database == read_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         write_lxml_generator(write_con, StopPlace, query1(read_con))
         write_lxml_generator(write_con, ScheduledStopPoint, query2(read_con))

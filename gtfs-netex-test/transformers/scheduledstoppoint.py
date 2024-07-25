@@ -30,7 +30,7 @@ def infer_locations_from_quay_or_stopplace_and_apply(read_database, write_databa
         if write_database == read_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         for sp in load_local(read_con, StopPlace):
             sp: StopPlace

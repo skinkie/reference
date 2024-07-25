@@ -36,6 +36,6 @@ def infer_directions_from_sjps_and_apply(read_database, write_database, generato
         if write_database == read_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
         update_generator(write_con, ServiceJourneyPattern, query(read_con))
         write_objects(write_con, list(directions.values()), True)

@@ -54,7 +54,7 @@ def infer_stop_places(read_database: str, write_database: str, generator_default
         if write_database == read_database:
             read_con = write_con
         else:
-            read_con = sqlite3.connect(read_database)
+            read_con = sqlite3.connect(read_database, read_only=True)
 
         stop_areas = load_local(read_con, StopArea)
         scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
