@@ -32,6 +32,7 @@ from transformers.direction import infer_directions_from_sjps_and_apply
 from transformers.dutch import dutch_scheduled_stop_point_generator, \
     dutch_service_journey_pattern_time_demand_type_memory
 from transformers.responsibilityset import infer_operator_from_responsibilityset_and_apply
+from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
 from transformers.site_frame import infer_stop_places
 from utils import project
 from multiprocess import Pool
@@ -57,6 +58,7 @@ generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1, 'Def
 
 def main(source_database_file: str):
     infer_operator_from_responsibilityset_and_apply(source_database_file, source_database_file, generator_defaults)
+    infer_locations_from_quay_or_stopplace_and_apply(source_database_file, source_database_file, generator_defaults)
 
 if __name__ == '__main__':
     import argparse
