@@ -273,14 +273,24 @@ def service_journey_ac_to_day_type(service_journey: ServiceJourney,
     acs = []
 
     for ac in service_journey.validity_conditions_or_valid_between:
-        ac: ValidityConditionsRelStructure
-        for a in ac.choice:
-            if isinstance(a, AvailabilityConditionRef):
-                acs.append(availability_conditions[a.ref])
-            elif isinstance(a, AvailabilityCondition):
-                acs.append(a)
-            else:
-                warnings.warn(f"Unhandled ValidityCondition in {service_journey.id}")
+        if isinstance(ac, ValidityConditionsRelStructure):
+            ac: ValidityConditionsRelStructure
+            for a in ac.choice:
+                if isinstance(a, AvailabilityConditionRef):
+                    acs.append(availability_conditions[a.ref])
+                elif isinstance(a, AvailabilityCondition):
+                    acs.append(a)
+                else:
+                    warnings.warn(f"Unhandled ValidityCondition in {service_journey.id}")
+
+    if service_journey.day_types is not None:
+        if len(acs) == 0:
+            # There are no AvailabilityConditions, TODO: there may be ValidBetweens, trust the DayType
+            return
+        else:
+            # Both exist, maybe trigger a warning?
+            pass    
+
 
     # TODO: this will fail in extreme cases
     day_type_id = acs[0].id.replace('AvailabilityCondition', 'DayType')
