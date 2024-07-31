@@ -16,7 +16,9 @@ def infer_locations_from_quay_or_stopplace_and_apply(read_database, write_databa
             location: LocationStructure2 = ssp_location.get(ssp.id, None)
             if location is not None:
                 ssp.location = location
-                return ssp
+
+        # TODO: The question here is can we just do something like a virtual table?
+        return ssp
 
     def query(read_con) -> Generator:
         _load_generator = load_generator(read_con, ScheduledStopPoint)
