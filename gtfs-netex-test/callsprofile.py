@@ -316,8 +316,8 @@ class CallsProfile:
             if isinstance(pis, StopPointInJourneyPattern):
                 ssp_refs[pis.id] = pis.scheduled_stop_point_ref
             elif isinstance(pis, TimingPointInJourneyPattern):
-                if isinstance(pis.choice_1, ScheduledStopPointRef):
-                    ssp_refs[pis.id] = pis.choice_1
+                if isinstance(pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref, ScheduledStopPointRef):
+                    ssp_refs[pis.id] = pis.timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref
                 else:
                     # TODO: implement TimingPointRef nameOfRefClass
                     pass
