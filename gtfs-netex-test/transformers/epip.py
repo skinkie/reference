@@ -431,6 +431,11 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
         write_generator(write_con, ServiceJourney, query(read_con), True)
         write_objects(write_con, list(sjps.values()), True, True)
 
+        if len(uic_operating_periods) == 0:
+            day_types = getIndex(load_local(read_con, DayType))
+            uic_operating_periods = load_local(read_con, UicOperatingPeriod)
+            day_type_assignments = load_local(read_con, DayTypeAssignment)
+
         service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
 
         write_objects(write_con, [service_calendar], True, True)
