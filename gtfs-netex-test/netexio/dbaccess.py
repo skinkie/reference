@@ -9,6 +9,8 @@ from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
+from mro_attributes import list_attributes
+
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
 context = XmlContext()
@@ -375,11 +377,11 @@ def get_interesting_classes(filter=None):
     # set(geme) - set(envi)
 
     if filter is not None:
-        clean_element_names = sorted([x[0] for x in entitiesinversion if x[0] in filter])
-        interesting_element_names =  set([get_element_name_with_ns(x[1]) for x in entitiesinversion if x[0] in filter])
+        clean_element_names = [x[0] for x in entitiesinversion if x[0] in filter]
+        interesting_element_names =  [get_element_name_with_ns(x[1]) for x in entitiesinversion if x[0] in filter]
     else:
-        clean_element_names = sorted([x[0] for x in entitiesinversion if not x[0].endswith('Frame')])
-        interesting_element_names =  set([get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')])
+        clean_element_names = [x[0] for x in entitiesinversion if not x[0].endswith('Frame')]
+        interesting_element_names =  [get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')]
 
     return clean_element_names, interesting_element_names
 
@@ -407,12 +409,21 @@ def setup_database(con, classes, clean=False, cursor=False):
     for objectname in clean_element_names:
         # TODO: optimize
         clazz = getattr(sys.modules['netex'], objectname)
+        optionals = {x[0]: x[1][1] for x in list_attributes(clazz) if x[0] in ('order', 'version')}
+        ordr_opt = optionals.get('order', False)
+        version_opt = optionals.get('version', False)
 
         if hasattr(clazz, 'order'):
-            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+            if ordr_opt:
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version));"
+            else:
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
 
         elif hasattr(clazz, 'version'):
-            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+            if version_opt:
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object text NOT NULL, PRIMARY KEY (id));"
+            else:
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
 
         else:
             sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL PRIMARY KEY (id));"
@@ -430,6 +441,13 @@ def insert_database(con, classes, f=None, cursor=False):
         cur = con
 
     clean_element_names, interesting_element_names = classes
+    clazz_by_name = {}
+
+    for i in range(0, len(interesting_element_names)):
+        objectname = clean_element_names[i]
+        clazz = getattr(sys.modules['netex'], objectname)
+        clazz_by_name[interesting_element_names[i]] = clazz
+
     events = ("start", "end")
     context = etree.iterparse(f, events=events, remove_blank_text=True)
     current_element = None
@@ -441,20 +459,26 @@ def insert_database(con, classes, f=None, cursor=False):
                 # print(xml)
                 continue
 
-            id = element.attrib['id']
-            version = element.attrib.get('version', None)
-            order = element.attrib.get('order', None)
+            clazz = clazz_by_name[element.tag]
 
+            id = element.attrib['id']
             localname = element.tag.split('}')[-1] # localname
-            if order is not None:
+
+            if hasattr(clazz, 'order'):
+                version = element.attrib.get('version', None)
+                order = element.attrib.get('order', None)
+
                 sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
                 try:
                     cur.execute(sql_insert_object, (id, version, order, xml,))
                 except:
                     print(xml)
+                    raise
                     pass
 
-            elif version is not None:
+            elif hasattr(clazz, 'version'):
+                version = element.attrib.get('version', None)
+
                 sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
                 try:
                     cur.execute(sql_insert_object, (id, version, xml,))
@@ -471,6 +495,7 @@ def insert_database(con, classes, f=None, cursor=False):
                     cur.execute(sql_insert_object, (id, xml,))
                 except:
                     print(xml)
+                    raise
                     pass
 
 

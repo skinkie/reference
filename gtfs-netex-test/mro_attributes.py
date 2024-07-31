@@ -58,16 +58,17 @@ def resolve_class(clazz):
 IGNORE_ATTRIBUTES = ['name_of_class_attribute']
 def list_attributes(clazz, parent_name=None):
     buffer = []
-    for name, field in unembed(clazz.__dataclass_fields__):
-        if name in IGNORE_ATTRIBUTES:
-            continue
+    if hasattr(clazz, '__dataclass_fields__'):
+        for name, field in unembed(clazz.__dataclass_fields__):
+            if name in IGNORE_ATTRIBUTES:
+                continue
 
-        if parent_name:
-            full_name = parent_name + '.' + name
-            buffer.append((full_name, get_type(field.type, full_name), hasdefault(field.default), field))
-        else:
-            buffer.append((name, get_type(field.type, name), hasdefault(field.default), field))
-            # return (name, get_type(field.type, name))
+            if parent_name:
+                full_name = parent_name + '.' + name
+                buffer.append((full_name, get_type(field.type, full_name), hasdefault(field.default), field))
+            else:
+                buffer.append((name, get_type(field.type, name), hasdefault(field.default), field))
+                # return (name, get_type(field.type, name))
 
     return buffer
 
