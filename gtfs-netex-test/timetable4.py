@@ -17,10 +17,10 @@ from netex import StopArea, ScheduledStopPoint, StopPointInJourneyPattern, Timin
     OrganisationsInFrameRelStructure, TimetableFrame, LinesInFrameRelStructure, DataObjectsRelStructure, \
     JourneysInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure, \
     TimingLinkRefStructure, PathLink, PathLinkEndStructure, PlaceRefStructure, TransferDurationStructure, \
-    PathLinksInFrameRelStructure, DestinationDisplayRef, DestinationDisplaysInFrameRelStructure, \
+    DestinationDisplayRef, DestinationDisplaysInFrameRelStructure, \
     AllVehicleModesOfTransportEnumeration, OperatorRef, AccessibilityAssessment, LimitationStatusEnumeration, \
     AccessibilityLimitationsRelStructure, AccessibilityLimitation, WheelchairAccess, ParticipantRef, \
-    SuitabilitiesRelStructure, Suitability, MobilityEnumeration, PyschosensoryNeedEnumeration, \
+    SuitabilitiesRelStructure, Suitability, MobilityEnumeration, \
     PlaceEquipmentsRelStructure, ShelterEquipmentRef, CycleStorageEquipmentRef, CoveredEnumeration, \
     SiteRefsRelStructure, ParkingRef, Parking, ParkingVehicleEnumeration, ServiceFacilitySetsRelStructure, \
     ServiceFacilitySet, MobilityFacilityList, MobilityFacilityEnumeration, PassengerCommsFacilityList, \
@@ -411,7 +411,7 @@ service_frame = ServiceFrame(
     id="1", version="1",
     scheduled_stop_points=ScheduledStopPointsInFrameRelStructure(scheduled_stop_point=scheduled_stop_points),
     connections=TransfersInFrameRelStructure(transfer=connections),
-    stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment=passenger_stop_assignments),
+    stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment_or_passenger_boarding_position_assignment=passenger_stop_assignments),
     lines=LinesInFrameRelStructure(line=lines),
     routes=RoutesInFrameRelStructure(route=routes),
     journey_patterns=JourneyPatternsInFrameRelStructure(journey_pattern=service_journey_patterns)

@@ -111,7 +111,7 @@ class DutchProfile:
             stop_areas = StopAreasInFrameRelStructure(stop_area=stop_areas)
 
         if stop_assignments is not None and len(stop_assignments) > 0:
-            stop_assignments = StopAssignmentsInFrameRelStructure(stop_assignment=stop_assignments)
+            stop_assignments = StopAssignmentsInFrameRelStructure(stop_assignment_or_passenger_boarding_position_assignment=stop_assignments)
 
         if timing_points is not None and len(timing_points) > 0:
             timing_points = TimingPointsInFrameRelStructure(timing_point=timing_points)

@@ -111,7 +111,7 @@ def iff_serviceframe(scheduled_stop_points: List[ScheduledStopPoint],
               )
               ],
             scheduled_stop_points=ScheduledStopPointsInFrameRelStructure(scheduled_stop_point=scheduled_stop_points),
-                        stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment=passenger_stop_assignments),
+                        stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment_or_passenger_boarding_position_assignment=passenger_stop_assignments),
                         routes=RoutesInFrameRelStructure(route=routes),
                         route_points=RoutePointsInFrameRelStructure(route_point=route_points),
                         route_links=RouteLinksInFrameRelStructure(route_link=route_links),

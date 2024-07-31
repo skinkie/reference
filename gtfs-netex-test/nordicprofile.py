@@ -203,7 +203,7 @@ class NordicProfile:
             service_links = None
 
         if len(stop_assignments) > 0:
-            stop_assignments = StopAssignmentsInFrameRelStructure(stop_assignment=stop_assignments)
+            stop_assignments = StopAssignmentsInFrameRelStructure(stop_assignment_or_passenger_boarding_position_assignment=stop_assignments)
         else:
             stop_assignments = None
 

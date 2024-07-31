@@ -203,7 +203,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                          service_links=ServiceLinksInFrameRelStructure(service_link=service_link.generator()) if service_link.has_value() else None,
                                          journey_patterns=JourneyPatternsInFrameRelStructure(journey_pattern=journey_pattern.generator()) if journey_pattern.has_value() else None,
                                          connections=TransfersInFrameRelStructure(transfer=transfer.generator()) if transfer.has_value() else None,
-                                         stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment=stop_assignment.generator()) if stop_assignment.has_value() else None,
+                                         stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment_or_passenger_boarding_position_assignment=stop_assignment.generator()) if stop_assignment.has_value() else None,
                                          notices=NoticesInFrameRelStructure(notice=notice.generator()) if notice.has_value() else None,
                                          notice_assignments=NoticeAssignmentsInFrameRelStructure(notice_assignment=notice_assignment.generator()) if notice_assignment.has_value() else None,
                                     ),
