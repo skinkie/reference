@@ -7,3 +7,4 @@ class EntranceSettingEnumeration(Enum):
     OPEN = "open"
     SHUT = "shut"
     LOCKED_SHUT = "lockedShut"
+    OPEN_WHEN_LOADING = "openWhenLoading"

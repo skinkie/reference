@@ -4,6 +4,7 @@ from typing import Optional, Union
 
 from .car_model_profile_ref import CarModelProfileRef
 from .compound_train_ref import CompoundTrainRef
+from .contact_structure import ContactStructure
 from .cycle_model_profile_ref import CycleModelProfileRef
 from .entity_in_version_structure import DataManagedObjectStructure
 from .multilingual_string import MultilingualString
@@ -130,5 +131,13 @@ class VehicleModelVersionStructure(DataManagedObjectStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
+        },
+    )
+    customer_service_contact_details: Optional[ContactStructure] = field(
+        default=None,
+        metadata={
+            "name": "CustomerServiceContactDetails",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
         },
     )

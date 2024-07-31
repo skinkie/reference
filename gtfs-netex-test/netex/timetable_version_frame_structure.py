@@ -23,6 +23,7 @@ from .line_view import LineView
 from .network_view import NetworkView
 from .notice_assignments_in_frame_rel_structure import NoticeAssignmentsInFrameRelStructure
 from .notices_in_frame_rel_structure import NoticesInFrameRelStructure
+from .occupancy_view_in_frame_rel_structure import OccupancyViewInFrameRelStructure
 from .operator_view import OperatorView
 from .powered_train_ref import PoweredTrainRef
 from .service_calendar_frame_ref import ServiceCalendarFrameRef
@@ -351,6 +352,13 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
         default=None,
         metadata={
             "name": "journeyAccountings",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    occupancies: Optional[OccupancyViewInFrameRelStructure] = field(
+        default=None,
+        metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

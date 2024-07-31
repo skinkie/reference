@@ -4,6 +4,7 @@ from typing import Optional
 from xsdata.models.datatype import XmlDuration, XmlTime
 
 from .headway_interval_structure import HeadwayIntervalStructure
+from .occupancy_view_rel_structure import OccupancyViewRelStructure
 from .passing_time_versioned_child_structure import PassingTimeVersionedChildStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -90,6 +91,13 @@ class TimetabledPassingTimeVersionedChildStructure(PassingTimeVersionedChildStru
         default=None,
         metadata={
             "name": "EarliestDepartureDayOffset",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    occupancies: Optional[OccupancyViewRelStructure] = field(
+        default=None,
+        metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

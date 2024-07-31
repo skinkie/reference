@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from .customer_purchase_package import CustomerPurchasePackage
+from .fare_contract_entries_rel_structure import CustomerPurchasePackage
 from .frame_containment_structure import FrameContainmentStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

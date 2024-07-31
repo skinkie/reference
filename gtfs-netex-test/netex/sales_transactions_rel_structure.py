@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import List, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
-from .sales_transaction import SalesTransaction
+from .fare_contract_entries_rel_structure import SalesTransaction
 from .sales_transaction_ref import SalesTransactionRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"

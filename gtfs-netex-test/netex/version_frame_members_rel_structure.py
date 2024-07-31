@@ -32,6 +32,7 @@ from .block import Block
 from .block_part import BlockPart
 from .boarding_position import BoardingPosition
 from .booking_arrangement import BookingArrangement
+from .booking_debit import BookingDebit
 from .border_point import BorderPoint
 from .branding import Branding
 from .cancelling import Cancelling
@@ -69,7 +70,6 @@ from .crossing_equipment import CrossingEquipment
 from .customer import Customer
 from .customer_account import CustomerAccount
 from .customer_account_status import CustomerAccountStatus
-from .customer_purchase_package import CustomerPurchasePackage
 from .customer_purchase_package_element import CustomerPurchasePackageElement
 from .customer_purchase_parameter_assignment import CustomerPurchaseParameterAssignment
 from .customer_service import CustomerService
@@ -83,7 +83,7 @@ from .day_type_assignment import DayTypeAssignment
 from .dead_run import DeadRun
 from .dead_run_journey_pattern import DeadRunJourneyPattern
 from .deck import Deck
-from .deck_entrance_assignment import DeckEntranceAssignment
+from .deck_entrance_assignments_rel_structure import DeckEntranceAssignment
 from .deck_level import DeckLevel
 from .deck_path_junction import DeckPathJunction
 from .deck_path_link import DeckPathLink
@@ -138,10 +138,16 @@ from .escalator_equipment import EscalatorEquipment
 from .exchanging import Exchanging
 from .facility_requirement import FacilityRequirement
 from .fare_contract import FareContract
+from .fare_contract_entries_rel_structure import (
+    CustomerPurchasePackage,
+    SalesTransaction,
+)
 from .fare_contract_entry import FareContractEntry
+from .fare_debit_dummy_type import FareDebitDummyType
 from .fare_demand_factor import FareDemandFactor
 from .fare_frame import FareFrame
 from .fare_interval import FareInterval
+from .fare_product_sale_debit import FareProductSaleDebit
 from .fare_quota_factor import FareQuotaFactor
 from .fare_scheduled_stop_point import FareScheduledStopPoint
 from .fare_structure_element import FareStructureElement
@@ -246,6 +252,7 @@ from .normal_dated_vehicle_journey import NormalDatedVehicleJourney
 from .notice import Notice
 from .notice_assignment import NoticeAssignment
 from .off_site_path_link import OffSitePathLink
+from .offence_debit import OffenceDebit
 from .offered_travel_specification import OfferedTravelSpecification
 from .online_service import OnlineService
 from .online_service_operator import OnlineServiceOperator
@@ -256,6 +263,7 @@ from .operational_context import OperationalContext
 from .operator import Operator
 from .organisation_part import OrganisationPart
 from .organisational_unit import OrganisationalUnit
+from .other_debit import OtherDebit
 from .other_deck_entrance import OtherDeckEntrance
 from .other_deck_space import OtherDeckSpace
 from .other_organisation import OtherOrganisation
@@ -271,6 +279,7 @@ from .parking_passenger_entrance import ParkingPassengerEntrance
 from .parking_point import ParkingPoint
 from .parking_tariff import ParkingTariff
 from .passenger_beacon_equipment import PassengerBeaconEquipment
+from .passenger_boarding_position_assignment import PassengerBoardingPositionAssignment
 from .passenger_carrying_requirement import PassengerCarryingRequirement
 from .passenger_carrying_requirements_view import PassengerCarryingRequirementsView
 from .passenger_entrance import PassengerEntrance
@@ -362,7 +371,6 @@ from .sales_offer_package_element import SalesOfferPackageElement
 from .sales_offer_package_entitlement_given import SalesOfferPackageEntitlementGiven
 from .sales_offer_package_entitlement_required import SalesOfferPackageEntitlementRequired
 from .sales_offer_package_substitution import SalesOfferPackageSubstitution
-from .sales_transaction import SalesTransaction
 from .sales_transaction_frame import SalesTransactionFrame
 from .sanitary_equipment import SanitaryEquipment
 from .scheduled_operation import ScheduledOperation
@@ -455,6 +463,7 @@ from .train_block import TrainBlock
 from .train_block_part import TrainBlockPart
 from .train_component import TrainComponent
 from .train_component_label_assignment import TrainComponentLabelAssignment
+from .train_component_stop_assignment import TrainComponentStopAssignment
 from .train_element import TrainElement
 from .train_element_type_dummy_type import TrainElementTypeDummyType
 from .train_number import TrainNumber
@@ -467,6 +476,7 @@ from .travel_document import TravelDocument
 from .travel_specification_1 import TravelSpecification1
 from .travel_specification_2 import TravelSpecification2
 from .travelator_equipment import TravelatorEquipment
+from .trip_debit import TripDebit
 from .trolley_stand_equipment import TrolleyStandEquipment
 from .type_of_access_right_assignment import TypeOfAccessRightAssignment
 from .type_of_activation import TypeOfActivation
@@ -606,6 +616,12 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             EmvCard,
             MobileDevice,
             MediumAccessDevice,
+            OffenceDebit,
+            FareProductSaleDebit,
+            OtherDebit,
+            TripDebit,
+            BookingDebit,
+            FareDebitDummyType,
             ServiceAccessCode,
             TravelDocument,
             CustomerAccount,
@@ -713,9 +729,8 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             AccountableElement,
             Duty,
             TimeDemandProfile,
-            VehicleTypeStopAssignment,
-            TrainComponentLabelAssignment,
             TrainNumber,
+            TrainComponentLabelAssignment,
             FlexibleServiceProperties,
             JourneyPartCouple,
             CoupledJourney,
@@ -738,12 +753,16 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             VehicleJourney,
             PointOfInterestClassificationHierarchy,
             TimeDemandType,
+            DynamicStopAssignment,
             VehicleJourneyStopAssignment,
+            VehicleTypeStopAssignment,
             FlexibleStopAssignment,
             NavigationPathAssignment,
             TrainStopAssignment,
-            DynamicStopAssignment,
+            PassengerBoardingPositionAssignment,
+            DeckEntranceAssignment,
             PassengerStopAssignment,
+            TrainComponentStopAssignment,
             LogicalDisplay,
             LineNetwork,
             ModeRestrictionAssessment,
@@ -931,7 +950,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
             TimeDemandTypeAssignment,
             TransferRestriction,
             ServiceExclusion,
-            DeckEntranceAssignment,
             DisplayAssignment,
             OvertakingPossibility,
             MeetingRestriction,
@@ -1223,6 +1241,36 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "MediumAccessDevice",
                     "type": MediumAccessDevice,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OffenceDebit",
+                    "type": OffenceDebit,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FareProductSaleDebit",
+                    "type": FareProductSaleDebit,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OtherDebit",
+                    "type": OtherDebit,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TripDebit",
+                    "type": TripDebit,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingDebit",
+                    "type": BookingDebit,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FareDebit_DummyType",
+                    "type": FareDebitDummyType,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1761,18 +1809,13 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "VehicleTypeStopAssignment",
-                    "type": VehicleTypeStopAssignment,
+                    "name": "TrainNumber",
+                    "type": TrainNumber,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "TrainComponentLabelAssignment",
                     "type": TrainComponentLabelAssignment,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TrainNumber",
-                    "type": TrainNumber,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1886,8 +1929,18 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
+                    "name": "DynamicStopAssignment",
+                    "type": DynamicStopAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
                     "name": "VehicleJourneyStopAssignment",
                     "type": VehicleJourneyStopAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "VehicleTypeStopAssignment",
+                    "type": VehicleTypeStopAssignment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -1906,13 +1959,23 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "DynamicStopAssignment",
-                    "type": DynamicStopAssignment,
+                    "name": "PassengerBoardingPositionAssignment",
+                    "type": PassengerBoardingPositionAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "DeckEntranceAssignment",
+                    "type": DeckEntranceAssignment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "PassengerStopAssignment",
                     "type": PassengerStopAssignment,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TrainComponentStopAssignment",
+                    "type": TrainComponentStopAssignment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -2848,11 +2911,6 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
                 {
                     "name": "ServiceExclusion",
                     "type": ServiceExclusion,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "DeckEntranceAssignment",
-                    "type": DeckEntranceAssignment,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

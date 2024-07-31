@@ -12,6 +12,7 @@ from .interchange_rules_rel_structure import InterchangeRulesRelStructure
 from .journey_meeting_views_rel_structure import JourneyMeetingViewsRelStructure
 from .journey_part_ref import JourneyPartRef
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
+from .occupancy_view_rel_structure import OccupancyViewRelStructure
 from .passenger_at_stop_times_rel_structure import PassengerAtStopTimesRelStructure
 from .passenger_stop_assignment_ref import PassengerStopAssignmentRef
 from .quay_assignment_view import QuayAssignmentView
@@ -122,19 +123,19 @@ class DepartureStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_journey_stop_assignment_ref_or_dynamic_stop_assignment_ref_or_passenger_stop_assignment_ref_or_quay_assignment_view: Optional[Union[VehicleJourneyStopAssignmentRef, DynamicStopAssignmentRef, PassengerStopAssignmentRef, QuayAssignmentView]] = field(
+    dynamic_stop_assignment_ref_or_vehicle_journey_stop_assignment_ref_or_passenger_stop_assignment_ref_or_quay_assignment_view: Optional[Union[DynamicStopAssignmentRef, VehicleJourneyStopAssignmentRef, PassengerStopAssignmentRef, QuayAssignmentView]] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
                 {
-                    "name": "VehicleJourneyStopAssignmentRef",
-                    "type": VehicleJourneyStopAssignmentRef,
+                    "name": "DynamicStopAssignmentRef",
+                    "type": DynamicStopAssignmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "DynamicStopAssignmentRef",
-                    "type": DynamicStopAssignmentRef,
+                    "name": "VehicleJourneyStopAssignmentRef",
+                    "type": VehicleJourneyStopAssignmentRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
@@ -186,6 +187,13 @@ class DepartureStructure:
         default=None,
         metadata={
             "name": "passengerAtStopTimes",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    occupancies: Optional[OccupancyViewRelStructure] = field(
+        default=None,
+        metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

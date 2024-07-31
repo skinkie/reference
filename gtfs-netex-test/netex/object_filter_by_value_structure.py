@@ -33,6 +33,7 @@ from .blacklist_ref import BlacklistRef
 from .block_part_ref import BlockPartRef
 from .block_ref import BlockRef
 from .boarding_position_ref import BoardingPositionRef
+from .booking_debit_ref import BookingDebitRef
 from .booking_policy_ref import BookingPolicyRef
 from .border_point_ref import BorderPointRef
 from .bounding_box_structure_2 import BoundingBoxStructure2
@@ -138,11 +139,13 @@ from .fare_contract_entry_ref import FareContractEntryRef
 from .fare_contract_ref import FareContractRef
 from .fare_contract_security_listing_ref import FareContractSecurityListingRef
 from .fare_day_type_ref import FareDayTypeRef
+from .fare_debit_ref import FareDebitRef
 from .fare_demand_factor_ref import FareDemandFactorRef
 from .fare_frame_ref import FareFrameRef
 from .fare_price_ref import FarePriceRef
 from .fare_product_price_ref import FareProductPriceRef
 from .fare_product_ref import FareProductRef
+from .fare_product_sale_debit_ref import FareProductSaleDebitRef
 from .fare_quota_factor_ref import FareQuotaFactorRef
 from .fare_request_ref import FareRequestRef
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
@@ -253,6 +256,7 @@ from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .notice_ref import NoticeRef
 from .observed_passing_time_ref import ObservedPassingTimeRef
 from .off_site_path_link_ref import OffSitePathLinkRef
+from .offence_debit_ref import OffenceDebitRef
 from .offered_travel_specification_ref import OfferedTravelSpecificationRef
 from .onboard_stay_ref import OnboardStayRef
 from .online_service_operator_ref import OnlineServiceOperatorRef
@@ -266,6 +270,7 @@ from .operator_ref import OperatorRef
 from .organisation_part_ref import OrganisationPartRef
 from .organisation_ref import OrganisationRef
 from .organisational_unit_ref import OrganisationalUnitRef
+from .other_debit_ref import OtherDebitRef
 from .other_deck_entrance_ref import OtherDeckEntranceRef
 from .other_deck_space_ref import OtherDeckSpaceRef
 from .other_organisation_ref import OtherOrganisationRef
@@ -287,6 +292,7 @@ from .parking_properties_ref import ParkingPropertiesRef
 from .parking_ref import ParkingRef
 from .parking_tariff_ref import ParkingTariffRef
 from .passenger_at_stop_time_ref import PassengerAtStopTimeRef
+from .passenger_boarding_position_assignment_ref import PassengerBoardingPositionAssignmentRef
 from .passenger_capacity_ref import PassengerCapacityRef
 from .passenger_carrying_requirement_ref import PassengerCarryingRequirementRef
 from .passenger_entrance_ref import PassengerEntranceRef
@@ -472,6 +478,7 @@ from .train_block_part_ref import TrainBlockPartRef
 from .train_block_ref import TrainBlockRef
 from .train_component_label_assignment_ref import TrainComponentLabelAssignmentRef
 from .train_component_ref import TrainComponentRef
+from .train_component_stop_assignment_ref import TrainComponentStopAssignmentRef
 from .train_element_ref import TrainElementRef
 from .train_element_type_ref import TrainElementTypeRef
 from .train_in_compound_train_ref import TrainInCompoundTrainRef
@@ -486,6 +493,7 @@ from .travel_agent_ref import TravelAgentRef
 from .travel_document_ref import TravelDocumentRef
 from .travel_document_security_listing_ref import TravelDocumentSecurityListingRef
 from .travel_specification_ref import TravelSpecificationRef
+from .trip_debit_ref import TripDebitRef
 from .trip_leg_ref import TripLegRef
 from .trip_pattern_trip_ref import TripPatternTripRef
 from .trip_plan_request_ref import TripPlanRequestRef
@@ -915,6 +923,12 @@ class ObjectFilterByValueStructure:
                 SubmodeRef,
                 OpenTransportModeRef,
                 PathInstructionRef,
+                OffenceDebitRef,
+                FareProductSaleDebitRef,
+                TripDebitRef,
+                BookingDebitRef,
+                OtherDebitRef,
+                FareDebitRef,
                 SalesTransactionRef,
                 OfferedTravelSpecificationRef,
                 RequestedTravelSpecificationRef,
@@ -1226,18 +1240,20 @@ class ObjectFilterByValueStructure:
                 DistributionAssignmentRef,
                 SalesOfferPackageSubstitutionRef,
                 DeckPlanAssignmentRef,
-                JourneyAccountingRef,
                 TrainComponentLabelAssignmentRef,
+                JourneyAccountingRef,
                 RechargingPointAssignmentRef,
                 TransferRestrictionRef,
                 ServiceExclusionRef,
+                TrainComponentStopAssignmentRef,
                 DeckEntranceAssignmentRef,
-                FlexibleServiceAssignmentRef,
                 VehicleTypeStopAssignmentRef,
+                FlexibleServiceAssignmentRef,
                 PathAssignmentRef,
+                PassengerBoardingPositionAssignmentRef,
                 TrainStopAssignmentRef,
-                VehicleJourneyStopAssignmentRef,
                 DynamicStopAssignmentRef,
+                VehicleJourneyStopAssignmentRef,
                 PassengerStopAssignmentRef,
                 StopAssignmentRef,
                 DisplayAssignmentRef,
@@ -2604,6 +2620,36 @@ class ObjectFilterByValueStructure:
                     {
                         "name": "PathInstructionRef",
                         "type": PathInstructionRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "OffenceDebitRef",
+                        "type": OffenceDebitRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "FareProductSaleDebitRef",
+                        "type": FareProductSaleDebitRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "TripDebitRef",
+                        "type": TripDebitRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "BookingDebitRef",
+                        "type": BookingDebitRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "OtherDebitRef",
+                        "type": OtherDebitRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "FareDebitRef",
+                        "type": FareDebitRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
@@ -4162,13 +4208,13 @@ class ObjectFilterByValueStructure:
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
-                        "name": "JourneyAccountingRef",
-                        "type": JourneyAccountingRef,
+                        "name": "TrainComponentLabelAssignmentRef",
+                        "type": TrainComponentLabelAssignmentRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
-                        "name": "TrainComponentLabelAssignmentRef",
-                        "type": TrainComponentLabelAssignmentRef,
+                        "name": "JourneyAccountingRef",
+                        "type": JourneyAccountingRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
@@ -4187,13 +4233,13 @@ class ObjectFilterByValueStructure:
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
-                        "name": "deckEntranceAssignmentRef",
-                        "type": DeckEntranceAssignmentRef,
+                        "name": "TrainComponentStopAssignmentRef",
+                        "type": TrainComponentStopAssignmentRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
-                        "name": "FlexibleServiceAssignmentRef",
-                        "type": FlexibleServiceAssignmentRef,
+                        "name": "deckEntranceAssignmentRef",
+                        "type": DeckEntranceAssignmentRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
@@ -4202,8 +4248,18 @@ class ObjectFilterByValueStructure:
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
+                        "name": "FlexibleServiceAssignmentRef",
+                        "type": FlexibleServiceAssignmentRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
                         "name": "PathAssignmentRef",
                         "type": PathAssignmentRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "PassengerBoardingPositionAssignmentRef",
+                        "type": PassengerBoardingPositionAssignmentRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
@@ -4212,13 +4268,13 @@ class ObjectFilterByValueStructure:
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
-                        "name": "VehicleJourneyStopAssignmentRef",
-                        "type": VehicleJourneyStopAssignmentRef,
+                        "name": "DynamicStopAssignmentRef",
+                        "type": DynamicStopAssignmentRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {
-                        "name": "DynamicStopAssignmentRef",
-                        "type": DynamicStopAssignmentRef,
+                        "name": "VehicleJourneyStopAssignmentRef",
+                        "type": VehicleJourneyStopAssignmentRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {

@@ -5,7 +5,7 @@ from .deck_vehicle_entrance_ref import DeckVehicleEntranceRef
 from .entity_in_version_structure import VersionedChildStructure
 from .entrance_setting_enumeration import EntranceSettingEnumeration
 from .entrance_usage_enumeration import EntranceUsageEnumeration
-from .locatable_spot_refs_rel_structure import LocatableSpotRefsRelStructure
+from .locatable_spot_range_ref_structure import LocatableSpotRangeRefStructure
 from .multilingual_string import MultilingualString
 from .other_deck_entrance_ref import OtherDeckEntranceRef
 from .passenger_entrance_ref import PassengerEntranceRef
@@ -81,7 +81,7 @@ class DeckEntranceUsageVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    start_spot: Optional[LocatableSpotRefsRelStructure] = field(
+    start_spot: Optional[LocatableSpotRangeRefStructure] = field(
         default=None,
         metadata={
             "name": "StartSpot",
@@ -89,7 +89,7 @@ class DeckEntranceUsageVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    end_spot: List[LocatableSpotRefsRelStructure] = field(
+    end_spot: List[LocatableSpotRangeRefStructure] = field(
         default_factory=list,
         metadata={
             "name": "EndSpot",

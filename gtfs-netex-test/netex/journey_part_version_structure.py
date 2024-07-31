@@ -9,6 +9,7 @@ from .journey_part_couple_ref import JourneyPartCoupleRef
 from .journey_part_positions_rel_structure import JourneyPartPositionsRelStructure
 from .journey_part_ref_structure import JourneyPartRefStructure
 from .multilingual_string import MultilingualString
+from .occupancy_view_rel_structure import OccupancyViewRelStructure
 from .purpose_of_journey_partition_ref import PurposeOfJourneyPartitionRef
 from .scheduled_stop_point_ref_structure import ScheduledStopPointRefStructure
 from .service_facility_sets_rel_structure import ServiceFacilitySetsRelStructure
@@ -158,6 +159,13 @@ class JourneyPartVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "journeyPartPositions",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    occupancies: Optional[OccupancyViewRelStructure] = field(
+        default=None,
+        metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

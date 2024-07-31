@@ -10,6 +10,7 @@ from .customer_payment_means_rel_structure import CustomerPaymentMeansRelStructu
 from .customer_purchase_package_refs_rel_structure import CustomerPurchasePackageRefsRelStructure
 from .customer_ref import CustomerRef
 from .entity_in_version_structure import DataManagedObjectStructure
+from .fare_contract_entries_rel_structure import FareContractEntriesRelStructure
 from .fare_contracts_rel_structure import FareContractsRelStructure
 from .medium_access_device_refs_rel_structure import MediumAccessDeviceRefsRelStructure
 from .multilingual_string import MultilingualString
@@ -91,6 +92,14 @@ class CustomerAccountVersionStructure(DataManagedObjectStructure):
         default=None,
         metadata={
             "name": "fareContracts",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    customer_account_entries: Optional[FareContractEntriesRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "customerAccountEntries",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

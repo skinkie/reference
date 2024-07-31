@@ -31,6 +31,7 @@ from .blacklist_ref import BlacklistRef
 from .block_part_ref import BlockPartRef
 from .block_ref import BlockRef
 from .boarding_position_ref import BoardingPositionRef
+from .booking_debit_ref import BookingDebitRef
 from .booking_policy_ref import BookingPolicyRef
 from .border_point_ref import BorderPointRef
 from .branding_ref import BrandingRef
@@ -125,11 +126,13 @@ from .fare_contract_entry_ref import FareContractEntryRef
 from .fare_contract_ref import FareContractRef
 from .fare_contract_security_listing_ref import FareContractSecurityListingRef
 from .fare_day_type_ref import FareDayTypeRef
+from .fare_debit_ref import FareDebitRef
 from .fare_demand_factor_ref import FareDemandFactorRef
 from .fare_frame_ref import FareFrameRef
 from .fare_price_ref import FarePriceRef
 from .fare_product_price_ref import FareProductPriceRef
 from .fare_product_ref import FareProductRef
+from .fare_product_sale_debit_ref import FareProductSaleDebitRef
 from .fare_quota_factor_ref import FareQuotaFactorRef
 from .fare_request_ref import FareRequestRef
 from .fare_scheduled_stop_point_ref import FareScheduledStopPointRef
@@ -236,6 +239,7 @@ from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .notice_ref import NoticeRef
 from .observed_passing_time_ref import ObservedPassingTimeRef
 from .off_site_path_link_ref import OffSitePathLinkRef
+from .offence_debit_ref import OffenceDebitRef
 from .offered_travel_specification_ref import OfferedTravelSpecificationRef
 from .onboard_stay_ref import OnboardStayRef
 from .online_service_operator_ref import OnlineServiceOperatorRef
@@ -249,6 +253,7 @@ from .operator_ref import OperatorRef
 from .organisation_part_ref import OrganisationPartRef
 from .organisation_ref import OrganisationRef
 from .organisational_unit_ref import OrganisationalUnitRef
+from .other_debit_ref import OtherDebitRef
 from .other_deck_entrance_ref import OtherDeckEntranceRef
 from .other_deck_space_ref import OtherDeckSpaceRef
 from .other_organisation_ref import OtherOrganisationRef
@@ -456,6 +461,7 @@ from .travel_agent_ref import TravelAgentRef
 from .travel_document_ref import TravelDocumentRef
 from .travel_document_security_listing_ref import TravelDocumentSecurityListingRef
 from .travel_specification_ref import TravelSpecificationRef
+from .trip_debit_ref import TripDebitRef
 from .trip_leg_ref import TripLegRef
 from .trip_pattern_trip_ref import TripPatternTripRef
 from .trip_plan_request_ref import TripPlanRequestRef
@@ -858,6 +864,12 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
             SubmodeRef,
             OpenTransportModeRef,
             PathInstructionRef,
+            OffenceDebitRef,
+            FareProductSaleDebitRef,
+            TripDebitRef,
+            BookingDebitRef,
+            OtherDebitRef,
+            FareDebitRef,
             SalesTransactionRef,
             OfferedTravelSpecificationRef,
             RequestedTravelSpecificationRef,
@@ -2508,6 +2520,36 @@ class GeneralFrameMemberStructure(VersionedChildStructure):
                 {
                     "name": "PathInstructionRef",
                     "type": PathInstructionRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OffenceDebitRef",
+                    "type": OffenceDebitRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FareProductSaleDebitRef",
+                    "type": FareProductSaleDebitRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "TripDebitRef",
+                    "type": TripDebitRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "BookingDebitRef",
+                    "type": BookingDebitRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OtherDebitRef",
+                    "type": OtherDebitRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "FareDebitRef",
+                    "type": FareDebitRef,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {

@@ -337,6 +337,10 @@ from .booking_arrangements_in_frame_rel_structure import BookingArrangementsInFr
 from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
 from .booking_arrangements_structure import BookingArrangementsStructure
 from .booking_charge_type_enumeration import BookingChargeTypeEnumeration
+from .booking_debit import BookingDebit
+from .booking_debit_ref import BookingDebitRef
+from .booking_debit_ref_structure import BookingDebitRefStructure
+from .booking_debit_version_structure import BookingDebitVersionStructure
 from .booking_method_enumeration import BookingMethodEnumeration
 from .booking_policy import BookingPolicy
 from .booking_policy_ref import BookingPolicyRef
@@ -699,7 +703,6 @@ from .customer_payment_means_ref import CustomerPaymentMeansRef
 from .customer_payment_means_ref_structure import CustomerPaymentMeansRefStructure
 from .customer_payment_means_rel_structure import CustomerPaymentMeansRelStructure
 from .customer_payment_means_versioned_child_structure import CustomerPaymentMeansVersionedChildStructure
-from .customer_purchase_package import CustomerPurchasePackage
 from .customer_purchase_package_element import CustomerPurchasePackageElement
 from .customer_purchase_package_element_access import CustomerPurchasePackageElementAccess
 from .customer_purchase_package_element_access_ref_structure import CustomerPurchasePackageElementAccessRefStructure
@@ -718,9 +721,7 @@ from .customer_purchase_package_ref import CustomerPurchasePackageRef
 from .customer_purchase_package_ref_structure import CustomerPurchasePackageRefStructure
 from .customer_purchase_package_refs_rel_structure import CustomerPurchasePackageRefsRelStructure
 from .customer_purchase_package_status_enumeration import CustomerPurchasePackageStatusEnumeration
-from .customer_purchase_package_version_structure import CustomerPurchasePackageVersionStructure
 from .customer_purchase_packages_in_frame_rel_structure import CustomerPurchasePackagesInFrameRelStructure
-from .customer_purchase_packages_rel_structure import CustomerPurchasePackagesRelStructure
 from .customer_purchase_parameter_assignment import CustomerPurchaseParameterAssignment
 from .customer_purchase_parameter_assignment_ref_structure import CustomerPurchaseParameterAssignmentRefStructure
 from .customer_purchase_parameter_assignment_version_structure import CustomerPurchaseParameterAssignmentVersionStructure
@@ -831,12 +832,15 @@ from .deck_component_ref_structure import DeckComponentRefStructure
 from .deck_component_version_structure import DeckComponentVersionStructure
 from .deck_entrance_1 import DeckEntrance1
 from .deck_entrance_2 import DeckEntrance2
-from .deck_entrance_assignment import DeckEntranceAssignment
 from .deck_entrance_assignment_ref import DeckEntranceAssignmentRef
 from .deck_entrance_assignment_ref_structure import DeckEntranceAssignmentRefStructure
 from .deck_entrance_assignment_refs_rel_structure import DeckEntranceAssignmentRefsRelStructure
-from .deck_entrance_assignment_version_structure import DeckEntranceAssignmentVersionStructure
-from .deck_entrance_assignments_rel_structure import DeckEntranceAssignmentsRelStructure
+from .deck_entrance_assignments_rel_structure import (
+    DeckEntranceAssignment,
+    DeckEntranceAssignmentsRelStructure,
+    DeckEntranceAssignmentVersionStructure,
+    PassengerBoardingPositionAssignmentVersionStructure,
+)
 from .deck_entrance_couple import DeckEntranceCouple
 from .deck_entrance_couple_ref import DeckEntranceCoupleRef
 from .deck_entrance_couple_ref_structure import DeckEntranceCoupleRefStructure
@@ -1251,7 +1255,14 @@ from .fare_class import FareClass
 from .fare_class_enumeration import FareClassEnumeration
 from .fare_classes import FareClasses
 from .fare_contract import FareContract
-from .fare_contract_entries_rel_structure import FareContractEntriesRelStructure
+from .fare_contract_entries_rel_structure import (
+    CustomerPurchasePackage,
+    CustomerPurchasePackagesRelStructure,
+    CustomerPurchasePackageVersionStructure,
+    FareContractEntriesRelStructure,
+    SalesTransaction,
+    SalesTransactionVersionStructure,
+)
 from .fare_contract_entry import FareContractEntry
 from .fare_contract_entry_abstract import FareContractEntryAbstract
 from .fare_contract_entry_ref import FareContractEntryRef
@@ -1269,6 +1280,12 @@ from .fare_contracts_in_frame_rel_structure import FareContractsInFrameRelStruct
 from .fare_contracts_rel_structure import FareContractsRelStructure
 from .fare_day_type_ref import FareDayTypeRef
 from .fare_day_type_ref_structure import FareDayTypeRefStructure
+from .fare_debit import FareDebit
+from .fare_debit_dummy_type import FareDebitDummyType
+from .fare_debit_ref import FareDebitRef
+from .fare_debit_ref_structure import FareDebitRefStructure
+from .fare_debit_refs_rel_structure import FareDebitRefsRelStructure
+from .fare_debit_version_structure import FareDebitVersionStructure
 from .fare_demand_factor import FareDemandFactor
 from .fare_demand_factor_ref import FareDemandFactorRef
 from .fare_demand_factor_ref_structure import FareDemandFactorRefStructure
@@ -1309,6 +1326,10 @@ from .fare_product_prices_rel_structure import FareProductPricesRelStructure
 from .fare_product_ref import FareProductRef
 from .fare_product_ref_structure import FareProductRefStructure
 from .fare_product_refs_rel_structure import FareProductRefsRelStructure
+from .fare_product_sale_debit import FareProductSaleDebit
+from .fare_product_sale_debit_ref import FareProductSaleDebitRef
+from .fare_product_sale_debit_ref_structure import FareProductSaleDebitRefStructure
+from .fare_product_sale_debit_version_structure import FareProductSaleDebitVersionStructure
 from .fare_product_version_structure import FareProductVersionStructure
 from .fare_products_in_frame_rel_structure import FareProductsInFrameRelStructure
 from .fare_quota_factor import FareQuotaFactor
@@ -1673,6 +1694,7 @@ from .group_of_timing_links_ref import GroupOfTimingLinksRef
 from .group_of_timing_links_ref_structure import GroupOfTimingLinksRefStructure
 from .group_of_timing_links_rel_structure import GroupOfTimingLinksRelStructure
 from .group_ofcustomer_purchase_package_refs_rel_structure import GroupOfcustomerPurchasePackageRefsRelStructure
+from .group_reservation_structure import GroupReservationStructure
 from .group_size_changes_enumeration import GroupSizeChangesEnumeration
 from .group_ticket import GroupTicket
 from .group_ticket_ref import GroupTicketRef
@@ -2014,6 +2036,7 @@ from .local_services_rel_structure import LocalServicesRelStructure
 from .locale import Locale
 from .locale_structure import LocaleStructure
 from .locatable_spot import LocatableSpot
+from .locatable_spot_range_ref_structure import LocatableSpotRangeRefStructure
 from .locatable_spot_ref import LocatableSpotRef
 from .locatable_spot_ref_structure import LocatableSpotRefStructure
 from .locatable_spot_refs_rel_structure import LocatableSpotRefsRelStructure
@@ -2268,11 +2291,21 @@ from .observed_passing_time_versioned_child_structure import ObservedPassingTime
 from .observed_passing_time_view import ObservedPassingTimeView
 from .observed_passing_time_view_structure import ObservedPassingTimeViewStructure
 from .observed_passing_times_rel_structure import ObservedPassingTimesRelStructure
+from .occupancy_enumeration import OccupancyEnumeration
+from .occupancy_view import OccupancyView
+from .occupancy_view_in_frame_rel_structure import OccupancyViewInFrameRelStructure
+from .occupancy_view_ref_structure import OccupancyViewRefStructure
+from .occupancy_view_rel_structure import OccupancyViewRelStructure
+from .occupancy_view_version_structure import OccupancyViewVersionStructure
 from .off_site_path_link import OffSitePathLink
 from .off_site_path_link_ref import OffSitePathLinkRef
 from .off_site_path_link_ref_structure import OffSitePathLinkRefStructure
 from .off_site_path_link_refs_rel_structure import OffSitePathLinkRefsRelStructure
 from .off_site_path_link_version_structure import OffSitePathLinkVersionStructure
+from .offence_debit import OffenceDebit
+from .offence_debit_ref import OffenceDebitRef
+from .offence_debit_ref_structure import OffenceDebitRefStructure
+from .offence_debit_version_structure import OffenceDebitVersionStructure
 from .offered_travel_specification import OfferedTravelSpecification
 from .offered_travel_specification_ref import OfferedTravelSpecificationRef
 from .offered_travel_specification_ref_structure import OfferedTravelSpecificationRefStructure
@@ -2367,6 +2400,10 @@ from .organisational_unit_refs_rel_structure import OrganisationalUnitRefsRelStr
 from .organisational_unit_version_structure import OrganisationalUnitVersionStructure
 from .organisational_units_rel_structure import OrganisationalUnitsRelStructure
 from .organisations_in_frame_rel_structure import OrganisationsInFrameRelStructure
+from .other_debit import OtherDebit
+from .other_debit_ref import OtherDebitRef
+from .other_debit_ref_structure import OtherDebitRefStructure
+from .other_debit_version_structure import OtherDebitVersionStructure
 from .other_deck_entrance import OtherDeckEntrance
 from .other_deck_entrance_ref import OtherDeckEntranceRef
 from .other_deck_entrance_ref_structure import OtherDeckEntranceRefStructure
@@ -2490,6 +2527,11 @@ from .passenger_beacon_equipment import PassengerBeaconEquipment
 from .passenger_beacon_equipment_ref import PassengerBeaconEquipmentRef
 from .passenger_beacon_equipment_ref_structure import PassengerBeaconEquipmentRefStructure
 from .passenger_beacon_equipment_version_structure import PassengerBeaconEquipmentVersionStructure
+from .passenger_boarding_position_assignment import PassengerBoardingPositionAssignment
+from .passenger_boarding_position_assignment_abstract import PassengerBoardingPositionAssignmentAbstract
+from .passenger_boarding_position_assignment_ref import PassengerBoardingPositionAssignmentRef
+from .passenger_boarding_position_assignment_ref_structure import PassengerBoardingPositionAssignmentRefStructure
+from .passenger_boarding_position_assignments_rel_structure import PassengerBoardingPositionAssignmentsRelStructure
 from .passenger_capacities_rel_structure import PassengerCapacitiesRelStructure
 from .passenger_capacity import PassengerCapacity
 from .passenger_capacity_ref import PassengerCapacityRef
@@ -3187,7 +3229,6 @@ from .sales_offer_package_substitutions_in_frame_rel_structure import SalesOffer
 from .sales_offer_package_substitutions_rel_structure import SalesOfferPackageSubstitutionsRelStructure
 from .sales_offer_package_version_structure import SalesOfferPackageVersionStructure
 from .sales_offer_packages_in_frame_rel_structure import SalesOfferPackagesInFrameRelStructure
-from .sales_transaction import SalesTransaction
 from .sales_transaction_frame import SalesTransactionFrame
 from .sales_transaction_frame_ref import SalesTransactionFrameRef
 from .sales_transaction_frame_ref_structure import SalesTransactionFrameRefStructure
@@ -3195,7 +3236,6 @@ from .sales_transaction_frame_version_frame_structure import SalesTransactionFra
 from .sales_transaction_ref import SalesTransactionRef
 from .sales_transaction_ref_structure import SalesTransactionRefStructure
 from .sales_transaction_refs_rel_structure import SalesTransactionRefsRelStructure
-from .sales_transaction_version_structure import SalesTransactionVersionStructure
 from .sales_transactions_in_frame_rel_structure import SalesTransactionsInFrameRelStructure
 from .sales_transactions_rel_structure import SalesTransactionsRelStructure
 from .same_class_of_use_enumeration import SameClassOfUseEnumeration
@@ -3964,6 +4004,12 @@ from .train_component_label_assignment_version_structure import TrainComponentLa
 from .train_component_label_assignments_rel_structure import TrainComponentLabelAssignmentsRelStructure
 from .train_component_ref import TrainComponentRef
 from .train_component_ref_structure import TrainComponentRefStructure
+from .train_component_stop_assignment import TrainComponentStopAssignment
+from .train_component_stop_assignment_ref import TrainComponentStopAssignmentRef
+from .train_component_stop_assignment_ref_structure import TrainComponentStopAssignmentRefStructure
+from .train_component_stop_assignment_refs_rel_structure import TrainComponentStopAssignmentRefsRelStructure
+from .train_component_stop_assignment_version_structure import TrainComponentStopAssignmentVersionStructure
+from .train_component_stop_assignments_rel_structure import TrainComponentStopAssignmentsRelStructure
 from .train_component_version_structure import TrainComponentVersionStructure
 from .train_component_view import TrainComponentView
 from .train_components_rel_structure import TrainComponentsRelStructure
@@ -4074,6 +4120,10 @@ from .travelator_equipment import TravelatorEquipment
 from .travelator_equipment_ref import TravelatorEquipmentRef
 from .travelator_equipment_ref_structure import TravelatorEquipmentRefStructure
 from .travelator_equipment_version_structure import TravelatorEquipmentVersionStructure
+from .trip_debit import TripDebit
+from .trip_debit_ref import TripDebitRef
+from .trip_debit_ref_structure import TripDebitRefStructure
+from .trip_debit_version_structure import TripDebitVersionStructure
 from .trip_leg_ref import TripLegRef
 from .trip_leg_ref_structure import TripLegRefStructure
 from .trip_pattern_ref_structure import TripPatternRefStructure
@@ -5160,6 +5210,10 @@ __all__ = [
     "BookingArrangementsRelStructure",
     "BookingArrangementsStructure",
     "BookingChargeTypeEnumeration",
+    "BookingDebit",
+    "BookingDebitRef",
+    "BookingDebitRefStructure",
+    "BookingDebitVersionStructure",
     "BookingMethodEnumeration",
     "BookingPolicy",
     "BookingPolicyRef",
@@ -5522,7 +5576,6 @@ __all__ = [
     "CustomerPaymentMeansRefStructure",
     "CustomerPaymentMeansRelStructure",
     "CustomerPaymentMeansVersionedChildStructure",
-    "CustomerPurchasePackage",
     "CustomerPurchasePackageElement",
     "CustomerPurchasePackageElementAccess",
     "CustomerPurchasePackageElementAccessRefStructure",
@@ -5541,9 +5594,7 @@ __all__ = [
     "CustomerPurchasePackageRefStructure",
     "CustomerPurchasePackageRefsRelStructure",
     "CustomerPurchasePackageStatusEnumeration",
-    "CustomerPurchasePackageVersionStructure",
     "CustomerPurchasePackagesInFrameRelStructure",
-    "CustomerPurchasePackagesRelStructure",
     "CustomerPurchaseParameterAssignment",
     "CustomerPurchaseParameterAssignmentRefStructure",
     "CustomerPurchaseParameterAssignmentVersionStructure",
@@ -5654,11 +5705,12 @@ __all__ = [
     "DeckComponentVersionStructure",
     "DeckEntrance1",
     "DeckEntrance2",
-    "DeckEntranceAssignment",
     "DeckEntranceAssignmentRef",
     "DeckEntranceAssignmentRefStructure",
     "DeckEntranceAssignmentRefsRelStructure",
+    "DeckEntranceAssignment",
     "DeckEntranceAssignmentVersionStructure",
+    "PassengerBoardingPositionAssignmentVersionStructure",
     "DeckEntranceAssignmentsRelStructure",
     "DeckEntranceCouple",
     "DeckEntranceCoupleRef",
@@ -6072,6 +6124,11 @@ __all__ = [
     "FareClassEnumeration",
     "FareClasses",
     "FareContract",
+    "CustomerPurchasePackage",
+    "CustomerPurchasePackageVersionStructure",
+    "SalesTransaction",
+    "SalesTransactionVersionStructure",
+    "CustomerPurchasePackagesRelStructure",
     "FareContractEntriesRelStructure",
     "FareContractEntry",
     "FareContractEntryAbstract",
@@ -6090,6 +6147,12 @@ __all__ = [
     "FareContractsRelStructure",
     "FareDayTypeRef",
     "FareDayTypeRefStructure",
+    "FareDebit",
+    "FareDebitDummyType",
+    "FareDebitRef",
+    "FareDebitRefStructure",
+    "FareDebitRefsRelStructure",
+    "FareDebitVersionStructure",
     "FareDemandFactor",
     "FareDemandFactorRef",
     "FareDemandFactorRefStructure",
@@ -6130,6 +6193,10 @@ __all__ = [
     "FareProductRef",
     "FareProductRefStructure",
     "FareProductRefsRelStructure",
+    "FareProductSaleDebit",
+    "FareProductSaleDebitRef",
+    "FareProductSaleDebitRefStructure",
+    "FareProductSaleDebitVersionStructure",
     "FareProductVersionStructure",
     "FareProductsInFrameRelStructure",
     "FareQuotaFactor",
@@ -6484,6 +6551,7 @@ __all__ = [
     "GroupOfTimingLinksRefStructure",
     "GroupOfTimingLinksRelStructure",
     "GroupOfcustomerPurchasePackageRefsRelStructure",
+    "GroupReservationStructure",
     "GroupSizeChangesEnumeration",
     "GroupTicket",
     "GroupTicketRef",
@@ -6825,6 +6893,7 @@ __all__ = [
     "Locale",
     "LocaleStructure",
     "LocatableSpot",
+    "LocatableSpotRangeRefStructure",
     "LocatableSpotRef",
     "LocatableSpotRefStructure",
     "LocatableSpotRefsRelStructure",
@@ -7079,11 +7148,21 @@ __all__ = [
     "ObservedPassingTimeView",
     "ObservedPassingTimeViewStructure",
     "ObservedPassingTimesRelStructure",
+    "OccupancyEnumeration",
+    "OccupancyView",
+    "OccupancyViewInFrameRelStructure",
+    "OccupancyViewRefStructure",
+    "OccupancyViewRelStructure",
+    "OccupancyViewVersionStructure",
     "OffSitePathLink",
     "OffSitePathLinkRef",
     "OffSitePathLinkRefStructure",
     "OffSitePathLinkRefsRelStructure",
     "OffSitePathLinkVersionStructure",
+    "OffenceDebit",
+    "OffenceDebitRef",
+    "OffenceDebitRefStructure",
+    "OffenceDebitVersionStructure",
     "OfferedTravelSpecification",
     "OfferedTravelSpecificationRef",
     "OfferedTravelSpecificationRefStructure",
@@ -7178,6 +7257,10 @@ __all__ = [
     "OrganisationalUnitVersionStructure",
     "OrganisationalUnitsRelStructure",
     "OrganisationsInFrameRelStructure",
+    "OtherDebit",
+    "OtherDebitRef",
+    "OtherDebitRefStructure",
+    "OtherDebitVersionStructure",
     "OtherDeckEntrance",
     "OtherDeckEntranceRef",
     "OtherDeckEntranceRefStructure",
@@ -7301,6 +7384,11 @@ __all__ = [
     "PassengerBeaconEquipmentRef",
     "PassengerBeaconEquipmentRefStructure",
     "PassengerBeaconEquipmentVersionStructure",
+    "PassengerBoardingPositionAssignment",
+    "PassengerBoardingPositionAssignmentAbstract",
+    "PassengerBoardingPositionAssignmentRef",
+    "PassengerBoardingPositionAssignmentRefStructure",
+    "PassengerBoardingPositionAssignmentsRelStructure",
     "PassengerCapacitiesRelStructure",
     "PassengerCapacity",
     "PassengerCapacityRef",
@@ -7996,7 +8084,6 @@ __all__ = [
     "SalesOfferPackageSubstitutionsRelStructure",
     "SalesOfferPackageVersionStructure",
     "SalesOfferPackagesInFrameRelStructure",
-    "SalesTransaction",
     "SalesTransactionFrame",
     "SalesTransactionFrameRef",
     "SalesTransactionFrameRefStructure",
@@ -8004,7 +8091,6 @@ __all__ = [
     "SalesTransactionRef",
     "SalesTransactionRefStructure",
     "SalesTransactionRefsRelStructure",
-    "SalesTransactionVersionStructure",
     "SalesTransactionsInFrameRelStructure",
     "SalesTransactionsRelStructure",
     "SameClassOfUseEnumeration",
@@ -8769,6 +8855,12 @@ __all__ = [
     "TrainComponentLabelAssignmentsRelStructure",
     "TrainComponentRef",
     "TrainComponentRefStructure",
+    "TrainComponentStopAssignment",
+    "TrainComponentStopAssignmentRef",
+    "TrainComponentStopAssignmentRefStructure",
+    "TrainComponentStopAssignmentRefsRelStructure",
+    "TrainComponentStopAssignmentVersionStructure",
+    "TrainComponentStopAssignmentsRelStructure",
     "TrainComponentVersionStructure",
     "TrainComponentView",
     "TrainComponentsRelStructure",
@@ -8879,6 +8971,10 @@ __all__ = [
     "TravelatorEquipmentRef",
     "TravelatorEquipmentRefStructure",
     "TravelatorEquipmentVersionStructure",
+    "TripDebit",
+    "TripDebitRef",
+    "TripDebitRefStructure",
+    "TripDebitVersionStructure",
     "TripLegRef",
     "TripLegRefStructure",
     "TripPatternRefStructure",

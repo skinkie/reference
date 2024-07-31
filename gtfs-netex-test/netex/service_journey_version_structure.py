@@ -53,6 +53,7 @@ from .vehicle_equipments_rel_structure import VehicleEquipmentsRelStructure
 from .vehicle_journey_layovers_rel_structure import VehicleJourneyLayoversRelStructure
 from .vehicle_journey_run_times_rel_structure import VehicleJourneyRunTimesRelStructure
 from .vehicle_journey_wait_times_rel_structure import VehicleJourneyWaitTimesRelStructure
+from .vehicle_ref import VehicleRef
 from .vehicle_type_ref import VehicleTypeRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
@@ -217,6 +218,14 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
+        },
+    )
+    vehicle_ref: Optional[VehicleRef] = field(
+        default=None,
+        metadata={
+            "name": "VehicleRef",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
         },
     )
     operational_context_ref: Optional[OperationalContextRef] = field(

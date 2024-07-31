@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import List, Optional, Union
 
 from .boarding_position import BoardingPosition
 from .boarding_position_ref import BoardingPositionRef
+from .passenger_boarding_position_assignments_rel_structure import PassengerBoardingPositionAssignmentsRelStructure
 from .quay import Quay
 from .quay_ref import QuayRef
 from .stop_assignment_version_structure import StopAssignmentVersionStructure
@@ -84,29 +85,21 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    train_stop_assignments_or_train_elements: List[Union["PassengerStopAssignmentVersionStructure.TrainStopAssignments", "PassengerStopAssignmentVersionStructure.TrainElements"]] = field(
+    passenger_boarding_position_assignments_or_train_elements: List[Union[PassengerBoardingPositionAssignmentsRelStructure, TrainStopAssignmentsRelStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
                 {
-                    "name": "trainStopAssignments",
-                    "type": ForwardRef("PassengerStopAssignmentVersionStructure.TrainStopAssignments"),
+                    "name": "passengerBoardingPositionAssignments",
+                    "type": PassengerBoardingPositionAssignmentsRelStructure,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
                     "name": "trainElements",
-                    "type": ForwardRef("PassengerStopAssignmentVersionStructure.TrainElements"),
+                    "type": TrainStopAssignmentsRelStructure,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),
         },
     )
-
-    @dataclass(kw_only=True)
-    class TrainStopAssignments(TrainStopAssignmentsRelStructure):
-        pass
-
-    @dataclass(kw_only=True)
-    class TrainElements(TrainStopAssignmentsRelStructure):
-        pass

@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .assignment_version_structure_1 import AssignmentVersionStructure1
 from .compound_train_ref import CompoundTrainRef
 from .dead_run_ref import DeadRunRef
 from .powered_train_ref import PoweredTrainRef
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
+from .stop_assignment_version_structure import StopAssignmentVersionStructure
 from .train_ref import TrainRef
 from .transport_type_ref import TransportTypeRef
 from .unpowered_train_ref import UnpoweredTrainRef
@@ -18,7 +18,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class VehicleTypeStopAssignmentVersionStructure(AssignmentVersionStructure1):
+class VehicleTypeStopAssignmentVersionStructure(StopAssignmentVersionStructure):
     class Meta:
         name = "VehicleTypeStopAssignment_VersionStructure"
 

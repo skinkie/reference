@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List
 
+from .fare_contract_entries_rel_structure import SalesTransaction
 from .frame_containment_structure import FrameContainmentStructure
-from .sales_transaction import SalesTransaction
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 

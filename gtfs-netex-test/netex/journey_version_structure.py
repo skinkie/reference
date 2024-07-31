@@ -8,6 +8,7 @@ from .journey_accountings_rel_structure import JourneyAccountingsRelStructure
 from .link_sequence_projection import LinkSequenceProjection
 from .link_sequence_projection_ref import LinkSequenceProjectionRef
 from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
+from .occupancy_view_rel_structure import OccupancyViewRelStructure
 from .sections_in_sequence_rel_structure import LinkSequenceVersionStructure
 from .transport_submode import TransportSubmode
 from .type_of_product_category_ref import TypeOfProductCategoryRef
@@ -107,6 +108,13 @@ class JourneyVersionStructure(LinkSequenceVersionStructure):
         default=None,
         metadata={
             "name": "noticeAssignments",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    occupancies: Optional[OccupancyViewRelStructure] = field(
+        default=None,
+        metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
