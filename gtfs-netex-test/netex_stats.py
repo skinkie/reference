@@ -35,8 +35,7 @@ def main(file: str):
         srch= ".//{http://www.netex.org.uk/netex}"+el
         res=rt.findall(srch)
         if not(res == None):
-            if (len(res)>0):
-                print (el +": "+str(len(res)))
+            print (el +": "+str(len(res)))
 
 if __name__ == "__main__":
     import argparse
