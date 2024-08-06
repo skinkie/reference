@@ -28,7 +28,8 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     PassengerStopAssignment, Connection, SiteConnection, DefaultConnection, ServiceCalendarFrame, \
     DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine, VersionFrameDefaultsStructure, SystemOfUnits, \
     LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, \
-    TopographicPlacesInFrameRelStructure, TopographicPlace, TransportOrganisationVersionStructure, Locale
+    TopographicPlacesInFrameRelStructure, TopographicPlace, TransportOrganisationVersionStructure, Locale, \
+    TypesOfValueInFrameRelStructure, ValueSet
 
 import netex_monkeypatching
 
@@ -117,6 +118,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
     codespace_ref_or_codespace = GeneratorTester(load_generator(con_orig, Codespace))
     data_source = GeneratorTester(load_generator(con_orig, DataSource))
     organisation_or_transport_organisation = load_local(con_orig, Authority) + load_local(con_orig, Operator)
+    value_set = GeneratorTester(load_generator(con_orig, ValueSet))
 
     all_locales = {org.locale for org in organisation_or_transport_organisation if org.locale is not None}
     if len(all_locales) > 1:
@@ -176,6 +178,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                         id="COMMON", version=version,
                                         type_of_frame_ref=TypeOfFrameRef(ref='epip:COMMON', version_ref='1.0'),
                                         data_sources=DataSourcesInFrameRelStructure(data_source=data_source.generator()) if data_source.has_value() else None,
+                                        types_of_value=TypesOfValueInFrameRelStructure(choice=value_set.generator()) if value_set.has_value() else None,
                                         organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=organisation_or_transport_organisation) if len(organisation_or_transport_organisation) > 0 else None,
                                         vehicle_types=VehicleTypesInFrameRelStructure(transport_type_dummy_type_or_train_type=transport_type_dummy_type_or_train_type.generator()) if transport_type_dummy_type_or_train_type.has_value() else None,
                                         responsibility_sets=ResponsibilitySetsInFrameRelStructure(responsibility_set=responsibility_set.generator()) if responsibility_set.has_value() else None,

@@ -25,6 +25,7 @@ from refs import getIndex, getRef, getId
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from transformers.projection import project_location_4326, project_polygon
+from transformers.timetabled_passing_time import infer_id_and_order_and_apply
 from utils import project
 
 EPIP_CLASSES = [ "Codespace", "StopPlace", "RoutePoint", "RouteLink", "Routes", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "ServiceJourneyPattern", "PassengerStopAssignment", "Notice", "NoticeAssignment", "AvailabilityCondition" ]
@@ -377,7 +378,8 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
         # Prototype, just: TimeDemandType -> PassingTimes
         with sqlite3.connect(read_database, read_only=True) as read_con:
             if sj.passing_times:
-                pass
+                # Since we don't do it ourselves, we might want to check the poor input offered.
+                infer_id_and_order_and_apply(sj)
 
             elif sj.calls:
                 if sj.journey_pattern_ref:
