@@ -36,11 +36,15 @@ def infer_locations_from_quay_or_stopplace_and_apply(read_database, write_databa
 
         for sp in load_local(read_con, StopPlace):
             sp: StopPlace
-            mapping[sp.id] = sp.centroid.location
+            if sp.centroid is not None:
+                mapping[sp.id] = sp.centroid.location
             if sp.quays is not None:
                 for quay in sp.quays.taxi_stand_ref_or_quay_ref_or_quay:
                     if isinstance(quay, Quay):
-                        mapping[quay.id] = quay.centroid.location
+                        if quay.centroid is not None:
+                            mapping[quay.id] = quay.centroid.location
+                        elif sp.centroid is not None:
+                            mapping[quay.id] = sp.centroid.location
 
         ssp_location = {}
         for psa in load_generator(read_con, PassengerStopAssignment):
