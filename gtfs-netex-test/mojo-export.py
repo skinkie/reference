@@ -42,8 +42,8 @@ codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=sh
 dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
                       xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
-start_date = datetime.datetime(year=2024, month=6, day=27)
-end_date = datetime.datetime(year=2024, month=6, day=29)
+start_date = datetime.datetime(year=2024, month=8, day=15)
+end_date = datetime.datetime(year=2024, month=8, day=19)
 
 today = str(datetime.date.today()).replace('-', '')
 
@@ -57,10 +57,27 @@ stt = SimpleTimetable(codespace, version)
 from_date = datetime.date.today().isoformat().replace('-', '')
 
 simple_timetable = {}
-stt.simple_timetable_interval(simple_timetable, "N", "G", datetime.datetime(2024, 6, 27, 13, 00, 00), datetime.datetime(2024, 6, 27, 21, 00, 00), datetime.timedelta(minutes=5))
-stt.simple_timetable_interval(simple_timetable,"N", "G", datetime.datetime(2024, 6, 29, 13, 00, 00), datetime.datetime(2024, 6, 29, 21, 00, 00), datetime.timedelta(minutes=5))
-stt.simple_timetable_interval(simple_timetable,"G", "N", datetime.datetime(2024, 6, 27, 13, 00, 00), datetime.datetime(2024, 6, 28, 1, 00, 00), datetime.timedelta(minutes=5))
-stt.simple_timetable_interval(simple_timetable,"G", "N", datetime.datetime(2024, 6, 29, 13, 00, 00), datetime.datetime(2024, 6, 30, 1, 00, 00), datetime.timedelta(minutes=5))
+stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2024, 8, 15, 7, 00, 00), datetime.datetime(2024, 8, 16, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2024, 8, 16, 8, 00, 00), datetime.datetime(2024, 8, 16, 17, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2024, 8, 18, 17, 00, 00), datetime.datetime(2024, 8, 19, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2024, 8, 19, 8, 00, 00), datetime.datetime(2024, 8, 19, 13, 30, 00), datetime.timedelta(minutes=10))
+
+stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2024, 8, 15, 7, 30, 00), datetime.datetime(2024, 8, 15, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2024, 8, 16, 8, 00, 00), datetime.datetime(2024, 8, 16, 17, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2024, 8, 18, 16, 30, 00), datetime.datetime(2024, 8, 18, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2024, 8, 19, 8, 00, 00), datetime.datetime(2024, 8, 19, 14, 00, 00), datetime.timedelta(minutes=10))
+
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 15, 7, 00, 00), datetime.datetime(2024, 8, 16, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 16, 8, 00, 00), datetime.datetime(2024, 8, 17, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 17, 8, 00, 00), datetime.datetime(2024, 8, 18, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 18, 8, 00, 00), datetime.datetime(2024, 8, 19, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 19, 8, 00, 00), datetime.datetime(2024, 8, 19, 13, 30, 00), datetime.timedelta(minutes=10))
+
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 15, 7, 30, 00), datetime.datetime(2024, 8, 15, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 16, 8, 00, 00), datetime.datetime(2024, 8, 16, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 17, 8, 00, 00), datetime.datetime(2024, 8, 17, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 18, 8, 00, 00), datetime.datetime(2024, 8, 18, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 19, 8, 00, 00), datetime.datetime(2024, 8, 19, 14, 00, 00), datetime.timedelta(minutes=10))
 
 
 service_journeys, availability_conditions = stt.simple_timetable_from_dict(simple_timetable)
@@ -74,10 +91,10 @@ data_source = DataSource(id=getId(DataSource, codespace, short_name),
                          short_name=MultilingualString(value=short_name),
                          description=MultilingualString(value=short_name))
 
-transport_administrative_zone_partitie = TransportAdministrativeZone(id=getId(TransportAdministrativeZone, codespace, "Nijmegen"),
+transport_administrative_zone_partitie = TransportAdministrativeZone(id=getId(TransportAdministrativeZone, codespace, "Dronten"),
                                                             version="any",
-                                                            name=MultilingualString(value="MOJO Nijmegen"),
-                                                            short_name=MultilingualString(value="MOJON"),
+                                                            name=MultilingualString(value="MOJO Dronten"),
+                                                            short_name=MultilingualString(value="MOJOD"),
                                                             vehicle_modes=[AllModesEnumeration.WATER])
 
 
@@ -148,7 +165,7 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
 line = Line(id=getId(Line, codespace, "MOJO"), version=version.version, name=MultilingualString(value="MOJO"),
               monitored=False,
               responsibility_set_ref_attribute=responsibility_set_financier.id,
-              description=MultilingualString(value="Festival vervoer Bruce Springsteen"),
+              description=MultilingualString(value="Lowlands Pendelbus"),
               transport_mode=AllVehicleModesOfTransportEnumeration.BUS,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="MOJO"),
@@ -158,177 +175,297 @@ line = Line(id=getId(Line, codespace, "MOJO"), version=version.version, name=Mul
               )
 
 
-rp_n = RoutePoint(id=getId(RoutePoint, codespace, "N"), version=version.version, location=LocationStructure2(pos=Pos(value=[187126, 428463], srs_dimension=2)))
-rp_g = RoutePoint(id=getId(RoutePoint, codespace, "G"), version=version.version, location=LocationStructure2(pos=Pos(value=[186006, 426725], srs_dimension=2)))
+rp_ly = RoutePoint(id=getId(RoutePoint, codespace, "LY"), version=version.version, location=LocationStructure2(pos=Pos(value=[160611, 502254], srs_dimension=2)))
+rp_dr = RoutePoint(id=getId(RoutePoint, codespace, "DR"), version=version.version, location=LocationStructure2(pos=Pos(value=[177667, 505203], srs_dimension=2)))
+rp_lo = RoutePoint(id=getId(RoutePoint, codespace, "LO"), version=version.version, location=LocationStructure2(pos=Pos(value=[180461, 494075], srs_dimension=2)))
 
-route_points = [rp_n, rp_g]
 
-linestring_ng = [187132, 428462, 187130, 428452, 187171, 428440, 187162, 428417, 187147, 428366, 187127, 428302, 187111, 428249, 187085, 428164, 187055, 428066, 187051, 428054, 187042, 428025, 187032, 428005, 187016, 427974, 187001, 427948, 186988, 427929, 186976, 427917, 186936, 427888, 186908, 427870, 186897, 427863, 186893, 427853, 186889, 427841, 186889, 427827, 186891, 427819, 186895, 427810, 186893, 427798, 186882, 427766, 186874, 427728, 186803, 427282, 186799, 427276, 186794, 427274, 186696, 427283, 186684, 427283, 186675, 427283, 186668, 427280, 186663, 427276, 186662, 427271, 186662, 427266, 186662, 427259, 186685, 427091, 186685, 427086, 186684, 427082, 186680, 427078, 186673, 427075, 186632, 427080, 186544, 427092, 186512, 427096, 186489, 427097, 186466, 427096, 186443, 427090, 186425, 427087, 186228, 427061, 185948, 427025, 185922, 427020, 185901, 427010, 185879, 426994, 185868, 426983, 185814, 426926, 185851, 426885, 185872, 426863, 185899, 426833, 185907, 426823, 185960, 426724, 186039, 426733, 186052, 426733]
+route_points = [rp_ly, rp_dr, rp_lo]
 
-rl_ng = RouteLink(id=getId(RouteLink, codespace, "N-G"), version=version.version,
-                  distance=Decimal('3500'), # TODO
-                  from_point_ref=getRef(rp_n, RoutePointRefStructure), to_point_ref=getRef(rp_g, RoutePointRefStructure),
-                    line_string=LineString(id=getId(RouteLink, codespace, "N-G").replace(":", "_").replace("-", "_"),
-                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=len(linestring_ng) // 2, value=linestring_ng)]),
+linestring_lylo = rp_ly.location.pos.value + rp_lo.location.pos.value # TODO
+
+rl_lylo = RouteLink(id=getId(RouteLink, codespace, "LY-LO"), version=version.version,
+                  distance=Decimal('30000'), # TODO
+                  from_point_ref=getRef(rp_ly, RoutePointRefStructure), to_point_ref=getRef(rp_lo, RoutePointRefStructure),
+                    line_string=LineString(id=getId(RouteLink, codespace, "LY-LO").replace(":", "_").replace("-", "_"),
+                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=len(linestring_lylo) // 2, value=linestring_lylo)]),
                     operational_context_ref=getRef(operational_context))
 
 
-linestring_gn = [186054, 426733, 186058, 426735, 186213, 426755, 186263, 426760, 186351, 426754, 186363, 426797, 186410, 426939, 186464, 427089, 186477, 427091, 186497, 427093, 186513, 427092, 186549, 427086, 186605, 427078, 186696, 427067, 186759, 427060, 186763, 427082, 186766, 427095, 186766, 427106, 186768, 427122, 186784, 427238, 186787, 427266, 186800, 427266, 186808, 427271, 186811, 427283, 186818, 427340, 186837, 427467, 186857, 427591, 186881, 427743, 186883, 427752, 186898, 427791, 186904, 427813, 186902, 427831, 186902, 427856, 186908, 427864, 186916, 427871, 186960, 427900, 186987, 427920, 187007, 427949, 187040, 428013, 187048, 428029, 187126, 428286, 187174, 428437, 187185, 428475, 187140, 428489, 187133, 428466]
+linestring_loly = rp_lo.location.pos.value + rp_ly.location.pos.value # TODO
 
-rl_gn = RouteLink(id=getId(RouteLink, codespace, "G-N"), version=version.version,
-                distance=Decimal('3500'), # TODO
-                    from_point_ref=getRef(rp_g, RoutePointRefStructure), to_point_ref=getRef(rp_n, RoutePointRefStructure),
-                    line_string=LineString(id=getId(RouteLink, codespace, "G-N").replace(":", "_").replace("-", "_"),
-                        pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=len(linestring_gn) // 2, value=linestring_gn)]),
+rl_loly = RouteLink(id=getId(RouteLink, codespace, "LO-LY"), version=version.version,
+                  distance=Decimal('30000'), # TODO
+                  from_point_ref=getRef(rp_lo, RoutePointRefStructure), to_point_ref=getRef(rp_ly, RoutePointRefStructure),
+                    line_string=LineString(id=getId(RouteLink, codespace, "LO-LY").replace(":", "_").replace("-", "_"),
+                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=len(linestring_loly) // 2, value=linestring_lylo)]),
                     operational_context_ref=getRef(operational_context))
 
-route_links = [rl_ng, rl_gn]
+linestring_drlo = rp_dr.location.pos.value + rp_lo.location.pos.value # TODO
+
+rl_drlo = RouteLink(id=getId(RouteLink, codespace, "DR-LO"), version=version.version,
+                  distance=Decimal('18000'), # TODO
+                  from_point_ref=getRef(rp_dr, RoutePointRefStructure), to_point_ref=getRef(rp_lo, RoutePointRefStructure),
+                    line_string=LineString(id=getId(RouteLink, codespace, "DR-LO").replace(":", "_").replace("-", "_"),
+                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=len(linestring_drlo) // 2, value=linestring_drlo)]),
+                    operational_context_ref=getRef(operational_context))
+
+linestring_lodr = rp_lo.location.pos.value + rp_dr.location.pos.value # TODO
+
+rl_lodr = RouteLink(id=getId(RouteLink, codespace, "LO-DR"), version=version.version,
+                  distance=Decimal('18000'), # TODO
+                  from_point_ref=getRef(rp_lo, RoutePointRefStructure), to_point_ref=getRef(rp_dr, RoutePointRefStructure),
+                    line_string=LineString(id=getId(RouteLink, codespace, "LO-DR").replace(":", "_").replace("-", "_"),
+                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=len(linestring_lodr) // 2, value=linestring_lodr)]),
+                    operational_context_ref=getRef(operational_context))
+
+route_links = [rl_lylo, rl_loly, rl_drlo, rl_lodr]
 
 
 
-route_ng = Route(id=getId(Route, codespace, "N-G"), version=version.version,
-                 distance=Decimal('3500'), # TODO
+route_lylo = Route(id=getId(Route, codespace, "LY-LO"), version=version.version,
+                 distance=Decimal('30000'), # TODO
                  line_ref=getRef(line),
                    direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "N-G-N"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_n), onward_route_link_ref=getRef(rl_ng, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "N-G-G"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_g)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "LY-LO-LY"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_ly), onward_route_link_ref=getRef(rl_lylo, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "LY-LO-LO"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_lo)),
                    ])
                    )
 
-route_gn = Route(id=getId(Route, codespace, "G-N"), version=version.version,
-                 distance=Decimal('3500'), # TODO
+route_loly = Route(id=getId(Route, codespace, "LO-LY"), version=version.version,
+                 distance=Decimal('30000'), # TODO
                  line_ref=getRef(line),
-                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "G-N-G"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_g), onward_route_link_ref=getRef(rl_gn, RouteLinkRefStructure)),
-                       PointOnRoute(id=getId(PointOnRoute, codespace, "G-N-N"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_n)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "LO-LY-LO"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_lo), onward_route_link_ref=getRef(rl_loly, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "LO-LY-LY"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_ly)),
                    ])
                    )
 
-routes = [route_ng, route_gn]
+route_drlo = Route(id=getId(Route, codespace, "DR-LO"), version=version.version,
+                 distance=Decimal('18000'), # TODO
+                 line_ref=getRef(line),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
+                   points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "DR-LO-DR"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_dr), onward_route_link_ref=getRef(rl_drlo, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "DR-LO-LO"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_lo)),
+                   ])
+                   )
+
+route_lodr = Route(id=getId(Route, codespace, "LO-DR"), version=version.version,
+                 distance=Decimal('18000'), # TODO
+                 line_ref=getRef(line),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
+                   points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "LO-DR-DR"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_lo), onward_route_link_ref=getRef(rl_lodr, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "LO-DR-LO"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_dr)),
+                   ])
+                   )
+
+routes = [route_lylo, route_loly, route_drlo, route_lodr]
 
 lines = [line]
 
 def setVariants(dd: DestinationDisplay):
     dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
 
-dd_n = DestinationDisplay(id=getId(DestinationDisplay, codespace, "N"), version=version.version,
-                           name=MultilingualString(value="Centraal Station"),
-                           front_text=MultilingualString(value="Centraal Station"),
+dd_ly = DestinationDisplay(id=getId(DestinationDisplay, codespace, "LY"), version=version.version,
+                           name=MultilingualString(value="Station Lelystad"),
+                           front_text=MultilingualString(value="Station Lelystad"),
                            private_code=PrivateCode(value="1", type_value="DestinationCode"))
-setVariants(dd_n)
+setVariants(dd_ly)
 
-dd_g = DestinationDisplay(id=getId(DestinationDisplay, codespace, "G"), version=version.version,
-                           name=MultilingualString(value="Bruce Springsteen"),
-                           front_text=MultilingualString(value="Bruce Springsteen"),
+dd_dr = DestinationDisplay(id=getId(DestinationDisplay, codespace, "DR"), version=version.version,
+                           name=MultilingualString(value="Station Dronten"),
+                           front_text=MultilingualString(value="Station Dronten"),
                            private_code=PrivateCode(value="2", type_value="DestinationCode"))
-setVariants(dd_g)
+setVariants(dd_dr)
+
+dd_lo = DestinationDisplay(id=getId(DestinationDisplay, codespace, "LO"), version=version.version,
+                           name=MultilingualString(value="Lowlands"),
+                           front_text=MultilingualString(value="Lowlands"),
+                           private_code=PrivateCode(value="3", type_value="DestinationCode"))
+setVariants(dd_lo)
 
 
-destination_displays=[dd_n, dd_g]
+destination_displays=[dd_ly, dd_dr, dd_lo]
 
-sa_n = StopArea(id=getId(StopArea, codespace, "N"),
+sa_ly = StopArea(id=getId(StopArea, codespace, "LY"),
                  version=version.version,
-                 name=MultilingualString(value="Centraal Station"),
-                 private_code=PrivateCode(value="60001002", type_value="UserStopAreaCode"),
-                 topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Nijmegen"))
+                 name=MultilingualString(value="Lelystad, Station Centrum"),
+                 private_code=PrivateCode(value="49000001", type_value="UserStopAreaCode"),
+                 topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Lelystad"))
                  )
 
-sa_g = StopArea(id=getId(StopArea, codespace, "G"),
+
+sa_dr = StopArea(id=getId(StopArea, codespace, "DR"),
                  version=version.version,
-                 name=MultilingualString(value="Festival"),
-                 private_code=PrivateCode(value="60000001", type_value="UserStopAreaCode"),
-                 topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Nijmegen"))
+                 name=MultilingualString(value="Dronten, Station"),
+                 private_code=PrivateCode(value="49430390", type_value="UserStopAreaCode"),
+                 topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Dronten"))
                  )
 
-stop_areas=[sa_n, sa_g]
+sa_lo = StopArea(id=getId(StopArea, codespace, "G"),
+                 version=version.version,
+                 name=MultilingualString(value="Biddinghuizen, Lowlands"),
+                 private_code=PrivateCode(value="49810001", type_value="UserStopAreaCode"),
+                 topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Biddinghuizen"))
+                 )
 
-ssp_n = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "N"), version=version.version,
-                              name=MultilingualString(value="Centraal Station"),
-                              location=LocationStructure2(pos=Pos(value=[187126, 428463], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "N"), version=version.version, project_to_point_ref=getRef(rp_n, PointRefStructure))]),
+stop_areas=[sa_ly, sa_dr, sa_lo]
+
+ssp_ly = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "LY"), version=version.version,
+                              name=MultilingualString(value="Lelystad, Station Centrum"),
+                              location=LocationStructure2(pos=Pos(value=[160611, 502254], srs_dimension=2)),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "LY"), version=version.version, project_to_point_ref=getRef(rp_ly, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
-                              stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_n)]),
-                              private_code=PrivateCode(value="60001002", type_value="UserStopCode"))
+                              stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_ly)]),
+                              private_code=PrivateCode(value="49000001", type_value="UserStopCode"))
 
-ssp_g = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "G"), version=version.version,
-                              name=MultilingualString(value="Festival"),
-                              location=LocationStructure2(pos=Pos(value=[186006, 426725], srs_dimension=2)),
-                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "G"), version=version.version, project_to_point_ref=getRef(rp_g, PointRefStructure))]),
+ssp_dr = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DR"), version=version.version,
+                              name=MultilingualString(value="Dronten, Station"),
+                              location=LocationStructure2(pos=Pos(value=[177667, 505203], srs_dimension=2)),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DR"), version=version.version, project_to_point_ref=getRef(rp_dr, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
-                              stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_g)]),
-                              private_code=PrivateCode(value="60000001", type_value="UserStopCode"))
+                              stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dr)]),
+                              private_code=PrivateCode(value="49430425", type_value="UserStopCode"))
+
+ssp_lo = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "LO"), version=version.version,
+                              name=MultilingualString(value="Biddinghuizen, Lowlands"),
+                              location=LocationStructure2(pos=Pos(value=[180461, 494075], srs_dimension=2)),
+                              projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "LO"), version=version.version, project_to_point_ref=getRef(rp_lo, PointRefStructure))]),
+                              for_alighting=True, for_boarding=True,
+                              stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_lo)]),
+                              private_code=PrivateCode(value="49810001", type_value="UserStopCode"))
 
 
-scheduled_stop_points=[ssp_n, ssp_g]
+scheduled_stop_points=[ssp_ly, ssp_dr, ssp_lo]
 
-tl_ng = TimingLink(id=getId(TimingLink, codespace, "N-G"), version=version.version,
-                   distance=Decimal('3500'), # TODO
-                   from_point_ref=getRef(ssp_n, TimingPointRefStructure), to_point_ref=getRef(ssp_g, TimingPointRefStructure),
+tl_lylo = TimingLink(id=getId(TimingLink, codespace, "LY-LO"), version=version.version,
+                   distance=Decimal('30000'), # TODO
+                   from_point_ref=getRef(ssp_ly, TimingPointRefStructure), to_point_ref=getRef(ssp_lo, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
-tl_gn = TimingLink(id=getId(TimingLink, codespace, "G-N"), version=version.version,
-                   distance=Decimal('3500'), #TODO
-                   from_point_ref=getRef(ssp_g, TimingPointRefStructure), to_point_ref=getRef(ssp_n, TimingPointRefStructure),
+tl_loly = TimingLink(id=getId(TimingLink, codespace, "LO-LY"), version=version.version,
+                   distance=Decimal('30000'), # TODO
+                   from_point_ref=getRef(ssp_lo, TimingPointRefStructure), to_point_ref=getRef(ssp_ly, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
-timing_links = [tl_ng, tl_gn]
+tl_drlo = TimingLink(id=getId(TimingLink, codespace, "DR-LO"), version=version.version,
+                   distance=Decimal('18000'), # TODO
+                   from_point_ref=getRef(ssp_dr, TimingPointRefStructure), to_point_ref=getRef(ssp_lo, TimingPointRefStructure),
+                    operational_context_ref=getRef(operational_context))
 
+tl_lodr = TimingLink(id=getId(TimingLink, codespace, "LO-DR"), version=version.version,
+                   distance=Decimal('18000'), # TODO
+                   from_point_ref=getRef(ssp_lo, TimingPointRefStructure), to_point_ref=getRef(ssp_dr, TimingPointRefStructure),
+                    operational_context_ref=getRef(operational_context))
 
-stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "N"), version=version.version, order=1,
-                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_n),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:60001002", QuayRef, "any")), # TODO
-                  PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "G"), version=version.version, order=1,
-                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_g),
-                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:60000001", QuayRef, "any"))]
+timing_links = [tl_lylo, tl_loly, tl_drlo, tl_lodr]
 
-sjp_ng = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "N-G"), version=version.version,
-                                 route_ref_or_route_view=getRef(route_ng),
+stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "LY"), version=version.version, order=1,
+                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_ly),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:49000001", QuayRef, "any")),
+                  PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "LO"), version=version.version, order=1,
+                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_lo),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:49810001", QuayRef, "any")),
+                  PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "DR"), version=version.version,
+                                          order=1,
+                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(
+                                              ssp_dr),
+                                          taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:49430425", QuayRef,
+                                                                                        "any")),
+                  ]
+
+sjp_lylo = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "LY-LO"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_lylo),
                                  direction_type=DirectionTypeEnumeration.INBOUND,
-                                 destination_display_ref_or_destination_display_view=getRef(dd_g),
+                                 destination_display_ref_or_destination_display_view=getRef(dd_lo),
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
-                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "N-G-N"), version=version.version, order=1,
-                                                                   scheduled_stop_point_ref=getRef(ssp_n),
-                                                                   onward_timing_link_ref=getRef(tl_ng, TimingLinkRefStructure),
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "LY-LO-LY"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_ly),
+                                                                   onward_timing_link_ref=getRef(tl_lylo, TimingLinkRefStructure),
                                                                    is_wait_point=False),
                                          StopPointInJourneyPattern(
-                                             id=getId(StopPointInJourneyPattern, codespace, "N-G-G"),
+                                             id=getId(StopPointInJourneyPattern, codespace, "LY-LO-LO"),
                                              version=version.version, order=2,
-                                             scheduled_stop_point_ref=getRef(ssp_g)),
+                                             scheduled_stop_point_ref=getRef(ssp_lo)),
                                      ]
                                     )
                                  )
 
-sjp_gn = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "G-N"), version=version.version,
-                                 route_ref_or_route_view=getRef(route_gn),
+sjp_loly = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "LO-LY"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_loly),
                                  direction_type=DirectionTypeEnumeration.OUTBOUND,
-                                 destination_display_ref_or_destination_display_view=getRef(dd_n),
+                                 destination_display_ref_or_destination_display_view=getRef(dd_ly),
                                  points_in_sequence=PointsInJourneyPatternRelStructure(
                                      point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
-                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "G-N-G"), version=version.version, order=1,
-                                                                   scheduled_stop_point_ref=getRef(ssp_g),
-                                                                   onward_timing_link_ref=getRef(tl_gn, TimingLinkRefStructure),
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "LO-LY-LO"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_lo),
+                                                                   onward_timing_link_ref=getRef(tl_loly, TimingLinkRefStructure),
                                                                    is_wait_point=False),
                                          StopPointInJourneyPattern(
-                                             id=getId(StopPointInJourneyPattern, codespace, "G-N-N"),
+                                             id=getId(StopPointInJourneyPattern, codespace, "LO-LY-LY"),
                                              version=version.version, order=2,
-                                             scheduled_stop_point_ref=getRef(ssp_n)),
+                                             scheduled_stop_point_ref=getRef(ssp_ly)),
+                                     ]
+                                    )
+                                 )
+
+sjp_drlo = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "DR-LO"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_drlo),
+                                 direction_type=DirectionTypeEnumeration.INBOUND,
+                                 destination_display_ref_or_destination_display_view=getRef(dd_lo),
+                                 points_in_sequence=PointsInJourneyPatternRelStructure(
+                                     point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "DR-LO-DR"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_dr),
+                                                                   onward_timing_link_ref=getRef(tl_drlo, TimingLinkRefStructure),
+                                                                   is_wait_point=False),
+                                         StopPointInJourneyPattern(
+                                             id=getId(StopPointInJourneyPattern, codespace, "DR-LO-LO"),
+                                             version=version.version, order=2,
+                                             scheduled_stop_point_ref=getRef(ssp_lo)),
+                                     ]
+                                    )
+                                 )
+
+sjp_lodr = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "LO-DR"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_lodr),
+                                 direction_type=DirectionTypeEnumeration.OUTBOUND,
+                                 destination_display_ref_or_destination_display_view=getRef(dd_dr),
+                                 points_in_sequence=PointsInJourneyPatternRelStructure(
+                                     point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "LO-DR-LO"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_lo),
+                                                                   onward_timing_link_ref=getRef(tl_lodr, TimingLinkRefStructure),
+                                                                   is_wait_point=False),
+                                         StopPointInJourneyPattern(
+                                             id=getId(StopPointInJourneyPattern, codespace, "LO-DR-DR"),
+                                             version=version.version, order=2,
+                                             scheduled_stop_point_ref=getRef(ssp_dr)),
                                      ]
                                     )
                                  )
 
 
-journey_patterns=[sjp_ng, sjp_gn]
+journey_patterns=[sjp_loly, sjp_lylo, sjp_drlo, sjp_lodr]
 
-tdt_ng = TimeDemandType(id=getId(TimeDemandType, codespace, "N-G"), version=version.version,
-                          run_times=JourneyRunTimesRelStructure(journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, codespace, "N-G"), version=version.version, timing_link_ref=getRef(tl_ng), run_time=XmlDuration("PT480S"))]))
+tdt_lylo = TimeDemandType(id=getId(TimeDemandType, codespace, "LY-LO"), version=version.version,
+                          run_times=JourneyRunTimesRelStructure(journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, codespace, "LY-LO"), version=version.version, timing_link_ref=getRef(tl_lylo), run_time=XmlDuration("PT1800S"))]))
 
-tdt_gn = TimeDemandType(id=getId(TimeDemandType, codespace, "G-N"), version=version.version,
-                          run_times=JourneyRunTimesRelStructure(journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, codespace, "G-N"), version=version.version, timing_link_ref=getRef(tl_gn), run_time=XmlDuration("PT480S"))]))
+tdt_loly = TimeDemandType(id=getId(TimeDemandType, codespace, "LO-LY"), version=version.version,
+                          run_times=JourneyRunTimesRelStructure(journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, codespace, "LO-LY"), version=version.version, timing_link_ref=getRef(tl_loly), run_time=XmlDuration("PT1800S"))]))
 
-time_demand_types=[tdt_ng, tdt_gn]
+tdt_drlo = TimeDemandType(id=getId(TimeDemandType, codespace, "DR-LO"), version=version.version,
+                          run_times=JourneyRunTimesRelStructure(journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, codespace, "DR-LO"), version=version.version, timing_link_ref=getRef(tl_drlo), run_time=XmlDuration("PT1200S"))]))
+
+tdt_lodr = TimeDemandType(id=getId(TimeDemandType, codespace, "LO-DR"), version=version.version,
+                          run_times=JourneyRunTimesRelStructure(journey_run_time=[JourneyRunTime(id=getId(JourneyRunTime, codespace, "LO-DR"), version=version.version, timing_link_ref=getRef(tl_lodr), run_time=XmlDuration("PT1200S"))]))
+
+time_demand_types=[tdt_lylo, tdt_loly, tdt_drlo, tdt_lodr]
 
 service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_links=route_links, routes=routes, lines=lines,
                                                destination_displays=destination_displays, scheduled_stop_points=scheduled_stop_points, stop_areas=stop_areas,
@@ -341,7 +478,7 @@ timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=av
 composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version],
                                                  responsibility_set=responsibility_set_partitie,
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
-publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste MOJO export")
+publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="MOJO export")
 
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
