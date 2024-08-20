@@ -181,21 +181,26 @@ def main(gtfs: str, database: str):
 
     con = duckdb.connect(database=database)
 
-    zip = zipfile.ZipFile(gtfs)
+    zf = zipfile.ZipFile(gtfs)
 
-    handle_file(con, zip, 'feed_info.txt', feed_info_txt)
-    handle_file(con, zip, 'agency.txt', agency_txt)
-    handle_file(con, zip, 'calendar_dates.txt', calendar_dates_txt)
-    handle_file(con, zip, 'calendar.txt', calendar_txt)
-    handle_file(con, zip, 'routes.txt', routes_txt)
-    handle_file(con, zip, 'levels.txt', levels_txt)
-    handle_file(con, zip, 'stops.txt', stops_txt)
-    handle_file(con, zip, 'shapes.txt', shapes_txt)
-    handle_file(con, zip, 'trips.txt', trips_txt)
-    handle_file(con, zip, 'transfers.txt', transfers_txt)
-    handle_file(con, zip, 'stop_times.txt', stop_times_txt)
-    handle_file(con, zip, 'frequencies.txt', frequencies_txt)
-    handle_file(con, zip, 'pathways.txt', pathways_txt)
+    # check if this is a GTFS file
+    if len(set(zf.namelist()) & {'agency.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'}) == 0:
+        print('This is not a GTFS file')
+        return
+
+    handle_file(con, zf, 'feed_info.txt', feed_info_txt)
+    handle_file(con, zf, 'agency.txt', agency_txt)
+    handle_file(con, zf, 'calendar_dates.txt', calendar_dates_txt)
+    handle_file(con, zf, 'calendar.txt', calendar_txt)
+    handle_file(con, zf, 'routes.txt', routes_txt)
+    handle_file(con, zf, 'levels.txt', levels_txt)
+    handle_file(con, zf, 'stops.txt', stops_txt)
+    handle_file(con, zf, 'shapes.txt', shapes_txt)
+    handle_file(con, zf, 'trips.txt', trips_txt)
+    handle_file(con, zf, 'transfers.txt', transfers_txt)
+    handle_file(con, zf, 'stop_times.txt', stop_times_txt)
+    handle_file(con, zf, 'frequencies.txt', frequencies_txt)
+    handle_file(con, zf, 'pathways.txt', pathways_txt)
 
     create_feed_info(con)
 
