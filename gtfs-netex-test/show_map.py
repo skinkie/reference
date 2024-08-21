@@ -1,9 +1,15 @@
 import folium
 import pandas as pd
-from io import BytesIO
 import zipfile
-import requests
+import random
 
+
+# Generate a random dark color
+def generate_random_dark_color():
+    r = random.randint(0, 200)  # Random red component (0-128)
+    g = random.randint(0, 200)  # Random green component (0-128)
+    b = random.randint(0, 200)  # Random blue component (0-128)
+    return '#%02x%02x%02x' % (r, g, b)
 def main(gtfs_zip_file,map_file):
     # Read GTFS files using pandas
     # Read the GTFS files directly from the ZIP archive using pandas
@@ -29,12 +35,17 @@ def main(gtfs_zip_file,map_file):
         route_id = route['route_id']
         route_trips = df_trips[df_trips['route_id'] == route_id]['trip_id']
         route_stops = df_stop_times[df_stop_times['trip_id'].isin(route_trips)]['stop_id'].unique().tolist()
-        route_stop_coords = df_stops[df_stops['stop_id'].isin(route_stops)][['stop_lat', 'stop_lon']].values.tolist()
-
+        route_stop_coords=[]
+        for astop in route_stops:
+            x=df_stops[df_stops['stop_id']==str(astop)]
+            route_stop_coords.append([x['stop_lat'].values[0],x['stop_lon'].values[0]])
+        if len(route_stop_coords)==0:
+            print (f"route {route_id} has no valid stop sequence.")
+            continue
         folium.PolyLine(
             locations=route_stop_coords,
-            color='blue',
-            weight=2,
+            color=generate_random_dark_color(),
+            weight=4,
             opacity=0.8,
             popup=route['route_short_name']
         ).add_to(m)
