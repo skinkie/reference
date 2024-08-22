@@ -609,24 +609,24 @@ timing_links = [tl_th, tl_ht, tl_vh, tl_hv, tl_tv, tl_vt]
 
 
 stop_assignments=[PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "HT"), version=version.version, order=1,
-                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_v),
+                                          fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(ssp_ht),
                                           taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:20670002", QuayRef, "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "HV"), version=version.version,
                                           order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(
-                                              ssp_v),
+                                              ssp_hv),
                                           taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:20670003", QuayRef,
                                                                                         "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TH"), version=version.version,
                                           order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(
-                                              ssp_v),
+                                              ssp_th),
                                           taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:29110001", QuayRef,
                                                                                         "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "TV"), version=version.version,
                                           order=1,
                                           fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point=getRef(
-                                              ssp_v),
+                                              ssp_tv),
                                           taxi_stand_ref_or_quay_ref_or_quay=getFakeRef("NL:CHB:Quay:29110003", QuayRef,
                                                                                         "any")),
                   PassengerStopAssignment(id=getId(PassengerStopAssignment, codespace, "V"), version=version.version, order=1,
