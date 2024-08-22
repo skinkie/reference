@@ -8,7 +8,7 @@ def process_assertions(assertions_file, input_file):
 
     # Create the namespace map with the URI as the value
     namespaces = {'netex': namespace_uri}
-    with open(input_file, 'r') as file:
+    with open(input_file, 'r',encoding='utf-8') as file:
         input_content = file.read()
 
     with open(assertions_file, 'r') as file:
@@ -19,7 +19,7 @@ def process_assertions(assertions_file, input_file):
         if assertion.startswith('#'):
             comment = assertion.split(' ', 1)[1]
             print(f'comment: {comment}')
-        if assertion.startswith('contains'):
+        elif assertion.startswith('contains'):
             regex = assertion.split(' ', 1)[1]
             if re.search(regex, input_content):
                 print(f'Assertion PASSed: File contains regex "{regex}"')
