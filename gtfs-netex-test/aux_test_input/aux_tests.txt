@@ -1,0 +1,128 @@
+[
+  {
+    "block": "Block 3: Blablacar Bus",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "gtfs_import_to_db.py", "args": ["./aux_test_input/blablacar.zip ./aux_test_processing/gtfs-import.duckdb"]},
+        {"script": "gtfs_convert_to_db.py", "args": ["./aux_test_processing/gtfs-import.duckdb ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/blablacar-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/blablacar-assertions.txt ./aux_test_processing/blablacar-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/blablacar-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/blablacar-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/blablacar-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/blablacar-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/blablacar-gtfs.zip ./aux_test_processing/blablacar-map.html"]}
+        ]
+  },
+  {
+    "block": "Block 7: Solea",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "gtfs_import_to_db.py", "args": ["./aux_test_input/solea.zip ./aux_test_processing/gtfs-import.duckdb"]},
+        {"script": "gtfs_convert_to_db.py", "args": ["./aux_test_processing/gtfs-import.duckdb ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/solea-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/solea-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/solea-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/solea-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/solea-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/solea-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/solea-gtfs.zip ./aux_test_processing/solea-map.html"]}
+        ]
+  },  {
+    "block": "Block 3: Flixbus",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "gtfs_import_to_db.py", "args": ["./aux_test_input/flixbus.zip ./aux_test_processing/gtfs-import.duckdb"]},
+        {"script": "gtfs_convert_to_db.py", "args": ["./aux_test_processing/gtfs-import.duckdb ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/flixbus-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/flixbus-assertions.txt ./aux_test_processing/flixbus-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/flixbus-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/flixbus-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/flixbus-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/flixbus-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/flixbus-gtfs.zip ./aux_test_processing/flixbus-map.html"]}
+        ]
+  },
+  {
+    "block": "Block 4: mobiliaetsverbünde at Test",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/at-test.zip ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/at-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/at-assertions.txt ./aux_test_processing/at-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/at-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/at-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/at-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/at-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/at-gtfs.zip ./aux_test_processing/at-map.html"]}
+        ]
+  },
+    {
+    "block": "Block 6: Trenitalia",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/trenitalia.zip ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/trenitalia-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/trenitalia-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/trenitalia-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/trenitalia-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/trenitalia-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/trenitalia-gtfs.zip ./aux_test_processing/trenitalia-map.html"]}
+        ]
+  },
+      {
+    "block": "Block 6: Milano",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/milano.zip ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/trenitalia-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/milano-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/milano-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/milano-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/milano-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/milano-gtfs.zip ./aux_test_processing/milano-map.html"]}
+        ]
+  },
+  {
+    "block": "Block 6: SNCF",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/sncf-test.zip ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/sncf-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/sncf-assertions.txt ./aux_test_processing/sncf-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/sncf-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/sncf-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/sncf-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/sncf-gtfs.zip ./aux_test_processing/sncf-map.html"]}
+        ]
+  },
+    {
+    "block": "Block 1: Swiss data",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "swiss_to_db.py", "args": ["./aux_test_input/swiss.zip ./aux_test_processing/swiss-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/swiss-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/swiss-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/swiss-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/swiss-assertions.txt ./aux_test_processing/swiss-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/swiss-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/swiss-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/swiss-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/swiss-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/swiss-gtfs.zip ./aux_test_processing/swiss-map.html"]}
+        ]
+  }
+,
+  {
+    "block": "Block 0: Cleaning",
+    "scripts": [
+      {"script": "#clean", "args": ["./aux_test_processing"]}
+    ]
+  }
+]

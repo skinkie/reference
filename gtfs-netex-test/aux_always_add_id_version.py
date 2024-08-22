@@ -27,7 +27,8 @@ def add_id_and_version(input_file, output_file):
         root = tree.getroot()
 
         # Iterate over the elements in the XML tree
-        for sequence, element_name in enumerate(element_names, start=1):
+        sequence=1
+        for element_name in element_names:
             # Find elements by name
             elements = root.findall('.//{http://www.netex.org.uk/netex}'+element_name)
 
@@ -35,6 +36,7 @@ def add_id_and_version(input_file, output_file):
             for element in elements:
                 if 'id' not in element.attrib:
                     element.set('id', '{}{}'.format(element_name, sequence))
+                    sequence=sequence+1
                 if 'version' not in element.attrib:
                     element.set('version', 'any')
 
@@ -49,14 +51,16 @@ def add_id_and_version(input_file, output_file):
         root = tree.getroot()
 
         # Iterate over the elements in the XML tree
-        for sequence, element_name in enumerate(element_names, start=1):
+        for element_name in element_names:
             # Find elements by name
             elements = root.findall('.//{http://www.netex.org.uk/netex}'+element_name)
 
             # Add id and version attributes if missing
+            sequence=1
             for element in elements:
                 if 'id' not in element.attrib:
                     element.set('id', '{}{}'.format(element_name, sequence))
+                    sequence=sequence+1
                 if 'version' not in element.attrib:
                     element.set('version', 'any')
 
