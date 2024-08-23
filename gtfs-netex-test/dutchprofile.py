@@ -21,6 +21,7 @@ from netex import Codespace, VehicleScheduleFrame, Version, ServiceCalendarFrame
     Authority, Operator, ParticipantRef, ExternalObjectRefStructure
 from refs import getId, getRef
 
+BISON_VERSION = '9.2.4'
 
 class DutchProfile:
     codespace: Codespace
@@ -57,7 +58,7 @@ class DutchProfile:
             resource_frame = ResourceFrame(
                 id=getId(ResourceFrame, self.codespace, id),
                 version=self.version.version,
-                type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_RESOURCE", version="9.3.0"),
+                type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_RESOURCE", version=BISON_VERSION),
                 data_sources=data_sources,
                 responsibility_sets=responsibility_sets,
                 organisations=organisations,
@@ -149,7 +150,7 @@ class DutchProfile:
             service_frame = ServiceFrame(
                 id=getId(ServiceFrame, self.codespace, id),
                 version=self.version.version,
-                type_of_frame_ref = TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_SERVICE", version="9.3.0"),
+                type_of_frame_ref = TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_SERVICE", version=BISON_VERSION),
                 route_points=route_points,
                 route_links=route_links,
                 routes=routes,
@@ -185,7 +186,7 @@ class DutchProfile:
             timetable_frame = TimetableFrame(
                 id=getId(TimetableFrame, self.codespace, id),
                 version=self.version.version,
-                type_of_frame_ref = TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_TIMETABLE", version="9.3.0"),
+                type_of_frame_ref = TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_TIMETABLE", version=BISON_VERSION),
                 content_validity_conditions=content_validity_conditions,
                 operator_view=operator_view,
                 vehicle_journeys=vehicle_journeys,
@@ -208,7 +209,7 @@ class DutchProfile:
             service_calendar_frame = ServiceCalendarFrame(
                 id=getId(ServiceCalendarFrame, self.codespace, id),
                 version=self.version.version,
-                type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_CALENDAR", version="9.3.0"),
+                type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_CALENDAR", version=BISON_VERSION),
                 day_types=day_types,
                 day_type_assignments=day_type_assignments,
             )
@@ -224,7 +225,7 @@ class DutchProfile:
             vehicle_schedule_frame = VehicleScheduleFrame(
                 id=getId(VehicleScheduleFrame, self.codespace, id),
                 version=self.version.version,
-                type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_VEHICLE", version="9.3.0"),
+                type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_VEHICLE", version=BISON_VERSION),
                 blocks=blocks
             )
             return [vehicle_schedule_frame]
@@ -250,7 +251,7 @@ class DutchProfile:
         composite_frame = CompositeFrame(
             id=getId(CompositeFrame, self.codespace, id),
             version=self.version.version,
-            type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_BASELINE", version="9.3.0"),
+            type_of_frame_ref=TypeOfFrameRef(ref="BISON:TypeOfFrame:NL_TT_BASELINE", version=BISON_VERSION),
             frame_defaults=VersionFrameDefaultsStructure(
                 default_codespace_ref=getRef(self.codespace, CodespaceRefStructure),
                 default_data_source_ref=getRef(self.data_source, DataSourceRefStructure),
