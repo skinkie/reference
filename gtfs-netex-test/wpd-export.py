@@ -527,7 +527,7 @@ service_journeys, availability_conditions = acp.deduplicate(sjs)
 
 for ac in availability_conditions:
     if version.start_date.to_datetime() > ac.from_date.to_datetime():
-        version.start_date = ac.from_date.to
+        version.start_date = ac.from_date
     if version.end_date.to_datetime() < ac.to_date.to_datetime():
         version.end_date = ac.to_date
 
