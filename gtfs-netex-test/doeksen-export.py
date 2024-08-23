@@ -30,6 +30,8 @@ import datetime
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
 
+from_date = datetime.date.today().isoformat().replace('-', '')
+
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
 short_name = "DOEKSEN"
@@ -40,22 +42,21 @@ codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=sh
 dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
                       xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
-start_date = datetime.datetime(year=2023, month=11, day=29)
+start_date = datetime.datetime(year=2099, month=11, day=29)
 end_date = datetime.datetime(year=2023, month=12, day=29)
 
-version = Version(id=getId(Version, codespace, str(1)),
+version = Version(id=getId(Version, codespace, str(from_date)),
                   version=str(1),
                   start_date=XmlDateTime.from_datetime(start_date),
                   end_date=XmlDateTime.from_datetime(end_date),
                   version_type=VersionTypeEnumeration.BASELINE)
 
 stt = SimpleTimetable(codespace, version)
-from_date = datetime.date.today().isoformat().replace('-', '')
 service_journeys, availability_conditions, time_demand_types = stt.simple_timetable2(f"../doeksen/scrape-output/doeksen-{from_date}.csv")
 
 for ac in availability_conditions:
     if version.start_date.to_datetime() > ac.from_date.to_datetime():
-        version.start_date = ac.from_date.to
+        version.start_date = ac.from_date
     if version.end_date.to_datetime() < ac.to_date.to_datetime():
         version.end_date = ac.to_date
 
