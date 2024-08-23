@@ -210,6 +210,12 @@ class GtfsNeTexProfile(CallsProfile):
                 if agency_id is not None:
                     operator_ref = getFakeRef(getId(Operator, self.codespace, get_or_none(agency_ids, i)), OperatorRef, self.version.version)
 
+                if ':Line:' in route_ids[i]:
+                    # Avoid recoding ids
+                    id = route_ids[i]
+                else:
+                    id = getId(Line, self.codespace, route_ids[i])
+
                 line = Line(id=getId(Line, self.codespace, get_or_none(route_ids, i)),
                             version=self.version.version,
                             name=MultilingualString(value=get_or_none(route_long_names, i)),
