@@ -27,7 +27,7 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ServiceJourney, \
     MobilityFacilityList, SanitaryFacilityList, \
     TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
-    TransportTypeVersionStructure, PublicCodeStructure
+    TransportTypeVersionStructure, PublicCodeStructure, ExternalObjectRefStructure
 
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
@@ -82,8 +82,8 @@ stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(20
 
 service_journeys, availability_conditions = stt.simple_timetable_from_dict(simple_timetable)
 
-version.start_date = availability_conditions[0].from_date
-version.end_date = availability_conditions[0].to_date
+version.start_date = min([ac.from_date for ac in availability_conditions])
+version.end_date = max([ac.to_date for ac in availability_conditions])
 
 data_source = DataSource(id=getId(DataSource, codespace, short_name),
                          version=version.version,
@@ -142,6 +142,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Standaard"), versio
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "Standaard"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=80, seating_capacity=80)]),
                            transport_mode=AllVehicleModesOfTransportEnumeration.BUS,
+                           length=Decimal("122"),
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
@@ -164,6 +165,7 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
 
 line = Line(id=getId(Line, codespace, "MOJO"), version=version.version, name=MultilingualString(value="MOJO"),
               monitored=False,
+              external_line_ref=ExternalObjectRefStructure(type_value="VeTagLineNumber", ref="1"),
               responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Lowlands Pendelbus"),
               transport_mode=AllVehicleModesOfTransportEnumeration.BUS,
