@@ -337,7 +337,7 @@ line_hv = Line(id=getId(Line, codespace, "HV"), version=version.version, name=Mu
               description=MultilingualString(value="Veer tussen Harlingen en Vlieland"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
-              public_code=PublicCodeStructure(value="HT"),
+              public_code=PublicCodeStructure(value="HV"),
               private_code=PrivateCode(value="2", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "HV"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
@@ -349,7 +349,7 @@ line_tv = Line(id=getId(Line, codespace, "TV"), version=version.version, name=Mu
               description=MultilingualString(value="Veer tussen Terschelling en Vlieland"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
-              public_code=PublicCodeStructure(value="HT"),
+              public_code=PublicCodeStructure(value="TV"),
               private_code=PrivateCode(value="3", type_value="LinePlanningNumber"),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "TV"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
