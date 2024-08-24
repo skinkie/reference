@@ -48,12 +48,14 @@ def main(source_database_file: str, operating_day: OperatingDay, line_ref: LineR
                 serializer.write(out, sd, ns_map)
 
 if __name__ == '__main__':
+    from datetime import date
+
     import argparse
     argument_parser = argparse.ArgumentParser(description='Convert a NeTEx file to SIRI-PT')
     argument_parser.add_argument('original', type=str, help='The original DuckDB NeTEx database')
-    argument_parser.add_argument('operating_day', type=str, help='OperatingDay to export')
-    argument_parser.add_argument('line_ref', type=str, help='LineRef to export')
-    argument_parser.add_argument('direction_ref', type=str, help='DirectionRef to export')
+    argument_parser.add_argument('--operating_day', default=str(date.today()), type=str, help='OperatingDay to export')
+    argument_parser.add_argument('--line_ref', type=str, help='LineRef to export')
+    argument_parser.add_argument('--direction_ref', type=str, help='DirectionRef to export')
     argument_parser.add_argument('output', type=str, help='Output filename for SIRI-PT')
     args = argument_parser.parse_args()
 
