@@ -452,10 +452,14 @@ def insert_database(con, classes, f=None, cursor=False):
     context = etree.iterparse(f, events=events, remove_blank_text=True)
     current_element = None
     for event, element in context:
-        if event == 'end' and element.tag in interesting_element_names: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
+        if event == 'start' and current_element is None and element.tag in interesting_element_names:
+            current_element = element.tag
+
+        elif event == 'end' and current_element == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
             # current_element = element.tag
             xml = etree.tostring(element, encoding='unicode')
             if 'id' not in element.attrib:
+                current_element = None
                 # print(xml)
                 continue
 
@@ -498,10 +502,7 @@ def insert_database(con, classes, f=None, cursor=False):
                     raise
                     pass
 
-
-        # elif event == 'end' and element.tag == current_element:
-        #    current_element = None
-
+            current_element = None
 
 def open_netex_file(filename):
     if filename.endswith('.xml.gz'):
