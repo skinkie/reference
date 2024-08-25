@@ -4,6 +4,8 @@
 gtfs2.duckdb
 **/venv
 **/aux_test_processing
+**/aux_test_input
+
 
 
 

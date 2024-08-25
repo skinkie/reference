@@ -102,7 +102,7 @@ def main(script_file,log_file):
                 if result.returncode == 0:
                     print(f'Script {script_name} executed successfully. Proceeding to the next script.')
                 elif result.returncode == 1:
-                    print(f'Script {script_name} returned an error. Terminating the block of scripts.')
+                    print(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
                     break
                 else:
                     print(f'Script {script_name} returned an unexpected error code: {result.returncode}.')
