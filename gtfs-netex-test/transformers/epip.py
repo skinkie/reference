@@ -199,9 +199,12 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
 
                                 project_polygon(quay.polygon_or_multi_surface, generator_defaults, 'urn:ogc:def:crs:EPSG::4326')
 
-                            project_location_4326(quay.centroid.location, generator_defaults)
+                            if quay.centroid:
+                                project_location_4326(quay.centroid.location, generator_defaults)
 
-                project_location_4326(stop_place.centroid.location, generator_defaults)
+                if stop_place.centroid:
+                    project_location_4326(stop_place.centroid.location, generator_defaults)
+
                 retained_stop_places.append(stop_place)
 
             write_objects(write_con, retained_stop_places, True, True)
