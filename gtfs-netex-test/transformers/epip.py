@@ -443,11 +443,11 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
         else:
             attach_objects(write_con, read_database, ServiceJourneyPattern)
 
-        # TODO: this must be updated (embedding)
         if len(uic_operating_periods) == 0:
-            day_types = getIndex(load_local(read_con, DayType))
-            uic_operating_periods = load_local(read_con, UicOperatingPeriod)
-            day_type_assignments = load_local(read_con, DayTypeAssignment)
+            service_calendars: List[ServiceCalendar] = load_local(read_con, ServiceCalendar)
+            day_types = getIndex(list(chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars])))
+            uic_operating_periods = list(chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars]))
+            day_type_assignments = list(chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars]))
 
         service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
 
