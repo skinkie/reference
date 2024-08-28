@@ -288,6 +288,25 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             ),
         },
     )
+
+    @property
+    def operator_ref(self) -> OperatorRef:
+        if isinstance(self.operator_ref_or_operator_view, OperatorRef):
+            return self.operator_ref_or_operator_view
+
+    @operator_ref.setter
+    def operator_ref(self, v: OperatorRef) -> None:
+        self.operator_ref_or_operator_view = v
+
+    @property
+    def operator_view(self) -> OperatorView:
+        if isinstance(self.operator_ref_or_operator_view, OperatorView):
+            return self.operator_ref_or_operator_view
+
+    @operator_view.setter
+    def operator_view(self, v: OperatorView) -> None:
+        self.operator_ref_or_operator_view = v
+
     flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view: Optional[Union[FlexibleLineRef, LineRef, LineView, FlexibleLineView]] = field(
         default=None,
         metadata={
