@@ -10,6 +10,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from anyintodbnew import setup_database, get_interesting_classes
 
 from netex import Codespace
+from netexio.dbaccess import attach_source
 
 from transformers.direction import infer_directions_from_sjps_and_apply
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
@@ -36,6 +37,7 @@ def main(source_database_file: str, target_database_file: str):
     classes = get_interesting_classes(filter=EPIP_CLASSES)
     with sqlite3.connect(target_database_file) as con:
         setup_database(con, classes, True)
+        # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
     epip_line_memory(source_database_file, target_database_file, generator_defaults)
     infer_locations_from_quay_or_stopplace_and_apply(source_database_file, target_database_file, generator_defaults)
     epip_scheduled_stop_point_memory(target_database_file, target_database_file, generator_defaults)

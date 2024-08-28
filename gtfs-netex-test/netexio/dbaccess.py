@@ -298,7 +298,21 @@ def update_generator(con, clazz, generator: Generator):
     else:
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
 
-    cur.execute(sql_create_table)
+    # This is not used effectively at this point, considering that DuckDB's ATTACH is not persistent
+    # https://github.com/duckdb/duckdb-web/issues/3495
+    cur.execute(f"SELECT table_type FROM information_schema.tables WHERE table_name = '{objectname}';")
+    result = cur.fetchone()
+    if result:
+        if result[0] == 'VIEW':
+            cur.execute(f"ALTER VIEW {objectname} RENAME TO x{objectname};")
+            cur.execute(f"CREATE TABLE {objectname} AS SELECT * FROM x{objectname};")
+            cur.execute(f"DROP VIEW x{objectname};")
+        else:
+            # In this case it already exists.
+            pass
+
+    else:
+        cur.execute(sql_create_table)
 
     def _prepare4(generator4, objectname):
         i = 0
@@ -504,13 +518,17 @@ def insert_database(con, classes, f=None, cursor=False):
 
             current_element = None
 
-def attach_objects(con, read_database, clazz):
+def attach_objects(con, read_database: str, clazz):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
+    # con.execute(f"DROP TABLE IF EXISTS {type};")
+    # con.execute(f"CREATE VIEW {type} AS SELECT * FROM original.{type};")
 
-    cur = con.cursor()
-    cur.execute(f"ATTACH IF NOT EXISTS '{read_database}' AS original (READ_ONLY);")
-    cur.execute(f"DROP TABLE IF EXISTS {type};")
-    cur.execute(f"CREATE VIEW {type} AS SELECT * FROM original.{type};")
+    # Workaround for https://github.com/duckdb/duckdb-web/issues/3495
+    attach_source(con, read_database)
+    con.execute(f"INSERT INTO {type} SELECT * FROM original.{type};")
+
+def attach_source(con, read_database: str):
+    con.execute(f"ATTACH IF NOT EXISTS '{read_database}' AS original (READ_ONLY);")
 
 def open_netex_file(filename):
     if filename.endswith('.xml.gz'):
