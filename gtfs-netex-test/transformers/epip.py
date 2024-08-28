@@ -19,8 +19,9 @@ from netex import Line, ScheduledStopPoint, PassengerStopAssignment, Quay, StopP
     ServiceCalendar, DayTypeRefsRelStructure, DayTypesRelStructure, OperatingPeriodsRelStructure, \
     DayTypeAssignmentsRelStructure, OperatingPeriodRef, RouteView
 
-from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, load_lxml_generator, \
-    write_lxml_generator
+from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, \
+    load_lxml_generator, \
+    write_lxml_generator, attach_objects
 from refs import getIndex, getRef, getId
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
@@ -431,8 +432,15 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
             read_con = sqlite3.connect(read_database, read_only=True)
 
         write_generator(write_con, ServiceJourney, query(read_con), True)
-        write_objects(write_con, list(sjps.values()), True, True)
 
+        # This check is a bit naive, if mixed files would exists, still not all ServiceJourneyPatterns would be available.
+        # If we would instead 'mix' the Original + the generated one, that would also be an issue for anything that would have updated the object.
+        if len(sjps.values()) > 0:
+            write_objects(write_con, list(sjps.values()), True, True)
+        else:
+            attach_objects(write_con, read_database, ServiceJourneyPattern)
+
+        # TODO: this must be updated (embedding)
         if len(uic_operating_periods) == 0:
             day_types = getIndex(load_local(read_con, DayType))
             uic_operating_periods = load_local(read_con, UicOperatingPeriod)
