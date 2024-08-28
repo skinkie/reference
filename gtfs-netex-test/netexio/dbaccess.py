@@ -504,6 +504,14 @@ def insert_database(con, classes, f=None, cursor=False):
 
             current_element = None
 
+def attach_objects(con, read_database, clazz):
+    type = getattr(clazz.Meta, 'name', clazz.__name__)
+
+    cur = con.cursor()
+    cur.execute(f"ATTACH IF NOT EXISTS '{read_database}' AS original (READ_ONLY);")
+    cur.execute(f"DROP TABLE IF EXISTS {type};")
+    cur.execute(f"CREATE VIEW {type} AS SELECT * FROM original.{type};")
+
 def open_netex_file(filename):
     if filename.endswith('.xml.gz'):
         yield igzip_threaded.open(filename, 'rb', compresslevel=3, threads=3)
@@ -516,3 +524,4 @@ def open_netex_file(filename):
             l_zipfilename = zipfilename.filename.lower()
             if l_zipfilename.endswith('.xml.gz') or l_zipfilename.endswith('.xml'):
                 yield zip.open(zipfilename)
+
