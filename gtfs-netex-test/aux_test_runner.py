@@ -43,15 +43,21 @@ def clean(directory):
 
 
 
-def main(script_file,log_file):
+def main(script_file,log_file, todo_block):
     # Read the scripts from a file
     with open(script_file) as f:
         data = json.load(f)
 
     with open(log_file, 'w') as f:
         for block in data:
+            blockstop=False
+            if  not todo_block==block["block"]:
+                if not todo_block=="all":
+                    continue
             scripts = block['scripts']
             for script in scripts:
+                if blockstop==True:
+                    break
                 start_time = time.time()
 
                 script_name = script['script']
@@ -98,14 +104,20 @@ def main(script_file,log_file):
                 f.write(output)
                 # Write the execution time to the log file
                 f.write(f"Execution time: {execution_time} seconds\n")
+                print(f"Execution time: {execution_time} seconds\n")
 
                 if result.returncode == 0:
-                    print(f'Script {script_name} executed successfully. Proceeding to the next script.')
+                    print(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
+                    f.write(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
                 elif result.returncode == 1:
                     print(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
+                    f.write(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
+                    blockstop=True
                     break
                 else:
                     print(f'Script {script_name} returned an unexpected error code: {result.returncode}.')
+                    f.write(f'Script {script_name} returned an unexpected error code: {result.returncode}.')
+                    blockstop=True
                     break
 
 
@@ -113,7 +125,9 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Executes scripts')
     parser.add_argument('script_file', type=str, help='the script file')
-    parser.add_argument('log_file', type=str, help='the log file')
+    parser.add_argument('log_file', type=str, help='name of the log file')
+
+    parser.add_argument('blockname', type=str, help='Block name to do')
     args = parser.parse_args()
 
-    main(args.script_file,args.log_file)
+    main(args.script_file,args.log_file, args.blockname)

@@ -1,6 +1,6 @@
 [
   {
-    "block": "Block 3: Blablacar Bus",
+    "block": "blablacar",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "gtfs_import_to_db.py", "args": ["./aux_test_input/blablacar.zip ./aux_test_processing/gtfs-import.duckdb"]},
@@ -16,7 +16,7 @@
         ]
   },
   {
-    "block": "Block 7: Solea",
+    "block": "solea",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "gtfs_import_to_db.py", "args": ["./aux_test_input/solea.zip ./aux_test_processing/gtfs-import.duckdb"]},
@@ -31,7 +31,7 @@
         {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/solea-gtfs.zip ./aux_test_processing/solea-map.html"]}
         ]
   },  {
-    "block": "Block 3: Flixbus",
+    "block": "flixbus",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "gtfs_import_to_db.py", "args": ["./aux_test_input/flixbus.zip ./aux_test_processing/gtfs-import.duckdb"]},
@@ -47,7 +47,7 @@
         ]
   },
   {
-    "block": "Block 4: mobiliaetsverbünde at Test",
+    "block": "at",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_input/at-test.zip ./aux_test_processing/netex-import.duckdb"]},
@@ -62,7 +62,7 @@
         ]
   },
     {
-    "block": "Block 6: Trenitalia",
+    "block": "trenitalia",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_input/trenitalia.zip ./aux_test_processing/netex-import.duckdb"]},
@@ -76,7 +76,7 @@
         ]
   },
       {
-    "block": "Block 6: Milano",
+    "block": "milano",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_input/milano.zip ./aux_test_processing/netex-import.duckdb"]},
@@ -90,7 +90,7 @@
         ]
   },
   {
-    "block": "Block 6: SNCF",
+    "block": "sncf",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_input/sncf-test.zip ./aux_test_processing/netex-import.duckdb"]},
@@ -104,7 +104,7 @@
         ]
   },
     {
-    "block": "Block 1: Swiss data",
+    "block": "swiss",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "swiss_to_db.py", "args": ["./aux_test_input/swiss.zip ./aux_test_processing/swiss-import.duckdb"]},
@@ -120,7 +120,7 @@
   }
 ,
   {
-    "block": "Block 0: Cleaning",
+    "block": "cleaning",
     "scripts": [
       {"script": "#clean", "args": ["./aux_test_processing"]}
     ]
