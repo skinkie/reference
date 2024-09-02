@@ -51,8 +51,10 @@ def infer_locations_from_quay_or_stopplace_and_apply(read_database, write_databa
             psa: PassengerStopAssignment
             if isinstance(psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point, ScheduledStopPointRef):
                 if isinstance(psa.taxi_stand_ref_or_quay_ref_or_quay, QuayRef):
-                    ssp_location[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = mapping[psa.taxi_stand_ref_or_quay_ref_or_quay.ref]
+                    if psa.taxi_stand_ref_or_quay_ref_or_quay.ref in mapping:
+                        ssp_location[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = mapping[psa.taxi_stand_ref_or_quay_ref_or_quay.ref]
                 if isinstance(psa.taxi_rank_ref_or_stop_place_ref_or_stop_place, StopPlaceRef):
-                    ssp_location[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = mapping[psa.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref]
+                    if psa.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref in mapping:
+                       ssp_location[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = mapping[psa.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref]
 
         update_generator(write_con, ScheduledStopPoint, query(read_con))

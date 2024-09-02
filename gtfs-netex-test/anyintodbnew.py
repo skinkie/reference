@@ -1,5 +1,5 @@
 from isal import igzip_threaded
-import sqlite3
+import duckdb
 from lxml import etree
 import sys
 
@@ -56,8 +56,16 @@ def setup_database(con, classes, clean=False):
 
         # DuckDB
         for objectname in clean_element_names:
-            sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
-            cur.execute(sql_drop_table)
+            try:
+                sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
+                cur.execute(sql_drop_table)
+
+            # Workaround for https://github.com/duckdb/duckdb/issues/13620
+            except duckdb.CatalogException:
+                sql_drop_table = f"DROP VIEW IF EXISTS {objectname}"
+                cur.execute(sql_drop_table)
+                pass
+
         cur.execute("VACUUM;")
 
     for objectname in clean_element_names:

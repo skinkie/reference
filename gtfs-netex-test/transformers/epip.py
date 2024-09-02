@@ -19,8 +19,9 @@ from netex import Line, ScheduledStopPoint, PassengerStopAssignment, Quay, StopP
     ServiceCalendar, DayTypeRefsRelStructure, DayTypesRelStructure, OperatingPeriodsRelStructure, \
     DayTypeAssignmentsRelStructure, OperatingPeriodRef, RouteView
 
-from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, load_lxml_generator, \
-    write_lxml_generator
+from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, \
+    load_lxml_generator, \
+    write_lxml_generator, attach_objects
 from refs import getIndex, getRef, getId
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
@@ -198,9 +199,12 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
 
                                 project_polygon(quay.polygon_or_multi_surface, generator_defaults, 'urn:ogc:def:crs:EPSG::4326')
 
-                            project_location_4326(quay.centroid.location, generator_defaults)
+                            if quay.centroid:
+                                project_location_4326(quay.centroid.location, generator_defaults)
 
-                project_location_4326(stop_place.centroid.location, generator_defaults)
+                if stop_place.centroid:
+                    project_location_4326(stop_place.centroid.location, generator_defaults)
+
                 retained_stop_places.append(stop_place)
 
             write_objects(write_con, retained_stop_places, True, True)
@@ -431,12 +435,19 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
             read_con = sqlite3.connect(read_database, read_only=True)
 
         write_generator(write_con, ServiceJourney, query(read_con), True)
-        write_objects(write_con, list(sjps.values()), True, True)
+
+        # This check is a bit naive, if mixed files would exists, still not all ServiceJourneyPatterns would be available.
+        # If we would instead 'mix' the Original + the generated one, that would also be an issue for anything that would have updated the object.
+        if len(sjps.values()) > 0:
+            write_objects(write_con, list(sjps.values()), True, True)
+        else:
+            attach_objects(write_con, read_database, ServiceJourneyPattern)
 
         if len(uic_operating_periods) == 0:
-            day_types = getIndex(load_local(read_con, DayType))
-            uic_operating_periods = load_local(read_con, UicOperatingPeriod)
-            day_type_assignments = load_local(read_con, DayTypeAssignment)
+            service_calendars: List[ServiceCalendar] = load_local(read_con, ServiceCalendar)
+            day_types = getIndex(list(chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars])))
+            uic_operating_periods = list(chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars]))
+            day_type_assignments = list(chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars]))
 
         service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
 

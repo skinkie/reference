@@ -56,6 +56,7 @@ def siri_dated_vehicle_journey_generator(read_con, operating_day: OperatingDay, 
         if service_journey.calls:
             dated_calls = DatedVehicleJourneyStructure.DatedCalls(dated_call=[siri_dated_call(call, operating_day, tzinfo) for call in service_journey.calls.call])
             yield DatedVehicleJourneyStructure(
+                line_ref=service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view.ref, # TODO: Implement function that actually captures what we want from a choice
                 framed_vehicle_journey_ref_or_vehicle_journey_ref=VehicleJourneyRef(value=service_journey.id),
                 dated_calls=dated_calls,
                 monitored=service_journey.monitored)
