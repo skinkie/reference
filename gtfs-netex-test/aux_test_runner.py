@@ -107,8 +107,7 @@ def main(script_file,log_file, todo_block):
                 print(f"Execution time: {execution_time} seconds\n")
 
                 if result.returncode == 0:
-                    print(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
-                    f.write(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
+                    print(f'Script {script_name} terminated.')
                 elif result.returncode == 1:
                     print(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
                     f.write(f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')

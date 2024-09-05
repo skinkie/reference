@@ -81,7 +81,7 @@
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_input/milano.zip ./aux_test_processing/netex-import.duckdb"]},
         {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
-        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/trenitalia-netex.xml"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/milano-netex.xml"]},
         {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/milano-netex.xml"]},
         {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/milano-netex.xml"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/milano-netex.xml ./aux_test_processing/netex-database.duckdb"]},
