@@ -458,7 +458,12 @@ class GtfsProfile:
         if transformer:
             latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
         else:
-            latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
+            if stop_place.centroid == None:  #TODO this is a bad fix for a bad data problem. The correct way would be to omit this kind of StopPlace or to feed the coordinates from the SceduledStopPlace via PSA
+                latitude=0
+                longitude=0
+                print(f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
+            else:
+                latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
 
         stop = {'stop_id': stop_place.id,
                 'stop_code': GtfsProfile.getOptionalPrivateCode(stop_place.public_code),
@@ -469,7 +474,7 @@ class GtfsProfile:
                 'zone_id': '',
                 'stop_url': '',
                 'location_type': 1, # Station
-                'parent_station': '',
+                'parent_station': '',  #TODO should be set correctly
                 'stop_timezone': GtfsProfile.getOrNone(stop_place, 'locale.time_zone'),
                 'wheelchair_boarding': '',
                 'level_id': stop_place.levels.level_ref_or_level if stop_place.levels is not None and stop_place.levels.level_ref_or_level is not None else '',
