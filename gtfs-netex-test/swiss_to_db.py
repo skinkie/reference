@@ -3,7 +3,7 @@ import os
 
 from anyintodbnew import  get_interesting_classes, setup_database, open_netex_file, insert_database
 
-SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "TemplateServiceJourney", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace", "ResponsibilitySet"]
+SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "TemplateServiceJourney", "ServiceCalendar", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace", "ResponsibilitySet"]
 
 def main(swiss_zip_file: str, database: str, clean_database: bool = True):
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
