@@ -9,8 +9,8 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from anyintodbnew import setup_database, get_interesting_classes
 
-from netex import Codespace
-from netexio.dbaccess import attach_source
+from netex import Codespace, AvailabilityCondition
+from netexio.dbaccess import attach_source, attach_objects
 
 from transformers.direction import infer_directions_from_sjps_and_apply
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
