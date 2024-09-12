@@ -1,4 +1,6 @@
 import io
+import warnings
+
 import duckdb
 import csv
 
@@ -170,6 +172,24 @@ def create_feed_info(con):
             if data[0][2] is None or len(data[0][2]) == 0:
                 cur.execute("""UPDATE feed_info SET feed_version = REPLACE(CAST(today() AS TEXT), '-', '');""")
 
+def handle_single_agency(con):
+    with con.cursor() as cur:
+        agency_id = None
+
+        cur.execute("""SELECT DISTINCT agency_id FROM agency;""")
+        data = cur.fetchall()
+        if len(data) > 1:
+            return
+        else:
+            agency_id = data[0][0]
+
+        cur.execute("""SELECT agency_id FROM routes WHERE agency_id <> '' GROUP BY agency_id;""")
+        data = cur.fetchall()
+        if len(data) < 1:
+            cur.execute("""UPDATE routes SET agency_id = ?;""", (agency_id,))
+        elif len(data) > 1:
+            warnings.warn("Multi values from agency_id are found, but only one was defined!")
+
 def main(gtfs: str, database: str):
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
     try:
@@ -203,6 +223,7 @@ def main(gtfs: str, database: str):
     handle_file(con, zf, 'pathways.txt', pathways_txt)
 
     create_feed_info(con)
+    handle_single_agency(con)
 
 if __name__ == "__main__":
     import argparse
