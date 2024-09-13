@@ -1,4 +1,4 @@
-xsdata[cli,lxml,soap] @ git+https://github.com/skinkie/xsdata@feature_convert_generator
+xsdata[cli,lxml,soap]
 duckdb
 pyproj
 chardet

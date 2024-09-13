@@ -298,7 +298,11 @@ def service_journey_ac_to_day_type(service_journey: ServiceJourney,
 
 
     # TODO: this will fail in extreme cases
-    day_type_id = acs[0].id.replace('AvailabilityCondition', 'DayType')
+    if len(acs) > 0:
+        day_type_id = acs[0].id.replace('AvailabilityCondition', 'DayType')
+    else:
+        warnings.warn(f'Check {service_journey.id}')
+        return
 
     if day_type_id not in day_types:
         valid_days, days_of_week = ServiceCalendarEPIPFrame.positiveAvailabilityCondition(acs)
@@ -445,9 +449,10 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
 
         if len(uic_operating_periods) == 0:
             service_calendars: List[ServiceCalendar] = load_local(read_con, ServiceCalendar)
-            day_types = getIndex(list(chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars])))
-            uic_operating_periods = list(chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars]))
-            day_type_assignments = list(chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars]))
+            # TODO
+            # day_types = getIndex(list(chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(read_con, DayType))
+            # uic_operating_periods = list(chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars if service_calendar.operating_periods] + load_local(read_con, UicOperatingPeriod)))
+            # day_type_assignments = list(chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments]))
 
         service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
 

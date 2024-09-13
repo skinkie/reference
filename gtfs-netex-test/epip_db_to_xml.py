@@ -29,7 +29,7 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine, VersionFrameDefaultsStructure, SystemOfUnits, \
     LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, \
     TopographicPlacesInFrameRelStructure, TopographicPlace, TransportOrganisationVersionStructure, Locale, \
-    TypesOfValueInFrameRelStructure, ValueSet
+    TypesOfValueInFrameRelStructure, ValueSet, ValidityConditionsRelStructure, AvailabilityCondition
 
 import netex_monkeypatching
 
@@ -145,6 +145,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
     notice = GeneratorTester(load_generator(con_orig, Notice))
     notice_assignment = GeneratorTester(load_generator(con_orig, NoticeAssignment))
 
+    availability_condition = GeneratorTester(load_generator(con_orig, AvailabilityCondition))
     service_journey = GeneratorTester(load_generator(con_target, ServiceJourney))
 
     day_type = GeneratorTester(load_generator(con_target, DayType))
@@ -213,6 +214,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                     TimetableFrame(
                                         id="EU_PI_TIMETABLE", version=version,
                                         type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_TIMETABLE', version_ref='1.0'),
+                                        content_validity_conditions=ValidityConditionsRelStructure(choice=availability_condition.generator()) if availability_condition.has_value() else None,
                                          vehicle_journeys=JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journey.generator()) if service_journey.has_value() else None,
                                     ),
                                     ServiceCalendarFrame(
