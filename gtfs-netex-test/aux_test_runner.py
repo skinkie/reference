@@ -43,7 +43,7 @@ def clean(directory):
 
 
 
-def main(script_file,log_file, todo_block):
+def main(script_file,log_file, todo_block,begin_step):
     # Read the scripts from a file
     with open(script_file) as f:
         data = json.load(f)
@@ -55,7 +55,12 @@ def main(script_file,log_file, todo_block):
                 if not todo_block=="all":
                     continue
             scripts = block['scripts']
+            step=1
             for script in scripts:
+                if step<begin_step:
+                    #skipping steps in the block
+                    step=step+1
+                    continue
                 if blockstop==True:
                     break
                 start_time = time.time()
@@ -65,6 +70,9 @@ def main(script_file,log_file, todo_block):
 
                 # Write the script name to the log file with a starting delimiter
                 f.write(f"--- {script_name} ---\n")
+                if script_name.startswith("#"):
+                    # is a comment
+                    continue
 
                 if script_name == 'clean_tmp':
                     # Execute the clean_tmp command
@@ -93,7 +101,7 @@ def main(script_file,log_file, todo_block):
                                         stderr=subprocess.STDOUT,
                                         universal_newlines=True)
                 end_time = time.time()
-                execution_time = end_time - start_time
+                execution_time = int(end_time - start_time)
                 # Capture the output
                 output = result.stdout
 
@@ -125,8 +133,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Executes scripts')
     parser.add_argument('script_file', type=str, help='the script file')
     parser.add_argument('log_file', type=str, help='name of the log file')
-
     parser.add_argument('blockname', type=str, help='Block name to do')
+    parser.add_argument('--begin_step', type=int, default=1, help='The begin step (default: 1)')
     args = parser.parse_args()
 
-    main(args.script_file,args.log_file, args.blockname)
+    main(args.script_file,args.log_file, args.blockname,args.begin_step)

@@ -1,2 +1,6 @@
 
 /gtfs-netex-test/aux_test_input/sncf-test
+gtfs-netex-test/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_COMMON_1_1_202406270606.xml
+gtfs-netex-test/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_RESOURCE_1_1_202406270606.xml
+gtfs-netex-test/LINE-F.xml
+gtfs-netex-test/aux_test_input/swiss.zip

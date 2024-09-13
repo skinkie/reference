@@ -12,13 +12,14 @@
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/blablacar-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/blablacar-gtfs.zip"]},
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/blablacar-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/blablacar-gtfs.zip ./aux_test_processing/blablacar-map.html"]}
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/blablacar-gtfs.zip ./aux_test_processing/blablacar-map.html all"]}
         ]
   },
   {
     "block": "solea",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "aux_gtfs_check.py", "args": ["./aux_test_input/solea.zip"]},
         {"script": "gtfs_import_to_db.py", "args": ["./aux_test_input/solea.zip ./aux_test_processing/gtfs-import.duckdb"]},
         {"script": "gtfs_convert_to_db.py", "args": ["./aux_test_processing/gtfs-import.duckdb ./aux_test_processing/netex-import.duckdb"]},
         {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
@@ -28,7 +29,7 @@
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/solea-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/solea-gtfs.zip"]},
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/solea-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/solea-gtfs.zip ./aux_test_processing/solea-map.html"]}
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/solea-gtfs.zip ./aux_test_processing/solea-map.html all"]}
         ]
   },  {
     "block": "flixbus",
@@ -43,7 +44,7 @@
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/flixbus-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/flixbus-gtfs.zip"]},
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/flixbus-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/flixbus-gtfs.zip ./aux_test_processing/flixbus-map.html"]}
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/flixbus-gtfs.zip ./aux_test_processing/flixbus-map.html all"]}
         ]
   },
   {
@@ -58,7 +59,7 @@
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/at-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/at-gtfs.zip"]},
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/at-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/at-gtfs.zip ./aux_test_processing/at-map.html"]}
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/at-gtfs.zip ./aux_test_processing/at-map.html routes"]}
         ]
   },
     {
@@ -72,7 +73,7 @@
         {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/trenitalia-netex.xml"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/trenitalia-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/trenitalia-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/trenitalia-gtfs.zip ./aux_test_processing/trenitalia-map.html"]}
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/trenitalia-gtfs.zip ./aux_test_processing/trenitalia-map.html all"]}
         ]
   },
       {
@@ -86,7 +87,7 @@
         {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/milano-netex.xml"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/milano-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/milano-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/milano-gtfs.zip ./aux_test_processing/milano-map.html"]}
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/milano-gtfs.zip ./aux_test_processing/milano-map.html routes"]}
         ]
   },
   {
@@ -100,7 +101,7 @@
         {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/sncf-netex.xml"]},
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/sncf-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/sncf-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/sncf-gtfs.zip ./aux_test_processing/sncf-map.html"]}
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/sncf-gtfs.zip ./aux_test_processing/sncf-map.html routes"]}
         ]
   },
     {
@@ -115,7 +116,85 @@
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/swiss-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/swiss-gtfs.zip"]},
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/swiss-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/swiss-gtfs.zip ./aux_test_processing/swiss-map.html"]}
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/swiss-gtfs.zip ./aux_test_processing/swiss-map.html all"]}
+        ]
+  },
+    {
+    "block": "thonongtfs",
+    "url":"https://transport.data.gouv.fr/datasets/thonon-agglomeration-donnees-gtfs",
+    "description":"Thonon school buses",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "gtfs_import_to_db.py", "args": ["./aux_test_input/thonon_gtfs.zip ./aux_test_processing/gtfs-import.duckdb"]},
+        {"script": "gtfs_convert_to_db.py", "args": ["./aux_test_processing/gtfs-import.duckdb ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/thonon-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/thonon-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/thonon-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/thonon-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/thonon-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/thonon-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/thonon-gtfs.zip ./aux_test_processing/thonon_gtfs-map.html all"]}
+        ]
+  },
+     {
+    "block": "swiss3",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "swiss_to_db.py", "args": ["./aux_test_input/swiss3.zip ./aux_test_processing/swiss-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/swiss-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/swiss-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/swiss3-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/swiss-assertions.txt ./aux_test_processing/swiss3-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/swiss3-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/swiss3-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "related_explorer.py", "args": ["./aux_test_processing/netex-database.duckdb ServiceJourney random ./aux_test_processing/sj.xml"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/swiss3-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/swiss3-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/swiss3-gtfs.zip ./aux_test_processing/swiss3-map.html routes"]}
+        ]
+  }
+  ,
+
+     {
+    "block": "swiss4",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["d:/aux_test_processing"]},
+        {"script": "swiss_to_db.py", "args": ["d:/swiss4.zip d:/aux_test_processing/swiss-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["d:/aux_test_processing/swiss-import.duckdb d:/aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["d:/aux_test_processing/swiss-import.duckdb d:/aux_test_processing/netex-database.duckdb d:/aux_test_processing/swiss3-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/swiss-assertions.txt d:/aux_test_processing/swiss3-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["d:/aux_test_processing/swiss3-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["d:/aux_test_processing/swiss3-netex.xml d:/aux_test_processing/netex-database.duckdb"]},
+        {"script": "related_explorer.py", "args": ["d:/aux_test_processing/netex-database.duckdb ServiceJourney random d:/aux_test_processing/sj.xml"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["d:/aux_test_processing/netex-database.duckdb d:/aux_test_processing/swiss3-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["d:/aux_test_processing/swiss3-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["d:/aux_test_processing/swiss3-gtfs.zip d:/aux_test_processing/swiss3-map.html routes"]}
+        ]
+  }
+  ,
+     {
+    "block": "thonon_collate",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "aux_collator.py", "args": ["./aux_test_input/thonon_netex.zip ./aux_test_processing/thonon-collated.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/thonon_netex.zip ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/thonon-netex.xml"]},
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/thonon-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/thonon-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/thonon-gtfs.zip ./aux_test_processing/thonon-map.html routes"]},
+        {"script": "related_explorer.py", "args": ["./aux_test_processing/netex-database.duckdb ServiceJourney random ./aux_test_processing/thonon_sj.xml"]}
+        ]
+  }
+,
+     {
+    "block": "swisscollate",
+    "scripts": [
+        {"script": "aux_collator.py", "args": ["./aux_test_input/swiss3.zip ./aux_test_processing/swiss3-collated.xml"]},
+        {"script": "#aux_deduplicate.py", "args": ["./aux_test_processing/swiss3-collated.xml ./aux_test_processing/swiss3-collated-dedup.xml ./aux_test_processing/swiss3-dupls.xlsx"]},
+        {"script": "aux_extract_one_servicejourney.py", "args": ["./aux_test_processing/swiss3-collated.xml ./aux_test_processing/swiss3-sy-1.xml"]},
+        {"script": "aux_extract_one_servicejourney.py", "args": ["./aux_test_processing/swiss3-collated.xml ./aux_test_processing/swiss3-sy-2.xml"]}
         ]
   }
 ,
