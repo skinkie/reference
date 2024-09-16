@@ -449,14 +449,18 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
 
         if len(uic_operating_periods) == 0:
             service_calendars: List[ServiceCalendar] = load_local(read_con, ServiceCalendar)
+            # TODO: WORKAROUND
+            write_objects(write_con, service_calendars, True, True)
+
             # TODO
             # day_types = getIndex(list(chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(read_con, DayType))
             # uic_operating_periods = list(chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars if service_calendar.operating_periods] + load_local(read_con, UicOperatingPeriod)))
             # day_type_assignments = list(chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments]))
 
-        service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
-
-        write_objects(write_con, [service_calendar], True, True)
+        else:
+            # TODO: Quick "fix" this should be done differently, because we cannot assure that the ServiceCalendar stored, is actually following EPIP.
+            service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
+            write_objects(write_con, [service_calendar], True, True)
 
         # availability_conditions = load_local(read_con, AvailabilityCondition)
         # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
