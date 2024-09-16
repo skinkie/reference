@@ -25,7 +25,7 @@ def get_transformer_by_srs_name(location, crs_to, generator_defaults: dict) -> T
 
 def project_location_4326(location, generator_defaults: dict, quantize='0.000001'):
     if location.pos is not None:
-        transformer = get_transformer_by_srs_name(location, 'urn:ogc:def:crs:EPSG::4326')
+        transformer = get_transformer_by_srs_name(location, 'urn:ogc:def:crs:EPSG::4326', generator_defaults)
         if transformer is not None:
             latitude, longitude = transformer.transform(location.pos.value[0], location.pos.value[1])
         else:
@@ -41,7 +41,7 @@ def project_location_4326(location, generator_defaults: dict, quantize='0.000001
 
 def project_location(location: LocationStructure2, crs_to: str, generator_defaults: dict, quantize='0.000001'):
     if location.pos is not None:
-        transformer = get_transformer_by_srs_name(location, crs_to, generator_defaults['DefaultLocationsystem'])
+        transformer = get_transformer_by_srs_name(location, crs_to, generator_defaults)
         if transformer is not None:
             x, y = transformer.transform(location.pos.value[0], location.pos.value[1])
             x = Decimal(x).quantize(Decimal(quantize), ROUND_HALF_UP)
@@ -49,7 +49,7 @@ def project_location(location: LocationStructure2, crs_to: str, generator_defaul
             location.pos = Pos(value=[x, y], srs_name=crs_to, srs_dimension=2)
 
     elif location.longitude is not None and location.latitude is not None:
-        transformer = get_transformer_by_srs_name(location, crs_to, generator_defaults['DefaultLocationsystem'])
+        transformer = get_transformer_by_srs_name(location, crs_to, generator_defaults)
         if transformer is not None:
             x, y = transformer.transform(location.latitude, location.longitude)
             x = Decimal(x).quantize(Decimal(quantize), ROUND_HALF_UP)
