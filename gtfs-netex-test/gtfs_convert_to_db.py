@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import math
 from _decimal import Decimal
 from typing import List, Generator
@@ -35,7 +36,7 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     ZoneRefStructure, InfoLinksRelStructure, InfoLink, TypeOfInfoLinkEnumeration, QuaysRelStructure, \
     SiteEntrancesRelStructure, Quay, StopPlaceEntrance, LevelRef, AccessSpacesRelStructure, AccessSpace, \
     PassengerStopAssignment, ZonesInFrameRelStructure, TemplateServiceJourney, FrequencyGroupsRelStructure, \
-    HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure
+    HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure
 
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
 
@@ -770,6 +771,112 @@ class GtfsNeTexProfile(CallsProfile):
 
         return availability_conditions
 
+
+    def getInterchangeRules(self, transfers_sql={'query': """select transfers.*, from_stop.location_type as from_stop_location_type, to_stop.location_type as to_stop_location_type from transfers join stops as from_stop on (from_stop_id = from_stop.stop_id) join stops as to_stop on (to_stop_id = to_stop.stop_id) order by from_route_id, to_route_id, from_trip_id, to_trip_id, from_stop_id, to_stop_id;"""}) -> Generator[InterchangeRule, None, None]:
+        # from_stop_id, to_stop_id, from_route_id, to_route_id, from_trip_id, to_trip_id, transfer_type, min_transfer_time
+        with self.conn.cursor() as cur:
+            cur.execute(**transfers_sql)
+            transfers_df = cur.df()
+
+            from_stop_ids = transfers_df.get('from_stop_id')
+            from_stop_location_types = transfers_df.get('from_stop_location_type')
+            to_stop_ids = transfers_df.get('to_stop_id')
+            to_stop_location_types = transfers_df.get('to_stop_location_type')
+            from_route_ids = transfers_df.get('from_route_id')
+            to_route_ids = transfers_df.get('to_route_id')
+            from_trip_ids = transfers_df.get('from_trip_id')
+            to_trip_ids = transfers_df.get('from_trip_id')
+            transfer_types = transfers_df.get('transfer_type')
+            min_transfer_times = transfers_df.get('min_transfer_time')
+
+            for i in range(0, len(transfer_types)):
+                feeder_filter = InterchangeRuleParameterStructure(
+                                        scheduled_stop_point_ref=getFakeRef(
+                                            getId(ScheduledStopPoint, self.codespace, from_stop_ids[i]),
+                                            ScheduledStopPointRef, self.version.version) if from_stop_location_types[i] == 0 else None,
+
+                                        stop_place_ref=getFakeRef(
+                                            getId(StopPlace, self.codespace, from_stop_ids[i]),
+                                            StopPlaceRef, self.version.version) if from_stop_location_types[i] == 1 else None,
+
+                                        all_lines_or_lines_in_direction_refs_or_line_in_direction_ref=[
+                                            LineInDirectionRef(line_ref=getFakeRef(getId(Line, self.codespace, from_route_ids[i]), LineRef, self.version.version)),
+                                        ] if from_route_ids[i] else [EmptyType2(value='')],
+
+                                        service_journey_ref_or_journey_designator_or_service_designator=getFakeRef(
+                                            getId(ServiceJourney, self.codespace, from_trip_ids[i]),
+                                            ServiceJourneyRefStructure, self.version.version) if from_trip_ids[i] else None,
+                                    )
+
+                distributor_filter = InterchangeRuleParameterStructure(
+                                        scheduled_stop_point_ref=getFakeRef(
+                                            getId(ScheduledStopPoint, self.codespace, to_stop_ids[i]),
+                                            ScheduledStopPointRef, self.version.version) if to_stop_location_types[i] == 0 else None,
+
+                                        stop_place_ref=getFakeRef(
+                                            getId(StopPlace, self.codespace, to_stop_ids[i]),
+                                            StopPlaceRef, self.version.version) if to_stop_location_types[i] == 1 else None,
+
+                                        all_lines_or_lines_in_direction_refs_or_line_in_direction_ref=[
+                                            LineInDirectionRef(
+                                                line_ref=getFakeRef(getId(Line, self.codespace, to_route_ids[i]), LineRef, self.version.version)),
+                                        ] if to_route_ids[i] else [EmptyType2(value='')],
+
+                                        service_journey_ref_or_journey_designator_or_service_designator=getFakeRef(
+                                            getId(ServiceJourney, self.codespace, to_trip_ids[i]),
+                                            ServiceJourneyRefStructure, self.version.version) if to_trip_ids[i] else None,
+                                    )
+
+                id = getId(InterchangeRule, self.codespace, hashlib.md5((';'.join([str(from_stop_ids[i]), str(to_stop_ids[i]), str(from_route_ids[i]), str(to_route_ids[i]), str(from_trip_ids[i]), str(to_trip_ids[i]), str(transfer_types[i]), str(min_transfer_times[i])])).encode('utf-8')).hexdigest()[0:5])
+
+                if transfer_types[i] == 0:
+                    # Recommended
+                    yield InterchangeRule(advertised=True,
+                                          id=id,
+                                          version=self.version.version,
+                                          feeder_filter=feeder_filter,
+                                          distributor_filter=distributor_filter)
+
+                elif transfer_types[i] == 1:
+                    # Timed transfer point between two routes
+                    yield InterchangeRule(advertised=True, planned=True, guaranteed=True,
+                                          id=id,
+                                          version=self.version.version,
+                                          feeder_filter=feeder_filter,
+                                          distributor_filter=distributor_filter)
+
+                elif transfer_types[i] == 2:
+                    # Transfer requires a minimum amount of time
+                    yield InterchangeRule(advertised=True, planned=True, minimum_transfer_time=XmlDuration(value=f"PT{int(min_transfer_times[i])}S") if min_transfer_times[i] else None,
+                                          id=id,
+                                          version=self.version.version,
+                                          feeder_filter=feeder_filter,
+                                          distributor_filter=distributor_filter)
+
+                elif transfer_types[i] == 3:
+                    # Transfers are not possible
+                    yield InterchangeRule(exclude=True,
+                                          id=id,
+                                          version=self.version.version,
+                                          feeder_filter=feeder_filter,
+                                          distributor_filter=distributor_filter)
+
+                elif transfer_types[i] == 4:
+                    # In-seat transfer
+                    yield InterchangeRule(advertised=True, planned=True, stay_seated=True, guaranteed=True,
+                                          id=id,
+                                          version=self.version.version,
+                                          feeder_filter=feeder_filter,
+                                          distributor_filter=distributor_filter)
+
+                elif transfer_types[i] == 5:
+                    # In-seat transfer not allowed
+                    yield InterchangeRule(exclude=True,
+                                          id=id,
+                                          version=self.version.version,
+                                          feeder_filter=feeder_filter,
+                                          distributor_filter=distributor_filter)
+
     @staticmethod
     def noonTimeToNeTEx(time: str):
         hour, minute, second = time.split(':')
@@ -859,7 +966,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 block_ref = None
                 if block_ids[i] is not None:
-                    block_ref = getFakeRef(getId(Block, self.codespace, block_ids[i]), BlockRef, None)
+                    block_ref = getFakeRef(getId(Block, self.codespace, block_ids[i]), BlockRef, None, "EXTERNAL")
 
                 route_ref = None
                 lsp = None
@@ -1019,7 +1126,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 block_ref = None
                 if block_ids[i] is not None:
-                    block_ref = getFakeRef(getId(Block, self.codespace, block_ids[i]), BlockRef, None)
+                    block_ref = getFakeRef(getId(Block, self.codespace, block_ids[i]), BlockRef, None, "EXTERNAL")
 
                 route_ref = None
                 lsp = None
@@ -1389,12 +1496,13 @@ class GtfsNeTexProfile(CallsProfile):
         write_objects(con, passenger_stop_assignments, empty=True, many=True)
         stop_places = stop_passenger_stop_assignments = None
 
-
         availability_conditions = self.getAvailabilityConditions()
         write_objects(con, availability_conditions, empty=True, many=True)
 
         write_generator(con, ServiceJourney, self.getServiceJourneys2(availability_conditions), empty=True)
         write_generator(con, TemplateServiceJourney, self.getTemplateServiceJourneys(availability_conditions), empty=True)
+
+        write_generator(con, InterchangeRule, self.getInterchangeRules(), empty=True)
 
 
     def __init__(self, conn, serializer):
