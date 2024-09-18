@@ -114,8 +114,8 @@ def handle_file(con, zip, filename, column_mapping: dict):
                 header = next(reader)
 
             if detector.result['encoding'].lower() not in ('utf-8', 'utf-8-sig,', 'ascii'):
-                with open(filename, 'r') as f_in:
-                    g = io.TextIOWrapper(f, detector.result['encoding'])
+                with zip.open(filename, 'r') as f_in:
+                    g = io.TextIOWrapper(f_in, detector.result['encoding'])
                     with open("_tmp", 'w', encoding='UTF-8') as f_out:
                         f_out.writelines(g)
             else:
@@ -190,6 +190,10 @@ def handle_single_agency(con):
         elif len(data) > 1:
             warnings.warn("Multi values from agency_id are found, but only one was defined!")
 
+def update_empty_enumerations(con):
+    with con.cursor() as cur:
+        cur.execute("""UPDATE stops SET location_type = 0 WHERE location_type IS NULL;""")
+
 def main(gtfs: str, database: str):
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
     try:
@@ -224,6 +228,7 @@ def main(gtfs: str, database: str):
 
     create_feed_info(con)
     handle_single_agency(con)
+    update_empty_enumerations(con)
 
 if __name__ == "__main__":
     import argparse
