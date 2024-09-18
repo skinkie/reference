@@ -42,9 +42,8 @@ def main(gtfs_zip_file,map_file,write_type):
             for astop in route_stops:
                 x = df_stops[df_stops['stop_id'] == str(astop)]
                 if not (len(x['stop_lat']) == 0 or len(x['stop_lon']) == 0):  # fix for non-existing coordinates
-                    if not (x['stop_lat'].values[
-                                0] == 0):  # fix for coordinates set to the equator (also bad in our case)
-                        # the route osnly for reasonable set stops.
+                    if not (x['stop_lat'].values[0] == 0):  # fix for coordinates set to the equator (also bad in our case)
+                        # the route only for reasonable set stops.
                         route_stop_coords.append([x['stop_lat'].values[0], x['stop_lon'].values[0]])
                     else:
                         print(f'Warning: no valid coordinates for stop {df_stops['stop_id']}')

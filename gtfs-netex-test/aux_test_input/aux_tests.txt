@@ -80,7 +80,22 @@
     "block": "milano",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
-        {"script": "netex_to_db.py", "args": ["./aux_test_input/milano.zip ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/milano.gz ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/milano-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/milano-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/milano-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/milano-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/milano-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/milano-gtfs.zip ./aux_test_processing/milano-map.html routes"]}
+        ]
+  },
+      {
+    "block": "trenord",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/it-itc4-net_151.xml.gz ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "#netex_to_db.py", "args": ["./aux_test_input/it-itc4-trenord_336.xml.gz ./aux_test_processing/netex-import.duckdb"]},
         {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
         {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/milano-netex.xml"]},
         {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/milano-netex.xml"]},
@@ -169,6 +184,24 @@
         {"script": "netex_db_to_gtfs.py", "args": ["d:/aux_test_processing/netex-database.duckdb d:/aux_test_processing/swiss3-gtfs.zip"]},
         {"script": "aux_gtfs_check.py", "args": ["d:/aux_test_processing/swiss3-gtfs.zip"]},
         {"script": "gtfs_show_map.py", "args": ["d:/aux_test_processing/swiss3-gtfs.zip d:/aux_test_processing/swiss3-map.html routes"]}
+        ]
+  }
+  ,
+     {
+    "block": "it1",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["d:/aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["D:/it/it.zip d:/aux_test_processing/swiss-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["d:/aux_test_processing/swiss-import.duckdb d:/aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["d:/aux_test_processing/swiss-import.duckdb d:/aux_test_processing/netex-database.duckdb d:/aux_test_processing/it-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/swiss-assertions.txt d:/aux_test_processing/it-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["d:/aux_test_processing/it-netex.xml"]},
+         {"script": "clean_tmp", "args": ["d:/aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["d:/aux_test_processing/it-netex.xml d:/aux_test_processing/netex-database.duckdb"]},
+        {"script": "related_explorer.py", "args": ["d:/aux_test_processing/netex-database.duckdb ServiceJourney random d:/aux_test_processing/sj.xml"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["d:/aux_test_processing/netex-database.duckdb d:/aux_test_processing/it-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["d:/aux_test_processing/it-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["d:/aux_test_processing/it-gtfs.zip d:/aux_test_processing/it-map.html routes"]}
         ]
   }
   ,
