@@ -17,6 +17,7 @@
   },
   {
     "block": "solea",
+    "url":"https://transport.data.gouv.fr/datasets/fr-200052264-t0014-0000-1",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_input/solea.zip"]},
@@ -31,7 +32,8 @@
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/solea-gtfs.zip"]},
         {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/solea-gtfs.zip ./aux_test_processing/solea-map.html all"]}
         ]
-  },  {
+  },
+  {
     "block": "flixbus",
     "scripts": [
         {"script": "clean_tmp", "args": ["./aux_test_processing"]},
@@ -74,6 +76,35 @@
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/trenitalia-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/trenitalia-gtfs.zip"]},
         {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/trenitalia-gtfs.zip ./aux_test_processing/trenitalia-map.html all"]}
+        ]
+  },
+    {
+    "block": "soleanetex",
+    "url": "https://transport.data.gouv.fr/datasets/fr-200052264-t0014-0000-1",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/fluo-grand-est-sitram-netex.zip ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/solean-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/solean-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/solean-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/solean-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/solean-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/solean-gtfs.zip ./aux_test_processing/solean-map.html all"]}
+        ]
+  },
+    {
+    "block": "it2",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_input/it1.zip ./aux_test_processing/netex-import.duckdb"]},
+        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/it1-netex.xml"]},
+        {"script": "aux_assertions.py", "args": ["./aux_test_input/general-netex-assertions.txt ./aux_test_processing/it1-netex.xml"]},
+        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/it1-netex.xml"]},
+        {"script": "netex_to_db.py", "args": ["./aux_test_processing/it1-netex.xml ./aux_test_processing/netex-database.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/it1-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/it1-gtfs.zip ./aux_test_processing/it1-map.html all"]}
         ]
   },
       {

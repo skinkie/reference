@@ -127,8 +127,11 @@ class GtfsProfile:
     @staticmethod
     def getOptionalPresentation(presentation: PresentationStructure, attrib: str):
         if presentation is not None:
-            return getattr(presentation, attrib, '').hex()
-
+            op=getattr(presentation, attrib, '')
+            if not op==None:
+                return op.hex()
+            else:   # sometimes it seems that some attribute is not set
+                return None
         return None
 
     @staticmethod
