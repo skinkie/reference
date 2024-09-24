@@ -477,7 +477,7 @@ class GtfsProfile:
                 'zone_id': '',
                 'stop_url': '',
                 'location_type': 1, # Station
-                'parent_station': '',  #TODO should be set correctly
+                'parent_station': '',
                 'stop_timezone': GtfsProfile.getOrNone(stop_place, 'locale.time_zone'),
                 'wheelchair_boarding': '',
                 'level_id': stop_place.levels.level_ref_or_level if stop_place.levels is not None and stop_place.levels.level_ref_or_level is not None else '',
