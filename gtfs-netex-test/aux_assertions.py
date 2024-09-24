@@ -48,7 +48,7 @@ def process_assertions(assertions_file, input_file):
                 failed=1
         elif len(assertion.strip()) > 0:
             print(f'Invalid assertion: {assertion}')
-            failed=1
+            failed = 1
     if (failed>0):
         exit(1)
 
