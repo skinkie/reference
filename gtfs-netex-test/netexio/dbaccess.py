@@ -492,7 +492,7 @@ def insert_database(con, classes, f=None, cursor=False):
                 except:
                     print("affected element")
                     print(xml)
-                    #TOTO better fix for PassenderStopAssignments: We assume that they are the same. In reality we would need to check
+                    # TODO better fix for PassenderStopAssignments: We assume that they are the same. In reality we would need to check
                     if not localname =="PassengerStopAssignment":
                         raise
                         pass
