@@ -23,7 +23,6 @@ def add_id_and_version(input_file, output_file):
             zip_ref.extract(xml_file)
 
         # Process the extracted XML file
-
         tree = ET.parse(xml_file)
         root = tree.getroot()
 
