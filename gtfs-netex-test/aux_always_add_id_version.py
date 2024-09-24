@@ -23,6 +23,7 @@ def add_id_and_version(input_file, output_file):
             zip_ref.extract(xml_file)
 
         # Process the extracted XML file
+
         tree = ET.parse(xml_file)
         root = tree.getroot()
 
@@ -40,8 +41,12 @@ def add_id_and_version(input_file, output_file):
                 if 'version' not in element.attrib:
                     element.set('version', 'any')
 
+
+        # Remove the namespace prefix for the specific namespace
+        ET.register_namespace('', 'http://www.netex.org.uk/netex')
         # Write the modified XML back to file
-        tree.write(output_file,encoding='UTF-8', xml_declaration=True, default_namespace=None)
+
+        tree.write(output_file, encoding='UTF-8', xml_declaration=True, default_namespace="")
 
         # Remove the extracted XML file
         os.remove(xml_file)
@@ -64,8 +69,12 @@ def add_id_and_version(input_file, output_file):
                 if 'version' not in element.attrib:
                     element.set('version', 'any')
 
+        # Remove the namespace prefix for the specific namespace
+        ET.register_namespace('', 'http://www.netex.org.uk/netex')
         # Write the modified XML back to file
-        tree.write(output_file,encoding='UTF-8', xml_declaration=True, default_namespace=None)
+
+        tree.write(output_file, encoding='UTF-8', xml_declaration=True, default_namespace="")
+
 
 
 if __name__ == "__main__":
