@@ -63,7 +63,7 @@ def recursive_resolve(con, parent, resolved):
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
         objs=[]
-        if object_filter=="random":
+        if object_filter == "random":
             objs = load_local(con, getattr(netex, object_type))
             objs = [random.choice(objs)] #randomly select one
         else:
