@@ -124,12 +124,6 @@ A block is a conversion/processing sequence. When a script stops with an err_cod
         ]
     },
 
-   parser = argparse.ArgumentParser(description='Executes scripts')
-    parser.add_argument('script_file', type=str, help='the script file')
-    parser.add_argument('log_file', type=str, help='name of the log file')
-    parser.add_argument('blockname', type=str, help='Block name to do')
-    parser.add_argument('--begin_step', type=int, default=1, help='The begin step (default: 1)')
-    args = parser.parse_args()
 
 #### aux_netex_stats.py - Simple statistics
 
