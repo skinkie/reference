@@ -2,7 +2,7 @@
 Stefan de Konink, 2024 <netexconv@mmtis.eu>
 
 ## Summary
-The software allows different conversions between GTFS and NeTEX and from different NeTEx profiles.
+The software allows different conversions between multiple transit interfaces and NeTEX and from different NeTEx profiles, which includes GTFS, OptiBus and IFF.
 
 NeTEx files come in different flavours ([VDV 462](https://www.vdv.de/oepnv-datenmodell.aspx), [EPIP](https://data4pt.org/w/index.php?title=Main_Page#NeTEx_EPIP), Call based (e.g. the [Swiss one](https://www.oev-info.ch/sites/default/files/2024-05/NeTEx_Core-Realisation_Guide_TP_Suisse-v1.00.pdf)) and are structured in different ways:
 * Network based
