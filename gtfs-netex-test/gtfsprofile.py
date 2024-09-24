@@ -462,8 +462,8 @@ class GtfsProfile:
             latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
         else:
             if not stop_place.centroid:  # TODO this is a bad fix for a bad data problem. The correct way would be to omit this kind of StopPlace or to feed the coordinates from the SceduledStopPlace via PSA
-                latitude=0
-                longitude=0
+                latitude = 0
+                longitude = 0
                 print(f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
             else:
                 latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
