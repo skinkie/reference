@@ -1,10 +1,10 @@
 # NeTEx conversion software
-Stefan de Konink, 2024
+Stefan de Konink, 2024 (xxx email)
 
 ## Summary
 The software allows different conversions between GTFS and NeTEX and from different NeTEx profiles.
 
-NeTEx files come in different flavours (VDV 462, EPIP, Call based) and are structured in different ways:
+NeTEx files come in different flavours ([VDV 462](https://www.vdv.de/oepnv-datenmodell.aspx), [EPIP](https://data4pt.org/w/index.php?title=Main_Page#NeTEx_EPIP), Call based (e.g. the [Swiss one](https://www.oev-info.ch/sites/default/files/2024-05/NeTEx_Core-Realisation_Guide_TP_Suisse-v1.00.pdf)) and are structured in different ways:
 * Network based
 * Line based
 * Frame based
@@ -12,6 +12,13 @@ NeTEx files come in different flavours (VDV 462, EPIP, Call based) and are struc
 In some cases the lines are complete with all relevant information. In some cases information about some
 elements is stored in separate files.
 
+## Resources:
+* Repository: https://github.com/skinkie/reference
+* Wiki: https://github.com/skinkie/reference/wiki (contains more information and links to data)
+* MMTIS error reports (if problems in data sources are found):
+  * Possible test files
+  * Flixbus GTFS: https://transport.data.gouv.fr/datasets/flixbus-horaires-theoriques-du-reseau-europeen-1
+  * Swiss NeTEx timetable 2024 (scheduled): https://opentransportdata.swiss/de/dataset/timetablenetex_2024
 
 ## Installation in pycharm
 * Pycharm should  be installed.
@@ -31,7 +38,40 @@ Currently, regeneration of NeTEx must be done with the original xsData version, 
 
 ## Using the conversions
 
+In the test runner you see how things are processed:  aux_test_runner.py
+
+An example of a configuration file can be found here: https://github.com/skinkie/reference/blob/master/gtfs-netex-test/aux_test_input/aux_tests.txt
+
+### Some use cases
+
+#### NeTEX to GTFS conversion
+1. Load the NeTEX. Usually use netex_to_db.py. Sometimes a specific profile warrants the usage of a specific importer (e.g. swiss_to_db.py)
+2. Write to GTFS
+
+#### GTFS to NeTEx conversion
+1. Load the GTFS with gtfs_convert_to_db.py
+2. Write NeTEx  netex_db_to_netex.py or epip_db_to
+
+#### NeTEx to EPIP conversion
+1. Load the NeTEx netex_to_db.py or a special loader like swiss_to_db.py
+2. DB-2-DB conversion: epip_db_to_db.py
+3. Writing EPIP epip_db_to_xml.py
+
+### NeTEx to SIRI 
+From a NeTEx file an operation day can be exported as SIRI PT/ET.
+
+> TO BE DONE
+
+### Validation and inspection of a NeTEX file
+* Some statistics aux_netex_stats.py
+* Some assertions aux_netex_assertions
+* XSD check: TO BE DONE
+* EPIP check: TO BE DONE
+
 ### Basic functions
+
+#### Basics
+* We usually can process files, zip and gzip. The ending determines, which file is read or written.
 
 #### Importing GTFS
 `python gtfs_import_to_db.py /path/to/gtfs.zip /path/to/gtfs-import.duckdb`
@@ -49,6 +89,11 @@ Currently, regeneration of NeTEx must be done with the original xsData version, 
 `python swiss_to_db.py /path/to/swiss-netex-file.zip /path/to/swiss-import.duckdb`
 
 The Swiss file has some specialities.
+
+Not yet working well are:
+* Demand responsive traffic
+* Frequency based traffic
+
 ####  Exploring instances and their dependencies
 `python related_explorer.py /path/to/netex.duckdb ServiceJourney the:id`
 
@@ -99,21 +144,26 @@ This shows if the relevant elements are present.
 
 `python aux_netex_stats.py path/to/netex_file.xml path/to/assertions.txt`
 
-The program testssome assertions agains a netex file 
+The program tests some assertions agains a netex file 
 
 > (!) Here it must be an uncompressed xml file for the time being 
 
 Example of an assertions.txt file:
-    # a comment
-    # currently only working for netex
-    xpathcountgreater //* 1000
-    xpathcountequal //netex:SiteFrame 1
-    contains PublicationDelivery
-    contains \d{4}-\d{2}-\d{2}
+
+     # a comment
+     # currently only working for netex
+     xpathcountgreater //* 1000
+     xpathcountequal //netex:SiteFrame 1
+     contains PublicationDelivery
+     contains \d{4}-\d{2}-\d{2}
 
 The example shows all allowed functions contains works with regex
 
 ## Roadmap, Issues and Pull Requests
+* Issues with the program and Pull Requests: https://github.com/skinkie/reference/issues
+* Data errors found: https://github.com/MMTIS/QA/issues
 
+### Current roadmap
+https://github.com/skinkie/reference/wiki/Roadmap
 
 ## License
