@@ -62,6 +62,7 @@ def convert(archive, database: str):
             stop_place: StopPlace
             if stop_place.quays:
                 for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
+                    # TODO: Replace with proper checks based on object type.
                     if hasattr(quay,"id"):
                         quay_to_sp[quay.id] = stop_place
                     else:
