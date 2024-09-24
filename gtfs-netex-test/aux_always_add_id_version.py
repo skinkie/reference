@@ -41,7 +41,6 @@ def add_id_and_version(input_file, output_file):
                 if 'version' not in element.attrib:
                     element.set('version', 'any')
 
-
         # Remove the namespace prefix for the specific namespace
         ET.register_namespace('', 'http://www.netex.org.uk/netex')
         # Write the modified XML back to file
