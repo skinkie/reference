@@ -1,5 +1,5 @@
 # NeTEx conversion software
-Stefan de Konink, 2024 (xxx email)
+Stefan de Konink, 2024 <netexconv@mmtis.eu>
 
 ## Summary
 The software allows different conversions between GTFS and NeTEX and from different NeTEx profiles.
