@@ -94,7 +94,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
                 with open(output_filename, 'w', encoding='utf-8') as out:
                     serializer.write(out, publication_delivery, ns_map)
         else:
-            print(f"no suchobject found {object_type},{object_filter}")
+            print(f"no such object found {object_type},{object_filter}")
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Export a prepared EPIP  import into DuckDB')
