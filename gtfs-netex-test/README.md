@@ -32,7 +32,6 @@ pip install --upgrade pip
 pip install -r requirements.txt
 xsdata generate -c netex.conf /home/skinkie/Sources/NeTEx/xsd/NeTEx_publication.xsd
 ```
-Currently, regeneration of NeTEx must be done with the original xsData version, because Iterable does not work while parsing. So, just use the checked out components.
 ### Generating Python classes from XML Schema
 `xsdata generate -c netex.conf /path/to/NeTEx/xsd/NeTEx_publication.xsd`
 
