@@ -285,8 +285,8 @@ class GtfsProfile:
     def projectStopEntranceToStop(stop_entrance: StopPlaceEntrance, parent: StopPlaceRef, transformer: Transformer = None):
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
-        if stop_entrance.centroid.location is None:
-            print(f"StopPlaceEntrance {stop_entrance.id} does not have a location.")
+        if stop_entrance.centroid is None or stop_entrance.centroid.location is None:
+            print(f"StopPlaceEntrance {stop_entrance.id} does not have a location or centroid.")
             # TODO: Maybe by parent?
             return None
 
