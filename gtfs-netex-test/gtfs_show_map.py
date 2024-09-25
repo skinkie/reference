@@ -28,8 +28,8 @@ def main(gtfs_zip_file, map_file):
     print("files read in " + str(end_time - start_time))
 
     # Create a map using Leaflet
-    map_center = [df_stops['stop_lat'].mean(), df_stops['stop_lon'].mean()]
-    m = folium.Map(location=map_center, zoom_start=12)
+    map_center = [47.368650, 8.539183]#df_stops['stop_lat'].mean(), df_stops['stop_lon'].mean()]
+    m = folium.Map(location=map_center, zoom_start=19)
     start_time = time.time()
     print("basemap created in " + str(start_time - end_time))
 
