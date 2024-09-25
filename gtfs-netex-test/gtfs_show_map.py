@@ -1,5 +1,4 @@
 import random
-import sys
 import time
 import zipfile
 
@@ -25,45 +24,34 @@ def main(gtfs_zip_file, map_file):
         df_trips = pd.read_csv(zip_ref.open('trips.txt'), usecols=['route_id', 'trip_id', 'trip_headsign'])
         df_stop_times = pd.read_csv(zip_ref.open('stop_times.txt'), usecols=['trip_id', 'stop_id', 'stop_sequence'])
     end_time = time.time()
-    print("files read in " + str(end_time - start_time))
+    print("files read in " + str(round(end_time - start_time, 2)))
 
     # Create a map using Leaflet
-    map_center = [47.368650, 8.539183]#df_stops['stop_lat'].mean(), df_stops['stop_lon'].mean()]
+    map_center = [47.368650, 8.539183]  # df_stops['stop_lat'].mean(), df_stops['stop_lon'].mean()]
     m = folium.Map(location=map_center, zoom_start=19)
     start_time = time.time()
-    print("basemap created in " + str(start_time - end_time))
+    print("basemap created in " + str(round(start_time - end_time, 2)))
 
     # Add markers for each stop
     # Create a dictionary for fast stop lookups
     stop_dict = df_stops.set_index('stop_id')[['stop_lat', 'stop_lon']].T.to_dict('list')  # efficiency improvement #1
-    end_time = time.time()
-    print("stop_dict in " + str(end_time - start_time))
 
     for stop_id, (lat, lon) in stop_dict.items():
         folium.Marker(
             location=[lat, lon],
             popup=stop_dict[stop_id][1]  # stop_name
         ).add_to(m)
-    start_time = time.time()
-    print("Markers added for each stop in " + str(start_time - end_time))
-
-    # Add polylines for each route
-    print("Creating polylines for each route. Total values to process: " + str(df_routes.size))
-
-    # Create cache structures - performance #3
-    route_dict = df_routes.set_index('route_id')[['route_short_name']].T.to_dict('list')
     end_time = time.time()
-    print("route_dict in " + str(end_time - start_time))
+    print("markers added for each stop in " + str(round(end_time - start_time, 2)))
+
+    # Create cache structures for improved mp creation
+    route_dict = df_routes.set_index('route_id')[['route_short_name']].T.to_dict('list')
 
     trips_dict = df_trips.groupby('route_id')['trip_id'].agg(list).reset_index().set_index('route_id')[
         'trip_id'].to_dict()
-    start_time = time.time()
-    print("trips_dict in " + str(start_time - end_time))
 
     stop_times_dict = df_stop_times.groupby('trip_id')['stop_id'].agg(list).reset_index().set_index('trip_id')[
         'stop_id'].to_dict()
-    end_time = time.time()
-    print("stop_times_dict in " + str(end_time - start_time))
 
     # create a map from trip to list of stops
     for route_id in route_dict.keys():
@@ -87,11 +75,11 @@ def main(gtfs_zip_file, map_file):
             ).add_to(m)
 
     start_time = time.time()
-    print("polylines added in: " + str(start_time - end_time))
+    print("polylines created in: " + str(round(start_time - end_time, 2)))
 
     # Save the map to an HTML file
     m.save(map_file)
-    print("map created in: " + str(time.time() - start_time))
+    print("map created in: " + str(round(time.time() - start_time, 2)))
 
 
 # Function to remove duplicates from each inner list
