@@ -871,7 +871,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 elif transfer_types[i] == 5:
                     # In-seat transfer not allowed
-                    yield InterchangeRule(exclude=True,
+                    yield InterchangeRule(stay_seated=False,
                                           id=id,
                                           version=self.version.version,
                                           feeder_filter=feeder_filter,

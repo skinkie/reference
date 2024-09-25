@@ -15,7 +15,7 @@ from netexio.dbaccess import load_local, load_generator
 from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
     Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
-    DataSource, StopPlaceEntrance, TemplateServiceJourney
+    DataSource, StopPlaceEntrance, TemplateServiceJourney, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting
 from nordicprofile import NordicProfile
 from refs import getId, getRef, getIndex
 
@@ -158,6 +158,12 @@ def convert(archive, database: str):
                                              uic_operating_periods[day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]))
 
         GtfsProfile.writeToZipFile(archive,'calendar_dates.txt', [item for row in calendar_dates.values() for item in row], write_header=True)
+
+        transfers = [GtfsProfile.projectInterchangeRuleToTransfer(transfer) for transfer in load_generator(con, InterchangeRule)] + [GtfsProfile.projectServiceJourneyInterchangeToTransfer(transfer) for transfer in load_generator(con, ServiceJourneyInterchange)] + [GtfsProfile.projectServiceJourneyMeeting(transfer) for transfer in load_generator(con, JourneyMeeting)]
+
+        transfers = list({(v['from_stop_id'], v['to_stop_id'], v['from_route_id'], v['to_route_id'], v['from_trip_id'], v['to_trip_id'], v['transfer_type'], v['min_transfer_time']):v for v in transfers}.values())
+
+        GtfsProfile.writeToZipFile(archive, 'transfers.txt', transfers, write_header=True)
 
         GtfsProfile.writeToZipFile(archive,'feed_info.txt', [{
             'feed_publisher_name': datasources[0].name.value if len(datasources) > 0 else 'Publication Delivery',
