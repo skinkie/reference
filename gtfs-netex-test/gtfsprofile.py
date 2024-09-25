@@ -4,14 +4,15 @@ import warnings
 from typing import List, Union
 import io
 from pyproj import Transformer
-from xsdata.models.datatype import XmlDateTime
+from xsdata.models.datatype import XmlDateTime, XmlDuration
+from utils import to_seconds
 
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \
     ScheduledStopPoint, StopPlace, AccessibilityAssessment, LimitationStatusEnumeration, TariffZoneRefsRelStructure, \
     PrivateCode, PrivateCodeStructure, Quay, PresentationStructure, Authority, Branding, Operator, ServiceJourney, \
     ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
     ServiceLink, PublicCodeStructure, StopPlaceEntrance, TemplateServiceJourney, HeadwayJourneyGroup, \
-    JourneyFrequencyGroupVersionStructure
+    JourneyFrequencyGroupVersionStructure, InterchangeRule, ServiceJourneyInterchange
 
 import operator as operator_f
 
@@ -192,10 +193,76 @@ class GtfsProfile:
     #              'agency_email': authority.contact_details.email
     #              }
 
+    @staticmethod
+    def projectInterchangeRuleToTransfer(interchange_rule: InterchangeRule):
+        from_stop_id = None
+        if interchange_rule.feeder_filter.stop_place_ref is not None:
+            from_stop_id = interchange_rule.feeder_filter.stop_place_ref.ref
+        elif interchange_rule.feeder_filter.scheduled_stop_point_ref is not None:
+            from_stop_id = interchange_rule.feeder_filter.scheduled_stop_point_ref.ref
+
+        to_stop_id = None
+        if interchange_rule.distributor_filter.stop_place_ref is not None:
+            to_stop_id = interchange_rule.distributor_filter.stop_place_ref.ref
+        elif interchange_rule.distributor_filter.scheduled_stop_point_ref is not None:
+            to_stop_id = interchange_rule.distributor_filter.scheduled_stop_point_ref.ref
+
+        from_route_id = None
+        if interchange_rule.feeder_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref is not None:
+            from_route_id = interchange_rule.feeder_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref[0].line_ref.ref
+
+        to_route_id = None
+        if interchange_rule.distributor_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref is not None:
+            to_route_id = interchange_rule.distributor_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref[0].line_ref.ref
+
+        from_trip_id = None
+        if interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator is not None:
+            from_trip_id = interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator.ref
+
+        to_trip_id = None
+        if interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator is not None:
+            to_trip_id = interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator.ref
+
+        transfer_type = 0
+
+        if interchange_rule.guaranteed:
+            transfer_type = 1
+
+            if interchange_rule.minimum_transfer_time:
+                transfer_type = 2
+
+            elif interchange_rule.standard_transfer_time:
+                transfer_type = 2
+
+        if interchange_rule.exclude:
+            transfer_type = 3
+
+        if interchange_rule.stay_seated == True:
+            transfer_type = 4
+
+        elif interchange_rule.stay_seated == False:
+            transfer_type = 5
+
+        min_transfer_time = None
+        if interchange_rule.minimum_transfer_time:
+            min_transfer_time = to_seconds(interchange_rule.minimum_transfer_time)
+        else:
+            min_transfer_time = to_seconds(interchange_rule.standard_transfer_time)
+
+        transfer = {'from_stop_id': from_stop_id,
+                    'to_stop_id': to_stop_id,
+                    'from_route_id': from_route_id,
+                    'to_route_id': to_route_id,
+                    'from_trip_id': from_trip_id,
+                    'to_trip_id': to_trip_id,
+                    'transfer_type': transfer_type,
+                    'min_transfer_time': min_transfer_time
+                    }
+
+        return transfer
 
     @staticmethod
     def projectLineToRoute(line: Line):
-
         if line.branding_ref is not None:
             agency_id = line.branding_ref.ref
         elif line.operator_ref is not None:
