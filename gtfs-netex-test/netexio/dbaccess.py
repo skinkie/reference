@@ -492,10 +492,12 @@ def insert_database(con, classes, f=None, cursor=False):
                 except:
                     print("affected element")
                     print(xml)
+                    raise
+                    pass
                     # TODO better fix for PassenderStopAssignments: We assume that they are the same. In reality we would need to check
-                    if not localname =="PassengerStopAssignment":
-                        raise
-                        pass
+                    #if not localname =="PassengerStopAssignment":
+                    #    raise
+                    #    pass
 
             elif hasattr(clazz, 'version'):
                 version = element.attrib.get('version', None)
