@@ -288,11 +288,22 @@
         {"script": "gtfs_show_map.py", "args": ["d:/aux_test_processing/swiss3-gtfs.zip d:/aux_test_processing/swiss3-map.html routes"]}
         ]
   }
- ,
+  ,
+     {
+    "block": "swiss4short",
+    "scripts": [
+        {"script": "clean_tmp", "args": ["d:/aux_test_processing"]},
+        {"script": "swiss_to_db.py", "args": ["d:/swiss4.zip d:/aux_test_processing/swiss-import.duckdb"]},
+        {"script": "netex_db_to_gtfs.py", "args": ["d:/aux_test_processing/swiss-import.duckdb d:/aux_test_processing/swiss4short-gtfs.zip"]},
+        {"script": "aux_gtfs_check.py", "args": ["d:/aux_test_processing/swiss4short-gtfs.zip"]},
+        {"script": "gtfs_show_map.py", "args": ["d:/aux_test_processing/swiss4short-gtfs.zip d:/aux_test_processing/swiss4short-gtfs-map.html routes"]}
+        ]
+    }
+    ,
      {
     "block": "stav462",
     "url":"download from Roberto",
-    "description":"STA file based on VDV 462 for testing
+    "description":"STA file based on VDV 462 for testing",
     "scripts": [
         {"script": "clean_tmp", "args": ["d:/aux_test_processing"]},
         {"script": "netex_to_db.py", "args": ["D:/conversion/GE16614_01_DIVA_apb_ALL_1_20240919165008.xml.zip d:/aux_test_processing/swiss-import.duckdb"]},
