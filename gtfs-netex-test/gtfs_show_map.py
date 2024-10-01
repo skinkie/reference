@@ -1,11 +1,10 @@
 import random
 import time
 import zipfile
-from datetime import datetime
 
 import folium
 import pandas as pd
-from folium.plugins import MarkerCluster
+from folium.plugins import MarkerCluster, Search
 
 
 # Generate a random dark color
@@ -75,13 +74,23 @@ def main(gtfs_zip_file, map_file, limitation):
 
         folium.Marker(
             location=[lat, lon],
-            popup=str(stop_id) + ":" + str(stop_name_dict[stop_id])  # stop_name
+            popup=str(stop_id) + ":" + str(stop_name_dict[stop_id]),  # stop_name
+            name=str(stop_id) + ":" + str(stop_name_dict[stop_id]) # as above
         ).add_to(marker_cluster)
 
     marker_cluster.add_to(m)
 
+    servicesearch = Search(
+        layer=marker_cluster,
+        search_label="name",
+        geom_type="Point",
+        placeholder="Search for stops",
+        collapsed=False,
+        position="topright"
+    ).add_to(m)
+
     end_time = time.time()
-    print("markers added for each stop in " + str(round(end_time - start_time, 2)) + " " + str(datetime.datetime.now()))
+    print("markers added for each stop in " + str(round(end_time - start_time, 2)))
 
     # Create dictionaries for trips creation as well
     trips_group = folium.FeatureGroup(
@@ -91,10 +100,13 @@ def main(gtfs_zip_file, map_file, limitation):
         show=False
     ).add_to(m)
 
-    route_dict = df_routes.set_index('route_id')[['route_short_name']].T.to_dict('list')
+    route_dict = df_routes.set_index('route_id')[['route_short_name']].T.to_dict()
 
     trips_dict = df_trips.groupby('route_id')['trip_id'].agg(list).reset_index().set_index('route_id')[
         'trip_id'].to_dict()
+
+    trips_names_dict = df_trips.groupby('route_id')['trip_headsign'].agg(list).reset_index().set_index('route_id')[
+        'trip_headsign'].to_dict()
 
     stop_times_dict = df_stop_times.groupby('trip_id')['stop_id'].agg(list).reset_index().set_index('trip_id')[
         'stop_id'].to_dict()
@@ -114,10 +126,10 @@ def main(gtfs_zip_file, map_file, limitation):
         route_name_dict = route_dict[route_id]
 
         if limitation and (r % limitation == 0):
-            handle_trips_for_route(trips_dict, route_id, stop_times_dict, stops_dict,
+            handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_dict, stops_dict,
                                    stop_coords_list, stop_coords_list_str, route_names, route_name_dict)
         elif not limitation:
-            handle_trips_for_route(trips_dict, route_id, stop_times_dict, stops_dict,
+            handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_dict, stops_dict,
                                    stop_coords_list, stop_coords_list_str, route_names, route_name_dict)
 
         r = r + 1
@@ -144,10 +156,11 @@ def main(gtfs_zip_file, map_file, limitation):
     print("map created in: " + str(round(time.time() - end_time, 2)))
 
 
-def handle_trips_for_route(trips_dict, route_id, stop_times_dict, stops_dict, stop_coords_list,
+def handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_dict, stops_dict, stop_coords_list,
                            stop_coords_list_str, route_names, route_name_dict):
     for trip_id in trips_dict[route_id]:
         stop_coords = []
+        trip_name = trips_names_dict[route_id][trips_dict[route_id].index(trip_id)]
 
         for stop_id in stop_times_dict[trip_id]:
             stop_coord = stops_dict[stop_id]
@@ -170,7 +183,7 @@ def handle_trips_for_route(trips_dict, route_id, stop_times_dict, stops_dict, st
         if not no_sub:
             stop_coords_list.append(stop_coords)
             stop_coords_list_str.append(array_of_array_to_string(stop_coords))
-            route_names.append(route_name_dict['route_short_name'])
+            route_names.append(route_name_dict['route_short_name'] + " to " + trip_name)
 
 
 def array_of_array_to_string(array_of_arrays):
