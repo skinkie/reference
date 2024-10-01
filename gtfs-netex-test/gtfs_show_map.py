@@ -1,11 +1,10 @@
 import random
 import time
 import zipfile
-from datetime import datetime
 
 import folium
 import pandas as pd
-from folium.plugins import MarkerCluster
+from folium.plugins import MarkerCluster, Search
 
 
 # Generate a random dark color
@@ -16,7 +15,7 @@ def generate_random_dark_color():
     return '#%02x%02x%02x' % (r, g, b)
 
 
-def main(gtfs_zip_file, map_file):
+def main(gtfs_zip_file, map_file, limitation):
     # Read GTFS files using pandas
     # Read the GTFS files directly from the ZIP archive using pandas
     start_time = time.time()
@@ -38,8 +37,8 @@ def main(gtfs_zip_file, map_file):
     print("basemap created in " + str(round(start_time - end_time, 2)))
 
     # Add markers for each stop - create a dictionary for fast stop lookups
-    stop_dict = df_stops.set_index('stop_id')[['stop_lat', 'stop_lon']].T.to_dict('list')
-    stop_dict_list = list(stop_dict.keys())
+    stops_dict = df_stops.set_index('stop_id')[['stop_lat', 'stop_lon']].T.to_dict('list')
+    stop_dict_list = list(stops_dict.keys())
     stop_dict_list_len_range = range(len(stop_dict_list))
     stop_name_dict = df_stops.set_index('stop_id')[['stop_name']].T.to_dict('list')
     stop_id_duplicates = []
@@ -53,8 +52,11 @@ def main(gtfs_zip_file, map_file):
     ).add_to(m)
 
     for i in stop_dict_list_len_range:
+        if limitation and (i % limitation != 0):
+            continue
+
         stop_id = stop_dict_list[i]
-        (lat, lon) = stop_dict[stop_id]
+        (lat, lon) = stops_dict[stop_id]
 
         if stop_id in stop_id_duplicates:
             continue
@@ -63,7 +65,7 @@ def main(gtfs_zip_file, map_file):
         for j in stop_dict_list_len_range:
             # this loop ensures that we do not have duplicate markers (no "single parents")
             stop_id_inner = stop_dict_list[j]
-            (lat_inner, lon_inner) = stop_dict[stop_id_inner]
+            (lat_inner, lon_inner) = stops_dict[stop_id_inner]
 
             if (lat == lat_inner) and (lon == lon_inner):
                 if stop_id == stop_id_inner:
@@ -75,26 +77,32 @@ def main(gtfs_zip_file, map_file):
 
         folium.Marker(
             location=[lat, lon],
-            popup=str(stop_id) + ":" + str(stop_name_dict[stop_id])  # stop_name
+            popup=str(stop_id) + ":" + str(stop_name_dict[stop_id]),  # stop_name
+            name=str(stop_id) + ":" + str(stop_name_dict[stop_id])  # as above
         ).add_to(marker_cluster)
 
     marker_cluster.add_to(m)
 
-    end_time = time.time()
-    print("markers added for each stop in " + str(round(end_time - start_time, 2)) + " " + str(datetime.datetime.now()))
-
-    # Create dictionaries for trips creation as well
-    trips_group = folium.FeatureGroup(
-        name="Trips",
-        overlay=True,
-        control=True,
-        show=False
+    servicesearch = Search(
+        layer=marker_cluster,
+        search_label="name",
+        geom_type="Point",
+        placeholder="Search for stops",
+        collapsed=False,
+        position="topright"
     ).add_to(m)
 
-    route_dict = df_routes.set_index('route_id')[['route_short_name']].T.to_dict('list')
+    end_time = time.time()
+    print("markers added for each stop in " + str(round(end_time - start_time, 2)))
+
+    # Create dictionaries for trips creation as well
+    route_dict = df_routes.set_index('route_id')[['route_short_name']].T.to_dict()
 
     trips_dict = df_trips.groupby('route_id')['trip_id'].agg(list).reset_index().set_index('route_id')[
         'trip_id'].to_dict()
+
+    trips_names_dict = df_trips.groupby('route_id')['trip_headsign'].agg(list).reset_index().set_index('route_id')[
+        'trip_headsign'].to_dict()
 
     stop_times_dict = df_stop_times.groupby('trip_id')['stop_id'].agg(list).reset_index().set_index('trip_id')[
         'stop_id'].to_dict()
@@ -107,50 +115,39 @@ def main(gtfs_zip_file, map_file):
     r = 0
     timer = 0
     for route_id in route_dict.keys():
-        if r % 1000 == 0:
+        if r % 1000 == 0 and not limitation:
             print(str(r) + " of " + str(len(route_dict)))
             timer = time.time()
 
-        route_name = route_dict[route_id]
+        route_name_dict = route_dict[route_id]
 
-        for trip_id in trips_dict[route_id]:
-            stop_coords = []
-
-            for stop_id in stop_times_dict[trip_id]:
-                stop_coord = stop_dict[stop_id]
-
-                if stop_coord:
-                    stop_coords.append(stop_coord)
-
-            # remove full duplicate lines or sub-lines we stringify the arrays for efficiency
-            stop_coords_str = array_of_array_to_string(stop_coords)
-            stop_coords_list_range = range(len(stop_coords_list))
-            no_sub = False
-
-            for i in stop_coords_list_range:
-                stop_coords_list_i_str = stop_coords_list_str[i]
-
-                if (stop_coords_str in stop_coords_list_i_str) or (stop_coords_list_i_str in stop_coords_str):
-                    no_sub = True
-                    break
-
-            if not no_sub:
-                stop_coords_list.append(stop_coords)
-                stop_coords_list_str.append(array_of_array_to_string(stop_coords))
-                route_names.append(route_name)
+        if limitation and (r % limitation == 0):
+            handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_dict, stops_dict,
+                                   stop_coords_list, stop_coords_list_str, route_names, route_name_dict)
+        elif not limitation:
+            handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_dict, stops_dict,
+                                   stop_coords_list, stop_coords_list_str, route_names, route_name_dict)
 
         r = r + 1
-        if r % 1000 == 0:
-            print("r in " + str(time.time() - timer) + " " + str(datetime.datetime.now()))
+        if r % 1000 == 0 and not limitation:
+            print("r in " + str(time.time() - timer))
 
     start_time = time.time()
     print("routes prepared in " + str(round(start_time - end_time, 2)))
 
+    trips_group = folium.FeatureGroup(
+        name="Trips",
+        overlay=True,
+        control=True,
+        show=False
+    ).add_to(m)
+
     for i in range(len(stop_coords_list)):
         folium.PolyLine(
             locations=stop_coords_list[i],
-            popup=route_names[i],
-            smooth_factor=10
+            tooltip=route_names[i],
+            smooth_factor=10,
+            color=generate_random_dark_color()
         ).add_to(trips_group)
 
     folium.LayerControl().add_to(m)
@@ -162,6 +159,36 @@ def main(gtfs_zip_file, map_file):
     print("map created in: " + str(round(time.time() - end_time, 2)))
 
 
+def handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_dict, stops_dict, stop_coords_list,
+                           stop_coords_list_str, route_names, route_name_dict):
+    for trip_id in trips_dict[route_id]:
+        stop_coords = []
+        trip_name = trips_names_dict[route_id][trips_dict[route_id].index(trip_id)]
+
+        for stop_id in stop_times_dict[trip_id]:
+            stop_coord = stops_dict[stop_id]
+
+            if stop_coord:
+                stop_coords.append(stop_coord)
+
+        # remove full duplicate lines or sub-lines we stringify the arrays for efficiency
+        stop_coords_str = array_of_array_to_string(stop_coords)
+        stop_coords_list_range = range(len(stop_coords_list))
+        no_sub = False
+
+        for i in stop_coords_list_range:
+            stop_coords_list_i_str = stop_coords_list_str[i]
+
+            if (stop_coords_str in stop_coords_list_i_str) or (stop_coords_list_i_str in stop_coords_str):
+                no_sub = True
+                break
+
+        if not no_sub:
+            stop_coords_list.append(stop_coords)
+            stop_coords_list_str.append(array_of_array_to_string(stop_coords))
+            route_names.append(route_name_dict['route_short_name'] + " to " + trip_name)
+
+
 def array_of_array_to_string(array_of_arrays):
     return ''.join(f'[{x[0]}, {x[1]}]' for x in array_of_arrays)
 
@@ -169,9 +196,14 @@ def array_of_array_to_string(array_of_arrays):
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Writes  an html file with leaflet to show')
+    parser = argparse.ArgumentParser(description='Writes an html file for GTFS with leaflet to show stops and trips')
     parser.add_argument('gtfs_zip_file', type=str, help='GTFS zip file')
     parser.add_argument('map_file', type=str, help='output file (.html)')
+    parser.add_argument('--limitation', type=int, required=False,
+                        help='output every <argument> route (all trips of route)')
     args = parser.parse_args()
 
-    main(args.gtfs_zip_file, args.map_file)
+    if args.limitation:
+        main(args.gtfs_zip_file, args.map_file, args.limitation)
+    else:
+        main(args.gtfs_zip_file, args.map_file, None)
