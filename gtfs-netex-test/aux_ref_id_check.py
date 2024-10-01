@@ -9,10 +9,6 @@ def main(netex_file: str):
     error_dict = {} # the problems
 
     for file in open_netex_file(netex_file):
-        print("***************************************************")
-        print("file: "+file)
-        print("***************************************************")
-
         # Load the XML document
         tree=ET.parse(file)
         root=tree.getroot()
@@ -58,7 +54,7 @@ def main(netex_file: str):
     print(f"Problematic refs in file{netex_file}")
     print(error_dict)
     print(f'"ref","version","order","class","severity"')
-    for element in error_dict:
+    for key,element in error_dict.items():
         print (f'"{element.get("ref")}","{element.get('version')}","{element.get('order')}","{element.get('tag')}","{element.get('severity')}"')
 
 
