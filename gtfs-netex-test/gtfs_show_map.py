@@ -52,6 +52,9 @@ def main(gtfs_zip_file, map_file, limitation):
     ).add_to(m)
 
     for i in stop_dict_list_len_range:
+        if limitation and (i % limitation != 0):
+            continue
+
         stop_id = stop_dict_list[i]
         (lat, lon) = stops_dict[stop_id]
 
@@ -75,7 +78,7 @@ def main(gtfs_zip_file, map_file, limitation):
         folium.Marker(
             location=[lat, lon],
             popup=str(stop_id) + ":" + str(stop_name_dict[stop_id]),  # stop_name
-            name=str(stop_id) + ":" + str(stop_name_dict[stop_id]) # as above
+            name=str(stop_id) + ":" + str(stop_name_dict[stop_id])  # as above
         ).add_to(marker_cluster)
 
     marker_cluster.add_to(m)
@@ -93,13 +96,6 @@ def main(gtfs_zip_file, map_file, limitation):
     print("markers added for each stop in " + str(round(end_time - start_time, 2)))
 
     # Create dictionaries for trips creation as well
-    trips_group = folium.FeatureGroup(
-        name="Trips",
-        overlay=True,
-        control=True,
-        show=False
-    ).add_to(m)
-
     route_dict = df_routes.set_index('route_id')[['route_short_name']].T.to_dict()
 
     trips_dict = df_trips.groupby('route_id')['trip_id'].agg(list).reset_index().set_index('route_id')[
@@ -139,10 +135,17 @@ def main(gtfs_zip_file, map_file, limitation):
     start_time = time.time()
     print("routes prepared in " + str(round(start_time - end_time, 2)))
 
+    trips_group = folium.FeatureGroup(
+        name="Trips",
+        overlay=True,
+        control=True,
+        show=False
+    ).add_to(m)
+
     for i in range(len(stop_coords_list)):
         folium.PolyLine(
             locations=stop_coords_list[i],
-            popup=route_names[i],
+            tooltip=route_names[i],
             smooth_factor=10,
             color=generate_random_dark_color()
         ).add_to(trips_group)
