@@ -2,6 +2,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from itertools import chain
 
 from pyproj import Transformer
+from pyproj.exceptions import CRSError
 
 from netex import Polygon, PosList, Pos, LocationStructure2
 
@@ -19,7 +20,14 @@ def get_transformer_by_srs_name(location, crs_to, generator_defaults: dict) -> T
     mapping = f"{srs_name}_{crs_to}"
     transformer = transformers.setdefault(mapping, None)
     if transformer is None:
-        transformer = Transformer.from_crs(srs_name, crs_to)
+        try:
+            transformer = Transformer.from_crs(srs_name, crs_to)
+        except CRSError:
+            # TODO: Implement logging rule that handles error
+            raise
+            pass
+        except:
+            raise
         transformers[mapping] = transformer
     return transformer
 
