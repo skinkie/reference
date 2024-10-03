@@ -1,3 +1,4 @@
+import inspect
 import sys
 from typing import T, List, Generator
 
@@ -9,7 +10,9 @@ from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
+import netex
 from mro_attributes import list_attributes
+from netex import VersionFrameDefaultsStructure
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -445,7 +448,22 @@ def setup_database(con, classes, clean=False, cursor=False):
         print(sql_create_table)
         cur.execute(sql_create_table)
 
+def get_local_name(element):
+    if hasattr(element, 'Meta') and hasattr(element.Meta, 'name'):
+        return element.Meta.name
+    return element.__name__
+
 def insert_database(con, classes, f=None, cursor=False):
+    clsmembers = inspect.getmembers(netex, inspect.isclass)
+    all_frames = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.VersionFrameVersionStructure in x[1].__mro__]
+
+    # See: https://github.com/NeTEx-CEN/NeTEx/issues/788
+    # all_datasource_refs = [x[0] for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and hasattr(x[1], 'data_source_ref_attribute')]
+    all_datasource_refs = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.DataManagedObjectStructure  in x[1].__mro__]
+    all_responsibility_set_refs = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.EntityInVersionStructure  in x[1].__mro__]
+    all_srs_name = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1], 'srs_name')]
+
+    frame_defaults_stack = []
     if f is None:
         return
 
@@ -465,63 +483,109 @@ def insert_database(con, classes, f=None, cursor=False):
     events = ("start", "end")
     context = etree.iterparse(f, events=events, remove_blank_text=True)
     current_element = None
+    current_framedefaults = None
+    location_srsName = None
     for event, element in context:
-        if event == 'start' and current_element is None and element.tag in interesting_element_names:
-            current_element = element.tag
+        localname = element.tag.split('}')[-1]  # localname
 
-        elif event == 'end' and current_element == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
+        if event == 'start':
+            if current_element is None and element.tag in interesting_element_names:
+                current_element = element.tag
+
+            if localname in all_frames:
+                frame_defaults_stack.append(None)
+
+            if localname == 'Location':
+                if 'srsName' in element.attrib:
+                    location_srsName = element.attrib['srsName']
+
+        elif event == 'end':
             # current_element = element.tag
-            xml = etree.tostring(element, encoding='unicode')
-            if 'id' not in element.attrib:
-                current_element = None
-                # print(xml)
+            if localname == 'FrameDefaults':
+                xml = etree.tostring(element, encoding='unicode')
+                frame_defaults: VersionFrameDefaultsStructure = parser.from_string(xml, VersionFrameDefaultsStructure)
+                frame_defaults_stack[-1] = frame_defaults
+                current_framedefaults = frame_defaults
                 continue
 
-            clazz = clazz_by_name[element.tag]
+            elif localname in all_frames:
+                # This is the end of the frame, pop the frame_defaults stack
+                frame_defaults_stack.pop()
+                filtered = [fd for fd in frame_defaults_stack if fd is not None]
+                current_framedefaults = filtered[-1] if len(filtered) > 0 else None
+                continue
 
-            id = element.attrib['id']
-            localname = element.tag.split('}')[-1] # localname
+            if current_framedefaults is not None:
+                if localname in all_datasource_refs:
+                    if 'dataSourceRef' not in element.attrib:
+                        element.attrib['dataSourceRef'] = current_framedefaults.default_data_source_ref.ref
 
-            if hasattr(clazz, 'order'):
-                version = element.attrib.get('version', None)
-                order = element.attrib.get('order', None)
+                if localname in all_responsibility_set_refs:
+                    if 'responsibilitySetRef' not in element.attrib:
+                        element.attrib['responsibilitySetRef'] = current_framedefaults.default_responsibility_set_ref.ref
 
-                sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
-                try:
-                    cur.execute(sql_insert_object, (id, version, order, xml,))
-                except:
-                    print("affected element")
-                    print(xml)
-                    raise
-                    pass
-                    # TODO better fix for PassenderStopAssignments: We assume that they are the same. In reality we would need to check
-                    #if not localname =="PassengerStopAssignment":
-                    #    raise
-                    #    pass
+                if localname in all_srs_name:
+                    if 'srsName' not in element.attrib:
+                        element.attrib['srsName'] = location_srsName if location_srsName is not None else current_framedefaults.default_location_system
 
-            elif hasattr(clazz, 'version'):
-                version = element.attrib.get('version', None)
+                if localname == 'Location':
+                    if 'srsName' not in element.attrib:
+                        element.attrib['srsName'] = current_framedefaults.default_location_system
 
-                sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
-                try:
-                    cur.execute(sql_insert_object, (id, version, xml,))
-                except:
-                    if localname == 'ServiceJourney':
+                    location_srsName = None
+
+            if current_element == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
+                if 'id' not in element.attrib:
+                    current_element = None
+                    # print(xml)
+                    continue
+
+                xml = etree.tostring(element, encoding='unicode')
+
+                clazz = clazz_by_name[element.tag]
+
+                id = element.attrib['id']
+
+                if hasattr(clazz, 'order'):
+                    version = element.attrib.get('version', None)
+                    order = element.attrib.get('order', None)
+
+                    sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
+                    try:
+                        cur.execute(sql_insert_object, (id, version, order, xml,))
+                    except:
+                        print("affected element")
                         print(xml)
                         raise
+                        pass
+                        # TODO better fix for PassenderStopAssignments: We assume that they are the same. In reality we would need to check
+                        #if not localname =="PassengerStopAssignment":
+                        #    raise
+                        #    pass
 
-                    pass
+                elif hasattr(clazz, 'version'):
+                    version = element.attrib.get('version', None)
 
-            else:
-                sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?);"""
-                try:
-                    cur.execute(sql_insert_object, (id, xml,))
-                except:
-                    print(xml)
-                    raise
-                    pass
+                    sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
+                    try:
+                        cur.execute(sql_insert_object, (id, version, xml,))
+                    except:
+                        if localname == 'ServiceJourney':
+                            print(xml)
+                            raise
 
-            current_element = None
+                        pass
+
+                else:
+                    sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?);"""
+                    try:
+                        cur.execute(sql_insert_object, (id, xml,))
+                    except:
+                        print(xml)
+                        raise
+                        pass
+
+                current_element = None
 
 def attach_objects(con, read_database: str, clazz):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
