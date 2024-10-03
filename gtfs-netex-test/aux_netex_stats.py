@@ -1,6 +1,7 @@
 # Programs reads a file and returns information about a lot of elements
+import logging
 import xml.etree.ElementTree as ET
-
+from aux_logging import *
 # elements to count
 elementlist = ['ResourceFrame','ResponsibilitySet','Notice','TypeofProductCategory','AlternativeText','AlternativeName','ServiceCalendarFrame','DayType','DayTypeAssignment','Organisation',
  'Operator','Authority','SiteFrame','StopPlace','Quay','ServiceFrame','Direction','Network','Line','GroupOfLines','DefaultConnection','AvailabilityCondition','ScheduledStopPoint','StopArea','TariffZone',
@@ -14,12 +15,12 @@ def get_element_names(node):
     return element_names
 
 def main(file: str):
-    print("***************************************************")
-    print("file: "+file)
-    print("***************************************************")
-
+    log_print("***************************************************")
+    log_print("file: "+file)
+    log_print("***************************************************")
+    logger=prepare_logger(logging.WARN,None,"aux_netex_stats")
     tree=ET.parse(file)
-    print(tree)
+
     rt=tree.getroot()
 
     # Get the element names of all nodes
@@ -29,13 +30,13 @@ def main(file: str):
     #print("All element types found:")
     #for name in element_names:
     #    print(name)
-    print("***************************************************")
+    log_print("***************************************************")
 
     for el in elementlist:
         srch= ".//{http://www.netex.org.uk/netex}"+el
         res=rt.findall(srch)
         if not(res == None):
-            print (el +": "+str(len(res)))
+            logger.log(logging.INFO,el +": "+str(len(res)))
 
 if __name__ == "__main__":
     import argparse

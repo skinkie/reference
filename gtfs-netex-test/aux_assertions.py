@@ -1,7 +1,9 @@
+import logging
 import re
 from lxml import etree
-
+from aux_logging import *
 def process_assertions(assertions_file, input_file):
+    logger=prepare_logger(logging.WARNING,None,"aux_assertions")
     tree = etree.parse(input_file)
     # Define the namespace URI
     namespace_uri = 'http://www.netex.org.uk/netex'
@@ -18,13 +20,13 @@ def process_assertions(assertions_file, input_file):
         assertion = assertion.strip()
         if assertion.startswith('#'):
             comment = assertion.split(' ', 1)[1]
-            print(f'comment: {comment}')
+            log_print(f'comment: {comment}')
         elif assertion.startswith('contains'):
             regex = assertion.split(' ', 1)[1]
             if re.search(regex, input_content):
-                print(f'Assertion PASSed: File contains regex "{regex}"')
+                log_print(f'Assertion PASSed: File contains regex "{regex}"')
             else:
-                print(f'Assertion FAILed: File does not contain regex "{regex}"')
+                logger.log(logging.ERROR,f'Assertion FAILed: File does not contain regex "{regex}"')
                 failed=1
         elif assertion.startswith('xpathcountequal'):
             parts = assertion.split(' ')
@@ -32,9 +34,9 @@ def process_assertions(assertions_file, input_file):
             expected_count = int(parts[2])
             results = tree.xpath(xpath_expression, namespaces=namespaces)
             if len(results) == expected_count:
-                print(f'Assertion PASSed: XPath "{xpath_expression}" has {expected_count} results')
+                log_print(f'Assertion PASSed: XPath "{xpath_expression}" has {expected_count} results')
             else:
-                print(f'Assertion FAILed: XPath "{xpath_expression}" does not have {expected_count} results, was {len(results)}')
+                logging.log(logging.ERROR,f'Assertion FAILed: XPath "{xpath_expression}" does not have {expected_count} results, was {len(results)}')
                 failed=1
         elif assertion.startswith('xpathcountgreater'):
             parts = assertion.split(' ')
@@ -42,12 +44,12 @@ def process_assertions(assertions_file, input_file):
             expected_count = int(parts[2])
             results = tree.xpath(xpath_expression, namespaces=namespaces)
             if len(results) > expected_count:
-                print(f'Assertion PASSed: XPath "{xpath_expression}" has more than {expected_count} results, was {len(results)}')
+                log_print(f'Assertion PASSed: XPath "{xpath_expression}" has more than {expected_count} results, was {len(results)}')
             else:
-                print(f'Assertion FAILed: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
+                logger.log(logging.ERROR,f'Assertion FAILed: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
                 failed=1
         elif len(assertion.strip()) > 0:
-            print(f'Invalid assertion: {assertion}')
+            logger.log(logging.ERROR,f'Invalid assertion: {assertion}')
             failed = 1
     if (failed>0):
         exit(1)
