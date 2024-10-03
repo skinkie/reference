@@ -5,7 +5,7 @@
 
 import logging
 log_dict={}
-
+mylogger = None
 NOSOFTLOGGING=False
 
 # Basic ideas:
@@ -23,8 +23,11 @@ def log_print(s):
 
 def prepare_logger(log_level,log_file_name,module_name):
     # create logger
-    logger = logging.getLogger(module_name)
-    logger.setLevel(log_level)
+    global mylogger
+    global log_dict
+    if not mylogger:
+        mylogger = logging.getLogger(module_name)
+    mylogger.setLevel(log_level)
     log_dict ={}
     # create console handler and set level to debug
     ch = logging.StreamHandler()
@@ -37,16 +40,17 @@ def prepare_logger(log_level,log_file_name,module_name):
     ch.setFormatter(formatter)
 
     # add ch to logger
-    logger.addHandler(ch)
+    mylogger.addHandler(ch)
     fh = logging.FileHandler(log_file_name)
     fh.setFormatter(formatter)
     fh.setLevel(log_level)
-    logger.addHandler(fh)
-    return logger
+    mylogger.addHandler(fh)
+    return mylogger
 
 
 # Only prints the message once and continues
 def log_once(logger,log_level,key,message):
+    global log_dict
     a = log_dict.get(key)
     if a == None:
         log_dict[key]=message
