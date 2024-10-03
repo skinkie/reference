@@ -6,6 +6,8 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
 from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime
+import random
+
 
 from netexio.dbaccess import load_local
 import netex
@@ -50,14 +52,22 @@ def recursive_resolve(con, parent, resolved):
 
         if obj in resolved:
             continue
-
+        if not hasattr(netex, obj.name_of_ref_class):
+            #hack for non-existing structures
+            print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+            continue
         resolved_objs = load_local(con, getattr(netex, obj.name_of_ref_class), filter=obj.ref)
         if len(resolved_objs) > 0:
             recursive_resolve(con, resolved_objs[0], resolved)
 
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
-        objs = load_local(con, getattr(netex, object_type), filter=object_filter)
+        objs=[]
+        if object_filter == "random":
+            objs = load_local(con, getattr(netex, object_type))
+            objs = [random.choice(objs)] #randomly select one
+        else:
+            objs = load_local(con, getattr(netex, object_type), filter=object_filter)
         if len(objs) > 0:
             obj = objs[0]
 
@@ -83,7 +93,8 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
             else:
                 with open(output_filename, 'w', encoding='utf-8') as out:
                     serializer.write(out, publication_delivery, ns_map)
-
+        else:
+            print(f"no such object found {object_type},{object_filter}")
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Export a prepared EPIP  import into DuckDB')

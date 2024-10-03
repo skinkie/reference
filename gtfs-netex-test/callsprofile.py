@@ -220,9 +220,12 @@ class CallsProfile:
             i = 0
             for lis in service_journey_pattern.links_in_sequence.service_link_in_journey_pattern_or_timing_link_in_journey_pattern:
                 if isinstance(lis, ServiceLinkInJourneyPattern):
+                    if not hasattr(lis.run_times,'journey_run_time'):
+                        print(f"no run_times")
+                        print(lis)
                     for journey_run_time in lis.run_times.journey_run_time:
                         tdt_tl[lis.service_link_ref.ref] = journey_run_time
-                        # TODO: Guard begin point equeals assigned value
+                        # TODO: Guard begin point equals assigned value
                         service_journey_pattern.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern[i].onward_service_link_ref = lis.service_link_ref
 
                 elif isinstance(lis, TimingLinkInJourneyPattern):

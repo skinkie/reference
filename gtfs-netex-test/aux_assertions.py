@@ -46,8 +46,9 @@ def process_assertions(assertions_file, input_file):
             else:
                 print(f'Assertion FAILed: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
                 failed=1
-        else:
+        elif len(assertion.strip()) > 0:
             print(f'Invalid assertion: {assertion}')
+            failed = 1
     if (failed>0):
         exit(1)
 

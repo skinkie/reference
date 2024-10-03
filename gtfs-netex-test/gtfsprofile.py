@@ -128,8 +128,11 @@ class GtfsProfile:
     @staticmethod
     def getOptionalPresentation(presentation: PresentationStructure, attrib: str):
         if presentation is not None:
-            return getattr(presentation, attrib, '').hex()
-
+            op=getattr(presentation, attrib, '')
+            if not op==None:
+                return op.hex()
+            else:   # sometimes it seems that some attribute is not set
+                return None
         return None
 
     @staticmethod
@@ -434,8 +437,8 @@ class GtfsProfile:
     def projectStopEntranceToStop(stop_entrance: StopPlaceEntrance, parent: StopPlaceRef, transformer: Transformer = None):
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
-        if stop_entrance.centroid.location is None:
-            print(f"StopPlaceEntrance {stop_entrance.id} does not have a location.")
+        if stop_entrance.centroid is None or stop_entrance.centroid.location is None:
+            print(f"StopPlaceEntrance {stop_entrance.id} does not have a location or centroid.")
             # TODO: Maybe by parent?
             return None
 
@@ -610,7 +613,12 @@ class GtfsProfile:
         if transformer:
             latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
         else:
-            latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
+            if not stop_place.centroid:  # TODO this is a bad fix for a bad data problem. The correct way would be to omit this kind of StopPlace or to feed the coordinates from the SceduledStopPlace via PSA
+                latitude = 0
+                longitude = 0
+                print(f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
+            else:
+                latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
 
         stop = {'stop_id': stop_place.id,
                 'stop_code': GtfsProfile.getOptionalPrivateCode(stop_place.public_code),
