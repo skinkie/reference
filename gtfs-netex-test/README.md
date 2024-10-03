@@ -11,21 +11,26 @@ This repository contains various scripts that allow:
   * Dutch
   * Nordic
   * Switzerland
+  * EPIP
+  * VDV 462 (planned)
 
 The scripts include mechanisms to:
 * validate the provided NeTEx
-* todo
+* conversion between different models
+* loading them into a data base representation
+* a script pipeline
+* clean-up tools for the pipeline
+* test tools
 
 An important aspect in the conversion is that NeTEx files come in different flavours:
 * [VDV 462](https://www.vdv.de/oepnv-datenmodell.aspx), 
 * [EPIP](https://data4pt.org/w/index.php?title=Main_Page#NeTEx_EPIP), 
-* Call based (e.g. the [Swiss one](https://www.oev-info.ch/sites/default/files/2024-05/NeTEx_Core-Realisation_Guide_TP_Suisse-v1.00.pdf)) 
-* todo
+* Call based (e.g. the [Swiss one](https://www.oev-info.ch/sites/default/files/2024-05/NeTEx_Core-Realisation_Guide_TP_Suisse-v1.00.pdf))
 
 Moreover, they are structured in different ways: 
-* Network based, e.g.: todo
-* Line based, e.g.: todo 
-* Frame based, e.g.: todo 
+* Network based, e.g.: STA. The whole network is in a single huge file.
+* Line based, e.g.: Mobiltitätsverbünde AT. Each line is a separate file and self-contained.
+* Frame based, e.g.: Switzerland. Each file usually contains a single Frame. In the case of the TimetableFrame multiple files exists. 
 
 In some cases the lines are complete with all relevant information. In some cases information about some
 elements is stored in separate files.
