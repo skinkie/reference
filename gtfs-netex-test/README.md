@@ -2,12 +2,32 @@
 Stefan de Konink, 2024 <netexconv@mmtis.eu>
 
 ## Summary
-The software allows different conversions between multiple transit interfaces and NeTEX and from different NeTEx profiles, which includes GTFS, OptiBus and IFF.
+This repository contains various scripts that allow:
+* converting from the data formats to NeTEx and vice versa:
+  * GTFS 
+  * OptiBus
+  * IFF
+  * todo
+* converting between any of the following NeTEx profiles
+  * Netherlands
+  * Nordic
+  * Switzerland
+  * todo
 
-NeTEx files come in different flavours ([VDV 462](https://www.vdv.de/oepnv-datenmodell.aspx), [EPIP](https://data4pt.org/w/index.php?title=Main_Page#NeTEx_EPIP), Call based (e.g. the [Swiss one](https://www.oev-info.ch/sites/default/files/2024-05/NeTEx_Core-Realisation_Guide_TP_Suisse-v1.00.pdf)) and are structured in different ways:
-* Network based
-* Line based
-* Frame based
+The scripts include mechanisms to:
+* validate the provided NeTEx
+* todo
+
+An important aspect in the conversion is that NeTEx files come in different flavours:
+* [VDV 462](https://www.vdv.de/oepnv-datenmodell.aspx), 
+* [EPIP](https://data4pt.org/w/index.php?title=Main_Page#NeTEx_EPIP), 
+* Call based (e.g. the [Swiss one](https://www.oev-info.ch/sites/default/files/2024-05/NeTEx_Core-Realisation_Guide_TP_Suisse-v1.00.pdf)) 
+* todo
+
+Moreover, they are structured in different ways: 
+* Network based, e.g.: todo
+* Line based, e.g.: todo 
+* Frame based, e.g.: todo 
 
 In some cases the lines are complete with all relevant information. In some cases information about some
 elements is stored in separate files.
@@ -21,9 +41,9 @@ elements is stored in separate files.
   * Swiss NeTEx timetable 2024 (scheduled): https://opentransportdata.swiss/de/dataset/timetablenetex_2024
 
 ## Installation in pycharm
-* Pycharm should  be installed.
-* A latest phyton version should be installed
-* Pip needs to be actualised.
+* Pycharm should  be installed
+* A latest python version should be installed
+* Pip needs to be updated
 * Then you can download the master version from github
 
 ### Dependencies
