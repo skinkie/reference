@@ -7,12 +7,10 @@ This repository contains various scripts that allow:
   * GTFS 
   * OptiBus
   * IFF
-  * todo
 * converting between any of the following NeTEx profiles
-  * Netherlands
+  * Dutch
   * Nordic
   * Switzerland
-  * todo
 
 The scripts include mechanisms to:
 * validate the provided NeTEx
