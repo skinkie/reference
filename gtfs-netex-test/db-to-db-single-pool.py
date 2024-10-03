@@ -1,3 +1,4 @@
+import logging
 import sqlite3
 from decimal import Decimal, ROUND_HALF_UP
 from functools import partial
@@ -28,7 +29,7 @@ from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from utils import project
 from multiprocess import Pool, freeze_support
-
+from aux_logging import *
 def ref_version_hash(self):
     return hash(self.ref + ';' + self.version)
 
@@ -125,7 +126,7 @@ def write_objects(con, objs, empty=False, many=False):
     cur.execute(sql_create_table)
 
     if many:
-        print(objectname, len(objs))
+        log_print(objectname, len(objs))
         if hasattr(clazz, 'version'):
             cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')) for obj in objs])
         else:
@@ -140,8 +141,8 @@ def write_objects(con, objs, empty=False, many=False):
                 cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')))
 
             if i % 13 == 0:
-                print('\r', objectname, str(i), end = '')
-        print('\r', objectname, len(objs), end='')
+                log_print('\r', objectname, str(i), end = '')
+        log_print('\r', objectname, len(objs), end='')
 
 
 def write_generator(con, clazz, generator: Generator, empty=False):
@@ -163,28 +164,28 @@ def write_generator(con, clazz, generator: Generator, empty=False):
         i = 0
         for obj in generator4:
             if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
+                log_print('\r', objectname, str(i), end='')
             i += 1
             yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
-        print('\r', objectname, i, end='')
+        log_print('\r', objectname, i, end='')
 
     def _prepare3(generator3, objectname):
         i = 0
         for obj in generator3:
             if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
+                log_print('\r', objectname, str(i), end='')
             i += 1
             yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
-        print('\r', objectname, i, end='')
+        log_print('\r', objectname, i, end='')
 
     def _prepare2(generator2, objectname):
         i = 0
         for obj in generator2:
             if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
+                log_print('\r', objectname, str(i), end='')
             i += 1
             yield obj.id, serializer.render(obj, ns_map).replace('\n', '').encode('utf-8')
-        print('\r', objectname, i, end='')
+        log_print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
         cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
@@ -258,7 +259,8 @@ def project_location_4326(location, generator_defaults: dict):
         location.pos = None
 
     elif location.srs_name not in (None, 'EPSG:4326', 'urn:ogc:def:crs:EPSG::4326') and generator_defaults['DefaultLocationsystem'] not in ('EPSG:4326', 'urn:ogc:def:crs:EPSG::4326'):
-        print("TODO: Crazy not WGS84")
+        logger =prepare_logger(logging.WARNING,None,"db-to-db-single-pool")
+        logger.log(logging.WARNING,"TODO: Crazy not WGS84")
 
 def project_location(points: Iterable[PointVersionStructure], generator_defaults, crs_to):
     transformer = transformers.get(generator_defaults['DefaultLocationsystem'], Transformer.from_crs(generator_defaults['DefaultLocationsystem'], crs_to))
@@ -461,7 +463,8 @@ def append_timing_links_to_service_link(con, pis: StopPointInJourneyPattern, int
                 if service_link.line_string[-2:] == route_link.line_string[0:2]:
                     service_link.line_string += route_link.line_string[2:]
                 else:
-                    print("End does not match start")
+                    logger=prepare_logger(logging.WARNING,None,"db-to-db-single-pool")
+                    log_once(logger,logging.WARNING,f'End does not match start: {route_link.id}')
 
         if tl is not None and (
                 tl.to_point_ref.name_of_ref_class == 'ScheduledStopPoint' or 'ScheduledStopPoint' in tl.to_point_ref.ref):
@@ -482,7 +485,8 @@ def append_timing_links_to_service_link(con, pis: StopPointInJourneyPattern, int
             service_link.line_string = route_link.line_string
 
     if service_link.to_point_ref.ref != scheduled_stop_point_ref.ref:
-        print("Expected end points don't match.")
+        logger = prepare_logger(logging.WARNING, None, "db-to-db-single-pool")
+        log_once(logger,logging.WARNING, f"Expected end points don't match.: {service_link.to_point_ref.ref}")
 
     return offset
 
@@ -545,7 +549,7 @@ def transform_timinglinks_to_servicelinks(con, service_journey_pattern: ServiceJ
 import sys
 
 def bison_codespaces(read_database, write_database, generator_defaults):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(write_database) as write_con:
         codespaces = []
         codespaces.append(Codespace(id="BISON:Codespace:ARR", xmlns_url="http://bison.dova.nu/ns/ARR", xmlns="ARR",
@@ -558,7 +562,7 @@ def bison_codespaces(read_database, write_database, generator_defaults):
 
 
 def epip_site_frame_memory(read_database, write_database, generator_defaults):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
             refs = set([])
@@ -642,7 +646,7 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
             write_objects(write_con, retained_stop_places, True, True)
 
 def epip_route_point_memory(read_database, write_database, generator_defaults):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
             route_points = load_local(read_con, RoutePoint )
@@ -650,7 +654,7 @@ def epip_route_point_memory(read_database, write_database, generator_defaults):
             write_objects(write_con, route_points, True, True)
 
 def epip_route_link_memory(read_database, write_database, generator_defaults):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
             route_links: List[RouteLink] = load_local(read_con, RouteLink)
@@ -663,7 +667,7 @@ def epip_route_link_memory(read_database, write_database, generator_defaults):
 import time
 
 def epip_line_generator(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
 
     def process(line: Line):
         line.branding_ref = None
@@ -681,7 +685,7 @@ def epip_line_generator(read_database: str, write_database: str, generator_defau
         write_generator(write_con, Line, query(read_database), True)
 
 def epip_line_memory(read_database, write_database, generator_defaults):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
             lines: List[Line] = load_local(read_con, Line)
@@ -692,7 +696,7 @@ def epip_line_memory(read_database, write_database, generator_defaults):
             write_objects(write_con, lines, True, True)
 
 def epip_scheduled_stop_point_generator(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
 
     def process(ssp: ScheduledStopPoint, generator_defaults: dict):
         ssp.stop_areas = None
@@ -740,7 +744,7 @@ def epip_scheduled_stop_point_generator(read_database: str, write_database: str,
 
 
 def epip_scheduled_stop_point_memory(read_database: str, write_database: str, generator_defaults: dict):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
             scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
@@ -753,7 +757,7 @@ def epip_scheduled_stop_point_memory(read_database: str, write_database: str, ge
 
 
 def epip_timetabled_passing_times_memory(read_database, write_database, generator_defaults, dynamics=[]):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
             # TODO: Maybe do this on the fly, per servicejourney?
@@ -792,7 +796,7 @@ def apply_line_ref_to_sj(line_ref_by_sjp: dict[ServiceJourneyPatternRef, LineRef
     sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view = line_ref_by_sjp.get(sj.journey_pattern_ref)
 
 def epip_timetabled_passing_times_generator2(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
 
     def process(sj: ServiceJourney, read_database, write_database, generator_defaults: dict):
         sj: ServiceJourney
@@ -835,7 +839,7 @@ def epip_timetabled_passing_times_generator2(read_database: str, write_database:
 
 
 def epip_service_journey_patterns(read_database, write_database, generator_defaults):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         with sqlite3.connect(write_database) as write_con:
             service_journey_patterns = load_local(read_con, ServiceJourneyPattern)
@@ -861,7 +865,7 @@ def epip_service_journey_patterns(read_database, write_database, generator_defau
             write_objects(write_con, service_journey_patterns, True, True)
 
 def vehicle_type_from_block(read_database):
-    print(sys._getframe().f_code.co_name)
+    log_print(sys._getframe().f_code.co_name)
     with sqlite3.connect(read_database) as read_con:
         blocks: List[Block] = load_local(read_con, Block)
         sjs: dict[ServiceJourneyRef, VehicleTypeRef] = {}
