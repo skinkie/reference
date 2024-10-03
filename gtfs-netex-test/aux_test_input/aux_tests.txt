@@ -12,7 +12,7 @@
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/blablacar-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/blablacar-gtfs.zip"]},
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/blablacar-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/blablacar-gtfs.zip ./aux_test_processing/blablacar-map.html all"]}
+        {"script": "gtfs_show_map.py", "args": ["--limitation 100 ./aux_test_processing/blablacar-gtfs.zip ./aux_test_processing/blablacar-map.html"]}
         ]
   },
   {
@@ -46,7 +46,7 @@
         {"script": "netex_to_db.py", "args": ["./aux_test_processing/flixbus-netex.xml ./aux_test_processing/netex-database.duckdb"]},
         {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/flixbus-gtfs.zip"]},
         {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/flixbus-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/flixbus-gtfs.zip ./aux_test_processing/flixbus-map.html all"]}
+        {"script": "gtfs_show_map.py", "args": ["--limitation 100 ./aux_test_processing/flixbus-gtfs.zip ./aux_test_processing/flixbus-map.html"]}
         ]
   },
   {
