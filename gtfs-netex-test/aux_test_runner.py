@@ -118,7 +118,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                     blockstop=True
                     break
                 else:
-                    logging.log(logging.ERROR,'Script {script_name} returned an unexpected error code: {result.returncode}.')
+                    logging.log(logging.ERROR,f'Script {script_name} returned an unexpected error code: {result.returncode}.')
                     blockstop=True
                     break
 
