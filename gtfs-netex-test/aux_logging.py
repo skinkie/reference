@@ -18,6 +18,7 @@ NOSOFTLOGGING=False
 # - the logging should assist the pipeline.
 
 def log_print(s):
+    global NOSOFTLOGGING
     if not NOSOFTLOGGING:
         print(s)
 
@@ -38,13 +39,14 @@ def prepare_logger(log_level,log_file_name,module_name):
 
     # add formatter to ch
     ch.setFormatter(formatter)
+    mylogger.addHandler(ch)
 
     # add ch to logger
-    mylogger.addHandler(ch)
-    fh = logging.FileHandler(log_file_name)
-    fh.setFormatter(formatter)
-    fh.setLevel(log_level)
-    mylogger.addHandler(fh)
+    if not log_file_name==None and not len(log_file_name)>5:
+        fh = logging.FileHandler(log_file_name)
+        fh.setFormatter(formatter)
+        fh.setLevel(log_level)
+        mylogger.addHandler(fh)
     return mylogger
 
 
