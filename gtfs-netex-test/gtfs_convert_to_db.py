@@ -39,7 +39,7 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure
 
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
-
+from aux_logging import *
 
 def get_or_none(l: list, i: int, cast_clazz=None):
     if l is None:

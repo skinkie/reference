@@ -1,9 +1,10 @@
 import io
+import logging
 import warnings
 
 import duckdb
 import csv
-
+from aux_logging import *
 agency_txt = {'agency_id': 'VARCHAR', 'agency_name': 'VARCHAR', 'agency_url': 'VARCHAR', 'agency_timezone': 'VARCHAR', 'agency_lang': 'VARCHAR', 'agency_phone': 'VARCHAR', 'agency_fare_url': 'VARCHAR', 'agency_email': 'VARCHAR'}
 stops_txt = {'stop_id': 'VARCHAR', 'stop_code': 'VARCHAR', 'stop_name': 'VARCHAR', 'tts_stop_name': 'VARCHAR', 'stop_desc': 'VARCHAR', 'stop_lat': 'FLOAT', 'stop_lon': 'FLOAT', 'zone_id': 'VARCHAR', 'stop_url': 'VARCHAR', 'location_type': 'INTEGER', 'parent_station': 'VARCHAR', 'stop_timezone': 'VARCHAR', 'wheelchair_boarding': 'INTEGER', 'level_id': 'VARCHAR', 'platform_code': 'VARCHAR'}
 routes_txt = {'route_id': 'VARCHAR', 'agency_id': 'VARCHAR', 'route_long_name': 'VARCHAR', 'route_type': 'INTEGER', 'route_url': 'VARCHAR', 'route_color': 'CHAR(6)', 'route_text_color': 'CHAR(6)', 'route_sort_order': 'INTEGER', 'continuous_pickup': 'INTEGER',  'continuous_drop_off': 'INTEGER', 'network_id': 'VARCHAR'}
@@ -209,7 +210,8 @@ def main(gtfs: str, database: str):
 
     # check if this is a GTFS file
     if len(set(zf.namelist()) & {'agency.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'}) == 0:
-        print('This is not a GTFS file')
+        logger=prepare_logger(logging.ERROR,"null,gtfs_import_to_db")
+        logger.log(logging.ERROR,'This is not a GTFS file')
         return
 
     handle_file(con, zf, 'feed_info.txt', feed_info_txt)
