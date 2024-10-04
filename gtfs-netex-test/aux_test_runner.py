@@ -45,8 +45,8 @@ def clean(directory):
 
 
 def main(script_file,log_file, log_level, todo_block,begin_step):
+    prepare_logger(log_level,log_file,"test_runner")
     # Read the scripts from a file
-    logger = prepare_logger(logging.INFO,"log.txt", "Log Runner")
     with open(script_file) as f:
         data = json.load(f)
 
@@ -71,7 +71,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 script_args = shlex.split(''.join(script['args']))
 
                 # Write the script name to the log file with a starting delimiter
-                f.write(f"--- {script_name} ---\n")
+                log_all(logging.INFO,"test_runner",script_name)
                 if script_name.startswith("#"):
                     # is a comment
                     continue
@@ -80,16 +80,16 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                     # Execute the clean_tmp command
                     folder = script_args[0]
                     clean_tmp(folder)
-                    logger.log(logging.INFO,f"Command 'clean_tmp' executed for folder: {folder}\n")
+                    log_all(logging.INFO,"test_runner",f"Command 'clean_tmp' executed for folder: {folder}\n")
                     continue
 
                 if script_name == 'clean':
                     # Execute the clean command
                     folder = script_args[0]
                     clean(folder)
-                    logger.log(logging.INFO,f"Command 'clean' executed for folder: {folder}\n")
+                    log_all(logging.INFO,"test_runner",f"Command 'clean' executed for folder: {folder}\n")
                     continue
-                logger.log(logging.INFO,f"{script_name} with {script_args}")
+                log_all(logging.INFO, "test_runner",f"{script_name} with {script_args}")
                 # Fetch the Python executable
                 python_executable = sys.executable
                 # Run the script with arguments and capture the output
@@ -109,16 +109,20 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 log_print(output)
 
                 # Write the execution time to the log file
-                logging.log(logging.INFO,f"Execution time: {execution_time} seconds\n")
-
+                log_all(logging.INFO,"test_runner_timing",f"Execution time: {execution_time} seconds\n")
+                log_all(logging.INFO,"test_runner","Warnings (if any)")
+                log_write_counts(logging.WARNING)
                 if result.returncode == 0:
-                    logging.log(logging.DEBUG,f'Script {script_name} terminated.')
+                    log_all(logging.DEBUG,"test_runner",f'Script {script_name} terminated.')
+                    log_flush()
                 elif result.returncode == 1:
-                    logging.log(logging.ERROR,f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
+                    log_all(logging.ERROR,"test_runner",f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
+                    log_flush()
                     blockstop=True
                     break
                 else:
-                    logging.log(logging.ERROR,f'Script {script_name} returned an unexpected error code: {result.returncode}.')
+                    log_all(logging.ERROR,"test_runner",f'Script {script_name} returned an unexpected error code: {result.returncode}.')
+                    log_flush()
                     blockstop=True
                     break
 

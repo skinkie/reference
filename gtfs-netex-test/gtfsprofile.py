@@ -407,8 +407,7 @@ class GtfsProfile:
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
         if scheduled_stop_point.location is None:
-            logger = prepare_logger(logging.WARNING,None,"gtfsprofile")
-            log_once(logger,logging.WARNING,f"SSP {scheduled_stop_point.id} does not have a location.")
+            log_once(logging.WARNING,"gtfsprofile",f"SSP {scheduled_stop_point.id} does not have a location.")
             # TODO: Maybe by parent?
             return None
 
@@ -441,7 +440,7 @@ class GtfsProfile:
 
         if stop_entrance.centroid is None or stop_entrance.centroid.location is None:
             logger=prepare_logger(logging.WARNING,None,"gtfsprofilef")
-            log_once(logger,logging.WARNING,f"StopPlaceEntrance {stop_entrance.id} does not have a location or centroid.")
+            log_once(logging.WARNING,"gtfsprofile: StopPlaceEntrance",f"StopPlaceEntrance {stop_entrance.id} does not have a location or centroid.")
             # TODO: Maybe by parent?
             return None
 
@@ -619,8 +618,7 @@ class GtfsProfile:
             if not stop_place.centroid:  # TODO this is a bad fix for a bad data problem. The correct way would be to omit this kind of StopPlace or to feed the coordinates from the SceduledStopPlace via PSA
                 latitude = 0
                 longitude = 0
-                logger = prepare_logger(logging.WARNING,None,"gtfsprofile")
-                log_once(logger,logging.WARNING,f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
+                log_once(logging.WARNING,"gtfsprofile: StopPlace",f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
             else:
                 latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
 

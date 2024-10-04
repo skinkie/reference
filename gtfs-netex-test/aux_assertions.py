@@ -3,7 +3,6 @@ import re
 from lxml import etree
 from aux_logging import *
 def process_assertions(assertions_file, input_file):
-    logger=prepare_logger(logging.WARNING,None,"aux_assertions")
     tree = etree.parse(input_file)
     # Define the namespace URI
     namespace_uri = 'http://www.netex.org.uk/netex'
@@ -26,7 +25,7 @@ def process_assertions(assertions_file, input_file):
             if re.search(regex, input_content):
                 log_print(f'Assertion PASSed: File contains regex "{regex}"')
             else:
-                logger.log(logging.ERROR,f'Assertion FAILed: File does not contain regex "{regex}"')
+                log_all(logging.ERROR,"assertions",f'Assertion FAILed: File does not contain regex "{regex}"')
                 failed=1
         elif assertion.startswith('xpathcountequal'):
             parts = assertion.split(' ')
@@ -36,7 +35,7 @@ def process_assertions(assertions_file, input_file):
             if len(results) == expected_count:
                 log_print(f'Assertion PASSed: XPath "{xpath_expression}" has {expected_count} results')
             else:
-                logging.log(logging.ERROR,f'Assertion FAILed: XPath "{xpath_expression}" does not have {expected_count} results, was {len(results)}')
+                log_all(logging.ERROR,"assertions",f'Assertion FAILed: XPath "{xpath_expression}" does not have {expected_count} results, was {len(results)}')
                 failed=1
         elif assertion.startswith('xpathcountgreater'):
             parts = assertion.split(' ')
@@ -46,10 +45,10 @@ def process_assertions(assertions_file, input_file):
             if len(results) > expected_count:
                 log_print(f'Assertion PASSed: XPath "{xpath_expression}" has more than {expected_count} results, was {len(results)}')
             else:
-                logger.log(logging.ERROR,f'Assertion FAILed: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
+                log_all(logging.ERROR,"assertions",f'Assertion FAILed: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
                 failed=1
         elif len(assertion.strip()) > 0:
-            logger.log(logging.ERROR,f'Invalid assertion: {assertion}')
+            log_all(logging.ERROR,"assertions",f'Invalid assertion: {assertion}')
             failed = 1
     if (failed>0):
         exit(1)

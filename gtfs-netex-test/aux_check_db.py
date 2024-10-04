@@ -3,7 +3,6 @@ import logging
 import duckdb
 from aux_logging import *
 def print_table_row_counts_with_example(db_file):
-    logger=prepare_logger(logging.WARNING,None,"auxh_check_db")
     # Connect to the DuckDB database
     con = duckdb.connect(database=db_file)
 
@@ -14,7 +13,7 @@ def print_table_row_counts_with_example(db_file):
     for table in tables:
         table_name = table[0]
         row_count = con.execute(f"SELECT COUNT(*) FROM {table_name};").fetchone()[0]
-        logger.log(logging.INFO,f"{table_name}: {row_count}")
+        log:all(logging.INFO,"check_db",f"{table_name}: {row_count}")
 
         # Select a random row from the table
         random_row = con.execute(f"SELECT * FROM {table_name} ORDER BY RANDOM() LIMIT 1;").fetchone()

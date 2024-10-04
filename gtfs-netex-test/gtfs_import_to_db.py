@@ -210,8 +210,7 @@ def main(gtfs: str, database: str):
 
     # check if this is a GTFS file
     if len(set(zf.namelist()) & {'agency.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'}) == 0:
-        logger=prepare_logger(logging.ERROR,"null,gtfs_import_to_db")
-        logger.log(logging.ERROR,'This is not a GTFS file')
+        log_all(logging.ERROR,'This is not a GTFS file')
         return
 
     handle_file(con, zf, 'feed_info.txt', feed_info_txt)

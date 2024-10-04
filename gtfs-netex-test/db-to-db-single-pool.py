@@ -259,8 +259,7 @@ def project_location_4326(location, generator_defaults: dict):
         location.pos = None
 
     elif location.srs_name not in (None, 'EPSG:4326', 'urn:ogc:def:crs:EPSG::4326') and generator_defaults['DefaultLocationsystem'] not in ('EPSG:4326', 'urn:ogc:def:crs:EPSG::4326'):
-        logger =prepare_logger(logging.WARNING,None,"db-to-db-single-pool")
-        logger.log(logging.WARNING,"TODO: Crazy not WGS84")
+        log_all(logging.WARNING,"db-to-db-single-pool","TODO: Crazy not WGS84")
 
 def project_location(points: Iterable[PointVersionStructure], generator_defaults, crs_to):
     transformer = transformers.get(generator_defaults['DefaultLocationsystem'], Transformer.from_crs(generator_defaults['DefaultLocationsystem'], crs_to))
@@ -463,8 +462,7 @@ def append_timing_links_to_service_link(con, pis: StopPointInJourneyPattern, int
                 if service_link.line_string[-2:] == route_link.line_string[0:2]:
                     service_link.line_string += route_link.line_string[2:]
                 else:
-                    logger=prepare_logger(logging.WARNING,None,"db-to-db-single-pool")
-                    log_once(logger,logging.WARNING,f'End does not match start: {route_link.id}')
+                    log_once(logging.WARNING,'db-to-db-single-pool: route_link',f'End does not match start: {route_link.id}')
 
         if tl is not None and (
                 tl.to_point_ref.name_of_ref_class == 'ScheduledStopPoint' or 'ScheduledStopPoint' in tl.to_point_ref.ref):
@@ -485,8 +483,7 @@ def append_timing_links_to_service_link(con, pis: StopPointInJourneyPattern, int
             service_link.line_string = route_link.line_string
 
     if service_link.to_point_ref.ref != scheduled_stop_point_ref.ref:
-        logger = prepare_logger(logging.WARNING, None, "db-to-db-single-pool")
-        log_once(logger,logging.WARNING, f"Expected end points don't match.: {service_link.to_point_ref.ref}")
+        log_once(logging.WARNING,"gtfsprofile: service_link", f"Expected end points don't match.: {service_link.to_point_ref.ref}")
 
     return offset
 
