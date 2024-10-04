@@ -6,6 +6,7 @@
 import logging
 log_dict={}
 mylogger = None
+main_log_file = "aux.log"
 NOSOFTLOGGING=False
 general_log_level = logging.WARNING
 
@@ -55,8 +56,9 @@ def prepare_logger(log_level,log_file_name,module_name):
 def log_all(log_level,key, message):
     global mylogger
     global general_log_level
+    global main_log_file
     if mylogger==None:
-        mylogger = prepare_logger(general_log_level,message,key)
+        mylogger = prepare_logger(general_log_level,main_log_file,message,key)
     mylogger.log(log_level,key+": "+message)
 
 # Only prints the message once and continues

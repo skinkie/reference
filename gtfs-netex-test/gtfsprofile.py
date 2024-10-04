@@ -439,7 +439,6 @@ class GtfsProfile:
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
         if stop_entrance.centroid is None or stop_entrance.centroid.location is None:
-            logger=prepare_logger(logging.WARNING,None,"gtfsprofilef")
             log_once(logging.WARNING,"gtfsprofile: StopPlaceEntrance",f"StopPlaceEntrance {stop_entrance.id} does not have a location or centroid.")
             # TODO: Maybe by parent?
             return None

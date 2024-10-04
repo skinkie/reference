@@ -134,7 +134,7 @@ if __name__ == "__main__":
     parser.add_argument('log_file', type=str, help='name of the log file')
     parser.add_argument('blockname', type=str, help='Block name to do')
     parser.add_argument('--begin_step', type=int, default=1, help='The begin step (default: 1)')
-    parser.add_argument('--log_level', type=int , default=logging.WARNING, help='The begin step (default: 1)')
+    parser.add_argument('--log_level', type=int , default=logging.INFO, help='The begin step (default: 1)')
     args = parser.parse_args()
 
     main(args.script_file,args.log_file, args.log_level,args.blockname,args.begin_step)
