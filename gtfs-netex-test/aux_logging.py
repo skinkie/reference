@@ -4,11 +4,7 @@
 # --logfile=filename
 
 import logging
-log_dict={}
-mylogger = None
-main_log_file = "aux.log"
-NOSOFTLOGGING=False
-general_log_level = logging.INFO
+from configuration import *
 
 # Basic ideas:
 # - There might still remain print statements, that are just send to the screen

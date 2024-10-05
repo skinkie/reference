@@ -1,8 +1,9 @@
 # Programs reads a file and returns information about a lot of elements
 import logging
 import xml.etree.ElementTree as ET
+from configuration import *
 from aux_logging import *
-# elements to count
+# elements to count and report in the statistics
 elementlist = ['ResourceFrame','ResponsibilitySet','Notice','TypeofProductCategory','AlternativeText','AlternativeName','ServiceCalendarFrame','DayType','DayTypeAssignment','Organisation',
  'Operator','Authority','SiteFrame','StopPlace','Quay','ServiceFrame','Direction','Network','Line','GroupOfLines','DefaultConnection','AvailabilityCondition','ScheduledStopPoint','StopArea','TariffZone',
  'ServiceLink','PassengerStopAssignment','ServiceJourneyPattern','TimetabledPassingTime','TimetableFrame','ServiceJourney','Call','JourneyMeeting','CoupledJourney','JourneyPart','InterchangeRule','AccessibilityAssessment','CheckConstraint','TemplateServiceJourney','ServiceFacilitySet','UicOperatingPeriod']

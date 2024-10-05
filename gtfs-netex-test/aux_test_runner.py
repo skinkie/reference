@@ -7,9 +7,18 @@ import shlex
 import os
 import shutil
 from aux_logging import *
+from configuration import *
 
+def replace_in_string(input, search, replace):
+    return input.replace(search, replace)
+
+# command to clean a directory from temp files (mostly duckdb)
 def clean_tmp(f):
     # Iterate over the items in the folder
+    if not os.path.isdir(f):
+        log_all(logging.WARNING,"clean_tmp",f"No valid path to clean:{f}")
+
+        return
     for item in os.listdir(f):
         item_path = os.path.join(f, item)
 
@@ -24,8 +33,12 @@ def clean_tmp(f):
             # Recursively clean subdirectory
             clean_tmp(item_path)
 
+# removes a given processed folder
 def clean(directory):
     # Clean the specified folder by deleting all files and subfolders
+    if not os.path.isdir(directory):
+        log_all(logging.WARNING,"clean_tmp",f"No valid path to clean: {directory}")
+        return
     # Iterate over the items in the directory
     for item in os.listdir(directory):
         item_path = os.path.join(directory, item)
@@ -45,13 +58,18 @@ def clean(directory):
 
 
 def main(script_file,log_file, log_level, todo_block,begin_step):
-    prepare_logger(log_level,log_file,"test_runner")
+    # set the logger
     # Read the scripts from a file
     with open(script_file) as f:
         data = json.load(f)
 
     with open(log_file, 'w') as f:
         for block in data:
+            processdir = processing_data + "/" + todo_block
+            # prepare the logger
+            prepare_logger(log_level, processdir + "/" + log_file, "")
+            log_all(logging.INFO, "Start", f'Processing block: {block["block"]}')
+
             blockstop=False
             if  not todo_block==block["block"]:
                 if not todo_block=="all":
@@ -59,6 +77,8 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             scripts = block['scripts']
             step=1
             for script in scripts:
+
+                # skip some steps if this is mandated
                 if step<begin_step:
                     #skipping steps in the block
                     step=step+1
@@ -68,32 +88,42 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 start_time = time.time()
 
                 script_name = script['script']
-                script_args = shlex.split(''.join(script['args']))
+                script_args = script['args']
+
+                # replace the placeholder for processdir with the correct values
+                script_args =replace_in_string(script_args, "%%dir%%", processdir)
+                script_args =replace_in_string(script_args, "%%block%%", block["block"])
+
+                # if the processing dir doesn't exist, then we create it
+                os.makedirs(processdir, exist_ok=True)
+
 
                 # Write the script name to the log file with a starting delimiter
                 log_all(logging.INFO, "test_runner",f"{script_name} with {script_args}")
+
                 if script_name.startswith("#"):
-                    # is a comment
+                    # is a comment and we do nothing
                     continue
 
                 if script_name == 'clean_tmp':
                     # Execute the clean_tmp command
-                    folder = script_args[0]
+                    folder = script_args
                     clean_tmp(folder)
                     log_all(logging.INFO,"test_runner",f"Command 'clean_tmp' executed for folder: {folder}\n")
                     continue
 
                 if script_name == 'clean':
                     # Execute the clean command
-                    folder = script_args[0]
+                    folder = script_args
                     clean(folder)
                     log_all(logging.INFO,"test_runner",f"Command 'clean' executed for folder: {folder}\n")
                     continue
                 # Fetch the Python executable
                 python_executable = sys.executable
-                # Run the script with arguments and capture the output
-                command = python_executable + " " + script_name + " " + " ".join(
-                    shlex.quote(arg) for arg in script_args)
+
+
+                # Run the script with arguments
+                command = python_executable + " " + script_name + " " + script_args
                 log_print(command)
                 result = subprocess.run(command,
                                         stdout=subprocess.PIPE,
