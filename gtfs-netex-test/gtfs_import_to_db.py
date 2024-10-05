@@ -236,6 +236,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='GTFS import into DuckDB')
     parser.add_argument('gtfs', type=str, help='GTFS file to import, for example: gtfs.zip')
     parser.add_argument('database', type=str, help='DuckDB file to overwrite and store contents of the import.')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
-
+    mylogger =prepare_logger(logging.INFO,args.log_file)
     main(args.gtfs, args.database)

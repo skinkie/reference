@@ -5,7 +5,7 @@ import os
 import xml.etree.ElementTree as ET
 
 from anyintodbnew import  get_interesting_classes, setup_database, open_netex_file, insert_database
-
+from aux_logging import *
 SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "TemplateServiceJourney", "ServiceCalendar", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace", "ResponsibilitySet"]
 
 def main(swiss_zip_file: str, database: str, clean_database: bool = True):
@@ -48,6 +48,8 @@ if __name__ == '__main__':
     argument_parser.add_argument('swiss_zip_file', type=str, help='The original DuckDB NeTEx database')
     argument_parser.add_argument('database', type=str, help='The DuckDB to be overwritten with the NeTEx context')
     argument_parser.add_argument('clean_database', action="store_true", help='Clean the current file', default=True)
+    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
 
     main(args.swiss_zip_file, args.database, args.clean_database)

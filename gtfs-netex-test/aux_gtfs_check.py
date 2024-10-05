@@ -1,6 +1,6 @@
 import pandas as pd
 import zipfile
-
+from aux_logging import *
 def check_gtfs_consistency(gtfs_file):
     try:
         # Read GTFS files using pandas
@@ -128,6 +128,7 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Validates a gtfs file and shows some stats')
     parser.add_argument('gtfs_file', type=str, help='The input file (gtfs.zip)')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
-
+    mylogger =prepare_logger(logging.INFO,args.log_file)
     main(args.gtfs_file)

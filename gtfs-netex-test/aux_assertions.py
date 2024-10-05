@@ -58,5 +58,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Lets a set of assertions run on a file (xml)')
     parser.add_argument('assertions_file', type=str, help='File with the assertions')
     parser.add_argument('input_file', type=str, help='the input file (xml)')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
     process_assertions(args.assertions_file, args.input_file)

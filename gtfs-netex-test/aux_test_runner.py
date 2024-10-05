@@ -24,7 +24,7 @@ def clean_tmp(f):
 
         if os.path.isfile(item_path):
             # Remove file if it matches the extensions
-            if item.endswith('.duckdb') or item.endswith('.tmp'):
+            if item.endswith('.duckdb') or item.endswith('.tmp') or item.endswith('.log'):
                 try:
                     os.remove(item_path)
                 except Exception as e:
@@ -65,16 +65,16 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
 
     with open(log_file, 'w') as f:
         for block in data:
-            processdir = processing_data + "/" + todo_block
+            processdir = processing_data + "/" + block["block"]
             # prepare the logger
-            prepare_logger(log_level, processdir + "/" + log_file, "")
-            log_all(logging.INFO, "Start", f'Processing block: {block["block"]}')
 
             blockstop=False
             if  not todo_block==block["block"]:
                 if not todo_block=="all":
                     continue
             scripts = block['scripts']
+            prepare_logger(log_level, block["block"] + "/" + log_file)
+            log_once(logging.INFO, "Start", f'Processing block: {block["block"]}')
             step=1
             for script in scripts:
 
@@ -93,6 +93,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 # replace the placeholder for processdir with the correct values
                 script_args =replace_in_string(script_args, "%%dir%%", processdir)
                 script_args =replace_in_string(script_args, "%%block%%", block["block"])
+                script_args =replace_in_string(script_args, "%%log%%", block["block"]+"/"+log_file)
 
                 # if the processing dir doesn't exist, then we create it
                 os.makedirs(processdir, exist_ok=True)

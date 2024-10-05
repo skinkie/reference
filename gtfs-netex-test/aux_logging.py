@@ -20,12 +20,16 @@ def log_print(s):
     if not NOSOFTLOGGING:
         print(s)
 
-def prepare_logger(log_level,log_file_name,module_name):
+def prepare_logger(log_level,log_file_name):
     # create logger
     global mylogger
     global log_dict
+    global processing_data
     if not mylogger:
-        mylogger = logging.getLogger(module_name)
+        if logging.getLogger("testrunner"):
+            mylogger = logging.getLogger("testrunner")
+        else:
+            mylogger = logging.getLogger("testrunner")
     mylogger.setLevel(log_level)
     log_dict ={}
     # create console handler and set level to debug
@@ -41,7 +45,7 @@ def prepare_logger(log_level,log_file_name,module_name):
 
     # add ch to logger
     if not log_file_name==None and len(log_file_name)>5:
-        fh = logging.FileHandler(log_file_name,mode="a")
+        fh = logging.FileHandler(processing_data+"/"+log_file_name,mode="a")
         fh.setFormatter(formatter)
         fh.setLevel(log_level)
         mylogger.addHandler(fh)
@@ -54,13 +58,15 @@ def log_all(log_level,key, message):
     global general_log_level
     global main_log_file
     if mylogger==None:
-        mylogger = prepare_logger(general_log_level,main_log_file,key)
+        mylogger = prepare_logger(general_log_level,main_log_file)
     mylogger.log(log_level,key+": "+message)
 
 # Only prints the message once and continues
 def log_once(log_level,key,message):
     global log_dict
     global mylogger
+    if mylogger==None:
+        mylogger = prepare_logger(general_log_level,main_log_file)
     a = log_dict.get(key)
     if a == None:
         log_dict[key]=[1,message]
@@ -74,10 +80,12 @@ def log_once(log_level,key,message):
 def log_write_counts(log_level):
     global log_dict
     global mylogger
+    if mylogger==None:
+        mylogger = prepare_logger(general_log_level,main_log_file)
     if len(log_dict)>0:
-        mylogger.log(logging.INFO,"Logging",'Recapitulation of warnings')
+        mylogger.log(logging.INFO,'Logging: Recapitulation of warnings')
         for key, arr in log_dict.items():
-            mylogger.log(log_level, key, f'{arr[1]} (counted {arr[0]}')
+            mylogger.log(log_level, f'{key}: {arr[1]} (counted {arr[0]})')
         log_dict = {}
         log_flush()
 

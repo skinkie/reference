@@ -50,6 +50,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Transform the input into mandatory objects for the export of EPIP')
     parser.add_argument('source', type=str, help='DuckDB file to use as input of the transformation.')
     parser.add_argument('target', type=str, help='DuckDB file to overwrite and store contents of the transformation.')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
 
     main(args.source, args.target)
