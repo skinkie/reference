@@ -18,7 +18,7 @@ def main(file: str):
     log_print("***************************************************")
     log_print("file: "+file)
     log_print("***************************************************")
-    log_all(logging.WARN,"netex_stats.","aux_netex_stats")
+    log_all(logging.WARN,"netex_stats","aux_netex_stats")
     tree=ET.parse(file)
 
     rt=tree.getroot()

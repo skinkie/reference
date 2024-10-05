@@ -71,7 +71,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 script_args = shlex.split(''.join(script['args']))
 
                 # Write the script name to the log file with a starting delimiter
-                log_all(logging.INFO,"test_runner",script_name)
+                log_all(logging.INFO, "test_runner",f"{script_name} with {script_args}")
                 if script_name.startswith("#"):
                     # is a comment
                     continue
@@ -89,7 +89,6 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                     clean(folder)
                     log_all(logging.INFO,"test_runner",f"Command 'clean' executed for folder: {folder}\n")
                     continue
-                log_all(logging.INFO, "test_runner",f"{script_name} with {script_args}")
                 # Fetch the Python executable
                 python_executable = sys.executable
                 # Run the script with arguments and capture the output
@@ -110,7 +109,6 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
 
                 # Write the execution time to the log file
                 log_all(logging.INFO,"test_runner_timing",f"Execution time: {execution_time} seconds\n")
-                log_all(logging.INFO,"test_runner","Warnings (if any)")
                 log_write_counts(logging.WARNING)
                 if result.returncode == 0:
                     log_all(logging.DEBUG,"test_runner",f'Script {script_name} terminated.')

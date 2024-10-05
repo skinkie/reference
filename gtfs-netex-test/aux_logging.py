@@ -8,7 +8,7 @@ log_dict={}
 mylogger = None
 main_log_file = "aux.log"
 NOSOFTLOGGING=False
-general_log_level = logging.WARNING
+general_log_level = logging.INFO
 
 # Basic ideas:
 # - There might still remain print statements, that are just send to the screen
@@ -58,7 +58,7 @@ def log_all(log_level,key, message):
     global general_log_level
     global main_log_file
     if mylogger==None:
-        mylogger = prepare_logger(general_log_level,main_log_file,message,key)
+        mylogger = prepare_logger(general_log_level,main_log_file,key)
     mylogger.log(log_level,key+": "+message)
 
 # Only prints the message once and continues
@@ -78,10 +78,13 @@ def log_once(log_level,key,message):
 def log_write_counts(log_level):
     global log_dict
     global mylogger
-    for key,arr in log_dict.items():
-        mylogger.log(log_level,key,f'{arr[1]} (counted {arr[0]}')
-    log_dict={}
-    log_flush()
+    if len(log_dict)>0:
+        mylogger.log(logging.INFO,"Logging",'Recapitulation of warnings')
+        for key, arr in log_dict.items():
+            mylogger.log(log_level, key, f'{arr[1]} (counted {arr[0]}')
+        log_dict = {}
+        log_flush()
+
 
 # flushes the log to disk
 def log_flush():
