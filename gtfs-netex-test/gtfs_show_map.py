@@ -211,6 +211,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.limitation:
-        main(args.gtfs_zip_file, args.map_file, args.limitation,log_file)
+        main(args.gtfs_zip_file, args.map_file, args.limitation,args.log_file)
     else:
-        main(args.gtfs_zip_file, args.map_file, None,log_file)
+        main(args.gtfs_zip_file, args.map_file, None,args.log_file)

@@ -5,6 +5,7 @@
 
 import logging
 from configuration import *
+import os
 
 # Basic ideas:
 # - There might still remain print statements, that are just send to the screen
@@ -45,6 +46,9 @@ def prepare_logger(log_level,log_file_name):
 
     # add ch to logger
     if not log_file_name==None and len(log_file_name)>5:
+        # if the processing dir doesn't exist, then we create it
+        directory = os.path.dirname(processing_data+"/"+log_file_name)
+        os.makedirs(directory, exist_ok=True)
         fh = logging.FileHandler(processing_data+"/"+log_file_name,mode="a")
         fh.setFormatter(formatter)
         fh.setLevel(log_level)

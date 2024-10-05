@@ -1,3 +1,5 @@
+import logging
+
 import pandas as pd
 import zipfile
 from aux_logging import *
@@ -37,16 +39,16 @@ def check_gtfs_consistency(gtfs_file):
         # Additional consistency checks can be added based on specific requirements
 
         if errors:
-            print("GTFS feed has the following issues:")
+            log_all(logging.ERROR,"GTFS feed has the following issues:")
             for error in errors:
-                print(error)
+                log_all(logging.ERROR,error)
             return False
         else:
-            print("GTFS feed is internally consistent.")
+            log_all(logging.INFO,"GTFS feed is internally consistent.")
             return True
 
     except Exception as e:
-        print("Error occurred while checking GTFS consistency:", str(e))
+        log_all(logging.ERROR,"Error occurred while checking GTFS consistency:", str(e))
         return False
 
 def check_gtfs_validity(gtfs_file):
@@ -58,7 +60,7 @@ def check_gtfs_validity(gtfs_file):
             gtfs_files = set(zip_ref.namelist())
             missing_files = required_files - gtfs_files
             if missing_files:
-                print("Missing required files:", missing_files)
+                log_all(logging.ERROR,f"Missing required files: {missing_files}")
                 return False
 
             # Check if all required columns are present
@@ -73,7 +75,7 @@ def check_gtfs_validity(gtfs_file):
                 df = pd.read_csv(zip_ref.open(file))
                 missing_columns = set(columns) - set(df.columns)
                 if missing_columns:
-                    print("Missing columns in", file, ":", missing_columns)
+                    log_all(logging.ERROR,f"Missing columns in {file}: {missing_columns}")
                     return False
 
             # Additional validation checks can be added based on specific requirements
@@ -82,7 +84,7 @@ def check_gtfs_validity(gtfs_file):
             return True
 
         except Exception as e:
-            print("Error occurred while checking GTFS validity:", str(e))
+            log_all(logging.ERROR,f"Error occurred while checking GTFS validity:{str(e)}")
             return False
 def get_gtfs_stats(gtfs_file):
     stats = {}
@@ -104,20 +106,20 @@ def get_gtfs_stats(gtfs_file):
             # Additional statistics can be calculated based on specific requirements
 
         except Exception as e:
-            print("Error occurred while processing GTFS file:", str(e))
+            log_all(logging.ERROR,f"Error occurred while processing GTFS file: {str(e)}")
 
     return stats
 
 def print_stats(stats):
-    print("GTFS Statistics:")
+    log_all(logging.INFO,"GTFS Statistics:")
     for key, value in stats.items():
-        print(f"{key}: {value}")
+        log_all(logging.INFO,f"{key}: {value}")
 
 def main(gtfs_file):
     if check_gtfs_validity(gtfs_file):
-        print("The GTFS file is valid.")
+        log_print("The GTFS file is valid.")
     else:
-        print("The GTFS file is not valid.")
+        log_print("The GTFS file is not valid.")
         exit(1)
     if not check_gtfs_consistency(gtfs_file):
         exit(1)
