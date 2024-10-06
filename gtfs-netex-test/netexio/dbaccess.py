@@ -484,6 +484,10 @@ def insert_database(con, classes, f=None, cursor=False):
     context = etree.iterparse(f, events=events, remove_blank_text=True)
     current_element = None
     current_framedefaults = None
+    current_datasource_ref = None
+    current_responsibility_set_ref = None
+    current_location_system = None
+
     location_srsName = None
     for event, element in context:
         localname = element.tag.split('}')[-1]  # localname
@@ -513,26 +517,42 @@ def insert_database(con, classes, f=None, cursor=False):
                 frame_defaults_stack.pop()
                 filtered = [fd for fd in frame_defaults_stack if fd is not None]
                 current_framedefaults = filtered[-1] if len(filtered) > 0 else None
+
+                current_datasource_ref = None
+                current_responsibility_set_ref = None
+                current_location_system = None
+                for fd in reversed(filtered):
+                    if current_datasource_ref is None:
+                        if fd.default_data_source_ref is not None:
+                            current_datasource_ref = fd.default_data_source_ref.ref
+                    if current_responsibility_set_ref is None:
+                        if fd.default_responsibility_set_ref is not None:
+                            current_responsibility_set_ref = fd.default_responsibility_set_ref.ref
+                    if current_location_system is None:
+                        if fd.default_location_system is not None:
+                            current_location_system = fd.default_location_system
+
                 continue
 
             if current_framedefaults is not None:
-                if localname in all_datasource_refs:
+                if current_datasource_ref is not None and localname in all_datasource_refs:
                     if 'dataSourceRef' not in element.attrib:
-                        element.attrib['dataSourceRef'] = current_framedefaults.default_data_source_ref.ref
+                        element.attrib['dataSourceRef'] = current_datasource_ref
 
-                if localname in all_responsibility_set_refs:
+                if current_responsibility_set_ref is not None and localname in all_responsibility_set_refs:
                     if 'responsibilitySetRef' not in element.attrib:
-                        element.attrib['responsibilitySetRef'] = current_framedefaults.default_responsibility_set_ref.ref
+                        element.attrib['responsibilitySetRef'] = current_responsibility_set_ref
 
-                if localname in all_srs_name:
-                    if 'srsName' not in element.attrib:
-                        element.attrib['srsName'] = location_srsName if location_srsName is not None else current_framedefaults.default_location_system
+                if current_location_system is not None:
+                    if localname in all_srs_name:
+                        if 'srsName' not in element.attrib:
+                            element.attrib['srsName'] = location_srsName if location_srsName is not None else current_location_system
 
-                if localname == 'Location':
-                    if 'srsName' not in element.attrib:
-                        element.attrib['srsName'] = current_framedefaults.default_location_system
+                    if localname == 'Location':
+                        if 'srsName' not in element.attrib:
+                            element.attrib['srsName'] = current_location_system
 
-                    location_srsName = None
+                        location_srsName = None
 
             if current_element == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
                 if 'id' not in element.attrib:
