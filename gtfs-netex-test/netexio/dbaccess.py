@@ -27,6 +27,24 @@ serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 serializer.encoding = 'utf-8'
 
+# TODO: For all load_ functions filter by id + version, not only id
+
+def load_embedded(con, clazz: T, filter, cursor=False):
+    # TODO: maybe return something here, which includes *ALL* objects that are embedded within this object, so it does not have to be resolved anymore
+    type = getattr(clazz.Meta, 'name', clazz.__name__)
+
+    if cursor:
+        cur = con.cursor()
+    else:
+        cur = con
+
+    try:
+        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, type,))
+    except:
+        return []
+
+    return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
+
 def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
@@ -423,6 +441,10 @@ def setup_database(con, classes, clean=False, cursor=False):
             cur.execute(sql_drop_table)
         cur.execute("VACUUM;")
 
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
+    print(sql_create_table)
+    cur.execute(sql_create_table)
+
     for objectname in clean_element_names:
         # TODO: optimize
         clazz = getattr(sys.modules['netex'], objectname)
@@ -483,6 +505,7 @@ def insert_database(con, classes, f=None, cursor=False):
     events = ("start", "end")
     context = etree.iterparse(f, events=events, remove_blank_text=True)
     current_element = None
+    current_element_tag = None
     current_framedefaults = None
     current_datasource_ref = None
     current_responsibility_set_ref = None
@@ -493,8 +516,22 @@ def insert_database(con, classes, f=None, cursor=False):
         localname = element.tag.split('}')[-1]  # localname
 
         if event == 'start':
-            if current_element is None and element.tag in interesting_element_names:
-                current_element = element.tag
+            if current_element_tag is None and element.tag in interesting_element_names:
+                current_element = element
+                current_element_tag = element.tag
+            elif current_element is not None and 'id' in element.attrib:
+                parent_version = current_element.attrib.get('version', 'any')
+                version = element.attrib.get('version', 'any')
+                order = element.attrib.get('order', 0)
+                # print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
+
+                sql_insert_object = f"""INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"""
+                try:
+                    cur.execute(sql_insert_object, (current_element_tag.split('}')[-1], current_element.attrib['id'], parent_version, localname, element.attrib['id'], version, order))
+                except:
+                    print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
+                    raise
+                    pass
 
             if localname in all_frames:
                 frame_defaults_stack.append(None)
@@ -504,7 +541,7 @@ def insert_database(con, classes, f=None, cursor=False):
                     location_srsName = element.attrib['srsName']
 
         elif event == 'end':
-            # current_element = element.tag
+            # current_element_tag = element.tag
             if localname == 'FrameDefaults':
                 xml = etree.tostring(element, encoding='unicode')
                 frame_defaults: VersionFrameDefaultsStructure = parser.from_string(xml, VersionFrameDefaultsStructure)
@@ -554,9 +591,10 @@ def insert_database(con, classes, f=None, cursor=False):
 
                         location_srsName = None
 
-            if current_element == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
+            if current_element_tag == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
                 if 'id' not in element.attrib:
                     current_element = None
+                    current_element_tag = None
                     # print(xml)
                     continue
 
@@ -606,6 +644,7 @@ def insert_database(con, classes, f=None, cursor=False):
                         pass
 
                 current_element = None
+                current_element_tag = None
 
 def attach_objects(con, read_database: str, clazz):
     type = getattr(clazz.Meta, 'name', clazz.__name__)

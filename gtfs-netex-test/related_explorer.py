@@ -1,3 +1,4 @@
+import sys
 from decimal import Decimal
 from typing import List, Tuple
 
@@ -9,7 +10,7 @@ from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime
 import random
 
 
-from netexio.dbaccess import load_local
+from netexio.dbaccess import load_local, load_embedded
 import netex
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
@@ -43,6 +44,10 @@ def recursive_attributes(obj):
 
 
 def recursive_resolve(con, parent, resolved):
+    for x in resolved:
+        if parent.id == x.id and parent.__class__ == x.__class__:
+            return
+
     resolved.append(parent)
 
     for obj in recursive_attributes(parent):
@@ -57,9 +62,6 @@ def recursive_resolve(con, parent, resolved):
 
         clazz = getattr(netex, obj.name_of_ref_class)
 
-        if obj.ref == "ch:2:Line:11.S.S24":
-            print(".")
-
         # TODO: do this via a hash function
         # if obj in resolved:
         #    continue
@@ -69,7 +71,20 @@ def recursive_resolve(con, parent, resolved):
 
         resolved_objs = load_local(con, clazz, filter=obj.ref)
         if len(resolved_objs) > 0:
-            recursive_resolve(con, resolved_objs[0], resolved)
+            recursive_resolve(con, resolved_objs[0], resolved) # TODO: not only consider the first
+        else:
+            print(obj.ref)
+            resolved_parents = load_embedded(con, clazz, filter=obj.ref)
+            if len(resolved_parents) > 0:
+                for x in resolved:
+                    if resolved_parents[0][0] == x.id and getattr(sys.modules['netex'], resolved_parents[0][2]) == x.__class__:
+                        return
+
+                resolved_objs = load_local(con, getattr(sys.modules['netex'], resolved_parents[0][2]), filter=resolved_parents[0][0])
+                if len(resolved_objs) > 0:
+                    recursive_resolve(con, resolved_objs[0], resolved) # TODO: not only consider the first
+            else:
+                print(f"Cannot resolve {obj.ref}")
 
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
