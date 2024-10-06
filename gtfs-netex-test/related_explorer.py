@@ -50,13 +50,24 @@ def recursive_resolve(con, parent, resolved):
             # Hack, because NeTEx does not define the default name of ref class yet
             obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
-        if obj in resolved:
-            continue
         if not hasattr(netex, obj.name_of_ref_class):
             #hack for non-existing structures
             print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
             continue
-        resolved_objs = load_local(con, getattr(netex, obj.name_of_ref_class), filter=obj.ref)
+
+        clazz = getattr(netex, obj.name_of_ref_class)
+
+        if obj.ref == "ch:2:Line:11.S.S24":
+            print(".")
+
+        # TODO: do this via a hash function
+        # if obj in resolved:
+        #    continue
+        for x in resolved:
+            if obj.ref == x.id and clazz == x.__class__:
+                return
+
+        resolved_objs = load_local(con, clazz, filter=obj.ref)
         if len(resolved_objs) > 0:
             recursive_resolve(con, resolved_objs[0], resolved)
 
