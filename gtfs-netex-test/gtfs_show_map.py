@@ -20,7 +20,7 @@ def main(gtfs_zip_file, map_file, limitation,log_file):
     global processing_data
     if log_file == None:
         log_file="gtfs_show_map.log"
-    mylogger=prepare_logger(logging.INFO,processing_data+"/"+log_file)
+    mylogger=prepare_logger(logging.INFO,log_file)
     # Read GTFS files using pandas
     # Read the GTFS files directly from the ZIP archive using pandas
     start_time = time.time()
