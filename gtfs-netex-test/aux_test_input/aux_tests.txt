@@ -167,11 +167,10 @@
     "block": "trenord",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "netex_to_db.py", "args": "--log=%%log%% ./aux_test_input/it-itc4-net_151.xml.gz %%dir%%/netex-import.duckdb"},
-        {"script": "#netex_to_db.py", "args": "--log=%%log%% ./aux_test_input/it-itc4-trenord_336.xml.gz %%dir%%/netex-import.duckdb"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% ./aux_test_input/it-itc4-trenord_336.xml %%dir%%/netex-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_assertions.py", "args": "--log=%%log%% ./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "aux_assertions.py", "args": "--log=%%log%% ./aux_test_input/trenord-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "aux_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
         {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
@@ -221,7 +220,7 @@
         {"script": "clean_tmp", "args": "%%dir%%"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/netex-export1.xml %%dir%%/netex-import.duckdb"},
         {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html}
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
         ]
   },
     {
@@ -283,11 +282,14 @@
         {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "aux_assertions.py", "args": "--log=%%log%% ./aux_test_input/swiss-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "aux_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
-        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/swiss3-netex.xml %%dir%%/netex-database.duckdb"},
-        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
         {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
         {"script": "aux_gtfs_check.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml"},
+        {"script": "related_explorer.py", "args": "%%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj1.xml"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex-database.duckdb ServiceJourney random %%dir%%/sj2.xml"}
         ]
   }
   ,
