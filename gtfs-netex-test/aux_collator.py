@@ -1,6 +1,9 @@
 # Autocollator
 import xml.etree.ElementTree as ET
 import zipfile
+from aux_logging import *
+import traceback
+
 
 def get_text_from_last(input_string, search_string):
     index = input_string.rfind(search_string)
@@ -93,6 +96,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Makes one big NeTEx file out of several smaller ones (simple only)')
     parser.add_argument('input_file', type=str, help='input zip')
     parser.add_argument('output_file', type=str, help='collated output xml')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
-
-    main(args.input_file,args.output_file)
+    mylogger =prepare_logger(logging.INFO,args.log_file)
+    try:
+        main(args.input_file,args.output_file)
+    except Exception as e:
+        log_all(logging.ERROR,f'{e}',traceback.format_exc())

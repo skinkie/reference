@@ -1,5 +1,6 @@
 import datetime
 import glob
+import logging
 from typing import List
 
 from xsdata.formats.dataclass.context import XmlContext
@@ -29,6 +30,7 @@ import csv
 
 import zipfile
 from aux_logging import *
+import traceback
 
 def convert(archive, database: str):
     agencies = {}
@@ -187,5 +189,8 @@ if __name__ == '__main__':
     args = argument_parser.parse_args()
     mylogger = prepare_logger(logging.INFO, args.log_file)
 
-    with zipfile.ZipFile(args.gtfs, 'w') as archive:
-        convert(archive, args.netex)
+    try:
+        with zipfile.ZipFile(args.gtfs, 'w') as archive:
+            convert(archive, args.netex)
+    except Exception as e:
+        log_all(logging.ERROR,f'{e}',traceback.format_exc())
