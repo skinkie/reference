@@ -10,7 +10,7 @@ from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime
 import random
 
 
-from netexio.dbaccess import load_local, load_embedded
+from netexio.dbaccess import load_local, load_embedded, load_referencing, recursive_attributes, load_referencing_inwards
 import netex
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
@@ -24,36 +24,56 @@ serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config, writer=XmlEventWriter)
 
-def recursive_attributes(obj):
-    for k, v in obj.__dict__.items():
-        if v is not None:
-            # print(v)
-            if issubclass(v.__class__, VersionOfObjectRef) or issubclass(v.__class__, VersionOfObjectRefStructure):
-                yield v
-
-            else:
-                if (v.__class__.__name__ in netex.__all__ and hasattr(v, '__dict__')):
-                    yield from recursive_attributes(v)
-                elif v.__class__ in (list, tuple):
-                    for x in v:
-                        if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__,
-                                                                                     VersionOfObjectRefStructure):
-                            yield x
-                        else:
-                            yield from recursive_attributes(x)
 
 
-def recursive_resolve(con, parent, resolved):
+def recursive_resolve(con, parent, resolved, filter=None):
     for x in resolved:
         if parent.id == x.id and parent.__class__ == x.__class__:
             return
 
     resolved.append(parent)
 
+    if filter is False or filter == parent.id:
+        resolved_parents = load_referencing_inwards(con, parent.__class__, filter=parent.id)
+        if len(resolved_parents) > 0:
+            for y in resolved_parents:
+                already_done = False
+                for x in resolved:
+                    if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                        already_done = True
+                        break
+    
+                if not already_done:
+                    resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
+                                               filter=y[0])
+                    if len(resolved_objs) > 0:
+                        recursive_resolve(con, resolved_objs[0], resolved)  # TODO: not only consider the first
+
+    # In principle this would already take care of everything recursive_attributes could find, but now does it inwards.
+    resolved_parents = load_referencing(con, parent.__class__, filter=parent.id)
+    if len(resolved_parents) > 0:
+        for y in resolved_parents:
+            already_done = False
+            for x in resolved:
+                if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                    already_done = True
+                    break
+
+            if not already_done:
+                resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
+                                           filter=y[0])
+                if len(resolved_objs) > 0:
+                    recursive_resolve(con, resolved_objs[0], resolved)  # TODO: not only consider the first
+    # else:
+    #      print(f"Cannot resolve referencing {parent.id}")
+
     for obj in recursive_attributes(parent):
         if obj.name_of_ref_class is None:
             # Hack, because NeTEx does not define the default name of ref class yet
-            obj.name_of_ref_class = obj.__class__.__name__[0:-3]
+            if obj.__class__.__name__.endswith('RefStructure'):
+                obj.name_of_ref_class = obj.__class__.__name__[0:-12]
+            elif obj.__class__.__name__.endswith('Ref'):
+                obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
         if not hasattr(netex, obj.name_of_ref_class):
             #hack for non-existing structures
@@ -65,26 +85,33 @@ def recursive_resolve(con, parent, resolved):
         # TODO: do this via a hash function
         # if obj in resolved:
         #    continue
+        already_done = False
         for x in resolved:
             if obj.ref == x.id and clazz == x.__class__:
-                return
+                already_done = True
+                break
 
-        resolved_objs = load_local(con, clazz, filter=obj.ref)
-        if len(resolved_objs) > 0:
-            recursive_resolve(con, resolved_objs[0], resolved) # TODO: not only consider the first
-        else:
-            print(obj.ref)
-            resolved_parents = load_embedded(con, clazz, filter=obj.ref)
-            if len(resolved_parents) > 0:
-                for x in resolved:
-                    if resolved_parents[0][0] == x.id and getattr(sys.modules['netex'], resolved_parents[0][2]) == x.__class__:
-                        return
-
-                resolved_objs = load_local(con, getattr(sys.modules['netex'], resolved_parents[0][2]), filter=resolved_parents[0][0])
-                if len(resolved_objs) > 0:
-                    recursive_resolve(con, resolved_objs[0], resolved) # TODO: not only consider the first
+        if not already_done:
+            resolved_objs = load_local(con, clazz, filter=obj.ref)
+            if len(resolved_objs) > 0:
+                recursive_resolve(con, resolved_objs[0], resolved) # TODO: not only consider the first
             else:
-                print(f"Cannot resolve {obj.ref}")
+                print(obj.ref)
+                resolved_parents = load_embedded(con, clazz, filter=obj.ref)
+                if len(resolved_parents) > 0:
+                    for y in resolved_parents:
+                        already_done = False
+                        for x in resolved:
+                            if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                                already_done = True
+                                break
+
+                        if not already_done:
+                            resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]), filter=y[0])
+                            if len(resolved_objs) > 0:
+                                recursive_resolve(con, resolved_objs[0], resolved) # TODO: not only consider the first
+                else:
+                    print(f"Cannot resolve embedded {obj.ref}")
 
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
@@ -98,7 +125,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
             obj = objs[0]
 
             resolved = []
-            recursive_resolve(con, obj, resolved)
+            recursive_resolve(con, obj, resolved, obj.id)
 
             publication_delivery = PublicationDelivery(
                 version="ntx:1.1",
