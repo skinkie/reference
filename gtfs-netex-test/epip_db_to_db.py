@@ -26,7 +26,7 @@ serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
 import netex_monkeypatching
-
+from aux_logging import *
 from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory, epip_site_frame_memory, \
     epip_service_journey_generator, epip_remove_keylist_extensions
 from transformers.epip import EPIP_CLASSES
@@ -50,6 +50,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Transform the input into mandatory objects for the export of EPIP')
     parser.add_argument('source', type=str, help='DuckDB file to use as input of the transformation.')
     parser.add_argument('target', type=str, help='DuckDB file to overwrite and store contents of the transformation.')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
 
     main(args.source, args.target)

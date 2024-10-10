@@ -4,7 +4,7 @@ from lxml import etree
 import sys
 
 from netex import JourneyPart
-
+from aux_logging import log_print
 
 def get_element_name_with_ns(clazz):
     name = getattr(clazz.Meta, 'name', clazz.__name__)
@@ -81,7 +81,7 @@ def setup_database(con, classes, clean=False):
         else:
             sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL PRIMARY KEY (id));"
 
-        print(sql_create_table)
+        # print(sql_create_table)
         cur.execute(sql_create_table)
 
 
@@ -113,7 +113,7 @@ def insert_database(con, classes, f=None):
                 try:
                     cur.execute(sql_insert_object, (id, version, order, xml,))
                 except:
-                    print(xml)
+                    log_print(xml)
                     pass
 
             elif version is not None:
@@ -122,7 +122,7 @@ def insert_database(con, classes, f=None):
                     cur.execute(sql_insert_object, (id, version, xml,))
                 except:
                     if localname == 'ServiceJourney':
-                        print(xml)
+                        log_print(xml)
                         raise
 
                     pass
@@ -132,7 +132,7 @@ def insert_database(con, classes, f=None):
                 try:
                     cur.execute(sql_insert_object, (id, xml,))
                 except:
-                    print(xml)
+                    log_print(xml)
                     pass
 
 

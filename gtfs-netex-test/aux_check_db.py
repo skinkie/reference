@@ -1,5 +1,7 @@
-import duckdb
+import logging
 
+import duckdb
+from aux_logging import *
 def print_table_row_counts_with_example(db_file):
     # Connect to the DuckDB database
     con = duckdb.connect(database=db_file)
@@ -11,16 +13,16 @@ def print_table_row_counts_with_example(db_file):
     for table in tables:
         table_name = table[0]
         row_count = con.execute(f"SELECT COUNT(*) FROM {table_name};").fetchone()[0]
-        print(f"{table_name}: {row_count}")
+        log:all(logging.INFO,"check_db",f"{table_name}: {row_count}")
 
         # Select a random row from the table
         random_row = con.execute(f"SELECT * FROM {table_name} ORDER BY RANDOM() LIMIT 1;").fetchone()
         if random_row:
             # Convert the row to a string
             row_string = " | ".join(str(col) for col in random_row)
-            print(f"{table_name}_example: {row_string}")
+            log_print(f"{table_name}_example: {row_string}")
         else:
-            print(f"{table_name}_example: No rows found in the table")
+            log_print(f"{table_name}_example: No rows found in the table")
 
     # Close the database connection
     con.close()

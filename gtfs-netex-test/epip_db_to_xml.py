@@ -32,7 +32,7 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     TypesOfValueInFrameRelStructure, ValueSet, ValidityConditionsRelStructure, AvailabilityCondition, JourneyMeeting, InterchangeRule, JourneyMeetingsInFrameRelStructure, InterchangeRulesInFrameRelStructure
 
 import netex_monkeypatching
-
+from aux_logging import *
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
@@ -122,7 +122,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
 
     all_locales = {org.locale for org in organisation_or_transport_organisation if org.locale is not None}
     if len(all_locales) > 1:
-        print("TODO: Test case for multiple TimetableFrames!")
+        log_print("TODO: Test case for multiple TimetableFrames!")
 
     transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con_orig, VehicleType))
     responsibility_set = GeneratorTester(load_generator(con_orig, ResponsibilitySet))
@@ -247,6 +247,8 @@ if __name__ == '__main__':
     argument_parser.add_argument('original', type=str, help='The original DuckDB NeTEx database')
     argument_parser.add_argument('target', type=str, help='The transformed DuckDB NeTEx database')
     argument_parser.add_argument('output', type=str, help='The NeTEx output filename, for example: netex.xml.gz')
+    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
 
     export_epip_network_offer(args.original, args.target, args.output)
