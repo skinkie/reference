@@ -47,7 +47,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
                     resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
                                                filter=y[0])
                     if len(resolved_objs) > 0:
-                        recursive_resolve(con, resolved_objs[0], resolved)  # TODO: not only consider the first
+                        recursive_resolve(con, resolved_objs[0], resolved, filter)  # TODO: not only consider the first
 
     # In principle this would already take care of everything recursive_attributes could find, but now does it inwards.
     resolved_parents = load_referencing(con, parent.__class__, filter=parent.id)
@@ -63,7 +63,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
                 resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
                                            filter=y[0])
                 if len(resolved_objs) > 0:
-                    recursive_resolve(con, resolved_objs[0], resolved)  # TODO: not only consider the first
+                    recursive_resolve(con, resolved_objs[0], resolved, filter)  # TODO: not only consider the first
     # else:
     #      print(f"Cannot resolve referencing {parent.id}")
 
@@ -94,7 +94,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
         if not already_done:
             resolved_objs = load_local(con, clazz, filter=obj.ref)
             if len(resolved_objs) > 0:
-                recursive_resolve(con, resolved_objs[0], resolved) # TODO: not only consider the first
+                recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
             else:
                 print(obj.ref)
                 resolved_parents = load_embedded(con, clazz, filter=obj.ref)
@@ -109,7 +109,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
                         if not already_done:
                             resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]), filter=y[0])
                             if len(resolved_objs) > 0:
-                                recursive_resolve(con, resolved_objs[0], resolved) # TODO: not only consider the first
+                                recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
                 else:
                     print(f"Cannot resolve embedded {obj.ref}")
 
