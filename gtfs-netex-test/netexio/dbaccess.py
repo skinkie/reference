@@ -513,7 +513,7 @@ def get_local_name(element):
         return element.Meta.name
     return element.__name__
 
-def insert_database(con, classes, f=None, cursor=False):
+def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=False):
     clsmembers = inspect.getmembers(netex, inspect.isclass)
     all_frames = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.VersionFrameVersionStructure in x[1].__mro__]
 
@@ -548,6 +548,7 @@ def insert_database(con, classes, f=None, cursor=False):
     current_datasource_ref = None
     current_responsibility_set_ref = None
     current_location_system = None
+    skip_frame = False
 
     location_srsName = None
     for event, element in context:
@@ -557,6 +558,12 @@ def insert_database(con, classes, f=None, cursor=False):
             if current_element_tag is None and element.tag in interesting_element_names:
                 current_element = element
                 current_element_tag = element.tag
+
+            elif localname == 'TypeOfFrameRef':
+                if type_of_frame_filter is not None and element.attrib['ref'] not in type_of_frame_filter:
+                    # TODO: log a single warning that an unknown TypeOfFrame is found, and is not processed
+                    print(f"{element.attrib['ref']} is not a known TypeOfFrame")
+                    skip_frame = True
 
             elif current_element is not None and 'id' in element.attrib:
                 parent_version = current_element.attrib.get('version', 'any')
@@ -608,7 +615,11 @@ def insert_database(con, classes, f=None, cursor=False):
                         if fd.default_location_system is not None:
                             current_location_system = fd.default_location_system
 
+                skip_frame = False
                 continue
+
+            if skip_frame:
+               continue
 
             if current_framedefaults is not None:
                 if current_datasource_ref is not None and localname in all_datasource_refs:

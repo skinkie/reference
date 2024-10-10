@@ -9,8 +9,6 @@ from netexio.dbaccess import get_interesting_classes, setup_database, open_netex
 
 def main(filenames: List[str], database: str, clean_database: bool = True, referencing: bool = False):
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
-    print(referencing)
-
     try:
         os.remove(database)
     except:
