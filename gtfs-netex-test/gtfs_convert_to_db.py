@@ -112,6 +112,12 @@ class GtfsNeTexProfile(CallsProfile):
         # resource_frame.vehicles = VehiclesInFrameRelStructure(train_element_or_vehicle=getVehicles(codespace))
         return resource_frame
 
+    def get_agency_id(self, agency_id):
+        if ':Operator:' in agency_id:
+            return agency_id
+        else:
+            return getId(Operator, self.codespace, agency_id)
+
     def getOperators(self, agency_sql = {'query': """select * from agency;"""}) -> list[Operator]:
         results = []
 
@@ -128,7 +134,7 @@ class GtfsNeTexProfile(CallsProfile):
             agency_emails = df.get('agency_email')
 
             for i in range(0, len(agency_ids)):
-                operator = Operator(id=getId(Operator, self.codespace, agency_ids[i]),
+                operator = Operator(id=self.get_agency_id(agency_ids[i]),
                                     version=self.version.version,
                                     name=MultilingualString(value=get_or_none(agency_names, i)),
                                     locale=Locale(time_zone=get_or_none(agency_timezones, i),
@@ -181,6 +187,12 @@ class GtfsNeTexProfile(CallsProfile):
 
         return operational_contexts
 
+    def get_route_id(self, route_id):
+        if ':Line:' in route_id:
+            return route_id
+        else:
+            return getId(Line, self.codespace, route_id)
+
     def getLines(self) -> list[Line]:
         lines = []
 
@@ -209,15 +221,9 @@ class GtfsNeTexProfile(CallsProfile):
                 agency_id = get_or_none(agency_ids, i)
                 operator_ref = None
                 if agency_id is not None:
-                    operator_ref = getFakeRef(getId(Operator, self.codespace, get_or_none(agency_ids, i)), OperatorRef, self.version.version)
+                    operator_ref = getFakeRef(self.get_agency_id(self, agency_id), OperatorRef, self.version.version)
 
-                if ':Line:' in route_ids[i]:
-                    # Avoid recoding ids
-                    id = route_ids[i]
-                else:
-                    id = getId(Line, self.codespace, route_ids[i])
-
-                line = Line(id=getId(Line, self.codespace, get_or_none(route_ids, i)),
+                line = Line(id=self.get_route_id(route_ids[i]),
                             version=self.version.version,
                             name=MultilingualString(value=get_or_none(route_long_names, i)),
                             short_name=getOptionalString(get_or_none(route_short_names, i)),
@@ -232,6 +238,14 @@ class GtfsNeTexProfile(CallsProfile):
                 lines.append(line)
 
         return lines
+
+    def get_stop_id_sa(self, stop_id):
+        if ':StopArea:' in stop_id:
+            return stop_id
+        elif ':StopPlace:' in stop_id:
+            return stop_id.replace(':StopPlace:', ':StopArea:')
+        else:
+            return getId(StopArea, self.codespace, stop_id)
 
     def getStopAreas(self, stop_area_sql={'query': """select * from stops where location_type = 1 order by stop_id;"""}) -> list[StopArea]:
         stop_areas = []
@@ -256,7 +270,7 @@ class GtfsNeTexProfile(CallsProfile):
 
 
             for i in range(0, len(stop_ids)):
-                stop_area = StopArea(id=getId(StopArea, self.codespace, stop_ids[i]),
+                stop_area = StopArea(id=self.get_stop_id_sa(stop_ids[i]),
                                      version=self.version.version,
                                      name=MultilingualString(value=stop_names[i]),
                                      public_code=get_or_none(stop_codes, i),
@@ -270,6 +284,14 @@ class GtfsNeTexProfile(CallsProfile):
                 stop_areas.append(stop_area)
 
         return stop_areas
+
+    def get_stop_id(self, stop_id):
+        if ':ScheduledStopPoint:' in stop_id:
+            return stop_id
+        elif ':Quay:' in stop_id:
+            return stop_id.replace(':Quay:', ':ScheduledStopPoint:')
+        else:
+            return getId(ScheduledStopPoint, self.codespace, stop_id)
 
     def getScheduledStopPoints(self, stop_areas, scheduled_stop_points_sql={'query': """select * from stops where location_type = 0 or location_type is null order by stop_id;"""}) -> list[ScheduledStopPoint]:
         stop_areas = getIndex(stop_areas)
@@ -314,7 +336,7 @@ class GtfsNeTexProfile(CallsProfile):
                         getRef(stop_areas[stop_area_ref], StopAreaRefStructure)])
 
 
-                scheduled_stop_point = ScheduledStopPoint(id=getId(ScheduledStopPoint, self.codespace, stop_ids[i]),
+                scheduled_stop_point = ScheduledStopPoint(id=self.get_stop_id(stop_ids[i]),
                                                           version=self.version.version,
                                                           name=MultilingualString(value=stop_names[i]),
                                                           description=getOptionalString(get_or_none(stop_descs, i)),
@@ -480,6 +502,20 @@ class GtfsNeTexProfile(CallsProfile):
 
         return list(stop_places.values()), passenger_stop_assignments
 
+    def get_shape_id(self, shape_id):
+        if ':Route:' in shape_id:
+            return route_id
+        else:
+            return getId(Route, self.codespace, shape_id)
+
+    def get_shape_id_lsp(self, shape_id):
+        if ':Route:' in shape_id:
+            return route_id.replace(':Route:', ':LinkSequenceProjection:')
+        else:
+            return getId(LinkSequenceProjection, self.codespace, shape_id)
+
+
+
     #
     # def getPaths(self):
     #     pl = PathLink()
@@ -529,8 +565,12 @@ class GtfsNeTexProfile(CallsProfile):
             prev_shape_id = None
 
             for i in range(0, len(shape_ids)):
+                route_id = self.get_shape_id(shape_ids[i])
+                route_point_id = route_id.replace(":Route:", ":RoutePoint:")
+                route_link_id = route_link_id.replace(":Route:", ":RouteLink:")
+
                 route_point = RoutePoint(
-                    id=getId(RoutePoint, self.codespace, "{}-{}".format(shape_ids[i], shape_pt_sequences[i])),
+                    id=f"{route_point_id}-{shape_pt_sequences[i]}",
                     version=self.version.version,
                     location=LocationStructure2(longitude=Decimal(str(shape_pt_lons[i])),
                                                 latitude=Decimal(str(shape_pt_lats[i])),
@@ -543,7 +583,7 @@ class GtfsNeTexProfile(CallsProfile):
                     if shape_dist_traveleds[i]:
                         distance = shape_dist_traveleds[i] - prev_distance
 
-                    route_link = RouteLink(id=getId(RouteLink, self.codespace, "{}-{}".format(shape_ids[i], shape_pt_sequences[i])),
+                    route_link = RouteLink(id=f"{route_link_id}-{shape_pt_sequences[i]}",
                                            version=self.version.version,
                                            from_point_ref=getRef(prev_route_point),
                                            to_point_ref=getRef(route_point),
@@ -562,18 +602,20 @@ class GtfsNeTexProfile(CallsProfile):
 
                     route_ids = shape_route_mapping.get(shape_ids[i], [(shape_ids[i], None)])
                     for route_id, line_id in route_ids:
-                        route = Route(id=getId(Route, self.codespace, route_id), version=self.version.version)
+                        route = Route(id=self.get_shape_id(route_id), version=self.version.version)
                         route.private_code = PrivateCode(value = shape_ids[i], type_value = "shape_id")
                         route.points_in_sequence = PointsOnRouteRelStructure()
                         if line_id:
-                            line = lines[getId(Line, self.codespace, line_id)]
+                            line = lines[get_route_id(line_id)] # TODO: Validate
                             route.line_ref = getRef(line, LineRef)
 
                         routes[route_id] = route
                         prev_route.append(route)
 
                 for route in prev_route:
-                    point_on_route = PointOnRoute(id=getId(PointOnRoute, self.codespace, "{}-{}".format(route_id, shape_pt_sequences[i])), version=self.version.version, order=prev_order, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(route_point, RoutePointRef)) # shape_pt_sequence is non-negative integer
+                    route_point_id = self.get_shape_id(route_id).replace(":Route:", ":RoutePoint:")
+     
+                    point_on_route = PointOnRoute(id=f"{route_point_id}-{shape_pt_sequences[i]}", version=self.version.version, order=prev_order, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(route_point, RoutePointRef)) # shape_pt_sequence is non-negative integer
                     route.points_in_sequence.point_on_route.append(point_on_route)
 
                 prev_shape_id = shape_ids[i]
@@ -606,8 +648,9 @@ class GtfsNeTexProfile(CallsProfile):
                     if prev_distance is not None and not numpy.isnan(prev_distance):
                         de_distance = Decimal(prev_distance)
 
-                    link_sequence_projection.append(LinkSequenceProjection(id=getId(LinkSequenceProjection, self.codespace, prev_shape_id), version=self.version.version,
-                                                                           distance=de_distance, points_or_line_string=LineString(id=prev_shape_id, srs_name="EPSG:4326", srs_dimension=2, pos_or_point_property_or_pos_list=[PosList(value=pos_list)])))
+                    link_sequence_projection_id = self.get_shape_id_lsp(prev_shape_id)
+                    link_sequence_projection.append(LinkSequenceProjection(id=link_sequence_projection_id, version=self.version.version,
+                                                                           distance=de_distance, points_or_line_string=LineString(id=link_sequence_projection_id.replace(':', "_"), srs_name="EPSG:4326", srs_dimension=2, pos_or_point_property_or_pos_list=[PosList(value=pos_list)])))
                     pos_list = []
                     prev_distance = 0
 
@@ -621,10 +664,11 @@ class GtfsNeTexProfile(CallsProfile):
                 if prev_distance is not None and not numpy.isnan(prev_distance):
                     de_distance = Decimal(str(prev_distance))
 
+                link_sequence_projection_id = self.get_shape_id_lsp(prev_shape_id)
                 link_sequence_projection.append(
-                    LinkSequenceProjection(id=getId(LinkSequenceProjection, self.codespace, prev_shape_id),
+                    LinkSequenceProjection(id=link_sequence_projection_id,
                                            version=self.version.version, distance=de_distance,
-                                           points_or_line_string=LineString(id=getId(LinkSequenceProjection, self.codespace, prev_shape_id).replace(":", "_"), srs_name="EPSG:4326",
+                                           points_or_line_string=LineString(id=link_sequence_projection_id.replace(":", "_"), srs_name="EPSG:4326",
                                                                             srs_dimension=2,
                                                                             pos_or_point_property_or_pos_list=[
                                                                                 PosList(value=pos_list)])))
@@ -710,6 +754,22 @@ class GtfsNeTexProfile(CallsProfile):
         return service_frame
 
 
+    def get_service_id_ac(self, service_id):
+        if ':AvailabilityCondition:' in service_id:
+            return service_id
+        elif ':DayType:' in service_id:
+            return service_id.replace(':DayType:', ':AvailabilityCondition:')
+        else:
+            return getId(AvailabilityCondition, self.codespace, service_id)
+
+    def get_service_id_dt(self, service_id):
+        if ':DayType:' in service_id:
+            return service_id
+        if ':AvailabilityCondition:' in service_id:
+            return service_id.replace(':AvailabilityCondition:', ':DayType:')
+        else:
+            return getId(DayType, self.codespace, service_id)
+
     def getAvailabilityConditions(self, availability_condition_sql={'query': """select * from calendar order by service_id;"""}, exceptions_sql={'query': """select service_id, exception_type, array_agg(date order by date) as dates from calendar_dates group by service_id, exception_type;"""}) -> list[AvailabilityCondition]:
         availability_conditions = []
 
@@ -722,7 +782,8 @@ class GtfsNeTexProfile(CallsProfile):
             for i in range(0, len(service_ids)):
                 exception_type = int(exceptions_df['exception_type'][i])
                 if exception_type in (1, 2):
-                    ac = AvailabilityCondition(id = getId(AvailabilityCondition, self.codespace, service_ids[i] + '_' + str(exception_type)),
+                    
+                    ac = AvailabilityCondition(id=get_service_id(service_ids[i]) + '_' + str(exception_type)),
                                                version=self.version.version, is_available=exception_type == 1,
                                                from_date=date_to_xmldatetime(gtfs_date(exceptions_df['dates'][i][0])),
                                                to_date=date_to_xmldatetime(gtfs_date(exceptions_df['dates'][i][-1])),
@@ -763,10 +824,10 @@ class GtfsNeTexProfile(CallsProfile):
                 if sundays[i] == 1:
                     days_of_week.append(DayOfWeekEnumeration.SUNDAY)
 
-                availability_conditions.append(AvailabilityCondition(id=getId(AvailabilityCondition, self.codespace, service_ids[i]), version=self.version.version,
+                availability_conditions.append(AvailabilityCondition(id=get_service_id(service_ids[i]), version=self.version.version,
                                                                      is_available=True,
                                                                      from_date=date_to_xmldatetime(gtfs_date(start_dates[i])), to_date=date_to_xmldatetime(gtfs_date(end_dates[i])),
-                                                                     day_types=DayTypesRelStructure(day_type_ref_or_day_type=[DayType(id=getId(DayType, self.codespace, service_ids[i]), version=self.version.version,
+                                                                     day_types=DayTypesRelStructure(day_type_ref_or_day_type=[DayType(id=self.get_service_id_dt(service_ids[i]), version=self.version.version,
                                                                                                                     properties=PropertiesOfDayRelStructure(property_of_day=[PropertyOfDay(tides=None, weeks_of_month=None, holiday_types=None, seasons=None, days_of_week=days_of_week)]))])))
 
         return availability_conditions
@@ -919,6 +980,32 @@ class GtfsNeTexProfile(CallsProfile):
         with self.conn.cursor() as cur:
             cur.execute(**shape_sql)
 
+    def get_trip_id(self, trip_id):
+        if ':ServiceJourney:' in trip_id:
+            return trip_id
+        else:
+            return getId(ServiceJourney, self.codespace, trip_id)
+   
+    def get_trip_id_aa(self, trip_id):
+        if ':ServiceJourney:' in trip_id:
+            return trip_id.replace(':ServiceJourney:', ':AccessibilityAssessment:')
+        else:
+            return getId(AccessibilityAssessment, self.codespace, trip_id)
+
+    def get_trip_id_sfs(self, trip_id):
+        if ':ServiceJourney:' in trip_id:
+            return trip_id.replace(':ServiceJourney:', ':ServiceFacilitySet:')
+        else:
+            return getId(ServiceFacilitySet, self.codespace, trip_id)
+
+    def get_trip_id_call(self, trip_id, sequence):
+        if ':ServiceJourney:' in trip_id:
+            return trip_id.replace(':ServiceJourney:', ':Call:') + '_' + sequence
+        elif ':TemplateServiceJourney:' in trip_id:
+            return trip_id.replace(':TemplateServiceJourney:', ':Call:') + '_' + sequence 
+        else:
+            return getId(Call, self.codespace, trip_id) + '_' + sequence
+
     def getServiceJourneys(self, availability_conditions, trips_sql={'query': """select * from trips where trip_id not in (select trip_id from frequencies) order by trip_id;"""}, stop_times_sql = {'query': """select * from stop_times order by trip_id, stop_sequence;"""}) -> Generator[ServiceJourney, None, None]:
         availability_conditions = getIndex(availability_conditions)
 
@@ -946,7 +1033,7 @@ class GtfsNeTexProfile(CallsProfile):
             ticketing_types = df.get('ticketing_type')
 
             for i in range(0, len(route_ids)):
-                availability_condition_key = getId(AvailabilityCondition, self.codespace, service_ids[i])
+                availability_condition_key = self.get_service_id(service_ids[i])
 
                 availability_conditions_journey = [availability_conditions.get(availability_condition_key, None),
                                                    availability_conditions.get(availability_condition_key + "_1", None),
@@ -960,7 +1047,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 accessibility_assessment = None
                 if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
-                    accessibility_assessment = AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, trip_ids[i]),
+                    accessibility_assessment = AccessibilityAssessment(id=get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
 
@@ -973,7 +1060,7 @@ class GtfsNeTexProfile(CallsProfile):
                 shape_id = get_or_none(shape_ids, i)
                 if shape_id is not None:
                     if shape_id in shape_used:
-                        lsp = getFakeRef(getId(LinkSequenceProjection, self.codespace, shape_id), LinkSequenceProjectionRef, self.version.version)
+                        lsp = getFakeRef(get_shape_id_lsp(shape_id), LinkSequenceProjectionRef, self.version.version)
                     else:
                         lsps = self.getLineStrings({'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence, shape_dist_traveled from shapes where shape_id = ? order by shape_id, shape_pt_sequence, shape_dist_traveled;""", 'parameters': (shape_id,)})
                         if len(lsps) > 0:
@@ -993,12 +1080,12 @@ class GtfsNeTexProfile(CallsProfile):
                 if len(luggage_carriage_facility_list) > 0:
                     facitities = ServiceFacilitySetsRelStructure(
                             service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
-                                id=getId(ServiceFacilitySet, self.codespace, trip_ids[i]), version=self.version.version,
+                                id=self.get_trip_id_sfs(trip_ids[i]), version=self.version.version,
                                 luggage_carriage_facility_list=LuggageCarriageFacilityList(value=luggage_carriage_facility_list))])
 
-                service_journey = ServiceJourney(id=getId(ServiceJourney, self.codespace, trip_ids[i]),
+                service_journey = ServiceJourney(id=self.get_trip_id(trip_ids[i]),
                                                  version=self.version.version,
-                                                 flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
+                                                 flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(self.get_route_id(route_ids[i]), LineRef, self.version.version),
                                                  private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None])],
@@ -1061,7 +1148,7 @@ class GtfsNeTexProfile(CallsProfile):
                     distance = shape_dist_traveled - prev_shape_traveled
                     prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
-                call = Call(id=getId(Call, self.codespace, "{}_{}".format(trip_ids[i], stop_sequences[i])), version=self.version.version,
+                call = Call(id=self.get_trip_id_call(trip_ids[i], stop_sequences[i]), version=self.version.version,
                              fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getFakeRef(from_point_ref, ScheduledStopPointRef, self.version.version),
                              destination_display_ref_or_destination_display_view=destination_display_view,
                              arrival=ArrivalStructure(time=arrival_time, day_offset=arrival_dayoffset,
@@ -1120,7 +1207,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 accessibility_assessment = None
                 if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
-                    accessibility_assessment = AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, trip_ids[i]),
+                    accessibility_assessment = AccessibilityAssessment(id=get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
 
@@ -1153,7 +1240,7 @@ class GtfsNeTexProfile(CallsProfile):
                 if len(luggage_carriage_facility_list) > 0:
                     facitities = ServiceFacilitySetsRelStructure(
                             service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
-                                id=getId(ServiceFacilitySet, self.codespace, trip_ids[i]), version=self.version.version,
+                                id=self.get_trip_id_sfs(trip_ids[i]), version=self.version.version,
                                 luggage_carriage_facility_list=LuggageCarriageFacilityList(value=luggage_carriage_facility_list))])
 
                 calls = CallsRelStructure()
@@ -1194,7 +1281,7 @@ class GtfsNeTexProfile(CallsProfile):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
-                        call = Call(id=getId(Call, self.codespace, "{}_{}".format(trip_ids[i], stop_sequences[index_j])),
+                        call = Call(id=self.get_trip_id_call(trip_ids[i], stop_sequences[index_j]),
                                     version=self.version.version,
                                     fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getFakeRef(
                                         from_point_ref, ScheduledStopPointRef, self.version.version),
@@ -1214,7 +1301,7 @@ class GtfsNeTexProfile(CallsProfile):
                         prev_shape_traveled = shape_dist_traveled
                         prev_order += 1
 
-                service_journey = ServiceJourney(id=getId(ServiceJourney, self.codespace, trip_ids[i]),
+                service_journey = ServiceJourney(id=self.get_trip_id(trip_ids[i]),
                                                  version=self.version.version,
                                                  flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
                                                  private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
@@ -1230,6 +1317,15 @@ class GtfsNeTexProfile(CallsProfile):
                                                  )
 
                 yield service_journey
+
+    def get_trip_id_tsj(self, trip_id):
+        if ':TemplateServiceJourney:' in trip_id:
+            return trip_id
+        if ':ServiceJourney:' in trip_id:
+            return trip_id.replace(':ServiceJourney:', ':TemplateServiceJourney:')
+        else:
+            return getId(TemplateServiceJourney, self.codespace, trip_id)
+ 
 
     def getTemplateServiceJourneys(self, availability_conditions, trips_sql={'query': """select * from trips WHERE trip_id IN (SELECT trip_id FROM frequencies) order by trip_id;"""}) -> Generator[TemplateServiceJourney, None, None]:
         availability_conditions = getIndex(availability_conditions)
@@ -1271,7 +1367,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 accessibility_assessment = None
                 if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
-                    accessibility_assessment = AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, trip_ids[i]),
+                    accessibility_assessment = AccessibilityAssessment(id=get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
 
@@ -1304,7 +1400,7 @@ class GtfsNeTexProfile(CallsProfile):
                 if len(luggage_carriage_facility_list) > 0:
                     facitities = ServiceFacilitySetsRelStructure(
                             service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
-                                id=getId(ServiceFacilitySet, self.codespace, trip_ids[i]), version=self.version.version,
+                                id=self.get_trip_id_sfs(trip_ids[i]), version=self.version.version,
                                 luggage_carriage_facility_list=LuggageCarriageFacilityList(value=luggage_carriage_facility_list))])
 
                 calls = CallsRelStructure()
@@ -1345,7 +1441,7 @@ class GtfsNeTexProfile(CallsProfile):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
-                        call = Call(id=getId(Call, self.codespace, "{}_{}".format(trip_ids[i], stop_sequences[index_j])),
+                        call = Call(id=self.get_trip_id_call(trip_ids[i], stop_sequences[index_j]),
                                     version=self.version.version,
                                     fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view=getFakeRef(
                                         from_point_ref, ScheduledStopPointRef, self.version.version),
@@ -1390,7 +1486,7 @@ class GtfsNeTexProfile(CallsProfile):
                                             minimum_headway_interval=XmlDuration(value=f'PT{headway_secs[index_j]}S') if exact_times[index_j] == 0 else None,
                         ))
 
-                template_service_journey = TemplateServiceJourney(id=getId(ServiceJourney, self.codespace, trip_ids[i]),
+                template_service_journey = TemplateServiceJourney(id=getId(TemplateServiceJourney, self.codespace, trip_ids[i]),
                                                  version=self.version.version,
                                                  flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
                                                  private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
