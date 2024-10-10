@@ -12,6 +12,7 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True):
     for file in open_netex_file(swiss_zip_file):
         if file.name.endswith(".xml"):
             if not check_if_swiss_file(file):
+                # TODO: Wouldn't it be more efficient to check the filename structure?
                 print("Not enough elements with id attributes starting with ch:1:. So no Swiss data")
                 sys.exit(2)
 
