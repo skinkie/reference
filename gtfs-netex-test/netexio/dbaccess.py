@@ -1,7 +1,8 @@
 import inspect
 import sys
 from typing import T, List, Generator
-import re
+
+import duckdb
 
 from isal import igzip_threaded
 from xsdata.formats.dataclass.context import XmlContext
@@ -556,13 +557,14 @@ def insert_database(con, classes, f=None, cursor=False):
             if current_element_tag is None and element.tag in interesting_element_names:
                 current_element = element
                 current_element_tag = element.tag
+
             elif current_element is not None and 'id' in element.attrib:
                 parent_version = current_element.attrib.get('version', 'any')
                 version = element.attrib.get('version', 'any')
                 order = element.attrib.get('order', 0)
                 # print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
 
-                sql_insert_object = f"""INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"""
+                sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                 try:
                     cur.execute(sql_insert_object, (current_element_tag.split('}')[-1], current_element.attrib['id'], parent_version, localname, element.attrib['id'], version, order))
                 except:
@@ -573,7 +575,7 @@ def insert_database(con, classes, f=None, cursor=False):
             if localname in all_frames:
                 frame_defaults_stack.append(None)
 
-            if localname == 'Location':
+            elif localname == 'Location':
                 if 'srsName' in element.attrib:
                     location_srsName = element.attrib['srsName']
 
@@ -708,7 +710,12 @@ def recursive_attributes(obj):
                         elif (x.__class__.__name__ in netex.__all__ and hasattr(x, '__dict__')):
                             yield from recursive_attributes(x)
 
+import inspect
+
 def resolve_all_references(con, classes, f=None, cursor=False):
+    counter = 0
+    all_class_names = {name for name, obj in inspect.getmembers(netex) if inspect.isclass(obj)}
+
     if cursor:
         cur = con.cursor()
     else:
@@ -723,8 +730,12 @@ def resolve_all_references(con, classes, f=None, cursor=False):
         clazz = getattr(sys.modules['netex'], objectname)
         clazz_by_name[interesting_element_names[i]] = clazz
 
+    cur.execute("SET wal_autocheckpoint='1TB';")
+
     for clazz in clazz_by_name.values():
+        print(clazz)
         for parent in load_generator(con, clazz):
+            print(parent.id)
             for obj in recursive_attributes(parent):
                 if obj.name_of_ref_class is None:
                     # Hack, because NeTEx does not define the default name of ref class yet
@@ -733,7 +744,9 @@ def resolve_all_references(con, classes, f=None, cursor=False):
                     elif obj.__class__.__name__.endswith('Ref'):
                         obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
-                if not hasattr(netex, obj.name_of_ref_class):
+
+                if obj.name_of_ref_class not in all_class_names:
+                # if not hasattr(netex, obj.name_of_ref_class):
                     # hack for non-existing structures
                     print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
                     continue
@@ -743,14 +756,19 @@ def resolve_all_references(con, classes, f=None, cursor=False):
                 else:
                     order = 0
 
-                sql_insert_object = f"""INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"""
+
+                sql_insert_object = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
                 try:
-                    cur.execute(sql_insert_object, (
-                    parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
-                except:
-                    print(f"{parent.id} hosts {obj.ref} {obj.version}")
-                    raise
+                    cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
+                except duckdb.duckdb.ConstraintException:
                     pass
+                #     print(f"{parent.id} hosts {obj.ref} {obj.version}")
+                #     raise
+
+                # counter += 1
+                # print("\r" + str(counter) + ' ' + parent.id)
+
+        cur.execute("CHECKPOINT;")
 
 def attach_objects(con, read_database: str, clazz):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
