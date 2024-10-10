@@ -1,3 +1,4 @@
+import math
 import random
 import time
 import zipfile
@@ -186,7 +187,10 @@ def handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_di
         if not no_sub:
             stop_coords_list.append(stop_coords)
             stop_coords_list_str.append(array_of_array_to_string(stop_coords))
-            route_names.append(route_name_dict['route_short_name'] + " to " + trip_name)
+            if math.isnan(trip_name):
+                route_names.append(route_name_dict['route_short_name'])
+            else:
+                route_names.append(route_name_dict['route_short_name'] + " to " + trip_name)
 
 
 def array_of_array_to_string(array_of_arrays):
