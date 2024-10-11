@@ -11,8 +11,6 @@ from aux_logging import *
 
 def main(filenames: List[str], database: str, clean_database: bool = True, referencing: bool = False):
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
-    print(referencing)
-
     try:
         os.remove(database)
     except:
