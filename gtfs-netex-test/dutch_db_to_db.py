@@ -52,7 +52,7 @@ from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory
 
 from dutch_to_db import DUTCH_CLASSES
 
-generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1, 'DefaultLocationsystem': 'EPSG:28992'} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
+generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
 
 def main(source_database_file: str, target_database_file: str):
     classes = get_interesting_classes(filter=DUTCH_CLASSES)
