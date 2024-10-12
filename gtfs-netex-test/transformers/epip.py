@@ -75,7 +75,7 @@ def epip_scheduled_stop_point_generator(read_database: str, write_database: str,
         ssp.stop_areas = None
         ssp.key_list = None
         ssp.extensions = None
-        project_location_4326(ssp.location, generator_defaults)
+        project_location_4326(ssp.location)
         return ssp
 
     def query(read_con) -> Generator:
@@ -104,7 +104,7 @@ def epip_scheduled_stop_point_memory(read_database: str, write_database: str, ge
             ssp: ScheduledStopPoint
             ssp.stop_areas = None
             if ssp.location is not None:
-                project_location_4326(ssp.location, generator_defaults)
+                project_location_4326(ssp.location)
             else:
                 print(f"ScheduledStopPoint {ssp.id} does not have a location.")
 
@@ -197,13 +197,13 @@ def epip_site_frame_memory(read_database, write_database, generator_defaults):
                                 quay.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list = [
                                     PosList(value=list(chain(*zip(xx, yy))))]
 
-                                project_polygon(quay.polygon_or_multi_surface, generator_defaults, 'urn:ogc:def:crs:EPSG::4326')
+                                project_polygon(quay.polygon_or_multi_surface, 'urn:ogc:def:crs:EPSG::4326')
 
                             if quay.centroid:
-                                project_location_4326(quay.centroid.location, generator_defaults)
+                                project_location_4326(quay.centroid.location)
 
                 if stop_place.centroid:
-                    project_location_4326(stop_place.centroid.location, generator_defaults)
+                    project_location_4326(stop_place.centroid.location)
 
                 retained_stop_places.append(stop_place)
 
