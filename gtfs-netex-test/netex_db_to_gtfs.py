@@ -1,32 +1,16 @@
 import datetime
-import glob
-import logging
 from typing import List
-
-from xsdata.formats.dataclass.context import XmlContext
-from xsdata.formats.dataclass.parsers import XmlParser
-from xsdata.formats.dataclass.parsers.config import ParserConfig
-from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
-
-import lxml
-import hashlib
 
 from callsprofile import CallsProfile
 from netexio.dbaccess import load_local, load_generator
 from gtfsprofile import GtfsProfile
-from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
-    Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
+from netex import Line, StopPlace, Codespace, ScheduledStopPoint, PassengerStopAssignment, \
+    Authority, Operator, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
     DataSource, StopPlaceEntrance, TemplateServiceJourney, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting
 from nordicprofile import NordicProfile
-from refs import getId, getRef, getIndex
+from refs import getRef, getIndex
 
 import duckdb as sqlite3
-
-from decimal import Decimal
-
-from timetabledpassingtimesprofile import TimetablePassingTimesProfile
-
-import csv
 
 import zipfile
 from aux_logging import *
