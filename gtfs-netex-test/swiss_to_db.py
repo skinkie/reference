@@ -4,9 +4,9 @@ import duckdb as sqlite3
 import xml.etree.ElementTree as ET
 
 from anyintodbnew import  get_interesting_classes, setup_database, open_netex_file, insert_database
+from netexio.dbaccess import resolve_all_references_and_embeddings
 from aux_logging import *
 import traceback
-from netexio.dbaccess import resolve_all_references
 
 SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "TemplateServiceJourney", "ServiceCalendar", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace", "ResponsibilitySet"]
 
@@ -33,7 +33,7 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
             insert_database(con, classes, file)
 
         if referencing:
-            resolve_all_references(con, classes)
+            resolve_all_references_and_embeddings(con, classes)
 
 def check_if_swiss_file(file_handler):
     if file_handler.name.endswith(".xml"):

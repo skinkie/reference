@@ -11,7 +11,8 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDuration
 
 from callsprofile import CallsProfile
-from netexio.dbaccess import write_objects, write_generator
+from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, resolve_all_references, \
+    resolve_all_references_and_embeddings
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
     VersionTypeEnumeration, LocaleStructure, SystemOfUnits, Operator, ContactStructure, Locale, LanguageUsageStructure, \
     LanguageUseEnumeration, Line, PresentationStructure, AllVehicleModesOfTransportEnumeration, PrivateCode, \
@@ -1543,6 +1544,12 @@ def main(database_gtfs: str, database_netex: str):
 
     with duckdb.connect(database_netex) as con:
         gtfs.database(con)
+
+        # TODO: Maybe do something here specifically for GTFS-classes
+        classes = get_interesting_classes()
+        resolve_all_references_and_embeddings(con, classes)
+
+
 
 if __name__ == '__main__':
     import argparse

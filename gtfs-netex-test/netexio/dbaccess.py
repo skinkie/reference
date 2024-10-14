@@ -79,6 +79,36 @@ def load_referencing_inwards(con, clazz: T, filter, cursor=False):
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
 
+def load_embedded_transparent(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
+    type = getattr(clazz.Meta, 'name', clazz.__name__)
+
+    if cursor:
+        cur = con.cursor()
+    else:
+        cur = con
+
+    try:
+        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, type,))
+    except:
+        return []
+
+    objs = []
+    for parent_id, parent_version, parent_clazz in cur.fetchall():
+        cur2 = con.cursor()
+        cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? LIMIT 1;", (parent_id, parent_version,))
+        for object in cur2.fetchone():
+            tree = etree.fromstring(object)
+            elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}[@id='{filter}']")
+            for element in elements:
+                obj = parser.from_string(etree.tounicode(element), clazz)
+                objs.append(obj) # TODO: parsing directly from elementtree should be possible too
+
+    return objs
+
+
+
+
+
 def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
@@ -95,7 +125,9 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
         else:
             cur.execute(f"SELECT object FROM {type};")
     except:
-        return []
+        pass
+        # This is the situation where the type is not available at all in the catalogue
+        return load_embedded_transparent(con, clazz, limit, filter)
 
     objs: List[T] = []
     for xml, in cur.fetchall():
@@ -105,9 +137,11 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
             obj = parser.from_bytes(xml, clazz)
         objs.append(obj)
 
+    objs += load_embedded_transparent(con, clazz, limit, filter)
+
     return objs
 
-def load_generator(con, clazz, limit=None, filter=None):
+def load_generator(con, clazz, limit=None, filter=None, embedding=True):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     cur = con.cursor()
@@ -119,6 +153,9 @@ def load_generator(con, clazz, limit=None, filter=None):
         else:
             cur.execute(f"SELECT object FROM {type};")
     except:
+        pass
+        if embedding:
+            yield from load_embedded_transparent_generator(con, clazz, limit, filter)
         return
 
     while True:
@@ -129,6 +166,32 @@ def load_generator(con, clazz, limit=None, filter=None):
             yield parser.from_string(xml[0], clazz)
         else:
             yield parser.from_bytes(xml[0], clazz)
+
+    if embedding:
+        yield from load_embedded_transparent_generator(con, clazz, limit, filter)
+
+
+def load_embedded_transparent_generator(con, clazz: T, limit=None, filter=None) -> List[T]:
+    type = getattr(clazz.Meta, 'name', clazz.__name__)
+
+    cur = con.cursor()
+    try:
+        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, type,))
+    except:
+        return []
+
+    try:
+        for parent_id, parent_version, parent_clazz in cur.fetchone():
+            cur2 = con.cursor()
+            cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? LIMIT 1;", (parent_id, parent_version,))
+            for object in cur2.fetchone():
+                tree = etree.fromstring(object)
+                elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}[@id='{filter}']")
+                for element in elements:
+                    obj = parser.from_string(etree.tounicode(element), clazz) # TODO: parsing directly from elementtree should be possible too
+                    yield obj
+    except TypeError:
+        pass
 
 from lxml import etree
 def load_lxml_generator(con, clazz, limit=None):
@@ -479,10 +542,6 @@ def setup_database(con, classes, clean=False, cursor=False):
     print(sql_create_table)
     cur.execute(sql_create_table)
 
-    sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
-    print(sql_create_table)
-    cur.execute(sql_create_table)
-
     for objectname in clean_element_names:
         # TODO: optimize
         clazz = getattr(sys.modules['netex'], objectname)
@@ -712,19 +771,23 @@ def recursive_attributes(obj):
 
             else:
                 if (v.__class__.__name__ in netex.__all__ and hasattr(v, '__dict__')):
+                    if hasattr(v, 'id'):
+                        yield v
                     yield from recursive_attributes(v)
                 elif v.__class__ in (list, tuple):
                     for x in v:
-                        if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__,
-                                                                                     VersionOfObjectRefStructure):
-                            yield x
-                        elif (x.__class__.__name__ in netex.__all__ and hasattr(x, '__dict__')):
-                            yield from recursive_attributes(x)
+                        if x is not None:
+                            if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__,
+                                                                                         VersionOfObjectRefStructure):
+                                yield x
+                            elif (x.__class__.__name__ in netex.__all__ and hasattr(x, '__dict__')):
+                                if hasattr(x, 'id'):
+                                    yield x
+                                yield from recursive_attributes(x)
 
 import inspect
 
-def resolve_all_references(con, classes, f=None, cursor=False):
-    counter = 0
+def resolve_all_references(con, classes, cursor=False):
     all_class_names = {name for name, obj in inspect.getmembers(netex) if inspect.isclass(obj)}
 
     if cursor:
@@ -742,6 +805,10 @@ def resolve_all_references(con, classes, f=None, cursor=False):
         clazz_by_name[interesting_element_names[i]] = clazz
 
     cur.execute("SET wal_autocheckpoint='1TB';")
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
+    print(sql_create_table)
+    cur.execute(sql_create_table)
+    cur.execute("TRUNCATE referencing;")
 
     for clazz in clazz_by_name.values():
         print(clazz)
@@ -773,13 +840,84 @@ def resolve_all_references(con, classes, f=None, cursor=False):
                     cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
                 except duckdb.duckdb.ConstraintException:
                     pass
-                #     print(f"{parent.id} hosts {obj.ref} {obj.version}")
-                #     raise
-
-                # counter += 1
-                # print("\r" + str(counter) + ' ' + parent.id)
 
         cur.execute("CHECKPOINT;")
+
+
+# TODO: This is a duplicate, maybe clean up at all other places, and just do everything here
+def resolve_all_references_and_embeddings(con, classes, cursor=False):
+    all_class_names = {name for name, obj in inspect.getmembers(netex) if inspect.isclass(obj)}
+
+    if cursor:
+        cur = con.cursor()
+    else:
+        cur = con
+
+    # TODO: This pattern must be able to make generic, and maybe even avoided running multiple times
+    clean_element_names, interesting_element_names = classes
+    clazz_by_name = {}
+
+    for i in range(0, len(interesting_element_names)):
+        objectname = clean_element_names[i]
+        clazz = getattr(sys.modules['netex'], objectname)
+        clazz_by_name[interesting_element_names[i]] = clazz
+
+    cur.execute("SET wal_autocheckpoint='1TB';")
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
+    cur.execute(sql_create_table)
+    cur.execute("TRUNCATE referencing;")
+
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
+    cur.execute(sql_create_table)
+    cur.execute("TRUNCATE embedded;")
+
+
+    for clazz in clazz_by_name.values():
+        print(clazz)
+        for parent in load_generator(con, clazz, embedding=False):
+            # print(parent.id)
+            for obj in recursive_attributes(parent):
+                if hasattr(obj, 'id'):
+                    if obj.id is not None:
+                        version =  obj.version if hasattr(obj, 'version') else 'any'
+                        order = obj.order if hasattr(obj, 'order') else 0
+
+                        sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
+                        try:
+                            cur.execute(sql_insert_object, (
+                            clazz.__name__, parent.id, parent.version, obj.__class__.__name__, obj.id, version, order))
+                        except:
+                            raise
+
+                else:
+                    if obj.name_of_ref_class is None:
+                        # Hack, because NeTEx does not define the default name of ref class yet
+                        if obj.__class__.__name__.endswith('RefStructure'):
+                            obj.name_of_ref_class = obj.__class__.__name__[0:-12]
+                        elif obj.__class__.__name__.endswith('Ref'):
+                            obj.name_of_ref_class = obj.__class__.__name__[0:-3]
+
+
+                    if obj.name_of_ref_class not in all_class_names:
+                    # if not hasattr(netex, obj.name_of_ref_class):
+                        # hack for non-existing structures
+                        print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+                        continue
+
+                    if hasattr(obj, 'order'):
+                        order = obj.order
+                    else:
+                        order = 0
+
+
+                    sql_insert_object = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+                    try:
+                        cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
+                    except duckdb.duckdb.ConstraintException:
+                        pass
+
+        cur.execute("CHECKPOINT;")
+
 
 def attach_objects(con, read_database: str, clazz):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
