@@ -147,6 +147,10 @@ A block is a conversion/processing sequence. When a script stops with an err_cod
 
 The block name must exist within the script file.
 Example script files can be found in the folder ./scripts.
+e.g. use
+
+`python tool_script_runner.py ./scripts/scripts_regression.txt run.log swiss4 `
+
 Example draft of block "at1":
 
     [  {
