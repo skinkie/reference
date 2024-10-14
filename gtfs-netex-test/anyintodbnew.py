@@ -3,7 +3,6 @@ import duckdb
 from lxml import etree
 import sys
 
-from netex import JourneyPart
 from aux_logging import log_print
 
 def get_element_name_with_ns(clazz):
