@@ -53,16 +53,22 @@ def check_gtfs_consistency(gtfs_file):
 
 def check_gtfs_validity(gtfs_file):
     # Read GTFS files using pandas
+    invalid=False
     with zipfile.ZipFile(gtfs_file, 'r') as zip_ref:
         try:
             # Check required files
-            required_files = {'agency.txt', 'stops.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'}
+            required_files = {'agency.txt', 'stops.txt','calendar.txt','calender_dates.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'}
+            cond_required_files = {}
+            cond_required_files['stops.txt'] = 'locations.geojson'
+            cond_required_files['calendar.txt'] = 'calendar_dates.txt'
+            cond_required_files['calendar_dates.txt'] = 'calendar.txt'
             gtfs_files = set(zip_ref.namelist())
             missing_files = required_files - gtfs_files
-            if missing_files:
-                log_all(logging.ERROR,"gtfs_check",f"Missing required files: {missing_files}")
+            for missing_file in missing_files:
+                if not cond_required_files[missing_file] in gtfs_files:
+                    log_all(logging.ERROR,"gtfs_check",f"Missing required file: {missing_file}")
+                    invalid = True
                 return False
-
             # Check if all required columns are present
             required_columns = {
                 'agency.txt': ['agency_id', 'agency_name', 'agency_url'],

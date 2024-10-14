@@ -54,13 +54,12 @@ if __name__ == '__main__':
     argument_parser = argparse.ArgumentParser(description='Import a Swiss NeTEx ZIP archive into DuckDB')
     argument_parser.add_argument('swiss_zip_file', type=str, help='The NeTEx zip file')
     argument_parser.add_argument('database', type=str, help='The DuckDB to be overwritten with the NeTEx context')
-    argument_parser.add_argument('clean_database', action="store_true", help='Clean the current file', default=True)
-    argument_parser.add_argument('referencing', action="store_false", help='Create referencing table')
+    argument_parser.add_argument('--clean_database', action="store_true", help='Clean the current file', default=True)
+    argument_parser.add_argument('--referencing', action="store_false", help='Create referencing table')
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
     mylogger =prepare_logger(logging.INFO,args.log_file)
-
     try:
-        main(args.swiss_zip_file, args.database, args.clean_database)
+        main(args.swiss_zip_file, args.database, args.clean_database,args.referencing)
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())

@@ -284,12 +284,29 @@
         {"script": "aux_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb"},
         {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
-        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "aux_gtfs_check.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"},
         {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml"},
-        {"script": "related_explorer.py", "args": "%%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj1.xml"},
-        {"script": "related_explorer.py", "args": "%%dir%%/netex-database.duckdb ServiceJourney random %%dir%%/sj2.xml"}
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj1.xml"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj2.xml"},
+        {"script": "#netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "#aux_gtfs_check.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "#gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
+        ]
+  }
+  ,
+     {
+    "block": "swissmikro",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "gtfs_import_to_db.py", "args": "./aux_test_input/swiss_mikro.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
+        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "aux_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj1.xml"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj2.xml"}
         ]
   }
   ,

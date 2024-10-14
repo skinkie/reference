@@ -26,7 +26,7 @@ def clean_tmp(f):
             # Remove file if it matches the extensions
             if item.endswith('.duckdb') or item.endswith('.tmp') or item.endswith('.log'):
                 try:
-                    os.remove(item_path)
+                    os.remove(item_path)  # the open run.log can't be cleared, because it is in use. We ignore this for the time being
                 except Exception as e:
                     log_print(f"Error while removing file: {e}")
         elif os.path.isdir(item_path):
