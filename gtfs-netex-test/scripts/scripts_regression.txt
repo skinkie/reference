@@ -9,11 +9,11 @@
         {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "./tools/tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "./tools/tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
         {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "aux_gtfs_check.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "./tools/tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
         {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 100 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
         ]
   },
