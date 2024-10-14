@@ -117,7 +117,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
     organisation_or_transport_organisation = load_local(con_orig, Authority) + load_local(con_orig, Operator)
     value_set = GeneratorTester(load_generator(con_orig, ValueSet))
 
-    all_locales = {org.locale for org in organisation_or_transport_organisation if org.locale is not None}
+    all_locales = [org.locale for org in organisation_or_transport_organisation if org.locale is not None]
     if len(all_locales) > 1:
         log_print("TODO: Test case for multiple TimetableFrames!")
 
