@@ -148,7 +148,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
     journey_meeting = GeneratorTester(load_generator(con_orig, JourneyMeeting))
     interchange_rule = GeneratorTester(load_generator(con_orig, InterchangeRule))
 
-    availability_condition = GeneratorTester(load_generator(con_orig, AvailabilityCondition))
+    # availability_condition = GeneratorTester(load_generator(con_orig, AvailabilityCondition))
     service_journey = GeneratorTester(load_generator(con_target, ServiceJourney))
 
     day_type = GeneratorTester(load_generator(con_target, DayType))
@@ -216,7 +216,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                     TimetableFrame(
                                         id="EU_PI_TIMETABLE", version=version,
                                         type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_TIMETABLE', version_ref='1.0'),
-                                        content_validity_conditions=ValidityConditionsRelStructure(choice=availability_condition.generator()) if availability_condition.has_value() else None,
+                                        # content_validity_conditions=ValidityConditionsRelStructure(choice=availability_condition.generator()) if availability_condition.has_value() else None,
                                         vehicle_journeys=JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journey.generator()) if service_journey.has_value() else None,
                                         journey_meetings=JourneyMeetingsInFrameRelStructure(journey_meeting=journey_meeting.generator()) if journey_meeting.has_value() else None,
                                         interchange_rules=InterchangeRulesInFrameRelStructure(interchange_rule=interchange_rule.generator()) if interchange_rule.has_value() else None
