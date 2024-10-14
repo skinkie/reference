@@ -68,11 +68,18 @@ An example of a configuration file can be found here: https://github.com/skinkie
 
 #### NeTEX to GTFS conversion
 1. Load the NeTEX. Usually use netex_to_db.py. Sometimes a specific profile warrants the usage of a specific importer (e.g. swiss_to_db.py)
-2. Write to GTFS
+2. Write to GTFS with netex_db_to_gtfs.py
 
 #### GTFS to NeTEx conversion
-1. Load the GTFS with gtfs_convert_to_db.py
-2. Write NeTEx  netex_db_to_netex.py or epip_db_to
+1. Load the GTFS data into a database with gtfs_import_to_db.py
+2. Load the GTFS with gtfs_convert_to_db.py
+3. Write NeTEx  netex_db_to_xml.py
+
+If you want to produce EPIP:
+1. Load the GTFS data into a database with gtfs_import_to_db.py
+2. Load the GTFS with gtfs_convert_to_db.py
+3. epip_db_to_db.py convertsit to EPIP
+4. epip_db_to_xml.py writes it to an XML
 
 #### NeTEx to EPIP conversion
 1. Load the NeTEx netex_to_db.py or a special loader like swiss_to_db.py
@@ -85,8 +92,8 @@ From a NeTEx file an operation day can be exported as SIRI PT/ET.
 > TO BE DONE
 
 ### Validation and inspection of a NeTEX file
-* Some statistics aux_netex_stats.py
-* Some assertions aux_netex_assertions
+* Some statistics tools/tool_netex_stats.py
+* Some assertions tools/tool_netex_check_assertions.py
 * XSD check: TO BE DONE
 * EPIP check: TO BE DONE
 
@@ -96,15 +103,22 @@ From a NeTEx file an operation day can be exported as SIRI PT/ET.
 * We usually can process files, zip and gzip. The ending determines, which file is read or written.
 
 #### Importing GTFS
+Imports a GTFS file into the database structure:
+
 `python gtfs_import_to_db.py /path/to/gtfs.zip /path/to/gtfs-import.duckdb`
 
 ####  Conversion of GTFS to NeTEx intermediate
+Converts the GTFS database into a NeTEx one:
+
 `python gtfs_convert_to_db.py /path/to/gtfs-import.duckdb /path/to/netex-import.duckdb`
 
 ####  Transformation of NeTEx towards EPIP
+Transforms a NeTEx database into one that is suited for EPIP:
+
 `python epip_db_to_db.py /path/to/netex-import.duckdb /path/to/netex-import-epip.duckdb`
 
 ####  Conversion of NeTEx EPIP database to XML
+Writing the database in an XML. the extension says, if it is an XML, a ZIP or a gz.
 `python epip_db_to_xml.py /path/to/netex-import.duckdb /path/to/netex-import-epip.duckdb /path/to/netex.xml.gz`
 
 ####  Import a Swiss NeTEx ZIP file
@@ -117,50 +131,58 @@ Not yet working well are:
 * Frequency based traffic
 
 ####  Exploring instances and their dependencies
-`python related_explorer.py /path/to/netex.duckdb ServiceJourney the:id`
+`python related_explorer.py /path/to/netex.duckdb ServiceJourney the:id  /path/to/exportfile.gz`
 
-### Auxiliary functions
-Many auxiliary functions exist.
+the:id = random results in the script selecting a random element. 
+Instead of ServiceJourney also other elements can be used (e.g. Line)
 
-#### aux_test_runner.py - A script runner
-`python related_explorer.py --begin_step 1 solea path/to/logfile  /path/to/scriptfile`
+### Tools
+Most tools are in the ./tools folder. The exception is the tool_script_runner.py which is in the main directory.
 
+#### tool_script_runner.py - A script runner
 Uses a script file to work through the other commands. The scripts are other pyhton programs
 A block is a conversion/processing sequence. When a script stops with an err_code <> 0, then the block is terminated.
 
-    {
-    "block": "at1",
-    "url" : "http://www.example.com",
-    "description" : "Script to process a given file",
+`python tool_script_runner.py --begin_step 1 /path/to/script_file  relative/path/logfile  block-name `
+
+The block name must exist within the script file.
+Example script files can be found in the folder ./scripts.
+Example draft of block "at1":
+
+    [  {
+    "block": "blablacar",
+    "url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
+    "description":"Blablacar data",
     "scripts": [
-        {"script": "clean_tmp", "args": ["./aux_test_processing"]},
-        {"script": "netex_to_db.py", "args": ["./aux_test_input/20240918-2247_netex_vmobil_2024.zip ./aux_test_processing/netex-import.duckdb"]},
-        {"script": "epip_db_to_db.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb"]},
-        {"script": "epip_db_to_xml.py", "args": ["./aux_test_processing/netex-import.duckdb ./aux_test_processing/netex-database.duckdb ./aux_test_processing/at1-netex.xml"]},
-        {"script": "aux_assertions.py", "args": ["./aux_test_input/at-assertions.txt ./aux_test_processing/at1-netex.xml"]},
-        {"script": "aux_netex_stats.py", "args": ["./aux_test_processing/at1-netex.xml"]},
-        {"script": "netex_to_db.py", "args": ["./aux_test_processing/at1-netex.xml ./aux_test_processing/netex-database.duckdb"]},
-        {"script": "netex_db_to_gtfs.py", "args": ["./aux_test_processing/netex-database.duckdb ./aux_test_processing/at1-gtfs.zip"]},
-        {"script": "aux_gtfs_check.py", "args": ["./aux_test_processing/at1-gtfs.zip"]},
-        {"script": "gtfs_show_map.py", "args": ["./aux_test_processing/at1-gtfs.zip ./aux_test_processing/at1-map.html routes"]}
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "gtfs_import_to_db.py", "args": "./aux_test_input/blablacar.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
+        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "./tools/tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "./tools/tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "./tools/tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 100 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
         ]
-    },
+  }]
 
 
-#### aux_netex_stats.py - Simple statistics
+#### tools/tool_netex_stats.py - Simple statistics
 
-`python aux_netex_stats.py path/to/netex/file.xml`
+`python ./tools/tool_netex_stats.py path/to/netex/file.xml`
 
 Indicates for a given number of NeTEx elements the number of each element.
 This shows if the relevant elements are present.
 
 > (!) Here it must be an uncompressed xml file for the time being 
 
-#### aux_assertions.py - Simple assertions
+#### tools/tool_netex_check_assertions.py - Simple assertions
 
-`python aux_netex_stats.py path/to/netex_file.xml path/to/assertions.txt`
+`python ./tools/tools_netex_check_assertions.py path/to/netex_file.xml path/to/assertions.txt`
 
-The program tests some assertions agains a netex file 
+The program tests some assertions against a netex file 
 
 > (!) Here it must be an uncompressed xml file for the time being 
 
@@ -183,3 +205,4 @@ The example shows all allowed functions contains works with regex
 https://github.com/skinkie/reference/wiki/Roadmap
 
 ## License
+Apache AGPL 3.0
