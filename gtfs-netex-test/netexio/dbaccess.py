@@ -180,15 +180,18 @@ def load_embedded_transparent_generator(con, clazz: T, limit=None, filter=None) 
     except:
         return []
 
-    for parent_id, parent_version, parent_clazz in cur.fetchone():
-        cur2 = con.cursor()
-        cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? LIMIT 1;", (parent_id, parent_version,))
-        for object in cur2.fetchone():
-            tree = etree.fromstring(object)
-            elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}[@id='{filter}']")
-            for element in elements:
-                obj = parser.from_string(etree.tounicode(element), clazz) # TODO: parsing directly from elementtree should be possible too
-                yield obj
+    try:
+        for parent_id, parent_version, parent_clazz in cur.fetchone():
+            cur2 = con.cursor()
+            cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? LIMIT 1;", (parent_id, parent_version,))
+            for object in cur2.fetchone():
+                tree = etree.fromstring(object)
+                elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}[@id='{filter}']")
+                for element in elements:
+                    obj = parser.from_string(etree.tounicode(element), clazz) # TODO: parsing directly from elementtree should be possible too
+                    yield obj
+    except TypeError:
+        pass
 
 from lxml import etree
 def load_lxml_generator(con, clazz, limit=None):
