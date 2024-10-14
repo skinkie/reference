@@ -40,6 +40,7 @@ def convert(archive, database: str):
     psas = {}
     uic_operating_periods = {}
     max_date = datetime.date.today()
+    calendars = {}
     calendar_dates = {}
 
     # We can't append in a ZipFile
@@ -161,8 +162,6 @@ def convert(archive, database: str):
                                              uic_operating_periods[day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]))
 
         # This is what we produce ourselves, it splits the exceptions in positive and negative values, and a separate availability condition for the 'calendar'.
-        calendars = {}
-        calendar_dates = {}
         for availibility_condition in load_generator(con, AvailabilityCondition):
             # TODO: This is a hack. See #136
             service_id = re.sub('_[12]$', '', availibility_condition.id)
