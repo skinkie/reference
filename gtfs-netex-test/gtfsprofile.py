@@ -1,5 +1,6 @@
 import csv
 import datetime
+import re
 import warnings
 from typing import List, Union
 import io
@@ -14,7 +15,8 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
     PrivateCode, PrivateCodeStructure, Quay, PresentationStructure, Authority, Branding, Operator, ServiceJourney, \
     ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
     ServiceLink, PublicCodeStructure, StopPlaceEntrance, TemplateServiceJourney, HeadwayJourneyGroup, \
-    JourneyFrequencyGroupVersionStructure, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting
+    JourneyFrequencyGroupVersionStructure, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
+    AvailabilityCondition, DayType, DayOfWeekEnumeration
 
 import operator as operator_f
 
@@ -470,6 +472,31 @@ class GtfsProfile:
         return stop
 
     @staticmethod
+    def getCalendarAndCalendarDates(service_id, availability_condition: AvailabilityCondition):
+        if availability_condition.valid_day_bits is not None:
+            operational_dates = [availability_condition.from_date.to_datetime() + datetime.timedelta(days=i) for i in range(0, len(availability_condition.valid_day_bits)) if availability_condition.valid_day_bits[i] == '1']
+            for date in operational_dates:
+                yield tuple((None, {'service_id': service_id, 'date': str(date.date()).replace('-', ''), 'exception_type': 1 if (True if availability_condition.is_available is None else availability_condition.is_available) else 2},))
+
+        elif availability_condition.day_types is not None and len(availability_condition.day_types.day_type_ref_or_day_type) == 1 and isinstance(availability_condition.day_types.day_type_ref_or_day_type[0], DayType):
+            day_type: DayType = availability_condition.day_types.day_type_ref_or_day_type[0]
+            days_of_week = day_type.properties.property_of_day[0].days_of_week
+
+            yield tuple(({'service_id': service_id,
+                   'monday': int(DayOfWeekEnumeration.MONDAY in days_of_week),
+                   'tuesday': int(DayOfWeekEnumeration.TUESDAY in days_of_week),
+                   'wednesday': int(DayOfWeekEnumeration.WEDNESDAY in days_of_week),
+                   'thursday': int(DayOfWeekEnumeration.THURSDAY in days_of_week),
+                   'friday': int(DayOfWeekEnumeration.FRIDAY in days_of_week),
+                   'saturday': int(DayOfWeekEnumeration.SATURDAY in days_of_week),
+                   'sunday': int(DayOfWeekEnumeration.SUNDAY in days_of_week),
+                   'start_date': str(availability_condition.from_date.to_datetime().date()).replace('-', ''),
+                   'end_date': str(availability_condition.to_date.to_datetime().date()).replace('-', '')}, None,))
+
+        else:
+            warnings.warn("This availability condition does not match the GTFS profile")
+
+    @staticmethod
     def getCalendarDates(service_id, dates: List[datetime.datetime]):
         for date in dates:
             yield {'service_id': service_id, 'date': str(date).replace('-', ''), 'exception_type': 1}
@@ -493,7 +520,11 @@ class GtfsProfile:
             service_id = service_journey.day_types.day_type_ref[0].ref
         else:
             # TODO: Handle valid between
-            service_id = '+'.join([vc.ref for vc in service_journey.validity_conditions_or_valid_between[0].choice])
+            ids = []
+            for vc in service_journey.validity_conditions_or_valid_between[0].choice:
+                ids.append(re.sub('_[12]$', '', vc.ref))
+
+            service_id = '+'.join(list(set(ids)))
 
         trip = {'route_id': GtfsProfile.getLineRef(service_journey, service_journey_pattern),
                 'service_id': service_id,  # TODO: Guard for duplicates, and AvailabilityCondition

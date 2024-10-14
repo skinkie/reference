@@ -1,5 +1,6 @@
 import datetime
 import glob
+import re
 from typing import List
 
 from xsdata.formats.dataclass.context import XmlContext
@@ -15,7 +16,8 @@ from netexio.dbaccess import load_local, load_generator
 from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
     Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
-    DataSource, StopPlaceEntrance, TemplateServiceJourney, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting
+    DataSource, StopPlaceEntrance, TemplateServiceJourney, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
+    AvailabilityCondition
 from nordicprofile import NordicProfile
 from refs import getId, getRef, getIndex
 
@@ -146,6 +148,7 @@ def convert(archive, database: str):
         GtfsProfile.writeToZipFile(archive,'stops.txt', list(stops.values()), write_header=True)
         routes = agency = stops = None
 
+        # TODO: this all asumes that we take a specific type. GTFS handles it differently.
         for uic_operating_period in load_generator(con, UicOperatingPeriod):
             operational_dates = NordicProfile.getOperationalDates(uic_operating_period)
             if operational_dates[-1] > max_date:
@@ -156,6 +159,27 @@ def convert(archive, database: str):
             calendar_dates[day_type_assignment.day_type_ref.ref] = list(
                 GtfsProfile.getCalendarDates(day_type_assignment.day_type_ref.ref,
                                              uic_operating_periods[day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]))
+
+        # This is what we produce ourselves, it splits the exceptions in positive and negative values, and a separate availability condition for the 'calendar'.
+        calendars = {}
+        calendar_dates = {}
+        for availibility_condition in load_generator(con, AvailabilityCondition):
+            # TODO: This is a hack. See #136
+            service_id = re.sub('_[12]$', '', availibility_condition.id)
+            combined = list(GtfsProfile.getCalendarAndCalendarDates(service_id, availibility_condition))
+            exceptions = []
+            for calendar, calendar_date in combined:
+                if calendar is not None:
+                    calendars[service_id] = calendar
+
+                if calendar_date is not None:
+                    exceptions.append(calendar_date)
+
+            l = calendar_dates.get(service_id, [])
+            calendar_dates[service_id] = l + exceptions
+
+        if len(calendars.values()) > 0:
+            GtfsProfile.writeToZipFile(archive, 'calendar.txt', list(calendars.values()), write_header=True)
 
         GtfsProfile.writeToZipFile(archive,'calendar_dates.txt', [item for row in calendar_dates.values() for item in row], write_header=True)
 
