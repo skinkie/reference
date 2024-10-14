@@ -4,7 +4,7 @@ from typing import List
 import duckdb as sqlite3
 
 from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database, \
-    resolve_all_references
+    resolve_all_references_and_embeddings
 
 DUTCH_CLASSES = ["Authority", "AvailabilityCondition", "Block", "Branding", "DataSource", "DayType", "DayTypeAssignment", "DeadRun", "DeadRunJourneyPattern", "DestinationDisplay", "Line", "Notice", "NoticeAssignment", "OperationalContext", "Operator", "PassengerStopAssignment", "ResponsibilitySet", "Route", "RouteLink", "RoutePoint", "ScheduledStopPoint", "ServiceJourney", "ServiceJourneyPattern", "StopArea", "TimeDemandType", "TimingLink", "TimingPoint", "TransportAdministrativeZone", "TypeOfProductCategory", "VehicleType", "Version"]
 
@@ -28,7 +28,7 @@ def main(filenames: List[str], database: str, clean_database: bool = True, refer
                 insert_database(con, classes, sub_file, DUTCH_TYPE_OF_FRAME)
 
         if referencing:
-            resolve_all_references(con, classes)
+            resolve_all_references_and_embeddings(con, classes)
 
 if __name__ == '__main__':
     import argparse

@@ -4,7 +4,7 @@ import duckdb as sqlite3
 import os
 
 from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database, \
-    resolve_all_references
+    resolve_all_references_and_embeddings
 
 
 def main(filenames: List[str], database: str, clean_database: bool = True, referencing: bool = False):
@@ -25,7 +25,7 @@ def main(filenames: List[str], database: str, clean_database: bool = True, refer
                 insert_database(con, classes, sub_file)
 
         if referencing:
-            resolve_all_references(con, classes)
+            resolve_all_references_and_embeddings(con, classes)
 
 if __name__ == '__main__':
     import argparse
