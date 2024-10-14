@@ -1,7 +1,6 @@
 import sys
 
 import duckdb as sqlite3
-import os
 import xml.etree.ElementTree as ET
 
 from anyintodbnew import  get_interesting_classes, setup_database, open_netex_file, insert_database

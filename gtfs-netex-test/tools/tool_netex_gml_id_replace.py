@@ -21,5 +21,5 @@ def add_unique_ids_to_gml(file_path):
         file.write(modified_content)
 
 # Usage example
-file_path = 'C:/Users/ue71603/MG_Daten/github/reference1/gtfs-netex-test/aux_test_input/it-itc4-net_151.xml'
+file_path = '/aux_test_input/it-itc4-net_151.xml'
 add_unique_ids_to_gml(file_path)

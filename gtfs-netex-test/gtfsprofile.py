@@ -1,11 +1,9 @@
 import csv
 import datetime
-import logging
 import warnings
 from typing import List, Union
 import io
 from pyproj import Transformer
-from xsdata.models.datatype import XmlDateTime, XmlDuration
 from utils import to_seconds
 
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \

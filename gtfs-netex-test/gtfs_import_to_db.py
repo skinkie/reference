@@ -1,5 +1,4 @@
 import io
-import logging
 import warnings
 
 import duckdb
@@ -157,7 +156,6 @@ def handle_file(con, zip, filename, column_mapping: dict):
             sql_create_table = f"""CREATE TABLE {table} ({data_types});"""
             cur.execute(sql_create_table)
 
-import datetime
 
 def create_feed_info(con):
     with con.cursor() as cur:

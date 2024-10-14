@@ -1,26 +1,24 @@
-import logging
 import sqlite3
 from decimal import Decimal, ROUND_HALF_UP
 from functools import partial
 from itertools import chain
 from typing import List, Iterable, T, Generator
 
-from pyproj import Transformer, CRS
+from pyproj import Transformer
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
-from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
+from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from anyintodbnew import setup_database, get_interesting_classes
 from callsprofile import CallsProfile
 from netex import ServiceJourneyPattern, Direction, Codespace, MultilingualString, DirectionType, ServiceJourney, \
     AvailabilityCondition, TimeDemandType, ScheduledStopPoint, Pos, PointVersionStructure, RoutePoint, RouteLink, \
     StopPointInJourneyPattern, TimingPointInJourneyPattern, ScheduledStopPointRef, TimingLink, ServiceLink, \
-    TimingLinkRefStructure, ServiceLinkRefStructure, RouteRef, Route, RouteLinkRef, RouteLinkRefStructure, \
+    TimingLinkRefStructure, ServiceLinkRefStructure, RouteRef, Route, RouteLinkRefStructure, \
     RouteRefStructure, ScheduledStopPointRefStructure, RoutePointRef, RoutePointRefStructure, PointProjection, \
-    TimingPoint, TimingPointRefStructure, LineString, Link, LinkVersionStructure, PosList, Line, StopPlace, AccessSpace, \
+    TimingPoint, TimingPointRefStructure, LinkVersionStructure, PosList, Line, StopPlace, AccessSpace, \
     Quay, Polygon, PassengerStopAssignment, QuayRefStructure, StopPlaceRefStructure, Block, ServiceJourneyRef, \
     VehicleTypeRef, VersionOfObjectRefStructure, ServiceJourneyPatternRef, LineRef
 
@@ -28,7 +26,7 @@ from refs import getId, getRef, getIndex
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from utils import project
-from multiprocess import Pool, freeze_support
+from multiprocess import Pool
 from aux_logging import *
 def ref_version_hash(self):
     return hash(self.ref + ';' + self.version)
@@ -661,7 +659,6 @@ def epip_route_link_memory(read_database, write_database, generator_defaults):
 
             write_objects(write_con, route_links, True, True)
 
-import time
 
 def epip_line_generator(read_database: str, write_database: str, generator_defaults: dict, pool: Pool):
     log_print(sys._getframe().f_code.co_name)

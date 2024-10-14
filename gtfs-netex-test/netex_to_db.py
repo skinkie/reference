@@ -1,8 +1,6 @@
-import logging
 from typing import List
 
 import duckdb as sqlite3
-import os
 
 from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database, \
     resolve_all_references

@@ -3,14 +3,13 @@ import duckdb as sqlite3
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
-from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
+from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from anyintodbnew import setup_database, get_interesting_classes
 
-from netex import Codespace, AvailabilityCondition
-from netexio.dbaccess import attach_source, attach_objects
+from netex import Codespace
 
 from transformers.direction import infer_directions_from_sjps_and_apply
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
@@ -25,10 +24,9 @@ serializer_config.xml_declaration = False
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
-import netex_monkeypatching
 from aux_logging import *
 from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory, epip_site_frame_memory, \
-    epip_service_journey_generator, epip_remove_keylist_extensions
+    epip_service_journey_generator
 from transformers.epip import EPIP_CLASSES
 
 generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
