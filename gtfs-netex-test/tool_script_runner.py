@@ -58,7 +58,8 @@ def clean(directory):
 
 
 def main(script_file,log_file, log_level, todo_block,begin_step):
-    # set the logger
+    # blockexisted
+    blockexisted=False
     # Read the scripts from a file
     with open(script_file) as f:
         data = json.load(f)
@@ -72,6 +73,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
         if not todo_block == block["block"]:
             if not todo_block == "all":
                 continue
+        blockexisted=True
         scripts = block['scripts']
         prepare_logger(log_level, block["block"] + "/" + log_file)
         log_once(logging.INFO, "Start", f'Processing block: {block["block"]}')
@@ -154,6 +156,10 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 log_flush()
                 blockstop = True
                 break
+    if not blockexisted:
+        log_all(logging.ERROR, "test_runner",
+                f'Block "{todo_block}" not in script file.')
+        log_flush()
 
 
 if __name__ == "__main__":
