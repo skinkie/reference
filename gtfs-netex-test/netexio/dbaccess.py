@@ -802,10 +802,10 @@ def resolve_all_references(con, classes, cursor=False):
         clazz_by_name[interesting_element_names[i]] = clazz
 
     cur.execute("SET wal_autocheckpoint='1TB';")
-    cur.execute("TRUNCATE referencing;")
     sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
     print(sql_create_table)
     cur.execute(sql_create_table)
+    cur.execute("TRUNCATE referencing;")
 
     for clazz in clazz_by_name.values():
         print(clazz)
