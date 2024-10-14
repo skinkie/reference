@@ -5,6 +5,8 @@ from typing import List, Union
 import io
 from pyproj import Transformer
 from xsdata.models.datatype import XmlDateTime, XmlDuration
+
+from transformers.projection import project_location_4326
 from utils import to_seconds
 
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \
@@ -413,6 +415,7 @@ class GtfsProfile:
         if transformer:
             latitude, longitude = transformer.transform(scheduled_stop_point.location.pos.value[0], scheduled_stop_point.location.pos.value[1])
         else:
+            project_location_4326(scheduled_stop_point.location)
             latitude, longitude = scheduled_stop_point.location.latitude, scheduled_stop_point.location.longitude
 
         stop = {'stop_id': scheduled_stop_point.id,
@@ -445,6 +448,7 @@ class GtfsProfile:
         if transformer:
             latitude, longitude = transformer.transform(stop_entrance.centroid.location.pos.value[0], stop_entrance.centroid.location.pos.value[1])
         else:
+            project_location_4326(stop_entrance.centroid.location)
             latitude, longitude = stop_entrance.centroid.location.latitude, stop_entrance.centroid.location.longitude
 
         stop = {'stop_id': stop_entrance.id,
@@ -588,6 +592,7 @@ class GtfsProfile:
         if transformer:
             latitude, longitude = transformer.transform(stop_area.centroid.location.pos.value[0], stop_area.centroid.location.pos.value[1])
         else:
+            project_location_4326(stop_area.centroid.location)
             latitude, longitude = stop_area.centroid.location.latitude, stop_area.centroid.location.longitude
 
         stop = {'stop_id': stop_area.id,
@@ -610,6 +615,7 @@ class GtfsProfile:
 
     @staticmethod
     def projectStopPlaceToStop(stop_place: StopPlace, transformer: Transformer = None) -> dict:
+        # TODO: Maybe remove?
         if transformer:
             latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
         else:
@@ -618,6 +624,7 @@ class GtfsProfile:
                 longitude = 0
                 print(f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
             else:
+                project_location_4326(stop_place.centroid.location)
                 latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
 
         stop = {'stop_id': stop_place.id,
@@ -644,6 +651,7 @@ class GtfsProfile:
         if transformer:
             latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
         else:
+            project_location_4326(stop_place.centroid.location)
             latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
 
         result = []
@@ -674,6 +682,7 @@ class GtfsProfile:
                     latitude, longitude = transformer.transform(quay.centroid.location.pos.value[0],
                                                                 quay.centroid.location.pos.value[1])
                 else:
+                    project_location_4326(quay.centroid.location)
                     latitude, longitude = quay.centroid.location.latitude, quay.centroid.location.longitude
 
                 stop = {'stop_id': quay.id,
@@ -704,6 +713,7 @@ class GtfsProfile:
 
         for route_link in route_links[0:-1]:
             # TODO: handle variants (posList, pos array)
+            # TODO: Add transformer
             l = route_link.line_string.pos_or_point_property_or_pos_list[0].value
             dimensions = route_link.line_string.srs_dimension or 2
             for i in range(0, len(l) - dimensions, dimensions):
