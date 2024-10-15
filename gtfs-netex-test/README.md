@@ -172,6 +172,13 @@ Example draft of block "at1":
         ]
   }]
 
+There are currently three possible placeholders:
+- %%dir%%  (the directory where the output should be stored. the block name is used to create a subdirectory there.)
+- %%log%%  (the logfile it will be put into %%dir%%/%%block%%)
+- %%block%% (the name of the block)
+
+As it can be seend this can result in a generic block that can be reused with only the original input file being necessary (some tools might need additional files).
+
 
 #### tools/tool_netex_stats.py - Simple statistics
 

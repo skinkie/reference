@@ -24,9 +24,9 @@ def clean_tmp(f):
 
         if os.path.isfile(item_path):
             # Remove file if it matches the extensions
-            if item.endswith('.duckdb') or item.endswith('.tmp') or item.endswith('.log'):
+            if item.endswith('.duckdb') or item.endswith('.tmp'):  # logs are NOT cleaned (as at least one is already locked)
                 try:
-                    os.remove(item_path)  # the open run.log can't be cleared, because it is in use. We ignore this for the time being
+                    os.remove(item_path)
                 except Exception as e:
                     log_print(f"Error while removing file: {e}")
         elif os.path.isdir(item_path):
@@ -64,10 +64,9 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
     with open(script_file) as f:
         data = json.load(f)
 
-    #
+    # go through each block
     for block in data:
         processdir = processing_data + "/" + block["block"]
-        # prepare the logger
 
         blockstop = False
         if not todo_block == block["block"]:
@@ -76,7 +75,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
         blockexisted=True
         scripts = block['scripts']
         prepare_logger(log_level, block["block"] + "/" + log_file)
-        log_once(logging.INFO, "Start", f'Processing block: {block["block"]}')
+        # log_once(logging.INFO, "Start", f'Processing block: {block["block"]}')
         step = 1
         for script in scripts:
 
@@ -92,7 +91,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             script_name = script['script']
             script_args = script['args']
 
-            # replace the placeholder for processdir with the correct values
+            # replace the placeholder for processdir with the correct values and also the other place holders
             script_args = replace_in_string(script_args, "%%dir%%", processdir)
             script_args = replace_in_string(script_args, "%%block%%", block["block"])
             script_args = replace_in_string(script_args, "%%log%%", block["block"] + "/" + log_file)
