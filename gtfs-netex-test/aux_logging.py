@@ -3,7 +3,6 @@
 # --log=INFO
 # --logfile=filename
 
-import logging
 from configuration import *
 import os
 

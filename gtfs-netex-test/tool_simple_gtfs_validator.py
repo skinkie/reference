@@ -1,5 +1,3 @@
-import logging
-
 import pandas as pd
 import zipfile
 from aux_logging import *

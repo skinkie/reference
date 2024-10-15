@@ -1,5 +1,3 @@
-import logging
-
 import duckdb
 from aux_logging import *
 def print_table_row_counts_with_example(db_file):

@@ -1,13 +1,12 @@
 import datetime
-import glob
 import re
 from typing import List
 
 from callsprofile import CallsProfile
 from netexio.dbaccess import load_local, load_generator
 from gtfsprofile import GtfsProfile
-from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
-    Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
+from netex import Line, StopPlace, Codespace, ScheduledStopPoint, PassengerStopAssignment, \
+    Authority, Operator, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
     DataSource, StopPlaceEntrance, TemplateServiceJourney, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
     AvailabilityCondition
 from nordicprofile import NordicProfile

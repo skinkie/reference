@@ -1,7 +1,9 @@
 import logging
 import re
 from lxml import etree
-from aux_logging import *
+import aux_logging
+
+
 def process_assertions(assertions_file, input_file):
     tree = etree.parse(input_file)
     # Define the namespace URI
@@ -19,13 +21,13 @@ def process_assertions(assertions_file, input_file):
         assertion = assertion.strip()
         if assertion.startswith('#'):
             comment = assertion.split(' ', 1)[1]
-            log_print(f'comment: {comment}')
+            aux_logging.log_print(f'comment: {comment}')
         elif assertion.startswith('contains'):
             regex = assertion.split(' ', 1)[1]
             if re.search(regex, input_content):
-                log_print(f'Assertion PASSed: File contains regex "{regex}"')
+                aux_logging.log_print(f'Assertion PASSed: File contains regex "{regex}"')
             else:
-                log_all(logging.ERROR,"assertions",f'Assertion FAILed: File does not contain regex "{regex}"')
+                aux_logging.log_all(logging.ERROR, "assertions", f'Assertion FAILed: File does not contain regex "{regex}"')
                 failed=1
         elif assertion.startswith('xpathcountequal'):
             parts = assertion.split(' ')
@@ -33,9 +35,9 @@ def process_assertions(assertions_file, input_file):
             expected_count = int(parts[2])
             results = tree.xpath(xpath_expression, namespaces=namespaces)
             if len(results) == expected_count:
-                log_print(f'Assertion PASSed: XPath "{xpath_expression}" has {expected_count} results')
+                aux_logging.log_print(f'Assertion PASSed: XPath "{xpath_expression}" has {expected_count} results')
             else:
-                log_all(logging.ERROR,"assertions",f'Assertion FAILed: XPath "{xpath_expression}" does not have {expected_count} results, was {len(results)}')
+                aux_logging.log_all(logging.ERROR, "assertions", f'Assertion FAILed: XPath "{xpath_expression}" does not have {expected_count} results, was {len(results)}')
                 failed=1
         elif assertion.startswith('xpathcountgreater'):
             parts = assertion.split(' ')
@@ -43,12 +45,12 @@ def process_assertions(assertions_file, input_file):
             expected_count = int(parts[2])
             results = tree.xpath(xpath_expression, namespaces=namespaces)
             if len(results) > expected_count:
-                log_print(f'Assertion PASSed: XPath "{xpath_expression}" has more than {expected_count} results, was {len(results)}')
+                aux_logging.log_print(f'Assertion PASSed: XPath "{xpath_expression}" has more than {expected_count} results, was {len(results)}')
             else:
-                log_all(logging.ERROR,"assertions",f'Assertion FAILed: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
+                aux_logging.log_all(logging.ERROR, "assertions", f'Assertion FAILed: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
                 failed=1
         elif len(assertion.strip()) > 0:
-            log_all(logging.ERROR,"assertions",f'Invalid assertion: {assertion}')
+            aux_logging.log_all(logging.ERROR, "assertions", f'Invalid assertion: {assertion}')
             failed = 1
     if (failed>0):
         exit(1)
@@ -60,5 +62,5 @@ if __name__ == "__main__":
     parser.add_argument('input_file', type=str, help='the input file (xml)')
     parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
-    mylogger =prepare_logger(logging.INFO,args.log_file)
+    mylogger = aux_logging.prepare_logger(logging.INFO, args.log_file)
     process_assertions(args.assertions_file, args.input_file)

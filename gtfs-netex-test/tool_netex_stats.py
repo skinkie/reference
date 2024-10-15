@@ -1,10 +1,8 @@
 # Programs reads a file and returns information about a lot of elements
-import logging
 import argparse
-
-import xml.etree.ElementTree as ET
-from configuration import *
 from aux_logging import *
+import xml.etree.ElementTree as ET
+
 # elements to count and report in the statistics
 elementlist = ['ResourceFrame','ResponsibilitySet','Notice','TypeofProductCategory','AlternativeText','AlternativeName','ServiceCalendarFrame','DayType','DayTypeAssignment','Organisation',
  'Operator','Authority','SiteFrame','StopPlace','Quay','ServiceFrame','Direction','Network','Line','GroupOfLines','DefaultConnection','AvailabilityCondition','ScheduledStopPoint','StopArea','TariffZone',
@@ -22,11 +20,11 @@ def main(file: str,log_file:str):
     global processing_data
     if log_file == None:
         log_file="stats.log"
-    mylogger=prepare_logger(logging.INFO,log_file)
+    mylogger= prepare_logger(logging.INFO, log_file)
     log_print("***************************************************")
-    log_print("file: "+file)
+    log_print("file: " + file)
     log_print("***************************************************")
-    log_all(logging.WARN,"netex_stats","aux_netex_stats")
+    log_all(logging.WARN, "netex_stats", "aux_netex_stats")
     tree=ET.parse(file)
 
     rt=tree.getroot()
@@ -44,7 +42,7 @@ def main(file: str,log_file:str):
         srch= ".//{http://www.netex.org.uk/netex}"+el
         res=rt.findall(srch)
         if not(res == None):
-            log_all(logging.INFO,"netex_stats",el +": "+str(len(res)))
+            log_all(logging.INFO, "netex_stats", el + ": " + str(len(res)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='NeTEx statistics')

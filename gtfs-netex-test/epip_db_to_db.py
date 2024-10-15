@@ -24,7 +24,6 @@ serializer_config.xml_declaration = False
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
-import netex_monkeypatching
 from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory, epip_site_frame_memory, \
     epip_service_journey_generator
 

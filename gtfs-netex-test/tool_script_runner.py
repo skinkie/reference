@@ -1,10 +1,7 @@
-import logging
 import subprocess
 import sys
 import time
 import json
-import shlex
-import os
 import shutil
 from aux_logging import *
 from configuration import *
