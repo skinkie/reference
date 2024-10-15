@@ -79,7 +79,7 @@ def load_referencing_inwards(con, clazz: T, filter, cursor=False):
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
 
-def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
+def load_local(con, clazz: T, limit=None, filter=None, cursor=False, embedding=True) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if cursor:
@@ -97,7 +97,10 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
     except:
         pass
         # This is the situation where the type is not available at all in the catalogue
-        return list(load_embedded_transparent_generator(con, clazz, limit, filter))
+        if embedding:
+            return list(load_embedded_transparent_generator(con, clazz, limit, filter))
+        else:
+            return []
 
     objs: List[T] = []
     for xml, in cur.fetchall():
@@ -107,7 +110,8 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
             obj = parser.from_bytes(xml, clazz)
         objs.append(obj)
 
-    objs += list(load_embedded_transparent_generator(con, clazz, limit, filter))
+    if embedding:
+        objs += list(load_embedded_transparent_generator(con, clazz, limit, filter))
 
     return objs
 
