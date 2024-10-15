@@ -10,7 +10,8 @@ from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime
 import random
 
 
-from netexio.dbaccess import load_local, load_embedded, load_referencing, recursive_attributes, load_referencing_inwards
+from netexio.dbaccess import load_local, load_embedded, load_referencing, recursive_attributes, \
+    load_referencing_inwards, resolve_all_references_and_embeddings, get_interesting_classes
 import netex
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
@@ -68,53 +69,66 @@ def recursive_resolve(con, parent, resolved, filter=None):
     #      print(f"Cannot resolve referencing {parent.id}")
 
     for obj in recursive_attributes(parent):
-        if obj.name_of_ref_class is None:
-            # Hack, because NeTEx does not define the default name of ref class yet
-            if obj.__class__.__name__.endswith('RefStructure'):
-                obj.name_of_ref_class = obj.__class__.__name__[0:-12]
-            elif obj.__class__.__name__.endswith('Ref'):
-                obj.name_of_ref_class = obj.__class__.__name__[0:-3]
-
-        if not hasattr(netex, obj.name_of_ref_class):
-            #hack for non-existing structures
-            print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+        if hasattr(obj, 'id'):
             continue
 
-        clazz = getattr(netex, obj.name_of_ref_class)
+        elif hasattr(obj, 'name_of_ref_class'):
+            if obj.name_of_ref_class is None:
+                # Hack, because NeTEx does not define the default name of ref class yet
+                if obj.__class__.__name__.endswith('RefStructure'):
+                    obj.name_of_ref_class = obj.__class__.__name__[0:-12]
+                elif obj.__class__.__name__.endswith('Ref'):
+                    obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
-        # TODO: do this via a hash function
-        # if obj in resolved:
-        #    continue
-        already_done = False
-        for x in resolved:
-            if obj.ref == x.id and clazz == x.__class__:
-                already_done = True
-                break
+            if not hasattr(netex, obj.name_of_ref_class):
+                #hack for non-existing structures
+                print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+                continue
 
-        if not already_done:
-            resolved_objs = load_local(con, clazz, filter=obj.ref)
-            if len(resolved_objs) > 0:
-                recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
-            else:
-                print(obj.ref)
-                resolved_parents = load_embedded(con, clazz, filter=obj.ref)
-                if len(resolved_parents) > 0:
-                    for y in resolved_parents:
-                        already_done = False
-                        for x in resolved:
-                            if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
-                                already_done = True
-                                break
+            clazz = getattr(netex, obj.name_of_ref_class)
 
-                        if not already_done:
-                            resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]), filter=y[0])
-                            if len(resolved_objs) > 0:
-                                recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
+            # TODO: do this via a hash function
+            # if obj in resolved:
+            #    continue
+            already_done = False
+            for x in resolved:
+                if obj.ref == x.id and clazz == x.__class__:
+                    already_done = True
+                    break
+
+            if not already_done:
+                resolved_objs = load_local(con, clazz, filter=obj.ref)
+                if len(resolved_objs) > 0:
+                    recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
                 else:
-                    print(f"Cannot resolve embedded {obj.ref}")
+                    print(obj.ref)
+                    resolved_parents = load_embedded(con, clazz, filter=obj.ref)
+                    if len(resolved_parents) > 0:
+                        for y in resolved_parents:
+                            already_done = False
+                            for x in resolved:
+                                if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                                    already_done = True
+                                    break
+
+                            if not already_done:
+                                resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]), filter=y[0])
+                                if len(resolved_objs) > 0:
+                                    recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
+                    else:
+                        print(f"Cannot resolve embedded {obj.ref}")
 
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
+        try:
+            con.execute("SELECT * FROM referencing LIMIT 1;")
+            con.execute("SELECT * FROM embedded LIMIT 1;")
+        except:
+            pass
+            classes = get_interesting_classes()
+            resolve_all_references_and_embeddings(con, classes)
+
+
         objs=[]
         if object_filter == "random":
             objs = load_local(con, getattr(netex, object_type))

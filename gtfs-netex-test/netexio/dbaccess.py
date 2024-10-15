@@ -97,7 +97,7 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
     except:
         pass
         # This is the situation where the type is not available at all in the catalogue
-        return list(load_embedded_transparent_generator(con, clazz, limit, filter, True))
+        return list(load_embedded_transparent_generator(con, clazz, limit, filter))
 
     objs: List[T] = []
     for xml, in cur.fetchall():
@@ -107,7 +107,7 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
             obj = parser.from_bytes(xml, clazz)
         objs.append(obj)
 
-    objs += list(load_embedded_transparent_generator(con, clazz, limit, filter, True))
+    objs += list(load_embedded_transparent_generator(con, clazz, limit, filter))
 
     return objs
 
