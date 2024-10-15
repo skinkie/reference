@@ -871,8 +871,8 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
             for obj in recursive_attributes(parent):
                 if hasattr(obj, 'id'):
                     if obj.id is not None:
-                        version =  obj.version if hasattr(obj, 'version') else 'any'
-                        order = obj.order if hasattr(obj, 'order') else 0
+                        version =  obj.version if hasattr(obj, 'version') and obj.version is not None else 'any'
+                        order = obj.order if hasattr(obj, 'order') and obj.order is not None else 0
 
                         sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                         try:
