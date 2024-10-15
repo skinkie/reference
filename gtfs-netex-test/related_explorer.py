@@ -46,7 +46,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
     
                 if not already_done:
                     resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
-                                               filter=y[0])
+                                               filter=y[0], embedding=False)
                     if len(resolved_objs) > 0:
                         recursive_resolve(con, resolved_objs[0], resolved, filter)  # TODO: not only consider the first
 
@@ -62,7 +62,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
 
             if not already_done:
                 resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
-                                           filter=y[0])
+                                           filter=y[0], embedding=False)
                 if len(resolved_objs) > 0:
                     recursive_resolve(con, resolved_objs[0], resolved, filter)  # TODO: not only consider the first
     # else:
@@ -97,11 +97,11 @@ def recursive_resolve(con, parent, resolved, filter=None):
                     break
 
             if not already_done:
-                resolved_objs = load_local(con, clazz, filter=obj.ref)
+                resolved_objs = load_local(con, clazz, filter=obj.ref, embedding=False)
                 if len(resolved_objs) > 0:
                     recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
                 else:
-                    print(obj.ref)
+                    # print(obj.ref)
                     resolved_parents = load_embedded(con, clazz, filter=obj.ref)
                     if len(resolved_parents) > 0:
                         for y in resolved_parents:
@@ -112,7 +112,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
                                     break
 
                             if not already_done:
-                                resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]), filter=y[0])
+                                resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]), filter=y[0], embedding=False)
                                 if len(resolved_objs) > 0:
                                     recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
                     else:

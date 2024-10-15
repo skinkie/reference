@@ -79,7 +79,7 @@ def load_referencing_inwards(con, clazz: T, filter, cursor=False):
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
 
-def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
+def load_local(con, clazz: T, limit=None, filter=None, cursor=False, embedding=True) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if cursor:
@@ -97,7 +97,10 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
     except:
         pass
         # This is the situation where the type is not available at all in the catalogue
-        return list(load_embedded_transparent_generator(con, clazz, limit, filter))
+        if embedding:
+            return list(load_embedded_transparent_generator(con, clazz, limit, filter))
+        else:
+            return []
 
     objs: List[T] = []
     for xml, in cur.fetchall():
@@ -107,7 +110,8 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False) -> List[T]:
             obj = parser.from_bytes(xml, clazz)
         objs.append(obj)
 
-    objs += list(load_embedded_transparent_generator(con, clazz, limit, filter))
+    if embedding:
+        objs += list(load_embedded_transparent_generator(con, clazz, limit, filter))
 
     return objs
 
@@ -871,8 +875,8 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
             for obj in recursive_attributes(parent):
                 if hasattr(obj, 'id'):
                     if obj.id is not None:
-                        version =  obj.version if hasattr(obj, 'version') else 'any'
-                        order = obj.order if hasattr(obj, 'order') else 0
+                        version =  obj.version if hasattr(obj, 'version') and obj.version is not None else 'any'
+                        order = obj.order if hasattr(obj, 'order') and obj.order is not None else 0
 
                         sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                         try:
