@@ -124,8 +124,10 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
             con.execute("SELECT * FROM referencing LIMIT 1;")
             con.execute("SELECT * FROM embedded LIMIT 1;")
         except:
+            pass
             classes = get_interesting_classes()
             resolve_all_references_and_embeddings(con, classes)
+
 
         objs=[]
         if object_filter == "random":
