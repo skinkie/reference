@@ -3,27 +3,24 @@ import hashlib
 import math
 from _decimal import Decimal
 from typing import List, Generator
-import os
 
 import duckdb
 import numpy
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
-from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
+from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDuration
 
 from callsprofile import CallsProfile
-from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, resolve_all_references, \
+from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, \
     resolve_all_references_and_embeddings
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
     VersionTypeEnumeration, LocaleStructure, SystemOfUnits, Operator, ContactStructure, Locale, LanguageUsageStructure, \
     LanguageUseEnumeration, Line, PresentationStructure, AllVehicleModesOfTransportEnumeration, PrivateCode, \
-    PublicationDelivery, DataObjectsRelStructure, OperationalContext, ResourceFrame, TypeOfFrameRef, \
-    DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, OperationalContextsInFrameRelStructure, \
+    PublicationDelivery, DataObjectsRelStructure, OperationalContext, ResourceFrame, DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, OperationalContextsInFrameRelStructure, \
     CompositeFrame, VersionsRelStructure, FramesRelStructure, ServiceFrame, LinesInFrameRelStructure, \
     OperatorRef, StopArea, LocationStructure2, SimplePointVersionStructure, PrivateCodeStructure, \
     ScheduledStopPoint, StopAreaRefsRelStructure, StopAreaRefStructure, \
-    StopAreasInFrameRelStructure, ScheduledStopPointsInFrameRelStructure, AvailabilityCondition, ServiceJourneyPattern, \
-    DestinationDisplayView, ScheduledStopPointRef, Call, ArrivalStructure, \
+    StopAreasInFrameRelStructure, ScheduledStopPointsInFrameRelStructure, AvailabilityCondition, DestinationDisplayView, ScheduledStopPointRef, Call, ArrivalStructure, \
     DepartureStructure, CallsRelStructure, ValidityConditionsRelStructure, AvailabilityConditionRef, BlockRef, \
     DirectionTypeEnumeration, AccessibilityAssessment, LimitationStatusEnumeration, TimetableFrame, \
     JourneysInFrameRelStructure, LineRef, JourneyPatternView, CodespacesRelStructure, \
@@ -36,11 +33,12 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     PosList, CodespaceRefStructure, DataSourceRefStructure, ParticipantRef, LuggageCarriageFacilityList, StopPlace, \
     ZoneRefStructure, InfoLinksRelStructure, InfoLink, TypeOfInfoLinkEnumeration, QuaysRelStructure, \
     SiteEntrancesRelStructure, Quay, StopPlaceEntrance, LevelRef, AccessSpacesRelStructure, AccessSpace, \
-    PassengerStopAssignment, ZonesInFrameRelStructure, TemplateServiceJourney, FrequencyGroupsRelStructure, \
+    PassengerStopAssignment, TemplateServiceJourney, FrequencyGroupsRelStructure, \
     HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure
-
+import netex_monkeypatching
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
-
+from aux_logging import *
+import traceback
 
 def get_or_none(l: list, i: int, cast_clazz=None):
     if l is None:
@@ -1559,6 +1557,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert a GTFS database to a NeTEx database')
     parser.add_argument('gtfs', type=str, help='GTFS database to convert, for example: gtfs-import.duckdb')
     parser.add_argument('database', type=str, help='DuckDB file to overwrite and store contents of the conversion.')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
+    mylogger = prepare_logger(logging.INFO, args.log_file)
 
-    main(args.gtfs, args.database)
+    try:
+        main(args.gtfs, args.database)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
+

@@ -3,16 +3,15 @@ from typing import List
 from xsdata.models.datatype import XmlDuration, XmlTime
 
 from netex import ServiceJourney, StopPointInJourneyPattern, ServiceJourneyPattern, PointsInJourneyPatternRelStructure, \
-    ServiceJourneyPatternRef, JourneyPatternView, TimingLink, Line, TimingPointRefStructure, LineRef, \
-    TimingLinkRefStructure, TimingLinkRef, Call, DepartureStructure, ArrivalStructure, JourneyRunTime, JourneyWaitTime, \
-    StopPointInJourneyPatternRef, StopPointInJourneyPatternRefStructure, PointInJourneyPatternRefStructure, \
-    OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, TimeDemandTypeRef, \
+    ServiceJourneyPatternRef, TimingLink, Line, TimingPointRefStructure, TimingLinkRefStructure, TimingLinkRef, Call, DepartureStructure, ArrivalStructure, JourneyRunTime, JourneyWaitTime, \
+    PointInJourneyPatternRefStructure, \
+    OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, \
     TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint, Route, CallsRelStructure, TimingPointInJourneyPattern, \
     ScheduledStopPointRef, ServiceLinkInJourneyPattern, TimingLinkInJourneyPattern, JourneyPatternWaitTimesRelStructure, \
     TimetabledPassingTime, TimetabledPassingTimesRelStructure
-from refs import setIdVersion, getRef, getIndex, getIdByRef
+from refs import setIdVersion, getRef, getIndex
 from utils import project
-
+from aux_logging import log_print
 
 class CallsProfile:
     @staticmethod
@@ -221,8 +220,8 @@ class CallsProfile:
             for lis in service_journey_pattern.links_in_sequence.service_link_in_journey_pattern_or_timing_link_in_journey_pattern:
                 if isinstance(lis, ServiceLinkInJourneyPattern):
                     if not hasattr(lis.run_times,'journey_run_time'):
-                        print(f"no run_times")
-                        print(lis)
+                        log_print(f"no run_times")
+                        log_print(lis)
                     for journey_run_time in lis.run_times.journey_run_time:
                         tdt_tl[lis.service_link_ref.ref] = journey_run_time
                         # TODO: Guard begin point equals assigned value
