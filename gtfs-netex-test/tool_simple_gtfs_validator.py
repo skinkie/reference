@@ -55,7 +55,7 @@ def check_gtfs_validity(gtfs_file):
     with zipfile.ZipFile(gtfs_file, 'r') as zip_ref:
         try:
             # Check required files
-            required_files = {'agency.txt', 'stops.txt','calendar.txt','calender_dates.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'}
+            required_files = {'agency.txt', 'stops.txt','calendar.txt','calendar_dates.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'}
             cond_required_files = {}
             cond_required_files['stops.txt'] = 'locations.geojson'
             cond_required_files['calendar.txt'] = 'calendar_dates.txt'
@@ -66,7 +66,7 @@ def check_gtfs_validity(gtfs_file):
                 if not cond_required_files[missing_file] in gtfs_files:
                     log_all(logging.ERROR,"gtfs_check",f"Missing required file: {missing_file}")
                     invalid = True
-                return False
+                    return False
             # Check if all required columns are present
             required_columns = {
                 'agency.txt': ['agency_id', 'agency_name', 'agency_url'],
@@ -75,6 +75,9 @@ def check_gtfs_validity(gtfs_file):
                 'trips.txt': ['route_id', 'trip_id'],
                 'stop_times.txt': ['trip_id', 'stop_id', 'stop_sequence']
             }
+            # 'calendar.txt': ['service_id', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
+            #                 'start_date', 'end_date'],
+            # 'calendar_dates.txt': ['service_id', 'date', 'exception_type'],
             for file, columns in required_columns.items():
                 df = pd.read_csv(zip_ref.open(file))
                 missing_columns = set(columns) - set(df.columns)
