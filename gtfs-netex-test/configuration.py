@@ -8,7 +8,7 @@ general_log_level = logging.INFO
 
 # Basic files for script runner
 processing_data = "d:/aux_testing_processing"
-processing_data = "C:/Users/ue71603/MG_Daten/github/reference1/gtfs-netex-test/aux_test_processing"
+# processing_data = "C:/Users/ue71603/MG_Daten/github/reference1/gtfs-netex-test/aux_test_processing"
 
 main_log_file = "aux.log" # in the processing_data folder
 
