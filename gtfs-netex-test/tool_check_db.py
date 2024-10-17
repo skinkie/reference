@@ -1,5 +1,6 @@
 import duckdb
 from aux_logging import *
+import traceback
 def print_table_row_counts_with_example(db_file):
     # Connect to the DuckDB database
     con = duckdb.connect(database=db_file)
@@ -28,7 +29,13 @@ def print_table_row_counts_with_example(db_file):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Check the content of a duckdb')
-    parser.add_argument('db_file', type=str, help='tthe duckdb-file')
+    parser.add_argument('db_file', type=str, help='the duckdb-file')
     args = parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
+    try:
+        print_table_row_counts_with_example(args.db_file)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
 
-    print_table_row_counts_with_example(args.db_file)
+

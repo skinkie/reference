@@ -3,6 +3,7 @@ from datetime import date
 from typing import Generator
 from utils import project
 from isal import igzip_threaded
+import traceback
 
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
@@ -248,5 +249,9 @@ if __name__ == '__main__':
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
     mylogger =prepare_logger(logging.INFO,args.log_file)
+    try:
+        export_epip_network_offer(args.original, args.target, args.output)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
 
-    export_epip_network_offer(args.original, args.target, args.output)

@@ -7,6 +7,7 @@ import folium
 import pandas as pd
 from folium.plugins import MarkerCluster, Search
 from aux_logging import *
+import traceback
 
 # Generate a random dark color
 def generate_random_dark_color():
@@ -213,8 +214,14 @@ if __name__ == "__main__":
     parser.add_argument('--log_file', type=str, required=False,
                         help='the logfile')
     args = parser.parse_args()
+    mylogger = prepare_logger(logging.INFO, args.log_file)
+    try:
+        if args.limitation:
+            main(args.gtfs_zip_file, args.map_file, args.limitation, args.log_file)
+        else:
+            main(args.gtfs_zip_file, args.map_file, None, args.log_file)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
 
-    if args.limitation:
-        main(args.gtfs_zip_file, args.map_file, args.limitation,args.log_file)
-    else:
-        main(args.gtfs_zip_file, args.map_file, None,args.log_file)
+

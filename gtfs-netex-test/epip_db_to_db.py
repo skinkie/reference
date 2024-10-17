@@ -13,7 +13,7 @@ from netex import Codespace
 
 from transformers.direction import infer_directions_from_sjps_and_apply
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
-
+import traceback
 context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
 parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
@@ -52,5 +52,8 @@ if __name__ == '__main__':
     parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
     mylogger =prepare_logger(logging.INFO,args.log_file)
-
-    main(args.source, args.target)
+    try:
+        main(args.source, args.target)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e

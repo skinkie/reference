@@ -4,6 +4,7 @@ import warnings
 import duckdb
 import csv
 from aux_logging import *
+import traceback
 agency_txt = {'agency_id': 'VARCHAR', 'agency_name': 'VARCHAR', 'agency_url': 'VARCHAR', 'agency_timezone': 'VARCHAR', 'agency_lang': 'VARCHAR', 'agency_phone': 'VARCHAR', 'agency_fare_url': 'VARCHAR', 'agency_email': 'VARCHAR'}
 stops_txt = {'stop_id': 'VARCHAR', 'stop_code': 'VARCHAR', 'stop_name': 'VARCHAR', 'tts_stop_name': 'VARCHAR', 'stop_desc': 'VARCHAR', 'stop_lat': 'FLOAT', 'stop_lon': 'FLOAT', 'zone_id': 'VARCHAR', 'stop_url': 'VARCHAR', 'location_type': 'INTEGER', 'parent_station': 'VARCHAR', 'stop_timezone': 'VARCHAR', 'wheelchair_boarding': 'INTEGER', 'level_id': 'VARCHAR', 'platform_code': 'VARCHAR'}
 routes_txt = {'route_id': 'VARCHAR', 'agency_id': 'VARCHAR', 'route_long_name': 'VARCHAR', 'route_type': 'INTEGER', 'route_url': 'VARCHAR', 'route_color': 'CHAR(6)', 'route_text_color': 'CHAR(6)', 'route_sort_order': 'INTEGER', 'continuous_pickup': 'INTEGER',  'continuous_drop_off': 'INTEGER', 'network_id': 'VARCHAR'}
@@ -237,4 +238,9 @@ if __name__ == "__main__":
     parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
     mylogger =prepare_logger(logging.INFO,args.log_file)
-    main(args.gtfs, args.database)
+    try:
+        main(args.gtfs, args.database)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
+

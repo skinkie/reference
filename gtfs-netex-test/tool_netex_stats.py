@@ -1,6 +1,9 @@
 # Programs reads a file and returns information about a lot of elements
 import argparse
+import sys
+
 from aux_logging import *
+import traceback
 import xml.etree.ElementTree as ET
 
 # elements to count and report in the statistics
@@ -51,5 +54,10 @@ if __name__ == "__main__":
                         help='the logfile')
 
     args = parser.parse_args()
+    mylogger = prepare_logger(logging.INFO, args.log_file)
+    try:
+        main(args.file,args.log_file)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise(e)
 
-    main(args.file,args.log_file)

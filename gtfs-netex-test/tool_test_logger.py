@@ -45,10 +45,8 @@ if __name__ == "__main__":
     mylogger = prepare_logger(logging.INFO, args.log_file)
     mylogger = prepare_logger(logging.INFO, args.log_file)
     mylogger = prepare_logger(logging.INFO, args.log_file)
-
     try:
         main(args.log_file)
-
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
-        sys.exit(2)
+        raise e
