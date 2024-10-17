@@ -172,6 +172,7 @@ if __name__ == '__main__':
     argument_parser.add_argument('object_type', type=str, help='The NeTEx object type to filter, for example ServiceJourney')
     argument_parser.add_argument('object_filter', type=str, help='The object filter to apply.')
     argument_parser.add_argument('output', type=str, nargs="?", default="-", help='The NeTEx output filename, for example: netex.xml.gz')
+    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
     mylogger =prepare_logger(logging.INFO,args.log_file)
     try:
