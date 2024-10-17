@@ -5,6 +5,7 @@ import json
 import shutil
 from aux_logging import *
 from configuration import *
+import traceback
 
 def replace_in_string(input, search, replace):
     return input.replace(search, replace)
@@ -127,12 +128,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                                     stderr=subprocess.STDOUT,
                                     universal_newlines=True)
             end_time = time.time()
-            execution_time = int(end_time - start_time)
-            # Capture the output
-            output = result.stdout
-
-            # Print the output to the console
-            log_print(output)
+            execution_time = int(10*(end_time - start_time))/10
 
             # Write the execution time to the log file
             log_all(logging.INFO, "test_runner_timing", f"Execution time: {execution_time} seconds\n")
@@ -167,5 +163,10 @@ if __name__ == "__main__":
     parser.add_argument('--begin_step', type=int, default=1, help='The begin step (default: 1)')
     parser.add_argument('--log_level', type=int , default=logging.INFO, help='The begin step (default: 1)')
     args = parser.parse_args()
+    mylogger = prepare_logger(logging.INFO, args.log_file)
 
-    main(args.script_file,args.log_file, args.log_level,args.blockname,args.begin_step)
+    try:
+        main(args.script_file, args.log_file, args.log_level, args.blockname, args.begin_step)
+
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())

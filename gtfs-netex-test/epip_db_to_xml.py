@@ -29,6 +29,7 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, \
     TopographicPlacesInFrameRelStructure, TopographicPlace, TypesOfValueInFrameRelStructure, ValueSet, JourneyMeeting, InterchangeRule, JourneyMeetingsInFrameRelStructure, InterchangeRulesInFrameRelStructure
 
+import netex_monkeypatching
 from aux_logging import *
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True

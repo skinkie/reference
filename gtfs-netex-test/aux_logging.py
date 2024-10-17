@@ -28,30 +28,29 @@ def prepare_logger(log_level,log_file_name):
     if not mylogger:
         if logging.getLogger("testrunner"):
             mylogger = logging.getLogger("testrunner")
-        else:
-            mylogger = logging.getLogger("testrunner")
-    mylogger.setLevel(log_level)
-    log_dict ={}
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+            mylogger.setLevel(log_level)
+            log_dict = {}
+            # create console handler and set level to debug
+            ch = logging.StreamHandler()
+            ch.setLevel(logging.DEBUG)
 
-    # create formatter
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            # create formatter
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    # add formatter to ch
-    ch.setFormatter(formatter)
-    mylogger.addHandler(ch)
+            # add formatter to ch
+            ch.setFormatter(formatter)
+            mylogger.addHandler(ch)
 
-    # add ch to logger
-    if not log_file_name==None and len(log_file_name)>5:
-        # if the processing dir doesn't exist, then we create it
-        directory = os.path.dirname(processing_data+"/"+log_file_name)
-        os.makedirs(directory, exist_ok=True)
-        fh = logging.FileHandler(processing_data+"/"+log_file_name,mode="a")
-        fh.setFormatter(formatter)
-        fh.setLevel(log_level)
-        mylogger.addHandler(fh)
+            # add ch to logger
+            if not log_file_name == None and len(log_file_name) > 5:
+                # if the processing dir doesn't exist, then we create it
+                directory = os.path.dirname(processing_data + "/" + log_file_name)
+                os.makedirs(directory, exist_ok=True)
+                fh = logging.FileHandler(processing_data + "/" + log_file_name, mode="a")
+                fh.setFormatter(formatter)
+                fh.setLevel(log_level)
+                mylogger.addHandler(fh)
+
     return mylogger
 
 

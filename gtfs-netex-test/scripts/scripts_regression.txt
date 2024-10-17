@@ -64,8 +64,16 @@
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb"},
         {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
         {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml"},
-        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj1.xml"},
-        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj2.xml"}
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/sj.xml %%dir%%/netex3-database.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex3-database.duckdb %%dir%%/netex4-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex3-database.duckdb %%dir%%/netex4-database.duckdb %%dir%%/%%block%%-sj-netex.xml"}
+        ]
+  },
+  {
+    "block": "logtest",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "tool_test_logger.py", "args": " --log=%%log%% "}
         ]
   }
 ]
