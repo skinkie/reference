@@ -1,57 +1,5 @@
 [
   {
-    "block": "blablacar",
-    "url":"",
-    "description":"Blablacar data",
-    "scripts": [
-        {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "gtfs_import_to_db.py", "args": "./aux_test_input/blablacar.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
-        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
-        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
-        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
-        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "aux_gtfs_check.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 100 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
-        ]
-  },
-  {
-    "block": "solea",
-    "url":"https://transport.data.gouv.fr/datasets/fr-200052264-t0014-0000-1",
-    "scripts": [
-        {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "aux_gtfs_check.py", "args": "./aux_test_input/solea.zip"},
-        {"script": "gtfs_import_to_db.py", "args": "--log=%%log%% ./aux_test_input/solea.zip %%dir%%/gtfs-import.duckdb"},
-        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
-        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_assertions.py", "args": "--log=%%log%% ./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_netex_stats.py", "args": "--log=%%log%% %%dir%%/solea-netex.xml"},
-        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/solea-netex.xml %%dir%%/netex-database.duckdb"},
-        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "aux_gtfs_check.py", "args": "--log=%%log%%%%dir%%/%%block%%-gtfs.zip"},
-        {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 1 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
-        ]
-  },
-  {
-    "block": "flixbus",
-    "scripts": [
-        {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "gtfs_import_to_db.py", "args": "--log=%%log%% ./aux_test_input/flixbus.zip %%dir%%/gtfs-import.duckdb"},
-        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
-        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_assertions.py", "args": "--log=%%log%% ./aux_test_input/flixbus-assertions.txt %%dir%%/%%block%%-netex.xml"},
-        {"script": "aux_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
-        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
-        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "aux_gtfs_check.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 100 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
-        ]
-  },
-  {
     "block": "at",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
@@ -382,11 +330,5 @@
         {"script": "aux_extract_one_servicejourney.py", "args": "%%dir%%/%%block%%-collated.xml %%dir%%/%%block%%-sy-2.xml"}
         ]
   }
-,
-  {
-    "block": "cleaning",
-    "scripts": [
-      {"script": "#clean", "args": "%%dir%%"}
-    ]
-  }
+
 ]

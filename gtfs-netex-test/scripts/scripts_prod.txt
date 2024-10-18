@@ -12,5 +12,19 @@
         {"script": "./tools/tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "./tools/tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"}
         ]
+  },
+  {
+    "block": "solea",
+    "url":"https://eu.ftp.opendatasoft.com/mulhouse/TRANSPORT_GTFS/SOLEA.GTFS_current.zip",
+    "description":"Converting solea gtfs to EPIP.",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "gtfs_import_to_db.py", "args": "d:/input/SOLEA.GTFS_current.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
+        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "./tools/tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "./tools/tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"}
+        ]
   }
 ]
