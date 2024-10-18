@@ -813,6 +813,7 @@ def resolve_all_references(con, classes, cursor=False):
             for obj in recursive_attributes(parent):
                 if obj.name_of_ref_class is None:
                     # Hack, because NeTEx does not define the default name of ref class yet
+                    # TODO: #147
                     if obj.__class__.__name__.endswith('RefStructure'):
                         obj.name_of_ref_class = obj.__class__.__name__[0:-12]
                     elif obj.__class__.__name__.endswith('Ref'):
@@ -872,6 +873,7 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
         print(clazz)
         for parent in load_generator(con, clazz, embedding=False):
             # print(parent.id)
+            count = 0
             for obj in recursive_attributes(parent):
                 if hasattr(obj, 'id'):
                     if obj.id is not None:
@@ -911,6 +913,12 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
                         cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
                     except duckdb.duckdb.ConstraintException:
                         pass
+
+                    if count == 1000:
+                        cur.execute("CHECKPOINT;")
+                        count = 0
+
+                    count += 1
 
         cur.execute("CHECKPOINT;")
 

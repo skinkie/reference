@@ -15,7 +15,7 @@ from netexio.dbaccess import load_local, load_embedded, load_referencing, recurs
 import netex
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
-    GeneralFrameMembersRelStructure, AvailabilityConditionRef
+    GeneralFrameMembersRelStructure, AvailabilityConditionRef, Route, ServiceJourneyPattern
 import duckdb as sqlite3
 from mro_attributes import list_attributes
 import xsdata
@@ -27,14 +27,14 @@ serializer = XmlSerializer(config=serializer_config, writer=XmlEventWriter)
 
 
 
-def recursive_resolve(con, parent, resolved, filter=None):
+def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
     for x in resolved:
         if parent.id == x.id and parent.__class__ == x.__class__:
             return
 
     resolved.append(parent)
 
-    if filter is False or filter == parent.id:
+    if filter is False or filter == parent.id or parent.__class__ in filter_class:
         resolved_parents = load_referencing_inwards(con, parent.__class__, filter=parent.id)
         if len(resolved_parents) > 0:
             for y in resolved_parents:
@@ -48,7 +48,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
                     resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
                                                filter=y[0], embedding=False)
                     if len(resolved_objs) > 0:
-                        recursive_resolve(con, resolved_objs[0], resolved, filter)  # TODO: not only consider the first
+                        recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class)  # TODO: not only consider the first
 
     # In principle this would already take care of everything recursive_attributes could find, but now does it inwards.
     resolved_parents = load_referencing(con, parent.__class__, filter=parent.id)
@@ -64,7 +64,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
                 resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
                                            filter=y[0], embedding=False)
                 if len(resolved_objs) > 0:
-                    recursive_resolve(con, resolved_objs[0], resolved, filter)  # TODO: not only consider the first
+                    recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class)  # TODO: not only consider the first
     # else:
     #      print(f"Cannot resolve referencing {parent.id}")
 
@@ -99,7 +99,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
             if not already_done:
                 resolved_objs = load_local(con, clazz, filter=obj.ref, embedding=False)
                 if len(resolved_objs) > 0:
-                    recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
+                    recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
                 else:
                     # print(obj.ref)
                     resolved_parents = load_embedded(con, clazz, filter=obj.ref)
@@ -114,7 +114,7 @@ def recursive_resolve(con, parent, resolved, filter=None):
                             if not already_done:
                                 resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]), filter=y[0], embedding=False)
                                 if len(resolved_objs) > 0:
-                                    recursive_resolve(con, resolved_objs[0], resolved, filter) # TODO: not only consider the first
+                                    recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
                     else:
                         print(f"Cannot resolve embedded {obj.ref}")
 
@@ -139,7 +139,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
             obj = objs[0]
 
             resolved = []
-            recursive_resolve(con, obj, resolved, obj.id)
+            recursive_resolve(con, obj, resolved, obj.id, {Route, ServiceJourneyPattern})
 
             publication_delivery = PublicationDelivery(
                 version="ntx:1.1",
