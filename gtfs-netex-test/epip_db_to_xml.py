@@ -1,8 +1,9 @@
 import duckdb as sqlite3
-from datetime import datetime, date
+from datetime import date
 from typing import Generator
 from utils import project
 from isal import igzip_threaded
+import traceback
 
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
@@ -14,25 +15,23 @@ from xsdata.models.datatype import XmlDateTime
 from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
 
 from netexio.dbaccess import load_local
-from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataObjectsRelStructure, GeneralFrame, \
-    GeneralFrameMembersRelStructure, ServiceJourney, StopPlace, CompositeFrame, FramesRelStructure, TimetableFrame, \
-    JourneysInFrameRelStructure, TypeOfFrame, TypeOfFrameRef, ServiceFrame, JourneyPatternsInFrameRelStructure, \
+from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataObjectsRelStructure, ServiceJourney, StopPlace, CompositeFrame, FramesRelStructure, TimetableFrame, \
+    JourneysInFrameRelStructure, TypeOfFrameRef, ServiceFrame, JourneyPatternsInFrameRelStructure, \
     DirectionsInFrameRelStructure, ServiceJourneyPattern, Direction, RoutePointsInFrameRelStructure, RoutePoint, \
     ScheduledStopPointsInFrameRelStructure, ScheduledStopPoint, RoutesInFrameRelStructure, Route, \
     LinesInFrameRelStructure, Line, SiteFrame, ResourceFrame, CodespacesRelStructure, Codespace, \
-    StopPlacesInFrameRelStructure, ServiceFacilitySet, DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, \
+    StopPlacesInFrameRelStructure, DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, \
     VehicleTypesInFrameRelStructure, ResponsibilitySetsInFrameRelStructure, DataSource, Authority, Operator, \
-    VehicleType, ResponsibilitySet, Branding, RouteLinksInFrameRelStructure, RouteLink, Network, \
-    NetworksInFrameRelStructure, DestinationDisplaysInFrameRelStructure, DestinationDisplay, \
+    VehicleType, ResponsibilitySet, RouteLinksInFrameRelStructure, RouteLink, Network, \
+    DestinationDisplaysInFrameRelStructure, DestinationDisplay, \
     ServiceLinksInFrameRelStructure, ServiceLink, TransfersInFrameRelStructure, StopAssignmentsInFrameRelStructure, \
     PassengerStopAssignment, Connection, SiteConnection, DefaultConnection, ServiceCalendarFrame, \
     DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine, VersionFrameDefaultsStructure, SystemOfUnits, \
     LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, \
-    TopographicPlacesInFrameRelStructure, TopographicPlace, TransportOrganisationVersionStructure, Locale, \
-    TypesOfValueInFrameRelStructure, ValueSet, ValidityConditionsRelStructure, AvailabilityCondition, JourneyMeeting, InterchangeRule, JourneyMeetingsInFrameRelStructure, InterchangeRulesInFrameRelStructure
+    TopographicPlacesInFrameRelStructure, TopographicPlace, TypesOfValueInFrameRelStructure, ValueSet, JourneyMeeting, InterchangeRule, JourneyMeetingsInFrameRelStructure, InterchangeRulesInFrameRelStructure
 
 import netex_monkeypatching
-
+from aux_logging import *
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
@@ -122,7 +121,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
 
     all_locales = {org.locale for org in organisation_or_transport_organisation if org.locale is not None}
     if len(all_locales) > 1:
-        print("TODO: Test case for multiple TimetableFrames!")
+        log_print("TODO: Test case for multiple TimetableFrames!")
 
     transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con_orig, VehicleType))
     responsibility_set = GeneratorTester(load_generator(con_orig, ResponsibilitySet))
@@ -247,6 +246,12 @@ if __name__ == '__main__':
     argument_parser.add_argument('original', type=str, help='The original DuckDB NeTEx database')
     argument_parser.add_argument('target', type=str, help='The transformed DuckDB NeTEx database')
     argument_parser.add_argument('output', type=str, help='The NeTEx output filename, for example: netex.xml.gz')
+    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
+    try:
+        export_epip_network_offer(args.original, args.target, args.output)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
 
-    export_epip_network_offer(args.original, args.target, args.output)

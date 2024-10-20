@@ -1,6 +1,7 @@
 # @https://github.com/ue71603, 2024
 import os
-
+from aux_logging import *
+import traceback
 from lxml import etree
 
 
@@ -42,7 +43,12 @@ if __name__ == '__main__':
     argument_parser = argparse.ArgumentParser(description='Validates each file in a folder (xsd and xml)')
     argument_parser.add_argument('folder', type=str, help='The folder containing the xml files to validate')
     argument_parser.add_argument('xmlschema', type=str, help='The schema file to use as a basis for validation')
+    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
-
     # Fetching the data based on command-line arguments
-    validate_xsd_in_folder(args.folder, args.xmlschema)
+    mylogger = prepare_logger(logging.INFO, args.log_file)
+    try:
+        validate_xsd_in_folder(args.folder, args.xmlschema)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e

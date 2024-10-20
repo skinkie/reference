@@ -1,0 +1,80 @@
+[
+  {
+    "block": "blablacar",
+    "url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
+    "description":"Converting blablacar gtfs to EPIP.",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "gtfs_import_to_db.py", "args": "./aux_test_input/blablacar.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
+        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"}
+        ]
+  },
+  {
+    "block": "solea",
+    "url":"https://eu.ftp.opendatasoft.com/mulhouse/TRANSPORT_GTFS/SOLEA.GTFS_current.zip",
+    "description":"Converting solea gtfs to EPIP.",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "gtfs_import_to_db.py", "args": "d:/input/SOLEA.GTFS_current.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
+        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"}
+        ]
+  },
+  {
+    "block": "milano_atm_metro",
+    "url":"https://nap-1926.it/nap/mmtis/public/catalog/Asset/93524",
+    "description":"Converting italien NeTEx for Milano into GTFS.",
+    "scripts": [
+       {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% d:/input/IT-ITC4-ATM_METRO-NeTEx_L1.xml.gz %%dir%%/swiss-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
+        ]
+  },
+      {
+    "block": "trenitaliapiemont",
+    "url":"https://nap-1926.it/nap/mmtis/public/catalog/Asset/272029",
+    "description":"Trenitalia Piemont -> EPIP and GTFS.",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% d:/input/IT-ITC1-TRENITALIA-NeTEx_L1.xml.gz %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 10 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
+        ]
+  },
+    {
+    "block": "swiss",
+    "url":"https://opentransportdata.swiss/de/dataset/timetablenetex_2025/permalink",
+    "description":"Converting the Swiss NeTEx into EPIP and GTFS.",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "swiss_to_db.py", "args": "--log=%%log%% d:/input/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_TIMETABLE_4_313_202406270606.zip %%dir%%/swiss-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/swiss-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
+        ]
+  }
+]
