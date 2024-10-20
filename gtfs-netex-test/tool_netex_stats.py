@@ -57,7 +57,9 @@ if __name__ == "__main__":
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
         main(args.file,args.log_file)
+        log_flush()
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        log_flush()
         raise(e)
 

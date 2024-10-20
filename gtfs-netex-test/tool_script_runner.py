@@ -133,6 +133,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             # Write the execution time to the log file
             log_all(logging.INFO, "test_runner_timing", f"Execution time: {execution_time} seconds\n")
             log_write_counts(logging.WARNING)
+            log_flush()
             if result.returncode == 0:
                 log_all(logging.DEBUG, "test_runner", f'Script {script_name} terminated.')
                 log_flush()

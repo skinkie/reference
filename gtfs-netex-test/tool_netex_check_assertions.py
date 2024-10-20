@@ -66,8 +66,10 @@ if __name__ == "__main__":
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
         process_assertions(args.assertions_file, args.input_file)
+        log_flush()
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        log_flush()
         raise e
 
 

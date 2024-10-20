@@ -26,8 +26,8 @@ def prepare_logger(log_level,log_file_name):
     global log_dict
     global processing_data
     if not mylogger:
-        if logging.getLogger("testrunner"):
-            mylogger = logging.getLogger("testrunner")
+        mylogger = logging.getLogger("testrunner")
+        if mylogger:
             mylogger.setLevel(log_level)
             log_dict = {}
             # create console handler and set level to debug
@@ -50,7 +50,8 @@ def prepare_logger(log_level,log_file_name):
                 fh.setFormatter(formatter)
                 fh.setLevel(log_level)
                 mylogger.addHandler(fh)
-
+    else:
+        print("ERROR: Logger not initialisable.")
     return mylogger
 
 
@@ -98,6 +99,8 @@ def log_flush():
     if not mylogger==None:
         for handler in mylogger.handlers:
             handler.flush()
+    else:
+        print("ERROR: not flushing log.")
 
 
 
