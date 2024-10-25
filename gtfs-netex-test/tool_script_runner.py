@@ -1,3 +1,4 @@
+import shlex
 import subprocess
 import sys
 import time
@@ -126,7 +127,9 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             # Run the script with arguments
             command = python_executable + " " + script_name + " " + script_args
             log_print(command)
-            result = subprocess.run(command,
+            command_list = [python_executable,script_name]
+            command_list.extend(shlex.split(script_args))
+            result = subprocess.run(command_list,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.STDOUT,
                                     universal_newlines=True)
