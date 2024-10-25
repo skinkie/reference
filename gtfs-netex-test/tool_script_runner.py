@@ -65,7 +65,8 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
     # go through each block
     for block in data:
         processdir = processing_data + "/" + block["block"]
-
+        # make sure folder for block exists
+        os.makedirs(processdir, exist_ok=True)
         blockstop = False
         if not todo_block == block["block"]:
             if not todo_block == "all":
@@ -117,6 +118,8 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 clean(folder)
                 log_all(logging.INFO, "test_runner", f"Command 'clean' executed for folder: {folder}\n")
                 continue
+
+
             # Fetch the Python executable
             python_executable = sys.executable
 
