@@ -38,15 +38,17 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
 
 def check_if_swiss_file(file_handler):
     if file_handler.name.endswith(".xml"):
-        tree = ET.parse(file_handler)
-        root = tree.getroot()
-        count = 0
-        for elem in root.iter():
-            if "id" in elem.attrib and elem.attrib["id"].startswith("ch:1:"):
-                count += 1
-                if count > 10:
-                    return True
-        return False
+        # tree = ET.parse(file_handler)
+        # root = tree.getroot()
+        # count = 0
+        # for elem in root.iter():
+        #     if "id" in elem.attrib and elem.attrib["id"].startswith("ch:1:"):
+        #         count += 1
+        #        if count > 10:
+        #            return True
+        if "CHE_SKI" in file_handler.name:
+            return True
+    return False
 
 
 if __name__ == '__main__':
