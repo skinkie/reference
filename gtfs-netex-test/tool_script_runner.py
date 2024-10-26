@@ -66,12 +66,12 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
     # go through each block
     for block in data:
         processdir = processing_data + "/" + block["block"]
-        # make sure folder for block exists
-        os.makedirs(processdir, exist_ok=True)
         blockstop = False
         if not todo_block == block["block"]:
             if not todo_block == "all":
                 continue
+        # make sure folder for block exists
+        os.makedirs(processdir, exist_ok=True)
         blockexisted=True
         scripts = block['scripts']
         prepare_logger(log_level, block["block"] + "/" + log_file)
