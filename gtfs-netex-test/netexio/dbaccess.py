@@ -16,7 +16,7 @@ import netex
 from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
     EntityInVersionStructure, DataSourceRef, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
-import netex_monkeypatching
+
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
 context = XmlContext()
