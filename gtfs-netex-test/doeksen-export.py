@@ -45,8 +45,10 @@ dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="
 start_date = datetime.datetime(year=2099, month=11, day=29)
 end_date = datetime.datetime(year=2023, month=12, day=29)
 
+today = str(datetime.date.today()).replace('-', '')
+
 version = Version(id=getId(Version, codespace, str(from_date)),
-                  version=str(1),
+                  version=today,
                   start_date=XmlDateTime.from_datetime(start_date),
                   end_date=XmlDateTime.from_datetime(end_date),
                   version_type=VersionTypeEnumeration.BASELINE)
