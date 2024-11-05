@@ -3,7 +3,6 @@ import sys
 from typing import T, List, Generator
 
 import duckdb
-import pickle
 
 from isal import igzip_threaded
 from xsdata.formats.dataclass.context import XmlContext
@@ -17,6 +16,7 @@ import netex
 from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
     EntityInVersionStructure, DataSourceRef, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
+from netexio.database import Database
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -80,13 +80,13 @@ def load_referencing_inwards(con, clazz: T, filter, cursor=False):
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
 
-def load_local(con, clazz: T, limit=None, filter=None, cursor=False, embedding=True) -> List[T]:
+def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     try:
         if filter is not None:
@@ -99,24 +99,24 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False, embedding=T
         pass
         # This is the situation where the type is not available at all in the catalogue
         if embedding:
-            return list(load_embedded_transparent_generator(con, clazz, limit, filter))
+            return list(load_embedded_transparent_generator(db, clazz, limit, filter))
         else:
             return []
 
     objs: List[T] = []
     for xml, in cur.fetchall():
-        obj = pickle.loads(xml)
+        obj = db.serializer.unmarshall(xml, type)
         objs.append(obj)
 
     if embedding:
-        objs += list(load_embedded_transparent_generator(con, clazz, limit, filter))
+        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter))
 
     return objs
 
-def load_generator(con, clazz, limit=None, filter=None, embedding=True):
+def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
-    cur = con.cursor()
+    cur = db.cursor()
     try:
         if filter is not None:
             cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
@@ -127,24 +127,24 @@ def load_generator(con, clazz, limit=None, filter=None, embedding=True):
     except:
         pass
         if embedding:
-            yield from load_embedded_transparent_generator(con, clazz, limit, filter)
+            yield from load_embedded_transparent_generator(db, clazz, limit, filter)
         return
 
     while True:
         xml = cur.fetchone()
         if xml is None:
             break
-        yield pickle.loads(xml[0])
+        yield db.serializer.unmarshall(xml[0], type)
 
     if embedding:
-        yield from load_embedded_transparent_generator(con, clazz, limit, filter)
+        yield from load_embedded_transparent_generator(db, clazz, limit, filter)
 
 object_cache = {}
 
-def load_embedded_transparent_generator(con, clazz: T, limit=None, filter=None) -> List[T]:
+def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
-    cur = con.cursor()
+    cur = db.cursor()
     try:
         if filter is not None:
             cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, type,))
@@ -156,7 +156,7 @@ def load_embedded_transparent_generator(con, clazz: T, limit=None, filter=None) 
         return
 
     try:
-        cur2 = con.cursor()
+        cur2 = db.cursor()
         while True:
             result = cur.fetchone()
             if result is None:
@@ -202,16 +202,16 @@ def load_lxml_generator(con, clazz, limit=None):
             break
         yield etree.fromstring(xml[0])
 
-def write_lxml_generator(con, clazz, generator: Generator):
+def write_lxml_generator(db: Database, clazz, generator: Generator):
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
-    cur = con.cursor()
+    cur = db.cursor()
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object BINARY NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -251,11 +251,11 @@ def write_lxml_generator(con, clazz, generator: Generator):
 
     print('\n')
 
-def get_single(con, clazz: T, id, version=None, cursor=False) -> T:
+def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
@@ -270,18 +270,18 @@ def get_single(con, clazz: T, id, version=None, cursor=False) -> T:
 
     row = cur.fetchone()
     if row is not None:
-        obj = pickle.loads(row[0])
+        obj = db.serializer.unmarshall(row[0], type)
         return obj
 
 
-def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False):
+def write_objects(db: Database, objs, empty=False, many=False, silent=False, cursor=False):
     if len(objs) == 0:
         return
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     clazz = objs[0].__class__
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
@@ -291,11 +291,11 @@ def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False
         cur.execute(sql_drop_table)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object BINARY NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -303,21 +303,21 @@ def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False
         if many:
             print(objectname, len(objs))
             if hasattr(clazz, 'order'):
-                cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)) for obj in objs])
+                cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)) for obj in objs])
             elif hasattr(clazz, 'version'):
-                cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)) for obj in objs])
+                cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, db.serializer.marshall(obj, objectname)) for obj in objs])
             else:
                 cur.executemany(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);',
-                                [(obj.id, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)) for obj in objs])
+                                [(obj.id, db.serializer.marshall(obj, objectname)) for obj in objs])
         else:
             for i in range(0, len(objs)):
                 obj = objs[i]
                 if hasattr(clazz, 'order'):
-                    cur.execute(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)))
+                    cur.execute(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)))
                 elif hasattr(clazz, 'version'):
-                    cur.execute(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)))
+                    cur.execute(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, db.serializer.marshall(obj, objectname)))
                 else:
-                    cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)))
+                    cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, db.serializer.marshall(obj, objectname)))
 
                 if not silent:
                     if i % 13 == 0:
@@ -329,8 +329,8 @@ def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False
         # pass
 
 
-def write_generator(con, clazz, generator: Generator, empty=False):
-    cur = con.cursor()
+def write_generator(db: Database, clazz, generator: Generator, empty=False):
+    cur = db.cursor()
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if empty:
@@ -338,11 +338,11 @@ def write_generator(con, clazz, generator: Generator, empty=False):
         cur.execute(sql_drop_table)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object BINARY NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -352,7 +352,7 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, obj.order, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+            yield obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     def _prepare3(generator3, objectname):
@@ -361,7 +361,7 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+            yield obj.id, obj.version, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     def _prepare2(generator2, objectname):
@@ -370,23 +370,23 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+            yield obj.id, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare4(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', a)
         else:
             cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare3(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', a)
         else:
             cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
     else:
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare2(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', a)
         else:
@@ -394,16 +394,16 @@ def write_generator(con, clazz, generator: Generator, empty=False):
 
     print('\n')
 
-def update_generator(con, clazz, generator: Generator):
-    cur = con.cursor()
+def update_generator(db: Database, clazz, generator: Generator):
+    cur = db.cursor()
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object BINARY NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
 
     # This is not used effectively at this point, considering that DuckDB's ATTACH is not persistent
     # https://github.com/duckdb/duckdb-web/issues/3495
@@ -427,7 +427,7 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, obj.order, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+            yield obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     def _prepare3(generator3, objectname):
@@ -436,7 +436,7 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+            yield obj.id, obj.version, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     def _prepare2(generator2, objectname):
@@ -445,23 +445,23 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+            yield obj.id, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare4(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', a)
         else:
             cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare3(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', a)
         else:
             cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
     else:
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare2(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', a)
         else:
@@ -506,22 +506,15 @@ def get_interesting_classes(filter=None):
 
     return clean_element_names, interesting_element_names
 
-def setup_database(con, classes, clean=False, cursor=False):
+def setup_database(db: Database, classes, clean=False, cursor=False):
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     clean_element_names, interesting_element_names = classes
 
     if clean:
-        # SQLITE
-        # cur.execute("PRAGMA writable_schema = 1;")
-        # cur.execute("DELETE FROM sqlite_master WHERE type IN ('table', 'index', 'trigger');")
-        # cur.execute("PRAGMA writable_schema = 0;")
-        # con.commit()
-
-        # DuckDB
         for objectname in clean_element_names:
             sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
             cur.execute(sql_drop_table)
@@ -540,18 +533,18 @@ def setup_database(con, classes, clean=False, cursor=False):
 
         if hasattr(clazz, 'order'):
             if ordr_opt:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object BINARY NOT NULL, PRIMARY KEY (id, version));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
             else:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id, version, ordr));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
 
         elif hasattr(clazz, 'version'):
             if version_opt:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object BINARY NOT NULL, PRIMARY KEY (id));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
             else:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object BINARY NOT NULL, PRIMARY KEY (id, version));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
 
         else:
-            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object BINARY NOT NULL PRIMARY KEY (id));"
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL PRIMARY KEY (id));"
 
         print(sql_create_table)
         cur.execute(sql_create_table)
@@ -561,7 +554,7 @@ def get_local_name(element):
         return element.Meta.name
     return element.__name__
 
-def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=False):
+def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
     clsmembers = inspect.getmembers(netex, inspect.isclass)
     all_frames = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.VersionFrameVersionStructure in x[1].__mro__]
 
@@ -576,9 +569,9 @@ def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=Fals
         return
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     clean_element_names, interesting_element_names = classes
     clazz_by_name = {}
@@ -706,12 +699,9 @@ def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=Fals
 
                     sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
                     try:
-                        xml = parser.parse(element, clazz)
-                        xml = pickle.dumps(xml, pickle.HIGHEST_PROTOCOL)
-                        cur.execute(sql_insert_object, (id, version, order, xml,))
+                        cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(element, clazz),))
                     except:
-                        print("affected element")
-                        print(xml)
+                        print(etree.tostring(element))
                         raise
                         pass
                         # TODO better fix for PassenderStopAssignments: We assume that they are the same. In reality we would need to check
@@ -724,24 +714,18 @@ def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=Fals
 
                     sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
                     try:
-                        xml = parser.parse(element, clazz)
-                        xml = pickle.dumps(xml, pickle.HIGHEST_PROTOCOL)
-                        cur.execute(sql_insert_object, (id, version, xml,))
+                        cur.execute(sql_insert_object, (id, version, db.serializer.marshall(element, clazz),))
                     except:
-                        if localname == 'ServiceJourney':
-                            print(xml)
-                            raise
-
+                        print(etree.tostring(element))
+                        raise
                         pass
 
                 else:
                     sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?);"""
                     try:
-                        xml = parser.parse(element, clazz)
-                        xml = pickle.dumps(xml, pickle.HIGHEST_PROTOCOL)
-                        cur.execute(sql_insert_object, (id, xml,))
+                        cur.execute(sql_insert_object, (id, db.serializer.marshall(element, clazz),))
                     except:
-                        print(xml)
+                        print(etree.tostring(element))
                         raise
                         pass
 
