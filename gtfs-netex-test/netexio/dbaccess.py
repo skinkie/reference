@@ -614,20 +614,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                     print(f"{element.attrib['ref']} is not a known TypeOfFrame")
                     skip_frame = True
 
-            # elif current_element is not None and 'id' in element.attrib:
-            #     parent_version = current_element.attrib.get('version', 'any')
-            #    version = element.attrib.get('version', 'any')
-            #    order = element.attrib.get('order', 0)
-            #    # print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
-            #
-            #    sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
-            #    try:
-            #        cur.execute(sql_insert_object, (current_element_tag.split('}')[-1], current_element.attrib['id'], parent_version, localname, element.attrib['id'], version, order))
-            #    except:
-            #        print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
-            #        raise
-            #        pass
-
             if localname in all_frames:
                 frame_defaults_stack.append(None)
 
@@ -743,10 +729,16 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         raise
                         pass
 
-                sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+                sql_insert_embedded = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+                sql_insert_reference = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+
                 for obj, path in recursive_attributes(object, []):
-                    if hasattr(obj, 'id') and obj.id is not None:
-                        cur.execute(sql_insert_object, (clazz.__name__, object.id, object.version, obj.__class__.__name__, obj.id, obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0, '.'.join([str(s) for s in path])))
+                    if hasattr(obj, 'id'):
+                        if obj.id is not None:
+                            cur.execute(sql_insert_embedded, (clazz.__name__, object.id, object.version, obj.__class__.__name__, obj.id, obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0, '.'.join([str(s) for s in path])))
+                    elif hasattr(obj, 'ref'):
+                        if obj.ref is not None:
+                            cur.execute(sql_insert_reference, (clazz.__name__, object.id, object.version, obj.name_of_ref_class, obj.ref, obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0))
 
                 current_element = None
                 current_element_tag = None
