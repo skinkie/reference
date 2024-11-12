@@ -10,7 +10,7 @@ class MyPickleSerializer(Serializer):
     sql_type = 'BINARY'
 
     def marshall(self, obj, clazz: T):
-        if not getattr(obj, '__module__', None) == 'netex':
+        if not getattr(obj, '__module__', None).startswith('netex.'): # TODO: can we just get the parent?
             obj = self.xmlserializer.unmarshall(obj, clazz)
 
         return pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)

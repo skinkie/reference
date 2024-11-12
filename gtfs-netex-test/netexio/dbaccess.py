@@ -1,6 +1,6 @@
 import inspect
 import sys
-from typing import T, List, Generator
+from typing import T, List, Generator, Tuple
 
 import duckdb
 
@@ -17,6 +17,7 @@ from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
     EntityInVersionStructure, DataSourceRef, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
 from netexio.database import Database
+from netexio.xmlserializer import MyXmlSerializer
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -108,8 +109,9 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         obj = db.serializer.unmarshall(xml, type)
         objs.append(obj)
 
-    if embedding:
-        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter))
+    # TODO: Straks weer aanzetten
+    # if embedding:
+    #     objs += list(load_embedded_transparent_generator(db, clazz, limit, filter))
 
     return objs
 
@@ -168,11 +170,14 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             if needle not in object_cache:
                 cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? ORDER BY id LIMIT 1;", (parent_id, parent_version,))
                 object = cur2.fetchone()
+                object_cache[needle] = db.serializer.unmarshall(object[0], parent_clazz)
+
                 # TODO pickle: Must find a way to do this without etree
-                object_cache[needle] = etree.fromstring(object[0])
+                # object_cache[needle] = etree.fromstring(object[0])
 
             tree = object_cache[needle]
             if tree is not None:
+                """
                 if filter is not None:
                     elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}[@id='{filter}']")
                 else:
@@ -183,6 +188,7 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                     # TODO pickle
                     obj = parser.from_string(etree.tounicode(element), clazz) # TODO: parsing directly from elementtree should be possible too
                     yield obj
+                """
     except TypeError:
         pass
 
@@ -520,7 +526,7 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
             cur.execute(sql_drop_table)
         cur.execute("VACUUM;")
 
-    sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
     print(sql_create_table)
     cur.execute(sql_create_table)
 
@@ -555,6 +561,7 @@ def get_local_name(element):
     return element.__name__
 
 def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
+    xml_serializer = MyXmlSerializer()
     clsmembers = inspect.getmembers(netex, inspect.isclass)
     all_frames = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.VersionFrameVersionStructure in x[1].__mro__]
 
@@ -606,19 +613,19 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                     print(f"{element.attrib['ref']} is not a known TypeOfFrame")
                     skip_frame = True
 
-            elif current_element is not None and 'id' in element.attrib:
-                parent_version = current_element.attrib.get('version', 'any')
-                version = element.attrib.get('version', 'any')
-                order = element.attrib.get('order', 0)
-                # print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
-
-                sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
-                try:
-                    cur.execute(sql_insert_object, (current_element_tag.split('}')[-1], current_element.attrib['id'], parent_version, localname, element.attrib['id'], version, order))
-                except:
-                    print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
-                    raise
-                    pass
+            # elif current_element is not None and 'id' in element.attrib:
+            #     parent_version = current_element.attrib.get('version', 'any')
+            #    version = element.attrib.get('version', 'any')
+            #    order = element.attrib.get('order', 0)
+            #    # print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
+            #
+            #    sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
+            #    try:
+            #        cur.execute(sql_insert_object, (current_element_tag.split('}')[-1], current_element.attrib['id'], parent_version, localname, element.attrib['id'], version, order))
+            #    except:
+            #        print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
+            #        raise
+            #        pass
 
             if localname in all_frames:
                 frame_defaults_stack.append(None)
@@ -693,13 +700,16 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
                 id = element.attrib['id']
 
+                object = None
+
                 if hasattr(clazz, 'order'):
                     version = element.attrib.get('version', None)
                     order = element.attrib.get('order', None)
+                    object = xml_serializer.unmarshall(element, clazz)
 
                     sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
                     try:
-                        cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(element, clazz),))
+                        cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise
@@ -711,56 +721,74 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
                 elif hasattr(clazz, 'version'):
                     version = element.attrib.get('version', None)
+                    object = xml_serializer.unmarshall(element, clazz)
 
                     sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
                     try:
-                        cur.execute(sql_insert_object, (id, version, db.serializer.marshall(element, clazz),))
+                        cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise
                         pass
 
                 else:
+                    object = xml_serializer.unmarshall(element, clazz)
+
                     sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?);"""
                     try:
-                        cur.execute(sql_insert_object, (id, db.serializer.marshall(element, clazz),))
+                        cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise
                         pass
 
+                sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+                for obj, path in recursive_attributes(object, []):
+                    if hasattr(obj, 'id') and obj.id is not None:
+                        cur.execute(sql_insert_object, (clazz.__name__, object.id, object.version, obj.__class__.__name__, obj.id, obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0, '.'.join([str(s) for s in path])))
+
                 current_element = None
                 current_element_tag = None
 
 
-def recursive_attributes(obj):
+def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
+    # print(obj.__class__.__name__)
     if issubclass(obj.__class__, EntityInVersionStructure) and obj.data_source_ref_attribute is not None:
-        yield DataSourceRefStructure(ref=obj.data_source_ref_attribute)
+        yield DataSourceRefStructure(ref=obj.data_source_ref_attribute), depth + ['data_source_ref_attribute']
     if issubclass(obj.__class__, DataManagedObject) and obj.responsibility_set_ref_attribute is not None:
-        yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute)
+        yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute), depth + ['responsibility_set_ref_attribute']
 
     # TODO: dataSourceRef-attribute, responsibilitySet-attribute
-    for k, v in obj.__dict__.items():
+    mydepth = depth.copy()
+    mydepth.append(0)
+    for key in obj.__dict__.keys():
+        mydepth[-1] = key
+        v = obj.__dict__.get(key, None)
         if v is not None:
             # print(v)
             if issubclass(v.__class__, VersionOfObjectRef) or issubclass(v.__class__, VersionOfObjectRefStructure):
-                yield v
+                yield v, mydepth
 
             else:
                 if (v.__class__.__name__ in netex.__all__ and hasattr(v, '__dict__')):
                     if hasattr(v, 'id'):
-                        yield v
-                    yield from recursive_attributes(v)
+                        yield v, mydepth
+                    yield from recursive_attributes(v, mydepth)
                 elif v.__class__ in (list, tuple):
-                    for x in v:
+                    mydepth.append(0)
+                    for j in range(0, len(v)):
+                        mydepth[-1] = j
+                        x = v[j]
+                        # TODO: Loopje ook een integer laten zetten
                         if x is not None:
                             if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__,
                                                                                          VersionOfObjectRefStructure):
-                                yield x
+                                yield x, mydepth
                             elif (x.__class__.__name__ in netex.__all__ and hasattr(x, '__dict__')):
                                 if hasattr(x, 'id'):
-                                    yield x
-                                yield from recursive_attributes(x)
+                                    yield x, mydepth
+                                yield from recursive_attributes(x, mydepth)
+                    mydepth.pop()
 
 import inspect
 
