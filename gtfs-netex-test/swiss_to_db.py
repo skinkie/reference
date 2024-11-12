@@ -13,8 +13,7 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
     for file in open_netex_file(swiss_zip_file):
         if file.name.endswith(".xml"):
             if not check_if_swiss_file(file):
-                # TODO: Wouldn't it be more efficient to check the filename structure?
-                print("Not enough elements with id attributes starting with ch:1:. So no Swiss data")
+                print("File names do not fit Swiss data:. So no Swiss data")
                 sys.exit(2)
 
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
@@ -36,15 +35,10 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
 
 def check_if_swiss_file(file_handler):
     if file_handler.name.endswith(".xml"):
-        tree = ET.parse(file_handler)
-        root = tree.getroot()
-        count = 0
-        for elem in root.iter():
-            if "id" in elem.attrib and elem.attrib["id"].startswith("ch:1:"):
-                count += 1
-                if count > 10:
-                    return True
-        return False
+        fn=file_handler.name
+        if "_CHE_" not in fn:
+            return False
+    return True
 
 
 if __name__ == '__main__':
