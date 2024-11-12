@@ -109,9 +109,8 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         obj = db.serializer.unmarshall(xml, type)
         objs.append(obj)
 
-    # TODO: Straks weer aanzetten
-    # if embedding:
-    #     objs += list(load_embedded_transparent_generator(db, clazz, limit, filter))
+    if embedding:
+        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter))
 
     return objs
 
@@ -143,17 +142,27 @@ def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True)
 
 object_cache = {}
 
+# Alternative implementation for attrgetter, handles list indices
+# from operator import attrgetter
+def resolve_attr(obj, attr):
+    for name in attr:
+        if isinstance(name, int):
+            obj = obj[name]
+        else:
+            obj = getattr(obj, name)
+    return obj
+
 def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     cur = db.cursor()
     try:
         if filter is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, type,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;", (filter, type,))
         elif limit is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class FROM embedded LIMIT ?;", (limit,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded LIMIT ?;", (limit,))
         else:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class FROM embedded WHERE class = ?;", (type,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ?;", (type,))
     except:
         return
 
@@ -164,7 +173,7 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             if result is None:
                 break
 
-            parent_id, parent_version, parent_clazz = result
+            parent_id, parent_version, parent_clazz, path = result
             needle = '|'.join([parent_id, parent_version, parent_clazz])
 
             if needle not in object_cache:
@@ -172,23 +181,15 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                 object = cur2.fetchone()
                 object_cache[needle] = db.serializer.unmarshall(object[0], parent_clazz)
 
-                # TODO pickle: Must find a way to do this without etree
-                # object_cache[needle] = etree.fromstring(object[0])
+            obj = object_cache[needle]
+            if obj is not None:
+                split = []
+                for p in path.split('.'):
+                    if p.isnumeric():
+                        p = int(p)
+                    split.append(p)
+                yield resolve_attr(obj, split)
 
-            tree = object_cache[needle]
-            if tree is not None:
-                """
-                if filter is not None:
-                    elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}[@id='{filter}']")
-                else:
-                    elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}")
-
-                for element in elements:
-                    # print(clazz, etree.tounicode(element))
-                    # TODO pickle
-                    obj = parser.from_string(etree.tounicode(element), clazz) # TODO: parsing directly from elementtree should be possible too
-                    yield obj
-                """
     except TypeError:
         pass
 
