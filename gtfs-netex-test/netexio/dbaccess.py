@@ -531,6 +531,10 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
     print(sql_create_table)
     cur.execute(sql_create_table)
 
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
+    print(sql_create_table)
+    cur.execute(sql_create_table)
+
     for objectname in clean_element_names:
         # TODO: optimize
         clazz = getattr(sys.modules['netex'], objectname)
@@ -570,14 +574,21 @@ def update_embedded_referencing(con, object):
         if hasattr(obj, 'id'):
             if obj.id is not None:
                 con.execute(sql_insert_embedded, (
-                object.__clazz__.__name__, object.id, object.version, obj.__class__.__name__, obj.id,
-                obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0,
+                object.__class__.__name__, object.id, object.version, obj.__class__.__name__, obj.id,
+                obj.version if hasattr(obj, 'version') and obj.version is not None else 'any', obj.order if hasattr(obj, 'order') and obj.order is not None else 0,
                 '.'.join([str(s) for s in path])))
         elif hasattr(obj, 'ref'):
             if obj.ref is not None:
+                if obj.name_of_ref_class is None:
+                    # Hack, because NeTEx does not define the default name of ref class yet
+                    if obj.__class__.__name__.endswith('RefStructure'):
+                        obj.name_of_ref_class = obj.__class__.__name__[0:-12]
+                    elif obj.__class__.__name__.endswith('Ref'):
+                        obj.name_of_ref_class = obj.__class__.__name__[0:-3]
+
                 con.execute(sql_insert_reference, (
-                object.__clazz__.__name__, object.id, object.version, obj.name_of_ref_class, obj.ref,
-                obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0))
+                object.__class__.__name__, object.id, object.version, obj.name_of_ref_class, obj.ref,
+                obj.version if hasattr(obj, 'version') and obj.version is not None else 'any', obj.order if hasattr(obj, 'order') and obj.order is not None else 0))
 
 def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
     xml_serializer = MyXmlSerializer()
@@ -706,16 +717,34 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                 order = element.attrib.get('order', None)
                 object = xml_serializer.unmarshall(element, clazz)
 
-                sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
-                try:
-                    cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
-                    update_embedded_referencing(cur, object)
+                if hasattr(clazz, 'order'):
+                    sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING;"""
+                    try:
+                        cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
+                    except:
+                        print(etree.tostring(element))
+                        raise
+                        pass
 
-                except:
-                    print(etree.tostring(element))
-                    raise
-                    pass
+                elif hasattr(clazz, 'version'):
+                    sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?) ON CONFLICT DO NOTHING;"""
+                    try:
+                        cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
+                    except:
+                        print(etree.tostring(element))
+                        raise
+                        pass
 
+                else:
+                    sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?) ON CONFLICT DO NOTHING;"""
+                    try:
+                        cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
+                    except:
+                        print(etree.tostring(element))
+                        raise
+                        pass
+
+                update_embedded_referencing(cur, object)
                 current_element_tag = None
 
 
