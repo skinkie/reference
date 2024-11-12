@@ -561,6 +561,24 @@ def get_local_name(element):
         return element.Meta.name
     return element.__name__
 
+
+def update_embedded_referencing(con, object):
+    sql_insert_embedded = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+    sql_insert_reference = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+
+    for obj, path in recursive_attributes(object, []):
+        if hasattr(obj, 'id'):
+            if obj.id is not None:
+                con.execute(sql_insert_embedded, (
+                object.__clazz__.__name__, object.id, object.version, obj.__class__.__name__, obj.id,
+                obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0,
+                '.'.join([str(s) for s in path])))
+        elif hasattr(obj, 'ref'):
+            if obj.ref is not None:
+                con.execute(sql_insert_reference, (
+                object.__clazz__.__name__, object.id, object.version, obj.name_of_ref_class, obj.ref,
+                obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0))
+
 def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
     xml_serializer = MyXmlSerializer()
     clsmembers = inspect.getmembers(netex, inspect.isclass)
@@ -591,7 +609,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
     events = ("start", "end")
     context = etree.iterparse(f, events=events, remove_blank_text=True)
-    current_element = None
     current_element_tag = None
     current_framedefaults = None
     current_datasource_ref = None
@@ -605,7 +622,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
         if event == 'start':
             if current_element_tag is None and element.tag in interesting_element_names:
-                current_element = element
                 current_element_tag = element.tag
 
             elif localname == 'TypeOfFrameRef':
@@ -678,7 +694,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
             if current_element_tag == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
                 if 'id' not in element.attrib:
-                    current_element = None
                     current_element_tag = None
                     # print(xml)
                     continue
@@ -687,60 +702,20 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
                 id = element.attrib['id']
 
-                object = None
+                version = element.attrib.get('version', None)
+                order = element.attrib.get('order', None)
+                object = xml_serializer.unmarshall(element, clazz)
 
-                if hasattr(clazz, 'order'):
-                    version = element.attrib.get('version', None)
-                    order = element.attrib.get('order', None)
-                    object = xml_serializer.unmarshall(element, clazz)
+                sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
+                try:
+                    cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
+                    update_embedded_referencing(cur, object)
 
-                    sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
-                    try:
-                        cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
-                    except:
-                        print(etree.tostring(element))
-                        raise
-                        pass
-                        # TODO better fix for PassenderStopAssignments: We assume that they are the same. In reality we would need to check
-                        #if not localname =="PassengerStopAssignment":
-                        #    raise
-                        #    pass
+                except:
+                    print(etree.tostring(element))
+                    raise
+                    pass
 
-                elif hasattr(clazz, 'version'):
-                    version = element.attrib.get('version', None)
-                    object = xml_serializer.unmarshall(element, clazz)
-
-                    sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
-                    try:
-                        cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
-                    except:
-                        print(etree.tostring(element))
-                        raise
-                        pass
-
-                else:
-                    object = xml_serializer.unmarshall(element, clazz)
-
-                    sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?);"""
-                    try:
-                        cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
-                    except:
-                        print(etree.tostring(element))
-                        raise
-                        pass
-
-                sql_insert_embedded = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
-                sql_insert_reference = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
-
-                for obj, path in recursive_attributes(object, []):
-                    if hasattr(obj, 'id'):
-                        if obj.id is not None:
-                            cur.execute(sql_insert_embedded, (clazz.__name__, object.id, object.version, obj.__class__.__name__, obj.id, obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0, '.'.join([str(s) for s in path])))
-                    elif hasattr(obj, 'ref'):
-                        if obj.ref is not None:
-                            cur.execute(sql_insert_reference, (clazz.__name__, object.id, object.version, obj.name_of_ref_class, obj.ref, obj.version if hasattr(obj, 'version') else 'any', obj.order if hasattr(obj, 'order') else 0))
-
-                current_element = None
                 current_element_tag = None
 
 
