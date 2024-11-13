@@ -566,11 +566,14 @@ def get_local_name(element):
     return element.__name__
 
 
-def update_embedded_referencing(con, object):
-    sql_insert_embedded = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
-    sql_insert_reference = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+def update_embedded_referencing(con, object, inner_loop=None):
+    sql_insert_embedded = "INSERT OR REPLACE INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+    sql_insert_reference = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
 
     for obj, path in recursive_attributes(object, []):
+        if inner_loop:
+            inner_loop(obj, path)
+
         if hasattr(obj, 'id'):
             if obj.id is not None:
                 con.execute(sql_insert_embedded, (
@@ -718,7 +721,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                 object = xml_serializer.unmarshall(element, clazz)
 
                 if hasattr(clazz, 'order'):
-                    sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING;"""
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
                     try:
                         cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
                     except:
@@ -727,7 +730,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         pass
 
                 elif hasattr(clazz, 'version'):
-                    sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?) ON CONFLICT DO NOTHING;"""
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
                     try:
                         cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
                     except:
@@ -736,7 +739,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         pass
 
                 else:
-                    sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?) ON CONFLICT DO NOTHING;"""
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object) VALUES (?, ?);"""
                     try:
                         cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
                     except:
@@ -755,7 +758,6 @@ def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     if issubclass(obj.__class__, DataManagedObject) and obj.responsibility_set_ref_attribute is not None:
         yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute), depth + ['responsibility_set_ref_attribute']
 
-    # TODO: dataSourceRef-attribute, responsibilitySet-attribute
     mydepth = depth.copy()
     mydepth.append(0)
     for key in obj.__dict__.keys():
@@ -776,7 +778,6 @@ def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
                     for j in range(0, len(v)):
                         mydepth[-1] = j
                         x = v[j]
-                        # TODO: Loopje ook een integer laten zetten
                         if x is not None:
                             if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__,
                                                                                          VersionOfObjectRefStructure):
@@ -838,7 +839,7 @@ def resolve_all_references(con, classes, cursor=False):
                     order = 0
 
 
-                sql_insert_object = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+                sql_insert_object = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                 try:
                     cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
                 except duckdb.duckdb.ConstraintException:
@@ -914,7 +915,7 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
                         order = 0
 
 
-                    sql_insert_object = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+                    sql_insert_object = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                     try:
                         cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
                     except duckdb.duckdb.ConstraintException:
