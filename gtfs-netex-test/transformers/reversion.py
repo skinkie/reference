@@ -1,10 +1,8 @@
 import functools
-from functools import partial
 
 import netex
 from netex import VersionOfObjectRef, VersionOfObjectRefStructure
 from netexio.database import Database
-from netexio.dbaccess import update_embedded_referencing, recursive_attributes, get_interesting_classes
 from netexio.serializer import Serializer
 
 
@@ -30,6 +28,7 @@ def simple_recursive_attributes(obj):
                                     yield x
                                 yield from simple_recursive_attributes(x)
 
+
 def reversion_object(deserialized, updated_version):
     for obj in simple_recursive_attributes(deserialized):
         if hasattr(obj, 'version') and obj.version != 'any':
@@ -50,8 +49,8 @@ def reversion_all_objects(db: Database, updated_version: str):
     con.create_function('reversion', functools.partial(reversion_udf, db.serializer))
 
     for objectname in db.serializer.clean_element_names:
-        con.execute(f"UPDATE {objectname} SET version = ?, object = reversion(object, ?, CAST(? AS VARCHAR));",
-                    (updated_version, objectname, updated_version,))
+        con.execute(f"UPDATE {objectname} SET version = ?, object = reversion(object, '{objectname}', ?);",
+                    (updated_version, updated_version,))
 
     con.remove_function('reversion')
 
