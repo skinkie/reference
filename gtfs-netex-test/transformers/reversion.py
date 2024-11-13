@@ -52,3 +52,10 @@ def reversion_all_objects(db: Database, updated_version: str):
     for objectname in db.serializer.clean_element_names:
         con.execute(f"UPDATE {objectname} SET version = ?, object = reversion(object, ?, CAST(? AS VARCHAR));",
                     (updated_version, objectname, updated_version,))
+
+    con.remove_function('reversion')
+
+    con.execute("UPDATE embedded SET parent_version = ? WHERE parent_version <> 'any';", (updated_version,))
+    con.execute("UPDATE embedded SET version = ? WHERE version <> 'any';", (updated_version,))
+    con.execute("UPDATE referencing SET parent_version = ? WHERE parent_version <> 'any';", (updated_version,))
+    con.execute("UPDATE referencing SET version = ? WHERE version <> 'any';", (updated_version,))
