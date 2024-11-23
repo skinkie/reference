@@ -3,24 +3,27 @@ import hashlib
 import math
 from _decimal import Decimal
 from typing import List, Generator
+import os
 
 import duckdb
 import numpy
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
-from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDuration
+from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
 
 from callsprofile import CallsProfile
-from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, \
+from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, resolve_all_references, \
     resolve_all_references_and_embeddings
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
     VersionTypeEnumeration, LocaleStructure, SystemOfUnits, Operator, ContactStructure, Locale, LanguageUsageStructure, \
     LanguageUseEnumeration, Line, PresentationStructure, AllVehicleModesOfTransportEnumeration, PrivateCode, \
-    PublicationDelivery, DataObjectsRelStructure, OperationalContext, ResourceFrame, DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, OperationalContextsInFrameRelStructure, \
+    PublicationDelivery, DataObjectsRelStructure, OperationalContext, ResourceFrame, TypeOfFrameRef, \
+    DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, OperationalContextsInFrameRelStructure, \
     CompositeFrame, VersionsRelStructure, FramesRelStructure, ServiceFrame, LinesInFrameRelStructure, \
     OperatorRef, StopArea, LocationStructure2, SimplePointVersionStructure, PrivateCodeStructure, \
     ScheduledStopPoint, StopAreaRefsRelStructure, StopAreaRefStructure, \
-    StopAreasInFrameRelStructure, ScheduledStopPointsInFrameRelStructure, AvailabilityCondition, DestinationDisplayView, ScheduledStopPointRef, Call, ArrivalStructure, \
+    StopAreasInFrameRelStructure, ScheduledStopPointsInFrameRelStructure, AvailabilityCondition, ServiceJourneyPattern, \
+    DestinationDisplayView, ScheduledStopPointRef, Call, ArrivalStructure, \
     DepartureStructure, CallsRelStructure, ValidityConditionsRelStructure, AvailabilityConditionRef, BlockRef, \
     DirectionTypeEnumeration, AccessibilityAssessment, LimitationStatusEnumeration, TimetableFrame, \
     JourneysInFrameRelStructure, LineRef, JourneyPatternView, CodespacesRelStructure, \
@@ -33,9 +36,9 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     PosList, CodespaceRefStructure, DataSourceRefStructure, ParticipantRef, LuggageCarriageFacilityList, StopPlace, \
     ZoneRefStructure, InfoLinksRelStructure, InfoLink, TypeOfInfoLinkEnumeration, QuaysRelStructure, \
     SiteEntrancesRelStructure, Quay, StopPlaceEntrance, LevelRef, AccessSpacesRelStructure, AccessSpace, \
-    PassengerStopAssignment, TemplateServiceJourney, FrequencyGroupsRelStructure, \
+    PassengerStopAssignment, ZonesInFrameRelStructure, TemplateServiceJourney, FrequencyGroupsRelStructure, \
     HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure
-import netex_monkeypatching
+
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
 from aux_logging import *
 import traceback

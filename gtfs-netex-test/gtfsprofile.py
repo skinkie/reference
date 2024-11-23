@@ -5,7 +5,7 @@ import warnings
 from typing import List, Union
 import io
 from pyproj import Transformer
-
+from xsdata.models.datatype import XmlDateTime, XmlDuration
 from transformers.projection import project_location_4326
 
 from utils import to_seconds

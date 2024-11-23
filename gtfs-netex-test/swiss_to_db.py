@@ -1,7 +1,8 @@
 import sys
 
 import duckdb as sqlite3
-import xml.etree.ElementTree as ET
+# import xml.etree.ElementTree as ET
+import os
 
 from anyintodbnew import  get_interesting_classes, setup_database, open_netex_file, insert_database
 from netexio.dbaccess import resolve_all_references_and_embeddings
@@ -57,8 +58,8 @@ if __name__ == '__main__':
     argument_parser = argparse.ArgumentParser(description='Import a Swiss NeTEx ZIP archive into DuckDB')
     argument_parser.add_argument('swiss_zip_file', type=str, help='The NeTEx zip file')
     argument_parser.add_argument('database', type=str, help='The DuckDB to be overwritten with the NeTEx context')
-    argument_parser.add_argument('--clean_database', action="store_true", help='Clean the current file', default=True)
-    argument_parser.add_argument('--referencing', action="store_false", help='Create referencing table')
+    argument_parser.add_argument('clean_database', action="store_true", help='Clean the current file', default=True)
+    argument_parser.add_argument('referencing', action="store_false", help='Create referencing table')
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
     mylogger =prepare_logger(logging.INFO,args.log_file)

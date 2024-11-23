@@ -1,5 +1,5 @@
 import duckdb as sqlite3
-from datetime import date
+from datetime import datetime, date
 from typing import Generator
 from utils import project
 from isal import igzip_threaded
@@ -15,15 +15,16 @@ from xsdata.models.datatype import XmlDateTime
 from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
 
 from netexio.dbaccess import load_local
-from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataObjectsRelStructure, ServiceJourney, StopPlace, CompositeFrame, FramesRelStructure, TimetableFrame, \
-    JourneysInFrameRelStructure, TypeOfFrameRef, ServiceFrame, JourneyPatternsInFrameRelStructure, \
+from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataObjectsRelStructure, GeneralFrame, \
+    GeneralFrameMembersRelStructure, ServiceJourney, StopPlace, CompositeFrame, FramesRelStructure, TimetableFrame, \
+    JourneysInFrameRelStructure, TypeOfFrame, TypeOfFrameRef, ServiceFrame, JourneyPatternsInFrameRelStructure, \
     DirectionsInFrameRelStructure, ServiceJourneyPattern, Direction, RoutePointsInFrameRelStructure, RoutePoint, \
     ScheduledStopPointsInFrameRelStructure, ScheduledStopPoint, RoutesInFrameRelStructure, Route, \
     LinesInFrameRelStructure, Line, SiteFrame, ResourceFrame, CodespacesRelStructure, Codespace, \
-    StopPlacesInFrameRelStructure, DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, \
+    StopPlacesInFrameRelStructure, ServiceFacilitySet, DataSourcesInFrameRelStructure, OrganisationsInFrameRelStructure, \
     VehicleTypesInFrameRelStructure, ResponsibilitySetsInFrameRelStructure, DataSource, Authority, Operator, \
-    VehicleType, ResponsibilitySet, RouteLinksInFrameRelStructure, RouteLink, Network, \
-    DestinationDisplaysInFrameRelStructure, DestinationDisplay, \
+    VehicleType, ResponsibilitySet, Branding, RouteLinksInFrameRelStructure, RouteLink, Network, \
+    NetworksInFrameRelStructure, DestinationDisplaysInFrameRelStructure, DestinationDisplay, \
     ServiceLinksInFrameRelStructure, ServiceLink, TransfersInFrameRelStructure, StopAssignmentsInFrameRelStructure, \
     PassengerStopAssignment, Connection, SiteConnection, DefaultConnection, ServiceCalendarFrame, \
     DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine, VersionFrameDefaultsStructure, SystemOfUnits, \
@@ -34,6 +35,7 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     TariffZonesInFrameRelStructure, ZonesInFrameRelStructure, TransportAdministrativeZone
 
 import netex_monkeypatching
+
 from aux_logging import *
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True

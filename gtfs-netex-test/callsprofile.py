@@ -3,13 +3,14 @@ from typing import List
 from xsdata.models.datatype import XmlDuration, XmlTime
 
 from netex import ServiceJourney, StopPointInJourneyPattern, ServiceJourneyPattern, PointsInJourneyPatternRelStructure, \
-    ServiceJourneyPatternRef, TimingLink, Line, TimingPointRefStructure, TimingLinkRefStructure, TimingLinkRef, Call, DepartureStructure, ArrivalStructure, JourneyRunTime, JourneyWaitTime, \
-    PointInJourneyPatternRefStructure, \
-    OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, \
+    ServiceJourneyPatternRef, JourneyPatternView, TimingLink, Line, TimingPointRefStructure, LineRef, \
+    TimingLinkRefStructure, TimingLinkRef, Call, DepartureStructure, ArrivalStructure, JourneyRunTime, JourneyWaitTime, \
+    StopPointInJourneyPatternRef, StopPointInJourneyPatternRefStructure, PointInJourneyPatternRefStructure, \
+    OnwardTimingLinkView, TimeDemandType, JourneyRunTimesRelStructure, JourneyWaitTimesRelStructure, TimeDemandTypeRef, \
     TimeDemandTypeRefStructure, RouteView, ScheduledStopPoint, Route, CallsRelStructure, TimingPointInJourneyPattern, \
     ScheduledStopPointRef, ServiceLinkInJourneyPattern, TimingLinkInJourneyPattern, JourneyPatternWaitTimesRelStructure, \
     TimetabledPassingTime, TimetabledPassingTimesRelStructure
-from refs import setIdVersion, getRef, getIndex
+from refs import setIdVersion, getRef, getIndex, getIdByRef
 from utils import project
 from aux_logging import log_print
 
