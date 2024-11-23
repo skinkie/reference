@@ -28,7 +28,10 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     PassengerStopAssignment, Connection, SiteConnection, DefaultConnection, ServiceCalendarFrame, \
     DayTypesInFrameRelStructure, ServiceCalendar, DayType, FlexibleLine, VersionFrameDefaultsStructure, SystemOfUnits, \
     LocaleStructure, Notice, NoticeAssignment, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, \
-    TopographicPlacesInFrameRelStructure, TopographicPlace, TypesOfValueInFrameRelStructure, ValueSet, JourneyMeeting, InterchangeRule, JourneyMeetingsInFrameRelStructure, InterchangeRulesInFrameRelStructure
+    TopographicPlacesInFrameRelStructure, TopographicPlace, TransportOrganisationVersionStructure, Locale, \
+    TypesOfValueInFrameRelStructure, ValueSet, ValidityConditionsRelStructure, AvailabilityCondition, JourneyMeeting, \
+    InterchangeRule, JourneyMeetingsInFrameRelStructure, InterchangeRulesInFrameRelStructure, TariffZone, \
+    TariffZonesInFrameRelStructure, ZonesInFrameRelStructure, TransportAdministrativeZone
 
 import netex_monkeypatching
 from aux_logging import *
@@ -118,25 +121,28 @@ def export_epip_network_offer(database_original, database_target, output_filenam
     data_source = GeneratorTester(load_generator(con_orig, DataSource))
     organisation_or_transport_organisation = load_local(con_orig, Authority) + load_local(con_orig, Operator)
     value_set = GeneratorTester(load_generator(con_orig, ValueSet))
+    transport_administrative_zone = GeneratorTester(load_generator(con_orig, TransportAdministrativeZone))
 
     all_locales = {org.locale for org in organisation_or_transport_organisation if org.locale is not None}
     if len(all_locales) > 1:
         log_print("TODO: Test case for multiple TimetableFrames!")
 
     transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(con_orig, VehicleType))
-    responsibility_set = GeneratorTester(load_generator(con_orig, ResponsibilitySet))
+    responsibility_set = GeneratorTester(load_generator(con_target, ResponsibilitySet))
 
     stop_place = GeneratorTester(load_generator(con_target, StopPlace))
     topographic_place = GeneratorTester(load_generator(con_orig, TopographicPlace))
 
     direction = GeneratorTester(load_generator(con_target, Direction))
-    route_point = GeneratorTester(load_generator(con_target, RoutePoint))
+    route_point = GeneratorTester(load_generator(con_orig, RoutePoint))
     route_link = GeneratorTester(load_generator(con_target, RouteLink))
     route = GeneratorTester(load_generator(con_orig, Route))
     line = GeneratorTester(chain(load_generator(con_target, Line), load_generator(con_orig, FlexibleLine)))
-    network = GeneratorTester(load_generator(con_orig, Network, 1))
+    network = GeneratorTester(load_generator(con_orig, Network, 0))
+    # network = GeneratorTester(load_generator(con_orig, Network, 1))
     destination_display = GeneratorTester(load_generator(con_orig, DestinationDisplay))
     scheduled_stop_point = GeneratorTester(load_generator(con_target, ScheduledStopPoint))
+    tariff_zone = GeneratorTester(load_generator(con_target, TariffZone))
     service_link = GeneratorTester(load_generator(con_target, ServiceLink))
     journey_pattern = GeneratorTester(load_generator(con_target, ServiceJourneyPattern))
     transfer = GeneratorTester(chain(load_generator(con_target, Connection), load_generator(con_target, SiteConnection), load_generator(con_target, DefaultConnection)))
@@ -184,6 +190,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                         organisations=OrganisationsInFrameRelStructure(organisation_or_transport_organisation=organisation_or_transport_organisation) if len(organisation_or_transport_organisation) > 0 else None,
                                         vehicle_types=VehicleTypesInFrameRelStructure(transport_type_dummy_type_or_train_type=transport_type_dummy_type_or_train_type.generator()) if transport_type_dummy_type_or_train_type.has_value() else None,
                                         responsibility_sets=ResponsibilitySetsInFrameRelStructure(responsibility_set=responsibility_set.generator()) if responsibility_set.has_value() else None,
+                                        zones=ZonesInFrameRelStructure(choice=transport_administrative_zone.generator()) if transport_administrative_zone.has_value() else None,
                                         # brandings=BrandingsInFrameRelStructure(branding=load_generator(con, Branding)) # TODO: must be added to a ValueSet
                                     ),
 
@@ -211,6 +218,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                          stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment_or_passenger_boarding_position_assignment=stop_assignment.generator()) if stop_assignment.has_value() else None,
                                          notices=NoticesInFrameRelStructure(notice=notice.generator()) if notice.has_value() else None,
                                          notice_assignments=NoticeAssignmentsInFrameRelStructure(notice_assignment=notice_assignment.generator()) if notice_assignment.has_value() else None,
+                                         tariff_zones=TariffZonesInFrameRelStructure(tariff_zone=tariff_zone.generator()) if tariff_zone.has_value() else None,
                                     ),
                                     TimetableFrame(
                                         id="EU_PI_TIMETABLE", version=version,

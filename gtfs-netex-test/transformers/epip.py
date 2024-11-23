@@ -414,6 +414,7 @@ def epip_service_journey_generator(read_database: str, write_database: str, gene
         # TODO: AvailabilityCondition -> Uic
 
         sj.validity_conditions_or_valid_between = None
+        sj.time_demand_type_ref = None
         sj.key_list = None
         sj.private_code = None
         sj.train_numbers = None
