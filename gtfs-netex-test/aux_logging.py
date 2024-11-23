@@ -5,6 +5,7 @@
 
 from configuration import *
 import os
+import sys
 
 # Basic ideas:
 # - There might still remain print statements, that are just send to the screen
@@ -15,6 +16,7 @@ import os
 # - some things are corrected and only one problem is resolved.
 # - the logging should assist the pipeline.
 
+# Attention: log_print only writes to the screen and not to the log_file
 def log_print(s):
     global NOSOFTLOGGING
     if not NOSOFTLOGGING:
@@ -31,7 +33,7 @@ def prepare_logger(log_level,log_file_name):
             mylogger.setLevel(log_level)
             log_dict = {}
             # create console handler and set level to debug
-            ch = logging.StreamHandler()
+            ch = logging.StreamHandler(sys.stdout)
             ch.setLevel(logging.DEBUG)
 
             # create formatter
@@ -51,7 +53,7 @@ def prepare_logger(log_level,log_file_name):
                 fh.setLevel(log_level)
                 mylogger.addHandler(fh)
     else:
-        print("ERROR: Logger not initialisable.")
+        print("ERROR: Logger can't be initalized.")
     return mylogger
 
 
@@ -63,6 +65,7 @@ def log_all(log_level,key, message):
     if mylogger==None:
         mylogger = prepare_logger(general_log_level,main_log_file)
     mylogger.log(log_level,key+": "+message)
+    log_flush()
 
 # Only prints the message once and continues
 def log_once(log_level,key,message):
@@ -74,8 +77,9 @@ def log_once(log_level,key,message):
     if a == None:
         log_dict[key]=[1,message]
         mylogger.log(log_level,key+":" +message)
+        log_flush()
     else:
-        count=log_dict[key][0]
+        count=log_dict[key][0]+1
         mess=log_dict[key][1]
         log_dict[key]=[count,mess]
 

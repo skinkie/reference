@@ -49,4 +49,4 @@ if __name__ == "__main__":
         main(args.log_file)
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
-        raise e
+    log_write_counts(logging.INFO)
