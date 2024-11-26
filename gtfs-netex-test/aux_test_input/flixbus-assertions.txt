@@ -1,8 +1,12 @@
-# a comment
-# currently only working for netex
+# assertions used on NeTEx XML after converison from flixbus gtfs
 xpathcountgreater //* 1000
 xpathcountequal //netex:SiteFrame 1
 contains PublicationDelivery
 contains \d{4}-\d{2}-\d{2}
-xpathcountgreater //netex:StopPlace 10
+xpathcountgreater //netex:StopPlace 1000
+xpathcountgreater //netex:Line 1000
+xpathcountgreater //netex:ServiceJourney 20000
+contains flixtrain
+contains <Name>Venice - Zürich</Name>
+
 

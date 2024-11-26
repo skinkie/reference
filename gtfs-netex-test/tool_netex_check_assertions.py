@@ -15,7 +15,7 @@ def process_assertions(assertions_file, input_file):
     with open(input_file, 'r',encoding='utf-8') as file:
         input_content = file.read()
 
-    with open(assertions_file, 'r') as file:
+    with open(assertions_file, 'r',encoding='utf-8') as file:
         assertions = file.readlines()
     failed=0
     for assertion in assertions:
@@ -25,7 +25,7 @@ def process_assertions(assertions_file, input_file):
             log_print(f'comment: {comment}')
         elif assertion.startswith('contains'):
             regex = assertion.split(' ', 1)[1]
-            if re.search(regex, input_content):
+            if re.search(regex, input_content,flags=re.UNICODE):
                 log_print(f'Assertion PASSed: File contains regex "{regex}"')
             else:
                 log_all(logging.ERROR, "assertions", f'Assertion FAILed: File does not contain regex "{regex}"')
