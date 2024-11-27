@@ -85,7 +85,8 @@ def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
 
             if not hasattr(netex, obj.name_of_ref_class):
                 #hack for non-existing structures
-                print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+                log_all(logging.WARN, 'related_explorer', f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+
                 continue
 
             clazz = getattr(netex, obj.name_of_ref_class)
@@ -119,7 +120,7 @@ def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
                                 if len(resolved_objs) > 0:
                                     recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
                     else:
-                        print(f"Cannot resolve embedded {obj.ref}")
+                        log_all(logging.WARN, 'related_explorer',f"Cannot resolve embedded {obj.ref}")
 
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
@@ -164,7 +165,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
                 with open(output_filename, 'w', encoding='utf-8') as out:
                     serializer.write(out, publication_delivery, ns_map)
         else:
-            print(f"no such object found {object_type},{object_filter}")
+            log_all(logging.WARN, 'related_explorer',f"no such object found {object_type},{object_filter}")
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Export a prepared EPIP  import into DuckDB')
