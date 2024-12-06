@@ -11,7 +11,9 @@ from aux_logging import *
 from transformers.embedding import embedding_update
 
 
-def main(filenames: List[str], database: str, clean_database: bool = True, referencing: bool = False):
+def main(filenames: List[str], database: str, clean_database: bool = True, referencing: bool = False, log_file: str = None):
+    mylogger = prepare_logger(logging.INFO,args.log_file) if log_file else None
+
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
     if clean_database:
         try:
@@ -19,7 +21,7 @@ def main(filenames: List[str], database: str, clean_database: bool = True, refer
         except:
             pass
 
-    with Database(database, read_only=False) as db:
+    with Database(database, read_only=False, logger=mylogger) as db:
         classes = get_interesting_classes()
 
         if clean_database:
@@ -34,7 +36,6 @@ def main(filenames: List[str], database: str, clean_database: bool = True, refer
 
 if __name__ == '__main__':
     import argparse
-    global mylogger
     argument_parser = argparse.ArgumentParser(description='Import any NeTEx source into DuckDB')
     argument_parser.add_argument('netex', nargs='+', default=[], help='NeTEx files')
     argument_parser.add_argument('database', type=str, help='The DuckDB to be overwritten with the NeTEx context')
@@ -42,6 +43,5 @@ if __name__ == '__main__':
     argument_parser.add_argument('--referencing', action="store_false", help='Create referencing table')
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
-    mylogger = prepare_logger(logging.INFO,args.log_file)
 
-    main(args.netex, args.database, args.clean_database, args.referencing)
+    main(args.netex, args.database, args.clean_database, args.referencing, args.log_file)

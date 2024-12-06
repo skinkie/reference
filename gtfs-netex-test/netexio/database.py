@@ -1,3 +1,5 @@
+from logging import Logger
+
 import duckdb
 
 from netexio.pickleserializer import MyPickleSerializer
@@ -10,9 +12,10 @@ class Database:
     serializer: Serializer
     con: duckdb.DuckDBPyConnection
 
-    def __init__(self, database_file: str, read_only=True, serializer=MyPickleSerializer):
+    def __init__(self, database_file: str, read_only: bool=True, logger: Logger=None, serializer=MyPickleSerializer):
         self.database_file = database_file
         self.read_only = read_only
+        self.logger = logger
         self.serializer = serializer()
 
     def cursor(self):
