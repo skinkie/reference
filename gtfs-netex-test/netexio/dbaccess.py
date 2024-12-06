@@ -1,6 +1,6 @@
 import inspect
 import sys
-from typing import T, List, Generator
+from typing import T, List, Generator, Tuple
 
 import duckdb
 
@@ -16,6 +16,8 @@ import netex
 from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
     EntityInVersionStructure, DataSourceRef, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
+from netexio.database import Database
+from netexio.xmlserializer import MyXmlSerializer
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -23,12 +25,12 @@ context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
 parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
 
-serializer_config = SerializerConfig(ignore_default_attributes=True)
-serializer_config.indent = None
-serializer_config.xml_declaration = False
-serializer_config.ignore_default_attributes = True
-serializer = XmlSerializer(config=serializer_config)
-serializer.encoding = 'utf-8'
+# serializer_config = SerializerConfig(ignore_default_attributes=True)
+# serializer_config.indent = None
+# serializer_config.xml_declaration = False
+# serializer_config.ignore_default_attributes = True
+# serializer = XmlSerializer(config=serializer_config)
+# serializer.encoding = 'utf-8'
 
 # TODO: For all load_ functions filter by id + version, not only id
 
@@ -79,13 +81,13 @@ def load_referencing_inwards(con, clazz: T, filter, cursor=False):
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
 
-def load_local(con, clazz: T, limit=None, filter=None, cursor=False, embedding=True) -> List[T]:
+def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     try:
         if filter is not None:
@@ -98,27 +100,24 @@ def load_local(con, clazz: T, limit=None, filter=None, cursor=False, embedding=T
         pass
         # This is the situation where the type is not available at all in the catalogue
         if embedding:
-            return list(load_embedded_transparent_generator(con, clazz, limit, filter))
+            return list(load_embedded_transparent_generator(db, clazz, limit, filter))
         else:
             return []
 
     objs: List[T] = []
     for xml, in cur.fetchall():
-        if isinstance(xml, str):
-            obj = parser.from_string(xml, clazz)
-        else:
-            obj = parser.from_bytes(xml, clazz)
+        obj = db.serializer.unmarshall(xml, type)
         objs.append(obj)
 
     if embedding:
-        objs += list(load_embedded_transparent_generator(con, clazz, limit, filter))
+        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter))
 
     return objs
 
-def load_generator(con, clazz, limit=None, filter=None, embedding=True):
+def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
-    cur = con.cursor()
+    cur = db.cursor()
     try:
         if filter is not None:
             cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
@@ -129,63 +128,68 @@ def load_generator(con, clazz, limit=None, filter=None, embedding=True):
     except:
         pass
         if embedding:
-            yield from load_embedded_transparent_generator(con, clazz, limit, filter)
+            yield from load_embedded_transparent_generator(db, clazz, limit, filter)
         return
 
     while True:
         xml = cur.fetchone()
         if xml is None:
             break
-        if isinstance(xml[0], str):
-            yield parser.from_string(xml[0], clazz)
-        else:
-            yield parser.from_bytes(xml[0], clazz)
+        yield db.serializer.unmarshall(xml[0], type)
 
     if embedding:
-        yield from load_embedded_transparent_generator(con, clazz, limit, filter)
+        yield from load_embedded_transparent_generator(db, clazz, limit, filter)
 
 object_cache = {}
 
-def load_embedded_transparent_generator(con, clazz: T, limit=None, filter=None) -> List[T]:
+# Alternative implementation for attrgetter, handles list indices
+# from operator import attrgetter
+def resolve_attr(obj, attr):
+    for name in attr:
+        if isinstance(name, int):
+            obj = obj[name]
+        else:
+            obj = getattr(obj, name)
+    return obj
+
+def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
-    cur = con.cursor()
+    cur = db.cursor()
     try:
         if filter is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, type,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;", (filter, type,))
         elif limit is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class FROM embedded ORDER BY id LIMIT ?;", (limit,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded ORDER BY id LIMIT ?;", (limit,))
         else:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class FROM embedded WHERE class = ? ORDER BY id;", (type,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id;", (type,))
     except:
         return
 
     try:
-        cur2 = con.cursor()
+        cur2 = db.cursor()
         while True:
             result = cur.fetchone()
             if result is None:
                 break
 
-            parent_id, parent_version, parent_clazz = result
+            parent_id, parent_version, parent_clazz, path = result
             needle = '|'.join([parent_id, parent_version, parent_clazz])
 
             if needle not in object_cache:
                 cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? ORDER BY id LIMIT 1;", (parent_id, parent_version,))
                 object = cur2.fetchone()
-                object_cache[needle] = etree.fromstring(object[0])
+                object_cache[needle] = db.serializer.unmarshall(object[0], parent_clazz)
 
-            tree = object_cache[needle]
-            if tree is not None:
-                if filter is not None:
-                    elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}[@id='{filter}']")
-                else:
-                    elements = tree.findall(f".//{{{clazz.Meta.namespace}}}{type}")
+            obj = object_cache[needle]
+            if obj is not None:
+                split = []
+                for p in path.split('.'):
+                    if p.isnumeric():
+                        p = int(p)
+                    split.append(p)
+                yield resolve_attr(obj, split)
 
-                for element in elements:
-                    # print(clazz, etree.tounicode(element))
-                    obj = parser.from_string(etree.tounicode(element), clazz) # TODO: parsing directly from elementtree should be possible too
-                    yield obj
     except TypeError:
         pass
 
@@ -205,16 +209,16 @@ def load_lxml_generator(con, clazz, limit=None):
             break
         yield etree.fromstring(xml[0])
 
-def write_lxml_generator(con, clazz, generator: Generator):
+def write_lxml_generator(db: Database, clazz, generator: Generator):
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
-    cur = con.cursor()
+    cur = db.cursor()
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -254,11 +258,11 @@ def write_lxml_generator(con, clazz, generator: Generator):
 
     print('\n')
 
-def get_single(con, clazz: T, id, version=None, cursor=False) -> T:
+def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
@@ -273,22 +277,18 @@ def get_single(con, clazz: T, id, version=None, cursor=False) -> T:
 
     row = cur.fetchone()
     if row is not None:
-        if isinstance(row[0], str):
-            obj = parser.from_string(row[0], clazz)
-        else:
-            obj = parser.from_bytes(row[0], clazz)
-
+        obj = db.serializer.unmarshall(row[0], type)
         return obj
 
 
-def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False):
+def write_objects(db: Database, objs, empty=False, many=False, silent=False, cursor=False):
     if len(objs) == 0:
         return
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     clazz = objs[0].__class__
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
@@ -298,11 +298,11 @@ def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False
         cur.execute(sql_drop_table)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -310,21 +310,21 @@ def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False
         if many:
             print(objectname, len(objs))
             if hasattr(clazz, 'order'):
-                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
+                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)) for obj in objs])
             elif hasattr(clazz, 'version'):
-                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
+                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, db.serializer.marshall(obj, objectname)) for obj in objs])
             else:
                 cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);',
-                                [(obj.id, serializer.render(obj, ns_map).replace('\n', '')) for obj in objs])
+                                [(obj.id, db.serializer.marshall(obj, objectname)) for obj in objs])
         else:
             for i in range(0, len(objs)):
                 obj = objs[i]
                 if hasattr(clazz, 'order'):
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)))
                 elif hasattr(clazz, 'version'):
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, db.serializer.marshall(obj, objectname)))
                 else:
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, serializer.render(obj, ns_map).replace('\n', '')))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, db.serializer.marshall(obj, objectname)))
 
                 if not silent:
                     if i % 13 == 0:
@@ -336,8 +336,8 @@ def write_objects(con, objs, empty=False, many=False, silent=False, cursor=False
         # pass
 
 
-def write_generator(con, clazz, generator: Generator, empty=False):
-    cur = con.cursor()
+def write_generator(db: Database, clazz, generator: Generator, empty=False):
+    cur = db.cursor()
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if empty:
@@ -345,11 +345,11 @@ def write_generator(con, clazz, generator: Generator, empty=False):
         cur.execute(sql_drop_table)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -359,7 +359,7 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')
+            yield obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     def _prepare3(generator3, objectname):
@@ -368,7 +368,7 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')
+            yield obj.id, obj.version, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     def _prepare2(generator2, objectname):
@@ -377,23 +377,23 @@ def write_generator(con, clazz, generator: Generator, empty=False):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, serializer.render(obj, ns_map).replace('\n', '')
+            yield obj.id, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare4(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', a)
         else:
             cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare3(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', a)
         else:
             cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
     else:
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare2(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', a)
         else:
@@ -401,16 +401,16 @@ def write_generator(con, clazz, generator: Generator, empty=False):
 
     print('\n')
 
-def update_generator(con, clazz, generator: Generator):
-    cur = con.cursor()
+def update_generator(db: Database, clazz, generator: Generator):
+    cur = db.cursor()
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
 
     # This is not used effectively at this point, considering that DuckDB's ATTACH is not persistent
     # https://github.com/duckdb/duckdb-web/issues/3495
@@ -434,7 +434,7 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, obj.order, serializer.render(obj, ns_map).replace('\n', '')
+            yield obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     def _prepare3(generator3, objectname):
@@ -443,7 +443,7 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, obj.version, serializer.render(obj, ns_map).replace('\n', '')
+            yield obj.id, obj.version, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     def _prepare2(generator2, objectname):
@@ -452,23 +452,23 @@ def update_generator(con, clazz, generator: Generator):
             if i % 13 == 0:
                 print('\r', objectname, str(i), end='')
             i += 1
-            yield obj.id, serializer.render(obj, ns_map).replace('\n', '')
+            yield obj.id, db.serializer.marshall(obj, objectname)
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare4(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', a)
         else:
             cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare3(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', a)
         else:
             cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
     else:
-        if con.__class__.__name__ == 'DuckDBPyConnection':
+        if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare2(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', a)
         else:
@@ -513,28 +513,25 @@ def get_interesting_classes(filter=None):
 
     return clean_element_names, interesting_element_names
 
-def setup_database(con, classes, clean=False, cursor=False):
+def setup_database(db: Database, classes, clean=False, cursor=False):
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     clean_element_names, interesting_element_names = classes
 
     if clean:
-        # SQLITE
-        # cur.execute("PRAGMA writable_schema = 1;")
-        # cur.execute("DELETE FROM sqlite_master WHERE type IN ('table', 'index', 'trigger');")
-        # cur.execute("PRAGMA writable_schema = 0;")
-        # con.commit()
-
-        # DuckDB
         for objectname in clean_element_names:
             sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
             cur.execute(sql_drop_table)
         cur.execute("VACUUM;")
 
-    sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
+    print(sql_create_table)
+    cur.execute(sql_create_table)
+
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
     print(sql_create_table)
     cur.execute(sql_create_table)
 
@@ -547,18 +544,18 @@ def setup_database(con, classes, clean=False, cursor=False):
 
         if hasattr(clazz, 'order'):
             if ordr_opt:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object text NOT NULL, PRIMARY KEY (id, version));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
             else:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object text NOT NULL, PRIMARY KEY (id, version, ordr));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
 
         elif hasattr(clazz, 'version'):
             if version_opt:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object text NOT NULL, PRIMARY KEY (id));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
             else:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object text NOT NULL, PRIMARY KEY (id, version));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
 
         else:
-            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object text NOT NULL PRIMARY KEY (id));"
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL PRIMARY KEY (id));"
 
         print(sql_create_table)
         cur.execute(sql_create_table)
@@ -568,7 +565,36 @@ def get_local_name(element):
         return element.Meta.name
     return element.__name__
 
-def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=False):
+
+def update_embedded_referencing(con, object, inner_loop=None):
+    sql_insert_embedded = "INSERT OR REPLACE INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+    sql_insert_reference = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
+
+    for obj, path in recursive_attributes(object, []):
+        if inner_loop:
+            inner_loop(obj, path)
+
+        if hasattr(obj, 'id'):
+            if obj.id is not None:
+                con.execute(sql_insert_embedded, (
+                object.__class__.__name__, object.id, object.version, obj.__class__.__name__, obj.id,
+                obj.version if hasattr(obj, 'version') and obj.version is not None else 'any', obj.order if hasattr(obj, 'order') and obj.order is not None else 0,
+                '.'.join([str(s) for s in path])))
+        elif hasattr(obj, 'ref'):
+            if obj.ref is not None:
+                if obj.name_of_ref_class is None:
+                    # Hack, because NeTEx does not define the default name of ref class yet
+                    if obj.__class__.__name__.endswith('RefStructure'):
+                        obj.name_of_ref_class = obj.__class__.__name__[0:-12]
+                    elif obj.__class__.__name__.endswith('Ref'):
+                        obj.name_of_ref_class = obj.__class__.__name__[0:-3]
+
+                con.execute(sql_insert_reference, (
+                object.__class__.__name__, object.id, object.version, obj.name_of_ref_class, obj.ref,
+                obj.version if hasattr(obj, 'version') and obj.version is not None else 'any', obj.order if hasattr(obj, 'order') and obj.order is not None else 0))
+
+def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
+    xml_serializer = MyXmlSerializer()
     clsmembers = inspect.getmembers(netex, inspect.isclass)
     all_frames = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.VersionFrameVersionStructure in x[1].__mro__]
 
@@ -583,9 +609,9 @@ def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=Fals
         return
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     clean_element_names, interesting_element_names = classes
     clazz_by_name = {}
@@ -597,7 +623,6 @@ def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=Fals
 
     events = ("start", "end")
     context = etree.iterparse(f, events=events, remove_blank_text=True)
-    current_element = None
     current_element_tag = None
     current_framedefaults = None
     current_datasource_ref = None
@@ -611,7 +636,6 @@ def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=Fals
 
         if event == 'start':
             if current_element_tag is None and element.tag in interesting_element_names:
-                current_element = element
                 current_element_tag = element.tag
 
             elif localname == 'TypeOfFrameRef':
@@ -619,20 +643,6 @@ def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=Fals
                     # TODO: log a single warning that an unknown TypeOfFrame is found, and is not processed
                     print(f"{element.attrib['ref']} is not a known TypeOfFrame")
                     skip_frame = True
-
-            elif current_element is not None and 'id' in element.attrib:
-                parent_version = current_element.attrib.get('version', 'any')
-                version = element.attrib.get('version', 'any')
-                order = element.attrib.get('order', 0)
-                # print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
-
-                sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
-                try:
-                    cur.execute(sql_insert_object, (current_element_tag.split('}')[-1], current_element.attrib['id'], parent_version, localname, element.attrib['id'], version, order))
-                except:
-                    print(f"{current_element.attrib['id']} hosts {element.attrib['id']} {version} {order} {localname}")
-                    raise
-                    pass
 
             if localname in all_frames:
                 frame_defaults_stack.append(None)
@@ -698,88 +708,85 @@ def insert_database(con, classes, f=None, type_of_frame_filter=None, cursor=Fals
 
             if current_element_tag == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
                 if 'id' not in element.attrib:
-                    current_element = None
                     current_element_tag = None
                     # print(xml)
                     continue
-
-                xml = etree.tostring(element, encoding='unicode')
 
                 clazz = clazz_by_name[element.tag]
 
                 id = element.attrib['id']
 
-                if hasattr(clazz, 'order'):
-                    version = element.attrib.get('version', None)
-                    order = element.attrib.get('order', None)
+                version = element.attrib.get('version', None)
+                order = element.attrib.get('order', None)
+                object = xml_serializer.unmarshall(element, clazz)
 
-                    sql_insert_object = f"""INSERT INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
+                if hasattr(clazz, 'order'):
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
                     try:
-                        cur.execute(sql_insert_object, (id, version, order, xml,))
+                        cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
                     except:
-                        print("affected element")
-                        print(xml)
+                        print(etree.tostring(element))
                         raise
                         pass
-                        # TODO better fix for PassenderStopAssignments: We assume that they are the same. In reality we would need to check
-                        #if not localname =="PassengerStopAssignment":
-                        #    raise
-                        #    pass
 
                 elif hasattr(clazz, 'version'):
-                    version = element.attrib.get('version', None)
-
-                    sql_insert_object = f"""INSERT INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
                     try:
-                        cur.execute(sql_insert_object, (id, version, xml,))
+                        cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
                     except:
-                        if localname == 'ServiceJourney':
-                            print(xml)
-                            raise
-
+                        print(etree.tostring(element))
+                        raise
                         pass
 
                 else:
-                    sql_insert_object = f"""INSERT INTO {localname} (id, object) VALUES (?, ?);"""
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object) VALUES (?, ?);"""
                     try:
-                        cur.execute(sql_insert_object, (id, xml,))
+                        cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
                     except:
-                        print(xml)
+                        print(etree.tostring(element))
                         raise
                         pass
 
-                current_element = None
+                update_embedded_referencing(cur, object)
                 current_element_tag = None
 
 
-def recursive_attributes(obj):
+def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
+    # print(obj.__class__.__name__)
     if issubclass(obj.__class__, EntityInVersionStructure) and obj.data_source_ref_attribute is not None:
-        yield DataSourceRefStructure(ref=obj.data_source_ref_attribute)
+        yield DataSourceRefStructure(ref=obj.data_source_ref_attribute), depth + ['data_source_ref_attribute']
     if issubclass(obj.__class__, DataManagedObject) and obj.responsibility_set_ref_attribute is not None:
-        yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute)
+        yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute), depth + ['responsibility_set_ref_attribute']
 
-    # TODO: dataSourceRef-attribute, responsibilitySet-attribute
-    for k, v in obj.__dict__.items():
+    mydepth = depth.copy()
+    mydepth.append(0)
+    for key in obj.__dict__.keys():
+        mydepth[-1] = key
+        v = obj.__dict__.get(key, None)
         if v is not None:
             # print(v)
             if issubclass(v.__class__, VersionOfObjectRef) or issubclass(v.__class__, VersionOfObjectRefStructure):
-                yield v
+                yield v, mydepth
 
             else:
                 if (v.__class__.__name__ in netex.__all__ and hasattr(v, '__dict__')):
                     if hasattr(v, 'id'):
-                        yield v
-                    yield from recursive_attributes(v)
+                        yield v, mydepth
+                    yield from recursive_attributes(v, mydepth)
                 elif v.__class__ in (list, tuple):
-                    for x in v:
+                    mydepth.append(0)
+                    for j in range(0, len(v)):
+                        mydepth[-1] = j
+                        x = v[j]
                         if x is not None:
                             if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__,
                                                                                          VersionOfObjectRefStructure):
-                                yield x
+                                yield x, mydepth
                             elif (x.__class__.__name__ in netex.__all__ and hasattr(x, '__dict__')):
                                 if hasattr(x, 'id'):
-                                    yield x
-                                yield from recursive_attributes(x)
+                                    yield x, mydepth
+                                yield from recursive_attributes(x, mydepth)
+                    mydepth.pop()
 
 import inspect
 
@@ -832,7 +839,7 @@ def resolve_all_references(con, classes, cursor=False):
                     order = 0
 
 
-                sql_insert_object = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+                sql_insert_object = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                 try:
                     cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
                 except duckdb.duckdb.ConstraintException:
@@ -908,7 +915,7 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
                         order = 0
 
 
-                    sql_insert_object = "INSERT INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+                    sql_insert_object = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                     try:
                         cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
                     except duckdb.duckdb.ConstraintException:
