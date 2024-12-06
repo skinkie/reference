@@ -19,7 +19,7 @@ def infer_directions_from_sjps_and_apply(db_read: Database, db_write: Database, 
                 direction = Direction(id=getId(Direction, generator_defaults['codespace'], key),
                                       version='any',
                                       name=MultilingualString(value=key),
-                                      direction_type=DirectionType(value=sjp.direction_type))
+                                      direction_type=sjp.direction_type.value)
                 directions[key] = direction
                 direction_refs[key] = getRef(direction)
             sjp.direction_ref_or_direction_view = direction_refs[key]
