@@ -20,9 +20,7 @@ from netex import Line, ScheduledStopPoint, PassengerStopAssignment, Quay, StopP
     DayTypeAssignmentsRelStructure, OperatingPeriodRef, RouteView, RouteRef, LineRef, FlexibleLineRef, Route
 from netexio.database import Database
 
-from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, \
-    load_lxml_generator, \
-    write_lxml_generator, attach_objects
+from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, recursive_attributes
 from refs import getIndex, getRef, getId
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
@@ -383,6 +381,15 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                     flexible_line_ref_or_line_ref_or_line_view=route.line_ref)
                 sjps[service_journey_pattern.id] = service_journey_pattern
 
+                if service_journey_pattern.direction_type is None:
+                    service_journey_pattern.direction_type = route.direction_type.value
+
+                if service_journey_pattern.direction_ref_or_direction_view is None:
+                    service_journey_pattern.direction_ref_or_direction_view = route.direction_ref
+
+                if service_journey_pattern.distance is None:
+                    route.distance = service_journey_pattern.distance
+
         else:
             service_journey_pattern.route_ref_or_route_view = RouteView(flexible_line_ref_or_line_ref_or_line_view=sj_line_ref)
             sjps[service_journey_pattern.id] = service_journey_pattern
@@ -488,44 +495,36 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         # service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
         # write_objects(write_con, [service_calendar], True, False)
 
-"""
 def epip_remove_keylist_extensions(db_read: Database, db_write: Database, generator_defaults: dict):
-    def process(tree, keys: List):
-        for key in keys:
-            for element in tree.iterfind(key):
-                element.getparent().remove(element)
-        return tree
+    def process(deserialised, keys: List):
+        for obj, path in recursive_attributes(deserialised, []):
+            for key in keys:
+                if hasattr(obj, key):
+                    obj.key = None
+
+        return deserialised
 
     def query1(read_con) -> Generator:
         _load_generator = load_generator(read_con, StopPlace)
-        for tree in load_lxml_generator(write_con, StopPlace):
-            yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
-
+        for obj in _load_generator:
+            yield process(obj, ['key_list', 'extensions'])
 
     def query2(read_con) -> Generator:
         _load_generator = load_generator(read_con, ScheduledStopPoint)
-        for tree in load_lxml_generator(write_con, ScheduledStopPoint):
-            yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
+        for obj in _load_generator:
+            yield process(obj, ['key_list', 'extensions'])
 
     def query3(read_con) -> Generator:
         _load_generator = load_generator(read_con, ServiceJourneyPattern)
-        for tree in load_lxml_generator(write_con, ServiceJourneyPattern):
-            yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
+        for obj in _load_generator:
+            yield process(obj, ['key_list', 'extensions'])
 
     def query4(read_con) -> Generator:
         _load_generator = load_generator(read_con, ServiceJourney)
-        for tree in load_lxml_generator(write_con, ServiceJourney):
-            yield process(tree, [".//{http://www.netex.org.uk/netex}keyList", ".//{http://www.netex.org.uk/netex}Extensions"])
+        for obj in _load_generator:
+            yield process(obj, ['key_list', 'extensions'])
 
-    # TODO: Make the database access pattern generic.
-    with sqlite3.connect(write_database) as write_con:
-        if write_database == read_database:
-            read_con = write_con
-        else:
-            read_con = sqlite3.connect(read_database, read_only=True)
-
-        write_lxml_generator(write_con, StopPlace, query1(read_con))
-        write_lxml_generator(write_con, ScheduledStopPoint, query2(read_con))
-        write_lxml_generator(write_con, ServiceJourneyPattern, query3(read_con))
-        write_lxml_generator(write_con, ServiceJourney, query4(read_con))
-"""
+    write_generator(db_write, StopPlace, query1(db_read))
+    write_generator(db_write, ScheduledStopPoint, query2(db_read))
+    write_generator(db_write, ServiceJourneyPattern, query3(db_read))
+    write_generator(db_write, ServiceJourney, query4(db_read))
