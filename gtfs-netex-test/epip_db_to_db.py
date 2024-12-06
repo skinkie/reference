@@ -7,9 +7,11 @@ from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from anyintodbnew import setup_database, get_interesting_classes
+from anyintodbnew import get_interesting_classes
 
 from netex import Codespace, AvailabilityCondition
+from netexio.database import Database
+from netexio.dbaccess import setup_database
 from netexio.dbaccess import attach_source, attach_objects
 
 from transformers.direction import infer_directions_from_sjps_and_apply
@@ -27,7 +29,7 @@ serializer = XmlSerializer(config=serializer_config)
 
 import netex_monkeypatching
 from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory, epip_site_frame_memory, \
-    epip_service_journey_generator, epip_remove_keylist_extensions
+    epip_service_journey_generator
 
 from transformers.epip import EPIP_CLASSES
 from aux_logging import *
@@ -36,15 +38,18 @@ generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # In
 
 def main(source_database_file: str, target_database_file: str):
     classes = get_interesting_classes(filter=EPIP_CLASSES)
-    with sqlite3.connect(target_database_file) as con:
-        setup_database(con, classes, True)
+
+    with Database(target_database_file, read_only=False) as target_db:
+        setup_database(target_db, classes, True)
         # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
-    epip_line_memory(source_database_file, target_database_file, generator_defaults)
-    infer_locations_from_quay_or_stopplace_and_apply(source_database_file, target_database_file, generator_defaults)
-    epip_scheduled_stop_point_memory(target_database_file, target_database_file, generator_defaults)
-    epip_site_frame_memory(source_database_file, target_database_file, generator_defaults)
-    epip_service_journey_generator(source_database_file, target_database_file, generator_defaults, None)
-    infer_directions_from_sjps_and_apply(target_database_file, target_database_file, generator_defaults)
+
+        with Database(source_database_file, read_only=True) as source_db:
+            epip_line_memory(source_db, target_db, generator_defaults)
+            infer_locations_from_quay_or_stopplace_and_apply(source_db, target_db, generator_defaults)
+            epip_scheduled_stop_point_memory(target_db, target_db, generator_defaults)
+            epip_site_frame_memory(source_db, target_db, generator_defaults)
+            epip_service_journey_generator(source_db, target_db, generator_defaults, None)
+            infer_directions_from_sjps_and_apply(target_db, target_db, generator_defaults)
 
 if __name__ == '__main__':
     import argparse
