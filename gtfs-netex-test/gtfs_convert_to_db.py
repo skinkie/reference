@@ -40,7 +40,8 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure
 
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
-
+from aux_logging import *
+import traceback
 
 def get_or_none(l: list, i: int, cast_clazz=None):
     if l is None:
@@ -1559,6 +1560,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert a GTFS database to a NeTEx database')
     parser.add_argument('gtfs', type=str, help='GTFS database to convert, for example: gtfs-import.duckdb')
     parser.add_argument('database', type=str, help='DuckDB file to overwrite and store contents of the conversion.')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
+    mylogger = prepare_logger(logging.INFO, args.log_file)
 
-    main(args.gtfs, args.database)
+    try:
+        main(args.gtfs, args.database)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
+

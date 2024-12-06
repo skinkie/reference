@@ -30,7 +30,8 @@ from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 import csv
 
 import zipfile
-
+from aux_logging import *
+import traceback
 
 def convert(archive, database: str):
     agencies = {}
@@ -206,7 +207,12 @@ if __name__ == '__main__':
     argument_parser = argparse.ArgumentParser(description='Convert prepared DuckDB database into GTFS')
     argument_parser.add_argument('netex', type=str, help='The original DuckDB NeTEx database')
     argument_parser.add_argument('gtfs', type=str, help='The DuckDB to be overwritten with the NeTEx context')
+    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
+    mylogger = prepare_logger(logging.INFO, args.log_file)
 
-    with zipfile.ZipFile(args.gtfs, 'w') as archive:
-        convert(archive, args.netex)
+    try:
+        with zipfile.ZipFile(args.gtfs, 'w') as archive:
+            convert(archive, args.netex)
+    except Exception as e:
+        log_all(logging.ERROR,f'{e}',traceback.format_exc())

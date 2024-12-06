@@ -1,0 +1,81 @@
+[
+  {
+    "block": "blablacar",
+    "url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
+    "description":"Blablacar data",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "gtfs_import_to_db.py", "args": "d:/input/blablacar.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
+        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex3-database.duckdb"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex3-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 10 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
+        ]
+  },
+
+{
+    "block": "swissmikro",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "gtfs_import_to_db.py", "args": "d:/input/swiss_mikro.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
+        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/sj.xml %%dir%%/netex3-database.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex3-database.duckdb %%dir%%/netex4-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex3-database.duckdb %%dir%%/netex4-database.duckdb %%dir%%/%%block%%-sj-netex.xml"}
+        ]
+  },
+  {
+    "block": "flixbus",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "gtfs_import_to_db.py", "args": "--log=%%log%% d:/input/flixbus.zip %%dir%%/gtfs-import.duckdb"},
+        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/flixbus-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex3-database.duckdb"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex3-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 10 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
+        ]
+  },
+
+       {
+    "block": "swiss4",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "swiss_to_db.py", "args": "--log=%%log%% d:/input/swiss4.zip %%dir%%/swiss-import.duckdb"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/swiss-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj1.xml"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb ServiceJourney random %%dir%%/sj2.xml"}
+        ]
+  },
+  {
+    "block": "logtest",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "tool_test_logger.py", "args": " --log=%%log%% "}
+        ]
+  }
+]

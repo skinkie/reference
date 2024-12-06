@@ -14,7 +14,7 @@ from netexio.dbaccess import attach_source, attach_objects
 
 from transformers.direction import infer_directions_from_sjps_and_apply
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
-
+import traceback
 context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
 parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
@@ -26,10 +26,11 @@ serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config)
 
 import netex_monkeypatching
-
 from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory, epip_site_frame_memory, \
     epip_service_journey_generator, epip_remove_keylist_extensions
+
 from transformers.epip import EPIP_CLASSES
+from aux_logging import *
 
 generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
 
@@ -50,6 +51,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Transform the input into mandatory objects for the export of EPIP')
     parser.add_argument('source', type=str, help='DuckDB file to use as input of the transformation.')
     parser.add_argument('target', type=str, help='DuckDB file to overwrite and store contents of the transformation.')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
-
-    main(args.source, args.target)
+    mylogger =prepare_logger(logging.INFO,args.log_file)
+    try:
+        main(args.source, args.target)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
