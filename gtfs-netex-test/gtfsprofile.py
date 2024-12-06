@@ -20,7 +20,7 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
 
 import operator as operator_f
 from aux_logging import *
-from configuration import DefaultAuthority, DefaultTimezone
+from configuration import defaults
 class GtfsProfile:
 
     empty_stop_time = {'trip_id': None, 'arrival_time': None, 'departure_time': None, 'stop_id': None,
@@ -144,8 +144,8 @@ class GtfsProfile:
     def projectAuthorityToAgency(authority: Authority) -> dict:
         agency = {'agency_id': authority.id,
                   'agency_name': GtfsProfile.getOptionalMultilingualString(authority.name) or GtfsProfile.getOptionalMultilingualString(authority.short_name),
-                  'agency_url': GtfsProfile.getOrNone(authority, "contact_details.url") or DefaultAuthority, # TODO: FrameDefaults
-                  'agency_timezone': GtfsProfile.getOrNone(authority, "locale.time_zone") or DefaultTimezone, # TODO: FrameDefaults
+                  'agency_url': GtfsProfile.getOrNone(authority, "contact_details.url") or defaults["authority"],  # TODO: FrameDefaults
+                  'agency_timezone': GtfsProfile.getOrNone(authority, "locale.time_zone") or defaults["timezone"],  # TODO: FrameDefaults
                   'agency_lang': GtfsProfile.getOrNone(authority, "locale.default_language"),
                   'agency_phone': GtfsProfile.getOrNone(authority, "contact_details.phone"),
                   'agency_fare_url': '',

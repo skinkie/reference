@@ -13,10 +13,11 @@ processing_data = "d:/aux_testing_processing"
 main_log_file = "aux.log" # in the processing_data folder
 
 # FrameDefaults
-DefaultAuthority="http://openov.nl/"
-DefaultTimezone="Europe/Amsterdam"
-DefaultFeedPublisherName="Publication Delivery"
-DefaultFeedPublisherURL="http://publicationdelivery.eu"
+defaults = {}
+defaults["authority"]= "http://openov.nl/"
+defaults["timezone"]= "Europe/Amsterdam"
+defaults["feed_publisher_name"]= "Publication Delivery"
+defaults["feed_publisher_url"]= "http://publicationdelivery.eu"
 
 # a local configuration overwrites the general one. The local_configuration must not be added to github
 try:

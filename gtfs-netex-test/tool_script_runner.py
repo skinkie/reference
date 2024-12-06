@@ -8,6 +8,7 @@ from aux_logging import *
 from configuration import *
 import traceback
 
+
 def replace_in_string(input, search, replace):
     return input.replace(search, replace)
 
@@ -55,6 +56,19 @@ def clean(directory):
                 log_print (f'Could not remove {item_path}')
 
 
+def parse_key_value_pairs(string):
+    pairs = {}
+    for pair in string.split(';'):
+        key_value = pair.split('=')
+        if len(key_value) == 2:
+            key = key_value[0].strip()
+            value = key_value[1].strip().strip('"').strip("'")  # Remove surrounding quotes from value
+            pairs[key] = value
+    return pairs
+def set_defaults(keyvaluestr):
+    result= parse_key_value_pairs(keyvaluestr)
+    # replace what is not yet in defaults
+    defaults.update(result)
 
 def main(script_file,log_file, log_level, todo_block,begin_step):
     # blockexisted
@@ -104,6 +118,12 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
 
             if script_name.startswith("#"):
                 # is a comment and we do nothing
+                continue
+
+            if script_name == 'set_defaults':
+                # Sets default values (when not done in configuration.py or local_configuration.py)
+                set_defaults(script_args)
+                log_all(logging.INFO, "test_runner", f"Command 'set_defaults' executed for: {script_args}\n")
                 continue
 
             if script_name == 'clean_tmp':
