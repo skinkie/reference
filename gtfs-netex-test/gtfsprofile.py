@@ -6,8 +6,8 @@ from typing import List, Union
 import io
 from pyproj import Transformer
 from xsdata.models.datatype import XmlDateTime, XmlDuration
-
 from transformers.projection import project_location_4326
+
 from utils import to_seconds
 
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \
@@ -19,7 +19,7 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
     AvailabilityCondition, DayType, DayOfWeekEnumeration
 
 import operator as operator_f
-
+from aux_logging import *
 class GtfsProfile:
 
     empty_stop_time = {'trip_id': None, 'arrival_time': None, 'departure_time': None, 'stop_id': None,
@@ -410,7 +410,7 @@ class GtfsProfile:
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
         if scheduled_stop_point.location is None:
-            print(f"SSP {scheduled_stop_point.id} does not have a location.")
+            log_once(logging.WARNING,"gtfsprofile",f"SSP {scheduled_stop_point.id} does not have a location.")
             # TODO: Maybe by parent?
             return None
 
@@ -443,7 +443,7 @@ class GtfsProfile:
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
         if stop_entrance.centroid is None or stop_entrance.centroid.location is None:
-            print(f"StopPlaceEntrance {stop_entrance.id} does not have a location or centroid.")
+            log_once(logging.WARNING,"gtfsprofile: StopPlaceEntrance",f"StopPlaceEntrance {stop_entrance.id} does not have a location or centroid.")
             # TODO: Maybe by parent?
             return None
 
@@ -653,7 +653,7 @@ class GtfsProfile:
             if not stop_place.centroid:  # TODO this is a bad fix for a bad data problem. The correct way would be to omit this kind of StopPlace or to feed the coordinates from the SceduledStopPlace via PSA
                 latitude = 0
                 longitude = 0
-                print(f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
+                log_once(logging.WARNING,"gtfsprofile: StopPlace",f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
             else:
                 project_location_4326(stop_place.centroid.location)
                 latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude

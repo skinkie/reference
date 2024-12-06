@@ -1,3 +1,5 @@
+from netex import StopPointInJourneyPattern, Quay
+
 class test():
     @staticmethod
     def get_or_none(l: list, i: int):
@@ -36,3 +38,5 @@ class test():
                 results.append(operator)
 
         return results
+
+

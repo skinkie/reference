@@ -93,9 +93,9 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         if filter is not None:
             cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
         elif limit is not None:
-            cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
+            cur.execute(f"SELECT object FROM {type} ORDER BY id LIMIT {limit};")
         else:
-            cur.execute(f"SELECT object FROM {type};")
+            cur.execute(f"SELECT object FROM {type} ORDER BY id;")
     except:
         pass
         # This is the situation where the type is not available at all in the catalogue
@@ -122,9 +122,9 @@ def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True)
         if filter is not None:
             cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
         elif limit is not None:
-            cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
+            cur.execute(f"SELECT object FROM {type} ORDER BY id LIMIT {limit};")
         else:
-            cur.execute(f"SELECT object FROM {type};")
+            cur.execute(f"SELECT object FROM {type} ORDER BY id;")
     except:
         pass
         if embedding:
@@ -160,9 +160,9 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
         if filter is not None:
             cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;", (filter, type,))
         elif limit is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded LIMIT ?;", (limit,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded ORDER BY id LIMIT ?;", (limit,))
         else:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ?;", (type,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id;", (type,))
     except:
         return
 
@@ -310,21 +310,21 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
         if many:
             print(objectname, len(objs))
             if hasattr(clazz, 'order'):
-                cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)) for obj in objs])
+                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)) for obj in objs])
             elif hasattr(clazz, 'version'):
-                cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, db.serializer.marshall(obj, objectname)) for obj in objs])
+                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, db.serializer.marshall(obj, objectname)) for obj in objs])
             else:
-                cur.executemany(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);',
+                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);',
                                 [(obj.id, db.serializer.marshall(obj, objectname)) for obj in objs])
         else:
             for i in range(0, len(objs)):
                 obj = objs[i]
                 if hasattr(clazz, 'order'):
-                    cur.execute(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)))
                 elif hasattr(clazz, 'version'):
-                    cur.execute(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, db.serializer.marshall(obj, objectname)))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, db.serializer.marshall(obj, objectname)))
                 else:
-                    cur.execute(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, db.serializer.marshall(obj, objectname)))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, db.serializer.marshall(obj, objectname)))
 
                 if not silent:
                     if i % 13 == 0:

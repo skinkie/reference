@@ -16,10 +16,13 @@ import netex
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
     GeneralFrameMembersRelStructure, AvailabilityConditionRef, Route, ServiceJourneyPattern
+import netex_monkeypatching
 import duckdb as sqlite3
 from mro_attributes import list_attributes
 import xsdata
-
+from aux_logging import *
+import logging
+import traceback
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
@@ -82,7 +85,8 @@ def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
 
             if not hasattr(netex, obj.name_of_ref_class):
                 #hack for non-existing structures
-                print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+                log_all(logging.WARN, 'related_explorer', f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+
                 continue
 
             clazz = getattr(netex, obj.name_of_ref_class)
@@ -116,7 +120,7 @@ def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
                                 if len(resolved_objs) > 0:
                                     recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
                     else:
-                        print(f"Cannot resolve embedded {obj.ref}")
+                        log_all(logging.WARN, 'related_explorer',f"Cannot resolve embedded {obj.ref}")
 
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
     with sqlite3.connect(database) as con:
@@ -161,7 +165,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
                 with open(output_filename, 'w', encoding='utf-8') as out:
                     serializer.write(out, publication_delivery, ns_map)
         else:
-            print(f"no such object found {object_type},{object_filter}")
+            log_all(logging.WARN, 'related_explorer',f"no such object found {object_type},{object_filter}")
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Export a prepared EPIP  import into DuckDB')
@@ -169,6 +173,12 @@ if __name__ == '__main__':
     argument_parser.add_argument('object_type', type=str, help='The NeTEx object type to filter, for example ServiceJourney')
     argument_parser.add_argument('object_filter', type=str, help='The object filter to apply.')
     argument_parser.add_argument('output', type=str, nargs="?", default="-", help='The NeTEx output filename, for example: netex.xml.gz')
+    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
+    try:
+        fetch(args.netex, args.object_type, args.object_filter, args.output)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
 
-    fetch(args.netex, args.object_type, args.object_filter, args.output)

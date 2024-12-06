@@ -9,7 +9,7 @@ from netex import Polygon, PosList, Pos, LocationStructure2
 transformers = {}
 
 def get_transformer_by_srs_name(location, crs_to) -> Transformer:
-    if location.pos is not None:
+    if hasattr(location, 'pos') and location.pos is not None:
         srs_name = location.pos.srs_name or location.srs_name or 'urn:ogc:def:crs:EPSG::4326'
     else:
         srs_name = location.srs_name or 'urn:ogc:def:crs:EPSG::4326'
@@ -21,7 +21,7 @@ def get_transformer_by_srs_name(location, crs_to) -> Transformer:
     transformer = transformers.setdefault(mapping, None)
     if transformer is None:
         try:
-            transformer = Transformer.from_crs(srs_name, crs_to)
+            transformer = Transformer.from_crs(srs_name, crs_to) # TODO: Test if we can use accuracy instead of quantitize later
         except CRSError:
             # TODO: Implement logging rule that handles error
             raise
@@ -90,11 +90,12 @@ def project_linestring2(transformer, linestring):
 
     if srs_dimension == 2:
         pxx, pyy = transformer.transform(xx, yy)
-        linestring.pos_or_point_property_or_pos_list = [PosList(value=list(chain(*zip(pxx, pyy))), srs_dimension=srs_dimension)]
+        linestring.pos_or_point_property_or_pos_list = [PosList(value=[Decimal(value).quantize(Decimal('0.000001'), ROUND_HALF_UP) for value in chain(*zip(pxx, pyy))], srs_dimension=srs_dimension)]
     elif srs_dimension == 3:
         pxx, pyy, pzz = transformer.transform(xx, yy, zz)
-        linestring.pos_or_point_property_or_pos_list = [PosList(value=list(chain(*zip(pxx, pyy, pzz))), srs_dimension=srs_dimension)]
+        linestring.pos_or_point_property_or_pos_list = [PosList(value=[Decimal(value).quantize(Decimal('0.000001'), ROUND_HALF_UP) for value in chain(*zip(pxx, pyy, pzz))], srs_dimension=srs_dimension)]
 
+    # TODO: I would really want to apply the crs_to here
 
 def project_polygon(polygon: Polygon, crs_to):
     mapping = f"{polygon.srs_name}_{crs_to}"
