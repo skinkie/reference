@@ -32,7 +32,7 @@ import csv
 import zipfile
 from aux_logging import *
 import traceback
-
+from configuration import DefaultFeedPublisherName, DefaultFeedPublisherURL
 def convert(archive, database: str):
     agencies = {}
     used_agencies = set([])
@@ -190,8 +190,8 @@ def convert(archive, database: str):
         GtfsProfile.writeToZipFile(archive, 'transfers.txt', transfers, write_header=True)
 
         GtfsProfile.writeToZipFile(archive,'feed_info.txt', [{
-            'feed_publisher_name': datasources[0].name.value if len(datasources) > 0 else 'Publication Delivery',
-            'feed_publisher_url': codespaces[0].xmlns_url if len(codespaces) > 0 else 'http://publicationdelivery.eu',
+            'feed_publisher_name': datasources[0].name.value if len(datasources) > 0 else DefaultFeedPublisherName,
+            'feed_publisher_url': codespaces[0].xmlns_url if len(codespaces) > 0 else DefaultFeedPublisherURL,
             'feed_lang': 'en', # TODO
             'default_lang': 'en', # TODO
             'feed_start_date': str(datetime.date.today()).replace('-', ''),
