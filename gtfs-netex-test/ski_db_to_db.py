@@ -54,7 +54,7 @@ from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory
 
 from swiss_to_db import SWISS_CLASSES
 
-generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1, 'DefaultLocationsystem': 'EPSG:4326'} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
+generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
 
 def main(source_database_file: str):
     infer_operator_from_responsibilityset_and_apply(source_database_file, source_database_file, generator_defaults)

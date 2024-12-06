@@ -12,7 +12,8 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
 
 from callsprofile import CallsProfile
-from netexio.dbaccess import write_objects, write_generator
+from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, resolve_all_references, \
+    resolve_all_references_and_embeddings
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
     VersionTypeEnumeration, LocaleStructure, SystemOfUnits, Operator, ContactStructure, Locale, LanguageUsageStructure, \
     LanguageUseEnumeration, Line, PresentationStructure, AllVehicleModesOfTransportEnumeration, PrivateCode, \
@@ -39,7 +40,8 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure
 
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
-
+from aux_logging import *
+import traceback
 
 def get_or_none(l: list, i: int, cast_clazz=None):
     if l is None:
@@ -1643,11 +1645,23 @@ def main(database_gtfs: str, database_netex: str):
     with duckdb.connect(database_netex) as con:
         gtfs.database(con)
 
+        # TODO: Maybe do something here specifically for GTFS-classes
+        classes = get_interesting_classes()
+        resolve_all_references_and_embeddings(con, classes)
+
+
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Convert a GTFS database to a NeTEx database')
     parser.add_argument('gtfs', type=str, help='GTFS database to convert, for example: gtfs-import.duckdb')
     parser.add_argument('database', type=str, help='DuckDB file to overwrite and store contents of the conversion.')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
+    mylogger = prepare_logger(logging.INFO, args.log_file)
 
-    main(args.gtfs, args.database)
+    try:
+        main(args.gtfs, args.database)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e

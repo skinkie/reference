@@ -1,3 +1,4 @@
+import math
 import random
 import time
 import zipfile
@@ -5,7 +6,8 @@ import zipfile
 import folium
 import pandas as pd
 from folium.plugins import MarkerCluster, Search
-
+from aux_logging import *
+import traceback
 
 # Generate a random dark color
 def generate_random_dark_color():
@@ -15,7 +17,12 @@ def generate_random_dark_color():
     return '#%02x%02x%02x' % (r, g, b)
 
 
-def main(gtfs_zip_file, map_file, limitation):
+def main(gtfs_zip_file, map_file, limitation,log_file):
+    global mylogger
+    global processing_data
+    if log_file == None:
+        log_file="gtfs_show_map.log"
+    mylogger=prepare_logger(logging.INFO,log_file)
     # Read GTFS files using pandas
     # Read the GTFS files directly from the ZIP archive using pandas
     start_time = time.time()
@@ -186,7 +193,10 @@ def handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_di
         if not no_sub:
             stop_coords_list.append(stop_coords)
             stop_coords_list_str.append(array_of_array_to_string(stop_coords))
-            route_names.append(route_name_dict['route_short_name'] + " to " + trip_name)
+            if math.isnan(trip_name):
+                route_names.append(route_name_dict['route_short_name'])
+            else:
+                route_names.append(route_name_dict['route_short_name'] + " to " + trip_name)
 
 
 def array_of_array_to_string(array_of_arrays):
@@ -201,9 +211,17 @@ if __name__ == "__main__":
     parser.add_argument('map_file', type=str, help='output file (.html)')
     parser.add_argument('--limitation', type=int, required=False,
                         help='output every <argument> route (all trips of route)')
+    parser.add_argument('--log_file', type=str, required=False,
+                        help='the logfile')
     args = parser.parse_args()
+    mylogger = prepare_logger(logging.INFO, args.log_file)
+    try:
+        if args.limitation:
+            main(args.gtfs_zip_file, args.map_file, args.limitation, args.log_file)
+        else:
+            main(args.gtfs_zip_file, args.map_file, None, args.log_file)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
 
-    if args.limitation:
-        main(args.gtfs_zip_file, args.map_file, args.limitation)
-    else:
-        main(args.gtfs_zip_file, args.map_file, None)
+

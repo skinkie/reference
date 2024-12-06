@@ -1,10 +1,13 @@
 import csv
 import datetime
+import re
 import warnings
 from typing import List, Union
 import io
 from pyproj import Transformer
 from xsdata.models.datatype import XmlDateTime, XmlDuration
+from transformers.projection import project_location_4326
+
 from utils import to_seconds
 
 from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeration, InfoLinksRelStructure, \
@@ -12,10 +15,11 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
     PrivateCode, PrivateCodeStructure, Quay, PresentationStructure, Authority, Branding, Operator, ServiceJourney, \
     ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
     ServiceLink, PublicCodeStructure, StopPlaceEntrance, TemplateServiceJourney, HeadwayJourneyGroup, \
-    JourneyFrequencyGroupVersionStructure, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting
+    JourneyFrequencyGroupVersionStructure, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
+    AvailabilityCondition, DayType, DayOfWeekEnumeration
 
 import operator as operator_f
-
+from aux_logging import *
 class GtfsProfile:
 
     empty_stop_time = {'trip_id': None, 'arrival_time': None, 'departure_time': None, 'stop_id': None,
@@ -128,8 +132,11 @@ class GtfsProfile:
     @staticmethod
     def getOptionalPresentation(presentation: PresentationStructure, attrib: str):
         if presentation is not None:
-            return getattr(presentation, attrib, '').hex()
-
+            op=getattr(presentation, attrib, '')
+            if not op==None:
+                return op.hex()
+            else:   # sometimes it seems that some attribute is not set
+                return None
         return None
 
     @staticmethod
@@ -403,13 +410,14 @@ class GtfsProfile:
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
         if scheduled_stop_point.location is None:
-            print(f"SSP {scheduled_stop_point.id} does not have a location.")
+            log_once(logging.WARNING,"gtfsprofile",f"SSP {scheduled_stop_point.id} does not have a location.")
             # TODO: Maybe by parent?
             return None
 
         if transformer:
             latitude, longitude = transformer.transform(scheduled_stop_point.location.pos.value[0], scheduled_stop_point.location.pos.value[1])
         else:
+            project_location_4326(scheduled_stop_point.location)
             latitude, longitude = scheduled_stop_point.location.latitude, scheduled_stop_point.location.longitude
 
         stop = {'stop_id': scheduled_stop_point.id,
@@ -434,14 +442,15 @@ class GtfsProfile:
     def projectStopEntranceToStop(stop_entrance: StopPlaceEntrance, parent: StopPlaceRef, transformer: Transformer = None):
         # TODO: parent_station could be obtained from StopPlace or StopArea
 
-        if stop_entrance.centroid.location is None:
-            print(f"StopPlaceEntrance {stop_entrance.id} does not have a location.")
+        if stop_entrance.centroid is None or stop_entrance.centroid.location is None:
+            log_once(logging.WARNING,"gtfsprofile: StopPlaceEntrance",f"StopPlaceEntrance {stop_entrance.id} does not have a location or centroid.")
             # TODO: Maybe by parent?
             return None
 
         if transformer:
             latitude, longitude = transformer.transform(stop_entrance.centroid.location.pos.value[0], stop_entrance.centroid.location.pos.value[1])
         else:
+            project_location_4326(stop_entrance.centroid.location)
             latitude, longitude = stop_entrance.centroid.location.latitude, stop_entrance.centroid.location.longitude
 
         stop = {'stop_id': stop_entrance.id,
@@ -461,6 +470,31 @@ class GtfsProfile:
         }
 
         return stop
+
+    @staticmethod
+    def getCalendarAndCalendarDates(service_id, availability_condition: AvailabilityCondition):
+        if availability_condition.valid_day_bits is not None:
+            operational_dates = [availability_condition.from_date.to_datetime() + datetime.timedelta(days=i) for i in range(0, len(availability_condition.valid_day_bits)) if availability_condition.valid_day_bits[i] == '1']
+            for date in operational_dates:
+                yield tuple((None, {'service_id': service_id, 'date': str(date.date()).replace('-', ''), 'exception_type': 1 if (True if availability_condition.is_available is None else availability_condition.is_available) else 2},))
+
+        elif availability_condition.day_types is not None and len(availability_condition.day_types.day_type_ref_or_day_type) == 1 and isinstance(availability_condition.day_types.day_type_ref_or_day_type[0], DayType):
+            day_type: DayType = availability_condition.day_types.day_type_ref_or_day_type[0]
+            days_of_week = day_type.properties.property_of_day[0].days_of_week
+
+            yield tuple(({'service_id': service_id,
+                   'monday': int(DayOfWeekEnumeration.MONDAY in days_of_week),
+                   'tuesday': int(DayOfWeekEnumeration.TUESDAY in days_of_week),
+                   'wednesday': int(DayOfWeekEnumeration.WEDNESDAY in days_of_week),
+                   'thursday': int(DayOfWeekEnumeration.THURSDAY in days_of_week),
+                   'friday': int(DayOfWeekEnumeration.FRIDAY in days_of_week),
+                   'saturday': int(DayOfWeekEnumeration.SATURDAY in days_of_week),
+                   'sunday': int(DayOfWeekEnumeration.SUNDAY in days_of_week),
+                   'start_date': str(availability_condition.from_date.to_datetime().date()).replace('-', ''),
+                   'end_date': str(availability_condition.to_date.to_datetime().date()).replace('-', '')}, None,))
+
+        else:
+            warnings.warn("This availability condition does not match the GTFS profile")
 
     @staticmethod
     def getCalendarDates(service_id, dates: List[datetime.datetime]):
@@ -486,7 +520,11 @@ class GtfsProfile:
             service_id = service_journey.day_types.day_type_ref[0].ref
         else:
             # TODO: Handle valid between
-            service_id = '+'.join([vc.ref for vc in service_journey.validity_conditions_or_valid_between[0].choice])
+            ids = []
+            for vc in service_journey.validity_conditions_or_valid_between[0].choice:
+                ids.append(re.sub('_[12]$', '', vc.ref))
+
+            service_id = '+'.join(list(set(ids)))
 
         trip = {'route_id': GtfsProfile.getLineRef(service_journey, service_journey_pattern),
                 'service_id': service_id,  # TODO: Guard for duplicates, and AvailabilityCondition
@@ -585,6 +623,7 @@ class GtfsProfile:
         if transformer:
             latitude, longitude = transformer.transform(stop_area.centroid.location.pos.value[0], stop_area.centroid.location.pos.value[1])
         else:
+            project_location_4326(stop_area.centroid.location)
             latitude, longitude = stop_area.centroid.location.latitude, stop_area.centroid.location.longitude
 
         stop = {'stop_id': stop_area.id,
@@ -607,10 +646,17 @@ class GtfsProfile:
 
     @staticmethod
     def projectStopPlaceToStop(stop_place: StopPlace, transformer: Transformer = None) -> dict:
+        # TODO: Maybe remove?
         if transformer:
             latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
         else:
-            latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
+            if not stop_place.centroid:  # TODO this is a bad fix for a bad data problem. The correct way would be to omit this kind of StopPlace or to feed the coordinates from the SceduledStopPlace via PSA
+                latitude = 0
+                longitude = 0
+                log_once(logging.WARNING,"gtfsprofile: StopPlace",f'Warning: StopPlace without coordinate {stop_place.public_code} - {stop_place.name}.')
+            else:
+                project_location_4326(stop_place.centroid.location)
+                latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
 
         stop = {'stop_id': stop_place.id,
                 'stop_code': GtfsProfile.getOptionalPrivateCode(stop_place.public_code),
@@ -636,6 +682,7 @@ class GtfsProfile:
         if transformer:
             latitude, longitude = transformer.transform(stop_place.centroid.location.pos.value[0], stop_place.centroid.location.pos.value[1])
         else:
+            project_location_4326(stop_place.centroid.location)
             latitude, longitude = stop_place.centroid.location.latitude, stop_place.centroid.location.longitude
 
         result = []
@@ -666,6 +713,7 @@ class GtfsProfile:
                     latitude, longitude = transformer.transform(quay.centroid.location.pos.value[0],
                                                                 quay.centroid.location.pos.value[1])
                 else:
+                    project_location_4326(quay.centroid.location)
                     latitude, longitude = quay.centroid.location.latitude, quay.centroid.location.longitude
 
                 stop = {'stop_id': quay.id,
@@ -696,6 +744,7 @@ class GtfsProfile:
 
         for route_link in route_links[0:-1]:
             # TODO: handle variants (posList, pos array)
+            # TODO: Add transformer
             l = route_link.line_string.pos_or_point_property_or_pos_list[0].value
             dimensions = route_link.line_string.srs_dimension or 2
             for i in range(0, len(l) - dimensions, dimensions):

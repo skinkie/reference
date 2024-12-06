@@ -5,4 +5,12 @@ xpathcountequal //netex:SiteFrame 1
 contains PublicationDelivery
 contains \d{4}-\d{2}-\d{2}
 xpathcountgreater //netex:StopPlace 10
+xpathcountgreater //netex:UicOperatingPeriod 5000
+xpathcountgreater //netex:Line 3000
+xpathcountgreater //netex:AccessibilityAssessment 5000
+contains <PrivateCode type="stop_id">ZRC</PrivateCode>
+
+
+
+
 

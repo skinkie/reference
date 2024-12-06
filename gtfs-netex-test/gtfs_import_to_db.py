@@ -3,7 +3,8 @@ import warnings
 
 import duckdb
 import csv
-
+from aux_logging import *
+import traceback
 agency_txt = {'agency_id': 'VARCHAR', 'agency_name': 'VARCHAR', 'agency_url': 'VARCHAR', 'agency_timezone': 'VARCHAR', 'agency_lang': 'VARCHAR', 'agency_phone': 'VARCHAR', 'agency_fare_url': 'VARCHAR', 'agency_email': 'VARCHAR'}
 stops_txt = {'stop_id': 'VARCHAR', 'stop_code': 'VARCHAR', 'stop_name': 'VARCHAR', 'tts_stop_name': 'VARCHAR', 'stop_desc': 'VARCHAR', 'stop_lat': 'FLOAT', 'stop_lon': 'FLOAT', 'zone_id': 'VARCHAR', 'stop_url': 'VARCHAR', 'location_type': 'INTEGER', 'parent_station': 'VARCHAR', 'stop_timezone': 'VARCHAR', 'wheelchair_boarding': 'INTEGER', 'level_id': 'VARCHAR', 'platform_code': 'VARCHAR'}
 routes_txt = {'route_id': 'VARCHAR', 'agency_id': 'VARCHAR', 'route_long_name': 'VARCHAR', 'route_type': 'INTEGER', 'route_url': 'VARCHAR', 'route_color': 'CHAR(6)', 'route_text_color': 'CHAR(6)', 'route_sort_order': 'INTEGER', 'continuous_pickup': 'INTEGER',  'continuous_drop_off': 'INTEGER', 'network_id': 'VARCHAR'}
@@ -156,7 +157,6 @@ def handle_file(con, zip, filename, column_mapping: dict):
             sql_create_table = f"""CREATE TABLE {table} ({data_types});"""
             cur.execute(sql_create_table)
 
-import datetime
 
 def create_feed_info(con):
     with con.cursor() as cur:
@@ -209,7 +209,7 @@ def main(gtfs: str, database: str):
 
     # check if this is a GTFS file
     if len(set(zf.namelist()) & {'agency.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'}) == 0:
-        print('This is not a GTFS file')
+        log_all(logging.ERROR,'This is not a GTFS file')
         return
 
     handle_file(con, zf, 'feed_info.txt', feed_info_txt)
@@ -235,6 +235,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='GTFS import into DuckDB')
     parser.add_argument('gtfs', type=str, help='GTFS file to import, for example: gtfs.zip')
     parser.add_argument('database', type=str, help='DuckDB file to overwrite and store contents of the import.')
+    parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = parser.parse_args()
+    mylogger =prepare_logger(logging.INFO,args.log_file)
+    try:
+        main(args.gtfs, args.database)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
 
-    main(args.gtfs, args.database)
