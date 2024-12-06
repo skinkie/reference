@@ -1,5 +1,6 @@
 from netex import ServiceJourney
 
+# DEPRECATION WARNING
 def infer_id_and_order_and_apply(service_journey: ServiceJourney):
     if service_journey.passing_times:
         if len([pt for pt in service_journey.passing_times.timetabled_passing_time if pt.id is None or pt.version is None]) > 0:
