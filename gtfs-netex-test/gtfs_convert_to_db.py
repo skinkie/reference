@@ -12,6 +12,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
 
 from callsprofile import CallsProfile
+from netexio.database import Database
 from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, resolve_all_references, \
     resolve_all_references_and_embeddings
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
@@ -42,6 +43,9 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
 from aux_logging import *
 import traceback
+
+from transformers.embedding import embedding_update
+
 
 def get_or_none(l: list, i: int, cast_clazz=None):
     if l is None:
@@ -223,7 +227,7 @@ class GtfsNeTexProfile(CallsProfile):
                 agency_id = get_or_none(agency_ids, i)
                 operator_ref = None
                 if agency_id is not None:
-                    operator_ref = getFakeRef(self.get_agency_id(self, agency_id), OperatorRef, self.version.version)
+                    operator_ref = getFakeRef(self.get_agency_id(agency_id), OperatorRef, self.version.version)
 
                 line = Line(id=self.get_route_id(route_ids[i]),
                             version=self.version.version,
@@ -249,7 +253,7 @@ class GtfsNeTexProfile(CallsProfile):
         else:
             return getId(StopArea, self.codespace, stop_id)
 
-    def getStopAreas(self, stop_area_sql={'query': """select * from stops where location_type = 1 order by stop_id;"""}) -> list[StopArea]:
+    def getStopAreas(self, stop_area_sql={'query': """select distinct * from stops where location_type = 1 order by stop_id;"""}) -> list[StopArea]:
         stop_areas = []
 
         with self.conn.cursor() as cur:
@@ -295,7 +299,7 @@ class GtfsNeTexProfile(CallsProfile):
         else:
             return getId(ScheduledStopPoint, self.codespace, stop_id)
 
-    def getScheduledStopPoints(self, stop_areas, scheduled_stop_points_sql={'query': """select * from stops where location_type = 0 or location_type is null order by stop_id;"""}) -> list[ScheduledStopPoint]:
+    def getScheduledStopPoints(self, stop_areas, scheduled_stop_points_sql={'query': """select distinct * from stops where location_type = 0 or location_type is null order by stop_id;"""}) -> list[ScheduledStopPoint]:
         stop_areas = getIndex(stop_areas)
 
         scheduled_stop_points = []
@@ -334,9 +338,14 @@ class GtfsNeTexProfile(CallsProfile):
                 parent_station = get_or_none(parent_stations, i)
                 if parent_station is not None:
                     stop_area_ref = getId(StopArea, self.codespace, parent_station)
-                    my_stop_areas = StopAreaRefsRelStructure(stop_area_ref=[
-                        getRef(stop_areas[stop_area_ref], StopAreaRefStructure)])
-
+                    if stop_area_ref not in stop_areas:
+                        # TODO: Implement the logger here too
+                        print(f"Parent {parent_station} not found, faking it.")
+                        my_stop_areas = StopAreaRefsRelStructure(stop_area_ref=[
+                            getFakeRef(stop_area_ref, StopAreaRefStructure, self.version.version)])
+                    else:
+                        my_stop_areas = StopAreaRefsRelStructure(stop_area_ref=[
+                            getRef(stop_areas[stop_area_ref], StopAreaRefStructure)])
 
                 scheduled_stop_point = ScheduledStopPoint(id=self.get_stop_id(stop_ids[i]),
                                                           version=self.version.version,
@@ -371,7 +380,7 @@ class GtfsNeTexProfile(CallsProfile):
         return scheduled_stop_points
 
     # TODO: implement
-    def getStopPlaces(self, stop_places_sql={'query': """select * from stops order by coalesce(parent_station, '') asc, stop_id;"""}) -> (List[StopPlace], List[PassengerStopAssignment]):
+    def getStopPlaces(self, stop_places_sql={'query': """select distinct * from stops order by coalesce(parent_station, '') asc, stop_id;"""}) -> (List[StopPlace], List[PassengerStopAssignment]):
         stop_places = {}
         passenger_stop_assignments = []
         with self.conn.cursor() as cur:
@@ -415,7 +424,44 @@ class GtfsNeTexProfile(CallsProfile):
                                            )
                     stop_places[stop_place.id] = stop_place
                 else:
-                    stop_place = stop_places[getId(StopPlace, self.codespace, parent_stations[i])]
+                    stop_place_id = getId(StopPlace, self.codespace, parent_stations[i])
+                    if stop_place_id == 'SBB:StopPlace:Parent8583337':
+                        pass
+                    if stop_place_id in stop_places:
+                        stop_place = stop_places[getId(StopPlace, self.codespace, parent_stations[i])]
+                    else:
+                        # Last resort, fake an instance if it does not exist.
+                        stop_place = StopPlace(id=stop_place_id,
+                                               version=self.version.version,
+                                               name=MultilingualString(value=stop_names[i]),
+                                               public_code=get_or_none(stop_codes, i),
+                                               description=getOptionalString(get_or_none(stop_descs, i)),
+                                               private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                               locale=Locale(time_zone=stop_timezones[i]) if stop_timezones[
+                                                                                                 i] is not None else None,
+                                               parent_zone_ref=ZoneRefStructure(ref=zone_ids[i],
+                                                                                version_ref="EXTERNAL") if zone_ids[
+                                                                                                               i] is not None else None,
+                                               accessibility_assessment=AccessibilityAssessment(
+                                                   id=getId(AccessibilityAssessment, self.codespace,
+                                                            'StopPlace_' + stop_ids[i]),
+                                                   version=self.version.version,
+                                                   mobility_impaired_access=self.wheelchairToNeTEx(
+                                                       wheelchair_boardings[i])) if wheelchair_boardings[
+                                                                                        i] is not None else None,
+                                               info_links=InfoLinksRelStructure(info_link=[
+                                                   InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE],
+                                                            value=stop_urls[i])]) if stop_urls[i] is not None else None,
+                                               centroid=SimplePointVersionStructure(location=
+                                                                                    LocationStructure2(latitude=Decimal(
+                                                                                        str(stop_lats[i])),
+                                                                                                       longitude=Decimal(
+                                                                                                           str(
+                                                                                                               stop_lons[
+                                                                                                                   i])),
+                                                                                                       srs_name="EPSG:4326")),
+                                               )
+                        stop_places[stop_place_id] = stop_place
 
                 if location_types[i] == 1:
                     # Nothing to do, we already created the StopPlace
@@ -506,13 +552,13 @@ class GtfsNeTexProfile(CallsProfile):
 
     def get_shape_id(self, shape_id):
         if ':Route:' in shape_id:
-            return route_id
+            return shape_id
         else:
             return getId(Route, self.codespace, shape_id)
 
     def get_shape_id_lsp(self, shape_id):
         if ':Route:' in shape_id:
-            return route_id.replace(':Route:', ':LinkSequenceProjection:')
+            return shape_id.replace(':Route:', ':LinkSequenceProjection:')
         else:
             return getId(LinkSequenceProjection, self.codespace, shape_id)
 
@@ -785,7 +831,7 @@ class GtfsNeTexProfile(CallsProfile):
                 exception_type = int(exceptions_df['exception_type'][i])
                 if exception_type in (1, 2):
                     
-                    ac = AvailabilityCondition(id=get_service_id(service_ids[i]) + '_' + str(exception_type)),
+                    ac = AvailabilityCondition(id=self.get_service_id_ac(service_ids[i]) + '_' + str(exception_type),
                                                version=self.version.version, is_available=exception_type == 1,
                                                from_date=date_to_xmldatetime(gtfs_date(exceptions_df['dates'][i][0])),
                                                to_date=date_to_xmldatetime(gtfs_date(exceptions_df['dates'][i][-1])),
@@ -826,7 +872,7 @@ class GtfsNeTexProfile(CallsProfile):
                 if sundays[i] == 1:
                     days_of_week.append(DayOfWeekEnumeration.SUNDAY)
 
-                availability_conditions.append(AvailabilityCondition(id=get_service_id(service_ids[i]), version=self.version.version,
+                availability_conditions.append(AvailabilityCondition(id=self.get_service_id_ac(service_ids[i]), version=self.version.version,
                                                                      is_available=True,
                                                                      from_date=date_to_xmldatetime(gtfs_date(start_dates[i])), to_date=date_to_xmldatetime(gtfs_date(end_dates[i])),
                                                                      day_types=DayTypesRelStructure(day_type_ref_or_day_type=[DayType(id=self.get_service_id_dt(service_ids[i]), version=self.version.version,
@@ -1002,11 +1048,11 @@ class GtfsNeTexProfile(CallsProfile):
 
     def get_trip_id_call(self, trip_id, sequence):
         if ':ServiceJourney:' in trip_id:
-            return trip_id.replace(':ServiceJourney:', ':Call:') + '_' + sequence
+            return trip_id.replace(':ServiceJourney:', ':Call:') + '_' + str(sequence)
         elif ':TemplateServiceJourney:' in trip_id:
-            return trip_id.replace(':TemplateServiceJourney:', ':Call:') + '_' + sequence 
+            return trip_id.replace(':TemplateServiceJourney:', ':Call:') + '_' + str(sequence)
         else:
-            return getId(Call, self.codespace, trip_id) + '_' + sequence
+            return getId(Call, self.codespace, trip_id) + '_' + str(sequence)
 
     def getServiceJourneys(self, availability_conditions, trips_sql={'query': """select * from trips where trip_id not in (select trip_id from frequencies) order by trip_id;"""}, stop_times_sql = {'query': """select * from stop_times order by trip_id, stop_sequence;"""}) -> Generator[ServiceJourney, None, None]:
         availability_conditions = getIndex(availability_conditions)
@@ -1035,7 +1081,7 @@ class GtfsNeTexProfile(CallsProfile):
             ticketing_types = df.get('ticketing_type')
 
             for i in range(0, len(route_ids)):
-                availability_condition_key = self.get_service_id(service_ids[i])
+                availability_condition_key = self.get_service_id_ac(service_ids[i])
 
                 availability_conditions_journey = [availability_conditions.get(availability_condition_key, None),
                                                    availability_conditions.get(availability_condition_key + "_1", None),
@@ -1049,7 +1095,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 accessibility_assessment = None
                 if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
-                    accessibility_assessment = AccessibilityAssessment(id=get_trip_id_aa(trip_ids[i]),
+                    accessibility_assessment = AccessibilityAssessment(id=self.get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
 
@@ -1062,7 +1108,7 @@ class GtfsNeTexProfile(CallsProfile):
                 shape_id = get_or_none(shape_ids, i)
                 if shape_id is not None:
                     if shape_id in shape_used:
-                        lsp = getFakeRef(get_shape_id_lsp(shape_id), LinkSequenceProjectionRef, self.version.version)
+                        lsp = getFakeRef(self.get_shape_id_lsp(shape_id), LinkSequenceProjectionRef, self.version.version)
                     else:
                         lsps = self.getLineStrings({'query': """select shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence, shape_dist_traveled from shapes where shape_id = ? order by shape_id, shape_pt_sequence, shape_dist_traveled;""", 'parameters': (shape_id,)})
                         if len(lsps) > 0:
@@ -1209,7 +1255,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 accessibility_assessment = None
                 if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
-                    accessibility_assessment = AccessibilityAssessment(id=get_trip_id_aa(trip_ids[i]),
+                    accessibility_assessment = AccessibilityAssessment(id=self.get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
 
@@ -1369,7 +1415,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 accessibility_assessment = None
                 if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
-                    accessibility_assessment = AccessibilityAssessment(id=get_trip_id_aa(trip_ids[i]),
+                    accessibility_assessment = AccessibilityAssessment(id=self.get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
 
@@ -1553,7 +1599,7 @@ class GtfsNeTexProfile(CallsProfile):
         for line in self.lines:
             with open('netex-output/{}.xml'.format(line.id.replace(':', '_')), 'w', encoding='utf-8') as out:
                 operators = self.getOperators({'query': """select distinct agency.* from agency join routes using (agency_id) where route_id = ? ;""", 'parameters': (line.private_code.value,)})
-                stop_areas = self.getStopAreas({'query': """select stops.* from stops where stop_id in (select distinct stops.parent_station from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and parent_station is not null and route_id = ?) order by stop_id;""", 'parameters': (line.private_code.value,)})
+                stop_areas = self.getStopAreas({'query': """select distinct stops.* from stops where stop_id in (select distinct stops.parent_station from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and parent_station is not null and route_id = ?) order by stop_id;""", 'parameters': (line.private_code.value,)})
                 scheduled_stop_points = self.getScheduledStopPoints(stop_areas, {'query': """select distinct stops.* from trips join stop_times using (trip_id) join stops using (stop_id) where (location_type = 0 or location_type is null) and route_id = ? order by stop_id;""", 'parameters': (line.private_code.value,)})
                 availability_conditions = self.getAvailabilityConditions(availability_condition_sql = {
                     'query': """select distinct calendar.* from trips join calendar using (service_id) where route_id = ? order by service_id;""", 'parameters': (line.private_code.value,)}, exceptions_sql = {
@@ -1642,14 +1688,9 @@ def main(database_gtfs: str, database_netex: str):
     except:
         pass
 
-    with duckdb.connect(database_netex) as con:
-        gtfs.database(con)
-
-        # TODO: Maybe do something here specifically for GTFS-classes
-        classes = get_interesting_classes()
-        resolve_all_references_and_embeddings(con, classes)
-
-
+    with Database(database_netex, read_only=False) as db_write:
+        gtfs.database(db_write)
+        embedding_update(db_write)
 
 if __name__ == '__main__':
     import argparse

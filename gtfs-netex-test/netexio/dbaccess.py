@@ -747,7 +747,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         raise
                         pass
 
-                update_embedded_referencing(cur, object)
+                # update_embedded_referencing(cur, object)
                 current_element_tag = None
 
 
