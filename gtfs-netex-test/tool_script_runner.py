@@ -146,7 +146,6 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
 
             # Run the script with arguments
             command = python_executable + " " + script_name + " " + script_args
-            log_print(command)
             command_list = [python_executable,script_name]
             command_list.extend(shlex.split(script_args))
             result = subprocess.run(command_list,
@@ -161,7 +160,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             log_write_counts(logging.WARNING)
             log_flush()
             if result.returncode == 0:
-                log_all(logging.DEBUG, "test_runner", f'Script {script_name} terminated.')
+                log_all(logging.DEBUG, "test_runner", f'Script {script_name} successfully terminated.')
                 log_flush()
             elif result.returncode == 1:
                 log_all(logging.ERROR, "test_runner",
