@@ -16,7 +16,7 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
     ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
     ServiceLink, PublicCodeStructure, StopPlaceEntrance, TemplateServiceJourney, HeadwayJourneyGroup, \
     JourneyFrequencyGroupVersionStructure, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
-    AvailabilityCondition, DayType, DayOfWeekEnumeration
+    AvailabilityCondition, DayType, DayOfWeekEnumeration, EmptyType2
 
 import operator as operator_f
 from aux_logging import *
@@ -254,11 +254,11 @@ class GtfsProfile:
         if service_journey_interchange.guaranteed:
             transfer_type = 1
 
-            if service_journey_interchange.minimum_transfer_time:
-                transfer_type = 2
+        if service_journey_interchange.minimum_transfer_time:
+            transfer_type = 2
 
-            elif service_journey_interchange.standard_transfer_time:
-                transfer_type = 2
+        elif service_journey_interchange.standard_transfer_time:
+            transfer_type = 2
 
         if service_journey_interchange.stay_seated == True:
             transfer_type = 4
@@ -279,7 +279,7 @@ class GtfsProfile:
                     'from_trip_id': from_trip_id,
                     'to_trip_id': to_trip_id,
                     'transfer_type': transfer_type,
-                    'min_transfer_time': min_transfer_time
+                    'min_transfer_time': int(min_transfer_time)
                     }
 
         return transfer
@@ -301,11 +301,11 @@ class GtfsProfile:
             to_stop_id = interchange_rule.distributor_filter.scheduled_stop_point_ref.ref
 
         from_route_id = None
-        if interchange_rule.feeder_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref is not None:
+        if interchange_rule.feeder_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref is not None and isinstance(interchange_rule.feeder_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref, EmptyType2):
             from_route_id = interchange_rule.feeder_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref[0].line_ref.ref
 
         to_route_id = None
-        if interchange_rule.distributor_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref is not None:
+        if interchange_rule.distributor_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref is not None and isinstance(interchange_rule.distributor_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref, EmptyType2):
             to_route_id = interchange_rule.distributor_filter.all_lines_or_lines_in_direction_refs_or_line_in_direction_ref[0].line_ref.ref
 
         from_trip_id = None
@@ -321,11 +321,11 @@ class GtfsProfile:
         if interchange_rule.guaranteed:
             transfer_type = 1
 
-            if interchange_rule.minimum_transfer_time:
-                transfer_type = 2
+        if interchange_rule.minimum_transfer_time:
+            transfer_type = 2
 
-            elif interchange_rule.standard_transfer_time:
-                transfer_type = 2
+        elif interchange_rule.standard_transfer_time:
+            transfer_type = 2
 
         if interchange_rule.exclude:
             transfer_type = 3
@@ -349,7 +349,7 @@ class GtfsProfile:
                     'from_trip_id': from_trip_id,
                     'to_trip_id': to_trip_id,
                     'transfer_type': transfer_type,
-                    'min_transfer_time': min_transfer_time
+                    'min_transfer_time': int(min_transfer_time)
                     }
 
         return transfer
@@ -368,7 +368,7 @@ class GtfsProfile:
 
         route = {'route_id': line.id,
                  'agency_id': agency_id,
-                 'route_short_name': line.public_code.value, # This is used as VehicleType or PublicCode
+                 'route_short_name': line.public_code, # This is used as VehicleType or PublicCode
                  'route_long_name': '', # GtfsProfile.getOptionalMultilingualString(line.name), # This is used as destination
                  'route_desc': GtfsProfile.getOptionalMultilingualString(line.description),
                  'route_type': GtfsProfile.projectVehicleModeToRouteType(line.transport_mode),

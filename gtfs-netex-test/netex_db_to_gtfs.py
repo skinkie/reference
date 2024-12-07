@@ -12,6 +12,7 @@ import lxml
 import hashlib
 
 from callsprofile import CallsProfile
+from netexio.database import Database
 from netexio.dbaccess import load_local, load_generator
 from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
@@ -48,19 +49,19 @@ def convert(archive, database: str):
     # GtfsProfile.writeToZipFile(archive, 'trips.txt', [GtfsProfile.empty_trip], write_header=True)
     # GtfsProfile.writeToZipFile(archive, 'stop_times.txt', [GtfsProfile.empty_stop_time], write_header=True)
 
-    with sqlite3.connect(database) as con:
-        datasources: List[DataSource] = load_local(con, DataSource, 1)
-        codespaces: List[Codespace] = load_local(con, Codespace, 1)
+    with Database(database) as db_read:
+        datasources: List[DataSource] = load_local(db_read, DataSource, 1)
+        codespaces: List[Codespace] = load_local(db_read, Codespace, 1)
 
-        for authority in load_generator(con, Authority):
+        for authority in load_generator(db_read, Authority):
             agency = GtfsProfile.projectAuthorityToAgency(authority)
             agencies[agency['agency_id']] = agency
 
-        for operator in load_generator(con, Operator):
+        for operator in load_generator(db_read, Operator):
             agency = GtfsProfile.projectOperatorToAgency(operator)
             agencies[agency['agency_id']] = agency
 
-        stop_places = getIndex(load_local(con, StopPlace))
+        stop_places = getIndex(load_local(db_read, StopPlace))
         quay_to_sp = {}
         for stop_place in stop_places.values():
             stop_place: StopPlace
@@ -73,7 +74,7 @@ def convert(archive, database: str):
                         quay_to_sp[quay.ref] = stop_place
 
         psas = {}
-        for psa in load_generator(con, PassengerStopAssignment):
+        for psa in load_generator(db_read, PassengerStopAssignment):
             psa: PassengerStopAssignment
             if psa.taxi_rank_ref_or_stop_place_ref_or_stop_place is not None:
                 psas[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = stop_places[psa.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref]
@@ -82,11 +83,11 @@ def convert(archive, database: str):
 
         # TODO: GTFS does not support Branding, so in order to facilitate it we will make it a separate Agency
         # A branding must have an 'original' agency or authority
-        # for branding in load_generator(con, Branding):
+        # for branding in load_generator(db_read, Branding):
         #     agency = GtfsProfile.projectBrandingToAgency(branding)
         #     agencies[agency['agency_id']] = agency
 
-        for scheduled_stop_point in load_local(con, ScheduledStopPoint):
+        for scheduled_stop_point in load_local(db_read, ScheduledStopPoint):
             stop_place = psas.get(scheduled_stop_point.id, None)
             if stop_place is not None:
                 stop_place_ref = getRef(stop_place)
@@ -106,7 +107,7 @@ def convert(archive, database: str):
                                 if stop is not None:
                                     stops[stop['stop_id']] = stop
 
-        for line in load_generator(con, Line):
+        for line in load_generator(db_read, Line):
             route = GtfsProfile.projectLineToRoute(line)
             if route is not None:
                 routes[route['route_id']] = route
@@ -114,11 +115,11 @@ def convert(archive, database: str):
 
         trips = []
         stop_times = []
-        service_journey_patterns = load_local(con, ServiceJourneyPattern)
+        service_journey_patterns = load_local(db_read, ServiceJourneyPattern)
 
         service_journey_patterns_index = getIndex(service_journey_patterns)
 
-        for service_journey in load_generator(con, ServiceJourney):
+        for service_journey in load_generator(db_read, ServiceJourney):
             service_journey_pattern = service_journey_patterns_index.get(service_journey.journey_pattern_ref.ref) if service_journey.journey_pattern_ref else None
             trip = GtfsProfile.projectServiceJourneyToTrip(service_journey, service_journey_pattern)
             trips.append(trip)
@@ -127,7 +128,7 @@ def convert(archive, database: str):
             stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
 
         frequencies = []
-        for template_service_journey in load_generator(con, TemplateServiceJourney):
+        for template_service_journey in load_generator(db_read, TemplateServiceJourney):
             service_journey_pattern = service_journey_patterns_index.get(template_service_journey.journey_pattern_ref.ref) if template_service_journey.journey_pattern_ref else None
             trip = GtfsProfile.projectServiceJourneyToTrip(template_service_journey, service_journey_pattern)
             trips.append(trip)
@@ -151,19 +152,19 @@ def convert(archive, database: str):
         routes = agency = stops = None
 
         # TODO: this all asumes that we take a specific type. GTFS handles it differently.
-        for uic_operating_period in load_generator(con, UicOperatingPeriod):
+        for uic_operating_period in load_generator(db_read, UicOperatingPeriod):
             operational_dates = NordicProfile.getOperationalDates(uic_operating_period)
             if operational_dates[-1] > max_date:
                 max_date = operational_dates[-1]
             uic_operating_periods[uic_operating_period.id] = operational_dates
 
-        for day_type_assignment in load_generator(con, DayTypeAssignment):
+        for day_type_assignment in load_generator(db_read, DayTypeAssignment):
             calendar_dates[day_type_assignment.day_type_ref.ref] = list(
                 GtfsProfile.getCalendarDates(day_type_assignment.day_type_ref.ref,
                                              uic_operating_periods[day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]))
 
         # This is what we produce ourselves, it splits the exceptions in positive and negative values, and a separate availability condition for the 'calendar'.
-        for availibility_condition in load_generator(con, AvailabilityCondition):
+        for availibility_condition in load_generator(db_read, AvailabilityCondition):
             # TODO: This is a hack. See #136
             service_id = re.sub('_[12]$', '', availibility_condition.id)
             combined = list(GtfsProfile.getCalendarAndCalendarDates(service_id, availibility_condition))
@@ -183,7 +184,7 @@ def convert(archive, database: str):
 
         GtfsProfile.writeToZipFile(archive,'calendar_dates.txt', [item for row in calendar_dates.values() for item in row], write_header=True)
 
-        transfers = [GtfsProfile.projectInterchangeRuleToTransfer(transfer) for transfer in load_generator(con, InterchangeRule)] + [GtfsProfile.projectServiceJourneyInterchangeToTransfer(transfer) for transfer in load_generator(con, ServiceJourneyInterchange)] + [GtfsProfile.projectServiceJourneyMeeting(transfer) for transfer in load_generator(con, JourneyMeeting)]
+        transfers = [GtfsProfile.projectInterchangeRuleToTransfer(transfer) for transfer in load_generator(db_read, InterchangeRule)] + [GtfsProfile.projectServiceJourneyInterchangeToTransfer(transfer) for transfer in load_generator(db_read, ServiceJourneyInterchange)] + [GtfsProfile.projectServiceJourneyMeeting(transfer) for transfer in load_generator(db_read, JourneyMeeting)]
 
         transfers = list({(v['from_stop_id'], v['to_stop_id'], v['from_route_id'], v['to_route_id'], v['from_trip_id'], v['to_trip_id'], v['transfer_type'], v['min_transfer_time']):v for v in transfers}.values())
 

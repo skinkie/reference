@@ -13,4 +13,4 @@ def project(obj, clazz: T) -> T:
 def to_seconds(xml_duration: XmlDuration):
     if xml_duration.months is not None and xml_duration.months > 0:
         warnings.warn("Duration is bigger than a month!")
-    return ((xml_duration.days * 24 + xml_duration.hours) * 3600) + (xml_duration.minutes * 60) + (xml_duration.seconds)
+    return (((xml_duration.days or 0) * 24 + (xml_duration.hours or 0)) * 3600) + ((xml_duration.minutes or 0) * 60) + (xml_duration.seconds or 0)
