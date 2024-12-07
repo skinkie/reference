@@ -15,6 +15,7 @@ from netexio.dbaccess import setup_database
 from netexio.dbaccess import attach_source, attach_objects
 
 from transformers.direction import infer_directions_from_sjps_and_apply
+from transformers.embedding import embedding_update
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
 import traceback
 context = XmlContext()
@@ -50,6 +51,8 @@ def main(source_database_file: str, target_database_file: str):
             epip_site_frame_memory(source_db, target_db, generator_defaults)
             epip_service_journey_generator(source_db, target_db, generator_defaults, None)
             infer_directions_from_sjps_and_apply(target_db, target_db, generator_defaults)
+
+        embedding_update(target_db)
 
 if __name__ == '__main__':
     import argparse
