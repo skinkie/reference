@@ -1,12 +1,7 @@
 from typing import List
 
-import duckdb as sqlite3
-import os
-
 from netexio.database import Database
-from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database, \
-    resolve_all_references_and_embeddings
-from netexio.xmlserializer import MyXmlSerializer
+from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database
 from aux_logging import *
 from transformers.embedding import embedding_update
 
