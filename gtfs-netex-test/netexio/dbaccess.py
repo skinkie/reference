@@ -50,13 +50,13 @@ def load_embedded(con, clazz: T, filter, cursor=False):
 
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
-def load_referencing(con, clazz: T, filter, cursor=False):
+def load_referencing(db: Database, clazz: T, filter, cursor=False):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     try:
         cur.execute(f"SELECT ref, version, class FROM referencing WHERE parent_id = ? and parent_class = ?;", (filter, type,))
@@ -65,13 +65,13 @@ def load_referencing(con, clazz: T, filter, cursor=False):
 
     return [(ref, version, clazz,) for ref, version, clazz in cur.fetchall()]
 
-def load_referencing_inwards(con, clazz: T, filter, cursor=False):
+def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     try:
         cur.execute(f"SELECT parent_id, parent_version, parent_class FROM referencing WHERE ref = ? and class = ?;", (filter, type,))
@@ -752,7 +752,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
 
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
-    # print(obj.__class__.__name__)
+    # qprint(obj.__class__.__name__)
     if issubclass(obj.__class__, EntityInVersionStructure) and obj.data_source_ref_attribute is not None:
         yield DataSourceRefStructure(ref=obj.data_source_ref_attribute), depth + ['data_source_ref_attribute']
     if issubclass(obj.__class__, DataManagedObject) and obj.responsibility_set_ref_attribute is not None:

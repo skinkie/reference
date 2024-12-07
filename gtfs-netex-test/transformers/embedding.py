@@ -41,7 +41,7 @@ def embedding_update(db: Database):
     con = db.con
     con.create_function('embedding', functools.partial(embedding_udf, db.serializer), return_type=list[str])
 
-    sql_create_table = "CREATE TEMPORARY TABLE IF NOT EXISTS temp_embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT);"
+    sql_create_table = "CREATE TABLE IF NOT EXISTS temp_embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT);"
     con.execute(sql_create_table)
 
     sql_create_table = "CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
@@ -57,10 +57,11 @@ def embedding_update(db: Database):
     tables = {table for table, in con.fetchall()}
 
     for objectname in tables.intersection(set(db.serializer.clean_element_names)):
-        con.execute(f"INSERT INTO temp_embedded SELECT CAST(z[1] AS TEXT), CAST(z[2] AS TEXT), CAST(z[3] AS TEXT), CAST(z[4] AS TEXT), CAST(z[5] AS TEXT), CAST(z[6] AS TEXT), CAST(z[7] AS INTEGER), CAST(z[8] AS TEXT) FROM (SELECT CAST(unnest(x) AS VARCHAR[]) AS z  FROM (SELECT embedding(object, '{objectname}') AS x FROM {objectname}));")
+        # TODO: The DISTINCT here is actually a bug in the collection process, must investigate.
+        con.execute(f"INSERT INTO temp_embedded SELECT DISTINCT CAST(z[1] AS TEXT), CAST(z[2] AS TEXT), CAST(z[3] AS TEXT), CAST(z[4] AS TEXT), CAST(z[5] AS TEXT), CAST(z[6] AS TEXT), CAST(z[7] AS INTEGER), CAST(z[8] AS TEXT) FROM (SELECT CAST(unnest(x) AS VARCHAR[]) AS z  FROM (SELECT embedding(object, '{objectname}') AS x FROM {objectname}));")
 
-    con.execute("INSERT INTO embedded SELECT * FROM temp_embedded WHERE path <> '';")
-    con.execute("INSERT INTO referencing SELECT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
+    con.execute("INSERT INTO embedded SELECT DISTINCT * FROM temp_embedded WHERE path IS NOT NULL;")
+    con.execute("INSERT INTO referencing SELECT DISTINCT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
 
     sql_drop_table = f"DROP TABLE temp_embedded;"
     con.execute(sql_drop_table)

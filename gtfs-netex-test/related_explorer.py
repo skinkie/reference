@@ -9,7 +9,7 @@ from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
 from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime
 import random
 
-
+from netexio.database import Database
 from netexio.dbaccess import load_local, load_embedded, load_referencing, recursive_attributes, \
     load_referencing_inwards, resolve_all_references_and_embeddings, get_interesting_classes
 import netex
@@ -23,14 +23,16 @@ import xsdata
 from aux_logging import *
 import logging
 import traceback
+
+from transformers.embedding import embedding_update
+
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config, writer=XmlEventWriter)
 
 
-
-def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
+def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=set([])):
     for x in resolved:
         if parent.id == x.id and parent.__class__ == x.__class__:
             return
@@ -38,23 +40,24 @@ def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
     resolved.append(parent)
 
     if filter is False or filter == parent.id or parent.__class__ in filter_class:
-        resolved_parents = load_referencing_inwards(con, parent.__class__, filter=parent.id)
+        resolved_parents = load_referencing_inwards(db, parent.__class__, filter=parent.id)
         if len(resolved_parents) > 0:
             for y in resolved_parents:
                 already_done = False
                 for x in resolved:
-                    if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                    y_class = getattr(sys.modules['netex'], y[2])
+                    if (y[0] == x.id and y_class == x.__class__) or y_class in filter_class:
                         already_done = True
                         break
     
                 if not already_done:
-                    resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
+                    resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]),
                                                filter=y[0], embedding=False)
                     if len(resolved_objs) > 0:
-                        recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class)  # TODO: not only consider the first
+                        recursive_resolve(db, resolved_objs[0], resolved, filter, filter_class)  # TODO: not only consider the first
 
     # In principle this would already take care of everything recursive_attributes could find, but now does it inwards.
-    resolved_parents = load_referencing(con, parent.__class__, filter=parent.id)
+    resolved_parents = load_referencing(db, parent.__class__, filter=parent.id)
     if len(resolved_parents) > 0:
         for y in resolved_parents:
             already_done = False
@@ -64,14 +67,14 @@ def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
                     break
 
             if not already_done:
-                resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]),
+                resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]),
                                            filter=y[0], embedding=False)
                 if len(resolved_objs) > 0:
-                    recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class)  # TODO: not only consider the first
+                    recursive_resolve(db, resolved_objs[0], resolved, filter, filter_class)  # TODO: not only consider the first
     # else:
     #      print(f"Cannot resolve referencing {parent.id}")
 
-    for obj in recursive_attributes(parent):
+    for obj in recursive_attributes(parent, []):
         if hasattr(obj, 'id'):
             continue
 
@@ -101,12 +104,12 @@ def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
                     break
 
             if not already_done:
-                resolved_objs = load_local(con, clazz, filter=obj.ref, embedding=False)
+                resolved_objs = load_local(db, clazz, filter=obj.ref, embedding=False)
                 if len(resolved_objs) > 0:
-                    recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
+                    recursive_resolve(db, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
                 else:
                     # print(obj.ref)
-                    resolved_parents = load_embedded(con, clazz, filter=obj.ref)
+                    resolved_parents = load_embedded(db, clazz, filter=obj.ref)
                     if len(resolved_parents) > 0:
                         for y in resolved_parents:
                             already_done = False
@@ -116,34 +119,36 @@ def recursive_resolve(con, parent, resolved, filter=None, filter_class=set([])):
                                     break
 
                             if not already_done:
-                                resolved_objs = load_local(con, getattr(sys.modules['netex'], y[2]), filter=y[0], embedding=False)
+                                resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]), filter=y[0], embedding=False)
                                 if len(resolved_objs) > 0:
-                                    recursive_resolve(con, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
+                                    recursive_resolve(db, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
                     else:
                         log_all(logging.WARN, 'related_explorer',f"Cannot resolve embedded {obj.ref}")
 
+
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
-    with sqlite3.connect(database) as con:
-        try:
-            con.execute("SELECT * FROM referencing LIMIT 1;")
-            con.execute("SELECT * FROM embedded LIMIT 1;")
-        except:
-            pass
-            classes = get_interesting_classes()
-            resolve_all_references_and_embeddings(con, classes)
+    classes = get_interesting_classes()
+    if object_type not in classes[0]:
+        log_all(logging.WARN, 'related_explorer', f"no such object type found {object_type}")
+        return
 
+    filter_set = {Route, ServiceJourneyPattern}
+    filter_set.add(getattr(sys.modules['netex'], object_type))
 
+    with Database(database) as db:
         objs=[]
         if object_filter == "random":
-            objs = load_local(con, getattr(netex, object_type))
-            objs = [random.choice(objs)] #randomly select one
+            objs = load_local(db, getattr(netex, object_type))
+            objs = [random.choice(objs)] # randomly select one
         else:
-            objs = load_local(con, getattr(netex, object_type), filter=object_filter)
+            objs = load_local(db, getattr(netex, object_type), filter=object_filter)
+
         if len(objs) > 0:
             obj = objs[0]
 
             resolved = []
-            recursive_resolve(con, obj, resolved, obj.id, {Route, ServiceJourneyPattern})
+
+            recursive_resolve(db, obj, resolved, obj.id, filter_set)
 
             publication_delivery = PublicationDelivery(
                 version="ntx:1.1",
@@ -166,6 +171,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
                     serializer.write(out, publication_delivery, ns_map)
         else:
             log_all(logging.WARN, 'related_explorer',f"no such object found {object_type},{object_filter}")
+
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Export a prepared EPIP  import into DuckDB')
@@ -173,12 +179,26 @@ if __name__ == '__main__':
     argument_parser.add_argument('object_type', type=str, help='The NeTEx object type to filter, for example ServiceJourney')
     argument_parser.add_argument('object_filter', type=str, help='The object filter to apply.')
     argument_parser.add_argument('output', type=str, nargs="?", default="-", help='The NeTEx output filename, for example: netex.xml.gz')
+    argument_parser.add_argument('--referencing', action="store_true", help='Create referencing table')
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
-    mylogger =prepare_logger(logging.INFO,args.log_file)
+    mylogger = prepare_logger(logging.INFO,args.log_file)
+
+    with Database(args.netex) as db:
+        references_exist = False
+        try:
+            db.con.execute("SELECT * FROM referencing LIMIT 1;")
+            db.con.execute("SELECT * FROM embedded LIMIT 1;")
+            references_exist = True
+        except:
+            pass
+
+        if args.referencing or not references_exist:
+            log_all(logging.INFO, 'related_explorer',f"updating embedded and referencing tables")
+            embedding_update(db)
+
     try:
         fetch(args.netex, args.object_type, args.object_filter, args.output)
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
         raise e
-
