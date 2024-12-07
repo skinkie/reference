@@ -9,8 +9,6 @@ from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
-from xsdata.formats.dataclass.serializers import XmlSerializer
-from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 import netex
 from mro_attributes import list_attributes
@@ -25,23 +23,25 @@ context = XmlContext()
 config = ParserConfig(fail_on_unknown_properties=False)
 parser = XmlParser(context=context, config=config, handler=LxmlEventHandler)
 
-# serializer_config = SerializerConfig(ignore_default_attributes=True)
-# serializer_config.indent = None
-# serializer_config.xml_declaration = False
-# serializer_config.ignore_default_attributes = True
-# serializer = XmlSerializer(config=serializer_config)
-# serializer.encoding = 'utf-8'
-
 # TODO: For all load_ functions filter by id + version, not only id
 
-def load_embedded(con, clazz: T, filter, cursor=False):
+def create_meta(db: Database):
+    sql_create_table = "CREATE TABLE IF NOT EXISTS meta (embedding_last_modified TIMESTAMP DEFAULT NULL);"
+    db.con.execute(sql_create_table)
+
+    db.con.execute("SELECT count(*) FROM meta;")
+    count, = db.con.fetchall()[0]
+    if count == 0:
+        db.con.execute("INSERT INTO meta VALUES (NULL);")
+
+def load_embedded(db: Database, clazz: T, filter, cursor=False):
     # TODO: maybe return something here, which includes *ALL* objects that are embedded within this object, so it does not have to be resolved anymore
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if cursor:
-        cur = con.cursor()
+        cur = db.cursor()
     else:
-        cur = con
+        cur = db.con
 
     try:
         cur.execute(f"SELECT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, type,))
@@ -535,6 +535,8 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
     print(sql_create_table)
     cur.execute(sql_create_table)
 
+    create_meta(db)
+
     for objectname in clean_element_names:
         # TODO: optimize
         clazz = getattr(sys.modules['netex'], objectname)
@@ -566,6 +568,33 @@ def get_local_name(element):
     return element.__name__
 
 
+def update_embedded_referencing(deserialized) -> Generator[list[str], None, None]:
+    for obj, path in recursive_attributes(deserialized, []):
+        if hasattr(obj, 'id'):
+            if obj.id is not None:
+                yield [
+                    deserialized.__class__.__name__, deserialized.id, deserialized.version, obj.__class__.__name__,
+                    obj.id,
+                    obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
+                    str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0',
+                    '.'.join([str(s) for s in path])]
+
+        elif hasattr(obj, 'ref'):
+            if obj.ref is not None:
+                if obj.name_of_ref_class is None:
+                    # Hack, because NeTEx does not define the default name of ref class yet
+                    if obj.__class__.__name__.endswith('RefStructure'):
+                        obj.name_of_ref_class = obj.__class__.__name__[0:-12]
+                    elif obj.__class__.__name__.endswith('Ref'):
+                        obj.name_of_ref_class = obj.__class__.__name__[0:-3]
+
+                yield [
+                    deserialized.__class__.__name__, deserialized.id, deserialized.version, obj.name_of_ref_class,
+                    obj.ref,
+                    obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
+                    str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0', None]
+
+"""
 def update_embedded_referencing(con, object, inner_loop=None):
     sql_insert_embedded = "INSERT OR REPLACE INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
     sql_insert_reference = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
@@ -592,6 +621,7 @@ def update_embedded_referencing(con, object, inner_loop=None):
                 con.execute(sql_insert_reference, (
                 object.__class__.__name__, object.id, object.version, obj.name_of_ref_class, obj.ref,
                 obj.version if hasattr(obj, 'version') and obj.version is not None else 'any', obj.order if hasattr(obj, 'order') and obj.order is not None else 0))
+"""
 
 def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
     xml_serializer = MyXmlSerializer()
@@ -612,6 +642,9 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
         cur = db.cursor()
     else:
         cur = db.con
+
+    sql_create_table = "CREATE TABLE temp_embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT);"
+    cur.execute(sql_create_table)
 
     clean_element_names, interesting_element_names = classes
     clazz_by_name = {}
@@ -747,9 +780,21 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         raise
                         pass
 
-                # update_embedded_referencing(cur, object)
                 current_element_tag = None
 
+                # WARNING: Executing the following code is SLOWER than deserialisation of our entire database, in the UDF.
+
+                # l = [x for x in update_embedded_referencing(object) if len(x) > 0]
+                # if len(l) > 0:
+                #    cur.executemany("INSERT INTO temp_embedded VALUES (?, ?, ?, ?, ?, ?, ?, ?)", l)
+
+        # For this to work, we must expect that the caller always updates the added objects.
+        # cur.execute("UPDATE meta SET embedding_last_modified = NOW();")
+
+        # cur.execute("INSERT OR REPLACE INTO embedded SELECT DISTINCT * FROM temp_embedded WHERE path IS NOT NULL;")
+        # cur.execute("INSERT OR REPLACE INTO referencing SELECT DISTINCT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
+
+        # cur.execute("TRUNCATE temp_embedded;")
 
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     # qprint(obj.__class__.__name__)
