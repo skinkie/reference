@@ -40,7 +40,7 @@ if __name__ == '__main__':
     argument_parser.add_argument('netex', nargs='+', default=[], help='NeTEx files')
     argument_parser.add_argument('database', type=str, help='The DuckDB to be overwritten with the NeTEx context')
     argument_parser.add_argument('--clean_database', action="store_true", help='Clean the current file', default=True)
-    argument_parser.add_argument('--referencing', action="store_false", help='Create referencing table')
+    argument_parser.add_argument('--referencing', action="store_true", help='Create referencing table')
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
 

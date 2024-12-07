@@ -214,11 +214,11 @@ def write_lxml_generator(db: Database, clazz, generator: Generator):
 
     cur = db.cursor()
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -250,11 +250,11 @@ def write_lxml_generator(db: Database, clazz, generator: Generator):
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', _prepare3(generator, objectname))
     else:
-        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
+        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', _prepare2(generator, objectname))
 
     print('\n')
 
@@ -298,11 +298,11 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
         cur.execute(sql_drop_table)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -310,21 +310,21 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
         if many:
             print(objectname, len(objs))
             if hasattr(clazz, 'order'):
-                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', [(obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)) for obj in objs])
+                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', [(obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)) for obj in objs])
             elif hasattr(clazz, 'version'):
-                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', [(obj.id, obj.version, db.serializer.marshall(obj, objectname)) for obj in objs])
+                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', [(obj.id, obj.version, db.serializer.marshall(obj, objectname)) for obj in objs])
             else:
-                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);',
+                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
                                 [(obj.id, db.serializer.marshall(obj, objectname)) for obj in objs])
         else:
             for i in range(0, len(objs)):
                 obj = objs[i]
                 if hasattr(clazz, 'order'):
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', (obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', (obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)))
                 elif hasattr(clazz, 'version'):
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', (obj.id, obj.version, db.serializer.marshall(obj, objectname)))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', (obj.id, obj.version, db.serializer.marshall(obj, objectname)))
                 else:
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', (obj.id, db.serializer.marshall(obj, objectname)))
+                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', (obj.id, db.serializer.marshall(obj, objectname)))
 
                 if not silent:
                     if i % 13 == 0:
@@ -345,11 +345,11 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
         cur.execute(sql_drop_table)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -383,21 +383,21 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
     if hasattr(clazz, 'order'):
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare4(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', a)
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', a)
         else:
-            cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+            cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare3(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', a)
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', a)
         else:
-            cur.executemany(f'INSERT INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+            cur.executemany(f'INSERT INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', _prepare3(generator, objectname))
     else:
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare2(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', a)
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', a)
         else:
-            cur.executemany(f'INSERT INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
+            cur.executemany(f'INSERT INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', _prepare2(generator, objectname))
 
     print('\n')
 
@@ -406,11 +406,11 @@ def update_generator(db: Database, clazz, generator: Generator):
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
 
     # This is not used effectively at this point, considering that DuckDB's ATTACH is not persistent
     # https://github.com/duckdb/duckdb-web/issues/3495
@@ -458,21 +458,21 @@ def update_generator(db: Database, clazz, generator: Generator):
     if hasattr(clazz, 'order'):
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare4(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', a)
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', a)
         else:
-            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object) VALUES (?, ?, ?, ?);', _prepare4(generator, objectname))
+            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare3(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', a)
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', a)
         else:
-            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object) VALUES (?, ?, ?);', _prepare3(generator, objectname))
+            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', _prepare3(generator, objectname))
     else:
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare2(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', a)
+                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', a)
         else:
-            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object) VALUES (?, ?);', _prepare2(generator, objectname))
+            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', _prepare2(generator, objectname))
 
     print('\n')
 
@@ -544,18 +544,18 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
 
         if hasattr(clazz, 'order'):
             if ordr_opt:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
             else:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version, ordr));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
 
         elif hasattr(clazz, 'version'):
             if version_opt:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
             else:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, PRIMARY KEY (id, version));"
+                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
 
         else:
-            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL PRIMARY KEY (id));"
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
 
         print(sql_create_table)
         cur.execute(sql_create_table)
@@ -721,7 +721,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                 object = xml_serializer.unmarshall(element, clazz)
 
                 if hasattr(clazz, 'order'):
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object) VALUES (?, ?, ?, ?);"""
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());"""
                     try:
                         cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
                     except:
@@ -730,7 +730,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         pass
 
                 elif hasattr(clazz, 'version'):
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object) VALUES (?, ?, ?);"""
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());"""
                     try:
                         cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
                     except:
@@ -739,7 +739,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         pass
 
                 else:
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object) VALUES (?, ?);"""
+                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object, last_modified) VALUES (?, ?, NOW());"""
                     try:
                         cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
                     except:
