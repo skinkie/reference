@@ -13,6 +13,7 @@ class Database:
     con: duckdb.DuckDBPyConnection
 
     def __init__(self, database_file: str, read_only: bool=True, logger: Logger=None, serializer=MyPickleSerializer):
+        self.con = None
         self.database_file = database_file
         self.read_only = read_only
         self.logger = logger
@@ -27,3 +28,10 @@ class Database:
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
         self.con.close()
+
+    def tables(self):
+        if self.con:
+            cur = self.con.cursor()
+            cur.execute("SELECT table_name FROM information_schema.tables;")
+            tables = {table for table, in cur.fetchall()}
+            return tables.intersection(set(self.serializer.clean_element_names))

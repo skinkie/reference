@@ -32,12 +32,9 @@ def embedding_update(db: Database, clean=False):
         con.execute("TRUNCATE embedded;")
         con.execute("TRUNCATE referencing;")
 
-    con.execute("SELECT table_name FROM information_schema.tables;")
-    tables = {table for table, in con.fetchall()}
-
     con.begin()
 
-    for objectname in tables.intersection(set(db.serializer.clean_element_names)):
+    for objectname in db.tables():
         # TODO: The DISTINCT here is actually a bug in the collection process, must investigate.
         con.execute(f"INSERT INTO temp_embedded SELECT DISTINCT CAST(z[1] AS TEXT), CAST(z[2] AS TEXT), CAST(z[3] AS TEXT), CAST(z[4] AS TEXT), CAST(z[5] AS TEXT), CAST(z[6] AS TEXT), CAST(z[7] AS INTEGER), CAST(z[8] AS TEXT) FROM (SELECT CAST(unnest(x) AS VARCHAR[]) AS z  FROM (SELECT embedding(object, '{objectname}') AS x FROM {objectname} WHERE COALESCE(last_modified < (SELECT COALESCE(embedding_last_modified, NOW()) FROM meta), TRUE)));")
 
