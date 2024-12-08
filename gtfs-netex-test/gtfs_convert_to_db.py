@@ -7,6 +7,7 @@ import os
 
 import duckdb
 import numpy
+from pandas._libs.missing import NAType
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
@@ -14,7 +15,7 @@ from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
 from callsprofile import CallsProfile
 from netexio.database import Database
 from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, resolve_all_references, \
-    resolve_all_references_and_embeddings
+    resolve_all_references_and_embeddings, create_meta
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
     VersionTypeEnumeration, LocaleStructure, SystemOfUnits, Operator, ContactStructure, Locale, LanguageUsageStructure, \
     LanguageUseEnumeration, Line, PresentationStructure, AllVehicleModesOfTransportEnumeration, PrivateCode, \
@@ -53,6 +54,9 @@ def get_or_none(l: list, i: int, cast_clazz=None):
 
     if cast_clazz is not None:
         return cast_clazz(l[i])
+
+    if isinstance(l[i], NAType):
+        return None
 
     return l[i]
 
@@ -415,7 +419,7 @@ class GtfsNeTexProfile(CallsProfile):
                                            parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                            accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, 'StopPlace_' + stop_ids[i]),
                                                                                             version=self.version.version,
-                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if wheelchair_boardings[i] is not None else None,
+                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if not isinstance(wheelchair_boardings[i], NAType) else None,
                                            info_links=InfoLinksRelStructure(info_link=[InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE], value=stop_urls[i])]) if stop_urls[i] is not None else None,
                                            centroid=SimplePointVersionStructure(location=
                                                                               LocationStructure2(latitude=Decimal(str(stop_lats[i])),
@@ -447,8 +451,7 @@ class GtfsNeTexProfile(CallsProfile):
                                                             'StopPlace_' + stop_ids[i]),
                                                    version=self.version.version,
                                                    mobility_impaired_access=self.wheelchairToNeTEx(
-                                                       wheelchair_boardings[i])) if wheelchair_boardings[
-                                                                                        i] is not None else None,
+                                                       wheelchair_boardings[i])) if not isinstance(wheelchair_boardings[i], NAType) else None,
                                                info_links=InfoLinksRelStructure(info_link=[
                                                    InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE],
                                                             value=stop_urls[i])]) if stop_urls[i] is not None else None,
@@ -480,7 +483,7 @@ class GtfsNeTexProfile(CallsProfile):
                                 private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
                                 parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                 accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, stop_ids[i]), version=self.version.version,
-                                                                                 mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if wheelchair_boardings[i] is not None else None,
+                                                                                 mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if not isinstance(wheelchair_boardings[i], NAType) else None,
                                 info_links=InfoLinksRelStructure(info_link=[InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE], value=stop_urls[i])]) if stop_urls[i] is not None else None,
                                 centroid=SimplePointVersionStructure(location=
                                                                      LocationStructure2(
@@ -513,7 +516,7 @@ class GtfsNeTexProfile(CallsProfile):
                                            parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                            accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, stop_ids[i]),
                                                                                             version=self.version.version,
-                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if wheelchair_boardings[i] is not None else None,
+                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if not isinstance(wheelchair_boardings[i], NAType) else None,
                                            info_links=InfoLinksRelStructure(info_link=[InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE], value=stop_urls[i])]) if stop_urls[i] is not None else None,
                                            centroid=SimplePointVersionStructure(location=
                                                                               LocationStructure2(latitude=Decimal(str(stop_lats[i])),
@@ -537,7 +540,7 @@ class GtfsNeTexProfile(CallsProfile):
                                            parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                            accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, stop_ids[i]),
                                                                                             version=self.version.version,
-                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if wheelchair_boardings[i] is not None else None,
+                                                                                            mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if not isinstance(wheelchair_boardings[i], NAType) else None,
                                            info_links=InfoLinksRelStructure(info_link=[InfoLink(type_of_info_link=[TypeOfInfoLinkEnumeration.RESOURCE], value=stop_urls[i])]) if stop_urls[i] is not None else None,
                                            centroid=SimplePointVersionStructure(location=
                                                                               LocationStructure2(latitude=Decimal(str(stop_lats[i])),
@@ -1094,7 +1097,7 @@ class GtfsNeTexProfile(CallsProfile):
                             name=MultilingualString(value=trip_headsigns[i]), front_text=MultilingualString(value=trip_headsigns[i])))
 
                 accessibility_assessment = None
-                if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
+                if wheelchair_accessibles is not None and not isinstance(wheelchair_accessibles[i], NAType):
                     accessibility_assessment = AccessibilityAssessment(id=self.get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
@@ -1254,7 +1257,7 @@ class GtfsNeTexProfile(CallsProfile):
                             name=MultilingualString(value=trip_headsigns[i]), front_text=MultilingualString(value=trip_headsigns[i])))
 
                 accessibility_assessment = None
-                if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
+                if wheelchair_accessibles is not None and not isinstance(wheelchair_accessibles[i], NAType):
                     accessibility_assessment = AccessibilityAssessment(id=self.get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
@@ -1414,7 +1417,7 @@ class GtfsNeTexProfile(CallsProfile):
                             name=MultilingualString(value=trip_headsigns[i]), front_text=MultilingualString(value=trip_headsigns[i])))
 
                 accessibility_assessment = None
-                if wheelchair_accessibles is not None and wheelchair_accessibles[i] is not None:
+                if wheelchair_accessibles is not None and not isinstance(wheelchair_accessibles[i], NAType):
                     accessibility_assessment = AccessibilityAssessment(id=self.get_trip_id_aa(trip_ids[i]),
                                                                        version=self.version.version,
                                                                        mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_accessibles[i]))
@@ -1690,6 +1693,7 @@ def main(database_gtfs: str, database_netex: str):
 
     with Database(database_netex, read_only=False) as db_write:
         gtfs.database(db_write)
+        create_meta(db_write)
         embedding_update(db_write)
 
 if __name__ == '__main__':
