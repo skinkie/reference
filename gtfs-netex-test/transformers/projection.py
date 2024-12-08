@@ -4,9 +4,32 @@ from itertools import chain
 from pyproj import Transformer
 from pyproj.exceptions import CRSError
 
-from netex import Polygon, PosList, Pos, LocationStructure2
+from mro_attributes import list_attributes
+from netex import Polygon, PosList, Pos, LocationStructure2, LineString, SimplePointVersionStructure, MultiSurface
+from netexio.dbaccess import get_interesting_classes
+import sys
 
 transformers = {}
+
+def get_all_geo_elements():
+    classes = get_interesting_classes()
+    clean_element_names, interesting_element_names = classes
+    for element_name in clean_element_names:
+        clazz_parent = getattr(sys.modules['netex'], element_name)
+        attrs = list_attributes(clazz_parent)
+        for attr in attrs:
+            clazz = attr[3].type
+            if clazz is not None and hasattr(clazz, '_name'):
+                if clazz._name == 'Optional':
+                    optional = True
+                    clazz_resolved = [x for x in clazz.__args__ if x is not None.__class__][0]
+                else:
+                    clazz_resolved = clazz
+
+                if clazz_resolved in {LocationStructure2, LineString, SimplePointVersionStructure, Polygon,
+                                      MultiSurface}:
+                    yield clazz_parent
+                    break
 
 def get_transformer_by_srs_name(location, crs_to) -> Transformer:
     if hasattr(location, 'pos') and location.pos is not None:
