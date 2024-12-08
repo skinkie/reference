@@ -214,11 +214,11 @@ def write_lxml_generator(db: Database, clazz, generator: Generator):
 
     cur = db.cursor()
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -298,12 +298,14 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
         cur.execute(sql_drop_table)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
 
+
+    print(sql_create_table)
     cur.execute(sql_create_table)
 
     try:
@@ -345,11 +347,11 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
         cur.execute(sql_drop_table)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
 
     cur.execute(sql_create_table)
 
@@ -406,11 +408,11 @@ def update_generator(db: Database, clazz, generator: Generator):
     objectname = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version, ordr));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id, version));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
     else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
+        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
 
     # This is not used effectively at this point, considering that DuckDB's ATTACH is not persistent
     # https://github.com/duckdb/duckdb-web/issues/3495
@@ -557,7 +559,7 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
                 sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
 
         else:
-            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL PRIMARY KEY (id));"
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
 
         print(sql_create_table)
         cur.execute(sql_create_table)
@@ -643,8 +645,8 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     else:
         cur = db.con
 
-    sql_create_table = "CREATE TABLE temp_embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT);"
-    cur.execute(sql_create_table)
+    # sql_create_table = "CREATE TABLE IF NOT EXISTS temp_embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT);"
+    # cur.execute(sql_create_table)
 
     clean_element_names, interesting_element_names = classes
     clazz_by_name = {}
