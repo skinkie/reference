@@ -1,8 +1,8 @@
 import sys
-import duckdb as sqlite3
 from itertools import groupby
 from typing import List, Generator, Tuple
 
+from netexio.database import Database
 from netexio.dbaccess import load_local, write_objects, write_generator
 from refs import getIndex, getRef
 from utils import project
@@ -48,20 +48,15 @@ def groupby_stop_area(stop_areas: List[StopArea], scheduled_stop_points: List[Sc
     for ssp in [ssp for ssp in scheduled_stop_points if ssp.stop_areas is None or len(ssp.stop_areas.stop_area_ref) == 0]:
         yield infer_stop_place_from_scheduled_stop_point(ssp)
 
-def infer_stop_places(read_database: str, write_database: str, generator_defaults: dict):
+def infer_stop_places(db_read: Database, db_write: Database, generator_defaults: dict):
     print(sys._getframe().f_code.co_name)
-    with sqlite3.connect(write_database) as write_con:
-        if write_database == read_database:
-            read_con = write_con
-        else:
-            read_con = sqlite3.connect(read_database, read_only=True)
 
-        stop_areas = load_local(read_con, StopArea)
-        scheduled_stop_points = load_local(read_con, ScheduledStopPoint)
-        write_generator(write_con, StopPlace, [], True)
-        write_generator(write_con, PassengerStopAssignment, [], True)
+    stop_areas = load_local(db_read, StopArea)
+    scheduled_stop_points = load_local(db_read, ScheduledStopPoint)
+    write_generator(db_write, StopPlace, [], True)
+    write_generator(db_write, PassengerStopAssignment, [], True)
 
-        # TODO: How to write to the database, a pair of input from a generator?
-        for stop_place, psas in groupby_stop_area(stop_areas, scheduled_stop_points):
-            write_objects(write_con, [stop_place], False, False)
-            write_objects(write_con, psas, False, False)
+    # TODO: How to write to the database, a pair of input from a generator?
+    for stop_place, psas in groupby_stop_area(stop_areas, scheduled_stop_points):
+        write_objects(db_write, [stop_place], False, False)
+        write_objects(db_write, psas, False, False)

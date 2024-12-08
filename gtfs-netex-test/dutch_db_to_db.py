@@ -1,5 +1,4 @@
 import sys
-import duckdb as sqlite3
 from decimal import Decimal, ROUND_HALF_UP
 from functools import partial
 from itertools import chain
@@ -15,6 +14,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from anyintodbnew import setup_database, get_interesting_classes
 from callsprofile import CallsProfile
+from netexio.database import Database
 from netexio.dbaccess import load_generator
 from netex import ServiceJourneyPattern, Direction, Codespace, MultilingualString, DirectionType, ServiceJourney, \
     AvailabilityCondition, TimeDemandType, ScheduledStopPoint, Pos, PointVersionStructure, RoutePoint, RouteLink, \
@@ -55,14 +55,14 @@ from dutch_to_db import DUTCH_CLASSES
 generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
 
 def main(source_database_file: str, target_database_file: str):
-    classes = get_interesting_classes(filter=DUTCH_CLASSES)
-    with sqlite3.connect(target_database_file) as con:
-        setup_database(con, classes, True)
+    with Database(target_database_file) as db:
+        classes = get_interesting_classes(filter=DUTCH_CLASSES)
+        setup_database(db, classes, True)
 
 
         # with Pool(1) as pool:
             # dutch_scheduled_stop_point_generator(source_database_file, target_database_file, generator_defaults, pool)
-        dutch_service_journey_pattern_time_demand_type_memory(source_database_file, target_database_file, generator_defaults)
+        dutch_service_journey_pattern_time_demand_type_memory(db, db, generator_defaults)
 
     # Add a single responsibility set and TransportAdministrativeZone
     # Infer OperationalContext from Line (Transportmode)

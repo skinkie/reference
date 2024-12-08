@@ -1,5 +1,4 @@
-import duckdb as sqlite3
-from datetime import datetime, date
+from datetime import date
 from typing import Generator
 
 from netexio.database import Database

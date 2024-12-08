@@ -1,5 +1,3 @@
-# import sqlite3
-import duckdb as sqlite3
 import sys
 import warnings
 from datetime import datetime
@@ -444,8 +442,8 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         sj.calls = None
         return sj
 
-    def query(read_con) -> Generator:
-        _load_generator = load_generator(read_con, ServiceJourney)
+    def query(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, ServiceJourney)
         for sj in _load_generator:
             yield process(sj, db_read, db_write, generator_defaults)
         # for sj in pool.imap_unordered(partial(process, read_database=read_database, write_database=write_database, generator_defaults=generator_defaults), _load_generator, chunksize=100):
@@ -470,8 +468,8 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         write_objects(db_write, service_calendars, True, True)
 
         # TODO
-        # day_types = getIndex(list(chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(read_con, DayType))
-        # uic_operating_periods = list(chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars if service_calendar.operating_periods] + load_local(read_con, UicOperatingPeriod)))
+        # day_types = getIndex(list(chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(db_read, DayType))
+        # uic_operating_periods = list(chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars if service_calendar.operating_periods] + load_local(db_read, UicOperatingPeriod)))
         # day_type_assignments = list(chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments]))
 
     else:
@@ -479,7 +477,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
         write_objects(db_write, [service_calendar], True, True)
 
-    # availability_conditions = load_local(read_con, AvailabilityCondition)
+    # availability_conditions = load_local(db_read, AvailabilityCondition)
     # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
     # service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys,
     #                                                                                availability_conditions)
@@ -490,7 +488,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         # TODO: Implement getTimetabledPassingTimes incrementally. As generator won't work, since it has to store the result (directly).
         # timetabledpassingtimesprofile.getTimetabledPassingTimes(clean=True)
 
-        # availability_conditions = load_local(read_con, AvailabilityCondition)
+        # availability_conditions = load_local(db_read, AvailabilityCondition)
         # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
         # service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
         # write_objects(write_con, [service_calendar], True, False)
@@ -504,23 +502,23 @@ def epip_remove_keylist_extensions(db_read: Database, db_write: Database, genera
 
         return deserialised
 
-    def query1(read_con) -> Generator:
-        _load_generator = load_generator(read_con, StopPlace)
+    def query1(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, StopPlace)
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 
-    def query2(read_con) -> Generator:
-        _load_generator = load_generator(read_con, ScheduledStopPoint)
+    def query2(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, ScheduledStopPoint)
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 
-    def query3(read_con) -> Generator:
-        _load_generator = load_generator(read_con, ServiceJourneyPattern)
+    def query3(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, ServiceJourneyPattern)
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 
-    def query4(read_con) -> Generator:
-        _load_generator = load_generator(read_con, ServiceJourney)
+    def query4(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, ServiceJourney)
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 

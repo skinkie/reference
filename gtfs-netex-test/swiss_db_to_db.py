@@ -1,4 +1,3 @@
-import sqlite3
 from decimal import Decimal, ROUND_HALF_UP
 from functools import partial
 from itertools import chain

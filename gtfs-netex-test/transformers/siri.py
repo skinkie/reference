@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
 from typing import Generator
 
-import duckdb as sqlite3
 from xsdata.models.datatype import XmlDate, XmlDateTime
 
 from callsprofile import CallsProfile
 from netex import ServiceJourney, DestinationDisplay, NaturalLanguageStringStructure, MultilingualString, Call, \
     ArrivalStructure, OperatingDay, DepartureStructure, ServiceJourneyPattern, TimeDemandType, LineRef, DirectionRef
+from netexio.database import Database
 from netexio.dbaccess import load_generator, get_single
 from siri import DatedVehicleJourneyStructure, DatedCall, AimedDepartureTime, AimedArrivalTime, Order, StopPointRef, VehicleJourneyRef
 
@@ -31,25 +31,24 @@ def siri_dated_call(call: Call, operating_day: OperatingDay, tzinfo) -> DatedCal
                      stop_point_ref=StopPointRef(value=call.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point_view.ref),
                      )
 
-def siri_destination_display_generator(read_database: str) -> Generator[NaturalLanguageStringStructure, None, None]:
-    with sqlite3.connect(read_database, read_only=True) as read_con:
-        for destination_display in load_generator(read_con, DestinationDisplay):
-            destination_display: DestinationDisplay
-            yield siri_language_string(destination_display.front_text)
+def siri_destination_display_generator(db_read: Database) -> Generator[NaturalLanguageStringStructure, None, None]:
+    for destination_display in load_generator(db_read, DestinationDisplay):
+        destination_display: DestinationDisplay
+        yield siri_language_string(destination_display.front_text)
 
-def siri_dated_vehicle_journey_generator(read_con, operating_day: OperatingDay, line_ref: LineRef, direction_ref: DirectionRef, tzinfo) -> Generator[DatedVehicleJourneyStructure, None, None]:
-    for service_journey in load_generator(read_con, ServiceJourney):
+def siri_dated_vehicle_journey_generator(db_read: Database, operating_day: OperatingDay, line_ref: LineRef, direction_ref: DirectionRef, tzinfo) -> Generator[DatedVehicleJourneyStructure, None, None]:
+    for service_journey in load_generator(db_read, ServiceJourney):
         # TODO: Implement a filter based on ServiceCalendar / AvailabilityCondition based on the provided operating_day, line_ref, direction_ref
 
         # TODO: Make more generic, also for GTFS
         if service_journey.calls:
             pass
         elif service_journey.passing_times:
-            service_journey_pattern = get_single(read_con, ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
+            service_journey_pattern = get_single(db_read, ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
             CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
         elif service_journey.time_demand_type_ref:
-            service_journey_pattern = get_single(read_con, ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
-            time_demand_type = get_single(read_con, TimeDemandType, service_journey.time_demand_type_ref.ref, service_journey.time_demand_type_ref.version)
+            service_journey_pattern = get_single(db_read, ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
+            time_demand_type = get_single(db_read, TimeDemandType, service_journey.time_demand_type_ref.ref, service_journey.time_demand_type_ref.version)
             CallsProfile.getCallsFromTimeDemandType(service_journey, service_journey_pattern, time_demand_type)
 
         service_journey: ServiceJourney

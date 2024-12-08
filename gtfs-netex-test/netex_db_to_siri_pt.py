@@ -1,4 +1,3 @@
-import duckdb as sqlite3
 import pytz
 from isal import igzip_threaded
 from xsdata.formats.dataclass.serializers import XmlSerializer
@@ -22,7 +21,7 @@ tzinfo = pytz.timezone('Europe/Amsterdam') # TODO: This is still something we wa
 
 def main(source_database_file: str, operating_day: OperatingDay, line_ref: LineRef, direction_ref: DirectionRef, output_filename: str):
     response_timestamp = ResponseTimestamp(value=XmlDateTime.now())
-    with sqlite3.connect(source_database_file, read_only=True) as read_con:
+    with Database(source_database_file) as db_read:
         ptd = ProductionTimetableDelivery(
             version="2.0",
             response_timestamp=response_timestamp,
@@ -31,7 +30,7 @@ def main(source_database_file: str, operating_day: OperatingDay, line_ref: LineR
                     recorded_at_time=XmlDateTime.now(tz=tzinfo),
                     line_ref=LineRefStructure(value=line_ref.ref),
                     direction_ref=DirectionRefStructure(value=direction_ref.ref),
-                    dated_vehicle_journey=siri_dated_vehicle_journey_generator(read_con, operating_day, line_ref, direction_ref, tzinfo))
+                    dated_vehicle_journey=siri_dated_vehicle_journey_generator(db_read, operating_day, line_ref, direction_ref, tzinfo))
             ])
 
         sd = ServiceDelivery(

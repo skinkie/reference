@@ -1,14 +1,15 @@
 import sys
 
-import duckdb as sqlite3
-# import xml.etree.ElementTree as ET
 import os
 
-from anyintodbnew import  get_interesting_classes, setup_database, open_netex_file, insert_database
-from netexio.dbaccess import resolve_all_references_and_embeddings
+from netexio.database import Database
+from netexio.dbaccess import resolve_all_references_and_embeddings, open_netex_file, get_interesting_classes, \
+    setup_database, insert_database
 import netex_monkeypatching
 from aux_logging import *
 import traceback
+
+from transformers.embedding import embedding_update
 
 SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "TemplateServiceJourney", "ServiceCalendar", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace", "ResponsibilitySet"]
 
@@ -19,47 +20,38 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
                 print("File names do not fit Swiss data:. So no Swiss data")
                 sys.exit(2)
 
-    # Workaround for https://github.com/duckdb/duckdb/issues/8261
-    try:
-        os.remove(database)
-    except:
-        pass
+    if clean_database:
+        # Workaround for https://github.com/duckdb/duckdb/issues/8261
+        try:
+            os.remove(database)
+        except:
+            pass
 
-    with sqlite3.connect(database) as con:
+    with Database(database) as db:
         classes = get_interesting_classes(SWISS_CLASSES)
 
-        setup_database(con, classes, clean_database)
+        setup_database(db, classes, clean_database)
 
         for file in open_netex_file(swiss_zip_file):
-            insert_database(con, classes, file)
+            insert_database(db, classes, file)
 
         if referencing:
-            resolve_all_references_and_embeddings(con, classes)
+            embedding_update(db)
 
 def check_if_swiss_file(file_handler):
     if file_handler.name.endswith(".xml"):
-        # tree = ET.parse(file_handler)
-        # root = tree.getroot()
-        # count = 0
-        # for elem in root.iter():
-        #     if "id" in elem.attrib and elem.attrib["id"].startswith("ch:1:"):
-        #         count += 1
-        #        if count > 10:
-        #            return True
-
         fn=file_handler.name
         if "_CHE_" not in fn:
             return False
     return True
-
 
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Import a Swiss NeTEx ZIP archive into DuckDB')
     argument_parser.add_argument('swiss_zip_file', type=str, help='The NeTEx zip file')
     argument_parser.add_argument('database', type=str, help='The DuckDB to be overwritten with the NeTEx context')
-    argument_parser.add_argument('clean_database', action="store_true", help='Clean the current file', default=True)
-    argument_parser.add_argument('referencing', action="store_false", help='Create referencing table')
+    argument_parser.add_argument('--clean_database', action="store_true", help='Clean the current file', default=True)
+    argument_parser.add_argument('--referencing', action="store_true", help='Create referencing table')
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
     mylogger =prepare_logger(logging.INFO,args.log_file)

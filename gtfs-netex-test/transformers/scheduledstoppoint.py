@@ -1,4 +1,3 @@
-import duckdb as sqlite3
 from typing import Iterable, Dict, Generator
 
 from netexio.database import Database

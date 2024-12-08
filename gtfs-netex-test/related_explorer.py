@@ -17,9 +17,6 @@ from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, Schedu
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
     GeneralFrameMembersRelStructure, AvailabilityConditionRef, Route, ServiceJourneyPattern
 import netex_monkeypatching
-import duckdb as sqlite3
-from mro_attributes import list_attributes
-import xsdata
 from aux_logging import *
 import logging
 import traceback

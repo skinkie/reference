@@ -22,8 +22,6 @@ from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStruct
 from nordicprofile import NordicProfile
 from refs import getId, getRef, getIndex
 
-import duckdb as sqlite3
-
 from decimal import Decimal
 
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile

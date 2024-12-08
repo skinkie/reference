@@ -1,6 +1,6 @@
-import duckdb as sqlite3
 from typing import Iterable, Dict, Generator, Set
 
+from netexio.database import Database
 from netexio.dbaccess import write_objects, load_generator, update_generator, load_local
 from netex import ServiceJourneyPattern, Direction, MultilingualString, ResponsibilitySet, ResponsibilityRoleAssignment, \
     StakeholderRoleTypeEnumeration, Line, Operator, OperatorRef, ServiceJourney, TemplateServiceJourney, LineRef
@@ -11,7 +11,7 @@ from utils import project
 import netex_monkeypatching
 
 
-def infer_operator_from_responsibilityset_and_apply(read_database, write_database, generator_defaults: dict):
+def infer_operator_from_responsibilityset_and_apply(db_read: Database, db_write: Database, generator_defaults: dict):
     line_ref_to_operator_ref: Dict[str, OperatorRef] = {}
     mapping: Dict[str, OperatorRef] = {}
 
@@ -36,47 +36,40 @@ def infer_operator_from_responsibilityset_and_apply(read_database, write_databas
         if changed:
             return object
 
-    def query1(read_con) -> Generator:
-        _load_generator = load_generator(read_con, Line)
+    def query1(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, Line)
         for line in _load_generator:
             new_line = process_line(line)
             if new_line is not None:
                 yield new_line
 
-    def query2(read_con) -> Generator:
-        _load_generator = load_generator(read_con, ServiceJourney)
+    def query2(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, ServiceJourney)
         for service_journey in _load_generator:
             new_service_journey = process_journey(service_journey)
             if new_service_journey is not None:
                 yield new_service_journey
 
-    def query3(read_con) -> Generator:
-        _load_generator = load_generator(read_con, TemplateServiceJourney)
+    def query3(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, TemplateServiceJourney)
         for template_service_journey in _load_generator:
             new_template_service_journey = process_journey(template_service_journey)
             if new_template_service_journey is not None:
                 yield new_template_service_journey
 
 
-    # TODO: Make the database access pattern generic.
-    with sqlite3.connect(write_database) as write_con:
-        if write_database == read_database:
-            read_con = write_con
-        else:
-            read_con = sqlite3.connect(read_database, read_only=True)
+    _mapping: Dict[str, Set] = {}
+    # operators = getIndex(load_local(db_read, Operator))
+    for responsibility_set in load_local(db_read, ResponsibilitySet):
+        _mapping[responsibility_set.id] = set([])
+        for role_assignment in responsibility_set.roles.responsibility_role_assignment:
+            if StakeholderRoleTypeEnumeration.OPERATION in role_assignment.stakeholder_role_type or StakeholderRoleTypeEnumeration.OPERATION_1 in role_assignment.stakeholder_role_type:
+                _mapping[responsibility_set.id].add(project(role_assignment.responsible_organisation_ref, OperatorRef))
 
-        _mapping: Dict[str, Set] = {}
-        # operators = getIndex(load_local(read_con, Operator))
-        for responsibility_set in load_local(read_con, ResponsibilitySet):
-            _mapping[responsibility_set.id] = set([])
-            for role_assignment in responsibility_set.roles.responsibility_role_assignment:
-                if StakeholderRoleTypeEnumeration.OPERATION in role_assignment.stakeholder_role_type or StakeholderRoleTypeEnumeration.OPERATION_1 in role_assignment.stakeholder_role_type:
-                    _mapping[responsibility_set.id].add(project(role_assignment.responsible_organisation_ref, OperatorRef))
+    mapping = {x: y.pop() for x, y in _mapping.items() if len(y) == 1}
+    # Maybe Authority too?
 
-        mapping = {x: y.pop() for x, y in _mapping.items() if len(y) == 1}
-        # Maybe Authority too?
-
-        update_generator(write_con, ServiceJourney, query2(read_con))
-        update_generator(write_con, TemplateServiceJourney, query3(read_con))
-        update_generator(write_con, Line, query1(read_con))
+    update_generator(db_write, ServiceJourney, query2(db_read))
+    update_generator(db_write, TemplateServiceJourney, query3(db_read))
+    update_generator(db_write, Line, query1(db_read))
 
