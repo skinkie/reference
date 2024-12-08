@@ -201,8 +201,8 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                             ServiceCalendarFrame(
                                                 id="EU_PI_CALENDAR", version=version,
                                                 type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_CALENDAR', version_ref='1.0'),
-                                                 day_types=DayTypesInFrameRelStructure(day_type=day_type.generator()) if day_type.has_value() else None,
-                                                 service_calendar=list(service_calendar.generator())[0] if service_calendar.has_value() else None, # Warning; we must handle multiple stuff
+                                                # day_types=DayTypesInFrameRelStructure(day_type=day_type.generator()) if day_type.has_value() else None, # if this is uncommented, it must be prevented that the ServiceCalendar has these DayTypes
+                                                service_calendar=list(service_calendar.generator())[0] if service_calendar.has_value() else None, # Warning; we must handle multiple stuff
                                             ),
                                         ]
                                     )
