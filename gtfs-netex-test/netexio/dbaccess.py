@@ -693,6 +693,13 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                 frame_defaults: VersionFrameDefaultsStructure = parser.from_string(xml, VersionFrameDefaultsStructure)
                 frame_defaults_stack[-1] = frame_defaults
                 current_framedefaults = frame_defaults
+                if current_framedefaults.default_data_source_ref is not None:
+                    current_datasource_ref = current_framedefaults.default_data_source_ref.ref
+                if current_framedefaults.default_responsibility_set_ref is not None:
+                    current_responsibility_set_ref = current_framedefaults.default_responsibility_set_ref.ref
+                if current_framedefaults.default_location_system is not None:
+                    current_location_system = current_framedefaults.default_location_system
+
                 continue
 
             elif localname in all_frames:
