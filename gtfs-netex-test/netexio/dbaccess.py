@@ -81,7 +81,7 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
 
-def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True) -> List[T]:
+def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     if cursor:
@@ -100,7 +100,7 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         pass
         # This is the situation where the type is not available at all in the catalogue
         if embedding:
-            return list(load_embedded_transparent_generator(db, clazz, limit, filter))
+            return list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent))
         else:
             return []
 
@@ -110,7 +110,7 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         objs.append(obj)
 
     if embedding:
-        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter))
+        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent))
 
     return objs
 
@@ -152,7 +152,7 @@ def resolve_attr(obj, attr):
             obj = getattr(obj, name)
     return obj
 
-def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None) -> List[T]:
+def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
     cur = db.cursor()
@@ -183,12 +183,16 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
 
             obj = object_cache[needle]
             if obj is not None:
-                split = []
-                for p in path.split('.'):
-                    if p.isnumeric():
-                        p = int(p)
-                    split.append(p)
-                yield resolve_attr(obj, split)
+                if parent:
+                    yield obj
+
+                else:
+                    split = []
+                    for p in path.split('.'):
+                        if p.isnumeric():
+                            p = int(p)
+                        split.append(p)
+                    yield resolve_attr(obj, split)
 
     except TypeError:
         pass

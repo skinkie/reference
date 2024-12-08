@@ -49,7 +49,7 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
     
                 if not already_done:
                     resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]),
-                                               filter=y[0], embedding=False)
+                                               filter=y[0], embedding=True, embedded_parent=True)
                     if len(resolved_objs) > 0:
                         recursive_resolve(db, resolved_objs[0], resolved, filter, filter_class)  # TODO: not only consider the first
 
@@ -65,7 +65,7 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
 
             if not already_done:
                 resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]),
-                                           filter=y[0], embedding=False)
+                                           filter=y[0], embedding=True, embedded_parent=True)
                 if len(resolved_objs) > 0:
                     recursive_resolve(db, resolved_objs[0], resolved, filter, filter_class)  # TODO: not only consider the first
     # else:
@@ -101,7 +101,7 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
                     break
 
             if not already_done:
-                resolved_objs = load_local(db, clazz, filter=obj.ref, embedding=False)
+                resolved_objs = load_local(db, clazz, filter=obj.ref, embedding=True, embedded_parent=True)
                 if len(resolved_objs) > 0:
                     recursive_resolve(db, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
                 else:
@@ -116,7 +116,7 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
                                     break
 
                             if not already_done:
-                                resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]), filter=y[0], embedding=False)
+                                resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]), filter=y[0], embedding=True, embedded_parent=True)
                                 if len(resolved_objs) > 0:
                                     recursive_resolve(db, resolved_objs[0], resolved, filter, filter_class) # TODO: not only consider the first
                     else:
