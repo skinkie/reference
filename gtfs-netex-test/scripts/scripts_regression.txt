@@ -67,8 +67,8 @@
         {"script": "tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
         {"script": "gtfs_show_map.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"},
         {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml"},
-         {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
-       {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj1.xml"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj1.xml"},
         {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb ServiceJourney random %%dir%%/sj2.xml"}
         ]
   },

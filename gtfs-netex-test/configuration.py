@@ -16,6 +16,8 @@ main_log_file = "aux.log" # in the processing_data folder
 defaults = {}
 defaults["authority"]= "http://openov.nl/"
 defaults["timezone"]= "Europe/Amsterdam"
+defaults["particpant_ref"] = "NDOV"
+defaults["xml_description"] = "Huge XML Serializer test"
 defaults["feed_publisher_name"]= "Publication Delivery"
 defaults["feed_publisher_url"]= "http://publicationdelivery.eu"
 

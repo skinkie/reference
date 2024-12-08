@@ -42,6 +42,7 @@ serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declara
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config, writer=XmlEventWriter)
+from configuration import defaults
 
 def chain(*iterables) -> Generator:
     for it in iterables:
@@ -141,8 +142,8 @@ def export_epip_network_offer(database_original, database_target, output_filenam
             publication_delivery = PublicationDelivery(
                             version="ntx:1.1",
                             publication_timestamp=XmlDateTime.now(),
-                            participant_ref=ParticipantRef(value="NDOV"),
-                            description=MultilingualString(value="Huge XML Serializer test"),
+                            participant_ref=ParticipantRef(value=defaults["particpant_ref"]),
+                            description=MultilingualString(value=defaults["xml_description"]),
                             data_objects=DataObjectsRelStructure(choice=[
                                 CompositeFrame(
                                     id="EU_PI_NETWORK_OFFER", version=version,
