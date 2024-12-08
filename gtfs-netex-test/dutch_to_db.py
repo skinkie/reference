@@ -1,6 +1,7 @@
 import os
 from typing import List
 
+from netexio.database import Database
 from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database, \
     resolve_all_references_and_embeddings
 from transformers.embedding import embedding_update
