@@ -26,11 +26,11 @@
         {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
-        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
         {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml"},
         {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml"},
-        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/sj.xml %%dir%%/netex3-database.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex3-database.duckdb %%dir%%/netex4-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex3-database.duckdb %%dir%%/netex4-database.duckdb %%dir%%/%%block%%-sj-netex.xml"}
         ]
@@ -56,8 +56,9 @@
     "block": "swiss4",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "set_defaults", "args": "authority='SKI+'; time_zone='Europe/Berlin'; feed_publisher_name='SBB SKI+'; feed_publisher_url='https://opentransportdata.swiss'"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     },
+        {"script": "set_defaults", "args": "authority='SKI+'; time_zone='Europe/Berlin'; feed_publisher_name='SBB SKI+'; feed_publisher_url='https://opentransportdata.swiss'"},
         {"script": "swiss_to_db.py", "args": "--log=%%log%% d:/input/swiss4.zip %%dir%%/swiss-import.duckdb"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/%%block%%-import-gtfs.zip"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/swiss-assertions.txt %%dir%%/%%block%%-netex.xml"},
