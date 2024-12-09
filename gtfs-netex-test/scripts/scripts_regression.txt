@@ -62,6 +62,7 @@
         {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/swiss-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
+        {"script": "tool_xml_validator.py", "args": "--log=%%log%%  %%dir%%/%%block%%-netex.xml C:/Users/ue71603/MG_Daten/github/NeTEx1/xsd/netex_publication.xsd"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb"},
         {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex2-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
         {"script": "tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
