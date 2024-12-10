@@ -795,19 +795,19 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
                 current_element_tag = None
 
-                # WARNING: Executing the following code is SLOWER than deserialisation of our entire database, in the UDF.
+                # WARNING: Executing the following code is SLOWER than deserialisation of our entire database, in the UDF. Factor 4x
 
                 # l = [x for x in update_embedded_referencing(object) if len(x) > 0]
                 # if len(l) > 0:
                 #    cur.executemany("INSERT INTO temp_embedded VALUES (?, ?, ?, ?, ?, ?, ?, ?)", l)
 
-        # For this to work, we must expect that the caller always updates the added objects.
-        # cur.execute("UPDATE meta SET embedding_last_modified = NOW();")
+    # For this to work, we must expect that the caller always updates the added objects.
+    # cur.execute("UPDATE meta SET embedding_last_modified = NOW();")
 
-        # cur.execute("INSERT OR REPLACE INTO embedded SELECT DISTINCT * FROM temp_embedded WHERE path IS NOT NULL;")
-        # cur.execute("INSERT OR REPLACE INTO referencing SELECT DISTINCT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
+    # cur.execute("INSERT OR REPLACE INTO embedded SELECT DISTINCT * FROM temp_embedded WHERE path IS NOT NULL;")
+    # cur.execute("INSERT OR REPLACE INTO referencing SELECT DISTINCT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
 
-        # cur.execute("TRUNCATE temp_embedded;")
+    # cur.execute("DROP TABLE temp_embedded;")
 
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     # qprint(obj.__class__.__name__)
