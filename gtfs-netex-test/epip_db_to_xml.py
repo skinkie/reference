@@ -2,6 +2,7 @@ from datetime import date
 from typing import Generator
 
 from netexio.database import Database
+from transformers.embedding import embedding_update
 from utils import project
 from isal import igzip_threaded
 import traceback
@@ -15,7 +16,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDateTime
 from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
 
-from netexio.dbaccess import load_local, load_generator
+from netexio.dbaccess import load_local, load_generator, fetch_references_classes_generator, create_meta
 from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataObjectsRelStructure, GeneralFrame, \
     GeneralFrameMembersRelStructure, ServiceJourney, StopPlace, CompositeFrame, FramesRelStructure, TimetableFrame, \
     JourneysInFrameRelStructure, TypeOfFrame, TypeOfFrameRef, ServiceFrame, JourneyPatternsInFrameRelStructure, \
@@ -129,11 +130,19 @@ def export_epip_network_offer(database_original, database_target, output_filenam
             # availability_condition = GeneratorTester(load_generator(db_orig, AvailabilityCondition))
             service_journey = GeneratorTester(load_generator(db_target, ServiceJourney))
         
-            day_type = GeneratorTester(load_generator(db_target, DayType))
             service_calendar = GeneratorTester(load_generator(db_target, ServiceCalendar, 1))
-        
+
+            other_referenced_classes = [Codespace, DataSource, Authority, Operator, ValueSet,
+                                        TransportAdministrativeZone, ResponsibilitySet, StopPlace,
+                                        TopographicPlace, Direction, Line, FlexibleLine,
+                                        Network, DestinationDisplay, ScheduledStopPoint, TariffZone, ServiceLink,
+                                        ServiceJourneyPattern, Connection, SiteConnection, DefaultConnection,
+                                        PassengerStopAssignment, Notice, NoticeAssignment, JourneyMeeting,
+                                        InterchangeRule, ServiceJourney, ServiceCalendar, VehicleType]
+
+            other_referenced_objects = GeneratorTester(fetch_references_classes_generator(db_orig, db_target, other_referenced_classes))
+
             version = date.today().strftime("%Y%m%d")
-        
         
             default_locale: LocaleStructure = project(list(all_locales)[0], LocaleStructure) if len(all_locales) > 0 else None
             if default_locale is not None and default_locale.languages is not None and len(default_locale.languages.language_usage) == 1:
@@ -201,9 +210,13 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                             ServiceCalendarFrame(
                                                 id="EU_PI_CALENDAR", version=version,
                                                 type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_CALENDAR', version_ref='1.0'),
-                                                # day_types=DayTypesInFrameRelStructure(day_type=day_type.generator()) if day_type.has_value() else None, # if this is uncommented, it must be prevented that the ServiceCalendar has these DayTypes
                                                 service_calendar=list(service_calendar.generator())[0] if service_calendar.has_value() else None, # Warning; we must handle multiple stuff
                                             ),
+
+                                            GeneralFrame(
+                                                id="OTHER_REFERENCED", version=version,
+                                                members=GeneralFrameMembersRelStructure(choice=other_referenced_objects.generator()) if other_referenced_objects.has_value() else None
+                                            )
                                         ]
                                     )
                                 )

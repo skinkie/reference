@@ -114,6 +114,34 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
 
     return objs
 
+def fetch_references_classes_generator(db: Database, db2: Database, classes: list):
+    cur = db.cursor()
+    cur2 = db2.cursor()
+
+    list_classes = ', '.join([f"'{clazz.__name__}'" for clazz in classes])
+    processed = set()
+
+    # Practically this could still lead to a reference from an embedded class, which may already be included
+    # (or not, hence we would need to assure that those objects are not in the class list)
+    query = f"SELECT DISTINCT class, ref, version FROM referencing WHERE class NOT IN ({list_classes}) ORDER BY class;"
+    cur2.execute(query)
+    while True:
+        result = cur2.fetchone()
+        if result is None:
+            break
+        clazz, ref, version = result
+
+        results = load_local(db, getattr(sys.modules['netex'], clazz), limit=1, filter=ref, cursor=True, embedding=True, embedded_parent=True)
+        if len(results) > 0:
+            needle = results[0].__class__.__name__ + '|' + results[0].id
+            if results[0].__class__ in classes: # Don't export classes, which are part of the main delivery
+                pass
+            elif needle in processed: # Don't export classes which have been exported already, maybe this can be solved at the database layer
+                pass
+            else:
+                processed.add(needle)
+                yield results[0]
+
 def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True):
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
@@ -808,6 +836,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     # cur.execute("INSERT OR REPLACE INTO referencing SELECT DISTINCT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
 
     # cur.execute("DROP TABLE temp_embedded;")
+
 
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     # qprint(obj.__class__.__name__)
