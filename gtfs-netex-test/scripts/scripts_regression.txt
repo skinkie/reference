@@ -74,6 +74,32 @@
         {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb ServiceJourney random %%dir%%/sj2.xml"}
         ]
   },
+
+       {
+    "block": "nl",
+    "scripts": [
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "dutch_to_db.py", "args": "d:/input/NeTEx_TESO_TESO_20241112_20241112.xml.gz %%dir%%/nl-import.duckdb --referencing"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/%%block%%-teso-gtfs.zip"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-teso-netex.xml"},
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "dutch_to_db.py", "args": "d:/input/NeTEx_WPD_WPD_20241112_20241112.xml.gz %%dir%%/nl-import.duckdb --referencing"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/%%block%%-wpd-gtfs.zip"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wpd-netex.xml"},
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "dutch_to_db.py", "args": "d:/input/NeTEx_WSF_WSF_20241112_20241112.xml.gz %%dir%%/wsf1-import.duckdb --referencing"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/%%block%%-teso-gtfs.zip"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wsf1-netex.xml"},
+        {"script": "clean_tmp", "args": "%%dir%%"},
+        {"script": "dutch_to_db.py", "args": "d:/input/NeTEx_WSF_WSF_20241203_20241203.xml.gz %%dir%%/nl-import.duckdb --referencing"},
+        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/%%block%%-wsf2-gtfs.zip"},
+        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wsf2-netex.xml"}
+         ]
+  },
   {
     "block": "logtest",
     "scripts": [
