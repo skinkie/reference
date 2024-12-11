@@ -79,11 +79,11 @@
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
         {"script": "set_defaults", "args": "authority='SKI+'; time_zone='Europe/Berlin'; feed_publisher_name='SBB SKI+'; feed_publisher_url='https://opentransportdata.swiss'"},
-        {"script": "swiss_to_db.py", "args": "--log=%%log%% d:/input/swiss4.zip %%dir%%/swiss-import.duckdb"},
-        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb Line random %%dir%%/line.xml"},
-        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj.xml"},
-        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj1.xml"},
-        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb ServiceJourney random %%dir%%/sj2.xml"}
+        {"script": "swiss_to_db.py", "args": "--log=%%log%% d:/input/swiss4.zip %%dir%%/swiss-import.duckdb --referencing"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb Line random %%dir%%/line.xml --referencing"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj.xml --referencing"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj1.xml --referencing"},
+        {"script": "related_explorer.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb ServiceJourney random %%dir%%/sj2.xml --referencing"}
         ]
   },
 
@@ -112,7 +112,7 @@
         {"script": "clean_tmp", "args": "%%dir%%"},
         {"script": "dutch_to_db.py", "args": "d:/input/NeTEx_WSF_WSF_20241203_20241203.xml.gz %%dir%%/nl-import.duckdb --referencing"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wsf2-netex.xml"}.
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wsf2-netex.xml"},
         {"script": "netex_to_db.py", "args": "%%dir%%/%%block%%-wsf2-netex.xml %%dir%%/nl-gtfs.duckdb"},
         {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/nl-gtfs.duckdb %%dir%%/%%block%%-wsf2-gtfs.zip"}
          ]
