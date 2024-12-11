@@ -92,7 +92,7 @@ class GeneratorTester:
 
         return None
 
-def export_epip_network_offer(database_original, database_target, output_filename: str):
+def main(database_original, database_target, output_filename: str):
     # The way how con_orig, and con_target have been modelled, is too hardcoded.
     # An alternative would be to put all the contents in the con_target.
 
@@ -238,7 +238,7 @@ if __name__ == '__main__':
     args = argument_parser.parse_args()
     mylogger =prepare_logger(logging.INFO,args.log_file)
     try:
-        export_epip_network_offer(args.original, args.target, args.output)
+        main(args.original, args.target, args.output)
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
         raise e

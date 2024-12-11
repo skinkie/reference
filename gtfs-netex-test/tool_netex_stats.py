@@ -18,12 +18,8 @@ def get_element_names(node):
         element_names.extend(get_element_names(child))
     return element_names
 
-def main(file: str,log_file:str):
-    global mylogger
+def main(file: str):
     global processing_data
-    if log_file == None:
-        log_file="stats.log"
-    mylogger= prepare_logger(logging.INFO, log_file)
     log_print("***************************************************")
     log_print("file: " + file)
     log_print("***************************************************")
@@ -56,7 +52,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
-        main(args.file,args.log_file)
+        main(args.file)
         log_flush()
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())

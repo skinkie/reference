@@ -2,7 +2,6 @@
 import logging
 # Logging
 log_dict={}  # relevant values key - type of problem, then  [count, message]
-mylogger = None  # the main logger
 NOSOFTLOGGING=False  # if set to True the log_print function will output nothing
 general_log_level = logging.INFO
 

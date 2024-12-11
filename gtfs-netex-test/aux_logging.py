@@ -24,12 +24,10 @@ def log_print(s):
 
 def prepare_logger(log_level,log_file_name):
     # create logger
-    global mylogger
     global log_dict
     global processing_data
-    if not mylogger:
-        mylogger = logging.getLogger("testrunner")
-        if mylogger:
+    mylogger = logging.getLogger("script_runner")
+    if mylogger:
             mylogger.setLevel(log_level)
             log_dict = {}
             # create console handler and set level to debug
@@ -57,23 +55,19 @@ def prepare_logger(log_level,log_file_name):
     return mylogger
 
 
+
+
 # just log every occurance
 def log_all(log_level,key, message):
-    global mylogger
-    global general_log_level
-    global main_log_file
-    if mylogger==None:
-        mylogger = prepare_logger(general_log_level,main_log_file)
+    mylogger = logging.getLogger("script_runner")
     mylogger.log(log_level,key+": "+message)
     log_flush()
 
 # Only prints the message once and continues
 def log_once(log_level,key,message):
     global log_dict
-    global mylogger
-    if mylogger==None:
-        mylogger = prepare_logger(general_log_level,main_log_file)
     a = log_dict.get(key)
+    mylogger = logging.getLogger("script_runner")
     if a == None:
         log_dict[key]=[1,message]
         mylogger.log(log_level,key+":" +message)
@@ -86,9 +80,7 @@ def log_once(log_level,key,message):
 # writes the numbers of occurances of each error type
 def log_write_counts(log_level):
     global log_dict
-    global mylogger
-    if mylogger==None:
-        mylogger = prepare_logger(general_log_level,main_log_file)
+    mylogger = logging.getLogger("script_runner")
     if len(log_dict)>0:
         mylogger.log(logging.INFO,'Logging: Recapitulation of warnings')
         for key, arr in log_dict.items():
@@ -99,7 +91,7 @@ def log_write_counts(log_level):
 
 # flushes the log to disk
 def log_flush():
-    global mylogger
+    mylogger = logging.getLogger("script_runner")
     if not mylogger==None:
         for handler in mylogger.handlers:
             handler.flush()

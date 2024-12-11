@@ -74,7 +74,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
         else:
             log_all(logging.WARN, 'related_explorer',f"no such object found {object_type},{object_filter}")
 
-def main(netex,object_type,object_filter,output,log_file,referencing):
+def main(netex,object_type,object_filter,output,referencing):
     with Database(netex) as db:
         references_exist = False
         try:
@@ -105,4 +105,4 @@ if __name__ == '__main__':
     args = argument_parser.parse_args()
     mylogger = prepare_logger(logging.INFO,args.log_file)
 
-    main(args.netex,args.object_type,args.object_filter,args.output,args.log_file,args.referencing)
+    main(args.netex,args.object_type,args.object_filter,args.output,args.referencing)
