@@ -8,6 +8,17 @@ from aux_logging import *
 from configuration import *
 import traceback
 
+def load_and_run(file_name, args_string):
+
+    module_name = file_name[:-3]  # Remove the '.py' extension
+    module_name = module_name+".main"
+    components = module_name.split('.')
+    mod = __import__(components[0])
+    for comp in components[1:]:
+        mod = getattr(mod, comp)
+    args = args_string.split()  # Split the string into a list of arguments
+    result = mod(*args)
+    return result
 
 def replace_in_string(input, search, replace):
     return input.replace(search, replace)
@@ -145,13 +156,15 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             python_executable = sys.executable
 
             # Run the script with arguments
-            command = python_executable + " " + script_name + " " + script_args
-            command_list = [python_executable,script_name]
-            command_list.extend(shlex.split(script_args))
-            result = subprocess.run(command_list,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT,
-                                    universal_newlines=True)
+            #command = python_executable + " " + script_name + " " + script_args
+            #command_list = [python_executable,script_name]
+            #command_list.extend(shlex.split(script_args))
+            #result = subprocess.run(command_list,
+            #                        stdout=subprocess.PIPE,
+            #                        stderr=subprocess.STDOUT,
+            #                        universal_newlines=True)
+
+            result=load_and_run(script_name, script_args)
             end_time = time.time()
             execution_time = int(10*(end_time - start_time))/10
 
@@ -159,10 +172,10 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             log_all(logging.INFO, "test_runner_timing", f"Execution time: {execution_time} seconds\n")
             log_write_counts(logging.WARNING)
             log_flush()
-            if result.returncode == 0:
+            if result == None or result == 0:
                 log_all(logging.DEBUG, "test_runner", f'Script {script_name} successfully terminated.')
                 log_flush()
-            elif result.returncode == 1:
+            elif result == 1:
                 log_all(logging.ERROR, "test_runner",
                         f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
                 log_flush()

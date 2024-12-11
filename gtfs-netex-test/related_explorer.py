@@ -169,6 +169,25 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
         else:
             log_all(logging.WARN, 'related_explorer',f"no such object found {object_type},{object_filter}")
 
+def main(netex,object_type,object_filter,output,log_file,referencing):
+    with Database(netex) as db:
+        references_exist = False
+        try:
+            db.con.execute("SELECT * FROM referencing LIMIT 1;")
+            db.con.execute("SELECT * FROM embedded LIMIT 1;")
+            references_exist = True
+        except:
+            pass
+
+        if referencing or not references_exist:
+            log_all(logging.INFO, 'related_explorer',f"updating embedded and referencing tables")
+            embedding_update(db)
+
+    try:
+        fetch(netex, object_type, object_filter, output)
+    except Exception as e:
+        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        raise e
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Export a prepared EPIP  import into DuckDB')
@@ -181,21 +200,4 @@ if __name__ == '__main__':
     args = argument_parser.parse_args()
     mylogger = prepare_logger(logging.INFO,args.log_file)
 
-    with Database(args.netex) as db:
-        references_exist = False
-        try:
-            db.con.execute("SELECT * FROM referencing LIMIT 1;")
-            db.con.execute("SELECT * FROM embedded LIMIT 1;")
-            references_exist = True
-        except:
-            pass
-
-        if args.referencing or not references_exist:
-            log_all(logging.INFO, 'related_explorer',f"updating embedded and referencing tables")
-            embedding_update(db)
-
-    try:
-        fetch(args.netex, args.object_type, args.object_filter, args.output)
-    except Exception as e:
-        log_all(logging.ERROR, f'{e}', traceback.format_exc())
-        raise e
+    main(args.netex,args.object_type,args.object_filter,args.output,args.log_file,args.referencing)
