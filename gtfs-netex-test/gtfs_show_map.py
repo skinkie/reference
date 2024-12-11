@@ -17,12 +17,8 @@ def generate_random_dark_color():
     return '#%02x%02x%02x' % (r, g, b)
 
 
-def main(gtfs_zip_file, map_file, limitation,log_file):
-    global mylogger
+def main(gtfs_zip_file, map_file, limitation):
     global processing_data
-    if log_file == None:
-        log_file="gtfs_show_map.log"
-    mylogger=prepare_logger(logging.INFO,log_file)
     # Read GTFS files using pandas
     # Read the GTFS files directly from the ZIP archive using pandas
     start_time = time.time()
@@ -217,9 +213,9 @@ if __name__ == "__main__":
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
         if args.limitation:
-            main(args.gtfs_zip_file, args.map_file, args.limitation, args.log_file)
+            main(args.gtfs_zip_file, args.map_file, args.limitation)
         else:
-            main(args.gtfs_zip_file, args.map_file, None, args.log_file)
+            main(args.gtfs_zip_file, args.map_file, None)
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
         raise e

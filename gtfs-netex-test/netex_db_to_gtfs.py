@@ -200,20 +200,17 @@ def extract(archive, database: str):
             'feed_contact_url': ''
         }], write_header=True)
 
-def main(netex,gtfs,log_file):
-    mylogger = prepare_logger(logging.INFO, log_file)
-    try:
-        with zipfile.ZipFile(gtfs, 'w') as archive:
-            extract(archive, netex)
-    except Exception as e:
-        log_all(logging.ERROR,f'{e}',traceback.format_exc())
+def main(netex,gtfs):
+    with zipfile.ZipFile(gtfs, 'w') as archive:
+        extract(archive, netex)
+
 
 if __name__ == '__main__':
     import argparse
     argument_parser = argparse.ArgumentParser(description='Convert prepared DuckDB database into GTFS')
     argument_parser.add_argument('netex', type=str, help='The original DuckDB NeTEx database')
     argument_parser.add_argument('gtfs', type=str, help='The DuckDB to be overwritten with the NeTEx context')
-    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
+    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile') #TODO use logger in this file
     args = argument_parser.parse_args()
-    main(netex,gtfs,log_file)
+    main(netex,gtfs)
 

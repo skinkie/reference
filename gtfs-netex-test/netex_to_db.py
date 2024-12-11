@@ -6,8 +6,7 @@ from aux_logging import *
 from transformers.embedding import embedding_update
 
 
-def main(filenames: List[str], database: str, clean_database: bool = True, referencing: bool = False, log_file: str = None):
-    mylogger = prepare_logger(logging.INFO,args.log_file) if log_file else None
+def main(filenames: List[str], database: str, clean_database: bool = True, referencing: bool = False):
 
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
     if clean_database:
@@ -34,7 +33,6 @@ if __name__ == '__main__':
     argument_parser.add_argument('netex', nargs='+', default=[], help='NeTEx files')
     argument_parser.add_argument('database', type=str, help='The DuckDB to be overwritten with the NeTEx context')
     argument_parser.add_argument('--clean_database', action="store_true", help='Clean the current file', default=True)
-    argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
 
-    main(args.netex, args.database, args.clean_database, args.log_file)
+    main(args.netex, args.database, args.clean_database)
