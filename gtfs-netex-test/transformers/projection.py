@@ -1,3 +1,4 @@
+import functools
 from decimal import Decimal, ROUND_HALF_UP
 from itertools import chain
 
@@ -6,10 +7,15 @@ from pyproj.exceptions import CRSError
 
 from mro_attributes import list_attributes
 from netex import Polygon, PosList, Pos, LocationStructure2, LineString, SimplePointVersionStructure, MultiSurface
-from netexio.dbaccess import get_interesting_classes
+from netexio.database import Database
+from netexio.dbaccess import get_interesting_classes, recursive_attributes
 import sys
 
+from netexio.serializer import Serializer
+
 transformers = {}
+
+GEO_CLASSES = {LocationStructure2, LineString, Polygon, MultiSurface}
 
 def get_all_geo_elements():
     classes = get_interesting_classes()
@@ -26,10 +32,59 @@ def get_all_geo_elements():
                 else:
                     clazz_resolved = clazz
 
-                if clazz_resolved in {LocationStructure2, LineString, SimplePointVersionStructure, Polygon,
-                                      MultiSurface}:
+                if clazz_resolved in GEO_CLASSES:
                     yield clazz_parent
                     break
+
+def reprojection(deserialized: object, crs_to: str):
+    # TODO: This function would walk over the class iteratively.
+    # A general optimisation would be to precompute the paths within
+    # a class to directly have a list (per class) of possible location targets
+    for obj, path in recursive_attributes(deserialized, []):
+        if isinstance(obj, LocationStructure2):
+            project_location(obj, crs_to)
+
+        elif isinstance(obj, LineString):
+            if obj.srs_name == crs_to:
+                continue
+
+            transformer = get_transformer_by_srs_name(obj, crs_to)
+            project_linestring2(transformer, obj)
+            obj.srs_name = crs_to
+
+        elif isinstance(obj, Polygon):
+            project_polygon(obj, crs_to)
+
+        elif isinstance(obj, MultiSurface):
+            for member in obj.surface_member:
+                project_polygon(member.polygon, crs_to)
+            for member in obj.surface_members.polygon:
+                project_polygon(member, crs_to)
+
+            obj.srs_name = crs_to
+
+    return deserialized
+
+def reprojection_udf(serializer: Serializer, serialized: bytes, clazz: str, crs_to: str) -> bytes:
+    deserialized = serializer.unmarshall(serialized, clazz)
+    result = reprojection(deserialized, crs_to)
+    # TODO: optimisation, don't update, if nothing changed
+    reserialised = serializer.marshall(result, clazz)
+    return reserialised
+
+def reprojection_update(db: Database, crs_to: str):
+    con = db.con
+    con.create_function('reprojection', functools.partial(reprojection_udf, db.serializer), return_type=bytes)
+
+    con.begin()
+
+    all_geo_elements = {x.__name__ for x in get_all_geo_elements()}
+    for objectname in db.tables(exclusively=all_geo_elements):
+        con.execute(f"UPDATE {objectname} SET object = reprojection(object, '{objectname}', ?);", (crs_to,))
+
+    con.commit()
+
+    con.remove_function('reprojection')
 
 def get_transformer_by_srs_name(location, crs_to) -> Transformer:
     if hasattr(location, 'pos') and location.pos is not None:
@@ -73,6 +128,9 @@ def project_location_4326(location, quantize='0.000001'):
         print("TODO: Crazy not WGS84")
 
 def project_location(location: LocationStructure2, crs_to: str, quantize='0.000001'):
+    if location.srs_name == crs_to:
+        return
+
     if location.pos is not None:
         transformer = get_transformer_by_srs_name(location, crs_to)
         if transformer is not None:
@@ -96,6 +154,7 @@ def project_location(location: LocationStructure2, crs_to: str, quantize='0.0000
 
 
 def project_linestring2(transformer, linestring):
+    # TODO: Refactor arguments
     srs_dimension = linestring.srs_dimension if hasattr(linestring, 'srs_dimension') and linestring.srs_dimension else 2
     xx = []
     yy = []
@@ -121,6 +180,9 @@ def project_linestring2(transformer, linestring):
     # TODO: I would really want to apply the crs_to here
 
 def project_polygon(polygon: Polygon, crs_to):
+    if polygon.srs_name == crs_to:
+        return
+
     mapping = f"{polygon.srs_name}_{crs_to}"
     transformer = transformers.get(mapping, Transformer.from_crs(polygon.srs_name, crs_to))
     transformers[mapping] = transformer
