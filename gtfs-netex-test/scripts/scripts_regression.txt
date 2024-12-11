@@ -27,10 +27,10 @@
         {"script": "epip_db_to_db.py", "args": "%%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "%%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "%%dir%%/%%block%%-netex.xml %%dir%%/netex2-database.duckdb True"},
-        {"script": "netex_db_to_gtfs.py", "args": "%%dir%%/netex2-database.duckdb %%dir%%/%%block%%-gtfs.zip %%log%%"},
-        {"script": "tool_netex_stats.py", "args": "%%dir%%/%%block%%-netex.xml %%log%%"},
-        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml %%log%% False"},
-        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml %%log%% False"}
+        {"script": "netex_db_to_gtfs.py", "args": "%%dir%%/netex2-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
+        {"script": "tool_netex_stats.py", "args": "%%dir%%/%%block%%-netex.xml"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml False"},
+        {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml False"}
 
         ]
   },
@@ -73,14 +73,22 @@
         ]
   },
        {
-    "block": "nl",
+    "block": "nl1",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "netex_to_db.py", "args": "d:/input/NeTEx_WPD_WPD_20241112_20241112.xml.gz %%dir%%/nl-import.duckdb True %%log%%"},
+        {"script": "netex_to_db.py", "args": "d:/input/NeTEx_WPD_WPD_20241112_20241112.xml.gz %%dir%%/nl-import.duckdb True"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wpd-netex.xml"},
         {"script": "netex_to_db.py", "args": "%%dir%%/%%block%%-wpd-netex.xml %%dir%%/nl-gtfs.duckdb True"},
         {"script": "netex_db_to_gtfs.py", "args": "%%dir%%/nl-gtfs.duckdb %%dir%%/%%block%%-wpd-gtfs.zip"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/nl-import.duckdb"},
+        {"script": "#tool_check_db.py", "args": "%%dir%%/netex-database.duckdb"},
+        {"script": "#tool_check_db.py", "args": "%%dir%%/nl-gtfs.duckdb"}
+         ]
+  },
+       {
+    "block": "nl2",
+    "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
         {"script": "netex_to_db.py", "args": "d:/input/NeTEx_TESO_TESO_20241112_20241112.xml.gz %%dir%%/nl-import.duckdb True"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},

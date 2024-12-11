@@ -151,19 +151,6 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 log_all(logging.INFO, "test_runner", f"Command 'clean' executed for folder: {folder}\n")
                 continue
 
-
-            # Fetch the Python executable
-            python_executable = sys.executable
-
-            # Run the script with arguments
-            #command = python_executable + " " + script_name + " " + script_args
-            #command_list = [python_executable,script_name]
-            #command_list.extend(shlex.split(script_args))
-            #result = subprocess.run(command_list,
-            #                        stdout=subprocess.PIPE,
-            #                        stderr=subprocess.STDOUT,
-            #                        universal_newlines=True)
-
             result=load_and_run(script_name, script_args)
             end_time = time.time()
             execution_time = int(10*(end_time - start_time))/10
