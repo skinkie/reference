@@ -15,7 +15,7 @@ def main(filenames: List[str], database: str, clean_database: bool = True, refer
         except:
             pass
 
-    with Database(database, read_only=False, logger=mylogger) as db:
+    with Database(database, read_only=False, logger=logging.getLogger("script_runner")) as db:
         classes = get_interesting_classes()
 
         if clean_database:
