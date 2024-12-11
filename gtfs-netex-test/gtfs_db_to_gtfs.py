@@ -32,7 +32,7 @@ import zipfile
 from aux_logging import *
 import traceback
 from configuration import defaults
-def convert(archive, database: str):
+def extract(archive, database: str):
     agencies = {}
     used_agencies = set([])
     routes = {}
@@ -204,6 +204,13 @@ def convert(archive, database: str):
             'feed_contact_url': ''
         }], write_header=True)
 
+def main(netex,gtfs,log_file):
+    mylogger = prepare_logger(logging.INFO, log_file)
+    try:
+        with zipfile.ZipFile(gtfs, 'w') as archive:
+            extract(archive, netex)
+    except Exception as e:
+        log_all(logging.ERROR,f'{e}',traceback.format_exc())
 
 if __name__ == '__main__':
     import argparse
@@ -212,10 +219,5 @@ if __name__ == '__main__':
     argument_parser.add_argument('gtfs', type=str, help='The DuckDB to be overwritten with the NeTEx context')
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
-    mylogger = prepare_logger(logging.INFO, args.log_file)
+    main(netex,gtfs,log_file)
 
-    try:
-        with zipfile.ZipFile(args.gtfs, 'w') as archive:
-            convert(archive, args.netex)
-    except Exception as e:
-        log_all(logging.ERROR,f'{e}',traceback.format_exc())
