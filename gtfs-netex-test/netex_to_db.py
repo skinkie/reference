@@ -37,4 +37,4 @@ if __name__ == '__main__':
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
 
-    main(args.netex, args.database, args.clean_database, args.referencing, args.log_file)
+    main(args.netex, args.database, args.clean_database, args.log_file)
