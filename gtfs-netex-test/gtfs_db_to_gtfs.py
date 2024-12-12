@@ -32,7 +32,7 @@ import zipfile
 from aux_logging import *
 import traceback
 from configuration import defaults
-def convert(archive, database: str):
+def extract(archive, database: str):
     agencies = {}
     used_agencies = set([])
     routes = {}
@@ -206,7 +206,7 @@ def convert(archive, database: str):
 
 def main(netex,gtfs):
     with zipfile.ZipFile(gtfs, 'w') as archive:
-        convert(archive, netex)
+        extract(archive, netex)
 
 
 if __name__ == '__main__':
