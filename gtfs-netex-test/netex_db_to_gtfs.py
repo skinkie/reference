@@ -75,9 +75,13 @@ def convert(archive, database: str):
         for psa in load_generator(db_read, PassengerStopAssignment):
             psa: PassengerStopAssignment
             if psa.taxi_rank_ref_or_stop_place_ref_or_stop_place is not None:
-                psas[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = stop_places[psa.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref]
+                sp = stop_places.get(psa.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref, None)
+                if sp is not None:
+                    psas[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = sp
             elif psa.taxi_stand_ref_or_quay_ref_or_quay is not None:
-                psas[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = quay_to_sp[psa.taxi_stand_ref_or_quay_ref_or_quay.ref]
+                sp = quay_to_sp.get(psa.taxi_stand_ref_or_quay_ref_or_quay.ref, None)
+                if sp is not None:
+                    psas[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = sp
 
         # TODO: GTFS does not support Branding, so in order to facilitate it we will make it a separate Agency
         # A branding must have an 'original' agency or authority

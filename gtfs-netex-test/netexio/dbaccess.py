@@ -3,6 +3,7 @@ import sys
 from typing import T, List, Generator, Tuple
 
 import duckdb
+from duckdb.duckdb import CatalogException
 
 from isal import igzip_threaded
 from xsdata.formats.dataclass.context import XmlContext
@@ -559,6 +560,31 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
             cur.executemany(f'INSERT INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', _prepare2(generator, objectname))
 
     print('\n')
+
+def copy_table(db_read: Database, db_write: Database, classes: list, clean=False):
+    if db_read.read_only:
+        db_write.con.execute(f"ATTACH IF NOT EXISTS '{db_read.database_file}' AS db_read (READ_ONLY);")
+        for clazz in classes:
+            objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+            try:
+                if clean:
+                    db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
+                db_write.con.execute(f'CREATE TABLE {objectname} AS SELECT * FROM db_read.{objectname};')
+            except CatalogException:
+                pass
+
+        db_write.con.execute(f"DETACH db_read;")
+
+    else:
+        for clazz in classes:
+            try:
+                if clean:
+                    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+                    db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
+
+                write_generator(db_write, clazz, load_generator(db_read, clazz, embedding=False))
+            except CatalogException:
+                pass
 
 def update_generator(db: Database, clazz, generator: Generator):
     cur = db.cursor()
