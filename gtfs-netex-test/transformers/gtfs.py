@@ -61,6 +61,7 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
                 # Is there any ServiceJourney -> OperatorRef relationship?
                 # TODO: Now we would like to filter on a property such as LineRef, but that may obviously be unavailable...
                 # TODO: Implement the reference chain by the reference table, so it finds the object of interest, by joins (inna-search)
+                # TODO: Iff multiple OperatorRefs are pointing to the same LineRef, the LineRef must be duplicated for GTFS export.
                 db_read.logger.info("Operator not found for {line}. Implement Innasearch.")
                 pass
 
