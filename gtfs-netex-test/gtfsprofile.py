@@ -368,7 +368,7 @@ class GtfsProfile:
 
         route = {'route_id': line.id,
                  'agency_id': agency_id,
-                 'route_short_name': line.public_code, # This is used as VehicleType or PublicCode
+                 'route_short_name': GtfsProfile.getOptionalMultilingualString(line.public_code), # This is used as VehicleType or PublicCode # TODO: introduce OptionalPublicCode
                  'route_long_name': '', # GtfsProfile.getOptionalMultilingualString(line.name), # This is used as destination
                  'route_desc': GtfsProfile.getOptionalMultilingualString(line.description),
                  'route_type': GtfsProfile.projectVehicleModeToRouteType(line.transport_mode),
@@ -534,7 +534,7 @@ class GtfsProfile:
                 'trip_short_name': '',
                 'direction_id': '',
                 'block_id': GtfsProfile.getOrNone(service_journey, "block_ref.ref"),
-                'shape_id': GtfsProfile.getOrNone(service_journey, "route_ref.ref"),
+                'shape_id': '', # TODO: GtfsProfile.getOrNone(service_journey, "route_ref.ref"),
                 'wheelchair_accessible': GtfsProfile.getWheelchairAccess(service_journey.accessibility_assessment),
                 'bikes_allowed': '' # TODO
                 }
