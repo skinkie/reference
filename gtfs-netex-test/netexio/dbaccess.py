@@ -81,6 +81,7 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
 
+
 def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
 
@@ -114,6 +115,111 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
 
     return objs
 
+
+def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=set([]), inwards=True, outwards=True):
+    for x in resolved:
+        if parent.id == x.id and parent.__class__ == x.__class__:
+            return
+
+    resolved.append(parent)
+
+    if inwards and (filter is False or filter == parent.id or parent.__class__ in filter_class):
+        resolved_parents = load_referencing_inwards(db, parent.__class__, filter=parent.id)
+        if len(resolved_parents) > 0:
+            for y in resolved_parents:
+                already_done = False
+                for x in resolved:
+                    y_class = getattr(sys.modules['netex'], y[2])
+                    if (y[0] == x.id and y_class == x.__class__) or y_class in filter_class:
+                        already_done = True
+                        break
+
+                if not already_done:
+                    resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]),
+                                               filter=y[0], embedding=True, embedded_parent=True)
+                    if len(resolved_objs) > 0:
+                        recursive_resolve(db, resolved_objs[0], resolved, filter,
+                                          filter_class, inwards, outwards)  # TODO: not only consider the first
+
+    # In principle this would already take care of everything recursive_attributes could find, but now does it inwards.
+    if outwards:
+        resolved_parents = load_referencing(db, parent.__class__, filter=parent.id)
+        if len(resolved_parents) > 0:
+            for y in resolved_parents:
+                already_done = False
+                for x in resolved:
+                    if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                        already_done = True
+                        break
+
+                if not already_done:
+                    resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]),
+                                               filter=y[0], embedding=True, embedded_parent=True)
+                    if len(resolved_objs) > 0:
+                        recursive_resolve(db, resolved_objs[0], resolved, filter,
+                                          filter_class, inwards, outwards)  # TODO: not only consider the first
+        # else:
+        #      print(f"Cannot resolve referencing {parent.id}")
+
+        for obj in recursive_attributes(parent, []):
+            if hasattr(obj, 'id'):
+                continue
+
+            elif hasattr(obj, 'name_of_ref_class'):
+                if obj.name_of_ref_class is None:
+                    # Hack, because NeTEx does not define the default name of ref class yet
+                    if obj.__class__.__name__.endswith('RefStructure'):
+                        obj.name_of_ref_class = obj.__class__.__name__[0:-12]
+                    elif obj.__class__.__name__.endswith('Ref'):
+                        obj.name_of_ref_class = obj.__class__.__name__[0:-3]
+
+                if not hasattr(netex, obj.name_of_ref_class):
+                    # hack for non-existing structures
+                    log_all(logging.WARN, 'related_explorer',
+                            f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
+
+                    continue
+
+                clazz = getattr(netex, obj.name_of_ref_class)
+
+                # TODO: do this via a hash function
+                # if obj in resolved:
+                #    continue
+                already_done = False
+                for x in resolved:
+                    if obj.ref == x.id and clazz == x.__class__:
+                        already_done = True
+                        break
+
+                if not already_done:
+                    resolved_objs = load_local(db, clazz, filter=obj.ref, embedding=True, embedded_parent=True)
+                    if len(resolved_objs) > 0:
+                        recursive_resolve(db, resolved_objs[0], resolved, filter,
+                                          filter_class, inwards, outwards)  # TODO: not only consider the first
+                    else:
+                        # print(obj.ref)
+                        resolved_parents = load_embedded(db, clazz, filter=obj.ref)
+                        if len(resolved_parents) > 0:
+                            for y in resolved_parents:
+                                already_done = False
+                                for x in resolved:
+                                    if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                                        already_done = True
+                                        break
+
+                                if not already_done:
+                                    resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]), filter=y[0],
+                                                               embedding=True, embedded_parent=True)
+                                    if len(resolved_objs) > 0:
+                                        recursive_resolve(db, resolved_objs[0], resolved, filter,
+                                                          filter_class, inwards, outwards)  # TODO: not only consider the first
+                        else:
+                            log_all(logging.WARN, 'related_explorer', f"Cannot resolve embedded {obj.ref}")
+
+
+object_cache = {}
+
+
 def fetch_references_classes_generator(db: Database, db2: Database, classes: list):
     cur = db.cursor()
     cur2 = db2.cursor()
@@ -140,7 +246,26 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
                 pass
             else:
                 processed.add(needle)
+
                 yield results[0]
+
+                # An element may obviously also include other references.
+                resolved = []
+                filter_set = {results[0].__class__}.union(classes)
+                recursive_resolve(db, results[0], resolved, results[0].id, filter_set, False, True)
+
+                for resolve in resolved:
+                    needle = resolve.__class__.__name__ + '|' + resolve.id
+                    if resolve.__class__ in classes:  # Don't export classes, which are part of the main delivery
+                        pass
+                    elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
+                        pass
+                    else:
+                        processed.add(needle)
+                        yield resolve
+
+                # TODO: The problem may be here that an embedding of this class, has been made a first class object, or an embedding of an existing element.
+
 
 def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True):
     type = getattr(clazz.Meta, 'name', clazz.__name__)

@@ -29,9 +29,12 @@ class Database:
     def __exit__(self, exception_type, exception_value, exception_traceback):
         self.con.close()
 
-    def tables(self):
+    def tables(self, exclusively: set[str]=None):
+        if exclusively is None:
+            exclusively = set(self.serializer.clean_element_names)
+
         if self.con:
             cur = self.con.cursor()
             cur.execute("SELECT table_name FROM information_schema.tables;")
             tables = {table for table, in cur.fetchall()}
-            return tables.intersection(set(self.serializer.clean_element_names))
+            return tables.intersection(exclusively)
