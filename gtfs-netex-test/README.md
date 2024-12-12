@@ -67,12 +67,13 @@ An example of a configuration file can be found here: https://github.com/skinkie
 
 #### NeTEX to GTFS conversion
 1. Load the NeTEX. Usually use netex_to_db.py. Sometimes a specific profile warrants the usage of a specific importer (e.g. swiss_to_db.py)
-2. Write to GTFS with netex_db_to_gtfs.py
+2. Convert the input to the output profile gtfs_db_to_db.py
+2. Write to the output profile gtfs_db_to_gtfs.py
 
 #### GTFS to NeTEx conversion
 1. Load the GTFS data into a database with gtfs_import_to_db.py
 2. Load the GTFS with gtfs_convert_to_db.py
-3. Write NeTEx  netex_db_to_xml.py
+3. Write NeTEx  netex_db_to_generalframe.py
 
 If you want to produce EPIP:
 1. Load the GTFS data into a database with gtfs_import_to_db.py
