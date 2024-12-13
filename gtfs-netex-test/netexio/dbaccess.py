@@ -230,15 +230,19 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
     processed = set()
 
     # Find all embeddings and objects the target profile, elements must not be added directly later, but referenced.
-    query = "SELECT DISTINCT class, ref, version FROM embedding;"
+    query = "SELECT DISTINCT class, id, version FROM embedded;"
     cur2.execute(query)
     existing_ids = {(clazz, ref, version,) for clazz, ref, version in cur2.fetchall()}
 
     for clazz in classes:
         object_name = getattr(clazz.Meta, 'name', clazz.__name__)
-        query = f"SELECT DISTINCT {object_name}, id, version FROM {object_name}"
-        cur2.execute(query)
-        existing_ids = existing_ids.union({(clazz, id, version,) for clazz, id, version in cur2.fetchall()})
+        query = f"SELECT DISTINCT id, version FROM {object_name}"
+        try:
+            cur2.execute(query)
+            set2 = {(object_name, id, version,) for id, version in cur2.fetchall()}
+            existing_ids = existing_ids.union(set2)
+        except duckdb.duckdb.CatalogException:
+            pass
 
     # Practically this could still lead to a reference from an embedded class, which may already be included
     # (or not, hence we would need to assure that those objects are not in the class list)
@@ -277,8 +281,8 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
                         processed.add(needle)
                         # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
-                        query = "SELECT DISTINCT class, id, version, path FROM embedding WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
-                        cur.execute(query)
+                        query = "SELECT DISTINCT class, id, version, path FROM embedded WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
+                        cur.execute(query, (resolve.__class__.__name__, resolve.id, resolve.version,)) # TODO: change to meta
 
                         for clazz, id, version, path in cur.fetchall():
                             if (clazz, id, version,) in existing_ids:
