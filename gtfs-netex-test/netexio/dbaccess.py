@@ -1,4 +1,3 @@
-import inspect
 import sys
 from typing import T, List, Generator, Tuple
 
@@ -12,11 +11,13 @@ from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
 
 import netex
+from netexio.attributes import resolve_attr
 from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
-    EntityInVersionStructure, DataSourceRef, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
+    EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
 from netexio.database import Database
 from netexio.xmlserializer import MyXmlSerializer
+from transformers.references import replace_with_reference_inplace
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -225,8 +226,19 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
     cur = db.cursor()
     cur2 = db2.cursor()
 
-    list_classes = ', '.join([f"'{clazz.__name__}'" for clazz in classes])
+    list_classes = ', '.join([f"'{getattr(clazz.Meta, 'name', clazz.__name__)}'" for clazz in classes])
     processed = set()
+
+    # Find all embeddings and objects the target profile, elements must not be added directly later, but referenced.
+    query = "SELECT DISTINCT class, ref, version FROM embedding;"
+    cur2.execute(query)
+    existing_ids = {(clazz, ref, version,) for clazz, ref, version in cur2.fetchall()}
+
+    for clazz in classes:
+        object_name = getattr(clazz.Meta, 'name', clazz.__name__)
+        query = f"SELECT DISTINCT {object_name}, id, version FROM {object_name}"
+        cur2.execute(query)
+        existing_ids = existing_ids.union({(clazz, id, version,) for clazz, id, version in cur2.fetchall()})
 
     # Practically this could still lead to a reference from an embedded class, which may already be included
     # (or not, hence we would need to assure that those objects are not in the class list)
@@ -263,6 +275,15 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
                         pass
                     else:
                         processed.add(needle)
+                        # We can do two things here, query the database for embeddings, or recursively iterate over the object.
+
+                        query = "SELECT DISTINCT class, id, version, path FROM embedding WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
+                        cur.execute(query)
+
+                        for clazz, id, version, path in cur.fetchall():
+                            if (clazz, id, version,) in existing_ids:
+                                replace_with_reference_inplace(resolve, path)
+
                         yield resolve
 
                 # TODO: The problem may be here that an embedding of this class, has been made a first class object, or an embedding of an existing element.
@@ -296,15 +317,7 @@ def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True)
 
 object_cache = {}
 
-# Alternative implementation for attrgetter, handles list indices
-# from operator import attrgetter
-def resolve_attr(obj, attr):
-    for name in attr:
-        if isinstance(name, int):
-            obj = obj[name]
-        else:
-            obj = getattr(obj, name)
-    return obj
+
 
 def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False) -> List[T]:
     type = getattr(clazz.Meta, 'name', clazz.__name__)
@@ -341,6 +354,7 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                     yield obj
 
                 else:
+                    # TODO: separate function
                     split = []
                     for p in path.split('.'):
                         if p.isnumeric():

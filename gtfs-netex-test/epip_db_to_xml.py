@@ -45,11 +45,13 @@ serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config, writer=XmlEventWriter)
 from configuration import defaults
 
+# TODO: chain to utils
 def chain(*iterables) -> Generator:
     for it in iterables:
         for element in it:
             yield element
 
+# TODO: dottsetifnone to utils
 def dontsetifnone(clazz, attr, value):
     if value is None:
         return None
@@ -61,6 +63,7 @@ def dontsetifnone(clazz, attr, value):
     else:
         return clazz(**{attr: chain([first],value)})
 
+# TODO: GeneratorTester to utils
 class GeneratorTester:
     def __init__(self, value):
         self._has_value = None
