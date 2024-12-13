@@ -124,9 +124,8 @@ def export_epip_network_offer(database_original, database_target, output_filenam
             journey_pattern = GeneratorTester(load_generator(db_target, ServiceJourneyPattern))
             transfer = GeneratorTester(chain(load_generator(db_target, Connection), load_generator(db_target, SiteConnection), load_generator(db_target, DefaultConnection)))
             stop_assignment = GeneratorTester(load_generator(db_target, PassengerStopAssignment))
-            notice = GeneratorTester(load_generator(db_orig, Notice))
-            notice_assignment = GeneratorTester(load_generator(db_orig, NoticeAssignment))
-        
+            notice = GeneratorTester(load_generator(db_target, Notice))
+
             journey_meeting = GeneratorTester(load_generator(db_orig, JourneyMeeting))
             interchange_rule = GeneratorTester(load_generator(db_orig, InterchangeRule))
         
@@ -140,7 +139,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                         TopographicPlace, Direction, Line, FlexibleLine,
                                         Network, DestinationDisplay, ScheduledStopPoint, TariffZone, ServiceLink,
                                         ServiceJourneyPattern, Connection, SiteConnection, DefaultConnection,
-                                        PassengerStopAssignment, Notice, NoticeAssignment, JourneyMeeting,
+                                        PassengerStopAssignment, Notice, JourneyMeeting,
                                         InterchangeRule, ServiceJourney, ServiceCalendar, VehicleType]
 
             other_referenced_objects = GeneratorTester(fetch_references_classes_generator(db_orig, db_target, other_referenced_classes))
@@ -199,7 +198,6 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                                  connections=TransfersInFrameRelStructure(transfer=transfer.generator()) if transfer.has_value() else None,
                                                  stop_assignments=StopAssignmentsInFrameRelStructure(stop_assignment_or_passenger_boarding_position_assignment=stop_assignment.generator()) if stop_assignment.has_value() else None,
                                                  notices=NoticesInFrameRelStructure(notice=notice.generator()) if notice.has_value() else None,
-                                                 notice_assignments=NoticeAssignmentsInFrameRelStructure(notice_assignment=notice_assignment.generator()) if notice_assignment.has_value() else None,
                                                  tariff_zones=TariffZonesInFrameRelStructure(tariff_zone=tariff_zone.generator()) if tariff_zone.has_value() else None,
                                             ),
                                             TimetableFrame(

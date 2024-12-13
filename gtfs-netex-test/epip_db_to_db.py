@@ -7,13 +7,14 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from anyintodbnew import get_interesting_classes
 
-from netex import Codespace, AvailabilityCondition
+from netex import Codespace, AvailabilityCondition, NoticeAssignment, Notice, ScheduledStopPoint
 from netexio.database import Database
-from netexio.dbaccess import setup_database
+from netexio.dbaccess import setup_database, copy_table
 from netexio.dbaccess import attach_source, attach_objects
 
 from transformers.direction import infer_directions_from_sjps_and_apply
 from transformers.embedding import embedding_update
+from transformers.projection import reprojection_update
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
 import traceback
 context = XmlContext()
@@ -43,12 +44,15 @@ def main(source_database_file: str, target_database_file: str):
         # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
 
         with Database(source_database_file, read_only=True) as source_db:
+            copy_table(source_db, target_db,[Notice, ScheduledStopPoint], clean=True)
             epip_line_memory(source_db, target_db, generator_defaults)
             infer_locations_from_quay_or_stopplace_and_apply(source_db, target_db, generator_defaults)
-            epip_scheduled_stop_point_memory(target_db, target_db, generator_defaults)
+            # epip_scheduled_stop_point_memory(target_db, target_db, generator_defaults)
             epip_site_frame_memory(source_db, target_db, generator_defaults)
             epip_service_journey_generator(source_db, target_db, generator_defaults, None)
             infer_directions_from_sjps_and_apply(target_db, target_db, generator_defaults)
+
+        reprojection_update(target_db, 'urn:ogc:def:crs:EPSG::4326')
 
         embedding_update(target_db)
 

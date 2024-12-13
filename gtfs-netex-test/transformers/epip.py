@@ -142,6 +142,7 @@ def epip_site_frame_memory(db_read: Database, db_write: Database, generator_defa
         stop_place.extensions = None
         stop_place.key_list = None
 
+        """
         stop_place.equipment_places = None
         if stop_place.access_spaces is not None:
             for access_space in stop_place.access_spaces.access_space_ref_or_access_space:
@@ -155,7 +156,7 @@ def epip_site_frame_memory(db_read: Database, db_write: Database, generator_defa
                             Decimal(value).quantize(Decimal('0.000001'), ROUND_HALF_UP) for value in
                             access_space.polygon_or_multi_surface.exterior.linear_ring.pos_or_point_property_or_pos_list[
                                 0].value]
-
+        
         if stop_place.quays:
             for quay in stop_place.quays.taxi_stand_ref_or_quay_ref_or_quay:
                 if isinstance(quay, Quay):
@@ -176,7 +177,7 @@ def epip_site_frame_memory(db_read: Database, db_write: Database, generator_defa
 
         if stop_place.centroid:
             project_location_4326(stop_place.centroid.location)
-
+        """
         retained_stop_places.append(stop_place)
 
     write_objects(db_write, retained_stop_places, True, True)

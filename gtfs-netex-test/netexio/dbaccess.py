@@ -244,9 +244,12 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
         except duckdb.duckdb.CatalogException:
             pass
 
+    print(".")
+
     # Practically this could still lead to a reference from an embedded class, which may already be included
     # (or not, hence we would need to assure that those objects are not in the class list)
     query = f"SELECT DISTINCT class, ref, version FROM referencing WHERE class NOT IN ({list_classes}) ORDER BY class;"
+    print(query)
     cur2.execute(query)
     while True:
         result = cur2.fetchone()
