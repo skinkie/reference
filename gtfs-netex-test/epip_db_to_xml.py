@@ -34,7 +34,8 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     TopographicPlacesInFrameRelStructure, TopographicPlace, TransportOrganisationVersionStructure, Locale, \
     TypesOfValueInFrameRelStructure, ValueSet, ValidityConditionsRelStructure, AvailabilityCondition, JourneyMeeting, \
     InterchangeRule, JourneyMeetingsInFrameRelStructure, InterchangeRulesInFrameRelStructure, TariffZone, \
-    TariffZonesInFrameRelStructure, ZonesInFrameRelStructure, TransportAdministrativeZone
+    TariffZonesInFrameRelStructure, ZonesInFrameRelStructure, TransportAdministrativeZone, ServiceJourneyInterchange, \
+    JourneyInterchangesInFrameRelStructure
 
 import netex_monkeypatching
 
@@ -126,12 +127,9 @@ def export_epip_network_offer(database_original, database_target, output_filenam
             stop_assignment = GeneratorTester(load_generator(db_target, PassengerStopAssignment))
             notice = GeneratorTester(load_generator(db_target, Notice))
 
-            journey_meeting = GeneratorTester(load_generator(db_orig, JourneyMeeting))
-            interchange_rule = GeneratorTester(load_generator(db_orig, InterchangeRule))
-        
-            # availability_condition = GeneratorTester(load_generator(db_orig, AvailabilityCondition))
             service_journey = GeneratorTester(load_generator(db_target, ServiceJourney))
-        
+            service_journey_interchange = GeneratorTester(load_generator(db_target, ServiceJourneyInterchange))
+
             service_calendar = GeneratorTester(load_generator(db_target, ServiceCalendar, 1))
 
             other_referenced_classes = [Codespace, DataSource, Authority, Operator, ValueSet,
@@ -139,8 +137,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                         TopographicPlace, Direction, Line, FlexibleLine,
                                         Network, DestinationDisplay, ScheduledStopPoint, TariffZone, ServiceLink,
                                         ServiceJourneyPattern, Connection, SiteConnection, DefaultConnection,
-                                        PassengerStopAssignment, Notice, JourneyMeeting,
-                                        InterchangeRule, ServiceJourney, ServiceCalendar, VehicleType]
+                                        PassengerStopAssignment, Notice, ServiceJourney, ServiceCalendar, VehicleType, ServiceJourneyInterchange]
 
             other_referenced_objects = GeneratorTester(fetch_references_classes_generator(db_orig, db_target, other_referenced_classes))
 
@@ -205,8 +202,7 @@ def export_epip_network_offer(database_original, database_target, output_filenam
                                                 type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_TIMETABLE', version_ref='1.0'),
                                                 # content_validity_conditions=ValidityConditionsRelStructure(choice=availability_condition.generator()) if availability_condition.has_value() else None,
                                                 vehicle_journeys=JourneysInFrameRelStructure(vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journey.generator()) if service_journey.has_value() else None,
-                                                journey_meetings=JourneyMeetingsInFrameRelStructure(journey_meeting=journey_meeting.generator()) if journey_meeting.has_value() else None,
-                                                interchange_rules=InterchangeRulesInFrameRelStructure(interchange_rule=interchange_rule.generator()) if interchange_rule.has_value() else None
+                                                journey_interchanges=JourneyInterchangesInFrameRelStructure(service_journey_pattern_interchange_or_service_journey_interchange=service_journey_interchange.generator()) if service_journey_interchange.has_value() else None
                                             ),
                                             ServiceCalendarFrame(
                                                 id="EU_PI_CALENDAR", version=version,
