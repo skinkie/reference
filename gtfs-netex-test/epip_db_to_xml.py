@@ -92,7 +92,7 @@ class GeneratorTester:
 
         return None
 
-def main(database_original, database_target, output_filename: str):
+def export_epip_network_offer(database_original, database_target, output_filename: str):
     # The way how con_orig, and con_target have been modelled, is too hardcoded.
     # An alternative would be to put all the contents in the con_target.
 
@@ -227,6 +227,9 @@ def main(database_original, database_target, output_filename: str):
             else:
                 with open(output_filename, 'w', encoding='utf-8') as out:
                     serializer.write(out, publication_delivery, ns_map)
+
+def main(database_original: str, database_target: str, output_filename: str):
+    export_epip_network_offer(database_original, database_target, output_filename)
 
 if __name__ == '__main__':
     import argparse
