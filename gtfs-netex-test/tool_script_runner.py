@@ -118,6 +118,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
 
             # replace the placeholder for processdir with the correct values and also the other place holders
             script_args = replace_in_string(script_args, "%%dir%%", processdir)
+            script_args = replace_in_string(script_args, "%%inputdir%%", input_dir)
             script_args = replace_in_string(script_args, "%%block%%", block["block"])
             script_args = replace_in_string(script_args, "%%log%%", block["block"] + "/" + log_file)
 
