@@ -1,4 +1,5 @@
 import sys
+import os
 from typing import T, List, Generator, Tuple
 
 import duckdb
@@ -585,8 +586,9 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
     print('\n')
 
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False):
-    if db_read.read_only:
-        db_write.con.execute(f"ATTACH IF NOT EXISTS '{db_read.database_file}' AS db_read (READ_ONLY);")
+    if db_read.read_only and os.name != 'nt':
+        print (f"ATTACH IF NOT EXISTS '{db_read.database_file}' AS db_read (READ_ONLY);")
+        db_write.con.execute(f"ATTACH DATABASE '{db_read.database_file}' AS db_read (READ_ONLY);")
         for clazz in classes:
             objectname = get_object_name(clazz)
             try:
