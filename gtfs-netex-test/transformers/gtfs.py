@@ -31,7 +31,7 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
             line.operator_ref = getRef(operator)
 
         elif line.operator_ref is not None:
-            if operator.id not in operators:
+            if line.operator_ref.ref not in operators:
                 operator: Operator = get_single(db_read, Operator, line.operator_ref.ref, line.operator_ref.version)
                 operators[operator.id] = operator
                 line.operator_ref = getRef(operator)
@@ -45,11 +45,12 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
         elif line.responsibility_set_ref_attribute is not None:
             # TODO: ResponsibilitySet to Operator/Authority should be a separate function
             responsibility_set: ResponsibilitySet = get_single(db_read, ResponsibilitySet, line.responsibility_set_ref_attribute)
-            for role_assignment in responsibility_set.roles.responsibility_role_assignment:
-                if StakeholderRoleTypeEnumeration.OPERATION in role_assignment.stakeholder_role_type or StakeholderRoleTypeEnumeration.OPERATION_1 in role_assignment.stakeholder_role_type:
-                    operator: Operator = get_single(db_read, db_read.get_class_by_name(role_assignment.responsible_organisation_ref.name_of_ref_class), role_assignment.responsible_organisation_ref.ref, role_assignment.responsible_organisation_ref.version)
-                    operators[operator.id] = operator
-                    line.operator_ref = getRef(operator)
+            if responsibility_set is not None and responsibility_set.roles is not None:
+                for role_assignment in responsibility_set.roles.responsibility_role_assignment:
+                    if StakeholderRoleTypeEnumeration.OPERATION in role_assignment.stakeholder_role_type or StakeholderRoleTypeEnumeration.OPERATION_1 in role_assignment.stakeholder_role_type:
+                        operator: Operator = get_single(db_read, db_read.get_class_by_name(role_assignment.responsible_organisation_ref.name_of_ref_class), role_assignment.responsible_organisation_ref.ref, role_assignment.responsible_organisation_ref.version)
+                        operators[operator.id] = operator
+                        line.operator_ref = getRef(operator)
 
         if line.operator_ref is None:
             if len(operators_local) == 1:
