@@ -5,11 +5,15 @@ from xsdata.models.datatype import XmlDateTime, XmlDuration
 def get_object_name(clazz: T) -> str:
     return getattr(clazz.Meta, 'name', clazz.__name__)
 
+def get_element_name_with_ns(clazz):
+    name = get_object_name(clazz)
+    return "{" + clazz.Meta.namespace + "}" + name
+
 def project(obj, clazz: T) -> T:
     # if issubclass(obj.__class__, clazz_intermediate):
     attributes = {x: y for x, y in obj.__dict__.items() if x in list(clazz.__dataclass_fields__.keys())}
     if 'id' in attributes:
-        attributes['id'] = attributes['id'].replace(f":{obj.__class__.__name__}:", f":{clazz.__name__}:")
+        attributes['id'] = attributes['id'].replace(f":{get_object_name(obj.__class__)}:", f":{get_object_name(clazz)}:")
     # return clazz({x: y for x, y in obj.__dict__.items() if x in list(clazz.__dataclass_fields__.keys())})
     return clazz(**attributes)
 

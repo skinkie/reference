@@ -2,6 +2,8 @@ import datetime
 from typing import Optional, List, T
 
 from netex import *
+from utils import get_object_name
+
 
 def getRef(obj: object, klass=None):
     if obj is None:
@@ -69,8 +71,8 @@ def setIdVersion(obj: object, codespace: Codespace, id: str, version: Optional[V
     else:
         obj.version = "any"
 
-def getId(clazz, codespace: Codespace, id: str):
-    name = getattr(clazz.Meta, 'name', clazz.__name__)
+def getId(clazz: T, codespace: Codespace, id: str):
+    name = get_object_name(clazz)
     return "{}:{}:{}".format(codespace.xmlns, name, str(id).replace(':', '-'))
 
 def getVersionOfObjectRef(obj: object):

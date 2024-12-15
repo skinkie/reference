@@ -18,7 +18,7 @@ from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfOb
 from netexio.database import Database
 from netexio.xmlserializer import MyXmlSerializer
 from transformers.references import replace_with_reference_inplace
-from utils import get_object_name
+from utils import get_object_name, get_element_name_with_ns
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -39,7 +39,7 @@ def create_meta(db: Database):
 
 def load_embedded(db: Database, clazz: T, filter, cursor=False):
     # TODO: maybe return something here, which includes *ALL* objects that are embedded within this object, so it does not have to be resolved anymore
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     if cursor:
         cur = db.cursor()
@@ -47,14 +47,14 @@ def load_embedded(db: Database, clazz: T, filter, cursor=False):
         cur = db.con
 
     try:
-        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, type,))
+        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, objectname,))
     except:
         return []
 
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
 def load_referencing(db: Database, clazz: T, filter, cursor=False):
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     if cursor:
         cur = db.cursor()
@@ -62,14 +62,14 @@ def load_referencing(db: Database, clazz: T, filter, cursor=False):
         cur = db.con
 
     try:
-        cur.execute(f"SELECT ref, version, class FROM referencing WHERE parent_id = ? and parent_class = ?;", (filter, type,))
+        cur.execute(f"SELECT ref, version, class FROM referencing WHERE parent_id = ? and parent_class = ?;", (filter, objectname,))
     except:
         return []
 
     return [(ref, version, clazz,) for ref, version, clazz in cur.fetchall()]
 
 def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     if cursor:
         cur = db.cursor()
@@ -77,7 +77,7 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
         cur = db.con
 
     try:
-        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM referencing WHERE ref = ? and class = ?;", (filter, type,))
+        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM referencing WHERE ref = ? and class = ?;", (filter, objectname,))
     except:
         return []
 
@@ -86,7 +86,7 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
 
 
 def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False) -> List[T]:
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     if cursor:
         cur = db.cursor()
@@ -95,14 +95,14 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
 
     try:
         if filter is not None:
-            cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
+            cur.execute(f"SELECT object FROM {objectname} WHERE id = ?;", (filter,))
         elif limit is not None:
-            cur.execute(f"SELECT object FROM {type} ORDER BY id LIMIT {limit};")
+            cur.execute(f"SELECT object FROM {objectname} ORDER BY id LIMIT {limit};")
         else:
-            cur.execute(f"SELECT object FROM {type} ORDER BY id;")
+            cur.execute(f"SELECT object FROM {objectname} ORDER BY id;")
     except:
         pass
-        # This is the situation where the type is not available at all in the catalogue
+        # This is the situation where the objectname is not available at all in the catalogue
         if embedding:
             return list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent))
         else:
@@ -110,7 +110,7 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
 
     objs: List[T] = []
     for xml, in cur.fetchall():
-        obj = db.serializer.unmarshall(xml, type)
+        obj = db.serializer.unmarshall(xml, clazz)
         objs.append(obj)
 
     if embedding:
@@ -227,7 +227,7 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
     cur = db.cursor()
     cur2 = db2.cursor()
 
-    list_classes = ', '.join([f"'{getattr(clazz.Meta, 'name', clazz.__name__)}'" for clazz in classes])
+    list_classes = ', '.join([f"'{get_object_name(clazz)}'" for clazz in classes])
     processed = set()
 
     # Find all embeddings and objects the target profile, elements must not be added directly later, but referenced.
@@ -236,11 +236,11 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
     existing_ids = {(clazz, ref, version,) for clazz, ref, version in cur2.fetchall()}
 
     for clazz in classes:
-        object_name = getattr(clazz.Meta, 'name', clazz.__name__)
-        query = f"SELECT DISTINCT id, version FROM {object_name}"
+        objectname = get_object_name(clazz)
+        query = f"SELECT DISTINCT id, version FROM {objectname}"
         try:
             cur2.execute(query)
-            set2 = {(object_name, id, version,) for id, version in cur2.fetchall()}
+            set2 = {(objectname, id, version,) for id, version in cur2.fetchall()}
             existing_ids = existing_ids.union(set2)
         except duckdb.duckdb.CatalogException:
             pass
@@ -258,9 +258,10 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
             break
         clazz, ref, version = result
 
+        # TODO: we cannot trust SQL objectname
         results = load_local(db, getattr(sys.modules['netex'], clazz), limit=1, filter=ref, cursor=True, embedding=True, embedded_parent=True)
         if len(results) > 0:
-            needle = results[0].__class__.__name__ + '|' + results[0].id
+            needle = get_object_name(results[0].__class__) + '|' + results[0].id
             if results[0].__class__ in classes: # Don't export classes, which are part of the main delivery
                 pass
             elif needle in processed: # Don't export classes which have been exported already, maybe this can be solved at the database layer
@@ -276,7 +277,7 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
                 recursive_resolve(db, results[0], resolved, results[0].id, filter_set, False, True)
 
                 for resolve in resolved:
-                    needle = resolve.__class__.__name__ + '|' + resolve.id
+                    needle = get_object_name(resolve.__class__) + '|' + resolve.id
                     if resolve.__class__ in classes:  # Don't export classes, which are part of the main delivery
                         pass
                     elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
@@ -286,7 +287,7 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
                         # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
                         query = "SELECT DISTINCT class, id, version, path FROM embedded WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
-                        cur.execute(query, (resolve.__class__.__name__, resolve.id, resolve.version,)) # TODO: change to meta
+                        cur.execute(query, (get_object_name(resolve.__class__), resolve.id, resolve.version,)) # TODO: change to meta
 
                         for clazz, id, version, path in cur.fetchall():
                             if (clazz, id, version,) in existing_ids:
@@ -297,17 +298,17 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
                 # TODO: The problem may be here that an embedding of this class, has been made a first class object, or an embedding of an existing element.
 
 
-def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True):
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True):
+    objectname = get_object_name(clazz)
 
     cur = db.cursor()
     try:
         if filter is not None:
-            cur.execute(f"SELECT object FROM {type} WHERE id = ?;", (filter,))
+            cur.execute(f"SELECT object FROM {objectname} WHERE id = ?;", (filter,))
         elif limit is not None:
-            cur.execute(f"SELECT object FROM {type} ORDER BY id LIMIT {limit};")
+            cur.execute(f"SELECT object FROM {objectname} ORDER BY id LIMIT {limit};")
         else:
-            cur.execute(f"SELECT object FROM {type} ORDER BY id;")
+            cur.execute(f"SELECT object FROM {objectname} ORDER BY id;")
     except:
         pass
         if embedding:
@@ -318,7 +319,7 @@ def load_generator(db: Database, clazz, limit=None, filter=None, embedding=True)
         xml = cur.fetchone()
         if xml is None:
             break
-        yield db.serializer.unmarshall(xml[0], type)
+        yield db.serializer.unmarshall(xml[0], clazz)
 
     if embedding:
         yield from load_embedded_transparent_generator(db, clazz, limit, filter)
@@ -328,16 +329,16 @@ object_cache = {}
 
 
 def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False) -> List[T]:
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     cur = db.cursor()
     try:
         if filter is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;", (filter, type,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;", (filter, objectname,))
         elif limit is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded ORDER BY id LIMIT ?;", (limit,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id LIMIT ?;", (objectname, limit,))
         else:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id;", (type,))
+            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id;", (objectname,))
     except:
         return
 
@@ -354,7 +355,8 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             if needle not in object_cache:
                 cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? ORDER BY id LIMIT 1;", (parent_id, parent_version,))
                 object = cur2.fetchone()
-                object_cache[needle] = db.serializer.unmarshall(object[0], parent_clazz)
+                true_parent_clazz = db.serializer.interesting_classes(db.serializer.clean_element_names.index(parent_clazz))
+                object_cache[needle] = db.serializer.unmarshall(object[0], true_parent_clazz)
 
             obj = object_cache[needle]
             if obj is not None:
@@ -375,13 +377,13 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
 
 from lxml import etree
 def load_lxml_generator(con, clazz, limit=None):
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     cur = con.cursor()
     if limit is not None:
-        cur.execute(f"SELECT object FROM {type} LIMIT {limit};")
+        cur.execute(f"SELECT object FROM {objectname} LIMIT {limit};")
     else:
-        cur.execute(f"SELECT object FROM {type};")
+        cur.execute(f"SELECT object FROM {objectname};")
 
     while True:
         xml = cur.fetchone()
@@ -444,20 +446,20 @@ def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
     else:
         cur = db.con
 
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     try:
         if version == 'any' or version is None:
-            cur.execute(f"SELECT object FROM {type} WHERE id = ? ORDER BY version DESC LIMIT 1;", (id,))
+            cur.execute(f"SELECT object FROM {objectname} WHERE id = ? ORDER BY version DESC LIMIT 1;", (id,))
         else:
-            cur.execute(f"SELECT object FROM {type} WHERE id = ? AND version = ? LIMIT 1;", (id, version,))
+            cur.execute(f"SELECT object FROM {objectname} WHERE id = ? AND version = ? LIMIT 1;", (id, version,))
     except:
         pass
         return
 
     row = cur.fetchone()
     if row is not None:
-        obj = db.serializer.unmarshall(row[0], type)
+        obj = db.serializer.unmarshall(row[0], clazz)
         return obj
 
 
@@ -703,10 +705,6 @@ def update_generator(db: Database, clazz, generator: Generator):
 
     print('\n')
 
-def get_element_name_with_ns(clazz):
-    name = getattr(clazz.Meta, 'name', clazz.__name__)
-    return "{" + clazz.Meta.namespace + "}" + name
-
 def get_interesting_classes(filter=None):
     import inspect
     import netex
@@ -783,7 +781,7 @@ def update_embedded_referencing(deserialized) -> Generator[list[str], None, None
         if hasattr(obj, 'id'):
             if obj.id is not None:
                 yield [
-                    deserialized.__class__.__name__, deserialized.id, deserialized.version, obj.__class__.__name__,
+                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version, get_object_name(obj.__class__),
                     obj.id,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0',
@@ -799,7 +797,7 @@ def update_embedded_referencing(deserialized) -> Generator[list[str], None, None
                         obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
                 yield [
-                    deserialized.__class__.__name__, deserialized.id, deserialized.version, obj.name_of_ref_class,
+                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version, obj.name_of_ref_class,
                     obj.ref,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0', None]
@@ -1100,7 +1098,7 @@ def resolve_all_references(con, classes, cursor=False):
 
                 sql_insert_object = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                 try:
-                    cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
+                    cur.execute(sql_insert_object, (get_object_name(parent.__class__), parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
                 except duckdb.duckdb.ConstraintException:
                     pass
 
@@ -1147,7 +1145,7 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
                         sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                         try:
                             cur.execute(sql_insert_object, (
-                            clazz.__name__, parent.id, parent.version, obj.__class__.__name__, obj.id, version, order))
+                            get_object_name(clazz), parent.id, parent.version, get_object_name(obj.__class__), obj.id, version, order))
                         except:
                             raise
 
@@ -1174,7 +1172,7 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
 
                     sql_insert_object = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                     try:
-                        cur.execute(sql_insert_object, (parent.__class__.__name__, parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
+                        cur.execute(sql_insert_object, (get_object_name(parent.__class__), parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
                     except duckdb.duckdb.ConstraintException:
                         pass
 
@@ -1187,14 +1185,14 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
         cur.execute("CHECKPOINT;")
 
 
-def attach_objects(con, read_database: str, clazz):
-    type = getattr(clazz.Meta, 'name', clazz.__name__)
+def attach_objects(con, read_database: str, clazz: T):
+    objectname = get_object_name(clazz)
     # con.execute(f"DROP TABLE IF EXISTS {type};")
     # con.execute(f"CREATE VIEW {type} AS SELECT * FROM original.{type};")
 
     # Workaround for https://github.com/duckdb/duckdb-web/issues/3495
     attach_source(con, read_database)
-    con.execute(f"INSERT INTO {type} SELECT * FROM original.{type};")
+    con.execute(f"INSERT INTO {objectname} SELECT * FROM original.{objectname};")
 
 def attach_source(con, read_database: str):
     con.execute(f"ATTACH IF NOT EXISTS '{read_database}' AS original (READ_ONLY);")
