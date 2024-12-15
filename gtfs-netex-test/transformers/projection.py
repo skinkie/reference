@@ -8,10 +8,11 @@ from pyproj.exceptions import CRSError
 from mro_attributes import list_attributes
 from netex import Polygon, PosList, Pos, LocationStructure2, LineString, SimplePointVersionStructure, MultiSurface
 from netexio.database import Database
-from netexio.dbaccess import get_interesting_classes, recursive_attributes
-import sys
+from netexio.dbaccess import recursive_attributes
+from utils import get_interesting_classes
 
 from netexio.serializer import Serializer
+from utils import get_object_name
 
 transformers = {}
 
@@ -77,8 +78,8 @@ def reprojection_update(db: Database, crs_to: str):
 
     con.begin()
 
-    all_geo_elements = {x.__name__ for x in get_all_geo_elements()}
-    for objectname in db.tables(exclusively=all_geo_elements):
+    for clazz in db.tables(exclusively=set(get_all_geo_elements())):
+        objectname = get_object_name(clazz)
         con.execute(f"UPDATE {objectname} SET object = reprojection(object, '{objectname}', ?);", (crs_to,))
 
     con.commit()

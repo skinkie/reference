@@ -10,9 +10,9 @@ from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime
 import random
 
 from netexio.database import Database
-from netexio.dbaccess import load_local, load_embedded, load_referencing, recursive_attributes, \
-    load_referencing_inwards, resolve_all_references_and_embeddings, get_interesting_classes, recursive_resolve
+from netexio.dbaccess import load_local, recursive_resolve
 import netex
+from utils import get_interesting_classes
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
     GeneralFrameMembersRelStructure, AvailabilityConditionRef, Route, ServiceJourneyPattern
@@ -34,10 +34,10 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
         log_all(logging.WARN, 'related_explorer', f"no such object type found {object_type}")
         return
 
-    filter_set = {Route, ServiceJourneyPattern}
-    filter_set.add(getattr(sys.modules['netex'], object_type))
-
     with Database(database) as db:
+        filter_set = {Route, ServiceJourneyPattern}
+        filter_set.add(db.get_class_by_name(object_type))
+
         objs=[]
         if object_filter == "random":
             objs = load_local(db, getattr(netex, object_type))

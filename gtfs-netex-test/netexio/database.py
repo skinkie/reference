@@ -1,4 +1,5 @@
 from logging import Logger
+from typing import T
 
 import duckdb
 
@@ -29,12 +30,15 @@ class Database:
     def __exit__(self, exception_type, exception_value, exception_traceback):
         self.con.close()
 
-    def tables(self, exclusively: set[str]=None):
+    def tables(self, exclusively: set[T]=None):
         if exclusively is None:
-            exclusively = set(self.serializer.clean_element_names)
+            exclusively = set(self.serializer.interesting_classes)
 
         if self.con:
             cur = self.con.cursor()
             cur.execute("SELECT table_name FROM information_schema.tables;")
-            tables = {table for table, in cur.fetchall()}
+            tables = {self.get_class_by_name(table) for table, in cur.fetchall() if table[0].isupper()} # TODO: Remove other classes from default namespace!
             return tables.intersection(exclusively)
+
+    def get_class_by_name(self, name: str):
+        return self.serializer.name_object[name]

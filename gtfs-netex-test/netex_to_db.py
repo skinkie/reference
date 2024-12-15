@@ -1,7 +1,8 @@
 from typing import List
 
 from netexio.database import Database
-from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database
+from netexio.dbaccess import setup_database, open_netex_file, insert_database
+from utils import get_interesting_classes
 from aux_logging import *
 from transformers.embedding import embedding_update
 

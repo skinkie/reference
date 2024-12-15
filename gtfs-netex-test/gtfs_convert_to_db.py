@@ -14,7 +14,8 @@ from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
 
 from callsprofile import CallsProfile
 from netexio.database import Database
-from netexio.dbaccess import write_objects, write_generator, get_interesting_classes, resolve_all_references, \
+from utils import get_interesting_classes
+from netexio.dbaccess import write_objects, write_generator, resolve_all_references, \
     resolve_all_references_and_embeddings, create_meta
 from netex import Codespace, DataSource, MultilingualString, Version, VersionFrameDefaultsStructure, \
     VersionTypeEnumeration, LocaleStructure, SystemOfUnits, Operator, ContactStructure, Locale, LanguageUsageStructure, \

@@ -11,7 +11,7 @@ from utils import chain
 
 def export_to_general_frame(db: Database) -> PublicationDelivery:
     # TODO: This is not the correct way of loading a module by name
-    iterables = [load_generator(db, getattr(sys.modules['netex'], table), embedding=False) for table in db.tables()]
+    iterables = [load_generator(db, clazz, embedding=False) for clazz in db.tables()]
 
     publication_delivery = PublicationDelivery(
         version="ntx:1.1",

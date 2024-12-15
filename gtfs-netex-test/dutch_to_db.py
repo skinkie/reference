@@ -2,8 +2,9 @@ import os
 from typing import List
 
 from netexio.database import Database
-from netexio.dbaccess import get_interesting_classes, setup_database, open_netex_file, insert_database, \
+from netexio.dbaccess import setup_database, open_netex_file, insert_database, \
     resolve_all_references_and_embeddings
+from utils import get_interesting_classes
 from transformers.embedding import embedding_update
 
 DUTCH_CLASSES = ["Authority", "AvailabilityCondition", "Block", "Branding", "DataSource", "DayType", "DayTypeAssignment", "DeadRun", "DeadRunJourneyPattern", "DestinationDisplay", "Line", "Notice", "NoticeAssignment", "OperationalContext", "Operator", "PassengerStopAssignment", "ResponsibilitySet", "Route", "RouteLink", "RoutePoint", "ScheduledStopPoint", "ServiceJourney", "ServiceJourneyPattern", "StopArea", "TimeDemandType", "TimingLink", "TimingPoint", "TransportAdministrativeZone", "TypeOfProductCategory", "VehicleType", "Version"]

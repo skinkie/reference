@@ -1,3 +1,5 @@
+import inspect
+import netex
 import warnings
 from typing import T, Generator
 from xsdata.models.datatype import XmlDateTime, XmlDuration
@@ -64,3 +66,44 @@ class GeneratorTester:
             return chain([self.first], self.value)
 
         return None
+
+def get_boring_classes():
+    # Get all classes from the generated NeTEx Python Dataclasses
+    clsmembers = inspect.getmembers(netex, inspect.isclass)
+
+    # The interesting class members certainly will have a "Meta class" with a namespace
+    interesting_members = [x[1] for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace')]
+
+    return interesting_members
+
+def get_interesting_classes(filter=None):
+    # Get all classes from the generated NeTEx Python Dataclasses
+    clsmembers = inspect.getmembers(netex, inspect.isclass)
+
+    # The interesting class members certainly will have a "Meta class" with a namespace
+    interesting_members = [x for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace')]
+
+    # Specifically we are interested in classes that are derived from "EntityInVersion", to find them, we exclude embedded child objects called "VersionedChild"
+    entitiesinversion = [x for x in interesting_members if netex.VersionedChildStructure not in x[1].__mro__ and netex.EntityInVersionStructure in x[1].__mro__]
+
+    # Obviously we want to have the VersionedChild too
+    versionedchild = [x for x in interesting_members if netex.VersionedChildStructure in x[1].__mro__]
+
+    # There is one particular container in NeTEx that should reflect almost the same our collection EntityInVersion namely the "GeneralFrame"
+    general_frame_members = netex.GeneralFrameMembersRelStructure.__dataclass_fields__['choice'].metadata['choices']
+
+    # The interesting part here is where the difference between the two lie.
+    # geme = [x['type'].Meta.getattr('name', x['type'].__name__) for x in general_frame_members]
+    # envi = [x[0] for x in entitiesinversion]
+    # set(geme) - set(envi)
+
+    if filter is not None:
+        clean_element_names = [x[0] for x in entitiesinversion if x[0] in filter]
+        interesting_element_names =  [get_element_name_with_ns(x[1]) for x in entitiesinversion if x[0] in filter]
+        interesting_clazzes = [x[1] for x in entitiesinversion if x[0] in filter]
+    else:
+        clean_element_names = [x[0] for x in entitiesinversion if not x[0].endswith('Frame')]
+        interesting_element_names =  [get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')]
+        interesting_clazzes = [x[1] for x in entitiesinversion if not x[0].endswith('Frame')]
+
+    return clean_element_names, interesting_element_names, interesting_clazzes

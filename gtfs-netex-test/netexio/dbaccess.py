@@ -132,13 +132,13 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
             for y in resolved_parents:
                 already_done = False
                 for x in resolved:
-                    y_class = getattr(sys.modules['netex'], y[2])
+                    y_class = db.get_class_by_name(y[2])
                     if (y[0] == x.id and y_class == x.__class__) or y_class in filter_class:
                         already_done = True
                         break
 
                 if not already_done:
-                    resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]),
+                    resolved_objs = load_local(db, db.get_class_by_name(y[2]),
                                                filter=y[0], embedding=True, embedded_parent=True)
                     if len(resolved_objs) > 0:
                         recursive_resolve(db, resolved_objs[0], resolved, filter,
@@ -151,12 +151,12 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
             for y in resolved_parents:
                 already_done = False
                 for x in resolved:
-                    if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                    if y[0] == x.id and db.get_class_by_name(y[2]) == x.__class__:
                         already_done = True
                         break
 
                 if not already_done:
-                    resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]),
+                    resolved_objs = load_local(db, db.get_class_by_name(y[2]),
                                                filter=y[0], embedding=True, embedded_parent=True)
                     if len(resolved_objs) > 0:
                         recursive_resolve(db, resolved_objs[0], resolved, filter,
@@ -206,12 +206,12 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
                             for y in resolved_parents:
                                 already_done = False
                                 for x in resolved:
-                                    if y[0] == x.id and getattr(sys.modules['netex'], y[2]) == x.__class__:
+                                    if y[0] == x.id and db.get_class_by_name(y[2]) == x.__class__:
                                         already_done = True
                                         break
 
                                 if not already_done:
-                                    resolved_objs = load_local(db, getattr(sys.modules['netex'], y[2]), filter=y[0],
+                                    resolved_objs = load_local(db, db.get_class_by_name(y[2]), filter=y[0],
                                                                embedding=True, embedded_parent=True)
                                     if len(resolved_objs) > 0:
                                         recursive_resolve(db, resolved_objs[0], resolved, filter,
@@ -256,10 +256,10 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
         result = cur2.fetchone()
         if result is None:
             break
-        clazz, ref, version = result
+        clazz_name, ref, version = result
 
         # TODO: we cannot trust SQL objectname
-        results = load_local(db, getattr(sys.modules['netex'], clazz), limit=1, filter=ref, cursor=True, embedding=True, embedded_parent=True)
+        results = load_local(db, db.get_class_by_name(clazz_name), limit=1, filter=ref, cursor=True, embedding=True, embedded_parent=True)
         if len(results) > 0:
             needle = get_object_name(results[0].__class__) + '|' + results[0].id
             if results[0].__class__ in classes: # Don't export classes, which are part of the main delivery
@@ -355,8 +355,7 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             if needle not in object_cache:
                 cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? ORDER BY id LIMIT 1;", (parent_id, parent_version,))
                 object = cur2.fetchone()
-                true_parent_clazz = db.serializer.interesting_classes(db.serializer.clean_element_names.index(parent_clazz))
-                object_cache[needle] = db.serializer.unmarshall(object[0], true_parent_clazz)
+                object_cache[needle] = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
 
             obj = object_cache[needle]
             if obj is not None:
@@ -704,41 +703,6 @@ def update_generator(db: Database, clazz, generator: Generator):
             cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', _prepare2(generator, objectname))
 
     print('\n')
-
-def get_interesting_classes(filter=None):
-    import inspect
-    import netex
-
-    # Get all classes from the generated NeTEx Python Dataclasses
-    clsmembers = inspect.getmembers(netex, inspect.isclass)
-
-    # The interesting class members certainly will have a "Meta class" with a namespace
-    interesting_members = [x for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace')]
-
-    # Specifically we are interested in classes that are derived from "EntityInVersion", to find them, we exclude embedded child objects called "VersionedChild"
-    entitiesinversion = [x for x in interesting_members if netex.VersionedChildStructure not in x[1].__mro__ and netex.EntityInVersionStructure in x[1].__mro__]
-
-    # Obviously we want to have the VersionedChild too
-    versionedchild = [x for x in interesting_members if netex.VersionedChildStructure in x[1].__mro__]
-
-    # There is one particular container in NeTEx that should reflect almost the same our collection EntityInVersion namely the "GeneralFrame"
-    general_frame_members = netex.GeneralFrameMembersRelStructure.__dataclass_fields__['choice'].metadata['choices']
-
-    # The interesting part here is where the difference between the two lie.
-    # geme = [x['type'].Meta.getattr('name', x['type'].__name__) for x in general_frame_members]
-    # envi = [x[0] for x in entitiesinversion]
-    # set(geme) - set(envi)
-
-    if filter is not None:
-        clean_element_names = [x[0] for x in entitiesinversion if x[0] in filter]
-        interesting_element_names =  [get_element_name_with_ns(x[1]) for x in entitiesinversion if x[0] in filter]
-        interesting_clazzes = [x[1] for x in entitiesinversion if x[0] in filter]
-    else:
-        clean_element_names = [x[0] for x in entitiesinversion if not x[0].endswith('Frame')]
-        interesting_element_names =  [get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')]
-        interesting_clazzes = [x[1] for x in entitiesinversion if not x[0].endswith('Frame')]
-
-    return clean_element_names, interesting_element_names, interesting_clazzes
 
 def setup_database(db: Database, classes, clean=False, cursor=False):
     if cursor:

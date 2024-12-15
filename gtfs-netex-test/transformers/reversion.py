@@ -4,6 +4,7 @@ import netex
 from netex import VersionOfObjectRef, VersionOfObjectRefStructure
 from netexio.database import Database
 from netexio.serializer import Serializer
+from utils import get_object_name
 
 
 def simple_recursive_attributes(obj):
@@ -48,7 +49,8 @@ def reversion_all_objects(db: Database, updated_version: str, any_too: bool = Fa
     con = db.con
     con.create_function('reversion', functools.partial(reversion_udf, db.serializer))
 
-    for objectname in db.tables():
+    for clazz in db.tables():
+        objectname = get_object_name(clazz)
         if any_too:
             con.execute(f"UPDATE {objectname} SET version = ?, object = reversion(object, '{objectname}', ?, ?);",
                         (updated_version, updated_version, any_too))

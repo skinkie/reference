@@ -3,8 +3,8 @@ import sys
 import os
 
 from netexio.database import Database
-from netexio.dbaccess import resolve_all_references_and_embeddings, open_netex_file, get_interesting_classes, \
-    setup_database, insert_database
+from netexio.dbaccess import resolve_all_references_and_embeddings, open_netex_file, setup_database, insert_database
+from utils import get_interesting_classes
 import netex_monkeypatching
 from aux_logging import *
 import traceback
