@@ -39,7 +39,7 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     JourneyInterchangesInFrameRelStructure, UicOperatingPeriod, DayTypeAssignment, AvailabilityConditionRef, \
     OperatingPeriodRef, DayTypeRefsRelStructure, DayTypesRelStructure, OperatingPeriodsRelStructure, \
     DayTypeAssignmentsRelStructure, RouteView, LineRef, FlexibleLineRef, RouteRef, TimetabledPassingTimesRelStructure, \
-    TimeDemandType
+    TimeDemandType, Quay,StopPointInJourneyPattern, PointsInJourneyPatternRelStructure
 
 from netexio.database import Database
 

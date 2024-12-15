@@ -5,7 +5,8 @@ import os
 from aux_logging import prepare_logger, log_all
 from netex import DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint, AvailabilityCondition
 from netexio.database import Database
-from netexio.dbaccess import setup_database, get_interesting_classes, write_objects, load_local, copy_table
+from netexio.dbaccess import setup_database,  write_objects, load_local, copy_table
+from utils import get_interesting_classes
 from transformers.gtfs import GTFS_CLASSES, gtfs_operator_line_memory, gtfs_calls_generator
 from transformers.projection import reprojection_update
 
