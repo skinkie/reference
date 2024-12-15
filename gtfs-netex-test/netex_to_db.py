@@ -1,5 +1,3 @@
-from typing import List
-
 from netexio.database import Database
 from netexio.dbaccess import setup_database, open_netex_file, insert_database
 from utils import get_interesting_classes
@@ -7,7 +5,8 @@ from aux_logging import *
 from transformers.embedding import embedding_update
 
 
-def main(filenames: List[str], database: str, clean_database: bool = True):
+def main(filenames: list[str], database: str, clean_database: bool = True):
+    print('TEST', filenames, database, clean_database)
 
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
     if clean_database:
@@ -22,9 +21,12 @@ def main(filenames: List[str], database: str, clean_database: bool = True):
         if clean_database:
             setup_database(db, classes, clean_database)
 
-        for filename in filenames:
-            for sub_file in open_netex_file(filename):
-                insert_database(db, classes, sub_file)
+        if isinstance(filenames, list):
+            for filename in filenames:
+                for sub_file in open_netex_file(filename):
+                    insert_database(db, classes, sub_file)
+        else:
+            insert_database(db, classes, filenames)
 
         embedding_update(db)
 
