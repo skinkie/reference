@@ -165,7 +165,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 log_flush()
             elif result == 1:
                 log_all(logging.ERROR, "test_runner",
-                        f'Script {script_name} returned an error. Terminating the block of scripts: {block['block']}')
+                        f"Script {script_name} returned an error. Terminating the block of scripts: {block['block']}")
                 log_flush()
                 blockstop = True
                 break
