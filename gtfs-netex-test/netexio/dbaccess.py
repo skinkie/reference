@@ -18,6 +18,7 @@ from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfOb
 from netexio.database import Database
 from netexio.xmlserializer import MyXmlSerializer
 from transformers.references import replace_with_reference_inplace
+from utils import get_object_name
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -389,7 +390,7 @@ def load_lxml_generator(con, clazz, limit=None):
         yield etree.fromstring(xml[0])
 
 def write_lxml_generator(db: Database, clazz, generator: Generator):
-    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     cur = db.cursor()
     if hasattr(clazz, 'order'):
@@ -470,7 +471,7 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
         cur = db.con
 
     clazz = objs[0].__class__
-    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     if empty:
         sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
@@ -519,7 +520,7 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
 
 def write_generator(db: Database, clazz, generator: Generator, empty=False):
     cur = db.cursor()
-    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+    objectname = get_object_name(clazz)
 
     if empty:
         sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
@@ -586,11 +587,14 @@ def copy_table(db_read: Database, db_write: Database, classes: list, clean=False
     if db_read.read_only:
         db_write.con.execute(f"ATTACH IF NOT EXISTS '{db_read.database_file}' AS db_read (READ_ONLY);")
         for clazz in classes:
-            objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+            objectname = get_object_name(clazz)
             try:
                 if clean:
                     db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
-                db_write.con.execute(f'CREATE TABLE {objectname} AS SELECT * FROM db_read.{objectname};')
+
+                sql_create_table = create_table_sql(db_write, clazz)
+                db_write.con.execute(sql_create_table)
+                db_write.con.execute(f'INSERT OR REPLACE INTO {objectname} SELECT * FROM db_read.{objectname};')
             except CatalogException:
                 pass
 
@@ -600,23 +604,39 @@ def copy_table(db_read: Database, db_write: Database, classes: list, clean=False
         for clazz in classes:
             try:
                 if clean:
-                    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+                    objectname = get_object_name(clazz)
                     db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
 
                 write_generator(db_write, clazz, load_generator(db_read, clazz, embedding=False))
             except CatalogException:
                 pass
 
-def update_generator(db: Database, clazz, generator: Generator):
-    cur = db.cursor()
-    objectname = getattr(clazz.Meta, 'name', clazz.__name__)
+def create_table_sql(db: Database, clazz: T) -> str:
+    objectname = get_object_name(clazz)
+    optionals = {x[0]: x[1][1] for x in list_attributes(clazz) if x[0] in ('order', 'version')}
+    ordr_opt = optionals.get('order', False)
+    version_opt = optionals.get('version', False)
 
     if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
+        if ordr_opt:
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
+        else:
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
+
     elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
+        if version_opt:
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
+        else:
+            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
+
     else:
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
+
+    return sql_create_table
+
+def update_generator(db: Database, clazz, generator: Generator):
+    cur = db.cursor()
+    objectname = get_object_name(clazz)
 
     # This is not used effectively at this point, considering that DuckDB's ATTACH is not persistent
     # https://github.com/duckdb/duckdb-web/issues/3495
@@ -632,6 +652,7 @@ def update_generator(db: Database, clazz, generator: Generator):
             pass
 
     else:
+        sql_create_table = create_table_sql(db, clazz)
         cur.execute(sql_create_table)
 
     def _prepare4(generator4, objectname):
@@ -713,11 +734,13 @@ def get_interesting_classes(filter=None):
     if filter is not None:
         clean_element_names = [x[0] for x in entitiesinversion if x[0] in filter]
         interesting_element_names =  [get_element_name_with_ns(x[1]) for x in entitiesinversion if x[0] in filter]
+        interesting_clazzes = [x[1] for x in entitiesinversion if x[0] in filter]
     else:
         clean_element_names = [x[0] for x in entitiesinversion if not x[0].endswith('Frame')]
         interesting_element_names =  [get_element_name_with_ns(x[1]) for x in entitiesinversion if not x[0].endswith('Frame')]
+        interesting_clazzes = [x[1] for x in entitiesinversion if not x[0].endswith('Frame')]
 
-    return clean_element_names, interesting_element_names
+    return clean_element_names, interesting_element_names, interesting_clazzes
 
 def setup_database(db: Database, classes, clean=False, cursor=False):
     if cursor:
@@ -725,10 +748,11 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
     else:
         cur = db.con
 
-    clean_element_names, interesting_element_names = classes
+    clean_element_names, interesting_element_names, interesting_classes = classes
 
     if clean:
-        for objectname in clean_element_names:
+        for clazz in interesting_classes:
+            objectname = get_object_name(clazz)
             sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
             cur.execute(sql_drop_table)
         cur.execute("VACUUM;")
@@ -743,28 +767,8 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
 
     create_meta(db)
 
-    for objectname in clean_element_names:
-        # TODO: optimize
-        clazz = getattr(sys.modules['netex'], objectname)
-        optionals = {x[0]: x[1][1] for x in list_attributes(clazz) if x[0] in ('order', 'version')}
-        ordr_opt = optionals.get('order', False)
-        version_opt = optionals.get('version', False)
-
-        if hasattr(clazz, 'order'):
-            if ordr_opt:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
-            else:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
-
-        elif hasattr(clazz, 'version'):
-            if version_opt:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64), object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
-            else:
-                sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
-
-        else:
-            sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
-
+    for clazz in interesting_classes:
+        sql_create_table = create_table_sql(db, clazz)
         print(sql_create_table)
         cur.execute(sql_create_table)
 
@@ -852,13 +856,11 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     # sql_create_table = "CREATE TABLE IF NOT EXISTS temp_embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT);"
     # cur.execute(sql_create_table)
 
-    clean_element_names, interesting_element_names = classes
+    clean_element_names, interesting_element_names, interesting_classes = classes
     clazz_by_name = {}
 
     for i in range(0, len(interesting_element_names)):
-        objectname = clean_element_names[i]
-        clazz = getattr(sys.modules['netex'], objectname)
-        clazz_by_name[interesting_element_names[i]] = clazz
+        clazz_by_name[interesting_element_names[i]] = interesting_classes[i]
 
     events = ("start", "end")
     context = etree.iterparse(f, events=events, remove_blank_text=True)
@@ -1058,13 +1060,11 @@ def resolve_all_references(con, classes, cursor=False):
         cur = con
 
     # TODO: This pattern must be able to make generic, and maybe even avoided running multiple times
-    clean_element_names, interesting_element_names = classes
+    clean_element_names, interesting_element_names, interesting_classes = classes
     clazz_by_name = {}
 
     for i in range(0, len(interesting_element_names)):
-        objectname = clean_element_names[i]
-        clazz = getattr(sys.modules['netex'], objectname)
-        clazz_by_name[interesting_element_names[i]] = clazz
+        clazz_by_name[interesting_element_names[i]] = interesting_classes[i]
 
     cur.execute("SET wal_autocheckpoint='1TB';")
     sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
@@ -1117,13 +1117,11 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
         cur = con
 
     # TODO: This pattern must be able to make generic, and maybe even avoided running multiple times
-    clean_element_names, interesting_element_names = classes
+    clean_element_names, interesting_element_names, interesting_classes = classes
     clazz_by_name = {}
 
     for i in range(0, len(interesting_element_names)):
-        objectname = clean_element_names[i]
-        clazz = getattr(sys.modules['netex'], objectname)
-        clazz_by_name[interesting_element_names[i]] = clazz
+        clazz_by_name[interesting_element_names[i]] = interesting_classes[i]
 
     cur.execute("SET wal_autocheckpoint='1TB';")
     sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"

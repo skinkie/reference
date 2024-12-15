@@ -19,9 +19,8 @@ GEO_CLASSES = {LocationStructure2, LineString, Polygon, MultiSurface}
 
 def get_all_geo_elements():
     classes = get_interesting_classes()
-    clean_element_names, interesting_element_names = classes
-    for element_name in clean_element_names:
-        clazz_parent = getattr(sys.modules['netex'], element_name)
+    clean_element_names, interesting_element_names, interesting_classes = classes
+    for clazz_parent in interesting_classes:
         attrs = list_attributes(clazz_parent)
         for attr in attrs:
             clazz = attr[3].type

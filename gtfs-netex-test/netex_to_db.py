@@ -6,7 +6,7 @@ from aux_logging import *
 from transformers.embedding import embedding_update
 
 
-def main(filenames: List[str], database: str, clean_database: bool = True, referencing: bool = False):
+def main(filenames: List[str], database: str, clean_database: bool = True):
 
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
     if clean_database:

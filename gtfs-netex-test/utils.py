@@ -2,6 +2,9 @@ import warnings
 from typing import T, Generator
 from xsdata.models.datatype import XmlDateTime, XmlDuration
 
+def get_object_name(clazz: T) -> str:
+    return getattr(clazz.Meta, 'name', clazz.__name__)
+
 def project(obj, clazz: T) -> T:
     # if issubclass(obj.__class__, clazz_intermediate):
     attributes = {x: y for x, y in obj.__dict__.items() if x in list(clazz.__dataclass_fields__.keys())}

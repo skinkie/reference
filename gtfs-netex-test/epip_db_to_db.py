@@ -5,11 +5,9 @@ from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from anyintodbnew import get_interesting_classes
-
 from netex import Codespace, AvailabilityCondition, NoticeAssignment, Notice, ScheduledStopPoint
 from netexio.database import Database
-from netexio.dbaccess import setup_database, copy_table
+from netexio.dbaccess import setup_database, copy_table, get_interesting_classes
 from netexio.dbaccess import attach_source, attach_objects
 
 from transformers.direction import infer_directions_from_sjps_and_apply

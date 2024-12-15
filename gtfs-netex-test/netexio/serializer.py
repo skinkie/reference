@@ -10,7 +10,7 @@ class Serializer:
     def __init__(self):
         from netexio.dbaccess import get_interesting_classes
 
-        self.clean_element_names, self.interesting_element_names = get_interesting_classes()
+        self.clean_element_names, self.interesting_element_names, self.interesting_classes = get_interesting_classes()
         # TODO: Really rework get_interesting_classes, to automatically include this
         self.name_object = {}
         for x in self.interesting_element_names:
