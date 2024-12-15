@@ -8,6 +8,18 @@ from aux_logging import *
 from configuration import *
 import traceback
 
+def create_list_from_string(input_string):
+    # Remove the square brackets from the string
+    cleaned_string = input_string.strip('[]')
+    # Split the cleaned string into a list using space as the delimiter
+    result_list = cleaned_string.split(' ')
+    return result_list
+
+def check_string(input_string):
+    if '[' in input_string and ']' in input_string:
+        return True
+    else:
+        return False
 def load_and_run(file_name, args_string):
 
     module_name = file_name[:-3]  # Remove the '.py' extension
@@ -17,7 +29,16 @@ def load_and_run(file_name, args_string):
     for comp in components[1:]:
         mod = getattr(mod, comp)
     args = args_string.split()  # Split the string into a list of arguments
-    result = mod(*args)
+    args1 = []
+    for arg in args:
+        if check_string(arg):
+            arg= create_list_from_string(arg)
+        elif arg == "True":
+            arg=True
+        elif arg == "False":
+            arg=False
+        args1.append(arg)
+    result = mod(*args1)
     return result
 
 def replace_in_string(input, search, replace):
