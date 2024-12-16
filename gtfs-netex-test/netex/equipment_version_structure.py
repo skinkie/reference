@@ -88,3 +88,11 @@ class EquipmentVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    monitored: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "Monitored",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )

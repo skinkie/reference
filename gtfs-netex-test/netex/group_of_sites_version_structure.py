@@ -2,10 +2,10 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
-from .external_object_ref_structure import ExternalObjectRefStructure
 from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 from .polygon import Polygon
 from .projections_rel_structure import ProjectionsRelStructure
+from .public_code_structure import PublicCodeStructure
 from .simple_point_version_structure import SimplePointVersionStructure
 from .site_refs_rel_structure import SiteRefsRelStructure
 
@@ -48,7 +48,7 @@ class GroupOfSitesVersionStructure(GroupOfEntitiesVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[ExternalObjectRefStructure] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",

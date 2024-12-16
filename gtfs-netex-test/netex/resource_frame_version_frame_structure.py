@@ -25,7 +25,7 @@ from .service_facility_sets_in_frame_rel_structure import ServiceFacilitySetsInF
 from .site_facility_sets_in_frame_rel_structure import SiteFacilitySetsInFrameRelStructure
 from .train_element_types_in_frame_rel_structure import TrainElementTypesInFrameRelStructure
 from .types_of_value_in_frame_rel_structure import TypesOfValueInFrameRelStructure
-from .vehicle_equipmen_profiles_in_frame_rel_structure import VehicleEquipmenProfilesInFrameRelStructure
+from .vehicle_equipment_profiles_in_frame_rel_structure import VehicleEquipmentProfilesInFrameRelStructure
 from .vehicle_model_profiles_in_frame_rel_structure import VehicleModelProfilesInFrameRelStructure
 from .vehicle_models_in_frame_rel_structure import VehicleModelsInFrameRelStructure
 from .vehicle_types_in_frame_rel_structure import VehicleTypesInFrameRelStructure
@@ -173,7 +173,7 @@ class ResourceFrameVersionFrameStructure(CommonVersionFrameStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_equipment_profiles: Optional[VehicleEquipmenProfilesInFrameRelStructure] = field(
+    vehicle_equipment_profiles: Optional[VehicleEquipmentProfilesInFrameRelStructure] = field(
         default=None,
         metadata={
             "name": "vehicleEquipmentProfiles",

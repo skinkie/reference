@@ -18,6 +18,7 @@ defaults["xml_description"] = "Huge XML Serializer test"
 defaults["feed_publisher_name"]= "Publication Delivery"
 defaults["feed_publisher_url"]= "http://publicationdelivery.eu"
 defaults["os"]= "windows"
+defaults["authority_reference"] = True
 input_dir = "d:/input"
 processing_data =  "d:/aux_testing_processing"
 

@@ -270,6 +270,14 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
             else:
                 processed.add(needle)
 
+                # Maybe make separater function
+                query = "SELECT DISTINCT class, id, version, path FROM embedded WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
+                cur.execute(query,
+                            (get_object_name(results[0].__class__), results[0].id, results[0].version,))
+
+                for clazz, id, version, path in cur.fetchall():
+                    if (clazz, id, version,) in existing_ids:
+                        replace_with_reference_inplace(results[0], path)
                 yield results[0]
 
                 # An element may obviously also include other references.
@@ -288,7 +296,7 @@ def fetch_references_classes_generator(db: Database, db2: Database, classes: lis
                         # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
                         query = "SELECT DISTINCT class, id, version, path FROM embedded WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
-                        cur.execute(query, (get_object_name(resolve.__class__), resolve.id, resolve.version,)) # TODO: change to meta
+                        cur.execute(query, (get_object_name(resolve.__class__), resolve.id, resolve.version,))
 
                         for clazz, id, version, path in cur.fetchall():
                             if (clazz, id, version,) in existing_ids:

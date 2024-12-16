@@ -165,6 +165,7 @@ from .rental_penalty_policy_ref import RentalPenaltyPolicyRef
 from .replacing_ref import ReplacingRef
 from .reselling_ref import ResellingRef
 from .reserving_ref import ReservingRef
+from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
 from .retail_consortium_ref import RetailConsortiumRef
 from .retail_device_ref import RetailDeviceRef
 from .retail_service_ref import RetailServiceRef
@@ -1883,11 +1884,16 @@ class CellVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    facility_set_ref: Optional[Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
+    service_facility_set_ref_or_facility_set_ref: Optional[Union[RestrictedServiceFacilitySetRef, ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
+                {
+                    "name": "RestrictedServiceFacilitySetRef",
+                    "type": RestrictedServiceFacilitySetRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
                 {
                     "name": "ServiceFacilitySetRef",
                     "type": ServiceFacilitySetRef,

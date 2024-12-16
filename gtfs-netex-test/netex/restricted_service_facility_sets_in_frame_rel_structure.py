@@ -2,19 +2,18 @@ from dataclasses import dataclass, field
 from typing import List, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
+from .restricted_service_facility_set import RestrictedServiceFacilitySet
 from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
-from .service_facility_set import ServiceFacilitySet
-from .service_facility_set_ref import ServiceFacilitySetRef
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
 @dataclass(kw_only=True)
-class ServiceFacilitySetsRelStructure(ContainmentAggregationStructure):
+class RestrictedServiceFacilitySetsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
-        name = "serviceFacilitySets_RelStructure"
+        name = "restrictedServiceFacilitySetsInFrame_RelStructure"
 
-    restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set: List[Union[RestrictedServiceFacilitySetRef, ServiceFacilitySetRef, ServiceFacilitySet]] = field(
+    restricted_service_facility_set_ref_or_restricted_service_facility_set: List[Union[RestrictedServiceFacilitySetRef, RestrictedServiceFacilitySet]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -25,13 +24,8 @@ class ServiceFacilitySetsRelStructure(ContainmentAggregationStructure):
                     "namespace": "http://www.netex.org.uk/netex",
                 },
                 {
-                    "name": "ServiceFacilitySetRef",
-                    "type": ServiceFacilitySetRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "ServiceFacilitySet",
-                    "type": ServiceFacilitySet,
+                    "name": "RestrictedServiceFacilitySet",
+                    "type": RestrictedServiceFacilitySet,
                     "namespace": "http://www.netex.org.uk/netex",
                 },
             ),

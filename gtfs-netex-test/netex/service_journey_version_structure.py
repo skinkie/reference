@@ -34,6 +34,7 @@ from .passenger_at_stop_times_rel_structure import PassengerAtStopTimesRelStruct
 from .passenger_carrying_requirement_ref import PassengerCarryingRequirementRef
 from .passenger_carrying_requirements_view import PassengerCarryingRequirementsView
 from .powered_train_ref import PoweredTrainRef
+from .public_code_structure import PublicCodeStructure
 from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
 from .route_ref import RouteRef
 from .service_alteration_enumeration import ServiceAlterationEnumeration
@@ -262,7 +263,7 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",
@@ -288,25 +289,6 @@ class ServiceJourneyVersionStructure(JourneyVersionStructure):
             ),
         },
     )
-
-    @property
-    def operator_ref(self) -> OperatorRef:
-        if isinstance(self.operator_ref_or_operator_view, OperatorRef):
-            return self.operator_ref_or_operator_view
-
-    @operator_ref.setter
-    def operator_ref(self, v: OperatorRef) -> None:
-        self.operator_ref_or_operator_view = v
-
-    @property
-    def operator_view(self) -> OperatorView:
-        if isinstance(self.operator_ref_or_operator_view, OperatorView):
-            return self.operator_ref_or_operator_view
-
-    @operator_view.setter
-    def operator_view(self, v: OperatorView) -> None:
-        self.operator_ref_or_operator_view = v
-
     flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view: Optional[Union[FlexibleLineRef, LineRef, LineView, FlexibleLineView]] = field(
         default=None,
         metadata={

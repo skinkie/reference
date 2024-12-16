@@ -4,7 +4,6 @@ from typing import Optional, Union
 
 from xsdata.models.datatype import XmlDuration
 
-from .compound_train_ref import CompoundTrainRef
 from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
 from .dead_run_ref import DeadRunRef
@@ -14,18 +13,15 @@ from .multilingual_string import MultilingualString
 from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .point_in_journey_pattern_ref import PointInJourneyPatternRef
 from .point_in_single_journey_path_ref import PointInSingleJourneyPathRef
-from .powered_train_ref import PoweredTrainRef
 from .service_journey_ref import ServiceJourneyRef
 from .single_journey_ref import SingleJourneyRef
 from .special_service_ref import SpecialServiceRef
 from .stop_point_in_journey_pattern_ref import StopPointInJourneyPatternRef
 from .template_service_journey_ref import TemplateServiceJourneyRef
 from .timing_point_in_journey_pattern_ref import TimingPointInJourneyPatternRef
-from .train_ref import TrainRef
-from .unpowered_train_ref import UnpoweredTrainRef
 from .vehicle_journey_ref import VehicleJourneyRef
-from .vehicle_ref import VehicleRef
-from .vehicle_type_ref import VehicleTypeRef
+from .vehicle_refs_rel_structure import VehicleRefsRelStructure
+from .vehicle_type_refs_rel_structure import VehicleTypeRefsRelStructure
 
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
@@ -177,43 +173,17 @@ class RechargingStepVersionStructure(VersionedChildStructure):
             ),
         },
     )
-    vehicle_type_ref_or_train_ref: Optional[Union[CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef]] = field(
+    vehicle_types: Optional[VehicleTypeRefsRelStructure] = field(
         default=None,
         metadata={
-            "type": "Elements",
-            "choices": (
-                {
-                    "name": "CompoundTrainRef",
-                    "type": CompoundTrainRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "UnpoweredTrainRef",
-                    "type": UnpoweredTrainRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "PoweredTrainRef",
-                    "type": PoweredTrainRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "TrainRef",
-                    "type": TrainRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-                {
-                    "name": "VehicleTypeRef",
-                    "type": VehicleTypeRef,
-                    "namespace": "http://www.netex.org.uk/netex",
-                },
-            ),
+            "name": "vehicleTypes",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_ref: Optional[VehicleRef] = field(
+    vehicles: Optional[VehicleRefsRelStructure] = field(
         default=None,
         metadata={
-            "name": "VehicleRef",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

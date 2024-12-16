@@ -26,6 +26,7 @@ from .notices_in_frame_rel_structure import NoticesInFrameRelStructure
 from .occupancy_view_in_frame_rel_structure import OccupancyViewInFrameRelStructure
 from .operator_view import OperatorView
 from .powered_train_ref import PoweredTrainRef
+from .restricted_service_facility_sets_in_frame_rel_structure import RestrictedServiceFacilitySetsInFrameRelStructure
 from .service_calendar_frame_ref import ServiceCalendarFrameRef
 from .service_facility_sets_in_frame_rel_structure import ServiceFacilitySetsInFrameRelStructure
 from .simple_vehicle_type_ref import SimpleVehicleTypeRef
@@ -257,6 +258,14 @@ class TimetableVersionFrameStructure(CommonVersionFrameStructure):
         default=None,
         metadata={
             "name": "serviceFacilitySets",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
+    restricted_service_facility_sets: Optional[RestrictedServiceFacilitySetsInFrameRelStructure] = field(
+        default=None,
+        metadata={
+            "name": "restrictedServiceFacilitySets",
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },

@@ -106,7 +106,7 @@ vehicle_type_vieroerd = VehicleType(id=getId(VehicleType, codespace, "SIEROERD")
                            has_lift_or_ramp=True,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "SIEROERD"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -137,7 +137,7 @@ vehicle_type_rottummonnik = VehicleType(id=getId(VehicleType, codespace, "ROTTUM
                            has_lift_or_ramp=True,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "ROTTUMMONNIK"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -168,7 +168,7 @@ vehicle_type_fostaborg = VehicleType(id=getId(VehicleType, codespace, "FOSTABORG
                            has_lift_or_ramp=True,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "FOSTABORG"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -194,7 +194,7 @@ vehicle_type_esonborg = VehicleType(id=getId(VehicleType, codespace, "ESONBORG")
                            has_lift_or_ramp=True,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "ESONBORG"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),

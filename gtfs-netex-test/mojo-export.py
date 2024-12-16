@@ -146,7 +146,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Standaard"), versio
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "Onbekend"), version=version.version,
                                                   mobility_facility_list=MobilityFacilityList(value=[MobilityFacilityEnumeration.UNKNOWN]),
                                                    vehicle_access_facility_list=VehicleAccessFacilityList(value=[VehicleAccessFacilityEnumeration.UNKNOWN]),

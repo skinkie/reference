@@ -71,6 +71,14 @@ class SimpleVehicleTypeVersionStructure(TransportTypeVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    number_of_wheels: Optional[int] = field(
+        default=None,
+        metadata={
+            "name": "NumberOfWheels",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     minimum_age: Optional[int] = field(
         default=None,
         metadata={

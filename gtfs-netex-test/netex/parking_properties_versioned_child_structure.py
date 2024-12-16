@@ -106,6 +106,14 @@ class ParkingPropertiesVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    monitored_bays: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "MonitoredBays",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     areas: Optional[ParkingAreaRefsRelStructure] = field(
         default=None,
         metadata={

@@ -358,6 +358,7 @@ from .resource_frame_ref import ResourceFrameRef
 from .responsibility_role_ref import ResponsibilityRoleRef
 from .responsibility_set_ref import ResponsibilitySetRef
 from .restricted_manoeuvre_ref import RestrictedManoeuvreRef
+from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
 from .retail_consortium_ref import RetailConsortiumRef
 from .retail_device_security_listing_ref import RetailDeviceSecurityListingRef
 from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
@@ -910,6 +911,7 @@ class ObjectFilterByValueStructure:
                 TransportTypeRef,
                 OnboardStayRef,
                 AccommodationRef,
+                RestrictedServiceFacilitySetRef,
                 ServiceFacilitySetRef,
                 SiteFacilitySetRef,
                 FacilitySetRef,
@@ -2555,6 +2557,11 @@ class ObjectFilterByValueStructure:
                     {
                         "name": "AccommodationRef",
                         "type": AccommodationRef,
+                        "namespace": "http://www.netex.org.uk/netex",
+                    },
+                    {
+                        "name": "RestrictedServiceFacilitySetRef",
+                        "type": RestrictedServiceFacilitySetRef,
                         "namespace": "http://www.netex.org.uk/netex",
                     },
                     {

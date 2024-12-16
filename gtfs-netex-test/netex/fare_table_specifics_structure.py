@@ -60,6 +60,7 @@ from .queueing_equipment_ref import QueueingEquipmentRef
 from .ramp_equipment_ref import RampEquipmentRef
 from .refuelling_equipment_ref import RefuellingEquipmentRef
 from .relative_direction_enumeration import RelativeDirectionEnumeration
+from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
 from .retail_device_ref import RetailDeviceRef
 from .retail_service_ref import RetailServiceRef
 from .rough_surface_ref import RoughSurfaceRef
@@ -281,11 +282,16 @@ class FareTableSpecificsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    facility_set_ref: Optional[Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
+    service_facility_set_ref_or_facility_set_ref: Optional[Union[RestrictedServiceFacilitySetRef, ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
+                {
+                    "name": "RestrictedServiceFacilitySetRef",
+                    "type": RestrictedServiceFacilitySetRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
                 {
                     "name": "ServiceFacilitySetRef",
                     "type": ServiceFacilitySetRef,

@@ -1131,7 +1131,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 if len(luggage_carriage_facility_list) > 0:
                     facitities = ServiceFacilitySetsRelStructure(
-                            service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
+                            restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
                                 id=self.get_trip_id_sfs(trip_ids[i]), version=self.version.version,
                                 luggage_carriage_facility_list=LuggageCarriageFacilityList(value=luggage_carriage_facility_list))])
 
@@ -1291,7 +1291,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 if len(luggage_carriage_facility_list) > 0:
                     facitities = ServiceFacilitySetsRelStructure(
-                            service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
+                            restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
                                 id=self.get_trip_id_sfs(trip_ids[i]), version=self.version.version,
                                 luggage_carriage_facility_list=LuggageCarriageFacilityList(value=luggage_carriage_facility_list))])
 
@@ -1451,7 +1451,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 if len(luggage_carriage_facility_list) > 0:
                     facitities = ServiceFacilitySetsRelStructure(
-                            service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
+                            restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(
                                 id=self.get_trip_id_sfs(trip_ids[i]), version=self.version.version,
                                 luggage_carriage_facility_list=LuggageCarriageFacilityList(value=luggage_carriage_facility_list))])
 

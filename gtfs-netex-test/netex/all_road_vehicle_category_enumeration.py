@@ -9,6 +9,7 @@ class AllRoadVehicleCategoryEnumeration(Enum):
     CYCLE = "cycle"
     PEDAL_CYCLE = "pedalCycle"
     E_CYCLE = "eCycle"
+    CARGO_CYCLE = "cargoCycle"
     TRICYCLE = "tricycle"
     TANDEM = "tandem"
     MOPED = "moped"

@@ -7,6 +7,7 @@ from .direction_ref import DirectionRef
 from .flexible_line_ref import FlexibleLineRef
 from .line_ref import LineRef
 from .multilingual_string import MultilingualString
+from .public_code_structure import PublicCodeStructure
 from .sign_equipment_version_structure import SignEquipmentVersionStructure
 from .transport_submode import TransportSubmode
 
@@ -97,7 +98,7 @@ class HeadingSignStructure(SignEquipmentVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    line_public_code: Optional[str] = field(
+    line_public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "LinePublicCode",

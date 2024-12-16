@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Union
 
 from .accommodation_facility import AccommodationFacility
 from .berth_facility import BerthFacility
@@ -11,6 +11,7 @@ from .gender_limitation import GenderLimitation
 from .multilingual_string import MultilingualString
 from .nuisance_facility_list import NuisanceFacilityList
 from .passenger_comms_facility_list import PassengerCommsFacilityList
+from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
 from .sanitary_facility_enumeration import SanitaryFacilityEnumeration
 from .service_facility_set_ref import ServiceFacilitySetRef
 
@@ -30,12 +31,22 @@ class AccommodationVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    service_facility_set_ref: Optional[ServiceFacilitySetRef] = field(
+    service_facility_set_ref: Optional[Union[RestrictedServiceFacilitySetRef, ServiceFacilitySetRef]] = field(
         default=None,
         metadata={
-            "name": "ServiceFacilitySetRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "RestrictedServiceFacilitySetRef",
+                    "type": RestrictedServiceFacilitySetRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "ServiceFacilitySetRef",
+                    "type": ServiceFacilitySetRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
     fare_class: Optional[FareClass] = field(
