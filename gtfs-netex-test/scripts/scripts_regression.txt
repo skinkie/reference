@@ -13,7 +13,7 @@
         {"script": "tool_netex_stats.py", "args": "%%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-netex.xml] %%dir%%/netex3-database.duckdb True"},
         {"script": "gtfs_db_to_db.py", "args": "%%dir%%/netex3-database.duckdb %%dir%%/netex4-database.duckdb"},
-        {"script": "netex_db_to_gtfs.py", "args": "%%dir%%/netex4-database.duckdb %%dir%%/%%block%%-gtfs.zip %%log%%"},
+        {"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/netex4-database.duckdb %%dir%%/%%block%%-gtfs.zip %%log%%"},
         {"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-gtfs.zip"},
         {"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html 10 %%log%%"}
         ]

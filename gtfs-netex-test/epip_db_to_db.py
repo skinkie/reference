@@ -41,9 +41,9 @@ def main(source_database_file: str, target_database_file: str):
     with Database(target_database_file, read_only=False) as target_db:
         setup_database(target_db, classes, True)
         # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
+        copy_table(source_database_file, target_db, [Notice, ScheduledStopPoint], clean=True)
 
         with Database(source_database_file, read_only=True) as source_db:
-            copy_table(source_db, target_db,[Notice, ScheduledStopPoint], clean=True)
             epip_line_memory(source_db, target_db, generator_defaults)
             infer_locations_from_quay_or_stopplace_and_apply(source_db, target_db, generator_defaults)
             # epip_scheduled_stop_point_memory(target_db, target_db, generator_defaults)

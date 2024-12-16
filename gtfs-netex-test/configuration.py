@@ -20,7 +20,8 @@ defaults["feed_publisher_url"]= "http://publicationdelivery.eu"
 defaults["os"]= "windows"
 input_dir = "d:/input"
 processing_data =  "d:/aux_testing_processing"
-
+input_dir = "C:/Users/ue71603/MG_Daten/conversion/input"
+processing_data =  "C:/Users/ue71603/MG_Daten/conversion/processing"
 
 # a local configuration overwrites the general one. The local_configuration must not be added to github
 try:

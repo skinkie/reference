@@ -24,6 +24,8 @@ def main(source_database_file: str, target_database_file: str, clean_database: b
 
     with Database(target_database_file, read_only=False) as db_write:
         setup_database(db_write, classes, True)
+        copy_table(source_database_file, db_write, [DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint,
+                                       AvailabilityCondition], clean=True)
 
         with Database(source_database_file, read_only=True) as db_read:
             # Copy tables that we don't change as-is.

@@ -20,6 +20,7 @@ from netexio.database import Database
 from netexio.xmlserializer import MyXmlSerializer
 from transformers.references import replace_with_reference_inplace
 from utils import get_object_name, get_element_name_with_ns
+from aux_logging import *
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -585,12 +586,17 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
 
     print('\n')
 
-def copy_table(db_read: Database, db_write: Database, classes: list, clean=False):
-    if db_read.read_only and os.name != 'nt':
-        print (f"ATTACH IF NOT EXISTS '{db_read.database_file}' AS db_read (READ_ONLY);")
-        db_write.con.execute(f"ATTACH DATABASE '{db_read.database_file}' AS db_read (READ_ONLY);")
+def copy_table(db_read_file: str, db_write: Database, classes: list, clean=False):
+    if True: #db_read.read_only: # and os.name != 'nt'
+        print (f"ATTACH IF NOT EXISTS '{db_read_file}' AS db_read (READ_ONLY);")
+        pid = os.getpid()
+        print("Process ID:", pid)
+        #db_write.con.execute(f"ATTACH DATABASE '{db_read.database_file}' AS db_read (READ_ONLY);")
+        db_write.con.execute(f"ATTACH IF NOT EXISTS '{db_read_file}' AS db_read (READ_ONLY);")
+
         for clazz in classes:
             objectname = get_object_name(clazz)
+            print(objectname)
             try:
                 if clean:
                     db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
@@ -600,7 +606,7 @@ def copy_table(db_read: Database, db_write: Database, classes: list, clean=False
                 db_write.con.execute(f'INSERT OR REPLACE INTO {objectname} SELECT * FROM db_read.{objectname};')
             except CatalogException:
                 pass
-
+        db_write.con.commit()
         db_write.con.execute(f"DETACH db_read;")
 
     else:
@@ -827,7 +833,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
         clazz_by_name[interesting_element_names[i]] = interesting_classes[i]
 
     events = ("start", "end")
-    context = etree.iterparse(f, events=events, remove_blank_text=True)
+    context = etree.iterparse(f, events=events, remove_blank_text=True,encoding="utf-8")
     current_element_tag = None
     current_framedefaults = None
     current_datasource_ref = None
