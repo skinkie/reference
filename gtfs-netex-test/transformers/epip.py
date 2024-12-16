@@ -39,7 +39,8 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     JourneyInterchangesInFrameRelStructure, UicOperatingPeriod, DayTypeAssignment, AvailabilityConditionRef, \
     OperatingPeriodRef, DayTypeRefsRelStructure, DayTypesRelStructure, OperatingPeriodsRelStructure, \
     DayTypeAssignmentsRelStructure, RouteView, LineRef, FlexibleLineRef, RouteRef, TimetabledPassingTimesRelStructure, \
-    TimeDemandType, Quay,StopPointInJourneyPattern, PointsInJourneyPatternRelStructure
+    TimeDemandType, Quay, StopPointInJourneyPattern, PointsInJourneyPatternRelStructure, \
+    TransportOrganisationRefsRelStructure
 
 from netexio.database import Database
 
@@ -61,6 +62,20 @@ def epip_line_generator(db_read: Database, db_write: Database, generator_default
         line.branding_ref = None
         line.type_of_service_ref = None
         line.type_of_product_category_ref = None
+        if line.operator_ref and line.authority_ref:
+            if defaults['authority_reference']:
+                if line.additional_operators and line.additional_operators.transport_organisation_ref:
+                    line.additional_operators.transport_organisation_ref.append(line.operator_ref)
+                else:
+                    line.additional_operators = TransportOrganisationRefsRelStructure(transport_organisation_ref=[line.operator_ref])
+                line.operator_ref = None
+            else:
+                if line.additional_operators and line.additional_operators.transport_organisation_ref:
+                    line.additional_operators.transport_organisation_ref.append(line.authority_ref)
+                else:
+                    line.additional_operators = TransportOrganisationRefsRelStructure(transport_organisation_ref=[line.authority_ref])
+                line.authority_ref = None
+
         return line
 
     def query(db_read: Database) -> Generator:
@@ -74,9 +89,24 @@ def epip_line_memory(db_read: Database, db_write: Database, generator_defaults):
     print(sys._getframe().f_code.co_name)
     lines: List[Line] = load_local(db_read, Line)
     for line in lines:
+        line: Line
         line.branding_ref = None
         line.type_of_service_ref = None
         line.type_of_product_category_ref = None
+        if line.operator_ref and line.authority_ref:
+            if defaults['authority_reference']:
+                if line.additional_operators and line.additional_operators.transport_organisation_ref:
+                    line.additional_operators.transport_organisation_ref.append(line.operator_ref)
+                else:
+                    line.additional_operators = TransportOrganisationRefsRelStructure(transport_organisation_ref=[line.operator_ref])
+                line.operator_ref = None
+            else:
+                if line.additional_operators and line.additional_operators.transport_organisation_ref:
+                    line.additional_operators.transport_organisation_ref.append(line.authority_ref)
+                else:
+                    line.additional_operators = TransportOrganisationRefsRelStructure(transport_organisation_ref=[line.authority_ref])
+                line.authority_ref = None
+
     write_objects(db_write, lines, True, True)
 
 def epip_scheduled_stop_point_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool):
