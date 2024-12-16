@@ -714,3 +714,21 @@ def export_epip_network_offer(db_orig: Database, db_target: Database) -> Publica
         ]))
 
     return publication_delivery
+
+def epip_service_journey_interchange(db_read: Database, db_write: Database, generator_defaults: dict) -> Generator:
+    print(sys._getframe().f_code.co_name)
+
+    def query1(db_read: Database) -> Generator:
+        # _load_generator = load_generator(db_read, InterchangeRule)
+        # for interchange_rule in _load_generator:
+        #     interchange_rule: InterchangeRule
+        #     service_journey_interchange: ServiceJourneyInterchange = project(interchange_rule, ServiceJourneyInterchange)
+        #     yield service_journey_interchange
+
+        _load_generator = load_generator(db_read, JourneyMeeting)
+        for journey_meeting in _load_generator:
+            journey_meeting: JourneyMeeting
+            service_journey_interchange: ServiceJourneyInterchange = project(journey_meeting, ServiceJourneyInterchange)
+            yield service_journey_interchange
+
+    write_generator(db_write, ServiceJourneyInterchange, query1(db_read))
