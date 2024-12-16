@@ -128,8 +128,7 @@ vehicle_type_wdv = VehicleType(id=getId(VehicleType, codespace, "WDV"), version=
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
-                               [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "WDV"), version=version.version,
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=[ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "WDV"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
                                                    passenger_comms_facility_list=PassengerCommsFacilityList(value=[
@@ -158,7 +157,7 @@ vehicle_type_wb = VehicleType(id=getId(VehicleType, codespace, "WB"), version=ve
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "WB"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -189,7 +188,7 @@ vehicle_type_friesland = VehicleType(id=getId(VehicleType, codespace, "FR"), ver
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "FRIESLAND"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -219,7 +218,7 @@ vehicle_type_vlieland = VehicleType(id=getId(VehicleType, codespace, "VL"), vers
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "VL"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -249,7 +248,7 @@ vehicle_type_koegelwieck = VehicleType(id=getId(VehicleType, codespace, "KW"), v
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "KW"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -275,7 +274,7 @@ vehicle_type_tiger = VehicleType(id=getId(VehicleType, codespace, "TI"), version
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "TI"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -301,7 +300,7 @@ vehicle_type_zeehond = VehicleType(id=getId(VehicleType, codespace, "ZEE"), vers
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "ZEE"), version=version.version,
                                                    mobility_facility_list=MobilityFacilityList(value=[
                                                        MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),

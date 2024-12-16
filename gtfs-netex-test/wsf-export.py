@@ -138,8 +138,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "PMPWA"), version=ve
                            transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
                            has_lift_or_ramp=False,
                            low_floor=True,
-                           facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                           facilities=ServiceFacilitySetsRelStructure(restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "PMPWA"), version=version.version,
                                                   mobility_facility_list=MobilityFacilityList(value=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
                                                   ticketing_service_facility_list=TicketingServiceFacilityList(value=[TicketingServiceFacilityEnumeration.PURCHASE, TicketingServiceFacilityEnumeration.RESERVATIONS]),

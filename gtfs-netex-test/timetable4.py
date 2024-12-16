@@ -281,7 +281,7 @@ service_journeys: List[ServiceJourney] = [ServiceJourney(
         TimetabledPassingTime(id="1a|bus|1.2", version="1", departure_time=XmlTime(0, 2, 0), arrival_time=XmlTime(0, 2, 0), point_in_journey_pattern_ref=StopPointInJourneyPatternRef(ref="1a|bus", order=2, version="1")),
     ]),
     transport_submode=TransportSubmode(choice=BusSubmode(value=BusSubmodeEnumeration.SCHOOL_BUS)),
-    facilities=ServiceFacilitySetsRelStructure(service_facility_set_ref_or_service_facility_set=[
+    facilities=ServiceFacilitySetsRelStructure(restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=[
         ServiceFacilitySet(
             id="1a|bus|1", version="1",
             mobility_facility_list=MobilityFacilityList(value=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -304,7 +304,7 @@ ServiceJourney(
         TimetabledPassingTime(id="1a|ferry|1.1", version="1", departure_time=XmlTime(0, 3, 0), arrival_time=XmlTime(0, 3, 0), point_in_journey_pattern_ref=StopPointInJourneyPatternRef(ref="1a|ferry", order=1, version="1")),
         TimetabledPassingTime(id="1a|ferry|1.2", version="1", departure_time=XmlTime(0, 4, 0), arrival_time=XmlTime(0, 4, 0), point_in_journey_pattern_ref=StopPointInJourneyPatternRef(ref="1a|ferry", order=2, version="1")),
     ]),
-    facilities=ServiceFacilitySetsRelStructure(service_facility_set_ref_or_service_facility_set=[
+    facilities=ServiceFacilitySetsRelStructure(restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=[
         ServiceFacilitySet(
             id="1a|ferry|1", version="1",
             mobility_facility_list=MobilityFacilityList(value=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
@@ -336,7 +336,7 @@ ServiceJourney(
                               point_in_journey_pattern_ref=StopPointInJourneyPatternRef(ref="1a|rail", order=2,
                                                                                         version="1")),
     ]),
-    facilities=ServiceFacilitySetsRelStructure(service_facility_set_ref_or_service_facility_set=[
+    facilities=ServiceFacilitySetsRelStructure(restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=[
         ServiceFacilitySet(
             id="1a|rail|1", version="1",
             mobility_facility_list=MobilityFacilityList(value=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),

@@ -112,7 +112,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), ver
                            has_lift_or_ramp=False,
                            low_floor=True,
                            facilities=ServiceFacilitySetsRelStructure(
-                               service_facility_set_ref_or_service_facility_set=
+                               restricted_service_facility_set_ref_or_service_facility_set_ref_or_service_facility_set=
                                [ServiceFacilitySet(id=getId(ServiceFacilitySet, codespace, "Texelstroom2"), version=version.version,
                                                   mobility_facility_list=MobilityFacilityList(value=[MobilityFacilityEnumeration.SUITABLE_FOR_WHEELCHAIRS]),
                                                   passenger_comms_facility_list=PassengerCommsFacilityList(value=[PassengerCommsFacilityEnumeration.FREE_WIFI]),
