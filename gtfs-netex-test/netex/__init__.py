@@ -365,6 +365,8 @@ from .bus_submode import BusSubmode
 from .bus_submode_enumeration import BusSubmodeEnumeration
 from .call import Call
 from .call_abstract import CallAbstract
+from .call_ref import CallRef
+from .call_ref_structure import CallRefStructure
 from .call_versioned_child_structure import CallVersionedChildStructure
 from .calls_rel_structure import CallsRelStructure
 from .cancelling import Cancelling
@@ -422,7 +424,6 @@ from .cell_ref_abstract import CellRefAbstract
 from .cell_ref_structure import CellRefStructure
 from .cell_refs_rel_structure import CellRefsRelStructure
 from .charging_basis_enumeration import ChargingBasisEnumeration
-from .charging_equipmen_profiles_in_frame_rel_structure import ChargingEquipmenProfilesInFrameRelStructure
 from .charging_moment import ChargingMoment
 from .charging_moment_enumeration import ChargingMomentEnumeration
 from .charging_moment_ref import ChargingMomentRef
@@ -2346,8 +2347,10 @@ from .open_transport_mode_ref import OpenTransportModeRef
 from .open_transport_mode_ref_structure import OpenTransportModeRefStructure
 from .open_transport_mode_refs_rel_structure import OpenTransportModeRefsRelStructure
 from .open_transport_mode_value_structure import OpenTransportModeValueStructure
+from .operating_day_derived_view_structure import OperatingDayDerivedViewStructure
 from .operating_day_ref import OperatingDayRef
 from .operating_day_ref_structure import OperatingDayRefStructure
+from .operating_day_view import OperatingDayView
 from .operating_days_in_frame_rel_structure import OperatingDaysInFrameRelStructure
 from .operating_department import OperatingDepartment
 from .operating_department_ref import OperatingDepartmentRef
@@ -3061,6 +3064,12 @@ from .restricted_manoeuvre import RestrictedManoeuvre
 from .restricted_manoeuvre_ref import RestrictedManoeuvreRef
 from .restricted_manoeuvre_ref_structure import RestrictedManoeuvreRefStructure
 from .restricted_manoeuvre_version_structure import RestrictedManoeuvreVersionStructure
+from .restricted_service_facility_set import RestrictedServiceFacilitySet
+from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
+from .restricted_service_facility_set_ref_structure import RestrictedServiceFacilitySetRefStructure
+from .restricted_service_facility_set_version_structure import RestrictedServiceFacilitySetVersionStructure
+from .restricted_service_facility_sets_in_frame_rel_structure import RestrictedServiceFacilitySetsInFrameRelStructure
+from .restricted_service_facility_sets_rel_structure import RestrictedServiceFacilitySetsRelStructure
 from .retail_consortium import RetailConsortium
 from .retail_consortium_ref import RetailConsortiumRef
 from .retail_consortium_ref_structure import RetailConsortiumRefStructure
@@ -4557,7 +4566,6 @@ from .vehicle_entrance_ref import VehicleEntranceRef
 from .vehicle_entrance_ref_structure import VehicleEntranceRefStructure
 from .vehicle_entrance_version_structure import VehicleEntranceVersionStructure
 from .vehicle_entrances_rel_structure import VehicleEntrancesRelStructure
-from .vehicle_equipmen_profiles_in_frame_rel_structure import VehicleEquipmenProfilesInFrameRelStructure
 from .vehicle_equipment_profile import VehicleEquipmentProfile
 from .vehicle_equipment_profile_member import VehicleEquipmentProfileMember
 from .vehicle_equipment_profile_member_ref import VehicleEquipmentProfileMemberRef
@@ -4569,6 +4577,7 @@ from .vehicle_equipment_profile_ref import VehicleEquipmentProfileRef
 from .vehicle_equipment_profile_ref_structure import VehicleEquipmentProfileRefStructure
 from .vehicle_equipment_profile_refs_rel_structure import VehicleEquipmentProfileRefsRelStructure
 from .vehicle_equipment_profile_version_structure import VehicleEquipmentProfileVersionStructure
+from .vehicle_equipment_profiles_in_frame_rel_structure import VehicleEquipmentProfilesInFrameRelStructure
 from .vehicle_equipment_ref import VehicleEquipmentRef
 from .vehicle_equipment_ref_structure import VehicleEquipmentRefStructure
 from .vehicle_equipments_rel_structure import VehicleEquipmentsRelStructure
@@ -5238,6 +5247,8 @@ __all__ = [
     "BusSubmodeEnumeration",
     "Call",
     "CallAbstract",
+    "CallRef",
+    "CallRefStructure",
     "CallVersionedChildStructure",
     "CallsRelStructure",
     "Cancelling",
@@ -5295,7 +5306,6 @@ __all__ = [
     "CellRefStructure",
     "CellRefsRelStructure",
     "ChargingBasisEnumeration",
-    "ChargingEquipmenProfilesInFrameRelStructure",
     "ChargingMoment",
     "ChargingMomentEnumeration",
     "ChargingMomentRef",
@@ -7203,8 +7213,10 @@ __all__ = [
     "OpenTransportModeRefStructure",
     "OpenTransportModeRefsRelStructure",
     "OpenTransportModeValueStructure",
+    "OperatingDayDerivedViewStructure",
     "OperatingDayRef",
     "OperatingDayRefStructure",
+    "OperatingDayView",
     "OperatingDaysInFrameRelStructure",
     "OperatingDepartment",
     "OperatingDepartmentRef",
@@ -7916,6 +7928,12 @@ __all__ = [
     "RestrictedManoeuvreRef",
     "RestrictedManoeuvreRefStructure",
     "RestrictedManoeuvreVersionStructure",
+    "RestrictedServiceFacilitySet",
+    "RestrictedServiceFacilitySetRef",
+    "RestrictedServiceFacilitySetRefStructure",
+    "RestrictedServiceFacilitySetVersionStructure",
+    "RestrictedServiceFacilitySetsInFrameRelStructure",
+    "RestrictedServiceFacilitySetsRelStructure",
     "RetailConsortium",
     "RetailConsortiumRef",
     "RetailConsortiumRefStructure",
@@ -9406,7 +9424,6 @@ __all__ = [
     "VehicleEntranceRefStructure",
     "VehicleEntranceVersionStructure",
     "VehicleEntrancesRelStructure",
-    "VehicleEquipmenProfilesInFrameRelStructure",
     "VehicleEquipmentProfile",
     "VehicleEquipmentProfileMember",
     "VehicleEquipmentProfileMemberRef",
@@ -9418,6 +9435,7 @@ __all__ = [
     "VehicleEquipmentProfileRefStructure",
     "VehicleEquipmentProfileRefsRelStructure",
     "VehicleEquipmentProfileVersionStructure",
+    "VehicleEquipmentProfilesInFrameRelStructure",
     "VehicleEquipmentRef",
     "VehicleEquipmentRefStructure",
     "VehicleEquipmentsRelStructure",

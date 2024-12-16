@@ -10,6 +10,7 @@ from .external_object_ref_structure import ExternalObjectRefStructure
 from .journey_pattern_ref_structure import JourneyPatternRefStructure
 from .normal_dated_vehicle_journey_ref import NormalDatedVehicleJourneyRef
 from .operating_day_ref import OperatingDayRef
+from .operating_day_view import OperatingDayView
 from .replaced_journeys_rel_structure import ReplacedJourneysRelStructure
 from .service_alteration_enumeration import ServiceAlterationEnumeration
 from .service_journey_ref import ServiceJourneyRef
@@ -90,12 +91,22 @@ class DatedVehicleJourneyVersionStructure(VehicleJourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    operating_day_ref: Optional[OperatingDayRef] = field(
+    operating_day_ref_or_operating_day_view: Optional[Union[OperatingDayRef, OperatingDayView]] = field(
         default=None,
         metadata={
-            "name": "OperatingDayRef",
-            "type": "Element",
-            "namespace": "http://www.netex.org.uk/netex",
+            "type": "Elements",
+            "choices": (
+                {
+                    "name": "OperatingDayRef",
+                    "type": OperatingDayRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+                {
+                    "name": "OperatingDayView",
+                    "type": OperatingDayView,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
+            ),
         },
     )
     uic_operating_period: Optional[UicOperatingPeriod] = field(

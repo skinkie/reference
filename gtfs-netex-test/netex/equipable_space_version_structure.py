@@ -7,6 +7,7 @@ from .component_orientation_enumeration import ComponentOrientationEnumeration
 from .entity_in_version_structure import DataManagedObjectStructure
 from .facility_set_ref import FacilitySetRef
 from .multilingual_string import MultilingualString
+from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
 from .service_facility_set_ref import ServiceFacilitySetRef
 from .site_facility_set_ref import SiteFacilitySetRef
 
@@ -74,11 +75,16 @@ class EquipableSpaceVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    facility_set_ref: Optional[Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
+    service_facility_set_ref_or_facility_set_ref: Optional[Union[RestrictedServiceFacilitySetRef, ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default=None,
         metadata={
             "type": "Elements",
             "choices": (
+                {
+                    "name": "RestrictedServiceFacilitySetRef",
+                    "type": RestrictedServiceFacilitySetRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
                 {
                     "name": "ServiceFacilitySetRef",
                     "type": ServiceFacilitySetRef,

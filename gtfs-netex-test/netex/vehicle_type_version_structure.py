@@ -114,6 +114,14 @@ class VehicleTypeVersionStructure(TransportTypeVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
+    monitored: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "Monitored",
+            "type": "Element",
+            "namespace": "http://www.netex.org.uk/netex",
+        },
+    )
     included_in: Optional[VehicleTypeRefStructure] = field(
         default=None,
         metadata={

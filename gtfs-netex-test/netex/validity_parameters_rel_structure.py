@@ -89,6 +89,7 @@ from .powered_train_ref import PoweredTrainRef
 from .pricing_rule_ref import PricingRuleRef
 from .quay_ref import QuayRef
 from .relative_direction_enumeration import RelativeDirectionEnumeration
+from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
 from .retail_consortium_ref import RetailConsortiumRef
 from .retail_service_ref import RetailServiceRef
 from .road_address_ref import RoadAddressRef
@@ -880,11 +881,16 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    facility_set_ref: List[Union[ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
+    service_facility_set_ref_or_facility_set_ref: List[Union[RestrictedServiceFacilitySetRef, ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
+                {
+                    "name": "RestrictedServiceFacilitySetRef",
+                    "type": RestrictedServiceFacilitySetRef,
+                    "namespace": "http://www.netex.org.uk/netex",
+                },
                 {
                     "name": "ServiceFacilitySetRef",
                     "type": ServiceFacilitySetRef,

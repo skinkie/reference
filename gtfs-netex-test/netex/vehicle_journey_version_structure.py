@@ -17,6 +17,7 @@ from .journey_version_structure import JourneyVersionStructure
 from .operational_context_ref import OperationalContextRef
 from .passenger_at_stop_times_rel_structure import PassengerAtStopTimesRelStructure
 from .powered_train_ref import PoweredTrainRef
+from .public_code_structure import PublicCodeStructure
 from .rhythmical_journey_group_ref import RhythmicalJourneyGroupRef
 from .route_ref import RouteRef
 from .service_journey_pattern_ref import ServiceJourneyPatternRef
@@ -234,7 +235,7 @@ class VehicleJourneyVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    public_code: Optional[str] = field(
+    public_code: Optional[PublicCodeStructure] = field(
         default=None,
         metadata={
             "name": "PublicCode",
