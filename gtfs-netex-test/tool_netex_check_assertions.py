@@ -5,7 +5,7 @@ from aux_logging import *
 import traceback
 
 
-def process_assertions(assertions_file, input_file):
+def main(assertions_file, input_file):
     tree = etree.parse(input_file)
     # Define the namespace URI
     namespace_uri = 'http://www.netex.org.uk/netex'
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
-        process_assertions(args.assertions_file, args.input_file)
+        main(args.assertions_file, args.input_file)
         log_flush()
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())

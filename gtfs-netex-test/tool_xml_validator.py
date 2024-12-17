@@ -25,7 +25,7 @@ def validate_xml(xml_file, xmlschema):
         print(f"An error occurred while validating {xml_file}: {str(e)}")
 
 
-def validate_xsd_in_folder(folder, xsd_schema):
+def main(folder, xsd_schema):
     xmlschema = etree.XMLSchema(etree.parse(xsd_schema))
     for root, dirs, files in os.walk(folder):
         for file in files:
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     # Fetching the data based on command-line arguments
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
-        validate_xsd_in_folder(args.folder, args.xmlschema)
+        main(args.folder, args.xmlschema)
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
         raise e
