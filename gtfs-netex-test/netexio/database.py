@@ -24,7 +24,7 @@ class Database:
         return self.con.cursor()
 
     def __enter__(self):
-        self.con = duckdb.connect(self.database_file)
+        self.con = duckdb.connect(self.database_file, read_only=self.read_only)
         return self
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
