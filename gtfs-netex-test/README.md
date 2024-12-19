@@ -69,7 +69,12 @@ If you later want to update it
 git submodule update
 ```
 
-
+### Duckdb and windows
+In some cases for duckdb to work properly on windows machines, it is necessary that the Mircrsoft Visual C++ Resitributable is installed:
+- https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+- https://github.com/duckdb/duckdb/issues/34
+- 
+This issue might be fixed at some point.
 
 ###Using the conversions
 In the test runner you see how things are processed:  tool_script_runner.py
