@@ -58,7 +58,20 @@ xsdata generate -c netex.conf /home/skinkie/Sources/NeTEx/xsd/NeTEx_publication.
 ### Generating Python classes from XML Schema
 `xsdata generate -c netex.conf /path/to/NeTEx/xsd/NeTEx_publication.xsd`
 
-## Using the conversions
+### Submodule with xsd
+The latest NeTEX XSD is downloaded from github and stored in the netex-xsd folder.
+You need to do a git submodule init and a git submodule update round.
+```
+git submodule init
+```
+If you later want to update it
+```
+git submodule update
+```
+
+
+
+###Using the conversions
 In the test runner you see how things are processed:  tool_script_runner.py
 
 An example of a configuration file can be found here: https://github.com/skinkie/reference/blob/master/gtfs-netex-test/scripts

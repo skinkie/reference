@@ -1,4 +1,0 @@
-[submodule "gtfs-netex-test/xsd"]
-	path = gtfs-netex-test/xsd
-	url = https://github.com/NeTEx-CEN/NeTEx.git
-	branch = next
