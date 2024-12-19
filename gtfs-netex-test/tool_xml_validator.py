@@ -21,8 +21,10 @@ def validate_xml(xml_file, xmlschema):
         print(f"{xml_file} is valid against {xmlschema}")
     except etree.XMLSchemaError as e:
         print(f"{xml_file} is invalid: {str(e)}")
+        raise e
     except Exception as e:
         print(f"An error occurred while validating {xml_file}: {str(e)}")
+        raise e
 
 
 def main(folder, xsd_schema):
@@ -42,13 +44,14 @@ if __name__ == '__main__':
 
     argument_parser = argparse.ArgumentParser(description='Validates each file in a folder (xsd and xml)')
     argument_parser.add_argument('folder', type=str, help='The folder containing the xml files to validate')
-    argument_parser.add_argument('xmlschema', type=str, help='The schema file to use as a basis for validation')
+    # argument_parser.add_argument('xmlschema', type=str, help='The schema file to use as a basis for validation')
+    xmlschema="./xsd/xsd/netex_publication.xsd"
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile')
     args = argument_parser.parse_args()
     # Fetching the data based on command-line arguments
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
-        main(args.folder, args.xmlschema)
+        main(args.folder, xmlschema)
     except Exception as e:
         log_all(logging.ERROR, f'{e}', traceback.format_exc())
         raise e
