@@ -3,9 +3,11 @@
 
 {
     "block": "swissmikro",
+    "download_url":"https://github.com/user-attachments/files/18201746/swiss_mikro.zip",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "gtfs_import_to_db.py", "args": "%%inputdir%%/swiss_mikro.zip %%dir%%/gtfs-import.duckdb"},
+        {"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"script": "gtfs_import_to_db.py", "args": "%%inputfilepath%% %%dir%%/gtfs-import.duckdb"},
         {"script": "gtfs_convert_to_db.py", "args": "%%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "%%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
@@ -19,7 +21,9 @@
         {"script": "tool_xml_validator.py", "args": "%%dir%%  C:/Users/ue71603/MG_Daten/github/NeTEx1/xsd/netex_publication.xsd"},
         {"script": "#tool_xml_compress.py", "args": "%%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "%%dir%%/%%block%%-netex.xml"},
-        {"script": "#tool_netex_check_assertions.py", "args": "./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"}
+        {"script": "#tool_netex_check_assertions.py", "args": "./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
+        {"script": "remove_file", "args": "%%inputfilepath%%"}
+
         ]
   },
        {

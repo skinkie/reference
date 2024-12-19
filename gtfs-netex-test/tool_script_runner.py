@@ -7,6 +7,7 @@ import shutil
 from aux_logging import *
 from configuration import *
 import traceback
+import urllib.request
 
 def create_list_from_string(input_string):
     # Remove the square brackets from the string
@@ -102,6 +103,35 @@ def set_defaults(keyvaluestr):
     # replace what is not yet in defaults
     defaults.update(result)
 
+
+def download(folder, url):
+    try:
+        # Create the folder if it doesn't exist
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        # Get the filename from the URL
+        filename = os.path.basename(url)
+
+        # Download the file
+        urllib.request.urlretrieve(url, os.path.join(folder, filename))
+
+        # Return the downloaded file path
+        return os.path.join(folder, filename)
+
+    except urllib.error.HTTPError:
+        return "FILE NOT FOUND"
+
+def remove_file(path):
+    if os.path.isfile(path):
+        try:
+            os.remove(path)
+            return "File removed successfully."
+        except OSError as e:
+            raise OSError(f"Failed to remove file: {str(e)}")
+    else:
+        raise FileNotFoundError(f"File not found: {path}")
+
 def main(script_file,log_file, log_level, todo_block,begin_step):
     # blockexisted
     blockexisted=False
@@ -123,6 +153,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
         prepare_logger(log_level, block["block"] + "/" + log_file)
         # log_once(logging.INFO, "Start", f'Processing block: {block["block"]}')
         step = 1
+        script_input_file_path = 'NOT SET YET'
         for script in scripts:
 
             # skip some steps if this is mandated
@@ -136,10 +167,11 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
 
             script_name = script['script']
             script_args = script['args']
-
+            script_download_url = block['download_url']
             # replace the placeholder for processdir with the correct values and also the other place holders
             script_args = replace_in_string(script_args, "%%dir%%", processdir)
             script_args = replace_in_string(script_args, "%%inputdir%%", input_dir)
+            script_args = replace_in_string(script_args, "%%inputfilepath%%", script_input_file_path)
             script_args = replace_in_string(script_args, "%%block%%", block["block"])
             script_args = replace_in_string(script_args, "%%log%%", block["block"] + "/" + log_file)
 
@@ -172,7 +204,17 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 clean(folder)
                 log_all(logging.INFO, "test_runner", f"Command 'clean' executed for folder: {folder}\n")
                 continue
-
+            if script_name == 'download_input_file':
+                # Execute the download command. The file under the download_url is copied to a folder
+                folder = script_args
+                script_input_file_path=download(folder,script_download_url)
+                log_all(logging.INFO, "test_runner", f"Command 'download_input_file' executed for url: {script_download_url}\n")
+                continue
+            if script_name == 'remove_file':
+                # Execute the download command. The file under the download_url is copied to a folder
+                remove_file(script_input_file_path)
+                log_all(logging.INFO, "test_runner", f"Command 'remove_file' executed for file: {script_input_file_path}\n")
+                continue
             result=load_and_run(script_name, script_args)
             end_time = time.time()
             execution_time = int(10*(end_time - start_time))/10

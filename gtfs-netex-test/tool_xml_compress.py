@@ -2,7 +2,7 @@ import gzip
 import os
 
 # TODO ev. Logging. But not really necessary.
-def main(input_file, cleanup=False):
+def compress_file(input_file, cleanup=False):
     if not input_file.lower().endswith('.xml'):
         raise ValueError('Input file must have an XML extension')
 
@@ -23,4 +23,4 @@ if __name__ == "__main__":
     parser.add_argument('file', type=str, help='file name')
     parser.add_argument('--cleanup', type=bool, default=False, help='If set, then the original file is removed.')
     args = parser.parse_args()
-    main(args.file, cleanup=args.cleanup)
+    compress_file(args.file, cleanup=args.cleanup)
