@@ -143,6 +143,11 @@ Not yet working well are:
 * Demand responsive traffic  (TODO)
 * Frequency based traffic (TODO)
 
+####  Generally import NeTEx files
+`python netex_to_db.py [list of files] /path/to/netex.duckdb`
+
+This commands takes a list of files (xml, zip, gz) and loads them into a netex duckdb.
+
 ####  Exploring instances and their dependencies
 `python related_explorer.py /path/to/netex.duckdb ServiceJourney the:id  /path/to/exportfile.gz`
 
@@ -171,6 +176,7 @@ Example draft of block "at1":
     [  {
     "block": "blablacar",
     "url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
+    "download_url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
     "description":"Blablacar data",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
