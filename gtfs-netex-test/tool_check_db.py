@@ -1,6 +1,8 @@
 import duckdb
 from aux_logging import *
 import traceback
+from configuration import LOGEXAMPLE
+
 def main(db_file):
     # Connect to the DuckDB database
     con = duckdb.connect(database=db_file)
@@ -12,7 +14,7 @@ def main(db_file):
     for table in tables:
         table_name = table[0]
         row_count = con.execute(f"SELECT COUNT(*) FROM {table_name};").fetchone()[0]
-        if row_count>0:
+        if row_count>0 and LOGEXAMPLE:
             log_all(logging.INFO,"check_db",f"{table_name}: {row_count}")
 
             # Select a random row from the table

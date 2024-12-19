@@ -3,6 +3,7 @@ import logging
 # Logging
 log_dict={}  # relevant values key - type of problem, then  [count, message]
 NOSOFTLOGGING=False  # if set to True the log_print function will output nothing
+LOGEXAMPLE=False # if set to True then tool_check_db will print a random row for each table
 general_log_level = logging.INFO
 
 

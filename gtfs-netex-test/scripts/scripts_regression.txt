@@ -28,9 +28,12 @@
   },
        {
     "block": "nl1",
+    "download_url":"https://github.com/user-attachments/files/18202156/NeTEx_TESO_TESO_20241112_20241112.xml.gz",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "netex_to_db.py", "args": "[%%inputdir%%/NeTEx_WPD_WPD_20241112_20241112.xml.gz] %%dir%%/nl-import.duckdb True"},
+        {"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/nl-import.duckdb True"},
+        {"script": "remove_file", "args": "%%inputfilepath%%"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wpd-netex.xml"},
         {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-wpd-netex.xml] %%dir%%/nl-gtfs.duckdb True"},
@@ -43,37 +46,77 @@
         {"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs.zip %%dir%%/%%block%%-wpd-map.html 1 %%log%%"}
          ]
   },
+
        {
     "block": "nl2",
+    "download_url":"https://github.com/user-attachments/files/18202160/NeTEx_WPD_WPD_20241112_20241112.xml.gz",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "netex_to_db.py", "args": "%%inputdir%%/NeTEx_TESO_TESO_20241112_20241112.xml.gz %%dir%%/nl-import.duckdb True"},
+        {"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/nl-import.duckdb True"},
+        {"script": "remove_file", "args": "%%inputfilepath%%"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-teso-netex.xml"},
-        {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-teso-netex.xml] %%dir%%/nl-gtfs.duckdb True"},
+        {"script": "epip_db_to_xml.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wpd-netex.xml"},
+        {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-wpd-netex.xml] %%dir%%/nl-gtfs.duckdb True"},
         {"script": "gtfs_db_to_db.py", "args": "%%dir%%/nl-gtfs.duckdb %%dir%%/nl2-gtfs.duckdb"},
-        {"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/nl2-gtfs.duckdb %%dir%%/nl2-gtfs-teso.zip"},
+        {"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/nl2-gtfs.duckdb %%dir%%/%%block%%-wpd-gtfs.zip"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/nl-import.duckdb"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/netex-database.duckdb"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/nl2-gtfs.duckdb"},
+        {"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-wpd-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs.zip %%dir%%/%%block%%-wpd-map.html 1 %%log%%"}
+         ]
+  },
+
+       {
+    "block": "nl3",
+    "download_url":"https://github.com/user-attachments/files/18202170/NeTEx_WSF_WSF_20241112_20241112.xml.gz",
+    "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "netex_to_db.py", "args": "[%%inputdir%%/NeTEx_WSF_WSF_20241112_20241112.xml.gz] %%dir%%/nl-import.duckdb True"},
+        {"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/nl-import.duckdb True"},
+        {"script": "remove_file", "args": "%%inputfilepath%%"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wsf1-netex.xml"},
-        {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-wsf1-netex.xml] %%dir%%/nl-gtfs.duckdb True"},
+        {"script": "epip_db_to_xml.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wpd-netex.xml"},
+        {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-wpd-netex.xml] %%dir%%/nl-gtfs.duckdb True"},
         {"script": "gtfs_db_to_db.py", "args": "%%dir%%/nl-gtfs.duckdb %%dir%%/nl2-gtfs.duckdb"},
-        {"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/nl2-gtfs.duckdb %%dir%%/%%block%%-wsf1-gtfs.zip"},
+        {"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/nl2-gtfs.duckdb %%dir%%/%%block%%-wpd-gtfs.zip"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/nl-import.duckdb"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/netex-database.duckdb"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/nl2-gtfs.duckdb"},
+        {"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-wpd-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs.zip %%dir%%/%%block%%-wpd-map.html 1 %%log%%"}
+         ]
+  },
+
+       {
+    "block": "nl4",
+    "download_url":"https://github.com/user-attachments/files/18202171/NeTEx_WSF_WSF_20241203_20241203.xml.gz",
+    "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "netex_to_db.py", "args": "[%%inputdi%r%/NeTEx_WSF_WSF_20241203_20241203.xml.gz] %%dir%%/nl-import.duckdb True"},
+        {"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/nl-import.duckdb True"},
+        {"script": "remove_file", "args": "%%inputfilepath%%"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wsf2-netex.xml"},
-        {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-wsf2-netex.xml] %%dir%%/nl-gtfs.duckdb True"},
+        {"script": "epip_db_to_xml.py", "args": "%%dir%%/nl-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-wpd-netex.xml"},
+        {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-wpd-netex.xml] %%dir%%/nl-gtfs.duckdb True"},
         {"script": "gtfs_db_to_db.py", "args": "%%dir%%/nl-gtfs.duckdb %%dir%%/nl2-gtfs.duckdb"},
-        {"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/nl2-gtfs.duckdb %%dir%%/%%block%%-wsf2-gtfs.zip"}
+        {"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/nl2-gtfs.duckdb %%dir%%/%%block%%-wpd-gtfs.zip"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/nl-import.duckdb"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/netex-database.duckdb"},
+        {"script": "tool_check_db.py", "args": "%%dir%%/nl2-gtfs.duckdb"},
+        {"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-wpd-gtfs.zip"},
+        {"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs.zip %%dir%%/%%block%%-wpd-map.html 1 %%log%%"}
          ]
   },
   {
     "block": "swissinterchange",
+    "download_url":"https://github.com/user-attachments/files/18201749/swiss_interchange.zip",
     "scripts": [
        {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "netex_to_db.py", "args": "[%%inputdir%%/swiss_interchange.zip] %%dir%%/import.duckdb True"},
+        {"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/import.duckdb True"},
+        {"script": "remove_file", "args": "%%inputfilepath%%"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "%%dir%%/import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-epip-netex.xml"},
         {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-epip-netex.xml] %%dir%%/ch-inter-gtfs.duckdb True"},
@@ -87,10 +130,13 @@
     {
     "block": "blablacar",
     "url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
+    "download_url":"https://github.com/user-attachments/files/18202184/blablacar.zip",
     "description":"Blablacar data",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "gtfs_import_to_db.py", "args": "%%inputdir%%/blablacar.zip %%dir%%/gtfs-import.duckdb"},
+        {"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"script": "gtfs_import_to_db.py", "args": "%%inputfilepath%% %%dir%%/gtfs-import.duckdb"},
+        {"script": "remove_file", "args": "%%inputfilepath%%"},
         {"script": "gtfs_convert_to_db.py", "args": "%%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "%%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "%%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
