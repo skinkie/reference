@@ -24,7 +24,7 @@ def main(log_file:str):
     if log_file == None:
         log_file="stats.log"
     log_print("***************************************************")
-    log_all(logging.INFO,"key1","mess1")
+    log_all(logging.INFO,"mess1")
     log_once(logging.INFO,"keyINFOOnce","mess2")
     log_once(logging.INFO,"keyINFOOnce","mess3")
     log_once(logging.INFO,"keyINFOOnce","mess4")
@@ -48,5 +48,5 @@ if __name__ == "__main__":
     try:
         main(args.log_file)
     except Exception as e:
-        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        log_all(logging.ERROR, f'{e} {traceback.format_exc()}')
     log_write_counts(logging.INFO)

@@ -48,5 +48,5 @@ if __name__ == '__main__':
     try:
         main(args.source, args.target)
     except Exception as e:
-        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        log_all(logging.ERROR, f'{e} {traceback.format_exc()}')
         raise e

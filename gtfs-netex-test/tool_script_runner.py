@@ -49,7 +49,7 @@ def replace_in_string(input, search, replace):
 def clean_tmp(f):
     # Iterate over the items in the folder
     if not os.path.isdir(f):
-        log_all(logging.WARNING,"clean_tmp",f"No valid path to clean:{f}")
+        log_all(logging.WARNING,f"No valid path to clean:{f}")
 
         return
     for item in os.listdir(f):
@@ -70,7 +70,7 @@ def clean_tmp(f):
 def clean(directory):
     # Clean the specified folder by deleting all files and subfolders
     if not os.path.isdir(directory):
-        log_all(logging.WARNING,"clean_tmp",f"No valid path to clean: {directory}")
+        log_all(logging.WARNING,f"No valid path to clean: {directory}")
         return
     # Iterate over the items in the directory
     for item in os.listdir(directory):
@@ -179,7 +179,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             os.makedirs(processdir, exist_ok=True)
 
             # Write the script name to the log file with a starting delimiter
-            log_all(logging.INFO, "test_runner", f"{script_name} {script_args}")
+            log_all(logging.INFO, f"{script_name} {script_args}")
 
             if script_name.startswith("#"):
                 # is a comment and we do nothing
@@ -188,59 +188,56 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             if script_name == 'set_defaults':
                 # Sets default values (when not done in configuration.py or local_configuration.py)
                 set_defaults(script_args)
-                log_all(logging.INFO, "test_runner", f"Command 'set_defaults' executed for: {script_args}\n")
+                log_all(logging.INFO, f"Command 'set_defaults' executed for: {script_args}\n")
                 continue
 
             if script_name == 'clean_tmp':
                 # Execute the clean_tmp command
                 folder = script_args
                 clean_tmp(folder)
-                log_all(logging.INFO, "test_runner", f"Command 'clean_tmp' executed for folder: {folder}\n")
+                log_all(logging.INFO,  f"Command 'clean_tmp' executed for folder: {folder}\n")
                 continue
 
             if script_name == 'clean':
                 # Execute the clean command
                 folder = script_args
                 clean(folder)
-                log_all(logging.INFO, "test_runner", f"Command 'clean' executed for folder: {folder}\n")
+                log_all(logging.INFO,  f"Command 'clean' executed for folder: {folder}\n")
                 continue
             if script_name == 'download_input_file':
                 # Execute the download command. The file under the download_url is copied to a folder
                 folder = script_args
                 script_input_file_path=download(folder,script_download_url)
-                log_all(logging.INFO, "test_runner", f"Command 'download_input_file' executed for url: {script_download_url}\n")
+                log_all(logging.INFO, f"Command 'download_input_file' executed for url: {script_download_url}\n")
                 continue
             if script_name == 'remove_file':
                 # Execute the download command. The file under the download_url is copied to a folder
                 remove_file(script_input_file_path)
-                log_all(logging.INFO, "test_runner", f"Command 'remove_file' executed for file: {script_input_file_path}\n")
+                log_all(logging.INFO, f"Command 'remove_file' executed for file: {script_input_file_path}\n")
                 continue
             result=load_and_run(script_name, script_args)
             end_time = time.time()
             execution_time = int(10*(end_time - start_time))/10
 
             # Write the execution time to the log file
-            log_all(logging.INFO, "test_runner_timing", f"Execution time: {execution_time} seconds\n")
+            log_all(logging.INFO,  f"Execution time: {execution_time} seconds\n")
             log_write_counts(logging.WARNING)
             log_flush()
             if result == None or result == 0:
-                log_all(logging.DEBUG, "test_runner", f'Script {script_name} successfully terminated.')
+                log_all(logging.DEBUG, f'Script {script_name} successfully terminated.')
                 log_flush()
             elif result == 1:
-                log_all(logging.ERROR, "test_runner",
-                        f"Script {script_name} returned an error. Terminating the block of scripts: {block['block']}")
+                log_all(logging.ERROR, f"Script {script_name} returned an error. Terminating the block of scripts: {block['block']}")
                 log_flush()
                 blockstop = True
                 break
             else:
-                log_all(logging.ERROR, "test_runner",
-                        f'Script {script_name} returned an unexpected error code: {result.returncode}.')
+                log_all(logging.ERROR, f'Script {script_name} returned an unexpected error code: {result.returncode}.')
                 log_flush()
                 blockstop = True
                 break
     if not blockexisted:
-        log_all(logging.ERROR, "test_runner",
-                f'Block "{todo_block}" not in script file.')
+        log_all(logging.ERROR, f'Block "{todo_block}" not in script file.')
         log_flush()
 
 
@@ -257,4 +254,4 @@ if __name__ == "__main__":
     try:
         main(args.script_file, args.log_file, args.log_level, args.blockname, args.begin_step)
     except Exception as e:
-        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        log_all(logging.ERROR, f'{e} {traceback.format_exc()}')

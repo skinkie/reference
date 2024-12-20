@@ -27,6 +27,9 @@ def prepare_logger(log_level,log_file_name):
     global log_dict
     global processing_data
     mylogger = logging.getLogger("script_runner")
+    if mylogger.hasHandlers():
+        #already initalised
+        return mylogger
     if mylogger:
             mylogger.setLevel(log_level)
             log_dict = {}
@@ -58,9 +61,9 @@ def prepare_logger(log_level,log_file_name):
 
 
 # just log every occurance
-def log_all(log_level,key, message):
+def log_all(log_level,message):
     mylogger = logging.getLogger("script_runner")
-    mylogger.log(log_level,key+": "+message)
+    mylogger.log(log_level,message)
     log_flush()
 
 # Only prints the message once and continues

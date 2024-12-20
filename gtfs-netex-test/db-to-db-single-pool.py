@@ -258,7 +258,7 @@ def project_location_4326(location, generator_defaults: dict):
         location.pos = None
 
     elif location.srs_name not in (None, 'EPSG:4326', 'urn:ogc:def:crs:EPSG::4326') and generator_defaults['DefaultLocationsystem'] not in ('EPSG:4326', 'urn:ogc:def:crs:EPSG::4326'):
-        log_all(logging.WARNING,"db-to-db-single-pool","TODO: Crazy not WGS84")
+        log_all(logging.WARNING,"TODO: Crazy not WGS84")
 
 def project_location(points: Iterable[PointVersionStructure], generator_defaults, crs_to):
     transformer = transformers.get(generator_defaults['DefaultLocationsystem'], Transformer.from_crs(generator_defaults['DefaultLocationsystem'], crs_to))
