@@ -6,3 +6,4 @@ isal
 pandas
 multiprocess
 folium
+pytz
