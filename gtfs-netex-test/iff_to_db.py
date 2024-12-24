@@ -222,7 +222,8 @@ List[ScheduledStopPoint], List[DefaultInterchange], List[PassengerStopAssignment
         g = io.TextIOWrapper(f, 'ISO-8859-1')
         operator_ref, from_date, to_date, version, description = parse_delivery(g)
         for line in g:
-            station_of_train_changes = int(iff_slice(line, 1, 1))
+            station_of_train_changes_str = iff_slice(line, 1, 1)
+            station_of_train_changes = int(station_of_train_changes_str) if station_of_train_changes_str != '' else 0
             station_short_name = iff_slice(line, 3, 9)
             min_interchange_time = iff_slice(line, 11, 12)
             max_interchange_time = iff_slice(line, 14, 15) # deprecated
