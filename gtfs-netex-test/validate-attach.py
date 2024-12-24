@@ -26,9 +26,8 @@ class Database:
         self.con.close()
 
 
-"""
 with duckdb.connect(rw_file, read_only=False) as target_db:
-    with duckdb.connect(ro_file, read_only=True) as source_db:
+    with duckdb.connect(ro_file, read_only=False) as source_db:
         target_db.execute(f"ATTACH DATABASE '{ro_file}' AS db_read (READ_ONLY);")
         target_db.execute(f"DETACH db_read;")
 
@@ -39,3 +38,4 @@ with Database(rw_file, read_only=False) as target_db:
     with Database(ro_file, read_only=True) as source_db:
         target_db.con.execute(f"ATTACH DATABASE '{ro_file}' AS db_read (READ_ONLY);")   
         target_db.con.execute(f"DETACH db_read;")
+"""

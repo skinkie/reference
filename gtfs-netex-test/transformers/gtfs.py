@@ -139,3 +139,22 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
 
 
     write_generator(db_write, TemplateServiceJourney, query_tsj(db_read))
+
+def gtfs_calendar_generator(db_read: Database, db_write: Database, generator_defaults: dict):
+    # This functions purpose is to transform calendars from NeTEx in such way it can be referenced by GTFS.
+    # GTFS only has a validity on a Trip, hence the list of calendars is limited by the validity structure
+    # referenced from SericeJourney and TemplateServiceJourney.
+    # Given that we don't know how the structure looks like, it may be an AvailabilityCondition or a DayType
+    # and further references thereof we take the following algorithm:
+    #
+    # Input:
+    # 1. The combination of DayType + AvailabilityCondition(s) will form the unique service_id (extremely complex case where availabilitycondition overrides the DayType)
+    # 2. All pair ids will be collected, (de)normalisation is not an issue
+    #
+    # Output for GTFS:
+    # 0. Our intermediate representation of calender.txt, calendar_dates.txt are two AvailabilityConditions (inclusive, and exclusive) and a separate one with a DayOfWeek.
+    #    a GTFS service_id may be recovered from PrivateCode.
+    # 1. If a DayType (DayOfWeek) has been provided, this will form a unique calendar.txt entry (mo-tue-wed-thu-fri-sat-sun)
+    # 2. If both inclusive and exclusive are provided, we assume that the positive bits are the only entries that actually matter,
+    #    we can warn for ambiguity, with respect to DayType not being coherent or both inclusive as exclusive values for the same date.
+

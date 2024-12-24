@@ -40,7 +40,8 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     ZoneRefStructure, InfoLinksRelStructure, InfoLink, TypeOfInfoLinkEnumeration, QuaysRelStructure, \
     SiteEntrancesRelStructure, Quay, StopPlaceEntrance, LevelRef, AccessSpacesRelStructure, AccessSpace, \
     PassengerStopAssignment, ZonesInFrameRelStructure, TemplateServiceJourney, FrequencyGroupsRelStructure, \
-    HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure
+    HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, \
+    LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure, PrivateCodes
 
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
 from aux_logging import *
@@ -834,8 +835,8 @@ class GtfsNeTexProfile(CallsProfile):
             for i in range(0, len(service_ids)):
                 exception_type = int(exceptions_df['exception_type'][i])
                 if exception_type in (1, 2):
-                    
                     ac = AvailabilityCondition(id=self.get_service_id_ac(service_ids[i]) + '_' + str(exception_type),
+                                               private_codes=PrivateCodes(private_code=[PrivateCode(type_value="service_id", value=service_ids[i])]),
                                                version=self.version.version, is_available=exception_type == 1,
                                                from_date=date_to_xmldatetime(gtfs_date(exceptions_df['dates'][i][0])),
                                                to_date=date_to_xmldatetime(gtfs_date(exceptions_df['dates'][i][-1])),
@@ -877,6 +878,9 @@ class GtfsNeTexProfile(CallsProfile):
                     days_of_week.append(DayOfWeekEnumeration.SUNDAY)
 
                 availability_conditions.append(AvailabilityCondition(id=self.get_service_id_ac(service_ids[i]), version=self.version.version,
+                                                                     private_codes=PrivateCodes(private_code=[
+                                                                         PrivateCode(type_value="service_id",
+                                                                                     value=service_ids[i])]),
                                                                      is_available=True,
                                                                      from_date=date_to_xmldatetime(gtfs_date(start_dates[i])), to_date=date_to_xmldatetime(gtfs_date(end_dates[i])),
                                                                      day_types=DayTypesRelStructure(day_type_ref_or_day_type=[DayType(id=self.get_service_id_dt(service_ids[i]), version=self.version.version,

@@ -20,7 +20,7 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     StopPlacesInFrameRelStructure, ServiceFrame, ScheduledStopPointsInFrameRelStructure, \
     StopAssignmentsInFrameRelStructure, RoutesInFrameRelStructure, RoutePointsInFrameRelStructure, \
     RouteLinksInFrameRelStructure, TimetableFrame, JourneysInFrameRelStructure, InterchangeRulesInFrameRelStructure, \
-    DefaultInterchangseInFrameRelStructure, ProjectionsRelStructure, PointProjection, RoutePoint, RouteLink, \
+    ProjectionsRelStructure, PointProjection, RoutePoint, RouteLink, \
     NoticeAssignmentsInFrameRelStructure, NoticesInFrameRelStructure, ResourceFrame, TypesOfValueInFrameRelStructure, \
     OrganisationsInFrameRelStructure, RoutePointRef, PointOnRoute, RouteLinkRef, PointsOnRouteRelStructure, \
     PointRefStructure, Quay, QuaysRelStructure, VersionFrameDefaultsStructure, LocaleStructure, SystemOfUnits, \
@@ -30,7 +30,8 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     ConnectionCertaintyEnumeration, JourneyInterchangesInFrameRelStructure, AccessibilityAssessment, \
     LimitationStatusEnumeration, SiteFacilitySetsRelStructure, SiteFacilitySet, AssistanceFacilityList, \
     AssistanceFacilityEnumeration, ServiceJourneyPatternInterchange, InterchangeRuleParameterStructure, StopPlaceRef, \
-    AllVehicleModesOfTransportEnumeration, VehicleJourneyRefStructure, EmptyType2
+    AllVehicleModesOfTransportEnumeration, VehicleJourneyRefStructure, EmptyType2, \
+    DefaultInterchangesInFrameRelStructure
 
 import io
 
@@ -182,7 +183,7 @@ def iff_timetableframe(service_journeys: List[ServiceJourney],
                         ],
                         vehicle_journeys=JourneysInFrameRelStructure(
                             vehicle_journey_or_dated_vehicle_journey_or_normal_dated_vehicle_journey_or_service_journey_or_dated_service_journey_or_dead_run_or_special_service_or_template_service_journey=service_journeys),
-                          default_interchanges=DefaultInterchangseInFrameRelStructure(default_interchange=default_interchanges),
+                          default_interchanges=DefaultInterchangesInFrameRelStructure(default_interchange=default_interchanges),
                           journey_interchanges=JourneyInterchangesInFrameRelStructure(service_journey_pattern_interchange_or_service_journey_interchange=service_journey_interchanges),
                           content_validity_conditions=ValidityConditionsRelStructure(choice=availability_conditions),
                           train_numbers=TrainNumbersInFrameRelStructure(train_number_or_train_number_ref=train_numbers),
