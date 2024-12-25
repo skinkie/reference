@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .flexible_line_ref import FlexibleLineRef
 from .line_ref import LineRef
@@ -13,7 +13,7 @@ class LineRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "lineRefs_RelStructure"
 
-    line_ref: List[Union[FlexibleLineRef, LineRef]] = field(
+    line_ref: list[Union[FlexibleLineRef, LineRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

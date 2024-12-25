@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .monitored_call import MonitoredCall
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class MonitoredCallsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "monitoredCalls_RelStructure"
 
-    monitored_call: List[MonitoredCall] = field(
+    monitored_call: list[MonitoredCall] = field(
         default_factory=list,
         metadata={
             "name": "MonitoredCall",

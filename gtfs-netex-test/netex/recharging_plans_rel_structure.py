@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .recharging_plan import RechargingPlan
@@ -12,7 +11,7 @@ class RechargingPlansRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "rechargingPlans_RelStructure"
 
-    recharging_plan: List[RechargingPlan] = field(
+    recharging_plan: list[RechargingPlan] = field(
         default_factory=list,
         metadata={
             "name": "RechargingPlan",

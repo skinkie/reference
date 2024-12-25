@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .journey_meeting_ref import JourneyMeetingRef
 from .journey_meeting_view import JourneyMeetingView
@@ -13,7 +13,7 @@ class JourneyMeetingViewsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "journeyMeetingViews_RelStructure"
 
-    journey_meeting_ref_or_journey_meeting_view: List[Union[JourneyMeetingRef, JourneyMeetingView]] = field(
+    journey_meeting_ref_or_journey_meeting_view: list[Union[JourneyMeetingRef, JourneyMeetingView]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

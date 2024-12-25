@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .journey_part_position import JourneyPartPosition
@@ -12,7 +11,7 @@ class JourneyPartPositionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "journeyPartPositions_RelStructure"
 
-    journey_part_position: List[JourneyPartPosition] = field(
+    journey_part_position: list[JourneyPartPosition] = field(
         default_factory=list,
         metadata={
             "name": "JourneyPartPosition",

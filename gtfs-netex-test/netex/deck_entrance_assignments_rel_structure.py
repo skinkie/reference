@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .boarding_position_ref_structure import BoardingPositionRefStructure
 from .containment_aggregation_structure import ContainmentAggregationStructure
@@ -27,7 +27,7 @@ class DeckEntranceAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "deckEntranceAssignments_RelStructure"
 
-    deck_entrance_assignment: List["DeckEntranceAssignment"] = field(
+    deck_entrance_assignment: list["DeckEntranceAssignment"] = field(
         default_factory=list,
         metadata={
             "name": "DeckEntranceAssignment",
@@ -123,7 +123,7 @@ class PassengerBoardingPositionAssignmentVersionStructure(StopAssignmentVersionS
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    is_allowed: List[bool] = field(
+    is_allowed: list[bool] = field(
         default_factory=list,
         metadata={
             "name": "IsAllowed",
@@ -193,7 +193,7 @@ class DeckEntranceAssignmentVersionStructure(PassengerBoardingPositionAssignment
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    end_spot: List[LocatableSpotRangeRefStructure] = field(
+    end_spot: list[LocatableSpotRangeRefStructure] = field(
         default_factory=list,
         metadata={
             "name": "EndSpot",

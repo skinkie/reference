@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .responsibility_role_assignment import ResponsibilityRoleAssignment
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class ResponsibilityRoleAssignmentsRelStructure(StrictContainmentAggregationStru
     class Meta:
         name = "responsibilityRoleAssignments_RelStructure"
 
-    responsibility_role_assignment: List[ResponsibilityRoleAssignment] = field(
+    responsibility_role_assignment: list[ResponsibilityRoleAssignment] = field(
         default_factory=list,
         metadata={
             "name": "ResponsibilityRoleAssignment",

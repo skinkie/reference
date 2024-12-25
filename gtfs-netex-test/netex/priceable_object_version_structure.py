@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, ForwardRef, List, Optional, Union
+from typing import Any, ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDate, XmlDateTime, XmlDuration
 
@@ -379,7 +379,7 @@ class FarePricesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "farePrices_RelStructure"
 
-    fare_price_ref_or_cell_ref_or_fare_price: List[
+    fare_price_ref_or_cell_ref_or_fare_price: list[
         Union[
             CustomerPurchasePackagePriceRef,
             ParkingPriceRef,
@@ -613,7 +613,7 @@ class FareTablesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "fareTables_RelStructure"
 
-    fare_table_ref_or_fare_table: List[Union[StandardFareTableRef, FareTableRef, StandardFareTable, "FareTableInContext", "FareTable"]] = field(
+    fare_table_ref_or_fare_table: list[Union[StandardFareTableRef, FareTableRef, StandardFareTable, "FareTableInContext", "FareTable"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -992,7 +992,7 @@ class PriceGroupsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "priceGroups_RelStructure"
 
-    price_group_ref_or_price_group: List[Union[PriceGroupRef, PriceGroup]] = field(
+    price_group_ref_or_price_group: list[Union[PriceGroupRef, PriceGroup]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1303,7 +1303,7 @@ class CellVersionedChildStructure(VersionedChildStructure):
             ),
         },
     )
-    choice_1: List[
+    choice_1: list[
         Union[
             CustomerPurchasePackageElementRef,
             CustomerPurchasePackageRef,
@@ -2573,12 +2573,14 @@ class Cell(CellVersionedChildStructure):
 
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
@@ -2590,7 +2592,7 @@ class CellsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "cells_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             Cell,
             "CellsRelStructure.CellInContext",
@@ -2834,12 +2836,14 @@ class CellsRelStructure(StrictContainmentAggregationStructure):
     class CellInContext(CellVersionedChildStructure):
         validity_conditions_or_valid_between: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         alternative_texts: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },

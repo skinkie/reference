@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .travel_document_security_listing_ref import TravelDocumentSecurityListingRef
@@ -12,7 +11,7 @@ class TravelDocumentSecurityListingRefsRelStructure(OneToManyRelationshipStructu
     class Meta:
         name = "TravelDocumentSecurityListingRefs_RelStructure"
 
-    travel_document_security_listing_ref: List[TravelDocumentSecurityListingRef] = field(
+    travel_document_security_listing_ref: list[TravelDocumentSecurityListingRef] = field(
         default_factory=list,
         metadata={
             "name": "TravelDocumentSecurityListingRef",

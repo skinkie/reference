@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .group_of_points import GroupOfPoints
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class GroupOfPointsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "groupOfPoints_RelStructure"
 
-    group_of_points: List[GroupOfPoints] = field(
+    group_of_points: list[GroupOfPoints] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfPoints",

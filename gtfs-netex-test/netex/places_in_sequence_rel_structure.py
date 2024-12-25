@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .place_in_sequence import PlaceInSequence
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class PlacesInSequenceRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "placesInSequence_RelStructure"
 
-    place_in_sequence: List[PlaceInSequence] = field(
+    place_in_sequence: list[PlaceInSequence] = field(
         default_factory=list,
         metadata={
             "name": "PlaceInSequence",

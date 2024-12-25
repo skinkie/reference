@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from xsdata.models.datatype import XmlDateTime
 
@@ -78,7 +78,7 @@ class OperatingPeriodVersionStructure(DataManagedObjectStructure):
             ),
         },
     )
-    holiday_type: List[HolidayTypeEnumeration] = field(
+    holiday_type: list[HolidayTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "HolidayType",
@@ -86,7 +86,7 @@ class OperatingPeriodVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    season: List[SeasonEnumeration] = field(
+    season: list[SeasonEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "Season",

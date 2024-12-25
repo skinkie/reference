@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .route_ref import RouteRef
@@ -12,7 +11,7 @@ class RouteRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "routeRefs_RelStructure"
 
-    route_ref: List[RouteRef] = field(
+    route_ref: list[RouteRef] = field(
         default_factory=list,
         metadata={
             "name": "RouteRef",

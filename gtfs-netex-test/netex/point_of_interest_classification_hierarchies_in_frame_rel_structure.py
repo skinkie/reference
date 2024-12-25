@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .point_of_interest_classification_hierarchy import PointOfInterestClassificationHierarchy
@@ -12,7 +11,7 @@ class PointOfInterestClassificationHierarchiesInFrameRelStructure(ContainmentAgg
     class Meta:
         name = "pointOfInterestClassificationHierarchiesInFrame_RelStructure"
 
-    point_of_interest_classification_hierarchy: List[PointOfInterestClassificationHierarchy] = field(
+    point_of_interest_classification_hierarchy: list[PointOfInterestClassificationHierarchy] = field(
         default_factory=list,
         metadata={
             "name": "PointOfInterestClassificationHierarchy",

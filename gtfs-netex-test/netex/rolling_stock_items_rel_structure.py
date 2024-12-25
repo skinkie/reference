@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .tractive_rolling_stock_item import TractiveRollingStockItem
@@ -15,7 +15,7 @@ class RollingStockItemsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "rollingStockItems_RelStructure"
 
-    rolling_stock_item_ref_or_rolling_stock_item_dummy_type: List[Union[TrailingRollingStockItemRef, TractiveRollingStockItemRef, TractiveRollingStockItem, TrailingRollingStockItem]] = field(
+    rolling_stock_item_ref_or_rolling_stock_item_dummy_type: list[Union[TrailingRollingStockItemRef, TractiveRollingStockItemRef, TractiveRollingStockItem, TrailingRollingStockItem]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

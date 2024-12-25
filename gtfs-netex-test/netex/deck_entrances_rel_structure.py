@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .deck_vehicle_entrance import DeckVehicleEntrance
@@ -17,7 +17,7 @@ class DeckEntrancesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "deckEntrances_RelStructure"
 
-    deck_entrance_ref_or_deck_entrance: List[Union[OtherDeckEntranceRef, DeckVehicleEntranceRef, PassengerEntranceRef, OtherDeckEntrance, DeckVehicleEntrance, PassengerEntrance]] = field(
+    deck_entrance_ref_or_deck_entrance: list[Union[OtherDeckEntranceRef, DeckVehicleEntranceRef, PassengerEntranceRef, OtherDeckEntrance, DeckVehicleEntrance, PassengerEntrance]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

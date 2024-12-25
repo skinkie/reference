@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .deck_path_link_ref import DeckPathLinkRef
 from .generic_path_link_ref import GenericPathLinkRef
@@ -17,7 +17,7 @@ class OffSitePathLinkRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "offSitePathLinkRefs_RelStructure"
 
-    deck_path_link_ref_or_off_site_path_link_ref_or_path_link_ref_or_site_path_link_ref_or_generic_path_link_ref_or_path_link_ref_by_value: List[Union[DeckPathLinkRef, OffSitePathLinkRef, PathLinkRef, SitePathLinkRef, GenericPathLinkRef, PathLinkRefByValue]] = field(
+    deck_path_link_ref_or_off_site_path_link_ref_or_path_link_ref_or_site_path_link_ref_or_generic_path_link_ref_or_path_link_ref_by_value: list[Union[DeckPathLinkRef, OffSitePathLinkRef, PathLinkRef, SitePathLinkRef, GenericPathLinkRef, PathLinkRefByValue]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

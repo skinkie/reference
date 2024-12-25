@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .access_space_ref import AccessSpaceRef
 from .accessibility_info_facility_list import AccessibilityInfoFacilityList
@@ -238,7 +238,7 @@ class PassengerInformationEquipmentVersionStructure(PassengerEquipmentVersionStr
             ),
         },
     )
-    passenger_information_equipment_list: List[PassengerInformationEquipmentEnumeration] = field(
+    passenger_information_equipment_list: list[PassengerInformationEquipmentEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PassengerInformationEquipmentList",

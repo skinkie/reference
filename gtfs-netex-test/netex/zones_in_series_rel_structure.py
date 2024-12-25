@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .zone_in_series_versioned_child_structure import ZoneInSeriesVersionedChildStructure
@@ -12,7 +11,7 @@ class ZonesInSeriesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "zonesInSeries_RelStructure"
 
-    zone_in_series: List[ZoneInSeriesVersionedChildStructure] = field(
+    zone_in_series: list[ZoneInSeriesVersionedChildStructure] = field(
         default_factory=list,
         metadata={
             "name": "ZoneInSeries",

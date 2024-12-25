@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .deck_plan_ref import DeckPlanRef
@@ -75,7 +75,7 @@ class TransportTypeVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    propulsion_type: List[PropulsionTypeEnumeration] = field(
+    propulsion_type: list[PropulsionTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PropulsionType",
@@ -145,7 +145,7 @@ class TransportTypeVersionStructure(DataManagedObjectStructure):
 
     @dataclass(kw_only=True)
     class FuelType:
-        value: List[FuelTypeEnumeration] = field(
+        value: list[FuelTypeEnumeration] = field(
             default_factory=list,
             metadata={
                 "tokens": True,

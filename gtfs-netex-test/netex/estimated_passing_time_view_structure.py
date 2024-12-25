@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -14,7 +14,7 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
     class Meta:
         name = "EstimatedPassingTime_ViewStructure"
 
-    expected_arrival_time_or_arrival_day_offset_or_expected_departure_time_or_departure_day_offset_or_expected_waiting_time_or_expected_nonstop_passing_time_or_passing_time_day_offset: List[
+    expected_arrival_time_or_arrival_day_offset_or_expected_departure_time_or_departure_day_offset_or_expected_waiting_time_or_expected_nonstop_passing_time_or_passing_time_day_offset: list[
         Union[
             "EstimatedPassingTimeViewStructure.ExpectedArrivalTime",
             "EstimatedPassingTimeViewStructure.ArrivalDayOffset",

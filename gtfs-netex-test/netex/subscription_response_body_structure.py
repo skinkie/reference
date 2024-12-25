@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from xsdata.models.datatype import XmlDateTime
 
@@ -10,7 +10,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class SubscriptionResponseBodyStructure:
-    response_status: List[ResponseStatus] = field(
+    response_status: list[ResponseStatus] = field(
         default_factory=list,
         metadata={
             "name": "ResponseStatus",

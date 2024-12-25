@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .point_on_line_section import PointOnLineSection
@@ -12,7 +11,7 @@ class PointOnLineSectionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "pointOnLineSections_RelStructure"
 
-    point_on_line_section: List[PointOnLineSection] = field(
+    point_on_line_section: list[PointOnLineSection] = field(
         default_factory=list,
         metadata={
             "name": "PointOnLineSection",

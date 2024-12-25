@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -209,14 +209,14 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: List[
+    choice: list[
         Union[
             BookingArrangementsRelStructure,
             ContactStructure,
-            List[BookingMethodEnumeration],
+            list[BookingMethodEnumeration],
             BookingAccessEnumeration,
             PurchaseWhenEnumeration,
-            List[PurchaseMomentEnumeration],
+            list[PurchaseMomentEnumeration],
             XmlTime,
             "SpecialServiceVersionStructure.MinimumBookingPeriod",
             "SpecialServiceVersionStructure.MaximumBookingPeriod",
@@ -240,7 +240,7 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
                 },
                 {
                     "name": "BookingMethods",
-                    "type": List[BookingMethodEnumeration],
+                    "type": list[BookingMethodEnumeration],
                     "namespace": "http://www.netex.org.uk/netex",
                     "default_factory": list,
                     "tokens": True,
@@ -257,7 +257,7 @@ class SpecialServiceVersionStructure(JourneyVersionStructure):
                 },
                 {
                     "name": "BuyWhen",
-                    "type": List[PurchaseMomentEnumeration],
+                    "type": list[PurchaseMomentEnumeration],
                     "namespace": "http://www.netex.org.uk/netex",
                     "default_factory": list,
                     "tokens": True,

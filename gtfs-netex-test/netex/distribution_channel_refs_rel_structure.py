@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .distribution_channel_ref import DistributionChannelRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class DistributionChannelRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "distributionChannelRefs_RelStructure"
 
-    distribution_channel_ref: List[DistributionChannelRef] = field(
+    distribution_channel_ref: list[DistributionChannelRef] = field(
         default_factory=list,
         metadata={
             "name": "DistributionChannelRef",

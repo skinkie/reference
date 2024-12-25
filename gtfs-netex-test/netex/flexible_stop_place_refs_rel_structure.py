@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .flexible_stop_place_ref import FlexibleStopPlaceRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class FlexibleStopPlaceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "flexibleStopPlaceRefs_RelStructure"
 
-    flexible_stop_place_ref: List[FlexibleStopPlaceRef] = field(
+    flexible_stop_place_ref: list[FlexibleStopPlaceRef] = field(
         default_factory=list,
         metadata={
             "name": "FlexibleStopPlaceRef",

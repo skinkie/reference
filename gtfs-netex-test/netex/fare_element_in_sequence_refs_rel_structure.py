@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .access_right_in_product_ref import AccessRightInProductRef
 from .controllable_element_in_sequence_ref import ControllableElementInSequenceRef
@@ -14,7 +14,7 @@ class FareElementInSequenceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "fareElementInSequenceRefs_RelStructure"
 
-    fare_element_in_sequence_ref: List[Union[ControllableElementInSequenceRef, FareStructureElementInSequenceRef, AccessRightInProductRef]] = field(
+    fare_element_in_sequence_ref: list[Union[ControllableElementInSequenceRef, FareStructureElementInSequenceRef, AccessRightInProductRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

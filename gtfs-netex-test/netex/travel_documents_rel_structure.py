@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .frame_containment_structure import FrameContainmentStructure
 from .service_access_code import ServiceAccessCode
@@ -15,7 +15,7 @@ class TravelDocumentsRelStructure(FrameContainmentStructure):
     class Meta:
         name = "travelDocuments_RelStructure"
 
-    service_access_code_ref_or_travel_document_ref_or_travel_document_or_service_access_code: List[Union[ServiceAccessCodeRef, TravelDocumentRef, TravelDocument, ServiceAccessCode]] = field(
+    service_access_code_ref_or_travel_document_ref_or_travel_document_or_service_access_code: list[Union[ServiceAccessCodeRef, TravelDocumentRef, TravelDocument, ServiceAccessCode]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

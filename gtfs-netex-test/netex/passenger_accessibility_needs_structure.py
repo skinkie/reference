@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .suitability import Suitability
 from .user_need import UserNeed
@@ -35,7 +35,7 @@ class PassengerAccessibilityNeedsStructure:
 
     @dataclass(kw_only=True)
     class UserNeeds:
-        user_need: List[UserNeed] = field(
+        user_need: list[UserNeed] = field(
             default_factory=list,
             metadata={
                 "name": "UserNeed",
@@ -46,7 +46,7 @@ class PassengerAccessibilityNeedsStructure:
 
     @dataclass(kw_only=True)
     class Suitabilities:
-        suitability: List[Suitability] = field(
+        suitability: list[Suitability] = field(
             default_factory=list,
             metadata={
                 "name": "Suitability",

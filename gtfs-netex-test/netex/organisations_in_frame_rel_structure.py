@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .authority import Authority
 from .containment_aggregation_structure import ContainmentAggregationStructure
@@ -20,7 +20,7 @@ class OrganisationsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "organisationsInFrame_RelStructure"
 
-    organisation_or_transport_organisation: List[Union[RetailConsortium, ServicedOrganisation, GeneralOrganisation, ManagementAgent, TravelAgent, OtherOrganisation, OnlineServiceOperator, Authority, Operator]] = field(
+    organisation_or_transport_organisation: list[Union[RetailConsortium, ServicedOrganisation, GeneralOrganisation, ManagementAgent, TravelAgent, OtherOrganisation, OnlineServiceOperator, Authority, Operator]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

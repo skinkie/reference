@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .point_of_interest_ref import PointOfInterestRef
@@ -12,7 +11,7 @@ class PointOfInterestRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "pointOfInterestRefs_RelStructure"
 
-    point_of_interest_ref: List[PointOfInterestRef] = field(
+    point_of_interest_ref: list[PointOfInterestRef] = field(
         default_factory=list,
         metadata={
             "name": "PointOfInterestRef",

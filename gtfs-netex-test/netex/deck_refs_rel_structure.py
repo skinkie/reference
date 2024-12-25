@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .deck_ref import DeckRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class DeckRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "deckRefs_RelStructure"
 
-    deck_ref: List[DeckRef] = field(
+    deck_ref: list[DeckRef] = field(
         default_factory=list,
         metadata={
             "name": "DeckRef",

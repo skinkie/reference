@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .point_of_interest_entrance import PointOfInterestEntrance
@@ -13,7 +13,7 @@ class PointOfInterestEntrancesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "pointOfInterestEntrances_RelStructure"
 
-    point_of_interest_entrance_ref_or_point_of_interest_entrance: List[Union[SiteComponentRefStructure, PointOfInterestEntrance]] = field(
+    point_of_interest_entrance_ref_or_point_of_interest_entrance: list[Union[SiteComponentRefStructure, PointOfInterestEntrance]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .access_space_ref import AccessSpaceRef
 from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
@@ -67,7 +67,7 @@ class SiteConnectionEndStructure:
             ),
         },
     )
-    choice: List[
+    choice: list[
         Union[
             TaxiRankRef,
             StopPlaceRef,

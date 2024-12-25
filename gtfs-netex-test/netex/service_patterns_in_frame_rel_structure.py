@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .journey_pattern_view import JourneyPatternView
@@ -13,7 +13,7 @@ class ServicePatternsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "servicePatternsInFrame_RelStructure"
 
-    service_pattern_or_journey_pattern_view: List[Union[ServicePattern, JourneyPatternView]] = field(
+    service_pattern_or_journey_pattern_view: list[Union[ServicePattern, JourneyPatternView]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

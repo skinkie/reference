@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .authority_ref import AuthorityRef
@@ -127,7 +127,7 @@ class DistributionChannelVersionStructure(TypeOfValueVersionStructure):
             ),
         },
     )
-    payment_methods: List[PaymentMethodEnumeration] = field(
+    payment_methods: list[PaymentMethodEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PaymentMethods",
@@ -144,7 +144,7 @@ class DistributionChannelVersionStructure(TypeOfValueVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distribution_rights: List[DistributionRightsEnumeration] = field(
+    distribution_rights: list[DistributionRightsEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "DistributionRights",

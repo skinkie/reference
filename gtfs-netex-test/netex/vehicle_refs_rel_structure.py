@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .vehicle_ref import VehicleRef
@@ -12,7 +11,7 @@ class VehicleRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "vehicleRefs_RelStructure"
 
-    vehicle_ref: List[VehicleRef] = field(
+    vehicle_ref: list[VehicleRef] = field(
         default_factory=list,
         metadata={
             "name": "VehicleRef",

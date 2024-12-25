@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .alternative_name import AlternativeName
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class AlternativeNamesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "alternativeNames_RelStructure"
 
-    alternative_name: List[AlternativeName] = field(
+    alternative_name: list[AlternativeName] = field(
         default_factory=list,
         metadata={
             "name": "AlternativeName",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .type_of_place_ref import TypeOfPlaceRef
@@ -12,7 +11,7 @@ class TypeOfPlaceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typeOfPlaceRefs_RelStructure"
 
-    type_of_place_ref: List[TypeOfPlaceRef] = field(
+    type_of_place_ref: list[TypeOfPlaceRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfPlaceRef",

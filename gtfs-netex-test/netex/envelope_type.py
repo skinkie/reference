@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from .direct_position_type import DirectPositionType
 from .pos import Pos
@@ -9,7 +9,7 @@ __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 @dataclass(kw_only=True)
 class EnvelopeType:
-    lower_corner_or_upper_corner_or_pos: List[Union["EnvelopeType.LowerCorner", "EnvelopeType.UpperCorner", Pos]] = field(
+    lower_corner_or_upper_corner_or_pos: list[Union["EnvelopeType.LowerCorner", "EnvelopeType.UpperCorner", Pos]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

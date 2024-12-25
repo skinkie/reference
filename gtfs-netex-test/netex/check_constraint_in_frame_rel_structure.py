@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .check_constraint import CheckConstraint
 from .containment_aggregation_structure import ContainmentAggregationStructure
@@ -12,7 +11,7 @@ class CheckConstraintInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "checkConstraintInFrame_RelStructure"
 
-    check_constraint: List[CheckConstraint] = field(
+    check_constraint: list[CheckConstraint] = field(
         default_factory=list,
         metadata={
             "name": "CheckConstraint",

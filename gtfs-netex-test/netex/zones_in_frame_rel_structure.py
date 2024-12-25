@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .access_space import AccessSpace
 from .access_zone import AccessZone
@@ -65,7 +65,7 @@ class ZonesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "zonesInFrame_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             MobilityServiceConstraintZone,
             RoutingConstraintZone,

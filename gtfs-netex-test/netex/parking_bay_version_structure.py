@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from xsdata.models.datatype import XmlDuration
 
@@ -58,7 +58,7 @@ class ParkingBayVersionStructure(ParkingComponentVersionStructure):
             ),
         },
     )
-    parking_user_types: List[ParkingUserEnumeration] = field(
+    parking_user_types: list[ParkingUserEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "ParkingUserTypes",
@@ -118,7 +118,7 @@ class ParkingBayVersionStructure(ParkingComponentVersionStructure):
             ),
         },
     )
-    parking_stay_list: List[ParkingStayEnumeration] = field(
+    parking_stay_list: list[ParkingStayEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "ParkingStayList",

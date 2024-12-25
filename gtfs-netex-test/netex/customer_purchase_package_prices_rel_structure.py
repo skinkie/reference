@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .cell_ref import CellRef
 from .customer_purchase_package_price_ref import CustomerPurchasePackagePriceRef
@@ -14,7 +14,7 @@ class CustomerPurchasePackagePricesRelStructure(StrictContainmentAggregationStru
     class Meta:
         name = "customerPurchasePackagePrices_RelStructure"
 
-    customer_purchase_package_price_ref_or_customer_purchase_package_price_or_cell_ref: List[Union[CustomerPurchasePackagePriceRef, CustomerPurchasePackagePriceVersionedChildStructure, CellRef]] = field(
+    customer_purchase_package_price_ref_or_customer_purchase_package_price_or_cell_ref: list[Union[CustomerPurchasePackagePriceRef, CustomerPurchasePackagePriceVersionedChildStructure, CellRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

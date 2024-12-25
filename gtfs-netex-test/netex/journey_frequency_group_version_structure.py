@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlTime
 
@@ -23,7 +23,7 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
             "required": True,
         }
     )
-    first_day_offset_or_last_departure_time_or_last_day_offset_or_first_arrival_time_or_last_arrival_time: List[
+    first_day_offset_or_last_departure_time_or_last_day_offset_or_first_arrival_time_or_last_arrival_time: list[
         Union["JourneyFrequencyGroupVersionStructure.FirstDayOffset", "JourneyFrequencyGroupVersionStructure.LastDepartureTime", "JourneyFrequencyGroupVersionStructure.LastDayOffset", "JourneyFrequencyGroupVersionStructure.FirstArrivalTime", "JourneyFrequencyGroupVersionStructure.LastArrivalTime"]
     ] = field(
         default_factory=list,

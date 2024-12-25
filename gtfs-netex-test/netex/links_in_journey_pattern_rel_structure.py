@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .service_link_in_journey_pattern import ServiceLinkInJourneyPattern
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -13,7 +13,7 @@ class LinksInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "linksInJourneyPattern_RelStructure"
 
-    service_link_in_journey_pattern_or_timing_link_in_journey_pattern: List[Union[ServiceLinkInJourneyPattern, TimingLinkInJourneyPattern]] = field(
+    service_link_in_journey_pattern_or_timing_link_in_journey_pattern: list[Union[ServiceLinkInJourneyPattern, TimingLinkInJourneyPattern]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

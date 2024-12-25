@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from xsdata.models.datatype import XmlDateTime
 
@@ -70,7 +70,7 @@ class PublicationRequestStructure:
 
     @dataclass(kw_only=True)
     class Topics:
-        network_frame_topic: List[NetworkFrameTopicStructure] = field(
+        network_frame_topic: list[NetworkFrameTopicStructure] = field(
             default_factory=list,
             metadata={
                 "name": "NetworkFrameTopic",

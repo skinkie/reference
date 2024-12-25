@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 
 from .connection_ref_structure import ConnectionRefStructure
 from .fare_basis_enumeration import FareBasisEnumeration
@@ -111,7 +111,7 @@ class SeriesConstraintVersionStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    fare_points_in_pattern: List[FarePointsInPatternRelStructure] = field(
+    fare_points_in_pattern: list[FarePointsInPatternRelStructure] = field(
         default_factory=list,
         metadata={
             "name": "farePointsInPattern",
@@ -119,7 +119,7 @@ class SeriesConstraintVersionStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    zones_in_series: List[ZonesInSeriesRelStructure] = field(
+    zones_in_series: list[ZonesInSeriesRelStructure] = field(
         default_factory=list,
         metadata={
             "name": "zonesInSeries",
@@ -135,14 +135,14 @@ class SeriesConstraintVersionStructure(PriceableObjectVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    prices: List[SeriesConstraintPricesRelStructure] = field(
+    prices: list[SeriesConstraintPricesRelStructure] = field(
         default_factory=list,
         metadata={
             "type": "Element",
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    replaces: List[SeriesConstraintRefsRelStructure] = field(
+    replaces: list[SeriesConstraintRefsRelStructure] = field(
         default_factory=list,
         metadata={
             "type": "Element",

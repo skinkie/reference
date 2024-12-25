@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .check_constraint_delay import CheckConstraintDelay
 from .check_constraint_delay_ref import CheckConstraintDelayRef
@@ -13,7 +13,7 @@ class CheckConstraintDelaysRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "checkConstraintDelays_RelStructure"
 
-    check_constraint_delay_ref_or_check_constraint_delay: List[Union[CheckConstraintDelayRef, CheckConstraintDelay]] = field(
+    check_constraint_delay_ref_or_check_constraint_delay: list[Union[CheckConstraintDelayRef, CheckConstraintDelay]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

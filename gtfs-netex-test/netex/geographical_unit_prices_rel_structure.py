@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from .cell_ref import CellRef
 from .fare_price_versioned_child_structure import FarePriceVersionedChildStructure
@@ -15,7 +15,7 @@ class GeographicalUnitPricesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "geographicalUnitPrices_RelStructure"
 
-    geographical_unit_price_ref_or_geographical_unit_price_or_cell_ref: List[Union[GeographicalUnitPriceRef, "GeographicalUnitPriceVersionedChildStructure", CellRef]] = field(
+    geographical_unit_price_ref_or_geographical_unit_price_or_cell_ref: list[Union[GeographicalUnitPriceRef, "GeographicalUnitPriceVersionedChildStructure", CellRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

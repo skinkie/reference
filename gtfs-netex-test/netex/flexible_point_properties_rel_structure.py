@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .flexible_point_properties import FlexiblePointProperties
@@ -12,7 +11,7 @@ class FlexiblePointPropertiesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "flexiblePointProperties_RelStructure"
 
-    flexible_point_properties: List[FlexiblePointProperties] = field(
+    flexible_point_properties: list[FlexiblePointProperties] = field(
         default_factory=list,
         metadata={
             "name": "FlexiblePointProperties",

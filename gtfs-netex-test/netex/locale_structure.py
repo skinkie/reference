@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 
 from .language_usage_structure import LanguageUsageStructure
 
@@ -59,7 +59,7 @@ class LocaleStructure:
 
     @dataclass(kw_only=True)
     class Languages:
-        language_usage: List[LanguageUsageStructure] = field(
+        language_usage: list[LanguageUsageStructure] = field(
             default_factory=list,
             metadata={
                 "name": "LanguageUsage",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .administrative_zone_ref import AdministrativeZoneRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class AdministrativeZoneRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "administrativeZoneRefs_RelStructure"
 
-    administrative_zone_ref: List[AdministrativeZoneRef] = field(
+    administrative_zone_ref: list[AdministrativeZoneRef] = field(
         default_factory=list,
         metadata={
             "name": "AdministrativeZoneRef",

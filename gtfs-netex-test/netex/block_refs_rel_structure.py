@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .block_ref import BlockRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -13,7 +13,7 @@ class BlockRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "blockRefs_RelStructure"
 
-    block_ref: List[Union[TrainBlockRef, BlockRef]] = field(
+    block_ref: list[Union[TrainBlockRef, BlockRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

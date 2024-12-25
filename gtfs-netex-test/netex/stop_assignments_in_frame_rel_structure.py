@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .deck_entrance_assignments_rel_structure import DeckEntranceAssignment
@@ -21,7 +21,7 @@ class StopAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "stopAssignmentsInFrame_RelStructure"
 
-    stop_assignment_or_passenger_boarding_position_assignment: List[
+    stop_assignment_or_passenger_boarding_position_assignment: list[
         Union[DynamicStopAssignment, VehicleJourneyStopAssignment, VehicleTypeStopAssignment, FlexibleStopAssignment, NavigationPathAssignment, TrainStopAssignment, PassengerBoardingPositionAssignment, DeckEntranceAssignment, PassengerStopAssignment, TrainComponentStopAssignment]
     ] = field(
         default_factory=list,

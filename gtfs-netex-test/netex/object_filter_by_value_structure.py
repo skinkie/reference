@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .accepted_driver_permit_ref import AcceptedDriverPermitRef
 from .access_ref import AccessRef
@@ -653,7 +653,7 @@ class ObjectFilterByValueStructure:
 
     @dataclass(kw_only=True)
     class ObjectReferences:
-        choice: List[
+        choice: list[
             Union[
                 TripLegRef,
                 IndividualPassengerInfoRef,

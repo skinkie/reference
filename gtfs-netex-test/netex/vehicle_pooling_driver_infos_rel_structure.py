@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .vehicle_pooling_driver_info import VehiclePoolingDriverInfo
@@ -12,7 +11,7 @@ class VehiclePoolingDriverInfosRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehiclePoolingDriverInfos_RelStructure"
 
-    vehicle_pooling_driver_info: List[VehiclePoolingDriverInfo] = field(
+    vehicle_pooling_driver_info: list[VehiclePoolingDriverInfo] = field(
         default_factory=list,
         metadata={
             "name": "VehiclePoolingDriverInfo",

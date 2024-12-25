@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .garage_point import GaragePoint
@@ -14,7 +14,7 @@ class ReliefPointsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "reliefPointsInFrame_RelStructure"
 
-    relief_point_or_parking_point: List[Union[ParkingPoint, GaragePoint, ReliefPoint]] = field(
+    relief_point_or_parking_point: list[Union[ParkingPoint, GaragePoint, ReliefPoint]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

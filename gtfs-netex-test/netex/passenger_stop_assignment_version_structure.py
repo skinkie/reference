@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .boarding_position import BoardingPosition
 from .boarding_position_ref import BoardingPositionRef
@@ -85,7 +85,7 @@ class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
             ),
         },
     )
-    passenger_boarding_position_assignments_or_train_elements: List[Union[PassengerBoardingPositionAssignmentsRelStructure, TrainStopAssignmentsRelStructure]] = field(
+    passenger_boarding_position_assignments_or_train_elements: list[Union[PassengerBoardingPositionAssignmentsRelStructure, TrainStopAssignmentsRelStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

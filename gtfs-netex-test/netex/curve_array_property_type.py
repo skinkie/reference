@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .line_string import LineString
 
@@ -8,7 +7,7 @@ __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 @dataclass(kw_only=True)
 class CurveArrayPropertyType:
-    line_string: List[LineString] = field(
+    line_string: list[LineString] = field(
         default_factory=list,
         metadata={
             "name": "LineString",

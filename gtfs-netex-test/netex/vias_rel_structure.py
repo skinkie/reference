@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .empty_type_2 import EmptyType2
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -13,7 +13,7 @@ class ViasRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "vias_RelStructure"
 
-    none_or_via: List[Union[EmptyType2, ViaVersionedChildStructure]] = field(
+    none_or_via: list[Union[EmptyType2, ViaVersionedChildStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

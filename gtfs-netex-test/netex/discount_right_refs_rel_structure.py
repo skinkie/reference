@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .capped_discount_right_ref import CappedDiscountRightRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -14,7 +14,7 @@ class DiscountRightRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "discountRightRefs_RelStructure"
 
-    capped_discount_right_ref_or_sale_discount_right_ref_or_usage_discount_right_ref: List[Union[CappedDiscountRightRef, SaleDiscountRightRef, UsageDiscountRightRef]] = field(
+    capped_discount_right_ref_or_sale_discount_right_ref_or_usage_discount_right_ref: list[Union[CappedDiscountRightRef, SaleDiscountRightRef, UsageDiscountRightRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

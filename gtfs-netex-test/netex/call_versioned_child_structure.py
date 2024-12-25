@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .arrival_structure import ArrivalStructure
 from .booking_arrangements_rel_structure import BookingArrangementsRelStructure
@@ -227,7 +227,7 @@ class CallVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    boarding_request_method: List[RequestMethodTypeEnumeration] = field(
+    boarding_request_method: list[RequestMethodTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "BoardingRequestMethod",
@@ -236,7 +236,7 @@ class CallVersionedChildStructure(VersionedChildStructure):
             "tokens": True,
         },
     )
-    alighting_request_method: List[RequestMethodTypeEnumeration] = field(
+    alighting_request_method: list[RequestMethodTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "AlightingRequestMethod",

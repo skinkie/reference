@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
@@ -34,7 +34,7 @@ class LinkSequenceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "linkSequenceRefs_RelStructure"
 
-    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref_or_generic_navigation_path_ref: List[
+    link_sequence_ref_or_journey_ref_or_special_service_ref_or_service_journey_ref_or_vehicle_journey_ref_or_journey_pattern_ref_or_generic_navigation_path_ref: list[
         Union[
             TripRef,
             TripPatternTripRef,

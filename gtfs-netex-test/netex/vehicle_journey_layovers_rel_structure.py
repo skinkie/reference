@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .vehicle_journey_layover import VehicleJourneyLayover
@@ -12,7 +11,7 @@ class VehicleJourneyLayoversRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "vehicleJourneyLayovers_RelStructure"
 
-    vehicle_journey_layover: List[VehicleJourneyLayover] = field(
+    vehicle_journey_layover: list[VehicleJourneyLayover] = field(
         default_factory=list,
         metadata={
             "name": "VehicleJourneyLayover",

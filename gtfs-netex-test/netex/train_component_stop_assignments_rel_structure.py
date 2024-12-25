@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .train_component_stop_assignment import TrainComponentStopAssignment
@@ -12,7 +11,7 @@ class TrainComponentStopAssignmentsRelStructure(ContainmentAggregationStructure)
     class Meta:
         name = "trainComponentStopAssignments_RelStructure"
 
-    train_component_stop_assignment: List[TrainComponentStopAssignment] = field(
+    train_component_stop_assignment: list[TrainComponentStopAssignment] = field(
         default_factory=list,
         metadata={
             "name": "TrainComponentStopAssignment",

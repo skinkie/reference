@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .activation_assignment import ActivationAssignment
 from .activation_assignment_ref import ActivationAssignmentRef
@@ -13,7 +13,7 @@ class ActivationAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "activationAssignments_RelStructure"
 
-    activation_assignment_ref_or_activation_assignment: List[Union[ActivationAssignmentRef, ActivationAssignment]] = field(
+    activation_assignment_ref_or_activation_assignment: list[Union[ActivationAssignmentRef, ActivationAssignment]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

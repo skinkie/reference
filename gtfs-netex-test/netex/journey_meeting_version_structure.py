@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from xsdata.models.datatype import XmlTime
 
@@ -136,7 +136,7 @@ class JourneyMeetingVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    connecting_stop_point_ref: List[ScheduledStopPointRefStructure] = field(
+    connecting_stop_point_ref: list[ScheduledStopPointRefStructure] = field(
         default_factory=list,
         metadata={
             "name": "ConnectingStopPointRef",
@@ -144,7 +144,7 @@ class JourneyMeetingVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    connecting_stop_point_name: List[MultilingualString] = field(
+    connecting_stop_point_name: list[MultilingualString] = field(
         default_factory=list,
         metadata={
             "name": "ConnectingStopPointName",

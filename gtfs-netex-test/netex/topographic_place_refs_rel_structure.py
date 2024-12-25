@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .topographic_place_ref_structure import TopographicPlaceRefStructure
@@ -12,7 +11,7 @@ class TopographicPlaceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "topographicPlaceRefs_RelStructure"
 
-    topographic_place_ref: List[TopographicPlaceRefStructure] = field(
+    topographic_place_ref: list[TopographicPlaceRefStructure] = field(
         default_factory=list,
         metadata={
             "name": "TopographicPlaceRef",

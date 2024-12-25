@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from xsdata.models.datatype import XmlDuration
 
@@ -68,7 +68,7 @@ class InterchangeRuleParameterStructure:
             ),
         },
     )
-    all_lines_or_lines_in_direction_refs_or_line_in_direction_ref: List[Union[EmptyType2, LinesInDirectionRefsRelStructure, LineInDirectionRef]] = field(
+    all_lines_or_lines_in_direction_refs_or_line_in_direction_ref: list[Union[EmptyType2, LinesInDirectionRefsRelStructure, LineInDirectionRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .data_source import DataSource
@@ -12,7 +11,7 @@ class DataSourcesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "dataSourcesInFrame_RelStructure"
 
-    data_source: List[DataSource] = field(
+    data_source: list[DataSource] = field(
         default_factory=list,
         metadata={
             "name": "DataSource",

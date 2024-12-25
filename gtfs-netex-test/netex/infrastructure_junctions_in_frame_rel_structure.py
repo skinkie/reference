@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .railway_junction import RailwayJunction
@@ -14,7 +14,7 @@ class InfrastructureJunctionsInFrameRelStructure(ContainmentAggregationStructure
     class Meta:
         name = "infrastructureJunctionsInFrame_RelStructure"
 
-    railway_junction_or_road_junction_or_wire_junction: List[Union[RailwayJunction, RoadJunction, WireJunction]] = field(
+    railway_junction_or_road_junction_or_wire_junction: list[Union[RailwayJunction, RoadJunction, WireJunction]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

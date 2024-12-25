@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .customer_purchase_package_element_access import CustomerPurchasePackageElementAccess
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class CustomerPurchasePackageElementAccessesRelStructure(StrictContainmentAggreg
     class Meta:
         name = "customerPurchasePackageElementAccesses_RelStructure"
 
-    customer_purchase_package_element_access: List[CustomerPurchasePackageElementAccess] = field(
+    customer_purchase_package_element_access: list[CustomerPurchasePackageElementAccess] = field(
         default_factory=list,
         metadata={
             "name": "CustomerPurchasePackageElementAccess",

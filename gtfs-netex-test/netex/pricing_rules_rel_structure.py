@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .discounting_rule import DiscountingRule
 from .frame_containment_structure import FrameContainmentStructure
@@ -15,7 +15,7 @@ class PricingRulesRelStructure(FrameContainmentStructure):
     class Meta:
         name = "pricingRules_RelStructure"
 
-    pricing_rule: List[Union[LimitingRuleInContext, LimitingRule, DiscountingRule, PricingRule]] = field(
+    pricing_rule: list[Union[LimitingRuleInContext, LimitingRule, DiscountingRule, PricingRule]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

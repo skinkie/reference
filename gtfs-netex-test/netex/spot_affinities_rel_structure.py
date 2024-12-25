@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .spot_affinity import SpotAffinity
@@ -12,7 +11,7 @@ class SpotAffinitiesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "spotAffinities_RelStructure"
 
-    spot_affinity: List[SpotAffinity] = field(
+    spot_affinity: list[SpotAffinity] = field(
         default_factory=list,
         metadata={
             "name": "SpotAffinity",

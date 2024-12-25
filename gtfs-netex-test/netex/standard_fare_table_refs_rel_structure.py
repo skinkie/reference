@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .standard_fare_table_ref import StandardFareTableRef
@@ -12,7 +11,7 @@ class StandardFareTableRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "StandardFareTableRefs_RelStructure"
 
-    standard_fare_table_ref: List[StandardFareTableRef] = field(
+    standard_fare_table_ref: list[StandardFareTableRef] = field(
         default_factory=list,
         metadata={
             "name": "StandardFareTableRef",

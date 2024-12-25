@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -29,8 +29,8 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_contact_or_booking_methods_or_booking_access_or_book_when_or_buy_when_or_latest_booking_time_or_minimum_booking_period_or_maximum_booking_period_or_booking_url_or_booking_note: List[
-        Union[ContactStructure, List[BookingMethodEnumeration], BookingAccessEnumeration, PurchaseWhenEnumeration, List[PurchaseMomentEnumeration], XmlTime, "FlexibleLineVersionStructure.MinimumBookingPeriod", "FlexibleLineVersionStructure.MaximumBookingPeriod", InfoLinkStructure, MultilingualString]
+    booking_contact_or_booking_methods_or_booking_access_or_book_when_or_buy_when_or_latest_booking_time_or_minimum_booking_period_or_maximum_booking_period_or_booking_url_or_booking_note: list[
+        Union[ContactStructure, list[BookingMethodEnumeration], BookingAccessEnumeration, PurchaseWhenEnumeration, list[PurchaseMomentEnumeration], XmlTime, "FlexibleLineVersionStructure.MinimumBookingPeriod", "FlexibleLineVersionStructure.MaximumBookingPeriod", InfoLinkStructure, MultilingualString]
     ] = field(
         default_factory=list,
         metadata={
@@ -43,7 +43,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
                 },
                 {
                     "name": "BookingMethods",
-                    "type": List[BookingMethodEnumeration],
+                    "type": list[BookingMethodEnumeration],
                     "namespace": "http://www.netex.org.uk/netex",
                     "default_factory": list,
                     "tokens": True,
@@ -60,7 +60,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
                 },
                 {
                     "name": "BuyWhen",
-                    "type": List[PurchaseMomentEnumeration],
+                    "type": list[PurchaseMomentEnumeration],
                     "namespace": "http://www.netex.org.uk/netex",
                     "default_factory": list,
                     "tokens": True,

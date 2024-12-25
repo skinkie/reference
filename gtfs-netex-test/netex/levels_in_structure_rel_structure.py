@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .level_in_structure import LevelInStructure
@@ -12,7 +11,7 @@ class LevelsInStructureRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "levelsInStructure_RelStructure"
 
-    level_in_structure: List[LevelInStructure] = field(
+    level_in_structure: list[LevelInStructure] = field(
         default_factory=list,
         metadata={
             "name": "LevelInStructure",

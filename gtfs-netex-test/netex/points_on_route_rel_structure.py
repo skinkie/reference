@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .point_on_route import PointOnRoute
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class PointsOnRouteRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "pointsOnRoute_RelStructure"
 
-    point_on_route: List[PointOnRoute] = field(
+    point_on_route: list[PointOnRoute] = field(
         default_factory=list,
         metadata={
             "name": "PointOnRoute",

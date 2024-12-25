@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .customer import Customer
 from .frame_containment_structure import FrameContainmentStructure
@@ -12,7 +11,7 @@ class CustomersInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "customersInFrame_RelStructure"
 
-    customer: List[Customer] = field(
+    customer: list[Customer] = field(
         default_factory=list,
         metadata={
             "name": "Customer",

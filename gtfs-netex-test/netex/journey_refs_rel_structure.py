@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .dated_special_service_ref import DatedSpecialServiceRef
 from .dated_vehicle_journey_ref import DatedVehicleJourneyRef
@@ -22,7 +22,7 @@ class JourneyRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "journeyRefs_RelStructure"
 
-    choice: List[Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef, JourneyDesignator, ServiceDesignator]] = field(
+    choice: list[Union[SingleJourneyRef, NormalDatedVehicleJourneyRef, DatedVehicleJourneyRef, DatedSpecialServiceRef, SpecialServiceRef, TemplateServiceJourneyRef, ServiceJourneyRef, DeadRunRef, VehicleJourneyRef, JourneyDesignator, ServiceDesignator]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

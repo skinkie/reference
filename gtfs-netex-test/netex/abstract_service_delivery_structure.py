@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from xsdata.models.datatype import XmlDateTime, XmlDuration
 
@@ -16,7 +16,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class AbstractServiceDeliveryStructure(ResponseStructure):
-    request_message_ref_or_subscriber_ref_or_subscription_filter_ref_or_subscription_ref: List[Union[MessageQualifierStructure, ParticipantRefStructure, SubscriptionFilterRefStructure, SubscriptionQualifierStructure]] = field(
+    request_message_ref_or_subscriber_ref_or_subscription_filter_ref_or_subscription_ref: list[Union[MessageQualifierStructure, ParticipantRefStructure, SubscriptionFilterRefStructure, SubscriptionQualifierStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .course_of_journeys import CourseOfJourneys
@@ -12,7 +11,7 @@ class CoursesOfJourneysInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "coursesOfJourneysInFrame_RelStructure"
 
-    course_of_journeys: List[CourseOfJourneys] = field(
+    course_of_journeys: list[CourseOfJourneys] = field(
         default_factory=list,
         metadata={
             "name": "CourseOfJourneys",

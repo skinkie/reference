@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from .availability_condition_ref import AvailabilityConditionRef
 from .call_ref_structure import CallRefStructure
@@ -34,7 +34,7 @@ class RestrictedServiceFacilitySetVersionStructure(ServiceFacilitySetVersionStru
             ),
         },
     )
-    from_call_or_to_call_or_from_stop_point_in_journey_pattern_or_to_stop_point_in_journey_pattern: List[
+    from_call_or_to_call_or_from_stop_point_in_journey_pattern_or_to_stop_point_in_journey_pattern: list[
         Union["RestrictedServiceFacilitySetVersionStructure.FromCall", "RestrictedServiceFacilitySetVersionStructure.ToCall", "RestrictedServiceFacilitySetVersionStructure.FromStopPointInJourneyPattern", "RestrictedServiceFacilitySetVersionStructure.ToStopPointInJourneyPattern"]
     ] = field(
         default_factory=list,

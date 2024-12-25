@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .timeband import Timeband
@@ -12,7 +11,7 @@ class TimebandsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "timebandsInFrame_RelStructure"
 
-    timeband: List[Timeband] = field(
+    timeband: list[Timeband] = field(
         default_factory=list,
         metadata={
             "name": "Timeband",

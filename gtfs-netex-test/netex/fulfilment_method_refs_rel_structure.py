@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .fulfilment_method_ref import FulfilmentMethodRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class FulfilmentMethodRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "fulfilmentMethodRefs_RelStructure"
 
-    fulfilment_method_ref: List[FulfilmentMethodRef] = field(
+    fulfilment_method_ref: list[FulfilmentMethodRef] = field(
         default_factory=list,
         metadata={
             "name": "FulfilmentMethodRef",

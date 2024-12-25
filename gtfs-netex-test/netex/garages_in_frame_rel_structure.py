@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .garage import Garage
@@ -12,7 +11,7 @@ class GaragesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "garagesInFrame_RelStructure"
 
-    garage: List[Garage] = field(
+    garage: list[Garage] = field(
         default_factory=list,
         metadata={
             "name": "Garage",

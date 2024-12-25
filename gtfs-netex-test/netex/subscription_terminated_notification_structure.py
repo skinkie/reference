@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .error_description_structure import ErrorDescriptionStructure
 from .extensions_1 import Extensions1
@@ -13,7 +13,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class SubscriptionTerminatedNotificationStructure(ProducerResponseStructure):
-    subscriber_ref: List[ParticipantRefStructure] = field(
+    subscriber_ref: list[ParticipantRefStructure] = field(
         default_factory=list,
         metadata={
             "name": "SubscriberRef",
@@ -21,7 +21,7 @@ class SubscriptionTerminatedNotificationStructure(ProducerResponseStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    subscription_filter_ref: List[SubscriptionFilterRefStructure] = field(
+    subscription_filter_ref: list[SubscriptionFilterRefStructure] = field(
         default_factory=list,
         metadata={
             "name": "SubscriptionFilterRef",
@@ -29,7 +29,7 @@ class SubscriptionTerminatedNotificationStructure(ProducerResponseStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    subscription_ref: List[SubscriptionQualifierStructure] = field(
+    subscription_ref: list[SubscriptionQualifierStructure] = field(
         default_factory=list,
         metadata={
             "name": "SubscriptionRef",

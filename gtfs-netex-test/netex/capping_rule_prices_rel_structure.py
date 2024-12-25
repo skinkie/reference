@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .capping_rule_price import CappingRulePrice
 from .capping_rule_price_ref import CappingRulePriceRef
@@ -14,7 +14,7 @@ class CappingRulePricesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "cappingRulePrices_RelStructure"
 
-    capping_rule_price_ref_or_cell_ref_or_capping_rule_price: List[Union[CappingRulePriceRef, CellRef, CappingRulePrice]] = field(
+    capping_rule_price_ref_or_cell_ref_or_capping_rule_price: list[Union[CappingRulePriceRef, CellRef, CappingRulePrice]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

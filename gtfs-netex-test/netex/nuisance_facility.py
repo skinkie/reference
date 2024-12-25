@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .nuisance_facility_enumeration import NuisanceFacilityEnumeration
 
@@ -11,7 +10,7 @@ class NuisanceFacility:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    value: List[NuisanceFacilityEnumeration] = field(
+    value: list[NuisanceFacilityEnumeration] = field(
         default_factory=lambda: [
             NuisanceFacilityEnumeration.UNKNOWN,
         ],

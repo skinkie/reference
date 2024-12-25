@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .deck_navigation_path_ref import DeckNavigationPathRef
 from .generic_navigation_path_ref import GenericNavigationPathRef
@@ -15,7 +15,7 @@ class SiteNavigationPathRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "siteNavigationPathRefs_RelStructure"
 
-    generic_navigation_path_ref: List[Union[DeckNavigationPathRef, NavigationPathRef, SiteNavigationPathRef, GenericNavigationPathRef]] = field(
+    generic_navigation_path_ref: list[Union[DeckNavigationPathRef, NavigationPathRef, SiteNavigationPathRef, GenericNavigationPathRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

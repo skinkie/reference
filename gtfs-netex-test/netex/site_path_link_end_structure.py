@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .access_space_ref import AccessSpaceRef
 from .boarding_position_ref import BoardingPositionRef
@@ -260,7 +260,7 @@ class SitePathLinkEndStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    entrance_ref: List[Union[EntranceRefStructure, EntranceRef]] = field(
+    entrance_ref: list[Union[EntranceRefStructure, EntranceRef]] = field(
         default_factory=list,
         metadata={
             "name": "EntranceRef",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .route_instruction import RouteInstruction
 from .route_instruction_ref import RouteInstructionRef
@@ -13,7 +13,7 @@ class RouteInstructionsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "routeInstructions_RelStructure"
 
-    route_instruction_ref_or_route_instruction: List[Union[RouteInstructionRef, RouteInstruction]] = field(
+    route_instruction_ref_or_route_instruction: list[Union[RouteInstructionRef, RouteInstruction]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

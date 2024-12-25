@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .access_mode_enumeration import AccessModeEnumeration
 from .accessibility_assessment import AccessibilityAssessment
@@ -193,7 +193,7 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    access_modes: List[AccessModeEnumeration] = field(
+    access_modes: list[AccessModeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "AccessModes",
@@ -210,7 +210,7 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    user_types: List[UserTypeEnumeration] = field(
+    user_types: list[UserTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "UserTypes",
@@ -266,7 +266,7 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    payment_methods: List[PaymentMethodEnumeration] = field(
+    payment_methods: list[PaymentMethodEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PaymentMethods",
@@ -283,7 +283,7 @@ class LineVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    purchase_moment: List[PurchaseMomentEnumeration] = field(
+    purchase_moment: list[PurchaseMomentEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PurchaseMoment",

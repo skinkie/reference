@@ -13,6 +13,7 @@ class DeckPathJunction(DeckPathJunctionVersionStructure):
 
     path_instructions: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },

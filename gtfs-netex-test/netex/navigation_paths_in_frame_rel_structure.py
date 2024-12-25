@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .navigation_path import NavigationPath
@@ -13,7 +13,7 @@ class NavigationPathsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "navigationPathsInFrame_RelStructure"
 
-    site_navigation_path_or_navigation_path: List[Union[SiteNavigationPath, NavigationPath]] = field(
+    site_navigation_path_or_navigation_path: list[Union[SiteNavigationPath, NavigationPath]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

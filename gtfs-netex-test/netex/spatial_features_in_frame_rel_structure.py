@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .complex_feature import ComplexFeature
 from .containment_aggregation_structure import ContainmentAggregationStructure
@@ -13,7 +13,7 @@ class SpatialFeaturesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "spatialFeaturesInFrame_RelStructure"
 
-    simple_feature_or_complex_feature: List[Union[SimpleFeature, ComplexFeature]] = field(
+    simple_feature_or_complex_feature: list[Union[SimpleFeature, ComplexFeature]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

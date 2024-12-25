@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .monitored_vehicle_sharing_parking_bay_ref import MonitoredVehicleSharingParkingBayRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -19,7 +19,7 @@ class ParkingComponentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "parkingComponentRefs_RelStructure"
 
-    parking_area_ref_or_parking_bay_ref_or_vehicle_sharing_parking_bay_ref: List[Union[VehiclePoolingParkingAreaRef, VehicleSharingParkingAreaRef, TaxiParkingAreaRef, ParkingAreaRef, VehiclePoolingParkingBayRef, MonitoredVehicleSharingParkingBayRef, VehicleSharingParkingBayRef, ParkingBayRef]] = field(
+    parking_area_ref_or_parking_bay_ref_or_vehicle_sharing_parking_bay_ref: list[Union[VehiclePoolingParkingAreaRef, VehicleSharingParkingAreaRef, TaxiParkingAreaRef, ParkingAreaRef, VehiclePoolingParkingBayRef, MonitoredVehicleSharingParkingBayRef, VehicleSharingParkingBayRef, ParkingBayRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .frame_containment_structure import FrameContainmentStructure
 from .priceable_object_version_structure import (
@@ -16,7 +16,7 @@ class FareTablesInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "fareTablesInFrame_RelStructure"
 
-    fare_table: List[Union[StandardFareTable, FareTableInContext, FareTable]] = field(
+    fare_table: list[Union[StandardFareTable, FareTableInContext, FareTable]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .check_constraint_delay import CheckConstraintDelay
 from .containment_aggregation_structure import ContainmentAggregationStructure
@@ -12,7 +11,7 @@ class CheckConstraintDelaysInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "checkConstraintDelaysInFrame_RelStructure"
 
-    check_constraint_delay: List[CheckConstraintDelay] = field(
+    check_constraint_delay: list[CheckConstraintDelay] = field(
         default_factory=list,
         metadata={
             "name": "CheckConstraintDelay",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .group_of_link_sequences import GroupOfLinkSequences
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class GroupOfLinkSequencesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "groupOfLinkSequences_RelStructure"
 
-    group_of_link_sequences: List[GroupOfLinkSequences] = field(
+    group_of_link_sequences: list[GroupOfLinkSequences] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfLinkSequences",

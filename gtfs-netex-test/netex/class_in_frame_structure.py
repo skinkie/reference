@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .class_attribute_in_frame import ClassAttributeInFrame
 from .class_ref_type_enumeration import ClassRefTypeEnumeration
@@ -60,7 +60,7 @@ class ClassInFrameStructure:
 
     @dataclass(kw_only=True)
     class Attributes:
-        class_attribute_in_frame: List[ClassAttributeInFrame] = field(
+        class_attribute_in_frame: list[ClassAttributeInFrame] = field(
             default_factory=list,
             metadata={
                 "name": "ClassAttributeInFrame",
@@ -72,7 +72,7 @@ class ClassInFrameStructure:
 
     @dataclass(kw_only=True)
     class Relationships:
-        class_relationship_in_frame: List[ClassRelationshipInFrame] = field(
+        class_relationship_in_frame: list[ClassRelationshipInFrame] = field(
             default_factory=list,
             metadata={
                 "name": "ClassRelationshipInFrame",

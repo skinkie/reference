@@ -13,6 +13,7 @@ class DatedSpecialService(DatedSpecialServiceVersionStructure):
 
     service_alteration_type: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },

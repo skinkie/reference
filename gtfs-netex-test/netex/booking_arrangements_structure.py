@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -24,7 +24,7 @@ class BookingArrangementsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    booking_methods: List[BookingMethodEnumeration] = field(
+    booking_methods: list[BookingMethodEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "BookingMethods",
@@ -49,7 +49,7 @@ class BookingArrangementsStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    buy_when: List[PurchaseMomentEnumeration] = field(
+    buy_when: list[PurchaseMomentEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "BuyWhen",

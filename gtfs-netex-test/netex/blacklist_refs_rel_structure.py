@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .blacklist_ref import BlacklistRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class BlacklistRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "blacklistRefs_RelStructure"
 
-    blacklist_ref: List[BlacklistRef] = field(
+    blacklist_ref: list[BlacklistRef] = field(
         default_factory=list,
         metadata={
             "name": "BlacklistRef",

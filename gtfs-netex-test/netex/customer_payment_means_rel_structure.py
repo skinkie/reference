@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .customer_payment_means import CustomerPaymentMeans
@@ -12,7 +11,7 @@ class CustomerPaymentMeansRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "customerPaymentMeans_RelStructure"
 
-    customer_payment_means: List[CustomerPaymentMeans] = field(
+    customer_payment_means: list[CustomerPaymentMeans] = field(
         default_factory=list,
         metadata={
             "name": "CustomerPaymentMeans",

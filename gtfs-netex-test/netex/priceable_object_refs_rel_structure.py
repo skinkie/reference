@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .additional_driver_option_ref import AdditionalDriverOptionRef
 from .amount_of_price_unit_product_ref import AmountOfPriceUnitProductRef
@@ -77,7 +77,7 @@ class PriceableObjectRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "priceableObjectRefs_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             CustomerPurchasePackageElementRef,
             CustomerPurchasePackageRef,

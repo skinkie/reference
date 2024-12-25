@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .price_unit_ref import PriceUnitRef
@@ -12,7 +11,7 @@ class PriceUnitRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "priceUnitRefs_RelStructure"
 
-    price_unit_ref: List[PriceUnitRef] = field(
+    price_unit_ref: list[PriceUnitRef] = field(
         default_factory=list,
         metadata={
             "name": "PriceUnitRef",

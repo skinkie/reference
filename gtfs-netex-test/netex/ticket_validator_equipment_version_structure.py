@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .multilingual_string import MultilingualString
 from .passenger_equipment_version_structure import PassengerEquipmentVersionStructure
@@ -13,7 +13,7 @@ class TicketValidatorEquipmentVersionStructure(PassengerEquipmentVersionStructur
     class Meta:
         name = "TicketValidatorEquipment_VersionStructure"
 
-    ticket_validator_type: List[TicketValidatorEnumeration] = field(
+    ticket_validator_type: list[TicketValidatorEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "TicketValidatorType",

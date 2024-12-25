@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .fare_table_ref import FareTableRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -13,7 +13,7 @@ class FareTableRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "fareTableRefs_RelStructure"
 
-    fare_table_ref: List[Union[StandardFareTableRef, FareTableRef]] = field(
+    fare_table_ref: list[Union[StandardFareTableRef, FareTableRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

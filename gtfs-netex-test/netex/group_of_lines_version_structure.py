@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTransportEnumeration
 from .flexible_mode_of_operation_ref import FlexibleModeOfOperationRef
@@ -110,7 +110,7 @@ class GroupOfLinesVersionStructure(GroupOfEntitiesVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    payment_methods: List[PaymentMethodEnumeration] = field(
+    payment_methods: list[PaymentMethodEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PaymentMethods",
@@ -127,7 +127,7 @@ class GroupOfLinesVersionStructure(GroupOfEntitiesVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    purchase_moment: List[PurchaseMomentEnumeration] = field(
+    purchase_moment: list[PurchaseMomentEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PurchaseMoment",

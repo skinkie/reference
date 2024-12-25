@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .entity_in_version_structure import DataManagedObjectStructure
@@ -14,7 +14,7 @@ class AcceptedDriverPermitsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "acceptedDriverPermits_RelStructure"
 
-    accepted_driver_permit: List["AcceptedDriverPermit"] = field(
+    accepted_driver_permit: list["AcceptedDriverPermit"] = field(
         default_factory=list,
         metadata={
             "name": "AcceptedDriverPermit",

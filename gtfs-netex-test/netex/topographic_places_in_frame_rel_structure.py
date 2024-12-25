@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .topographic_place import TopographicPlace
@@ -12,7 +11,7 @@ class TopographicPlacesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "topographicPlacesInFrame_RelStructure"
 
-    topographic_place: List[TopographicPlace] = field(
+    topographic_place: list[TopographicPlace] = field(
         default_factory=list,
         metadata={
             "name": "TopographicPlace",

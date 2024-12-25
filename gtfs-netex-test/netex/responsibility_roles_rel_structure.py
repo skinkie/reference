@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .responsibility_role import ResponsibilityRole
@@ -13,7 +13,7 @@ class ResponsibilityRolesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "ResponsibilityRoles_RelStructure"
 
-    responsibility_role_ref_or_responsibility_role: List[Union[ResponsibilityRoleRef, ResponsibilityRole]] = field(
+    responsibility_role_ref_or_responsibility_role: list[Union[ResponsibilityRoleRef, ResponsibilityRole]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

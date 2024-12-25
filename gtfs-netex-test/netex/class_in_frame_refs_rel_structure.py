@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .class_in_frame_ref import ClassInFrameRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class ClassInFrameRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "ClassInFrameRefs_RelStructure"
 
-    class_in_frame_ref: List[ClassInFrameRef] = field(
+    class_in_frame_ref: list[ClassInFrameRef] = field(
         default_factory=list,
         metadata={
             "name": "ClassInFrameRef",

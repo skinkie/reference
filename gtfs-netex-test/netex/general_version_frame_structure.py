@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDateTime
 
@@ -722,7 +722,7 @@ class EntitiesInVersionRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "entitiesInVersion_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             VehicleTypeZoneRestriction,
             MediumApplicationInstance,
@@ -4832,7 +4832,7 @@ class FramesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "frames_RelStructure"
 
-    common_frame: List[Union[MobilityJourneyFrame, MobilityServiceFrame, SalesTransactionFrame, FareFrame, DriverScheduleFrame, VehicleScheduleFrame, ServiceFrame, TimetableFrame, SiteFrame, InfrastructureFrame, "GeneralFrame", ResourceFrame, ServiceCalendarFrame]] = field(
+    common_frame: list[Union[MobilityJourneyFrame, MobilityServiceFrame, SalesTransactionFrame, FareFrame, DriverScheduleFrame, VehicleScheduleFrame, ServiceFrame, TimetableFrame, SiteFrame, InfrastructureFrame, "GeneralFrame", ResourceFrame, ServiceCalendarFrame]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -4971,7 +4971,7 @@ class GeneralFrameMembersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "generalFrameMembers_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             GeneralFrameMember,
             IndividualPassengerInfo,

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 
 from xsdata.models.datatype import XmlPeriod
 
@@ -110,7 +110,7 @@ class UserProfileVersionStructure(UsageParameterVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    proof_required: List[ProofOfIdentityEnumeration] = field(
+    proof_required: list[ProofOfIdentityEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "ProofRequired",

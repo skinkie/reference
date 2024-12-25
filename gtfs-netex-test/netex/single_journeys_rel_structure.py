@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .single_journey import SingleJourney
@@ -12,7 +11,7 @@ class SingleJourneysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "singleJourneys_RelStructure"
 
-    single_journey: List[SingleJourney] = field(
+    single_journey: list[SingleJourney] = field(
         default_factory=list,
         metadata={
             "name": "SingleJourney",

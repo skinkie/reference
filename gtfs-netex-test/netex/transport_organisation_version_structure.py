@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, ForwardRef, List, Optional, Union
+from typing import Any, ForwardRef, Optional, Union
 
 from .air_submode import AirSubmode
 from .all_modes_enumeration import AllModesEnumeration
@@ -183,7 +183,7 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
             ),
         },
     )
-    operator_activities: List[OperatorActivitiesEnumeration] = field(
+    operator_activities: list[OperatorActivitiesEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "OperatorActivities",
@@ -220,42 +220,49 @@ class TransportOrganisationVersionStructure(OrganisationVersionStructure):
     class Address(PostalAddressVersionStructure):
         members: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         key_list: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         private_codes: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         extensions: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         branding_ref: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         validity_conditions_or_valid_between: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         alternative_texts: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },

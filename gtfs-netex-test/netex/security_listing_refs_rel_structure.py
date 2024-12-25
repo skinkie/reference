@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .customer_account_security_listing_ref import CustomerAccountSecurityListingRef
 from .customer_security_listing_ref import CustomerSecurityListingRef
@@ -17,7 +17,7 @@ class SecurityListingRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "SecurityListingRefs_RelStructure"
 
-    security_listing_ref: List[Union[TravelDocumentSecurityListingRef, RetailDeviceSecurityListingRef, CustomerAccountSecurityListingRef, FareContractSecurityListingRef, CustomerSecurityListingRef, MediumAccessDeviceSecurityListingRef]] = field(
+    security_listing_ref: list[Union[TravelDocumentSecurityListingRef, RetailDeviceSecurityListingRef, CustomerAccountSecurityListingRef, FareContractSecurityListingRef, CustomerSecurityListingRef, MediumAccessDeviceSecurityListingRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, List, Optional, Union
+from typing import Any, Optional, Union
 
 from .entity_in_version_structure import VersionedChildStructure
 from .fare_table_ref import FareTableRef
@@ -17,7 +17,7 @@ class FareTableRowsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "fareTableRows_RelStructure"
 
-    fare_table_row: List["FareTableRow"] = field(
+    fare_table_row: list["FareTableRow"] = field(
         default_factory=list,
         metadata={
             "name": "FareTableRow",
@@ -104,12 +104,14 @@ class FareTableRow(FareTableRowVersionedChildStructure):
 
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },

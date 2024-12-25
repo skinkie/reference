@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .access_summary import AccessSummary
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class AccessSummariesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "accessSummaries_RelStructure"
 
-    access_summary: List[AccessSummary] = field(
+    access_summary: list[AccessSummary] = field(
         default_factory=list,
         metadata={
             "name": "AccessSummary",

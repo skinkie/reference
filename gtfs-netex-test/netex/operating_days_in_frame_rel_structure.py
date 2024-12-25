@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .entity_in_version_structure import OperatingDay
@@ -12,7 +11,7 @@ class OperatingDaysInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "operatingDaysInFrame_RelStructure"
 
-    operating_day: List[OperatingDay] = field(
+    operating_day: list[OperatingDay] = field(
         default_factory=list,
         metadata={
             "name": "OperatingDay",

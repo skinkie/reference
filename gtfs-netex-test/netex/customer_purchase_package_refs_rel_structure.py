@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .customer_purchase_package_ref import CustomerPurchasePackageRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class CustomerPurchasePackageRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "customerPurchasePackageRefs_RelStructure"
 
-    customer_purchase_package_ref: List[CustomerPurchasePackageRef] = field(
+    customer_purchase_package_ref: list[CustomerPurchasePackageRef] = field(
         default_factory=list,
         metadata={
             "name": "CustomerPurchasePackageRef",

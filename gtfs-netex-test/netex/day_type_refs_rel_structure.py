@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .day_type_ref import DayTypeRef
 from .fare_day_type_ref import FareDayTypeRef
@@ -13,7 +13,7 @@ class DayTypeRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "dayTypeRefs_RelStructure"
 
-    day_type_ref: List[Union[FareDayTypeRef, DayTypeRef]] = field(
+    day_type_ref: list[Union[FareDayTypeRef, DayTypeRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .schematic_map import SchematicMap
@@ -12,7 +11,7 @@ class SchematicMapsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "schematicMapsInFrame_RelStructure"
 
-    schematic_map: List[SchematicMap] = field(
+    schematic_map: list[SchematicMap] = field(
         default_factory=list,
         metadata={
             "name": "SchematicMap",

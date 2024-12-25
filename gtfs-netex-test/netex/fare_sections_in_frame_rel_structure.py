@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .frame_containment_structure import FrameContainmentStructure
 from .sections_in_sequence_rel_structure import FareSection
@@ -12,7 +11,7 @@ class FareSectionsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "fareSectionsInFrame_RelStructure"
 
-    fare_section: List[FareSection] = field(
+    fare_section: list[FareSection] = field(
         default_factory=list,
         metadata={
             "name": "FareSection",

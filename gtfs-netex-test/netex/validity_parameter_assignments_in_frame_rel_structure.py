@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .frame_containment_structure import FrameContainmentStructure
 from .validity_parameter_assignment import ValidityParameterAssignment
@@ -12,7 +11,7 @@ class ValidityParameterAssignmentsInFrameRelStructure(FrameContainmentStructure)
     class Meta:
         name = "validityParameterAssignmentsInFrame_RelStructure"
 
-    validity_parameter_assignment: List[ValidityParameterAssignment] = field(
+    validity_parameter_assignment: list[ValidityParameterAssignment] = field(
         default_factory=list,
         metadata={
             "name": "ValidityParameterAssignment",

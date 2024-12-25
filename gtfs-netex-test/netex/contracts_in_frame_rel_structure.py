@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .contract import Contract
@@ -12,7 +11,7 @@ class ContractsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "contractsInFrame_RelStructure"
 
-    contract: List[Contract] = field(
+    contract: list[Contract] = field(
         default_factory=list,
         metadata={
             "name": "Contract",

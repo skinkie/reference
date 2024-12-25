@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .type_of_travel_document import TypeOfTravelDocument
@@ -13,7 +13,7 @@ class TypesOfTravelDocumentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typesOfTravelDocuments_RelStructure"
 
-    type_of_travel_document_ref_or_type_of_travel_document: List[Union[TypeOfTravelDocumentRef, TypeOfTravelDocument]] = field(
+    type_of_travel_document_ref_or_type_of_travel_document: list[Union[TypeOfTravelDocumentRef, TypeOfTravelDocument]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

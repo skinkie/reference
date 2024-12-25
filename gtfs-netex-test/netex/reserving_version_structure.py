@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from xsdata.models.datatype import XmlDuration
 
@@ -19,7 +19,7 @@ class ReservingVersionStructure(BookingPolicyVersionStructure):
     class Meta:
         name = "Reserving_VersionStructure"
 
-    reserving_requirements: List[ReservationEnumeration] = field(
+    reserving_requirements: list[ReservationEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "ReservingRequirements",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .distance_matrix_element import DistanceMatrixElement
 from .frame_containment_structure import FrameContainmentStructure
@@ -12,7 +11,7 @@ class DistanceMatrixElementsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "distanceMatrixElementsInFrame_RelStructure"
 
-    distance_matrix_element: List[DistanceMatrixElement] = field(
+    distance_matrix_element: list[DistanceMatrixElement] = field(
         default_factory=list,
         metadata={
             "name": "DistanceMatrixElement",

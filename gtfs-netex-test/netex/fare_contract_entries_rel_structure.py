@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Any, ForwardRef, List, Optional, Union
+from typing import Any, ForwardRef, Optional, Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .customer_account_ref import CustomerAccountRef
@@ -53,7 +53,7 @@ class FareContractEntriesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "fareContractEntries_RelStructure"
 
-    fare_contract_entry_ref_or_travel_specification_ref_or_fare_contract_entry_or_travel_specification: List[
+    fare_contract_entry_ref_or_travel_specification_ref_or_fare_contract_entry_or_travel_specification: list[
         Union[SalesTransactionRef, OfferedTravelSpecificationRef, RequestedTravelSpecificationRef, TravelSpecificationRef, FareContractEntryRef, "SalesTransaction", OfferedTravelSpecification, RequestedTravelSpecification, TravelSpecification1, TravelSpecification2, FareContractEntry]
     ] = field(
         default_factory=list,
@@ -296,7 +296,7 @@ class CustomerPurchasePackagesRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "customerPurchasePackages_RelStructure"
 
-    customer_purchase_package_or_customer_purchase_package_ref: List[Union[CustomerPurchasePackage, CustomerPurchasePackageRef]] = field(
+    customer_purchase_package_or_customer_purchase_package_ref: list[Union[CustomerPurchasePackage, CustomerPurchasePackageRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -453,12 +453,14 @@ class SalesTransaction(SalesTransactionVersionStructure):
 
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },

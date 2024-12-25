@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .stop_place_ref import StopPlaceRef
@@ -13,7 +13,7 @@ class StopPlaceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "stopPlaceRefs_RelStructure"
 
-    stop_place_ref: List[Union[TaxiRankRef, StopPlaceRef]] = field(
+    stop_place_ref: list[Union[TaxiRankRef, StopPlaceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .language_use_enumeration import LanguageUseEnumeration
 
@@ -16,7 +15,7 @@ class LanguageUsageStructure:
             "required": True,
         }
     )
-    language_use: List[LanguageUseEnumeration] = field(
+    language_use: list[LanguageUseEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "LanguageUse",

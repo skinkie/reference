@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .assistance_booking_service import AssistanceBookingService
 from .assistance_booking_service_ref import AssistanceBookingServiceRef
@@ -39,7 +39,7 @@ class ExplicitLocalServicesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "explicitLocalServices_RelStructure"
 
-    local_service_ref_or_local_service_or_customer_service: List[
+    local_service_ref_or_local_service_or_customer_service: list[
         Union[
             AssistanceBookingServiceRef,
             CateringServiceRef,

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .turnaround_time_limit_time import TurnaroundTimeLimitTime
@@ -12,7 +11,7 @@ class TurnaroundTimeLimitTimesRelStructure(StrictContainmentAggregationStructure
     class Meta:
         name = "turnaroundTimeLimitTimes_RelStructure"
 
-    turnaround_time_limit_time: List[TurnaroundTimeLimitTime] = field(
+    turnaround_time_limit_time: list[TurnaroundTimeLimitTime] = field(
         default_factory=list,
         metadata={
             "name": "TurnaroundTimeLimitTime",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .suitability import Suitability
@@ -12,7 +11,7 @@ class SuitabilitiesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "suitabilities_RelStructure"
 
-    suitability: List[Suitability] = field(
+    suitability: list[Suitability] = field(
         default_factory=list,
         metadata={
             "name": "Suitability",

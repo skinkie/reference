@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .blacklist_ref import BlacklistRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -13,7 +13,7 @@ class SecuritylistRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "securitylistRefs_RelStructure"
 
-    security_list_ref: List[Union[WhitelistRef, BlacklistRef]] = field(
+    security_list_ref: list[Union[WhitelistRef, BlacklistRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

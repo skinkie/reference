@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .dead_run_ref import DeadRunRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -13,7 +13,7 @@ class VehicleJourneyRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "vehicleJourneyRefs_RelStructure"
 
-    vehicle_journey_ref: List[Union[DeadRunRef, VehicleJourneyRef]] = field(
+    vehicle_journey_ref: list[Union[DeadRunRef, VehicleJourneyRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

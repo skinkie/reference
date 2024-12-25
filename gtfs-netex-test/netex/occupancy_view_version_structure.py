@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .day_type_refs_rel_structure import DayTypeRefsRelStructure
 from .entity_in_version_structure import (
@@ -239,7 +239,7 @@ class OccupancyViewVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    group_reservation: List[GroupReservationStructure] = field(
+    group_reservation: list[GroupReservationStructure] = field(
         default_factory=list,
         metadata={
             "name": "GroupReservation",

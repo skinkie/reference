@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .access_space_ref import AccessSpaceRef
 from .address_ref import AddressRef
@@ -78,7 +78,7 @@ class NetworkFilterByValueStructure(ObjectFilterByValueStructure):
 
     @dataclass(kw_only=True)
     class Places:
-        choice: List[
+        choice: list[
             Union[
                 HailAndRideAreaRef,
                 FlexibleAreaRef,

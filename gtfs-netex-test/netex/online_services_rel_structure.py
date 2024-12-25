@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .online_service import OnlineService
@@ -12,7 +11,7 @@ class OnlineServicesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "onlineServices_RelStructure"
 
-    online_service: List[OnlineService] = field(
+    online_service: list[OnlineService] = field(
         default_factory=list,
         metadata={
             "name": "OnlineService",

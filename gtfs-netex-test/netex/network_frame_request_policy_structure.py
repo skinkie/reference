@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from xsdata.models.datatype import XmlDateTime, XmlDuration
 
@@ -50,7 +50,7 @@ class NetworkFrameRequestPolicyStructure:
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    request_detail: List[OutputDetailEnumeration] = field(
+    request_detail: list[OutputDetailEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "RequestDetail",

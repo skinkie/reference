@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .access_space_ref import AccessSpaceRef
 from .address_ref import AddressRef
@@ -182,21 +182,21 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "validityParameters_RelStructure"
 
-    vehicle_modes_or_transport_modes: List[Union[List[VehicleModeEnumeration], List[AllModesEnumeration]]] = field(
+    vehicle_modes_or_transport_modes: list[Union[list[VehicleModeEnumeration], list[AllModesEnumeration]]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
             "choices": (
                 {
                     "name": "VehicleModes",
-                    "type": List[VehicleModeEnumeration],
+                    "type": list[VehicleModeEnumeration],
                     "namespace": "http://www.netex.org.uk/netex",
                     "default_factory": list,
                     "tokens": True,
                 },
                 {
                     "name": "TransportModes",
-                    "type": List[AllModesEnumeration],
+                    "type": list[AllModesEnumeration],
                     "namespace": "http://www.netex.org.uk/netex",
                     "default_factory": list,
                     "tokens": True,
@@ -204,7 +204,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    transport_submode: List[TransportSubmode] = field(
+    transport_submode: list[TransportSubmode] = field(
         default_factory=list,
         metadata={
             "name": "TransportSubmode",
@@ -213,7 +213,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: List[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
+    mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: list[Union[PersonalModeOfOperationRef, VehiclePoolingRef, VehicleSharingRef, VehicleRentalRef, FlexibleModeOfOperationRef, ScheduledModeOfOperationRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -251,7 +251,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    group_of_operators_ref: List[GroupOfOperatorsRef] = field(
+    group_of_operators_ref: list[GroupOfOperatorsRef] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfOperatorsRef",
@@ -260,7 +260,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    all_public_transport_organisations_ref_or_all_transport_organisations_ref_or_all_organisations_ref_or_organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: List[
+    all_public_transport_organisations_ref_or_all_transport_organisations_ref_or_all_organisations_ref_or_organisation_ref_or_other_organisation_ref_or_transport_organisation_ref: list[
         Union[
             AllAuthoritiesRef,
             AllOperatorsRef,
@@ -361,7 +361,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    group_of_lines_ref: List[Union[NetworkRef, GroupOfLinesRef]] = field(
+    group_of_lines_ref: list[Union[NetworkRef, GroupOfLinesRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -379,7 +379,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    line_ref: List[Union[FlexibleLineRef, LineRef]] = field(
+    line_ref: list[Union[FlexibleLineRef, LineRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -397,7 +397,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    type_of_line_ref: List[TypeOfLineRef] = field(
+    type_of_line_ref: list[TypeOfLineRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfLineRef",
@@ -406,7 +406,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    group_of_tariff_zones_ref: List[GroupOfTariffZonesRef] = field(
+    group_of_tariff_zones_ref: list[GroupOfTariffZonesRef] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfTariffZonesRef",
@@ -415,7 +415,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    tariff_zone_ref: List[TariffZoneRef] = field(
+    tariff_zone_ref: list[TariffZoneRef] = field(
         default_factory=list,
         metadata={
             "name": "TariffZoneRef",
@@ -424,7 +424,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    fare_zone_ref: List[FareZoneRef] = field(
+    fare_zone_ref: list[FareZoneRef] = field(
         default_factory=list,
         metadata={
             "name": "FareZoneRef",
@@ -433,7 +433,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    fare_section_ref: List[FareSectionRef] = field(
+    fare_section_ref: list[FareSectionRef] = field(
         default_factory=list,
         metadata={
             "name": "FareSectionRef",
@@ -442,7 +442,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    scheduled_stop_point_ref: List[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
+    scheduled_stop_point_ref: list[Union[FareScheduledStopPointRef, ScheduledStopPointRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -460,7 +460,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    vehicle_meeting_point_ref: List[VehicleMeetingPointRef] = field(
+    vehicle_meeting_point_ref: list[VehicleMeetingPointRef] = field(
         default_factory=list,
         metadata={
             "name": "VehicleMeetingPointRef",
@@ -469,7 +469,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    vehicle_meeting_link_ref: List[VehicleMeetingLinkRef] = field(
+    vehicle_meeting_link_ref: list[VehicleMeetingLinkRef] = field(
         default_factory=list,
         metadata={
             "name": "VehicleMeetingLinkRef",
@@ -478,7 +478,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    vehicle_meeting_place_ref: List[Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]] = field(
+    vehicle_meeting_place_ref: list[Union[VehiclePoolingMeetingPlaceRef, VehicleMeetingPlaceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -496,7 +496,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    place_use: List[PlaceUseEnumeration] = field(
+    place_use: list[PlaceUseEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PlaceUse",
@@ -505,7 +505,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    topographic_place_ref: List[TopographicPlaceRef] = field(
+    topographic_place_ref: list[TopographicPlaceRef] = field(
         default_factory=list,
         metadata={
             "name": "TopographicPlaceRef",
@@ -514,7 +514,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    address_ref: List[Union[PostalAddressRef, RoadAddressRef, AddressRef]] = field(
+    address_ref: list[Union[PostalAddressRef, RoadAddressRef, AddressRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -537,7 +537,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    group_of_sites_ref: List[GroupOfSitesRef] = field(
+    group_of_sites_ref: list[GroupOfSitesRef] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfSitesRef",
@@ -546,7 +546,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    choice: List[
+    choice: list[
         Union[
             VehicleStoppingPositionRef,
             VehicleStoppingPlaceRef,
@@ -755,7 +755,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    level_ref: List[LevelRef] = field(
+    level_ref: list[LevelRef] = field(
         default_factory=list,
         metadata={
             "name": "LevelRef",
@@ -764,7 +764,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    point_of_interest_classification_ref: List[PointOfInterestClassificationRef] = field(
+    point_of_interest_classification_ref: list[PointOfInterestClassificationRef] = field(
         default_factory=list,
         metadata={
             "name": "PointOfInterestClassificationRef",
@@ -773,7 +773,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    mobility_service_constraint_zone_ref: List[MobilityServiceConstraintZoneRef] = field(
+    mobility_service_constraint_zone_ref: list[MobilityServiceConstraintZoneRef] = field(
         default_factory=list,
         metadata={
             "name": "MobilityServiceConstraintZoneRef",
@@ -782,7 +782,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    routing_type: List[RoutingTypeEnumeration] = field(
+    routing_type: list[RoutingTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "RoutingType",
@@ -791,7 +791,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    directions: List[RelativeDirectionEnumeration] = field(
+    directions: list[RelativeDirectionEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "Directions",
@@ -800,7 +800,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    border_point_ref: List[BorderPointRef] = field(
+    border_point_ref: list[BorderPointRef] = field(
         default_factory=list,
         metadata={
             "name": "BorderPointRef",
@@ -809,7 +809,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    series_constraint_ref: List[SeriesConstraintRef] = field(
+    series_constraint_ref: list[SeriesConstraintRef] = field(
         default_factory=list,
         metadata={
             "name": "SeriesConstraintRef",
@@ -818,7 +818,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    service_journey_pattern_ref: List[ServiceJourneyPatternRef] = field(
+    service_journey_pattern_ref: list[ServiceJourneyPatternRef] = field(
         default_factory=list,
         metadata={
             "name": "ServiceJourneyPatternRef",
@@ -827,7 +827,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    single_journey_path_ref: List[SingleJourneyPathRef] = field(
+    single_journey_path_ref: list[SingleJourneyPathRef] = field(
         default_factory=list,
         metadata={
             "name": "SingleJourneyPathRef",
@@ -836,7 +836,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    transfer_restriction_ref: List[TransferRestrictionRef] = field(
+    transfer_restriction_ref: list[TransferRestrictionRef] = field(
         default_factory=list,
         metadata={
             "name": "TransferRestrictionRef",
@@ -845,7 +845,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    routing_constraint_zone_ref: List[RoutingConstraintZoneRef] = field(
+    routing_constraint_zone_ref: list[RoutingConstraintZoneRef] = field(
         default_factory=list,
         metadata={
             "name": "RoutingConstraintZoneRef",
@@ -854,7 +854,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    service_exclusion_ref: List[ServiceExclusionRef] = field(
+    service_exclusion_ref: list[ServiceExclusionRef] = field(
         default_factory=list,
         metadata={
             "name": "ServiceExclusionRef",
@@ -863,7 +863,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    class_of_use_ref: List[ClassOfUseRef] = field(
+    class_of_use_ref: list[ClassOfUseRef] = field(
         default_factory=list,
         metadata={
             "name": "ClassOfUseRef",
@@ -872,7 +872,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    fare_class: List[FareClass] = field(
+    fare_class: list[FareClass] = field(
         default_factory=list,
         metadata={
             "name": "FareClass",
@@ -881,7 +881,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    service_facility_set_ref_or_facility_set_ref: List[Union[RestrictedServiceFacilitySetRef, ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
+    service_facility_set_ref_or_facility_set_ref: list[Union[RestrictedServiceFacilitySetRef, ServiceFacilitySetRef, SiteFacilitySetRef, FacilitySetRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -909,7 +909,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    type_of_product_category_ref: List[TypeOfProductCategoryRef] = field(
+    type_of_product_category_ref: list[TypeOfProductCategoryRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfProductCategoryRef",
@@ -918,7 +918,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    service_journey_ref: List[Union[TemplateServiceJourneyRef, ServiceJourneyRef]] = field(
+    service_journey_ref: list[Union[TemplateServiceJourneyRef, ServiceJourneyRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -936,7 +936,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    train_number_ref: List[TrainNumberRef] = field(
+    train_number_ref: list[TrainNumberRef] = field(
         default_factory=list,
         metadata={
             "name": "TrainNumberRef",
@@ -945,7 +945,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    group_of_services_ref: List[GroupOfServicesRef] = field(
+    group_of_services_ref: list[GroupOfServicesRef] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfServicesRef",
@@ -954,7 +954,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    single_journey_ref: List[SingleJourneyRef] = field(
+    single_journey_ref: list[SingleJourneyRef] = field(
         default_factory=list,
         metadata={
             "name": "SingleJourneyRef",
@@ -963,7 +963,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    group_of_single_journeys_ref: List[GroupOfSingleJourneysRef] = field(
+    group_of_single_journeys_ref: list[GroupOfSingleJourneysRef] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfSingleJourneysRef",
@@ -972,7 +972,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    transport_type_ref_or_vehicle_type_ref_or_train_ref: List[Union[SimpleVehicleTypeRef, CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
+    transport_type_ref_or_vehicle_type_ref_or_train_ref: list[Union[SimpleVehicleTypeRef, CompoundTrainRef, UnpoweredTrainRef, PoweredTrainRef, TrainRef, VehicleTypeRef, TransportTypeRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1015,7 +1015,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    vehicle_model_ref: List[VehicleModelRef] = field(
+    vehicle_model_ref: list[VehicleModelRef] = field(
         default_factory=list,
         metadata={
             "name": "VehicleModelRef",
@@ -1024,7 +1024,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_service_ref: List[TypeOfServiceRef] = field(
+    type_of_service_ref: list[TypeOfServiceRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfServiceRef",
@@ -1033,7 +1033,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    vehicle_model_profile_ref: List[Union[CycleModelProfileRef, CarModelProfileRef]] = field(
+    vehicle_model_profile_ref: list[Union[CycleModelProfileRef, CarModelProfileRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1051,7 +1051,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref_or_local_service_ref: List[
+    mobility_service_ref_or_common_vehicle_service_ref_or_vehicle_pooling_service_ref_or_local_service_ref: list[
         Union[
             OnlineServiceRef,
             VehicleRentalServiceRef,
@@ -1182,7 +1182,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    train_element_ref: List[TrainElementRef] = field(
+    train_element_ref: list[TrainElementRef] = field(
         default_factory=list,
         metadata={
             "name": "TrainElementRef",
@@ -1191,7 +1191,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    train_component_label_assignment_ref: List[TrainComponentLabelAssignmentRef] = field(
+    train_component_label_assignment_ref: list[TrainComponentLabelAssignmentRef] = field(
         default_factory=list,
         metadata={
             "name": "TrainComponentLabelAssignmentRef",
@@ -1200,7 +1200,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    deck_plan_ref: List[DeckPlanRef] = field(
+    deck_plan_ref: list[DeckPlanRef] = field(
         default_factory=list,
         metadata={
             "name": "DeckPlanRef",
@@ -1209,7 +1209,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    deck_space_ref: List[Union[OtherDeckSpaceRef, PassengerSpaceRef]] = field(
+    deck_space_ref: list[Union[OtherDeckSpaceRef, PassengerSpaceRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1227,7 +1227,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    spot_column_ref: List[SpotColumnRef] = field(
+    spot_column_ref: list[SpotColumnRef] = field(
         default_factory=list,
         metadata={
             "name": "SpotColumnRef",
@@ -1236,7 +1236,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    spot_row_ref: List[SpotRowRef] = field(
+    spot_row_ref: list[SpotRowRef] = field(
         default_factory=list,
         metadata={
             "name": "SpotRowRef",
@@ -1245,7 +1245,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    locatable_spot_ref: List[Union[LuggageSpotRef, PassengerVehicleSpotRef, PassengerSpotRef]] = field(
+    locatable_spot_ref: list[Union[LuggageSpotRef, PassengerVehicleSpotRef, PassengerSpotRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1268,7 +1268,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    type_of_locatable_spot_ref: List[TypeOfLocatableSpotRef] = field(
+    type_of_locatable_spot_ref: list[TypeOfLocatableSpotRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfLocatableSpotRef",
@@ -1277,7 +1277,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    passenger_seat_ref: List[PassengerSeatRef] = field(
+    passenger_seat_ref: list[PassengerSeatRef] = field(
         default_factory=list,
         metadata={
             "name": "PassengerSeatRef",
@@ -1286,7 +1286,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    vehicle_ref: List[VehicleRef] = field(
+    vehicle_ref: list[VehicleRef] = field(
         default_factory=list,
         metadata={
             "name": "VehicleRef",
@@ -1295,7 +1295,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_fare_structure_factor_ref: List[TypeOfFareStructureFactorRef] = field(
+    type_of_fare_structure_factor_ref: list[TypeOfFareStructureFactorRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfFareStructureFactorRef",
@@ -1304,7 +1304,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_fare_structure_element_ref: List[TypeOfFareStructureElementRef] = field(
+    type_of_fare_structure_element_ref: list[TypeOfFareStructureElementRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfFareStructureElementRef",
@@ -1313,7 +1313,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_tariff_ref: List[TypeOfTariffRef] = field(
+    type_of_tariff_ref: list[TypeOfTariffRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfTariffRef",
@@ -1322,7 +1322,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    tariff_ref: List[Union[ParkingTariffRef, TariffRef]] = field(
+    tariff_ref: list[Union[ParkingTariffRef, TariffRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1340,7 +1340,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    discounting_rule_ref_or_pricing_rule_ref: List[Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]] = field(
+    discounting_rule_ref_or_pricing_rule_ref: list[Union[LimitingRuleRef, DiscountingRuleRef, PricingRuleRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1363,7 +1363,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    type_of_pricing_rule_ref: List[TypeOfPricingRuleRef] = field(
+    type_of_pricing_rule_ref: list[TypeOfPricingRuleRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfPricingRuleRef",
@@ -1372,7 +1372,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    charging_moment_ref: List[ChargingMomentRef] = field(
+    charging_moment_ref: list[ChargingMomentRef] = field(
         default_factory=list,
         metadata={
             "name": "ChargingMomentRef",
@@ -1381,7 +1381,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_fare_product_ref: List[TypeOfFareProductRef] = field(
+    type_of_fare_product_ref: list[TypeOfFareProductRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfFareProductRef",
@@ -1390,7 +1390,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_usage_parameter_ref: List[TypeOfUsageParameterRef] = field(
+    type_of_usage_parameter_ref: list[TypeOfUsageParameterRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfUsageParameterRef",
@@ -1399,7 +1399,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_concession_ref: List[TypeOfConcessionRef] = field(
+    type_of_concession_ref: list[TypeOfConcessionRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfConcessionRef",
@@ -1408,7 +1408,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_proof_ref: List[TypeOfProofRef] = field(
+    type_of_proof_ref: list[TypeOfProofRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfProofRef",
@@ -1417,7 +1417,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    types_of_proof_accepted_ref: List[TypesOfProofRefsRelStructure] = field(
+    types_of_proof_accepted_ref: list[TypesOfProofRefsRelStructure] = field(
         default_factory=list,
         metadata={
             "name": "typesOfProofAcceptedRef",
@@ -1426,7 +1426,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_sales_offer_package_ref: List[TypeOfSalesOfferPackageRef] = field(
+    type_of_sales_offer_package_ref: list[TypeOfSalesOfferPackageRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfSalesOfferPackageRef",
@@ -1435,7 +1435,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_travel_document_ref: List[TypeOfTravelDocumentRef] = field(
+    type_of_travel_document_ref: list[TypeOfTravelDocumentRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfTravelDocumentRef",
@@ -1444,7 +1444,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_machine_readability_ref: List[TypeOfMachineReadabilityRef] = field(
+    type_of_machine_readability_ref: list[TypeOfMachineReadabilityRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfMachineReadabilityRef",
@@ -1453,7 +1453,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_medium_access_device_ref: List[TypeOfMediumAccessDeviceRef] = field(
+    type_of_medium_access_device_ref: list[TypeOfMediumAccessDeviceRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfMediumAccessDeviceRef",
@@ -1462,7 +1462,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    distribution_channel_ref_or_group_of_distribution_channels_ref: List[Union[DistributionChannelRef, GroupOfDistributionChannelsRef]] = field(
+    distribution_channel_ref_or_group_of_distribution_channels_ref: list[Union[DistributionChannelRef, GroupOfDistributionChannelsRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1480,7 +1480,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    fulfilment_method_ref: List[FulfilmentMethodRef] = field(
+    fulfilment_method_ref: list[FulfilmentMethodRef] = field(
         default_factory=list,
         metadata={
             "name": "FulfilmentMethodRef",
@@ -1489,7 +1489,7 @@ class ValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    type_of_payment_method_ref: List[TypeOfPaymentMethodRef] = field(
+    type_of_payment_method_ref: list[TypeOfPaymentMethodRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfPaymentMethodRef",

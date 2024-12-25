@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .vehicle_type_preference import VehicleTypePreference
@@ -12,7 +11,7 @@ class VehicleTypePreferencesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "vehicleTypePreferences_RelStructure"
 
-    vehicle_type_preference: List[VehicleTypePreference] = field(
+    vehicle_type_preference: list[VehicleTypePreference] = field(
         default_factory=list,
         metadata={
             "name": "VehicleTypePreference",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .spot_column_ref import SpotColumnRef
@@ -12,7 +11,7 @@ class SpotColumnRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "spotColumnRefs_RelStructure"
 
-    spot_column_ref: List[SpotColumnRef] = field(
+    spot_column_ref: list[SpotColumnRef] = field(
         default_factory=list,
         metadata={
             "name": "SpotColumnRef",

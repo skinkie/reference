@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .availability_condition_ref import AvailabilityConditionRef
 from .containment_aggregation_structure import ContainmentAggregationStructure
@@ -17,7 +17,7 @@ class AvailabilityConditionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "availabilityConditions_RelStructure"
 
-    availability_condition_ref_or_availability_condition_or_valid_during_or_valid_between: List[Union[AvailabilityConditionRef, AvailabilityCondition, ValidDuring, ValidBetween]] = field(
+    availability_condition_ref_or_availability_condition_or_valid_during_or_valid_between: list[Union[AvailabilityConditionRef, AvailabilityCondition, ValidDuring, ValidBetween]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

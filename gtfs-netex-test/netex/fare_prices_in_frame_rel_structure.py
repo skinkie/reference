@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .frame_containment_structure import FrameContainmentStructure
 from .priceable_object_version_structure import PriceGroup
@@ -12,7 +11,7 @@ class FarePricesInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "farePricesInFrame_RelStructure"
 
-    price_group: List[PriceGroup] = field(
+    price_group: list[PriceGroup] = field(
         default_factory=list,
         metadata={
             "name": "PriceGroup",

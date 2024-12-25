@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .local_service_version_structure import LocalServiceVersionStructure
 from .payment_method_enumeration import PaymentMethodEnumeration
@@ -15,7 +15,7 @@ class TicketingServiceVersionStructure(LocalServiceVersionStructure):
     class Meta:
         name = "TicketingService_VersionStructure"
 
-    vehicle_modes: List[VehicleModeEnumeration] = field(
+    vehicle_modes: list[VehicleModeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "VehicleModes",
@@ -24,7 +24,7 @@ class TicketingServiceVersionStructure(LocalServiceVersionStructure):
             "tokens": True,
         },
     )
-    ticketing_service_list: List[TicketingServiceFacilityEnumeration] = field(
+    ticketing_service_list: list[TicketingServiceFacilityEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "TicketingServiceList",
@@ -33,7 +33,7 @@ class TicketingServiceVersionStructure(LocalServiceVersionStructure):
             "tokens": True,
         },
     )
-    ticket_type_list: List[List[TicketTypeEnumeration]] = field(
+    ticket_type_list: list[list[TicketTypeEnumeration]] = field(
         default_factory=list,
         metadata={
             "name": "TicketTypeList",
@@ -82,7 +82,7 @@ class TicketingServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    payment_methods: List[PaymentMethodEnumeration] = field(
+    payment_methods: list[PaymentMethodEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PaymentMethods",

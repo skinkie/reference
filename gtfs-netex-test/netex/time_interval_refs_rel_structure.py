@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .time_interval_ref import TimeIntervalRef
@@ -12,7 +11,7 @@ class TimeIntervalRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "timeIntervalRefs_RelStructure"
 
-    time_interval_ref: List[TimeIntervalRef] = field(
+    time_interval_ref: list[TimeIntervalRef] = field(
         default_factory=list,
         metadata={
             "name": "TimeIntervalRef",

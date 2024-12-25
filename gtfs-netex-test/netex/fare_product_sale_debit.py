@@ -13,60 +13,70 @@ class FareProductSaleDebit(FareProductSaleDebitVersionStructure):
 
     amount: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     currency: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     price_unit_ref: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     units: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     rule_step_results: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     payment_method: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     type_of_payment_method_ref: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     card_number: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },

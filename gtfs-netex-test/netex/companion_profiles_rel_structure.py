@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .companion_profile import CompanionProfile
 from .companion_profile_ref import CompanionProfileRef
@@ -13,7 +13,7 @@ class CompanionProfilesRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "companionProfiles_RelStructure"
 
-    companion_profile_ref_or_companion_profile: List[Union[CompanionProfileRef, CompanionProfile]] = field(
+    companion_profile_ref_or_companion_profile: list[Union[CompanionProfileRef, CompanionProfile]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

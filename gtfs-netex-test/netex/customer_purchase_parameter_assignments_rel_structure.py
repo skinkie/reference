@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .customer_purchase_parameter_assignment import CustomerPurchaseParameterAssignment
@@ -12,7 +11,7 @@ class CustomerPurchaseParameterAssignmentsRelStructure(ContainmentAggregationStr
     class Meta:
         name = "customerPurchaseParameterAssignments_RelStructure"
 
-    customer_purchase_parameter_assignment: List[CustomerPurchaseParameterAssignment] = field(
+    customer_purchase_parameter_assignment: list[CustomerPurchaseParameterAssignment] = field(
         default_factory=list,
         metadata={
             "name": "CustomerPurchaseParameterAssignment",

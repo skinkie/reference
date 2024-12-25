@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .property_of_day import PropertyOfDay
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class PropertiesOfDayRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "propertiesOfDay_RelStructure"
 
-    property_of_day: List[PropertyOfDay] = field(
+    property_of_day: list[PropertyOfDay] = field(
         default_factory=list,
         metadata={
             "name": "PropertyOfDay",

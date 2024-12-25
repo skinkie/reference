@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
 from .usage_parameter_price_ref import UsageParameterPriceRef
@@ -12,7 +11,7 @@ class UsageParameterPriceRefsRelStructure(StrictContainmentAggregationStructure)
     class Meta:
         name = "usageParameterPriceRefs_RelStructure"
 
-    usage_parameter_price_ref: List[UsageParameterPriceRef] = field(
+    usage_parameter_price_ref: list[UsageParameterPriceRef] = field(
         default_factory=list,
         metadata={
             "name": "UsageParameterPriceRef",

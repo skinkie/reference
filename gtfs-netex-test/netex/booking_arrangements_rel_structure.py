@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .booking_arrangement import BookingArrangement
 from .booking_arrangement_ref import BookingArrangementRef
@@ -13,7 +13,7 @@ class BookingArrangementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "bookingArrangements_RelStructure"
 
-    booking_arrangement_ref_or_booking_arrangement: List[Union[BookingArrangementRef, BookingArrangement]] = field(
+    booking_arrangement_ref_or_booking_arrangement: list[Union[BookingArrangementRef, BookingArrangement]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

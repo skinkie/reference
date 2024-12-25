@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDateTime
 
@@ -77,7 +77,7 @@ class NetworkFrameTopicStructure(TopicStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    choice: List[
+    choice: list[
         Union[
             MobilityJourneyFrameRef,
             MobilityServiceFrameRef,
@@ -181,7 +181,7 @@ class NetworkFrameTopicStructure(TopicStructure):
 
     @dataclass(kw_only=True)
     class SelectionValidityConditions:
-        validity_condition: List[Union[SimpleAvailabilityCondition, ValidDuring, AvailabilityCondition, ValidityRuleParameter, ValidityTrigger, ValidityCondition]] = field(
+        validity_condition: list[Union[SimpleAvailabilityCondition, ValidDuring, AvailabilityCondition, ValidityRuleParameter, ValidityTrigger, ValidityCondition]] = field(
             default_factory=list,
             metadata={
                 "type": "Elements",

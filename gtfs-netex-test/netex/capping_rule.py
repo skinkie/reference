@@ -13,6 +13,7 @@ class CappingRule(CappingRuleVersionedChildStructure):
 
     private_codes: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .nil_reason_enumeration_value import NilReasonEnumerationValue
 
@@ -8,7 +8,7 @@ __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 @dataclass(kw_only=True)
 class CodeOrNilReasonListType:
-    value: List[Union[str, NilReasonEnumerationValue]] = field(
+    value: list[Union[str, NilReasonEnumerationValue]] = field(
         default_factory=list,
         metadata={
             "pattern": r"other:\w{2,}",

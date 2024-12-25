@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDuration, XmlTime
 
@@ -14,7 +14,7 @@ class ObservedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildS
     class Meta:
         name = "ObservedPassingTime_VersionedChildStructure"
 
-    actual_arrival_time_or_arrival_day_offset_or_actual_departure_time_or_departure_day_offset_or_actual_waiting_time_or_actual_nonstop_passing_time_or_passing_time_day_offset: List[
+    actual_arrival_time_or_arrival_day_offset_or_actual_departure_time_or_departure_day_offset_or_actual_waiting_time_or_actual_nonstop_passing_time_or_passing_time_day_offset: list[
         Union[
             "ObservedPassingTimeVersionedChildStructure.ActualArrivalTime",
             "ObservedPassingTimeVersionedChildStructure.ArrivalDayOffset",

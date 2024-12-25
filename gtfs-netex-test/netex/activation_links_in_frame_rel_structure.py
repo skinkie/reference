@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .activation_link import ActivationLink
 from .containment_aggregation_structure import ContainmentAggregationStructure
@@ -12,7 +11,7 @@ class ActivationLinksInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "activationLinksInFrame_RelStructure"
 
-    activation_link: List[ActivationLink] = field(
+    activation_link: list[ActivationLink] = field(
         default_factory=list,
         metadata={
             "name": "ActivationLink",

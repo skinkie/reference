@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .distribution_assignment_ref import DistributionAssignmentRef
@@ -16,7 +16,7 @@ class SpecificParameterAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "specificParameterAssignments_RelStructure"
 
-    specific_parameter_assignment: List["SpecificParameterAssignment"] = field(
+    specific_parameter_assignment: list["SpecificParameterAssignment"] = field(
         default_factory=list,
         metadata={
             "name": "SpecificParameterAssignment",

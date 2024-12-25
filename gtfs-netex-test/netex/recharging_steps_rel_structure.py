@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .recharging_step import RechargingStep
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class RechargingStepsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "rechargingSteps_RelStructure"
 
-    recharging_step: List[RechargingStep] = field(
+    recharging_step: list[RechargingStep] = field(
         default_factory=list,
         metadata={
             "name": "RechargingStep",

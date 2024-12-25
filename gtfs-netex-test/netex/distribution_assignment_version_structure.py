@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .all_authorities_ref import AllAuthoritiesRef
 from .all_countries_ref import AllCountriesRef
@@ -127,7 +127,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    distribution_rights: List[DistributionRightsEnumeration] = field(
+    distribution_rights: list[DistributionRightsEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "DistributionRights",
@@ -366,7 +366,7 @@ class DistributionAssignmentVersionStructure(AssignmentVersionStructure2):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    payment_methods: List[PaymentMethodEnumeration] = field(
+    payment_methods: list[PaymentMethodEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PaymentMethods",

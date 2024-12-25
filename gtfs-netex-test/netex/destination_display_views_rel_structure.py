@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .destination_display_ref import DestinationDisplayRef
@@ -13,7 +13,7 @@ class DestinationDisplayViewsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "destinationDisplayViews_RelStructure"
 
-    destination_display_ref_or_destination_display_view: List[Union[DestinationDisplayRef, DestinationDisplayView]] = field(
+    destination_display_ref_or_destination_display_view: list[Union[DestinationDisplayRef, DestinationDisplayView]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

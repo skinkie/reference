@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .accepted_driver_permits_rel_structure import AcceptedDriverPermit
 from .access import Access
@@ -604,7 +604,7 @@ class VersionFrameMembersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "versionFrameMembers_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             EntityInVersionInFrameRefStructure,
             IndividualPassengerInfo,

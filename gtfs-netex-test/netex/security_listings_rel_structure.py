@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .customer_account_security_listing import CustomerAccountSecurityListing
@@ -17,7 +17,7 @@ class SecurityListingsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "securityListings_RelStructure"
 
-    security_listing: List[Union[MediumAccessDeviceSecurityListing, TravelDocumentSecurityListing, RetailDeviceSecurityListing, FareContractSecurityListing, CustomerSecurityListing, CustomerAccountSecurityListing]] = field(
+    security_listing: list[Union[MediumAccessDeviceSecurityListing, TravelDocumentSecurityListing, RetailDeviceSecurityListing, FareContractSecurityListing, CustomerSecurityListing, CustomerAccountSecurityListing]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

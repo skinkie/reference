@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .access_feature_enumeration import AccessFeatureEnumeration
 from .access_mode_enumeration import AccessModeEnumeration
@@ -50,7 +50,7 @@ class DeckNavigationPathVersionStructure(GenericNavigationPathVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    access_modes: List[AccessModeEnumeration] = field(
+    access_modes: list[AccessModeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "AccessModes",
@@ -137,7 +137,7 @@ class DeckNavigationPathVersionStructure(GenericNavigationPathVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    access_feature_list: List[AccessFeatureEnumeration] = field(
+    access_feature_list: list[AccessFeatureEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "AccessFeatureList",

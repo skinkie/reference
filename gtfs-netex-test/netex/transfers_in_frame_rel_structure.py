@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .access import Access
 from .connection import Connection
@@ -15,7 +15,7 @@ class TransfersInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "transfersInFrame_RelStructure"
 
-    transfer: List[Union[Connection, DefaultConnection, SiteConnection, Access]] = field(
+    transfer: list[Union[Connection, DefaultConnection, SiteConnection, Access]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

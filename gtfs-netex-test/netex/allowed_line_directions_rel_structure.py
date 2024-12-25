@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .allowed_line_direction import AllowedLineDirection
 from .allowed_line_direction_ref import AllowedLineDirectionRef
@@ -13,7 +13,7 @@ class AllowedLineDirectionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "allowedLineDirections_RelStructure"
 
-    allowed_line_direction_ref_or_allowed_line_direction: List[Union[AllowedLineDirectionRef, AllowedLineDirection]] = field(
+    allowed_line_direction_ref_or_allowed_line_direction: list[Union[AllowedLineDirectionRef, AllowedLineDirection]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

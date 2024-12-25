@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .purpose_of_grouping import PurposeOfGrouping
@@ -12,7 +11,7 @@ class PurposesOfGroupingInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "purposesOfGroupingInFrame_RelStructure"
 
-    purpose_of_grouping: List[PurposeOfGrouping] = field(
+    purpose_of_grouping: list[PurposeOfGrouping] = field(
         default_factory=list,
         metadata={
             "name": "PurposeOfGrouping",

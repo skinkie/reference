@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDate
 
@@ -68,7 +68,7 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    code_prefix: List[str] = field(
+    code_prefix: list[str] = field(
         default_factory=list,
         metadata={
             "name": "CodePrefix",
@@ -76,7 +76,7 @@ class CodespaceAssignmentVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    start_value_or_end_value: List[Union["CodespaceAssignmentVersionedChildStructure.StartValue", "CodespaceAssignmentVersionedChildStructure.EndValue"]] = field(
+    start_value_or_end_value: list[Union["CodespaceAssignmentVersionedChildStructure.StartValue", "CodespaceAssignmentVersionedChildStructure.EndValue"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .all_road_vehicle_category_enumeration import AllRoadVehicleCategoryEnumeration
 from .entity_in_version_structure import DataManagedObjectStructure
@@ -9,7 +9,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class PassengerVehicleCapacityStructure(DataManagedObjectStructure):
-    vehicle_category: List[AllRoadVehicleCategoryEnumeration] = field(
+    vehicle_category: list[AllRoadVehicleCategoryEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "VehicleCategory",

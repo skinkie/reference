@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .all_road_vehicle_category_enumeration import AllRoadVehicleCategoryEnumeration
 from .deck_entrance_version_structure import DeckEntranceVersionStructure
@@ -21,7 +21,7 @@ class DeckVehicleEntranceVersionStructure(DeckEntranceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_categories: List[AllRoadVehicleCategoryEnumeration] = field(
+    vehicle_categories: list[AllRoadVehicleCategoryEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "VehicleCategories",

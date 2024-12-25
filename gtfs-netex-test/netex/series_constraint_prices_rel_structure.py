@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .cell_ref import CellRef
 from .series_constraint_price_ref import SeriesConstraintPriceRef
@@ -14,7 +14,7 @@ class SeriesConstraintPricesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "seriesConstraintPrices_RelStructure"
 
-    series_constraint_price_ref_or_series_constraint_price_or_cell_ref: List[Union[SeriesConstraintPriceRef, SeriesConstraintPriceVersionedChildStructure, CellRef]] = field(
+    series_constraint_price_ref_or_series_constraint_price_or_cell_ref: list[Union[SeriesConstraintPriceRef, SeriesConstraintPriceVersionedChildStructure, CellRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

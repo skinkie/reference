@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .deck_vehicle_entrance_ref import DeckVehicleEntranceRef
 from .entity_in_version_structure import VersionedChildStructure
@@ -89,7 +89,7 @@ class DeckEntranceUsageVersionedChildStructure(VersionedChildStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    end_spot: List[LocatableSpotRangeRefStructure] = field(
+    end_spot: list[LocatableSpotRangeRefStructure] = field(
         default_factory=list,
         metadata={
             "name": "EndSpot",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .related_organisation import RelatedOrganisation
@@ -12,7 +11,7 @@ class RelatedOrganisationsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "relatedOrganisations_RelStructure"
 
-    related_organisation: List[RelatedOrganisation] = field(
+    related_organisation: list[RelatedOrganisation] = field(
         default_factory=list,
         metadata={
             "name": "RelatedOrganisation",

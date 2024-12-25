@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .group_of_lines import GroupOfLines
@@ -12,7 +11,7 @@ class GroupsOfLinesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "groupsOfLinesInFrame_RelStructure"
 
-    group_of_lines: List[GroupOfLines] = field(
+    group_of_lines: list[GroupOfLines] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfLines",

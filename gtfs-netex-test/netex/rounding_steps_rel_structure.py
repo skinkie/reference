@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .rounding_step import RoundingStep
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class RoundingStepsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "roundingSteps_RelStructure"
 
-    rounding_step: List[RoundingStep] = field(
+    rounding_step: list[RoundingStep] = field(
         default_factory=list,
         metadata={
             "name": "RoundingStep",

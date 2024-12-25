@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .fleet_ref import FleetRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class FleetRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "fleetRefs_RelStructure"
 
-    fleet_ref: List[FleetRef] = field(
+    fleet_ref: list[FleetRef] = field(
         default_factory=list,
         metadata={
             "name": "FleetRef",

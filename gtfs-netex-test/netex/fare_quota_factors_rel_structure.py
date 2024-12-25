@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .fare_quota_factor import FareQuotaFactor
 from .fare_quota_factor_ref import FareQuotaFactorRef
@@ -13,7 +13,7 @@ class FareQuotaFactorsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "fareQuotaFactors_RelStructure"
 
-    fare_quota_factor_ref_or_fare_quota_factor: List[Union[FareQuotaFactorRef, FareQuotaFactor]] = field(
+    fare_quota_factor_ref_or_fare_quota_factor: list[Union[FareQuotaFactorRef, FareQuotaFactor]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

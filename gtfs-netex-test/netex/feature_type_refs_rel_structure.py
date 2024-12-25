@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .type_of_feature_ref import TypeOfFeatureRef
@@ -12,7 +11,7 @@ class FeatureTypeRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "featureTypeRefs_RelStructure"
 
-    type_of_feature_ref: List[TypeOfFeatureRef] = field(
+    type_of_feature_ref: list[TypeOfFeatureRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfFeatureRef",

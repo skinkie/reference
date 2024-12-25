@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .authority_ref import AuthorityRef
 from .common_section_point_members_rel_structure import CommonSectionPointMembersRelStructure
@@ -57,7 +57,7 @@ class SectionsInSequenceRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "sectionsInSequence_RelStructure"
 
-    section_in_sequence: List["SectionInSequence"] = field(
+    section_in_sequence: list["SectionInSequence"] = field(
         default_factory=list,
         metadata={
             "name": "SectionInSequence",

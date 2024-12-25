@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .customer_account import CustomerAccount
@@ -13,7 +13,7 @@ class CustomerAccountsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "customerAccounts_RelStructure"
 
-    customer_account_ref_or_customer_account: List[Union[CustomerAccountRef, CustomerAccount]] = field(
+    customer_account_ref_or_customer_account: list[Union[CustomerAccountRef, CustomerAccount]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

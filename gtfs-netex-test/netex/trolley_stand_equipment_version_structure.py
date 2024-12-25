@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 
 from .payment_method_enumeration import PaymentMethodEnumeration
 from .site_equipment_version_structure import SiteEquipmentVersionStructure
@@ -40,7 +40,7 @@ class TrolleyStandEquipmentVersionStructure(SiteEquipmentVersionStructure):
             "pattern": r"[A-Z][A-Z][A-Z]",
         },
     )
-    payment_methods: List[PaymentMethodEnumeration] = field(
+    payment_methods: list[PaymentMethodEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PaymentMethods",

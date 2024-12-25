@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .distance_matrix_element_inverse_ref import DistanceMatrixElementInverseRef
 from .distance_matrix_element_ref import DistanceMatrixElementRef
@@ -13,7 +13,7 @@ class DistanceMatrixElementRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "distanceMatrixElementRefs_RelStructure"
 
-    distance_matrix_element_ref_or_distance_matrix_element_inverse_ref: List[Union[DistanceMatrixElementRef, DistanceMatrixElementInverseRef]] = field(
+    distance_matrix_element_ref_or_distance_matrix_element_inverse_ref: list[Union[DistanceMatrixElementRef, DistanceMatrixElementInverseRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .capability_not_supported_error import CapabilityNotSupportedError
 from .data_object_delivery import DataObjectDelivery
@@ -36,7 +36,7 @@ class ServiceDeliveryStructure(ProducerResponseStructure):
             "namespace": "http://www.siri.org.uk/siri",
         },
     )
-    data_object_delivery: List[DataObjectDelivery] = field(
+    data_object_delivery: list[DataObjectDelivery] = field(
         default_factory=list,
         metadata={
             "name": "DataObjectDelivery",

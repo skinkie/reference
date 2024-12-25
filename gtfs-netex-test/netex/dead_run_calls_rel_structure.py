@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .dead_run_call_versioned_child_structure import DeadRunCallVersionedChildStructure
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class DeadRunCallsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "deadRunCalls_RelStructure"
 
-    dead_run_call: List[DeadRunCallVersionedChildStructure] = field(
+    dead_run_call: list[DeadRunCallVersionedChildStructure] = field(
         default_factory=list,
         metadata={
             "name": "DeadRunCall",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .group_of_sites import GroupOfSites
@@ -12,7 +11,7 @@ class GroupsOfSitesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "groupsOfSites_RelStructure"
 
-    group_of_sites: List[GroupOfSites] = field(
+    group_of_sites: list[GroupOfSites] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfSites",

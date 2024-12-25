@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 
 from .customer_ref import CustomerRef
 from .entity_in_version_structure import DataManagedObjectStructure
@@ -75,7 +75,7 @@ class IndividualTravellerVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    languages: List[str] = field(
+    languages: list[str] = field(
         default_factory=list,
         metadata={
             "name": "Languages",

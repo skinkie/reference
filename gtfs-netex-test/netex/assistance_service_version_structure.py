@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .accessibility_tool_enumeration import AccessibilityToolEnumeration
 from .assistance_availability_enumeration import AssistanceAvailabilityEnumeration
@@ -41,7 +41,7 @@ class AssistanceServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    accessibility_tool_list: List[AccessibilityToolEnumeration] = field(
+    accessibility_tool_list: list[AccessibilityToolEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "AccessibilityToolList",
@@ -50,7 +50,7 @@ class AssistanceServiceVersionStructure(LocalServiceVersionStructure):
             "tokens": True,
         },
     )
-    languages: List[str] = field(
+    languages: list[str] = field(
         default_factory=list,
         metadata={
             "name": "Languages",
@@ -67,7 +67,7 @@ class AssistanceServiceVersionStructure(LocalServiceVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    emergency_service_list: List[EmergencyServiceEnumeration] = field(
+    emergency_service_list: list[EmergencyServiceEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "EmergencyServiceList",
@@ -76,7 +76,7 @@ class AssistanceServiceVersionStructure(LocalServiceVersionStructure):
             "tokens": True,
         },
     )
-    safety_facility_list: List[SafetyFacilityEnumeration] = field(
+    safety_facility_list: list[SafetyFacilityEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "SafetyFacilityList",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .reserved_space_facility_enumeration import ReservedSpaceFacilityEnumeration
 
@@ -11,7 +10,7 @@ class ReservedSpaceFacilityList:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
-    value: List[ReservedSpaceFacilityEnumeration] = field(
+    value: list[ReservedSpaceFacilityEnumeration] = field(
         default_factory=list,
         metadata={
             "tokens": True,

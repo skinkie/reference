@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .stop_place import StopPlace
@@ -12,7 +11,7 @@ class StopPlacesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "stopPlacesInFrame_RelStructure"
 
-    stop_place: List[StopPlace] = field(
+    stop_place: list[StopPlace] = field(
         default_factory=list,
         metadata={
             "name": "StopPlace",

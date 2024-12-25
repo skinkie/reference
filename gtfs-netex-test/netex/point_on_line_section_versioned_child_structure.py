@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .line_section_point_type_enumeration import LineSectionPointTypeEnumeration
 from .point_on_section_versioned_child_structure import PointOnSectionVersionedChildStructure
@@ -29,7 +29,7 @@ class PointOnLineSectionVersionedChildStructure(PointOnSectionVersionedChildStru
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    connecting_vehicle_modes: List[VehicleModeEnumeration] = field(
+    connecting_vehicle_modes: list[VehicleModeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "ConnectingVehicleModes",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .trace import Trace
 
@@ -11,7 +10,7 @@ class TracesRelStructure:
     class Meta:
         name = "traces_RelStructure"
 
-    trace: List[Trace] = field(
+    trace: list[Trace] = field(
         default_factory=list,
         metadata={
             "name": "Trace",

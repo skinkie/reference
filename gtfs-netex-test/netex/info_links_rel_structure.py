@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .info_link import InfoLink
 
@@ -11,7 +10,7 @@ class InfoLinksRelStructure:
     class Meta:
         name = "infoLinks_RelStructure"
 
-    info_link: List[InfoLink] = field(
+    info_link: list[InfoLink] = field(
         default_factory=list,
         metadata={
             "name": "InfoLink",

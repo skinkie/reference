@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .polygon import Polygon
 
@@ -8,7 +7,7 @@ __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 @dataclass(kw_only=True)
 class SurfaceArrayPropertyType:
-    polygon: List[Polygon] = field(
+    polygon: list[Polygon] = field(
         default_factory=list,
         metadata={
             "name": "Polygon",

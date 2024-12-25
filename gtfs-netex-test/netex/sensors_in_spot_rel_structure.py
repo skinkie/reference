@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .sensor_in_spot import SensorInSpot
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class SensorsInSpotRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "sensorsInSpot_RelStructure"
 
-    sensor_in_spot: List[SensorInSpot] = field(
+    sensor_in_spot: list[SensorInSpot] = field(
         default_factory=list,
         metadata={
             "name": "SensorInSpot",

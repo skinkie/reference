@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .service_booking_arrangement import ServiceBookingArrangement
@@ -12,7 +11,7 @@ class ServiceBookingArrangementsInFrameRelStructure(ContainmentAggregationStruct
     class Meta:
         name = "serviceBookingArrangementsInFrame_RelStructure"
 
-    service_booking_arrangement: List[ServiceBookingArrangement] = field(
+    service_booking_arrangement: list[ServiceBookingArrangement] = field(
         default_factory=list,
         metadata={
             "name": "ServiceBookingArrangement",

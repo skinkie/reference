@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .restricted_service_facility_set import RestrictedServiceFacilitySet
@@ -13,7 +13,7 @@ class RestrictedServiceFacilitySetsRelStructure(ContainmentAggregationStructure)
     class Meta:
         name = "restrictedServiceFacilitySets_RelStructure"
 
-    restricted_service_facility_set_ref_or_restricted_service_facility_set: List[Union[RestrictedServiceFacilitySetRef, RestrictedServiceFacilitySet]] = field(
+    restricted_service_facility_set_ref_or_restricted_service_facility_set: list[Union[RestrictedServiceFacilitySetRef, RestrictedServiceFacilitySet]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

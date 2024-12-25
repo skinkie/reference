@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .access_zone_ref import AccessZoneRef
 from .administrative_zone_ref import AdministrativeZoneRef
@@ -19,7 +19,7 @@ class GroupMembershipRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "groupMembershipRefs_RelStructure"
 
-    zone_ref_or_tariff_zone_ref: List[Union[MobilityServiceConstraintZoneRef, StopAreaRef, TransportAdministrativeZoneRef, AccessZoneRef, AdministrativeZoneRef, FareZoneRef, TariffZoneRef, ZoneRef]] = field(
+    zone_ref_or_tariff_zone_ref: list[Union[MobilityServiceConstraintZoneRef, StopAreaRef, TransportAdministrativeZoneRef, AccessZoneRef, AdministrativeZoneRef, FareZoneRef, TariffZoneRef, ZoneRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

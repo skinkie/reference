@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .deck_plan_assignment_ref import DeckPlanAssignmentRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class DeckPlanAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "deckPlanAssignmentRefs_RelStructure"
 
-    deck_plan_assignment_ref: List[DeckPlanAssignmentRef] = field(
+    deck_plan_assignment_ref: list[DeckPlanAssignmentRef] = field(
         default_factory=list,
         metadata={
             "name": "DeckPlanAssignmentRef",

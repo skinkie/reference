@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .deck_path_junction import DeckPathJunction
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class DeckPathJunctionRefsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "deckPathJunctionRefs_RelStructure"
 
-    deck_path_junction: List[DeckPathJunction] = field(
+    deck_path_junction: list[DeckPathJunction] = field(
         default_factory=list,
         metadata={
             "name": "DeckPathJunction",

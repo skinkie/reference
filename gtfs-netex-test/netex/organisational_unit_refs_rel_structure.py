@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .organisational_unit_ref import OrganisationalUnitRef
@@ -12,7 +11,7 @@ class OrganisationalUnitRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "organisationalUnitRefs_RelStructure"
 
-    organisational_unit_ref: List[OrganisationalUnitRef] = field(
+    organisational_unit_ref: list[OrganisationalUnitRef] = field(
         default_factory=list,
         metadata={
             "name": "OrganisationalUnitRef",

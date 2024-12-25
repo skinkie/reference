@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .passenger_at_stop_time import PassengerAtStopTime
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class PassengerAtStopTimesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "passengerAtStopTimes_RelStructure"
 
-    passenger_at_stop_time: List[PassengerAtStopTime] = field(
+    passenger_at_stop_time: list[PassengerAtStopTime] = field(
         default_factory=list,
         metadata={
             "name": "PassengerAtStopTime",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .group_of_tariff_zones_ref import GroupOfTariffZonesRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class GroupOfTariffZoneRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "groupOfTariffZoneRefs_RelStructure"
 
-    group_of_tariff_zones_ref: List[GroupOfTariffZonesRef] = field(
+    group_of_tariff_zones_ref: list[GroupOfTariffZonesRef] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfTariffZonesRef",

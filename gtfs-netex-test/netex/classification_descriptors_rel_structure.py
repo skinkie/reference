@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .classification_descriptor_version_structure import ClassificationDescriptorVersionStructure
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class ClassificationDescriptorsRelStructure(StrictContainmentAggregationStructur
     class Meta:
         name = "classificationDescriptors_RelStructure"
 
-    classification_descriptor: List[ClassificationDescriptorVersionStructure] = field(
+    classification_descriptor: list[ClassificationDescriptorVersionStructure] = field(
         default_factory=list,
         metadata={
             "name": "ClassificationDescriptor",

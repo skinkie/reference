@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .onboard_stay import OnboardStay
@@ -12,7 +11,7 @@ class OnboardStaysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "onboardStays_RelStructure"
 
-    onboard_stay: List[OnboardStay] = field(
+    onboard_stay: list[OnboardStay] = field(
         default_factory=list,
         metadata={
             "name": "OnboardStay",

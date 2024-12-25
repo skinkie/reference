@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .entity_in_version_structure import AvailabilityCondition
@@ -12,7 +11,7 @@ class ContainedAvailabilityConditionsRelStructure(ContainmentAggregationStructur
     class Meta:
         name = "containedAvailabilityConditions_RelStructure"
 
-    availability_condition: List[AvailabilityCondition] = field(
+    availability_condition: list[AvailabilityCondition] = field(
         default_factory=list,
         metadata={
             "name": "AvailabilityCondition",

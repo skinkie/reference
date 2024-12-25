@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .delta_value import DeltaValue
 
@@ -11,7 +10,7 @@ class DeltaValuesRelStructure:
     class Meta:
         name = "deltaValues_RelStructure"
 
-    delta_value: List[DeltaValue] = field(
+    delta_value: list[DeltaValue] = field(
         default_factory=list,
         metadata={
             "name": "DeltaValue",

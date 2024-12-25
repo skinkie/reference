@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from xsdata.models.datatype import XmlDuration
 
@@ -202,7 +202,7 @@ class StopPointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersio
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    boarding_request_method: List[RequestMethodTypeEnumeration] = field(
+    boarding_request_method: list[RequestMethodTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "BoardingRequestMethod",
@@ -211,7 +211,7 @@ class StopPointInJourneyPatternVersionedChildStructure(PointInLinkSequenceVersio
             "tokens": True,
         },
     )
-    alighting_request_method: List[RequestMethodTypeEnumeration] = field(
+    alighting_request_method: list[RequestMethodTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "AlightingRequestMethod",

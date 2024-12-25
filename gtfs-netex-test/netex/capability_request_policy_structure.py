@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .empty_type_1 import EmptyType1
 
@@ -8,7 +8,7 @@ __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 @dataclass(kw_only=True)
 class CapabilityRequestPolicyStructure:
-    national_language: List[str] = field(
+    national_language: list[str] = field(
         default_factory=list,
         metadata={
             "name": "NationalLanguage",

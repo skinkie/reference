@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .access_space_ref import AccessSpaceRef
 from .address_ref import AddressRef
@@ -62,7 +62,7 @@ class DummyPlaceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "dummyPlaceRefs_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             HailAndRideAreaRef,
             FlexibleAreaRef,

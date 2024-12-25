@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .mobility_service_constraint_zone import MobilityServiceConstraintZone
@@ -12,7 +11,7 @@ class MobilityServiceConstraintZonesInFrameRelStructure(ContainmentAggregationSt
     class Meta:
         name = "mobilityServiceConstraintZonesInFrame_RelStructure"
 
-    mobility_service_constraint_zone: List[MobilityServiceConstraintZone] = field(
+    mobility_service_constraint_zone: list[MobilityServiceConstraintZone] = field(
         default_factory=list,
         metadata={
             "name": "MobilityServiceConstraintZone",

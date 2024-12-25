@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .fare_contract_entries_rel_structure import SalesTransaction
 from .frame_containment_structure import FrameContainmentStructure
@@ -12,7 +11,7 @@ class SalesTransactionsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "salesTransactionsInFrame_RelStructure"
 
-    sales_transaction: List[SalesTransaction] = field(
+    sales_transaction: list[SalesTransaction] = field(
         default_factory=list,
         metadata={
             "name": "SalesTransaction",

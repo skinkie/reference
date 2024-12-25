@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .timing_link import TimingLink
@@ -12,7 +11,7 @@ class TimingLinksInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "timingLinksInFrame_RelStructure"
 
-    timing_link: List[TimingLink] = field(
+    timing_link: list[TimingLink] = field(
         default_factory=list,
         metadata={
             "name": "TimingLink",

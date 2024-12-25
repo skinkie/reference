@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .dead_run_journey_pattern_ref import DeadRunJourneyPatternRef
 from .journey_pattern_ref import JourneyPatternRef
@@ -15,7 +15,7 @@ class JourneyPatternRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "journeyPatternRefs_RelStructure"
 
-    journey_pattern_ref: List[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
+    journey_pattern_ref: list[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

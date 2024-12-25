@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .type_of_customer_account_ref import TypeOfCustomerAccountRef
@@ -12,7 +11,7 @@ class TypeOfCustomerAccountRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typeOfCustomerAccountRefs_RelStructure"
 
-    type_of_customer_account_ref: List[TypeOfCustomerAccountRef] = field(
+    type_of_customer_account_ref: list[TypeOfCustomerAccountRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfCustomerAccountRef",

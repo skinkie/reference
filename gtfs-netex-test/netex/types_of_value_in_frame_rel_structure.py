@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .branding import Branding
 from .charging_moment import ChargingMoment
@@ -89,7 +89,7 @@ class TypesOfValueInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typesOfValueInFrame_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             ValueSet,
             ParkingBayStatus,

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .type_of_fare_contract_entry_ref import TypeOfFareContractEntryRef
@@ -12,7 +11,7 @@ class TypeOfFareContractEntryRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typeOfFareContractEntryRefs_RelStructure"
 
-    type_of_fare_contract_entry_ref: List[TypeOfFareContractEntryRef] = field(
+    type_of_fare_contract_entry_ref: list[TypeOfFareContractEntryRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfFareContractEntryRef",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, ForwardRef, List, Optional, Union
+from typing import Any, ForwardRef, Optional, Union
 
 from xsdata.models.datatype import XmlDate, XmlDateTime, XmlDuration, XmlTime
 
@@ -36,7 +36,7 @@ __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 @dataclass(kw_only=True)
 class EntityInVersionStructure(EntityStructure):
-    validity_conditions_or_valid_between: List[Union["ValidityConditionsRelStructure", "ValidBetween"]] = field(
+    validity_conditions_or_valid_between: list[Union["ValidityConditionsRelStructure", "ValidBetween"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -323,7 +323,7 @@ class TimebandVersionedChildStructure(DataManagedObjectStructure):
             ),
         },
     )
-    end_time_or_end_event_or_day_offset_or_duration: List[Union[XmlTime, TimeOfDayEnumeration, int, XmlDuration]] = field(
+    end_time_or_end_event_or_day_offset_or_duration: list[Union[XmlTime, TimeOfDayEnumeration, int, XmlDuration]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -400,18 +400,21 @@ class AlternativeText(AlternativeTextVersionedChildStructure):
 
     extensions: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
@@ -454,12 +457,14 @@ class ValidityCondition(ValidityConditionVersionStructure):
 
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
@@ -479,7 +484,7 @@ class ValidityRuleParameterVersionStructure(ValidityConditionVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    attribute_name_or_comparison_operator_or_attribute_value_or_method_or_is_valid: List[Union[str, RelativeOperatorEnumeration, "ValidityRuleParameterVersionStructure.AttributeValue", "ValidityRuleParameterVersionStructure.Method", bool]] = field(
+    attribute_name_or_comparison_operator_or_attribute_value_or_method_or_is_valid: list[Union[str, RelativeOperatorEnumeration, "ValidityRuleParameterVersionStructure.AttributeValue", "ValidityRuleParameterVersionStructure.Method", bool]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -563,7 +568,7 @@ class TimebandsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "timebands_RelStructure"
 
-    timeband_ref_or_timeband: List[Union[TimebandRef, TimebandVersionedChildStructure]] = field(
+    timeband_ref_or_timeband: list[Union[TimebandRef, TimebandVersionedChildStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -659,60 +664,70 @@ class ValidBetween(ValidBetweenVersionStructure):
 
     name: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     description: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     conditioned_object_ref: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     with_condition_ref: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     key_list: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     private_codes: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     extensions: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     branding_ref: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
@@ -724,7 +739,7 @@ class ValidDuringVersionStructure(ValidBetweenVersionStructure):
     class Meta:
         name = "ValidDuring_VersionStructure"
 
-    fare_day_type_ref_or_day_type_ref_or_days_of_week_or_days: Optional[Union[FareDayTypeRef, DayTypeRef, List[DayOfWeekEnumeration], str]] = field(
+    fare_day_type_ref_or_day_type_ref_or_days_of_week_or_days: Optional[Union[FareDayTypeRef, DayTypeRef, list[DayOfWeekEnumeration], str]] = field(
         default=None,
         metadata={
             "type": "Elements",
@@ -741,7 +756,7 @@ class ValidDuringVersionStructure(ValidBetweenVersionStructure):
                 },
                 {
                     "name": "DaysOfWeek",
-                    "type": List[DayOfWeekEnumeration],
+                    "type": list[DayOfWeekEnumeration],
                     "namespace": "http://www.netex.org.uk/netex",
                     "default_factory": list,
                     "tokens": True,
@@ -773,12 +788,14 @@ class ValidityRuleParameter(ValidityRuleParameterVersionStructure):
 
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
@@ -792,12 +809,14 @@ class ValidityTrigger(ValidityTriggerVersionStructure):
 
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
@@ -809,7 +828,7 @@ class AlternativeTextsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "alternativeTexts_RelStructure"
 
-    alternative_text: List[AlternativeText] = field(
+    alternative_text: list[AlternativeText] = field(
         default_factory=list,
         metadata={
             "name": "AlternativeText",
@@ -825,7 +844,7 @@ class OperatingDaysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "operatingDays_RelStructure"
 
-    operating_day_ref_or_operating_day: List[Union[OperatingDayRef, OperatingDay]] = field(
+    operating_day_ref_or_operating_day: list[Union[OperatingDayRef, OperatingDay]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -893,36 +912,42 @@ class ValidDuring(ValidDuringVersionStructure):
 
     key_list: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     private_codes: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     extensions: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     branding_ref: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
@@ -946,7 +971,7 @@ class DayTypesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "dayTypes_RelStructure"
 
-    day_type_ref_or_day_type: List[Union[FareDayTypeRef, DayTypeRef, FareDayType, OrganisationDayType, DayType]] = field(
+    day_type_ref_or_day_type: list[Union[FareDayTypeRef, DayTypeRef, FareDayType, OrganisationDayType, DayType]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -1034,12 +1059,14 @@ class AvailabilityCondition(AvailabilityConditionVersionStructure):
 
     validity_conditions_or_valid_between: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
     )
     alternative_texts: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },
@@ -1051,7 +1078,7 @@ class ValidityConditionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "validityConditions_RelStructure"
 
-    choice: List[Union[AvailabilityConditionRef, ValidityRuleParameterRef, ValidityTriggerRef, ValidityConditionRef, ValidBetween, SimpleAvailabilityCondition, ValidDuring, AvailabilityCondition, ValidityRuleParameter, ValidityTrigger, ValidityCondition]] = field(
+    choice: list[Union[AvailabilityConditionRef, ValidityRuleParameterRef, ValidityTriggerRef, ValidityConditionRef, ValidBetween, SimpleAvailabilityCondition, ValidDuring, AvailabilityCondition, ValidityRuleParameter, ValidityTrigger, ValidityCondition]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

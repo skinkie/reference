@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .block import Block
 from .compound_block import CompoundBlock
@@ -14,7 +14,7 @@ class BlocksInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "blocksInFrame_RelStructure"
 
-    block_or_compound_block_or_train_block: List[Union[Block, CompoundBlock, TrainBlock]] = field(
+    block_or_compound_block_or_train_block: list[Union[Block, CompoundBlock, TrainBlock]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

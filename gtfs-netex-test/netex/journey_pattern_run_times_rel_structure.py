@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .journey_pattern_run_time import JourneyPatternRunTime
 from .journey_pattern_run_time_ref import JourneyPatternRunTimeRef
@@ -13,7 +13,7 @@ class JourneyPatternRunTimesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "journeyPatternRunTimes_RelStructure"
 
-    journey_pattern_run_time_ref_or_journey_pattern_run_time: List[Union[JourneyPatternRunTimeRef, JourneyPatternRunTime]] = field(
+    journey_pattern_run_time_ref_or_journey_pattern_run_time: list[Union[JourneyPatternRunTimeRef, JourneyPatternRunTime]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

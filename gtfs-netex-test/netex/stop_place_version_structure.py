@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .access_spaces_rel_structure import AccessSpacesRelStructure
 from .accesses_rel_structure import AccessesRelStructure
@@ -158,7 +158,7 @@ class StopPlaceVersionStructure(SiteVersionStructure):
             ),
         },
     )
-    other_transport_modes: List[VehicleModeEnumeration] = field(
+    other_transport_modes: list[VehicleModeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "OtherTransportModes",

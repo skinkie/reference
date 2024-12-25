@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .luggage_spot_ref import LuggageSpotRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -14,7 +14,7 @@ class LocatableSpotRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "locatableSpotRefs_RelStructure"
 
-    locatable_spot_ref: List[Union[LuggageSpotRef, PassengerVehicleSpotRef, PassengerSpotRef]] = field(
+    locatable_spot_ref: list[Union[LuggageSpotRef, PassengerVehicleSpotRef, PassengerSpotRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

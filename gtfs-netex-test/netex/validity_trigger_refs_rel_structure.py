@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .validity_trigger_ref import ValidityTriggerRef
@@ -12,7 +11,7 @@ class ValidityTriggerRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "validityTriggerRefs_RelStructure"
 
-    validity_trigger_ref: List[ValidityTriggerRef] = field(
+    validity_trigger_ref: list[ValidityTriggerRef] = field(
         default_factory=list,
         metadata={
             "name": "ValidityTriggerRef",

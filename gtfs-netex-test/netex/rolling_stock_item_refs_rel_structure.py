@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .tractive_rolling_stock_item_ref import TractiveRollingStockItemRef
@@ -13,7 +13,7 @@ class RollingStockItemRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "rollingStockItemRefs_RelStructure"
 
-    rolling_stock_item_ref: List[Union[TrailingRollingStockItemRef, TractiveRollingStockItemRef]] = field(
+    rolling_stock_item_ref: list[Union[TrailingRollingStockItemRef, TractiveRollingStockItemRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .fare_contract_entries_rel_structure import SalesTransaction
@@ -13,7 +13,7 @@ class SalesTransactionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "salesTransactions_RelStructure"
 
-    sales_transaction_ref_or_sales_transaction: List[Union[SalesTransactionRef, SalesTransaction]] = field(
+    sales_transaction_ref_or_sales_transaction: list[Union[SalesTransactionRef, SalesTransaction]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

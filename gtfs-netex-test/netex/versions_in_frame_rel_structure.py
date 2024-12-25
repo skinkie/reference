@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .version import Version
@@ -12,7 +11,7 @@ class VersionsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "versionsInFrame_RelStructure"
 
-    version: List[Version] = field(
+    version: list[Version] = field(
         default_factory=list,
         metadata={
             "name": "Version",

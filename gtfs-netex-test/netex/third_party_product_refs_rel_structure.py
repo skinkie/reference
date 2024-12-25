@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .third_party_product_ref import ThirdPartyProductRef
@@ -12,7 +11,7 @@ class ThirdPartyProductRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "thirdPartyProductRefs_RelStructure"
 
-    third_party_product_ref: List[ThirdPartyProductRef] = field(
+    third_party_product_ref: list[ThirdPartyProductRef] = field(
         default_factory=list,
         metadata={
             "name": "ThirdPartyProductRef",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .interchange_rule import InterchangeRule
@@ -12,7 +11,7 @@ class InterchangeRulesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "interchangeRulesInFrame_RelStructure"
 
-    interchange_rule: List[InterchangeRule] = field(
+    interchange_rule: list[InterchangeRule] = field(
         default_factory=list,
         metadata={
             "name": "InterchangeRule",

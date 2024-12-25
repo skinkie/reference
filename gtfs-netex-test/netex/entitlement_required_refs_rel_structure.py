@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .entitlement_required_ref import EntitlementRequiredRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class EntitlementRequiredRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "entitlementRequiredRefs_RelStructure"
 
-    entitlement_required_ref: List[EntitlementRequiredRef] = field(
+    entitlement_required_ref: list[EntitlementRequiredRef] = field(
         default_factory=list,
         metadata={
             "name": "EntitlementRequiredRef",

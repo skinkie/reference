@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .frame_containment_structure import FrameContainmentStructure
 from .travel_document import TravelDocument
@@ -12,7 +11,7 @@ class TravelDocumentsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "travelDocumentsInFrame_RelStructure"
 
-    travel_document: List[TravelDocument] = field(
+    travel_document: list[TravelDocument] = field(
         default_factory=list,
         metadata={
             "name": "TravelDocument",

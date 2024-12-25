@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .additional_driver_option_ref import AdditionalDriverOptionRef
 from .booking_policy_ref import BookingPolicyRef
@@ -46,7 +46,7 @@ class UsageParameterRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "usageParameterRefs_RelStructure"
 
-    usage_parameter_ref_or_profile_parameter_ref_or_user_profile_ref_or_reselling_ref_or_booking_policy_ref: List[
+    usage_parameter_ref_or_profile_parameter_ref_or_user_profile_ref_or_reselling_ref_or_booking_policy_ref: list[
         Union[
             AdditionalDriverOptionRef,
             RentalOptionRef,

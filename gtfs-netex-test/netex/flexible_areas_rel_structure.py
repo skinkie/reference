@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .flexible_area import FlexibleArea
@@ -13,7 +13,7 @@ class FlexibleAreasRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "flexibleAreas_RelStructure"
 
-    flexible_area_ref_or_flexible_area: List[Union[FlexibleAreaRef, FlexibleArea]] = field(
+    flexible_area_ref_or_flexible_area: list[Union[FlexibleAreaRef, FlexibleArea]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

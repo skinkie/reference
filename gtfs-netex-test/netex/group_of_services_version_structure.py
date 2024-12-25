@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .day_type_ref_structure import DayTypeRefStructure
 from .destination_display_refs_rel_structure import DestinationDisplayRefsRelStructure
@@ -95,7 +95,7 @@ class GroupOfServicesVersionStructure(GroupOfEntitiesVersionStructure):
 
     @dataclass(kw_only=True)
     class DayTypes:
-        day_type_ref: List[DayTypeRefStructure] = field(
+        day_type_ref: list[DayTypeRefStructure] = field(
             default_factory=list,
             metadata={
                 "name": "DayTypeRef",

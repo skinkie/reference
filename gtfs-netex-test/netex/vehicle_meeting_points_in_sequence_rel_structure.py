@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .vehicle_meeting_point_in_path import VehicleMeetingPointInPath
@@ -12,7 +11,7 @@ class VehicleMeetingPointsInSequenceRelStructure(ContainmentAggregationStructure
     class Meta:
         name = "vehicleMeetingPointsInSequence_RelStructure"
 
-    vehicle_meeting_point_in_path: List[VehicleMeetingPointInPath] = field(
+    vehicle_meeting_point_in_path: list[VehicleMeetingPointInPath] = field(
         default_factory=list,
         metadata={
             "name": "VehicleMeetingPointInPath",

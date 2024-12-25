@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .deck_navigation_path import DeckNavigationPath
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class DeckNavigationPathsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "deckNavigationPaths_RelStructure"
 
-    deck_navigation_path: List[DeckNavigationPath] = field(
+    deck_navigation_path: list[DeckNavigationPath] = field(
         default_factory=list,
         metadata={
             "name": "DeckNavigationPath",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .operating_period import OperatingPeriod
@@ -15,7 +15,7 @@ class OperatingPeriodsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "operatingPeriods_RelStructure"
 
-    uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period: List[Union[UicOperatingPeriodRef, OperatingPeriodRef, OperatingPeriod, UicOperatingPeriod]] = field(
+    uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period: list[Union[UicOperatingPeriodRef, OperatingPeriodRef, OperatingPeriod, UicOperatingPeriod]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

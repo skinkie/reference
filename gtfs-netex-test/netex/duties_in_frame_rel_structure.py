@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .duty import Duty
@@ -12,7 +11,7 @@ class DutiesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "dutiesInFrame_RelStructure"
 
-    duty: List[Duty] = field(
+    duty: list[Duty] = field(
         default_factory=list,
         metadata={
             "name": "Duty",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .frame_containment_structure import FrameContainmentStructure
 from .whitelist import Whitelist
@@ -12,7 +11,7 @@ class WhitelistsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "whitelistsInFrame_RelStructure"
 
-    whitelist: List[Whitelist] = field(
+    whitelist: list[Whitelist] = field(
         default_factory=list,
         metadata={
             "name": "Whitelist",

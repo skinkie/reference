@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from .coordinates_structure import CoordinatesStructure
 
@@ -12,7 +12,7 @@ class LocationStructure1:
     class Meta:
         name = "LocationStructure"
 
-    longitude_or_latitude_or_coordinates: List[Union["LocationStructure1.Longitude", "LocationStructure1.Latitude", CoordinatesStructure]] = field(
+    longitude_or_latitude_or_coordinates: list[Union["LocationStructure1.Longitude", "LocationStructure1.Latitude", CoordinatesStructure]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

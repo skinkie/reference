@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .dead_run_ref import DeadRunRef
 from .dynamic_stop_assignment_ref import DynamicStopAssignmentRef
@@ -16,7 +16,7 @@ class VehicleJourneyStopAssignmentVersionStructure(PassengerStopAssignmentVersio
     class Meta:
         name = "VehicleJourneyStopAssignment_VersionStructure"
 
-    vehicle_journey_ref: List[Union[DeadRunRef, VehicleJourneyRef]] = field(
+    vehicle_journey_ref: list[Union[DeadRunRef, VehicleJourneyRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

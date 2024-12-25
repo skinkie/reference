@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .passenger_spot import PassengerSpot
@@ -13,7 +13,7 @@ class PassengerSpotsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "passengerSpots_RelStructure"
 
-    passenger_spot_ref_or_passenger_spot: List[Union[PassengerSpotRef, PassengerSpot]] = field(
+    passenger_spot_ref_or_passenger_spot: list[Union[PassengerSpotRef, PassengerSpot]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .entity_in_version_structure import DataManagedObjectStructure
 from .info_links_rel_structure import InfoLinksRelStructure
@@ -31,7 +31,7 @@ class GroupOfEntitiesVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    description: List[MultilingualString] = field(
+    description: list[MultilingualString] = field(
         default_factory=list,
         metadata={
             "name": "Description",

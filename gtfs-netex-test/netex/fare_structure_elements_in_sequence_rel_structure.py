@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .controllable_element_in_sequence import ControllableElementInSequence
 from .fare_structure_element_in_sequence import FareStructureElementInSequence
@@ -13,7 +13,7 @@ class FareStructureElementsInSequenceRelStructure(StrictContainmentAggregationSt
     class Meta:
         name = "fareStructureElementsInSequence_RelStructure"
 
-    fare_structure_element_in_sequence_or_controllable_element_in_sequence: List[Union[FareStructureElementInSequence, ControllableElementInSequence]] = field(
+    fare_structure_element_in_sequence_or_controllable_element_in_sequence: list[Union[FareStructureElementInSequence, ControllableElementInSequence]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

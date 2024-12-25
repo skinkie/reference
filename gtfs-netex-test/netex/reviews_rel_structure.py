@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .review import Review
 
@@ -11,7 +10,7 @@ class ReviewsRelStructure:
     class Meta:
         name = "reviews_RelStructure"
 
-    review: List[Review] = field(
+    review: list[Review] = field(
         default_factory=list,
         metadata={
             "name": "Review",

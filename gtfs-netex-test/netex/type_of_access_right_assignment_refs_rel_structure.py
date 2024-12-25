@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .type_of_access_right_assignment_ref import TypeOfAccessRightAssignmentRef
@@ -12,7 +11,7 @@ class TypeOfAccessRightAssignmentRefsRelStructure(OneToManyRelationshipStructure
     class Meta:
         name = "TypeOfAccessRightAssignmentRefs_RelStructure"
 
-    type_of_access_right_assignment_ref: List[TypeOfAccessRightAssignmentRef] = field(
+    type_of_access_right_assignment_ref: list[TypeOfAccessRightAssignmentRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfAccessRightAssignmentRef",

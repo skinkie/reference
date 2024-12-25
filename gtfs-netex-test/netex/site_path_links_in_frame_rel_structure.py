@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .off_site_path_link import OffSitePathLink
@@ -14,7 +14,7 @@ class SitePathLinksInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "sitePathLinksInFrame_RelStructure"
 
-    site_path_link_or_off_site_path_link_or_path_link: List[Union[SitePathLink, OffSitePathLink, PathLink]] = field(
+    site_path_link_or_off_site_path_link_or_path_link: list[Union[SitePathLink, OffSitePathLink, PathLink]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

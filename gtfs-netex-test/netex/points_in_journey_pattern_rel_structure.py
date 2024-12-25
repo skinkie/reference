@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .point_in_journey_pattern import PointInJourneyPattern
 from .stop_point_in_journey_pattern import StopPointInJourneyPattern
@@ -14,7 +14,7 @@ class PointsInJourneyPatternRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "pointsInJourneyPattern_RelStructure"
 
-    point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern: List[Union[PointInJourneyPattern, StopPointInJourneyPattern, TimingPointInJourneyPattern]] = field(
+    point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern: list[Union[PointInJourneyPattern, StopPointInJourneyPattern, TimingPointInJourneyPattern]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

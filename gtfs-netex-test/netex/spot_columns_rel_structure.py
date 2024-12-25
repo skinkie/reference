@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .spot_column import SpotColumn
@@ -12,7 +11,7 @@ class SpotColumnsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "spotColumns_RelStructure"
 
-    spot_column: List[SpotColumn] = field(
+    spot_column: list[SpotColumn] = field(
         default_factory=list,
         metadata={
             "name": "SpotColumn",

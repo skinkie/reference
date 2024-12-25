@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .contract_ref_rel_structure import ContractRefRelStructure
 from .data_role_type_enumeration import DataRoleTypeEnumeration
@@ -37,7 +37,7 @@ class ResponsibilityRoleAssignmentVersionedChildStructure(VersionedChildStructur
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    data_role_type: List[DataRoleTypeEnumeration] = field(
+    data_role_type: list[DataRoleTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "DataRoleType",
@@ -46,7 +46,7 @@ class ResponsibilityRoleAssignmentVersionedChildStructure(VersionedChildStructur
             "tokens": True,
         },
     )
-    stakeholder_role_type: List[StakeholderRoleTypeEnumeration] = field(
+    stakeholder_role_type: list[StakeholderRoleTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "StakeholderRoleType",

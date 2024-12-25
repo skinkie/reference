@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .access_right_in_product import AccessRightInProduct
 from .access_right_in_product_ref import AccessRightInProductRef
@@ -13,7 +13,7 @@ class AccessRightsInProductRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "accessRightsInProduct_RelStructure"
 
-    access_right_in_product_ref_or_access_right_in_product: List[Union[AccessRightInProductRef, AccessRightInProduct]] = field(
+    access_right_in_product_ref_or_access_right_in_product: list[Union[AccessRightInProductRef, AccessRightInProduct]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .day_type_assignment import DayTypeAssignment
 from .strict_containment_aggregation_structure import StrictContainmentAggregationStructure
@@ -12,7 +11,7 @@ class DayTypeAssignmentsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "dayTypeAssignments_RelStructure"
 
-    day_type_assignment: List[DayTypeAssignment] = field(
+    day_type_assignment: list[DayTypeAssignment] = field(
         default_factory=list,
         metadata={
             "name": "DayTypeAssignment",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .all_distribution_channels_ref import AllDistributionChannelsRef
 from .customer_account_status_ref import CustomerAccountStatusRef
@@ -62,7 +62,7 @@ class TypeOfEntityRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typeOfEntityRefs_RelStructure"
 
-    type_of_entity_ref_or_mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: List[
+    type_of_entity_ref_or_mode_of_operation_ref_or_alternative_mode_of_operation_ref_or_conventional_mode_of_operation_ref: list[
         Union[
             TypeOfRetailDeviceRef,
             CustomerAccountStatusRef,

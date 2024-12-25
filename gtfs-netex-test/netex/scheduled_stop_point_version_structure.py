@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .country_ref import CountryRef
 from .external_object_ref_structure import ExternalObjectRefStructure
@@ -137,7 +137,7 @@ class ScheduledStopPointVersionStructure(TimingPointVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    vehicle_modes: List[VehicleModeEnumeration] = field(
+    vehicle_modes: list[VehicleModeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "VehicleModes",
@@ -178,7 +178,7 @@ class ScheduledStopPointVersionStructure(TimingPointVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    boarding_request_method: List[RequestMethodTypeEnumeration] = field(
+    boarding_request_method: list[RequestMethodTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "BoardingRequestMethod",
@@ -187,7 +187,7 @@ class ScheduledStopPointVersionStructure(TimingPointVersionStructure):
             "tokens": True,
         },
     )
-    alighting_request_method: List[RequestMethodTypeEnumeration] = field(
+    alighting_request_method: list[RequestMethodTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "AlightingRequestMethod",

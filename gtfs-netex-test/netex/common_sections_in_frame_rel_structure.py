@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .sections_in_sequence_rel_structure import CommonSection
@@ -12,7 +11,7 @@ class CommonSectionsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "commonSectionsInFrame_RelStructure"
 
-    common_section: List[CommonSection] = field(
+    common_section: list[CommonSection] = field(
         default_factory=list,
         metadata={
             "name": "CommonSection",

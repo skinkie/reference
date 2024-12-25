@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .group_of_distance_matrix_elements_ref import GroupOfDistanceMatrixElementsRef
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
@@ -12,7 +11,7 @@ class GroupOfDistanceMatrixElementsRefsRelStructure(OneToManyRelationshipStructu
     class Meta:
         name = "groupOfDistanceMatrixElementsRefs_RelStructure"
 
-    group_of_distance_matrix_elements_ref: List[GroupOfDistanceMatrixElementsRef] = field(
+    group_of_distance_matrix_elements_ref: list[GroupOfDistanceMatrixElementsRef] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfDistanceMatrixElementsRef",

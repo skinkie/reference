@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .partial_refund_basis_enumeration import PartialRefundBasisEnumeration
 from .payment_method_enumeration import PaymentMethodEnumeration
@@ -23,7 +23,7 @@ class RefundingVersionStructure(ResellingVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    refund_policy: List[RefundPolicyEnumeration] = field(
+    refund_policy: list[RefundPolicyEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "RefundPolicy",
@@ -40,7 +40,7 @@ class RefundingVersionStructure(ResellingVersionStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    payment_method: List[PaymentMethodEnumeration] = field(
+    payment_method: list[PaymentMethodEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PaymentMethod",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import ForwardRef, List, Optional, Union
+from typing import ForwardRef, Optional, Union
 
 from .administrative_zone_ref import AdministrativeZoneRef
 from .all_modes_enumeration import AllModesEnumeration
@@ -27,7 +27,7 @@ class AdministrativeZonesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "administrativeZones_RelStructure"
 
-    administrative_zone_ref_or_transport_administrative_zone_or_administrative_zone: List[Union[AdministrativeZoneRef, "TransportAdministrativeZone", "AdministrativeZone"]] = field(
+    administrative_zone_ref_or_transport_administrative_zone_or_administrative_zone: list[Union[AdministrativeZoneRef, "TransportAdministrativeZone", "AdministrativeZone"]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -158,7 +158,7 @@ class TransportAdministrativeZoneVersionStructure(AdministrativeZoneVersionStruc
     class Meta:
         name = "TransportAdministrativeZone_VersionStructure"
 
-    vehicle_modes: List[AllModesEnumeration] = field(
+    vehicle_modes: list[AllModesEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "VehicleModes",

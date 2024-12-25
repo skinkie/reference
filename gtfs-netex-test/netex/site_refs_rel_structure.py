@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .parking_ref import ParkingRef
@@ -17,7 +17,7 @@ class SiteRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "siteRefs_RelStructure"
 
-    site_ref_or_stop_place_ref: List[Union[ParkingRef, PointOfInterestRef, TaxiRankRef, StopPlaceRef, ServiceSiteRef, SiteRef]] = field(
+    site_ref_or_stop_place_ref: list[Union[ParkingRef, PointOfInterestRef, TaxiRankRef, StopPlaceRef, ServiceSiteRef, SiteRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

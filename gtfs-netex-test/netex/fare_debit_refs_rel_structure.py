@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .booking_debit_ref import BookingDebitRef
 from .fare_debit_ref import FareDebitRef
@@ -17,7 +17,7 @@ class FareDebitRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "fareDebitRefs_RelStructure"
 
-    fare_debit_ref: List[Union[OffenceDebitRef, FareProductSaleDebitRef, TripDebitRef, BookingDebitRef, OtherDebitRef, FareDebitRef]] = field(
+    fare_debit_ref: list[Union[OffenceDebitRef, FareProductSaleDebitRef, TripDebitRef, BookingDebitRef, OtherDebitRef, FareDebitRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .catering_service_enumeration import CateringServiceEnumeration
 from .local_service_version_structure import LocalServiceVersionStructure
@@ -12,7 +11,7 @@ class CateringServiceVersionStructure(LocalServiceVersionStructure):
     class Meta:
         name = "CateringService_VersionStructure"
 
-    service_list: List[CateringServiceEnumeration] = field(
+    service_list: list[CateringServiceEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "ServiceList",

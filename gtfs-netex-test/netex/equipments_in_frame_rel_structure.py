@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .access_vehicle_equipment import AccessVehicleEquipment
 from .actual_vehicle_equipment import ActualVehicleEquipment
@@ -75,7 +75,7 @@ class EquipmentsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "equipmentsInFrame_RelStructure"
 
-    choice: List[
+    choice: list[
         Union[
             OnlineService,
             VehicleRentalService,

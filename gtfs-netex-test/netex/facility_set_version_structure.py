@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from .accessibility_info_facility_list import AccessibilityInfoFacilityList
 from .accessibility_tool_list import AccessibilityToolList
@@ -189,7 +189,7 @@ class FacilitySetVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    passenger_information_equipment_list: List[PassengerInformationEquipmentEnumeration] = field(
+    passenger_information_equipment_list: list[PassengerInformationEquipmentEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "PassengerInformationEquipmentList",

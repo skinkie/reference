@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .driver_trip import DriverTrip
@@ -12,7 +11,7 @@ class DriverTripsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "driverTripsInFrame_RelStructure"
 
-    driver_trip: List[DriverTrip] = field(
+    driver_trip: list[DriverTrip] = field(
         default_factory=list,
         metadata={
             "name": "DriverTrip",

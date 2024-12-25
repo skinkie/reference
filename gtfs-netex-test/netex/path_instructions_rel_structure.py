@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .path_instruction import PathInstruction
@@ -12,7 +11,7 @@ class PathInstructionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "pathInstructions_RelStructure"
 
-    path_instruction: List[PathInstruction] = field(
+    path_instruction: list[PathInstruction] = field(
         default_factory=list,
         metadata={
             "name": "PathInstruction",

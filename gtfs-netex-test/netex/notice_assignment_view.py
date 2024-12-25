@@ -13,6 +13,7 @@ class NoticeAssignmentView(NoticeAssignmentDerivedViewStructure):
 
     name: Any = field(
         init=False,
+        default=None,
         metadata={
             "type": "Ignore",
         },

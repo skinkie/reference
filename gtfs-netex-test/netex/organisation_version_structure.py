@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 from .alternative_names_rel_structure import AlternativeNamesRelStructure
 from .contact_structure import ContactStructure
@@ -147,7 +147,7 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
             "namespace": "http://www.netex.org.uk/netex",
         },
     )
-    organisation_type: List[OrganisationTypeEnumeration] = field(
+    organisation_type: list[OrganisationTypeEnumeration] = field(
         default_factory=list,
         metadata={
             "name": "OrganisationType",
@@ -224,60 +224,70 @@ class OrganisationVersionStructure(DataManagedObjectStructure):
     class ValidityPeriod(ValidBetweenVersionStructure):
         name: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         description: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         conditioned_object_ref: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         with_condition_ref: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         key_list: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         private_codes: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         extensions: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         branding_ref: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         validity_conditions_or_valid_between: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },
         )
         alternative_texts: Any = field(
             init=False,
+            default=None,
             metadata={
                 "type": "Ignore",
             },

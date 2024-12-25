@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .fare_contract_entries_rel_structure import CustomerPurchasePackage
 from .frame_containment_structure import FrameContainmentStructure
@@ -12,7 +11,7 @@ class CustomerPurchasePackagesInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "customerPurchasePackagesInFrame_RelStructure"
 
-    customer_purchase_package: List[CustomerPurchasePackage] = field(
+    customer_purchase_package: list[CustomerPurchasePackage] = field(
         default_factory=list,
         metadata={
             "name": "CustomerPurchasePackage",

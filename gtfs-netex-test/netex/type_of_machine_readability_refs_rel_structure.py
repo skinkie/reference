@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .type_of_machine_readability_ref import TypeOfMachineReadabilityRef
@@ -12,7 +11,7 @@ class TypeOfMachineReadabilityRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "TypeOfMachineReadabilityRefs_RelStructure"
 
-    type_of_machine_readability_ref: List[TypeOfMachineReadabilityRef] = field(
+    type_of_machine_readability_ref: list[TypeOfMachineReadabilityRef] = field(
         default_factory=list,
         metadata={
             "name": "TypeOfMachineReadabilityRef",

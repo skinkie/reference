@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .one_to_many_relationship_structure import OneToManyRelationshipStructure
 from .train_component_stop_assignment_ref import TrainComponentStopAssignmentRef
@@ -12,7 +11,7 @@ class TrainComponentStopAssignmentRefsRelStructure(OneToManyRelationshipStructur
     class Meta:
         name = "trainComponentStopAssignmentRefs_RelStructure"
 
-    train_component_stop_assignment_ref: List[TrainComponentStopAssignmentRef] = field(
+    train_component_stop_assignment_ref: list[TrainComponentStopAssignmentRef] = field(
         default_factory=list,
         metadata={
             "name": "TrainComponentStopAssignmentRef",

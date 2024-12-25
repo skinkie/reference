@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .availability_condition_ref import AvailabilityConditionRef
 from .day_type_ref import DayTypeRef
@@ -23,7 +23,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "temporalValidityParameters_RelStructure"
 
-    day_type_ref: List[Union[FareDayTypeRef, DayTypeRef]] = field(
+    day_type_ref: list[Union[FareDayTypeRef, DayTypeRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -41,7 +41,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    timeband_ref: List[TimebandRef] = field(
+    timeband_ref: list[TimebandRef] = field(
         default_factory=list,
         metadata={
             "name": "TimebandRef",
@@ -50,7 +50,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    group_of_timebands_ref: List[GroupOfTimebandsRef] = field(
+    group_of_timebands_ref: list[GroupOfTimebandsRef] = field(
         default_factory=list,
         metadata={
             "name": "GroupOfTimebandsRef",
@@ -59,7 +59,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    operating_day_ref: List[OperatingDayRef] = field(
+    operating_day_ref: list[OperatingDayRef] = field(
         default_factory=list,
         metadata={
             "name": "OperatingDayRef",
@@ -68,7 +68,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    operating_period_ref: List[Union[UicOperatingPeriodRef, OperatingPeriodRef]] = field(
+    operating_period_ref: list[Union[UicOperatingPeriodRef, OperatingPeriodRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",
@@ -86,7 +86,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             ),
         },
     )
-    service_calendar_ref: List[ServiceCalendarRef] = field(
+    service_calendar_ref: list[ServiceCalendarRef] = field(
         default_factory=list,
         metadata={
             "name": "ServiceCalendarRef",
@@ -95,7 +95,7 @@ class TemporalValidityParametersRelStructure(OneToManyRelationshipStructure):
             "sequence": 1,
         },
     )
-    validity_condition_ref: List[Union[AvailabilityConditionRef, ValidityRuleParameterRef, ValidityTriggerRef, ValidityConditionRef]] = field(
+    validity_condition_ref: list[Union[AvailabilityConditionRef, ValidityRuleParameterRef, ValidityTriggerRef, ValidityConditionRef]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Union
 
 from .geographical_structure_factor import GeographicalStructureFactor
 from .geographical_structure_factor_ref import GeographicalStructureFactorRef
@@ -13,7 +13,7 @@ class GeographicalStructureFactorsRelStructure(StrictContainmentAggregationStruc
     class Meta:
         name = "geographicalStructureFactors_RelStructure"
 
-    geographical_structure_factor_ref_or_geographical_structure_factor: List[Union[GeographicalStructureFactorRef, GeographicalStructureFactor]] = field(
+    geographical_structure_factor_ref_or_geographical_structure_factor: list[Union[GeographicalStructureFactorRef, GeographicalStructureFactor]] = field(
         default_factory=list,
         metadata={
             "type": "Elements",

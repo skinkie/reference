@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from .containment_aggregation_structure import ContainmentAggregationStructure
 from .deck_level import DeckLevel
@@ -12,7 +11,7 @@ class DeckLevelsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "deckLevels_RelStructure"
 
-    deck_level: List[DeckLevel] = field(
+    deck_level: list[DeckLevel] = field(
         default_factory=list,
         metadata={
             "name": "DeckLevel",
