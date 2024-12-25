@@ -1,7 +1,8 @@
 from netex import VersionOfObjectRefStructure, ServiceJourneyRef, ServiceJourneyPatternRef, ServiceJourney, \
     ServiceJourneyPattern, RouteRefStructure, RouteLinkRefStructure, ScheduledStopPointRefStructure, ScheduledStopPoint, \
     RouteLink, Route, Quay, QuayRefStructure, StopPlaceRefStructure, StopPlace, TimingPoint, TimingPointRefStructure, \
-    ServiceLink, ServiceLinkRefStructure, TimingLink, TimingLinkRefStructure, Locale, LocaleStructure, OperatorRef
+    ServiceLink, ServiceLinkRefStructure, TimingLink, TimingLinkRefStructure, Locale, LocaleStructure, OperatorRef, \
+    DayTypeRef
 
 from netexio.dbaccess import get_single
 
@@ -12,6 +13,7 @@ VersionOfObjectRefStructure.__hash__ = ref_version_hash
 ServiceJourneyRef.__hash__ = ref_version_hash
 ServiceJourneyPatternRef.__hash__ = ref_version_hash
 OperatorRef.__hash__ = ref_version_hash
+DayTypeRef.__hash__ = ref_version_hash
 
 def id_version_hash(self):
     return hash(self.id + ';' + self.version)

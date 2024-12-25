@@ -4,7 +4,6 @@ from typing import Optional, List, T
 from netex import *
 from utils import get_object_name
 
-
 def getRef(obj: object, klass=None):
     if obj is None:
         return None
@@ -58,8 +57,13 @@ def getIndex(l: List[T], attr=None) -> dict[object, T]:
     if not attr:
         return {x.id:x for x in l }
 
-    f = attrgetter(attr)
+    f = attrgetter(attr) # TODO: change with our own attrgetter that understands lists
     return  {f(x):x for x in l }
+
+from itertools import groupby
+def getIndexByGroup(l: List[T], attr: str) -> dict[object, T]:
+    f = attrgetter(attr) # TODO: change with our own attrgetter that understands lists
+    return  {i: list(j) for i, j in groupby(l, lambda x : f(x))}
 
 def setIdVersion(obj: object, codespace: Codespace, id: str, version: Optional[Version]):
     name = type(obj).__name__

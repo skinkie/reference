@@ -8,7 +8,8 @@ from netex import DataSource, Codespace, StopPlace, PassengerStopAssignment, Sch
 from netexio.database import Database
 from netexio.dbaccess import setup_database,  write_objects, load_local, copy_table
 from utils import get_interesting_classes
-from transformers.gtfs import GTFS_CLASSES, gtfs_operator_line_memory, gtfs_calls_generator
+from transformers.gtfs import GTFS_CLASSES, gtfs_operator_line_memory, gtfs_calls_generator, \
+    apply_availability_conditions_via_day_type_ref
 from transformers.projection import reprojection_update
 
 
@@ -33,12 +34,16 @@ def main(source_database_file: str, target_database_file: str, clean_database: b
             # Flatten the Operator, Authority, Branding, ResponsibilitySet
             gtfs_operator_line_memory(db_read, db_write, {})
 
-            gtfs_calls_generator(db_read, db_write, {})
+            apply_availability_conditions_via_day_type_ref(db_read, db_write)
+
+            # rewrite to override the db_write
+            # gtfs_calls_generator(db_read, db_write, {})
 
             # Extract calendar information
-            gtfs_calendar_generator(db_read, db_write, {})
+            # gtfs_calendar_generator(db_read, db_write, {})
 
-        # Our target database must be reprojected to WGS84
+        # Our target database must be reprojected to WGS84            apply_availability_conditions_via_day_type_ref(db_read, db_write)
+
         reprojection_update(db_write, crs_to="urn:ogc:def:crs:EPSG::4326")
 
 if __name__ == '__main__':
