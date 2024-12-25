@@ -1,14 +1,16 @@
 from netexio.attributes import update_attr, resolve_attr
 from refs import getRef
 
-
-def replace_with_reference_inplace(obj, path, klass=None):
-    # TODO: Separate function
+def split_path(path) -> list[str]:
     split = []
     for p in path.split('.'):
         if p.isnumeric():
             p = int(p)
         split.append(p)
+    return split
+
+def replace_with_reference_inplace(obj, path, klass=None):
+    split = split_path(path)
 
     attribute = resolve_attr(obj, split)
 
