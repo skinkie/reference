@@ -13,10 +13,10 @@ def get_element_name_with_ns(clazz):
 
 def project(obj, clazz: T) -> T:
     # if issubclass(obj.__class__, clazz_intermediate):
-    attributes = {x: y for x, y in obj.__dict__.items() if x in list(clazz.__dataclass_fields__.keys())}
+    attributes = {x: y for x, y in obj.__dict__.items() if x in list(clazz.__dataclass_fields__.keys()) if (hasattr(clazz.__dataclass_fields__[x], 'init') and clazz.__dataclass_fields__[x].init != False)}
     if 'id' in attributes:
         attributes['id'] = attributes['id'].replace(f":{get_object_name(obj.__class__)}:", f":{get_object_name(clazz)}:")
-    # return clazz({x: y for x, y in obj.__dict__.items() if x in list(clazz.__dataclass_fields__.keys())})
+
     return clazz(**attributes)
 
 def to_seconds(xml_duration: XmlDuration):
