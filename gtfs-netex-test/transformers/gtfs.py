@@ -11,7 +11,8 @@ from netex import Line, Branding, Operator, Authority, ResponsibilitySet, Stakeh
     ServiceJourneyPattern, TimeDemandType, RouteView, RouteRef, Route, ValidityConditionsRelStructure, \
     AvailabilityCondition, AvailabilityConditionRef, DayType, DayTypeAssignment, OperatingPeriod, ServiceCalendar, \
     DayTypesRelStructure, OperatingPeriodRef, UicOperatingPeriodRef, OperatingDay, DayTypeRef, \
-    OperatingDaysRelStructure, OperatingDayRefStructure, UicOperatingPeriod, OperatingDayRef
+    OperatingDaysRelStructure, OperatingDayRefStructure, UicOperatingPeriod, OperatingDayRef, \
+    PropertiesOfDayRelStructure, PropertyOfDay
 from netexio.database import Database
 from netexio.dbaccess import load_generator, load_local, write_objects, get_single, write_generator, copy_table
 from refs import getRef, getIndex, getIndexByGroup, getId
@@ -151,25 +152,10 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
 def day_type_assignment_to_ac(day_type_assignment: DayTypeAssignment, day_type: DayType, ops: dict[str, OperatingPeriod | UicOperatingPeriod], ods: dict[str, OperatingDay]):
     ac: AvailabilityCondition = project(day_type_assignment, AvailabilityCondition)
     ac.is_available = day_type_assignment.is_available
-    ac.day_type = DayTypesRelStructure(day_type_ref_or_day_type=[getRef(day_type)])
+    ac.day_types = DayTypesRelStructure(day_type_ref_or_day_type=[getRef(day_type)])
 
-    if isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef):
-        operating_period_ref = day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
-        operating_period: OperatingPeriod = ops[operating_period_ref.ref]
-
-        if isinstance(operating_period.from_operating_day_ref_or_from_date, OperatingDayRefStructure):
-            od: OperatingDay = ods[operating_period.from_operating_day_ref_or_from_date.ref]
-            ac.from_date = od.calendar_date.to_datetime()
-        else:
-            ac.from_date = operating_period.from_operating_day_ref_or_from_date
-
-        if isinstance(operating_period.to_operating_day_ref_or_to_date, OperatingDayRefStructure):
-            od: OperatingDay = ods[operating_period.to_operating_day_ref_or_to_date.ref]
-            ac.to_date = od.calendar_date.to_datetime()
-        else:
-            ac.to_date = operating_period.to_operating_day_ref_or_to_date
-
-    elif isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
+    # Most specific class first
+    if isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef) or (isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef) or day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.name_of_ref_class == 'UicOperatingPeriod'):
         uic_operating_period_ref = day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
         uic_operating_period: UicOperatingPeriod = ops[uic_operating_period_ref.ref]
 
@@ -186,6 +172,29 @@ def day_type_assignment_to_ac(day_type_assignment: DayTypeAssignment, day_type: 
             ac.to_date = uic_operating_period.to_operating_day_ref_or_to_date
 
         ac.valid_day_bits = uic_operating_period.valid_day_bits
+
+        if len(uic_operating_period.days_of_week) > 0:
+            day_type_derived: DayType = project(day_type, DayType)
+            day_type_derived.id = ac.id.replace(':AvailabilityCondition:', ':DayType:') + '_1'
+            day_type_derived.properties = PropertiesOfDayRelStructure(property_of_day=[PropertyOfDay(days_of_week=uic_operating_period.days_of_week)])
+
+            ac.day_types = DayTypesRelStructure(day_type_ref_or_day_type=[day_type_derived])
+
+    elif isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef):
+        operating_period_ref = day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
+        operating_period: OperatingPeriod = ops[operating_period_ref.ref]
+
+        if isinstance(operating_period.from_operating_day_ref_or_from_date, OperatingDayRefStructure):
+            od: OperatingDay = ods[operating_period.from_operating_day_ref_or_from_date.ref]
+            ac.from_date = od.calendar_date.to_datetime()
+        else:
+            ac.from_date = operating_period.from_operating_day_ref_or_from_date
+
+        if isinstance(operating_period.to_operating_day_ref_or_to_date, OperatingDayRefStructure):
+            od: OperatingDay = ods[operating_period.to_operating_day_ref_or_to_date.ref]
+            ac.to_date = od.calendar_date.to_datetime()
+        else:
+            ac.to_date = operating_period.to_operating_day_ref_or_to_date
 
     elif isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef):
         operating_day_ref = day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
@@ -237,10 +246,11 @@ def apply_availability_conditions_via_day_type_ref(db_read: Database, db_write: 
     #with Database("/tmp/fake-mem.duckdb", read_only=False) as db_mem:
     mapping = {}
 
-    # copy_table(db_read, db_write, [AvailabilityCondition])
+    copy_table(db_read, db_write, [AvailabilityCondition])
     write_generator(db_write, AvailabilityCondition, query_sc(mapping))
     # The point is here that we now "normalise" everything to availability conditions, but this isn't the target format yet.
 
+    write_generator(db_write, DayType, load_generator(db_read, DayType, embedding=True))
     write_generator(db_write, ServiceJourney, query_sj(db_read, mapping, ServiceJourney))
     write_generator(db_write, TemplateServiceJourney, query_sj(db_read, mapping, TemplateServiceJourney))
 
