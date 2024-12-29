@@ -120,7 +120,7 @@
         {"script": "epip_db_to_db.py", "args": "%%dir%%/import.duckdb %%dir%%/netex-database.duckdb"},
         {"script": "epip_db_to_xml.py", "args": "%%dir%%/import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-epip-netex.xml"},
         {"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-epip-netex.xml] %%dir%%/ch-inter-gtfs.duckdb True"},
-        {"script": "gtfs_db_to_db.py", "args": "%%dir%%/ch-inter--gtfs.duckdb %%dir%%/ch-inter-2-gtfs.duckdb"},
+        {"script": "gtfs_db_to_db.py", "args": "%%dir%%/ch-inter-gtfs.duckdb %%dir%%/ch-inter-2-gtfs.duckdb"},
         {"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/ch-inter-2-gtfs.duckdb %%dir%%/%%block%%-ch-inter-gtfs.zip"},
         {"script": "tool_check_db.py", "args": "%%dir%%/import.duckdb"},
         {"script": "tool_check_db.py", "args": "%%dir%%/netex-database.duckdb"},
@@ -151,6 +151,8 @@
   },
   {
     "block": "flixbus",
+    "download_url":"https://gtfs.gis.flix.tech/gtfs_generic_eu.zip",
+    "description":"Flixbus data",
     "scripts": [
         {"script": "clean_tmp", "args": "%%dir%%"},
         {"script": "gtfs_import_to_db.py", "args": "%%inputdir%%/flixbus.zip %%dir%%/%%block%%gtfs-import.duckdb"},
