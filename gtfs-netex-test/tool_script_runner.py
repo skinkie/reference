@@ -179,7 +179,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             os.makedirs(processdir, exist_ok=True)
 
             # Write the script name to the log file with a starting delimiter
-            log_all(logging.INFO, f"{script_name} {script_args}")
+            log_all(logging.INFO, f"{block["block"]}-{step}: {script_name} {script_args}")
 
             if script_name.startswith("#"):
                 # is a comment and we do nothing
