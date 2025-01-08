@@ -6,6 +6,8 @@ from typing import List, Union
 import io
 from pyproj import Transformer
 from xsdata.models.datatype import XmlDateTime, XmlDuration
+
+from nordicprofile import NordicProfile
 from transformers.projection import project_location_4326
 
 from utils import to_seconds
@@ -16,7 +18,7 @@ from netex import Line, MultilingualString, AllVehicleModesOfTransportEnumeratio
     ServiceJourneyPattern, LineRefStructure, RouteView, StopArea, StopAreaRef, StopPlaceRef, Route, RouteLink, \
     ServiceLink, PublicCodeStructure, StopPlaceEntrance, TemplateServiceJourney, HeadwayJourneyGroup, \
     JourneyFrequencyGroupVersionStructure, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
-    AvailabilityCondition, DayType, DayOfWeekEnumeration, EmptyType2
+    AvailabilityCondition, DayType, DayOfWeekEnumeration, EmptyType2, UicOperatingPeriod
 
 import operator as operator_f
 from aux_logging import *
@@ -498,9 +500,10 @@ class GtfsProfile:
             warnings.warn("This availability condition does not match the GTFS profile")
 
     @staticmethod
-    def getCalendarDates(service_id, dates: List[datetime.datetime]):
+    def getCalendarDates(service_id, dates: List[datetime.datetime], is_available: bool = True):
+        exception_type = 1 if is_available else 2
         for date in dates:
-            yield {'service_id': service_id, 'date': str(date).replace('-', ''), 'exception_type': 1}
+            yield {'service_id': service_id, 'date': str(date).replace('-', ''), 'exception_type': exception_type}
 
     @staticmethod
     def getLineRef(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern):
