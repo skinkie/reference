@@ -1,7 +1,9 @@
 import sys
 import warnings
+from datetime import timedelta
 from typing import Generator, List, T
 
+from numpy.ma.core import negative
 from xsdata.models.datatype import XmlDate
 
 from callsprofile import CallsProfile
@@ -12,7 +14,7 @@ from netex import Line, Branding, Operator, Authority, ResponsibilitySet, Stakeh
     AvailabilityCondition, AvailabilityConditionRef, DayType, DayTypeAssignment, OperatingPeriod, ServiceCalendar, \
     DayTypesRelStructure, OperatingPeriodRef, UicOperatingPeriodRef, OperatingDay, DayTypeRef, \
     OperatingDaysRelStructure, OperatingDayRefStructure, UicOperatingPeriod, OperatingDayRef, \
-    PropertiesOfDayRelStructure, PropertyOfDay
+    PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration
 from netexio.database import Database
 from netexio.dbaccess import load_generator, load_local, write_objects, get_single, write_generator, copy_table
 from refs import getRef, getIndex, getIndexByGroup, getId
@@ -254,6 +256,134 @@ def apply_availability_conditions_via_day_type_ref(db_read: Database, db_write: 
     write_generator(db_write, ServiceJourney, query_sj(db_read, mapping, ServiceJourney))
     write_generator(db_write, TemplateServiceJourney, query_sj(db_read, mapping, TemplateServiceJourney))
 
+def gtfs_calendar(service_id: str, uic_operating_period: UicOperatingPeriod):
+    yield tuple(({'service_id': service_id,
+                  'monday': int(DayOfWeekEnumeration.MONDAY in uic_operating_period.days_of_week),
+                  'tuesday': int(DayOfWeekEnumeration.TUESDAY in uic_operating_period.days_of_week),
+                  'wednesday': int(DayOfWeekEnumeration.WEDNESDAY in uic_operating_period.days_of_week),
+                  'thursday': int(DayOfWeekEnumeration.THURSDAY in uic_operating_period.days_of_week),
+                  'friday': int(DayOfWeekEnumeration.FRIDAY in uic_operating_period.days_of_week),
+                  'saturday': int(DayOfWeekEnumeration.SATURDAY in uic_operating_period.days_of_week),
+                  'sunday': int(DayOfWeekEnumeration.SUNDAY in uic_operating_period.days_of_week),
+                  'start_date': str(
+                      uic_operating_period.from_operating_day_ref_or_from_date.to_datetime().date()).replace('-',
+                                                                                                             ''),
+                  'end_date': str(
+                      uic_operating_period.to_operating_day_ref_or_to_date.to_datetime().date()).replace('-', '')},
+                 None,))
+
+def netex_to_python_weekday(days_of_week: list[DayOfWeekEnumeration]) -> set[int]:
+    return set({
+        0 if DayOfWeekEnumeration.SUNDAY in days_of_week else None,
+        1 if DayOfWeekEnumeration.MONDAY in days_of_week else None,
+        2 if DayOfWeekEnumeration.TUESDAY in days_of_week else None,
+        3 if DayOfWeekEnumeration.WEDNESDAY in days_of_week else None,
+        4 if DayOfWeekEnumeration.THURSDAY in days_of_week else None,
+        5 if DayOfWeekEnumeration.FRIDAY in days_of_week else None,
+        6 if DayOfWeekEnumeration.SATURDAY in days_of_week else None})
+
+def gtfs_calendar_and_dates(db_read: Database, day_type_ref: DayTypeRef, day_type_assignments: list[DayTypeAssignment]):
+    day_type: DayType = get_single(db_read, DayTypeAssignment, day_type_ref.ref)
+    day_type_assignments: list[DayTypeAssignment] = list(day_type_assignments)
+
+    if day_type.private_codes:
+        service_ids = [private_code.value for private_code in day_type.private_codes.private_code if
+                       private_code.type_value == 'service_id']
+        service_id = service_ids[0] if len(service_ids) > 0 else day_type.id
+    else:
+        service_id = day_type.id
+
+    if len(day_type_assignments) == 1 and day_type_assignments[0].is_available:
+        # The provided bitstring will be completely materialised
+        if isinstance(day_type_assignments[0].uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
+            uic_operating_period: UicOperatingPeriod = get_single(db_read, UicOperatingPeriod, day_type_assignments[0].uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
+
+            if uic_operating_period.days_of_week:
+                yield from gtfs_calendar(service_id, uic_operating_period)
+
+                weekdays = netex_to_python_weekday(uic_operating_period.days_of_week)
+
+                # Here we will do an attempt to actually normalise the output
+                if uic_operating_period.valid_day_bits:
+                    from_date = uic_operating_period.from_operating_day_ref_or_from_date.to_datetime().date()
+                    to_date = uic_operating_period.to_operating_day_ref_or_to_date.to_datetime().date()
+                    # TODO: Check (from_date - to_date) + 1 == len(uic_operating_period.valid_day_bits)
+
+                    list_by_weekdays = set({y for y in [from_date+timedelta(days=x) for x in range((to_date-from_date).days+1)] if y.weekday() in weekdays})
+                    list_by_validdaybits_positive = set({(uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i)).date() for i in range(0, len(uic_operating_period.valid_day_bits)) if uic_operating_period.valid_day_bits[i] == '1'})
+                    list_by_validdaybits_negative = set({(uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i)).date() for i in range(0, len(uic_operating_period.valid_day_bits)) if uic_operating_period.valid_day_bits[i] == '0'})
+
+                    only_extra_dates = list_by_validdaybits_positive - list_by_weekdays
+                    only_removed_dates = list_by_validdaybits_negative.intersection(list_by_weekdays)
+
+                    for extra_date in only_extra_dates:
+                        yield tuple((None, {'service_id': service_id, 'date': str(
+                            extra_date.replace('-', '')), 'exception_type': 1},))
+
+                    for removed_date in only_removed_dates:
+                        yield tuple((None, {'service_id': service_id, 'date': str(
+                            removed_date.replace('-', '')), 'exception_type': 2},))
+
+            elif uic_operating_period.valid_day_bits:
+                for i in range(0, len(uic_operating_period.valid_day_bits)):
+                    if uic_operating_period.valid_day_bits[i] == '1':
+                        yield tuple((None, {'service_id': service_id, 'date': str((uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() +
+                                                                                   timedelta(days=i)).date().replace('-', '')),
+                                                                                  'exception_type': 1},))
+
+    elif len(day_type_assignments) == 2:
+        if day_type_assignments[0].is_available == True:
+            positive = day_type_assignments[0]
+            negative = day_type_assignments[1] if day_type_assignments[1].is_available == False else None
+        else:
+            positive = day_type_assignments[1] if day_type_assignments[1].is_available == True else None
+            negative = day_type_assignments[0]
+
+        if positive is None or negative is None:
+            warnings.warn("Two day type assignments, not matching GTFS Profile")
+            return
+
+        if isinstance(positive.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
+            uic_operating_period_positive: UicOperatingPeriod = get_single(db_read, UicOperatingPeriod, positive.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
+        else:
+            uic_operating_period_positive = None
+
+        if isinstance(negative.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
+            uic_operating_period_negative: UicOperatingPeriod = get_single(db_read, UicOperatingPeriod, negative.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
+        else:
+            uic_operating_period_negative = None
+
+        if uic_operating_period_positive is None or uic_operating_period_negative is None:
+            warnings.warn("No dual UicOperatingPeriod found, not matching GTFS Profile")
+            return
+
+        if uic_operating_period_positive.days_of_week:
+            yield from gtfs_calendar(service_id, uic_operating_period_positive)
+
+            # weekdays = netex_to_python_weekday(uic_operating_period_positive.days_of_week)
+
+            # We won't normalise the output, since it is obviously that the provided wanted to give us this
+            if uic_operating_period_positive.valid_day_bits:
+                # from_date = uic_operating_period_positive.from_operating_day_ref_or_from_date.to_datetime().date()
+                # to_date = uic_operating_period_positive.to_operating_day_ref_or_to_date.to_datetime().date()
+                # TODO: Check (from_date - to_date) + 1 == len(uic_operating_period.valid_day_bits)
+
+                list_by_validdaybits_positive = set(
+                    {(uic_operating_period_positive.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i)).date() for i in
+                     range(0, len(uic_operating_period_positive.valid_day_bits)) if uic_operating_period_positive.valid_day_bits[i] == '1'})
+
+                for extra_date in list_by_validdaybits_positive:
+                    yield tuple((None, {'service_id': service_id, 'date': str(
+                        extra_date.replace('-', '')), 'exception_type': 1},))
+
+            if uic_operating_period_negative.valid_day_bits:
+                list_by_validdaybits_negative = set(
+                    {(uic_operating_period_negative.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i)).date() for i in
+                     range(0, len(uic_operating_period_negative.valid_day_bits)) if uic_operating_period_negative.valid_day_bits[i] == '1'}) # 1 because it is a negated!
+
+                for removed_date in list_by_validdaybits_negative:
+                    yield tuple((None, {'service_id': service_id, 'date': str(
+                        removed_date.replace('-', '')), 'exception_type': 2},))
 
 def gtfs_calendar_generator(db_read: Database, db_write: Database, generator_defaults: dict):
     # This functions purpose is to transform calendars from NeTEx in such way it can be referenced by GTFS.

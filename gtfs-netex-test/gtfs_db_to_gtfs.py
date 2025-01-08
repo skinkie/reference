@@ -1,6 +1,8 @@
 import datetime
 import glob
 import re
+import warnings
+from itertools import groupby
 from typing import List
 
 from xsdata.formats.dataclass.context import XmlContext
@@ -13,12 +15,12 @@ import hashlib
 
 from callsprofile import CallsProfile
 from netexio.database import Database
-from netexio.dbaccess import load_local, load_generator
+from netexio.dbaccess import load_local, load_generator, get_single
 from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
     Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
     DataSource, StopPlaceEntrance, TemplateServiceJourney, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
-    AvailabilityCondition
+    AvailabilityCondition, DayType, PropertiesOfDayRelStructure, DayOfWeekEnumeration
 from nordicprofile import NordicProfile
 from refs import getId, getRef, getIndex
 
@@ -32,6 +34,9 @@ import zipfile
 from aux_logging import *
 import traceback
 from configuration import defaults
+from transformers.gtfs import gtfs_calendar_and_dates
+
+
 def extract(archive, database: str):
     agencies = {}
     used_agencies = set([])
@@ -153,25 +158,27 @@ def extract(archive, database: str):
         GtfsProfile.writeToZipFile(archive,'stops.txt', list(stops.values()), write_header=True)
         routes = agency = stops = None
 
-        # TODO: this all asumes that we take a specific type. GTFS handles it differently.
-        for uic_operating_period in load_generator(db_read, UicOperatingPeriod):
-            operational_dates = NordicProfile.getOperationalDates(uic_operating_period)
-            if operational_dates[-1] > max_date:
-                max_date = operational_dates[-1]
-            uic_operating_periods[uic_operating_period.id] = operational_dates
+        # GTFS Calendar and GTFS Calendar Dates
+        # A trip in GTFS points to a single service_id, this is analogue to ServiceJourney and DayTypeRef.
+        # A DayTypeAssignment is a relationship to a DayTypeRef; being either Available or Unavailable
+        # UicOperatingPeriod can describe both structures:
+        #  1. the calendar (from, to, day_types) and the calendar dates (bitstring)
+        #  2. if an explicit positive and negative bitstring is provided, we reproduce it
+        #
+        # At most 2 UicOperatingPeriods must be provided for the GTFS-profile
 
-        for day_type_assignment in load_generator(db_read, DayTypeAssignment):
-            calendar_dates[day_type_assignment.day_type_ref.ref] = list(
-                GtfsProfile.getCalendarDates(day_type_assignment.day_type_ref.ref,
-                                             uic_operating_periods[day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]))
+        for day_type_ref, day_type_assignments in groupby(load_generator(db_read, DayTypeAssignment), key=lambda day_type_assignment: day_type_assignment.day_type_ref):
+            day_type: DayType = get_single(db_read, DayTypeAssignment, day_type_ref.ref)
+            day_type_assignments: list[DayTypeAssignment] = list(day_type_assignments)
 
-        # This is what we produce ourselves, it splits the exceptions in positive and negative values, and a separate availability condition for the 'calendar'.
-        for availibility_condition in load_generator(db_read, AvailabilityCondition):
-            # TODO: This is a hack. See #136
-            service_id = re.sub('_[12]$', '', availibility_condition.id)
-            combined = list(GtfsProfile.getCalendarAndCalendarDates(service_id, availibility_condition))
+            if day_type.private_codes:
+                service_ids = [private_code.value for private_code in day_type.private_codes.private_code if private_code.type_value == 'service_id']
+                service_id = service_ids[0] if len(service_ids) > 0 else day_type.id
+            else:
+                service_id = day_type.id
+
             exceptions = []
-            for calendar, calendar_date in combined:
+            for calendar, calendar_date in gtfs_calendar_and_dates(db_read, day_type_ref, day_type_assignments):
                 if calendar is not None:
                     calendars[service_id] = calendar
 
@@ -180,6 +187,12 @@ def extract(archive, database: str):
 
             l = calendar_dates.get(service_id, [])
             calendar_dates[service_id] = l + exceptions
+
+        # This can be done more efficiently
+        for uic_operating_period in load_generator(db_read, UicOperatingPeriod):
+            operational_dates = NordicProfile.getOperationalDates(uic_operating_period)
+            if operational_dates[-1] > max_date:
+                max_date = operational_dates[-1]
 
         if len(calendars.values()) > 0:
             GtfsProfile.writeToZipFile(archive, 'calendar.txt', list(calendars.values()), write_header=True)
