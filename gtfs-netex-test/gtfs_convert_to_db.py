@@ -153,6 +153,8 @@ class GtfsNeTexProfile(CallsProfile):
 
             for i in range(0, len(agency_ids)):
                 operator = Operator(id=self.get_agency_id(agency_ids[i]),
+                                    private_codes=PrivateCodes(private_code=[
+                                        PrivateCode(value=agency_ids[i], type_value="agency_id")]),
                                     version=self.version.version,
                                     name=MultilingualString(value=get_or_none(agency_names, i)),
                                     locale=Locale(time_zone=get_or_none(agency_timezones, i),
@@ -1224,7 +1226,7 @@ class GtfsNeTexProfile(CallsProfile):
                 service_journey = ServiceJourney(id=self.get_trip_id(trip_ids[i]),
                                                  version=self.version.version,
                                                  flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(self.get_route_id(route_ids[i]), LineRef, self.version.version),
-                                                 private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
+                                                 private_codes=PrivateCodes(private_code=[PrivateCode(value=trip_ids[i], type_value="trip_id")]),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None])],
                                                  journey_pattern_view=journey_pattern_view,
@@ -1378,7 +1380,7 @@ class GtfsNeTexProfile(CallsProfile):
                 service_journey = ServiceJourney(id=self.get_trip_id(trip_ids[i]),
                                                  version=self.version.version,
                                                  flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(self.get_route_id(route_ids[i]), LineRef, self.version.version),
-                                                 private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
+                                                 private_codes=PrivateCodes(private_code=[PrivateCode(value=trip_ids[i], type_value="trip_id")]),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  day_types=DayTypeRefsRelStructure(day_type_ref=[getFakeRef(self.get_service_id_dt(service_ids[i]), DayType, self.version.version)]),
                                                  journey_pattern_view=journey_pattern_view,
@@ -1597,7 +1599,7 @@ class GtfsNeTexProfile(CallsProfile):
                 service_journey = ServiceJourney(id=self.get_trip_id(trip_ids[i]),
                                                  version=self.version.version,
                                                  flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
-                                                 private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
+                                                 private_codes=PrivateCodes(private_code=[PrivateCode(value=trip_ids[i], type_value="trip_id")]),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None])],
                                                  journey_pattern_view=journey_pattern_view,
@@ -1741,7 +1743,7 @@ class GtfsNeTexProfile(CallsProfile):
                 service_journey = ServiceJourney(id=self.get_trip_id(trip_ids[i]),
                                                  version=self.version.version,
                                                  flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
-                                                 private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
+                                                 private_codes=PrivateCodes(private_code=[PrivateCode(value=trip_ids[i], type_value="trip_id")]),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  day_types=DayTypeRefsRelStructure(day_type_ref=[
                                                      getFakeRef(self.get_service_id_dt(service_ids[i]), DayTypeRef,
@@ -1929,7 +1931,7 @@ class GtfsNeTexProfile(CallsProfile):
                 template_service_journey = TemplateServiceJourney(id=getId(TemplateServiceJourney, self.codespace, trip_ids[i]),
                                                  version=self.version.version,
                                                  flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
-                                                 private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
+                                                 private_codes=PrivateCodes(private_code=[PrivateCode(value=trip_ids[i], type_value="trip_id")]),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=[getRef(x, AvailabilityConditionRef) for x in availability_conditions_journey if x is not None])],
                                                  journey_pattern_view=journey_pattern_view,
@@ -2097,7 +2099,7 @@ class GtfsNeTexProfile(CallsProfile):
                 template_service_journey = TemplateServiceJourney(id=getId(TemplateServiceJourney, self.codespace, trip_ids[i]),
                                                  version=self.version.version,
                                                  flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view=getFakeRef(getId(Line, self.codespace, route_ids[i]), LineRef, self.version.version),
-                                                 private_code=PrivateCode(value=trip_ids[i], type_value="trip_id"),
+                                                 private_codes=PrivateCodes(private_code=[PrivateCode(value=trip_ids[i], type_value="trip_id")]),
                                                  short_name=getOptionalString(get_or_none(trip_short_names, i)),
                                                  day_types=DayTypeRefsRelStructure(day_type_ref=[
                                                       getFakeRef(self.get_service_id_dt(service_ids[i]),

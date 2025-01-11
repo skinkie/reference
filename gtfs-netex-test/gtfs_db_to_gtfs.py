@@ -103,14 +103,14 @@ def extract(archive, database: str):
             else:
                 stop_place_ref = None
 
-            stop = GtfsProfile.projectScheduledStopPointToStop(scheduled_stop_point, stop_place_ref)
+            stop = GtfsProfile.projectScheduledStopPointToStop(scheduled_stop_point, stop_place)
             if stop is not None:
                 stops[stop['stop_id']] = stop
                 if stop_place is not None:
                     if stop_place.entrances is not None:
                         for entrance in stop_place.entrances.parking_entrance_ref_or_entrance_ref_or_entrance:
                             if isinstance(entrance, StopPlaceEntrance):
-                                stop = GtfsProfile.projectStopEntranceToStop(entrance, stop_place_ref)
+                                stop = GtfsProfile.projectStopEntranceToStop(entrance, stop_place)
                                 if stop is not None:
                                     stops[stop['stop_id']] = stop
 
@@ -120,43 +120,9 @@ def extract(archive, database: str):
                 routes[route['route_id']] = route
                 used_agencies.add(route['agency_id'])
 
-        trips = []
-        stop_times = []
-        service_journey_patterns = load_local(db_read, ServiceJourneyPattern)
-
-        service_journey_patterns_index = getIndex(service_journey_patterns)
-
-        for service_journey in load_generator(db_read, ServiceJourney):
-            service_journey_pattern = service_journey_patterns_index.get(service_journey.journey_pattern_ref.ref) if service_journey.journey_pattern_ref else None
-            trip = GtfsProfile.projectServiceJourneyToTrip(service_journey, service_journey_pattern)
-            trips.append(trip)
-
-            CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
-            stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
-
-        frequencies = []
-        for template_service_journey in load_generator(db_read, TemplateServiceJourney):
-            service_journey_pattern = service_journey_patterns_index.get(template_service_journey.journey_pattern_ref.ref) if template_service_journey.journey_pattern_ref else None
-            trip = GtfsProfile.projectServiceJourneyToTrip(template_service_journey, service_journey_pattern)
-            trips.append(trip)
-
-            CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
-            stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
-
-            frequencies += list(GtfsProfile.projectTemplateServiceJourneyToFrequency(template_service_journey))
-
-        # TODO: maybe do this per trip?
-        GtfsProfile.writeToZipFile(archive,'trips.txt', trips, write_header=True)
-        if len(frequencies) > 0:
-            GtfsProfile.writeToZipFile(archive, 'frequencies.txt', frequencies, write_header=True)
-
-        GtfsProfile.writeToZipFile(archive,'stop_times.txt', stop_times, write_header=True)
-        trips = frequencies = stop_times = None
-
-        GtfsProfile.writeToZipFile(archive,'routes.txt', list(routes.values()), write_header=True)
         GtfsProfile.writeToZipFile(archive,'agency.txt', [y for x, y in agencies.items() if x in used_agencies], write_header=True)
+        GtfsProfile.writeToZipFile(archive,'routes.txt', list(routes.values()), write_header=True)
         GtfsProfile.writeToZipFile(archive,'stops.txt', list(stops.values()), write_header=True)
-        routes = agency = stops = None
 
         # GTFS Calendar and GTFS Calendar Dates
         # A trip in GTFS points to a single service_id, this is analogue to ServiceJourney and DayTypeRef.
@@ -164,6 +130,10 @@ def extract(archive, database: str):
         # A DayTypeAssignment is a relationship to a DayTypeRef: being Available with an "OperatingPeriod" is analogue to calendar.txt
 
         day_types: dict[str, DayType] = getIndex(load_local(db_read, DayType))
+
+        # TODO: replace
+        for day_type in load_generator(db_read, DayType):
+            GtfsProfile.temporaryDayTypeServiceId(day_type)
 
         for day_type_ref, day_type_assignments in groupby(load_generator(db_read, DayTypeAssignment), key=lambda day_type_assignment: day_type_assignment.day_type_ref):
             day_type: DayType = day_types[day_type_ref.ref]
@@ -200,6 +170,42 @@ def extract(archive, database: str):
 
         GtfsProfile.writeToZipFile(archive,'calendar_dates.txt', [item for row in calendar_dates.values() for item in row], write_header=True)
 
+        trips = []
+        stop_times = []
+        service_journey_patterns = load_local(db_read, ServiceJourneyPattern)
+
+        service_journey_patterns_index = getIndex(service_journey_patterns)
+
+        for service_journey in load_generator(db_read, ServiceJourney):
+            service_journey_pattern = service_journey_patterns_index.get(service_journey.journey_pattern_ref.ref) if service_journey.journey_pattern_ref else None
+            trip = GtfsProfile.projectServiceJourneyToTrip(service_journey, service_journey_pattern)
+            trips.append(trip)
+
+            CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
+            stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
+
+        frequencies = []
+        for template_service_journey in load_generator(db_read, TemplateServiceJourney):
+            service_journey_pattern = service_journey_patterns_index.get(template_service_journey.journey_pattern_ref.ref) if template_service_journey.journey_pattern_ref else None
+            trip = GtfsProfile.projectServiceJourneyToTrip(template_service_journey, service_journey_pattern)
+            trips.append(trip)
+
+            CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
+            stop_times += list(GtfsProfile.projectServiceJourneyToStopTimes(service_journey))
+
+            frequencies += list(GtfsProfile.projectTemplateServiceJourneyToFrequency(template_service_journey))
+
+        # TODO: maybe do this per trip?
+        GtfsProfile.writeToZipFile(archive,'trips.txt', trips, write_header=True)
+        if len(frequencies) > 0:
+            GtfsProfile.writeToZipFile(archive, 'frequencies.txt', frequencies, write_header=True)
+
+        GtfsProfile.writeToZipFile(archive,'stop_times.txt', stop_times, write_header=True)
+        trips = frequencies = stop_times = None
+
+        routes = agency = stops = None
+
+
         transfers = [GtfsProfile.projectInterchangeRuleToTransfer(transfer) for transfer in load_generator(db_read, InterchangeRule)] + [GtfsProfile.projectServiceJourneyInterchangeToTransfer(transfer) for transfer in load_generator(db_read, ServiceJourneyInterchange)] + [GtfsProfile.projectServiceJourneyMeeting(transfer) for transfer in load_generator(db_read, JourneyMeeting)]
 
         transfers = list({(v['from_stop_id'], v['to_stop_id'], v['from_route_id'], v['to_route_id'], v['from_trip_id'], v['to_trip_id'], v['transfer_type'], v['min_transfer_time']):v for v in transfers}.values())
@@ -214,8 +220,8 @@ def extract(archive, database: str):
             'feed_publisher_url': codespaces[0].xmlns_url if len(codespaces) > 0 else defaults["feed_publisher_url"],
             'feed_lang': 'en', # TODO
             'default_lang': 'en', # TODO
-            'feed_start_date': str(version.start_date).replace('-', ''),
-            'feed_end_date': str(version.end_date).replace('-', ''),
+            'feed_start_date': str(version.start_date.to_datetime().date()).replace('-', ''),
+            'feed_end_date': str(version.end_date.to_datetime().date()).replace('-', ''),
             'feed_version': str(datetime.date.today()).replace('-', ''),
             'feed_contact_email': '',
             'feed_contact_url': ''
