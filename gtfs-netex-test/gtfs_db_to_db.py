@@ -4,7 +4,7 @@ import os
 
 from aux_logging import prepare_logger, log_all
 from netex import DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint, AvailabilityCondition, \
-    DayType, DayTypeAssignment, UicOperatingPeriod
+    DayType, DayTypeAssignment, UicOperatingPeriod, Version
 from netexio.database import Database
 from netexio.dbaccess import setup_database,  write_objects, load_local, copy_table
 from utils import get_interesting_classes
@@ -29,7 +29,7 @@ def main(source_database_file: str, target_database_file: str, clean_database: b
 
         with Database(source_database_file, read_only=True) as db_read:
             # Copy tables that we don't change as-is.
-            copy_table(db_read, db_write,[DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint], clean=True)
+            copy_table(db_read, db_write,[DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint, Version], clean=True)
 
             # Flatten the Operator, Authority, Branding, ResponsibilitySet
             gtfs_operator_line_memory(db_read, db_write, {})

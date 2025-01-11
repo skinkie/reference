@@ -43,7 +43,8 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, \
     LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure, PrivateCodes, DayTypeAssignment, \
     UicOperatingPeriod, DayTypeRefsRelStructure, ServiceCalendarFrame, DayTypesInFrameRelStructure, \
-    OperatingPeriodsInFrameRelStructure, DayTypeAssignmentsInFrameRelStructure, DayTypeRef, OperatingPeriod
+    OperatingPeriodsInFrameRelStructure, DayTypeAssignmentsInFrameRelStructure, DayTypeRef, OperatingPeriod, \
+    PublicCodeStructure
 
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
 from aux_logging import *
@@ -249,8 +250,8 @@ class GtfsNeTexProfile(CallsProfile):
                             presentation=presentation,
                             url=get_or_none(route_urls, i),
                             operator_ref=operator_ref,
-                            public_code=get_or_none(route_short_names, i),
-                            private_code=PrivateCode(value=get_or_none(route_ids, i), type_value="route_id")
+                            public_code=PublicCodeStructure(value=route_short_names[i]) if route_short_names[i] is not None else None,
+                            private_codes=PrivateCodes(private_code=[PrivateCode(value=get_or_none(route_ids, i), type_value="route_id")])
                             )
                 lines.append(line)
 
@@ -290,9 +291,9 @@ class GtfsNeTexProfile(CallsProfile):
                 stop_area = StopArea(id=self.get_stop_id_sa(stop_ids[i]),
                                      version=self.version.version,
                                      name=MultilingualString(value=stop_names[i]),
-                                     public_code=get_or_none(stop_codes, i),
+                                     public_code=PublicCodeStructure(value=stop_codes[i]) if stop_codes[i] is not None else None,
                                      description=getOptionalString(get_or_none(stop_descs, i)),
-                                     private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                     private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
                                      centroid=SimplePointVersionStructure(location=
                                                                           LocationStructure2(latitude=Decimal(str(stop_lats[i])),
                                                                                              longitude=Decimal(str(stop_lons[i])),
@@ -362,9 +363,9 @@ class GtfsNeTexProfile(CallsProfile):
                                                           version=self.version.version,
                                                           name=MultilingualString(value=stop_names[i]),
                                                           description=getOptionalString(get_or_none(stop_descs, i)),
-                                                          private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                                          private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
                                                           short_stop_code=short_stop_code,
-                                                          public_code=get_or_none(stop_codes, i),
+                                                          public_code=PublicCodeStructure(value=stop_codes[i]) if stop_codes[i] is not None else None,
                                                           url=get_or_none(stop_urls, i),
                                                           location=location,
                                                           stop_areas=my_stop_areas)
@@ -419,9 +420,9 @@ class GtfsNeTexProfile(CallsProfile):
                     stop_place = StopPlace(id=getId(StopPlace, self.codespace, stop_ids[i]),
                                            version=self.version.version,
                                            name=MultilingualString(value=stop_names[i]),
-                                           public_code=get_or_none(stop_codes, i),
+                                           public_code=PublicCodeStructure(value=stop_codes[i]) if stop_codes[i] is not None else None,
                                            description=getOptionalString(get_or_none(stop_descs, i)),
-                                           private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                           private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
                                            locale=Locale(time_zone=stop_timezones[i]) if stop_timezones[i] is not None else None,
                                            parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                            accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, 'StopPlace_' + stop_ids[i]),
@@ -445,9 +446,9 @@ class GtfsNeTexProfile(CallsProfile):
                         stop_place = StopPlace(id=stop_place_id,
                                                version=self.version.version,
                                                name=MultilingualString(value=stop_names[i]),
-                                               public_code=get_or_none(stop_codes, i),
+                                               public_code=PublicCodeStructure(value=stop_codes[i]) if stop_codes[i] is not None else None,
                                                description=getOptionalString(get_or_none(stop_descs, i)),
-                                               private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                               private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
                                                locale=Locale(time_zone=stop_timezones[i]) if stop_timezones[
                                                                                                  i] is not None else None,
                                                parent_zone_ref=ZoneRefStructure(ref=zone_ids[i],
@@ -485,9 +486,9 @@ class GtfsNeTexProfile(CallsProfile):
                     quay = Quay(id=getId(Quay, self.codespace, stop_ids[i]),
                                 version=self.version.version,
                                 name=MultilingualString(value=stop_names[i]),
-                                public_code=get_or_none(stop_codes, i),
+                                public_code=PublicCodeStructure(value=stop_codes[i]) if stop_codes[i] is not None else None,
                                 description=getOptionalString(get_or_none(stop_descs, i)),
-                                private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
                                 parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                 accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, stop_ids[i]), version=self.version.version,
                                                                                  mobility_impaired_access=self.wheelchairToNeTEx(wheelchair_boardings[i])) if not isinstance(wheelchair_boardings[i], NAType) else None,
@@ -517,9 +518,9 @@ class GtfsNeTexProfile(CallsProfile):
                     stop_place_entrance = StopPlaceEntrance(id=getId(StopPlaceEntrance, self.codespace, stop_ids[i]),
                                            version=self.version.version,
                                            name=MultilingualString(value=stop_names[i]),
-                                           public_code=get_or_none(stop_codes, i),
+                                           public_code=PublicCodeStructure(value=stop_codes[i]) if stop_codes[i] is not None else None,
                                            description=getOptionalString(get_or_none(stop_descs, i)),
-                                           private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                           private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
                                            parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                            accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, stop_ids[i]),
                                                                                             version=self.version.version,
@@ -543,7 +544,7 @@ class GtfsNeTexProfile(CallsProfile):
                                            version=self.version.version,
                                            name=MultilingualString(value=stop_names[i]),
                                            description=getOptionalString(get_or_none(stop_descs, i)),
-                                           private_code=PrivateCode(value=stop_ids[i], type_value="stop_id"),
+                                           private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
                                            parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                            accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, stop_ids[i]),
                                                                                             version=self.version.version,

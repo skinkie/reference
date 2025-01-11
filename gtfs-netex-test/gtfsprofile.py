@@ -97,7 +97,6 @@ class GtfsProfile:
 
         return None
 
-
     @staticmethod
     def projectVehicleModeToRouteType(vehicle_mode: AllVehicleModesOfTransportEnumeration):
         if vehicle_mode == AllVehicleModesOfTransportEnumeration.TRAM:
@@ -370,7 +369,7 @@ class GtfsProfile:
 
         route = {'route_id': line.id,
                  'agency_id': agency_id,
-                 'route_short_name': GtfsProfile.getOptionalMultilingualString(line.public_code), # This is used as VehicleType or PublicCode # TODO: introduce OptionalPublicCode
+                 'route_short_name': GtfsProfile.getOptionalPrivateCode(line.public_code), # This is used as VehicleType or PublicCode
                  'route_long_name': '', # GtfsProfile.getOptionalMultilingualString(line.name), # This is used as destination
                  'route_desc': GtfsProfile.getOptionalMultilingualString(line.description),
                  'route_type': GtfsProfile.projectVehicleModeToRouteType(line.transport_mode),

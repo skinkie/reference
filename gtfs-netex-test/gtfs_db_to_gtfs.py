@@ -20,7 +20,7 @@ from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
     Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
     DataSource, StopPlaceEntrance, TemplateServiceJourney, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
-    AvailabilityCondition, DayType, PropertiesOfDayRelStructure, DayOfWeekEnumeration
+    AvailabilityCondition, DayType, PropertiesOfDayRelStructure, DayOfWeekEnumeration, OperatingPeriod, Version
 from nordicprofile import NordicProfile
 from refs import getId, getRef, getIndex
 
@@ -34,7 +34,7 @@ import zipfile
 from aux_logging import *
 import traceback
 from configuration import defaults
-from transformers.gtfs import gtfs_calendar_and_dates
+from transformers.gtfs import gtfs_calendar_and_dates, gtfs_calendar_and_dates2
 
 
 def extract(archive, database: str):
@@ -44,7 +44,7 @@ def extract(archive, database: str):
     stops = {}
     psas = {}
     uic_operating_periods = {}
-    max_date = datetime.date.today()
+    max_date = str(datetime.date.today()).replace('-', '')
     calendars = {}
     calendar_dates = {}
 
@@ -160,15 +160,13 @@ def extract(archive, database: str):
 
         # GTFS Calendar and GTFS Calendar Dates
         # A trip in GTFS points to a single service_id, this is analogue to ServiceJourney and DayTypeRef.
-        # A DayTypeAssignment is a relationship to a DayTypeRef; being either Available or Unavailable
-        # UicOperatingPeriod can describe both structures:
-        #  1. the calendar (from, to, day_types) and the calendar dates (bitstring)
-        #  2. if an explicit positive and negative bitstring is provided, we reproduce it
-        #
-        # At most 2 UicOperatingPeriods must be provided for the GTFS-profile
+        # A DayTypeAssignment is a relationship to a DayTypeRef; being either Available or Unavailable with a "Date" is analogue to calendar_dates.txt
+        # A DayTypeAssignment is a relationship to a DayTypeRef: being Available with an "OperatingPeriod" is analogue to calendar.txt
+
+        day_types: dict[str, DayType] = getIndex(load_local(db_read, DayType))
 
         for day_type_ref, day_type_assignments in groupby(load_generator(db_read, DayTypeAssignment), key=lambda day_type_assignment: day_type_assignment.day_type_ref):
-            day_type: DayType = get_single(db_read, DayTypeAssignment, day_type_ref.ref)
+            day_type: DayType = day_types[day_type_ref.ref]
             day_type_assignments: list[DayTypeAssignment] = list(day_type_assignments)
 
             if day_type.private_codes:
@@ -178,7 +176,7 @@ def extract(archive, database: str):
                 service_id = day_type.id
 
             exceptions = []
-            for calendar, calendar_date in gtfs_calendar_and_dates(db_read, day_type_ref, day_type_assignments):
+            for calendar, calendar_date in gtfs_calendar_and_dates2(db_read, day_type, day_type_assignments):
                 if calendar is not None:
                     calendars[service_id] = calendar
 
@@ -188,14 +186,17 @@ def extract(archive, database: str):
             l = calendar_dates.get(service_id, [])
             calendar_dates[service_id] = l + exceptions
 
-        # This can be done more efficiently
-        for uic_operating_period in load_generator(db_read, UicOperatingPeriod):
-            operational_dates = NordicProfile.getOperationalDates(uic_operating_period)
-            if operational_dates[-1] > max_date:
-                max_date = operational_dates[-1]
-
         if len(calendars.values()) > 0:
             GtfsProfile.writeToZipFile(archive, 'calendar.txt', list(calendars.values()), write_header=True)
+
+            for calendar in calendars.values():
+                if calendar['end_date'] > max_date:
+                    max_date = calendar_date['date']
+
+        for service_id, exceptions in calendar_dates.items():
+            for calendar_date in exceptions:
+                if calendar_date['date'] > max_date:
+                    max_date = calendar_date['date']
 
         GtfsProfile.writeToZipFile(archive,'calendar_dates.txt', [item for row in calendar_dates.values() for item in row], write_header=True)
 
@@ -205,13 +206,16 @@ def extract(archive, database: str):
 
         GtfsProfile.writeToZipFile(archive, 'transfers.txt', transfers, write_header=True)
 
+        # TODO: This concept is deprecated, we need to store the CompositeFrame ValidBetween on something.
+        version: Version = load_local(db_read, Version)[0]
+
         GtfsProfile.writeToZipFile(archive,'feed_info.txt', [{
             'feed_publisher_name': datasources[0].name.value if len(datasources) > 0 else defaults["feed_publisher_name"],
             'feed_publisher_url': codespaces[0].xmlns_url if len(codespaces) > 0 else defaults["feed_publisher_url"],
             'feed_lang': 'en', # TODO
             'default_lang': 'en', # TODO
-            'feed_start_date': str(datetime.date.today()).replace('-', ''),
-            'feed_end_date': str(max_date).replace('-', ''),
+            'feed_start_date': str(version.start_date).replace('-', ''),
+            'feed_end_date': str(version.end_date).replace('-', ''),
             'feed_version': str(datetime.date.today()).replace('-', ''),
             'feed_contact_email': '',
             'feed_contact_url': ''
@@ -229,5 +233,5 @@ if __name__ == '__main__':
     argument_parser.add_argument('gtfs', type=str, help='The DuckDB to be overwritten with the NeTEx context')
     argument_parser.add_argument('--log_file', type=str, required=False, help='the logfile') #TODO use logger in this file
     args = argument_parser.parse_args()
-    main(netex,gtfs)
+    main(args.netex, args.gtfs)
 

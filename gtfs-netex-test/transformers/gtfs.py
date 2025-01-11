@@ -256,6 +256,23 @@ def apply_availability_conditions_via_day_type_ref(db_read: Database, db_write: 
     write_generator(db_write, ServiceJourney, query_sj(db_read, mapping, ServiceJourney))
     write_generator(db_write, TemplateServiceJourney, query_sj(db_read, mapping, TemplateServiceJourney))
 
+def gtfs_calendar2(service_id: str, day_type: DayType, operating_period: OperatingPeriod):
+    yield tuple(({'service_id': service_id,
+                  'monday': int(DayOfWeekEnumeration.MONDAY in day_type.properties.property_of_day[0].days_of_week),
+                  'tuesday': int(DayOfWeekEnumeration.TUESDAY in day_type.properties.property_of_day[0].days_of_week),
+                  'wednesday': int(DayOfWeekEnumeration.WEDNESDAY in day_type.properties.property_of_day[0].days_of_week),
+                  'thursday': int(DayOfWeekEnumeration.THURSDAY in day_type.properties.property_of_day[0].days_of_week),
+                  'friday': int(DayOfWeekEnumeration.FRIDAY in day_type.properties.property_of_day[0].days_of_week),
+                  'saturday': int(DayOfWeekEnumeration.SATURDAY in day_type.properties.property_of_day[0].days_of_week),
+                  'sunday': int(DayOfWeekEnumeration.SUNDAY in day_type.properties.property_of_day[0].days_of_week),
+                  'start_date': str(
+                      operating_period.from_operating_day_ref_or_from_date.to_datetime().date()).replace('-',
+                                                                                                             ''),
+                  'end_date': str(
+                      operating_period.to_operating_day_ref_or_to_date.to_datetime().date()).replace('-', '')},
+                 None,))
+
+
 def gtfs_calendar(service_id: str, uic_operating_period: UicOperatingPeriod):
     yield tuple(({'service_id': service_id,
                   'monday': int(DayOfWeekEnumeration.MONDAY in uic_operating_period.days_of_week),
@@ -281,6 +298,23 @@ def netex_to_python_weekday(days_of_week: list[DayOfWeekEnumeration]) -> set[int
         4 if DayOfWeekEnumeration.THURSDAY in days_of_week else None,
         5 if DayOfWeekEnumeration.FRIDAY in days_of_week else None,
         6 if DayOfWeekEnumeration.SATURDAY in days_of_week else None})
+
+def gtfs_calendar_and_dates2(db_read: Database, day_type: DayType, day_type_assignments: list[DayTypeAssignment]):
+    if day_type.private_codes:
+        service_ids = [private_code.value for private_code in day_type.private_codes.private_code if
+                       private_code.type_value == 'service_id']
+        service_id = service_ids[0] if len(service_ids) > 0 else day_type.id
+    else:
+        service_id = day_type.id
+
+    for day_type_assignment in day_type_assignments:
+        if isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
+            yield tuple((None, {'service_id': service_id,
+                                'date': str(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.to_date()).replace('-', ''),
+                                'exception_type': 2 if day_type_assignment.is_available is not None and day_type_assignment.is_available == False else 1 },))
+        elif isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef):
+            operating_period: OperatingPeriod = get_single(db_read, OperatingPeriod, day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref)
+            yield from gtfs_calendar2(service_id, day_type, operating_period)
 
 def gtfs_calendar_and_dates(db_read: Database, day_type_ref: DayTypeRef, day_type_assignments: list[DayTypeAssignment]):
     day_type: DayType = get_single(db_read, DayTypeAssignment, day_type_ref.ref)
