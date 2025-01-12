@@ -152,14 +152,12 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
         scripts = block['scripts']
         prepare_logger(log_level, block["block"] + "/" + log_file)
         # log_once(logging.INFO, "Start", f'Processing block: {block["block"]}')
-        step = 1
+        step = 0
         script_input_file_path = 'NOT SET YET'
         for script in scripts:
-
+            step=step+1
             # skip some steps if this is mandated
             if step < begin_step:
-                # skipping steps in the block
-                step = step + 1
                 continue
             if blockstop == True:
                 break
@@ -167,7 +165,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
 
             script_name = script['script']
             script_args = script['args']
-            script_download_url = block['download_url']
+            script_download_url = block.get('download_url')
             # replace the placeholder for processdir with the correct values and also the other place holders
             script_args = replace_in_string(script_args, "%%dir%%", processdir)
             script_args = replace_in_string(script_args, "%%inputdir%%", input_dir)
@@ -179,7 +177,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             os.makedirs(processdir, exist_ok=True)
 
             # Write the script name to the log file with a starting delimiter
-            log_all(logging.INFO, f"{block["block"]}-{step}: {script_name} {script_args}")
+            log_all(logging.INFO, f"{block["block"]} - step: {step}: {script_name} {script_args}")
 
             if script_name.startswith("#"):
                 # is a comment and we do nothing
