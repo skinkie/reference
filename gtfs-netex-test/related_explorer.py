@@ -72,10 +72,10 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
                 with open(output_filename, 'w', encoding='utf-8') as out:
                     serializer.write(out, publication_delivery, ns_map)
         else:
-            log_all(logging.WARN, 'related_explorer',f"no such object found {object_type},{object_filter}")
+            log_all(logging.WARN, f"no such object found {object_type},{object_filter}")
 
 def main(netex,object_type,object_filter,output,referencing):
-    with Database(netex) as db:
+    with Database(netex,read_only=False) as db:
         references_exist = False
         try:
             db.con.execute("SELECT * FROM referencing LIMIT 1;")
@@ -85,13 +85,13 @@ def main(netex,object_type,object_filter,output,referencing):
             pass
 
         if referencing or not references_exist:
-            log_all(logging.INFO, 'related_explorer',f"updating embedded and referencing tables")
+            log_all(logging.INFO, f"updating embedded and referencing tables")
             embedding_update(db)
 
     try:
         fetch(netex, object_type, object_filter, output)
     except Exception as e:
-        log_all(logging.ERROR, f'{e}', traceback.format_exc())
+        log_all(logging.ERROR, f'{e} \n {traceback.format_exc()}')
         raise e
 if __name__ == '__main__':
     import argparse

@@ -218,7 +218,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             execution_time = int(10*(end_time - start_time))/10
 
             # Write the execution time to the log file
-            log_all(logging.INFO,  f"Execution time: {execution_time} seconds\n")
+            log_all(logging.INFO,  f"Execution time: {execution_time} seconds for {block["block"]} - step: {step}: {script_name} {script_args}\n")
             log_write_counts(logging.WARNING)
             log_flush()
             if result == None or result == 0:

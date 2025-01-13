@@ -1,4 +1,5 @@
 # @https://github.com/ue71603, 2024
+import logging
 import os
 from aux_logging import *
 import traceback
@@ -8,24 +9,24 @@ from lxml import etree
 def check_xsd_validity(xsd_file):
     try:
         etree.parse(xsd_file)
-        print(f"{xsd_file} is a valid XSD file")
+        log_all(logging.INFO,f"{xsd_file} is a valid XSD file")
     except etree.XMLSyntaxError as e:
-        print(f"{xsd_file} is an invalid XSD file: {str(e)}")
+        log_all(logging.ERROR,f"{xsd_file} is an invalid XSD file: {str(e)}")
     except Exception as e:
-        print(f"An error occurred while checking {xsd_file}: {str(e)}")
-
+        log_all(logging.ERROR,f"An error occurred while checking {xsd_file}: {str(e)}")
+    return True
 
 def validate_xml(xml_file, xmlschema):
     try:
         xmlschema.assertValid(etree.parse(xml_file))
-        print(f"{xml_file} is valid against {xmlschema}")
+        log_all(logging.INFO,f"{xml_file} is valid against {xmlschema}")
     except etree.XMLSchemaError as e:
-        print(f"{xml_file} is invalid: {str(e)}")
+        log_all(logging.ERROR,f"{xml_file} is invalid: {str(e)}")
         raise e
     except Exception as e:
-        print(f"An error occurred while validating {xml_file}: {str(e)}")
+        log_all(logging.ERROR,f"An error occurred while validating {xml_file}: {str(e)}")
         raise e
-
+    return True
 
 def main(folder, xsd_schema):
     xmlschema = etree.XMLSchema(etree.parse(xsd_schema))
