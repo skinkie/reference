@@ -38,7 +38,7 @@ class Database:
             cur = self.con.cursor()
             cur.execute("SELECT table_name FROM information_schema.tables;")
             tables = {self.get_class_by_name(table) for table, in cur.fetchall() if table[0].isupper()} # TODO: Remove other classes from default namespace!
-            return tables.intersection(exclusively)
+            return sorted(tables.intersection(exclusively))
 
     def get_class_by_name(self, name: str):
         return self.serializer.name_object[name]
