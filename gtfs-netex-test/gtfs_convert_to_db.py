@@ -113,7 +113,7 @@ class GtfsNeTexProfile(CallsProfile):
             frame_defaults = VersionFrameDefaultsStructure(default_codespace_ref=getRef(codespace, CodespaceRefStructure),
                                                            default_data_source_ref=getRef(data_source, DataSourceRefStructure),
                                                            default_locale=LocaleStructure(default_language=df['feed_lang'][0]),
-                                                           default_location_system="EPSG:4326",
+                                                           default_location_system="urn:ogc:def:crs:EPSG::4326",
                                                            default_system_of_units=SystemOfUnits.SI_METRES
                                                            )
 
@@ -299,7 +299,7 @@ class GtfsNeTexProfile(CallsProfile):
                                      centroid=SimplePointVersionStructure(location=
                                                                           LocationStructure2(latitude=Decimal(str(stop_lats[i])),
                                                                                              longitude=Decimal(str(stop_lons[i])),
-                                                                                             srs_name="EPSG:4326")),
+                                                                                             srs_name="urn:ogc:def:crs:EPSG::4326")),
                                      )
                 stop_areas.append(stop_area)
 
@@ -346,7 +346,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                 location = LocationStructure2(longitude=Decimal(str(stop_lons[i])) if stop_lons[i] is not None else None,
                                               latitude=Decimal(str(stop_lats[i])) if stop_lats[i] is not None else None,
-                                              srs_name="EPSG:4326")
+                                              srs_name="urn:ogc:def:crs:EPSG::4326")
 
                 my_stop_areas = None
                 parent_station = get_or_none(parent_stations, i)
@@ -434,7 +434,7 @@ class GtfsNeTexProfile(CallsProfile):
                                            centroid=SimplePointVersionStructure(location=
                                                                               LocationStructure2(latitude=Decimal(str(stop_lats[i])),
                                                                                                  longitude=Decimal(str(stop_lons[i])),
-                                                                                                 srs_name="EPSG:4326")),
+                                                                                                 srs_name="urn:ogc:def:crs:EPSG::4326")),
                                            )
                     stop_places[stop_place.id] = stop_place
                 else:
@@ -472,7 +472,7 @@ class GtfsNeTexProfile(CallsProfile):
                                                                                                            str(
                                                                                                                stop_lons[
                                                                                                                    i])),
-                                                                                                       srs_name="EPSG:4326")),
+                                                                                                       srs_name="urn:ogc:def:crs:EPSG::4326")),
                                                )
                         stop_places[stop_place_id] = stop_place
 
@@ -499,7 +499,7 @@ class GtfsNeTexProfile(CallsProfile):
                                                                      LocationStructure2(
                                                                          latitude=Decimal(str(stop_lats[i])),
                                                                          longitude=Decimal(str(stop_lons[i])),
-                                                                         srs_name="EPSG:4326")),
+                                                                         srs_name="urn:ogc:def:crs:EPSG::4326")),
                                 level_ref=LevelRef(ref=level_ids[0], version=self.version.version) if level_ids[i] is not None else None,
                                 )
 
@@ -531,7 +531,7 @@ class GtfsNeTexProfile(CallsProfile):
                                            centroid=SimplePointVersionStructure(location=
                                                                               LocationStructure2(latitude=Decimal(str(stop_lats[i])),
                                                                                                  longitude=Decimal(str(stop_lons[i])),
-                                                                                                 srs_name="EPSG:4326")),
+                                                                                                 srs_name="urn:ogc:def:crs:EPSG::4326")),
                                            level_ref=LevelRef(ref=level_ids[0], version=self.version.version) if level_ids[i] is not None else None,
                                            )
 
@@ -555,7 +555,7 @@ class GtfsNeTexProfile(CallsProfile):
                                            centroid=SimplePointVersionStructure(location=
                                                                               LocationStructure2(latitude=Decimal(str(stop_lats[i])),
                                                                                                  longitude=Decimal(str(stop_lons[i])),
-                                                                                                 srs_name="EPSG:4326")),
+                                                                                                 srs_name="urn:ogc:def:crs:EPSG::4326")),
                                            level_ref=LevelRef(ref=level_ids[0], version=self.version.version) if level_ids[i] is not None else None,
                                            )
 
@@ -635,7 +635,7 @@ class GtfsNeTexProfile(CallsProfile):
                     version=self.version.version,
                     location=LocationStructure2(longitude=Decimal(str(shape_pt_lons[i])),
                                                 latitude=Decimal(str(shape_pt_lats[i])),
-                                                srs_name="EPSG:4326"))
+                                                srs_name="urn:ogc:def:crs:EPSG::4326"))
                 route_points.append(route_point)
 
                 if shape_ids[i] == prev_shape_id:
@@ -711,7 +711,7 @@ class GtfsNeTexProfile(CallsProfile):
 
                     link_sequence_projection_id = self.get_shape_id_lsp(prev_shape_id)
                     link_sequence_projection.append(LinkSequenceProjection(id=link_sequence_projection_id, version=self.version.version,
-                                                                           distance=de_distance, points_or_line_string=LineString(id=link_sequence_projection_id.replace(':', "_"), srs_name="EPSG:4326", srs_dimension=2, pos_or_point_property_or_pos_list=[PosList(value=pos_list)])))
+                                                                           distance=de_distance, points_or_line_string=LineString(id=link_sequence_projection_id.replace(':', "_"), srs_name="urn:ogc:def:crs:EPSG::4326", srs_dimension=2, pos_or_point_property_or_pos_list=[PosList(value=pos_list)])))
                     pos_list = []
                     prev_distance = 0
 
@@ -729,7 +729,7 @@ class GtfsNeTexProfile(CallsProfile):
                 link_sequence_projection.append(
                     LinkSequenceProjection(id=link_sequence_projection_id,
                                            version=self.version.version, distance=de_distance,
-                                           points_or_line_string=LineString(id=link_sequence_projection_id.replace(":", "_"), srs_name="EPSG:4326",
+                                           points_or_line_string=LineString(id=link_sequence_projection_id.replace(":", "_"), srs_name="urn:ogc:def:crs:EPSG::4326",
                                                                             srs_dimension=2,
                                                                             pos_or_point_property_or_pos_list=[
                                                                                 PosList(value=pos_list)])))
