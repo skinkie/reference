@@ -354,7 +354,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
                     operating_days = []
                     for dta in day_type_assignments:
                         ref = dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
-                        if isinstance(ref, OperatingPeriod):
+                        if isinstance(ref, OperatingPeriodRef):
                             operating_periods.append(load_local(db_read, OperatingPeriod, limit=1, filter=ref.ref, cursor=True)[0])
                         elif isinstance(ref, UicOperatingPeriodRef):
                             uic_operating_periods.append(load_local(db_read, UicOperatingPeriod, limit=1, filter=ref.ref, cursor=True)[0])
