@@ -1,3 +1,4 @@
+import hashlib
 import sys
 import warnings
 from datetime import timedelta
@@ -14,10 +15,12 @@ from netex import Line, Branding, Operator, Authority, ResponsibilitySet, Stakeh
     AvailabilityCondition, AvailabilityConditionRef, DayType, DayTypeAssignment, OperatingPeriod, ServiceCalendar, \
     DayTypesRelStructure, OperatingPeriodRef, UicOperatingPeriodRef, OperatingDay, DayTypeRef, \
     OperatingDaysRelStructure, OperatingDayRefStructure, UicOperatingPeriod, OperatingDayRef, \
-    PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration
+    PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, DayTypeRefsRelStructure
 from netexio.database import Database
 from netexio.dbaccess import load_generator, load_local, write_objects, get_single, write_generator, copy_table
+from nordicprofile import NordicProfile
 from refs import getRef, getIndex, getIndexByGroup, getId
+from transformers.daytype import get_day_type_from_availability_condition, datetime_weekday_to_dow
 from utils import project, chain
 
 import netex_monkeypatching
@@ -86,6 +89,294 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
 
     write_objects(db_write, list(operators.values()), True, True)
     write_objects(db_write, lines, True, True)
+
+# TODO: move to separate file (calls profiles)
+def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
+    if sj.calls:
+        return sj
+    else:
+        sjp: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern, sj.journey_pattern_ref.ref,
+                                                cursor=True)
+        if sjp is None:
+            db_read.logger.error("No SJP")
+
+        else:
+            # TODO: very costly to do it here for every ServiceJourneyPattern
+            if sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view is None:
+                if sjp.route_ref_or_route_view is not None:
+                    if isinstance(sjp.route_ref_or_route_view, RouteView):
+                        sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view = sjp.route_ref_or_route_view.flexible_line_ref_or_line_ref_or_line_view
+                    elif isinstance(sjp.route_ref_or_route_view, RouteRef):
+                        sj.route_ref = sjp.route_ref_or_route_view
+                        route: Route = get_single(db_read, Route, sjp.route_ref_or_route_view.ref, cursor=True)
+                        sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view = route.line_ref
+
+            if sj.passing_times:
+                CallsProfile.getCallsFromTimetabledPassingTimes(sj, sjp)
+                return sj
+
+            elif sj.time_demand_type_ref:
+                tdt: TimeDemandType = get_single(db_read, TimeDemandType, sj.time_demand_type_ref.ref, cursor=True)
+                CallsProfile.getCallsFromTimeDemandType(sj, sjp, tdt)
+                return sj
+
+            else:
+                db_read.logger.error("Unimplemented method to calls")
+
+def calendars_to_daytype(db_read: Database, sj: ServiceJourney) -> DayTypeRefsRelStructure | ValidityConditionsRelStructure:
+    vcs: set[str] = set()
+
+    # We take validity conditions as priority
+    if isinstance(sj.validity_conditions_or_valid_between, ValidityConditionsRelStructure):
+        for vc in sj.validity_conditions_or_valid_between.choice:
+            if isinstance(vc, AvailabilityCondition):
+                vcs.add(vc.id)
+            elif isinstance(vc, AvailabilityConditionRef):
+                vcs.add(vc.ref)
+            else:
+                warnings.warn("Unimplemented other validity condition on ServiceJourney")  # TODO: Only report once
+
+        if len(vcs) > 1:
+            ref = hashlib.md5((';'.join(vcs)).encode('utf-8')).hexdigest()[0:5]
+            sj.day_types.day_type_ref = DayTypeRef(ref=ref, version=sj.version)
+
+        else:
+            sj.day_types.day_type_ref = DayTypeRef(ref=vcs[0].replace(":AvailabilityCondition:", ":DayType:"), version=sj.version)
+
+        return sj
+
+    elif sj.day_types is not None:
+        if len(sj.day_types.day_type_ref) > 1:
+            ref = hashlib.md5((';'.join([dt.ref for dt in sj.day_types.day_type_ref])).encode('utf-8')).hexdigest()[0:5]
+            sj.day_types.day_type_ref = DayTypeRef(ref=ref, version=sj.version)
+        # else:
+        # This would be a no op, the DayType can be reused.
+
+        return sj.day_types
+
+import copy
+
+def gtfs_day_type(day_type: DayType, day_type_assignments: list[DayTypeAssignment], operating_days: list[OperatingDay], uic_operating_periods: list[UicOperatingPeriod], operating_periods: list[OperatingPeriod]) -> tuple[DayType, list[DayTypeAssignment], OperatingPeriod]:
+    # The GTFS day type consists of a
+    # DayType (having properties of day)
+    # DayTypeAssignment (Directly assigning XmlDates)
+
+    # TODO: The when the input has multiple operating_periods, this directly means we either need to:
+    #  - split the service_id (we don't want that)
+    #  - apply negative dates for non-overlapping periods
+
+    # TODO: reduce the enormous complexity and duplications in the function below
+
+    if len(uic_operating_periods) > 1 or len(operating_periods) > 1 or (len(uic_operating_periods) > 0 or len(operating_periods) > 0):
+        warnings.warn("We can't handle multiple operating periods yet, only considering the first!")
+
+    my_day_type_assignments = []
+    my_operating_period = None
+    operating_days = getIndex(operating_days)
+    uic_operating_periods = getIndex(uic_operating_periods)
+    operating_periods = getIndex(operating_periods)
+    pod = None
+
+    if day_type.properties is not None and len(day_type.properties.property_of_day) > 0:
+        # If the properties are set, this means we would be able to make a valid calendars.txt entry we are now going to search for either an OperatingPeriod or UicOperatingPeriod
+        pod = day_type.properties.property_of_day[0].days_of_week
+        if DayOfWeekEnumeration.EVERYDAY not in pod:
+            pod = [DayOfWeekEnumeration.MONDAY, DayOfWeekEnumeration.TUESDAY, DayOfWeekEnumeration.WEDNESDAY, DayOfWeekEnumeration.THURSDAY, DayOfWeekEnumeration.FRIDAY, DayOfWeekEnumeration.SATURDAY, DayOfWeekEnumeration.SUNDAY]
+
+        # TODO: Implement the handling of multiple periods
+        for dta in day_type_assignments:
+            if dta.is_available != False:
+                if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
+                    my_operating_period = project(uic_operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref], OperatingPeriod)
+                    dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = getRef(my_operating_period)
+                    my_day_type_assignments.append(dta)
+                    break
+
+                elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef):
+                    my_operating_period = operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]
+                    my_day_type_assignments.append(dta)
+                    break
+
+        if my_operating_period is None:
+            # We cannot handle a period, without a period...
+            pod = None
+
+    if pod is None:
+        # Only intereted in the positive days
+        for dta in day_type_assignments:
+            if dta.is_available:
+                if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date,
+                              UicOperatingPeriodRef):
+                    uic_operating_period = uic_operating_periods[
+                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date]
+                    for dt in NordicProfile.getOperationalDates(uic_operating_period):
+                        dta = copy.deepcopy(dta)
+                        dta.id += '_' + str(dt.date()).replace('-', '')
+                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(dt.date())
+                        my_day_type_assignments.append(dta)
+
+                elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef):
+                    operating_day: OperatingDay = operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]
+                    dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(operating_day.calendar_date)
+                    my_day_type_assignments.append(dta)
+
+                elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
+                    my_day_type_assignments.append(dta)
+
+    else:
+        for dta in day_type_assignments:
+            if dta.is_available is None or dta.is_available:
+                if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date,
+                              UicOperatingPeriodRef):
+                    uic_operating_period = uic_operating_periods[
+                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date]
+
+                    for i in range(0, len(uic_operating_period.valid_day_bits)):
+                        dt = (uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(
+                            days=i)).date()
+
+                        if uic_operating_period.valid_day_bits[i] == '1':
+                            if datetime_weekday_to_dow(dt.weekday()) not in pod:
+                                # Extra date
+                                dta = copy.deepcopy(dta)
+                                dta.id += '_' + str(dt.date()).replace('-', '')
+                                dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(dt.date())
+                                my_day_type_assignments.append(dta)
+
+                        elif pod is not None and uic_operating_period.valid_day_bits[i] == '0':
+                            if datetime_weekday_to_dow(dt.weekday()) in pod:
+                                # Removed date
+                                dta = copy.deepcopy(dta)
+                                dta.id += '_' + str(dt.date()).replace('-', '')
+                                dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(dt.date())
+                                dta.is_available = False
+                                my_day_type_assignments.append(dta)
+
+                elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef):
+                    operating_day: OperatingDay = operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]
+                    dt = operating_day.calendar_date.date()
+                    if datetime_weekday_to_dow(dt.weekday()) not in pod:
+                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(operating_day.calendar_date)
+                        my_day_type_assignments.append(dta)
+
+                elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
+                    my_day_type_assignments.append(dta)
+
+            else:
+                if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date,
+                              UicOperatingPeriodRef):
+                    uic_operating_period = uic_operating_periods[
+                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date]
+
+                    for i in range(0, len(uic_operating_period.valid_day_bits)):
+                        dt = (uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(
+                            days=i)).date()
+
+                        if uic_operating_period.valid_day_bits[i] == '1':
+                            if datetime_weekday_to_dow(dt.weekday()) in pod:
+                                # Removed date
+                                dta = copy.deepcopy(dta)
+                                dta.id += '_' + str(dt.date()).replace('-', '')
+                                dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(dt.date())
+                                my_day_type_assignments.append(dta)
+
+                        # elif pod is not None and uic_operating_period.valid_day_bits[i] == '0':
+                        # In my understanding adding dates here would totally not make sense
+
+                elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef):
+                    operating_day: OperatingDay = operating_days[
+                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]
+                    dt = operating_day.calendar_date.date()
+                    if datetime_weekday_to_dow(dt.weekday()) in pod:
+                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(operating_day.calendar_date)
+                        my_day_type_assignments.append(dta)
+
+                elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
+                    my_day_type_assignments.append(dta)
+
+    return (day_type, my_day_type_assignments, my_operating_period)
+
+
+def gtfs_sj_processing(db_read: Database, db_write: Database):
+    calendar_combinations = set()
+    all_day_type_assignments = set()
+    all_operating_days = set()
+    all_uic_operating_period = set()
+
+    def query_sj(db_read: Database) -> Generator:
+        _load_generator = load_generator(db_read, ServiceJourney)
+        for sj in _load_generator:
+            sj: ServiceJourney
+            add_calls(db_read, sj)
+            calendar_combinations.add(calendars_to_daytype(db_read, sj))
+            yield sj
+
+            """
+            dts = load_local(db_read, DayType, embedding=True)
+            dta = load_local(db_read, DayTypeAssignment, embedding=True)
+            ops = load_local(db_read, OperatingPeriod, embedding=True)
+            uic_ops = load_local(db_read, UicOperatingPeriod, embedding=True)
+
+            # N AvailabilityCondition
+            avc = load_local(db_read, AvailabilityCondition, embedding=True)
+            """
+
+    write_generator(db_write, ServiceJourney, query_sj(db_read))
+
+    # TODO: At this point we have calendar_combinations, but we skip the extreme case where the DayType is limited by the AvailabilityCondition
+    def query_daytype(db_read, calendar_combinations):
+        dtas = getIndexByGroup(load_local(db_read, DayTypeAssignment, cursor=True, embedding=True),'day_type_ref.ref')
+
+        for option in calendar_combinations:
+            if isinstance(option, ValidityConditionsRelStructure):
+                if len(option.choice) == 1:
+                    if isinstance(option.choice, AvailabilityConditionRef):
+                        availability_condition = load_local(db_read, AvailabilityCondition, limit=1, filter=option.choice.ref, cursor=True, embedding=True)[0]
+                    elif isinstance(option.choice, AvailabilityCondition):
+                        availability_condition = option.choice
+                    else:
+                        warnings.warn("We cannot yet handle other validity conditions")
+
+                    day_type, day_type_assignments, operating_days, uic_operating_period = get_day_type_from_availability_condition(db_read, availability_condition)
+                    day_type, day_type_assignments, operating_period = gtfs_day_type(day_type, day_type_assignments, operating_days, [uic_operating_period], [])
+
+                    yield day_type, day_type_assignments, operating_period
+                else:
+                    # TODO
+                    warnings.warn("We cannot yet handle availability condition aggregation")
+
+            elif isinstance(option, DayTypeRefsRelStructure):
+                if len(option.day_type_ref) == 1:
+                    day_type = load_local(db_read, DayType, limit=1, filter=option.day_type_ref[0].ref)[0]
+                    day_type_assignments = dtas[day_type.id]
+                    uic_operating_periods = []
+                    operating_periods = []
+                    operating_days = []
+                    for dta in day_type_assignments:
+                        ref = dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
+                        if isinstance(ref, OperatingPeriod):
+                            operating_periods.append(load_local(db_read, OperatingPeriod, limit=1, filter=ref.ref, cursor=True)[0])
+                        elif isinstance(ref, UicOperatingPeriodRef):
+                            uic_operating_periods.append(load_local(db_read, UicOperatingPeriod, limit=1, filter=ref.ref, cursor=True)[0])
+                        elif isinstance(ref, OperatingDayRef):
+                            operating_days.append(load_local(db_read, OperatingDay, limit=1, filter=ref.ref, cursor=True)[0])
+
+                    if len(uic_operating_periods) > 0 or len(operating_days) > 0:
+                        day_type, day_type_assignments, operating_period = gtfs_day_type(day_type, day_type_assignments, operating_days, uic_operating_periods, operating_periods)
+                        yield day_type, day_type_assignments, operating_period
+                    else:
+                        yield day_type, day_type_assignments, operating_periods
+
+                else:
+                    # TODO
+                    warnings.warn("We cannot yet handle day type aggregation")
+
+    for day_type, day_type_assignments, operating_periods in query_daytype(db_read, calendar_combinations):
+        # TODO: Figure out if there can be a parallel receiver for a generator
+        write_objects(db_write, [day_type])
+        write_objects(db_write, day_type_assignments, many=True)
+        if operating_periods is not None:
+            write_objects(db_write, operating_periods)
 
 def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaults: dict):
     def query_sj(db_read: Database) -> Generator:

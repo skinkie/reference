@@ -4,12 +4,12 @@ import os
 
 from aux_logging import prepare_logger, log_all
 from netex import DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint, AvailabilityCondition, \
-    DayType, DayTypeAssignment, UicOperatingPeriod, Version
+    DayType, DayTypeAssignment, UicOperatingPeriod, Version, StopArea, InterchangeRule
 from netexio.database import Database
 from netexio.dbaccess import setup_database,  write_objects, load_local, copy_table
 from utils import get_interesting_classes
 from transformers.gtfs import GTFS_CLASSES, gtfs_operator_line_memory, gtfs_calls_generator, \
-    apply_availability_conditions_via_day_type_ref
+    apply_availability_conditions_via_day_type_ref, gtfs_sj_processing
 from transformers.projection import reprojection_update
 
 
@@ -25,16 +25,22 @@ def main(source_database_file: str, target_database_file: str, clean_database: b
 
 
     with Database(target_database_file, read_only=False) as db_write:
+        # Target requires: Version, DataSource, Codespace, Authority, Operator, Branding, StopPlace, PassengerStopAssignment, ScheduledStopPoint, Line, DayType, ServiceJourney, TemplateServiceJourney, JourneyMeeting, ServiceJourneyInterchange
+
         setup_database(db_write, classes, True)
 
         with Database(source_database_file, read_only=True) as db_read:
             # Copy tables that we don't change as-is.
-            copy_table(db_read, db_write,[DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint, Version], clean=True)
+            copy_table(db_read, db_write,[DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint, StopArea, InterchangeRule, Version], clean=True)
 
-            # Flatten the Operator, Authority, Branding, ResponsibilitySet
+            # Flatten the Operator, Authority, Branding, ResponsibilitySet; Provides Line and Operator
             gtfs_operator_line_memory(db_read, db_write, {})
 
-            apply_availability_conditions_via_day_type_ref(db_read, db_write)
+            gtfs_sj_processing(db_read, db_write)
+
+
+
+            # apply_availability_conditions_via_day_type_ref(db_read, db_write)
 
             # rewrite to override the db_write
             # gtfs_calls_generator(db_read, db_write, {})

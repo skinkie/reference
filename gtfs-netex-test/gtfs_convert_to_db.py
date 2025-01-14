@@ -42,7 +42,7 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     PassengerStopAssignment, ZonesInFrameRelStructure, TemplateServiceJourney, FrequencyGroupsRelStructure, \
     HeadwayJourneyGroup, JourneyFrequencyGroupVersionStructure, InterchangeRule, InterchangeRuleParameterStructure, \
     LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure, PrivateCodes, DayTypeAssignment, \
-    UicOperatingPeriod, DayTypeRefsRelStructure, ServiceCalendarFrame, DayTypesInFrameRelStructure, \
+    DayTypeRefsRelStructure, ServiceCalendarFrame, DayTypesInFrameRelStructure, \
     OperatingPeriodsInFrameRelStructure, DayTypeAssignmentsInFrameRelStructure, DayTypeRef, OperatingPeriod, \
     PublicCodeStructure
 
@@ -956,7 +956,7 @@ class GtfsNeTexProfile(CallsProfile):
                                    )
                 day_types.append(day_type)
 
-                operating_period = OperatingPeriod(id=self.get_service_id_dt(service_ids[i]).replace('DayType', 'UicOperatingPeriod'),
+                operating_period = OperatingPeriod(id=self.get_service_id_dt(service_ids[i]).replace('DayType', 'OperatingPeriod'),
                                                           version=self.version.version,
                                                           from_operating_day_ref_or_from_date=date_to_xmldatetime(gtfs_date(start_dates[i])),
                                                           to_operating_day_ref_or_to_date=date_to_xmldatetime(gtfs_date(end_dates[i])))

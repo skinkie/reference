@@ -2,7 +2,7 @@ from netex import VersionOfObjectRefStructure, ServiceJourneyRef, ServiceJourney
     ServiceJourneyPattern, RouteRefStructure, RouteLinkRefStructure, ScheduledStopPointRefStructure, ScheduledStopPoint, \
     RouteLink, Route, Quay, QuayRefStructure, StopPlaceRefStructure, StopPlace, TimingPoint, TimingPointRefStructure, \
     ServiceLink, ServiceLinkRefStructure, TimingLink, TimingLinkRefStructure, Locale, LocaleStructure, OperatorRef, \
-    DayTypeRef
+    DayTypeRef, DayTypesInFrameRelStructure, DayTypeRefsRelStructure, ValidityConditionsRelStructure
 
 from netexio.dbaccess import get_single
 
@@ -14,6 +14,24 @@ ServiceJourneyRef.__hash__ = ref_version_hash
 ServiceJourneyPatternRef.__hash__ = ref_version_hash
 OperatorRef.__hash__ = ref_version_hash
 DayTypeRef.__hash__ = ref_version_hash
+
+def day_type_refs_hash(self: DayTypeRefsRelStructure):
+    return hash('\n'.join([dtr.ref + ';' + dtr.version for dtr in self.day_type_ref]))
+
+DayTypeRefsRelStructure.__hash__ = day_type_refs_hash
+
+def vc_refs_hash(self: ValidityConditionsRelStructure):
+    refs = []
+    for vc in self.choice:
+        if hasattr(vc, 'id'):
+            refs.append(vc.id + ';' + vc.version)
+        elif hasattr(vc, 'ref'):
+            refs.append(vc.ref + ';' + vc.version)
+
+    return hash('\n'.join(refs))
+
+ValidityConditionsRelStructure.__hash__ = vc_refs_hash
+
 
 def id_version_hash(self):
     return hash(self.id + ';' + self.version)
