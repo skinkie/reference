@@ -38,16 +38,16 @@ def check_gtfs_consistency(gtfs_file):
         # Additional consistency checks can be added based on specific requirements
 
         if errors:
-            log_all(logging.ERROR,,"GTFS feed has the following issues:")
+            log_all(logging.ERROR, "GTFS feed has the following issues:")
             for error in errors:
                 log_all(logging.ERROR,error)
             return False
         else:
-            log_all(logging.INFO,"GTFS feed is internally consistent.")
+            log_all(logging.INFO, "GTFS feed is internally consistent.")
             return True
 
     except Exception as e:
-        log_all(logging.ERROR,"Error occurred while checking GTFS consistency:", str(e))
+        log_all(logging.ERROR, "Error occurred while checking GTFS consistency:", str(e))
         return False
 
 def check_gtfs_validity(gtfs_file):
