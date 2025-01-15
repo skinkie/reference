@@ -42,7 +42,8 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     OperatingPeriodRef, DayTypeRefsRelStructure, DayTypesRelStructure, OperatingPeriodsRelStructure, \
     DayTypeAssignmentsRelStructure, RouteView, LineRef, FlexibleLineRef, RouteRef, TimetabledPassingTimesRelStructure, \
     TimeDemandType, Quay, StopPointInJourneyPattern, PointsInJourneyPatternRelStructure, \
-    TransportOrganisationRefsRelStructure, OperatingPeriod, OperatingDayRef, UicOperatingPeriodRef, OperatingDay
+    TransportOrganisationRefsRelStructure, OperatingPeriod, OperatingDayRef, UicOperatingPeriodRef, OperatingDay, \
+    ServiceJourneyRef
 
 from netexio.database import Database
 
@@ -835,5 +836,27 @@ def epip_service_journey_interchange(db_read: Database, db_write: Database, gene
             journey_meeting: JourneyMeeting
             service_journey_interchange: ServiceJourneyInterchange = project(journey_meeting, ServiceJourneyInterchange)
             yield service_journey_interchange
+
+        _load_generator = load_generator(db_read, InterchangeRule)
+        for interchange_rule in _load_generator:
+            interchange_rule: InterchangeRule
+            service_journey_interchange: ServiceJourneyInterchange = project(interchange_rule, ServiceJourneyInterchange)
+            if isinstance(interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRef) and isinstance(interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRef):
+                service_journey_interchange.from_journey_ref = interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator
+                service_journey_interchange.to_journey_ref = interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator
+
+                # TODO: implement by computing the  interchange_rule.feeder_filter StopPlaceRef and AdjacentStopPlaceRef to match a ScheduledStopPoint of the ServiceJourney
+                # - service_journey_interchange.from_point_ref
+                # - service_journey_interchange.to_point_ref
+                # Fetch PassengerStopAssignment for all ScheduledStopPoints under StopPlace and AdjacentStopPlace, this gives possible ScheduledStopPoint
+                # Fetch ServiceJourneyPattern, cross validate previous set, and select single ScheduledStopPoint. Warn, if two are found.
+
+                yield service_journey_interchange
+
+            else:
+                warnings.warn("Unhandled interchange rule, unspecific")
+            # TODO: If for Feeder and Distributor no ServiceJourneyRef is specified, something should actually compute all relevant Interchanges once applied to ServiceJourneyInterchange.
+
+
 
     write_generator(db_write, ServiceJourneyInterchange, query1(db_read))
