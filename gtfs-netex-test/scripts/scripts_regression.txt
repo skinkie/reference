@@ -18,7 +18,7 @@
         {"script": "tool_netex_stats.py", "args": "%%dir%%/%%block%%-netex.xml"},
         {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml False"},
         {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml False"},
-        {"script": "tool_xml_validator.py", "args": "%%dir%%  C:/Users/ue71603/MG_Daten/github/NeTEx1/xsd/netex_publication.xsd"},
+        {"script": "tool_xml_validator.py", "args": "%%dir%%  ./netex-xsd/xsd/netex_publication.xsd"},
         {"script": "#tool_xml_compress.py", "args": "%%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "%%dir%%/%%block%%-netex.xml"},
         {"script": "#tool_netex_check_assertions.py", "args": "./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
