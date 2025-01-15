@@ -9,7 +9,7 @@ from netexio.database import Database
 from netexio.dbaccess import setup_database,  write_objects, load_local, copy_table
 from utils import get_interesting_classes
 from transformers.gtfs import GTFS_CLASSES, gtfs_operator_line_memory, gtfs_calls_generator, \
-    apply_availability_conditions_via_day_type_ref, gtfs_sj_processing
+    apply_availability_conditions_via_day_type_ref, gtfs_sj_processing, gtfs_generate_deprecated_version
 from transformers.projection import reprojection_update
 
 
@@ -38,8 +38,6 @@ def main(source_database_file: str, target_database_file: str, clean_database: b
 
             gtfs_sj_processing(db_read, db_write)
 
-
-
             # apply_availability_conditions_via_day_type_ref(db_read, db_write)
 
             # rewrite to override the db_write
@@ -47,6 +45,11 @@ def main(source_database_file: str, target_database_file: str, clean_database: b
 
             # Extract calendar information
             # gtfs_calendar_generator(db_read, db_write, {})
+
+
+            versions = load_local(db_write, Version, 1)
+            if len(versions) == 0:
+                gtfs_generate_deprecated_version(db_write)
 
         # Our target database must be reprojected to WGS84            apply_availability_conditions_via_day_type_ref(db_read, db_write)
 

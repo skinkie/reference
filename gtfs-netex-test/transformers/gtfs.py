@@ -1,11 +1,11 @@
 import hashlib
 import sys
 import warnings
-from datetime import timedelta
+from datetime import timedelta, datetime, time
 from typing import Generator, List, T
 
 from numpy.ma.core import negative
-from xsdata.models.datatype import XmlDate
+from xsdata.models.datatype import XmlDate, XmlDateTime
 
 from callsprofile import CallsProfile
 from gtfsprofile import GtfsProfile
@@ -15,7 +15,7 @@ from netex import Line, Branding, Operator, Authority, ResponsibilitySet, Stakeh
     AvailabilityCondition, AvailabilityConditionRef, DayType, DayTypeAssignment, OperatingPeriod, ServiceCalendar, \
     DayTypesRelStructure, OperatingPeriodRef, UicOperatingPeriodRef, OperatingDay, DayTypeRef, \
     OperatingDaysRelStructure, OperatingDayRefStructure, UicOperatingPeriod, OperatingDayRef, \
-    PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, DayTypeRefsRelStructure
+    PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, DayTypeRefsRelStructure, Version
 from netexio.database import Database
 from netexio.dbaccess import load_generator, load_local, write_objects, get_single, write_generator, copy_table
 from nordicprofile import NordicProfile
@@ -297,6 +297,33 @@ def gtfs_day_type(day_type: DayType, day_type_assignments: list[DayTypeAssignmen
     return (day_type, my_day_type_assignments, my_operating_period)
 
 
+def gtfs_generate_deprecated_version(db_write: Database) -> Version:
+    my_from = None
+    my_to = None
+    for op in load_generator(db_write, OperatingPeriod):
+        op: OperatingPeriod
+        dt = op.from_operating_day_ref_or_from_date.to_datetime().date()
+        if my_from is None or my_from < dt:
+            my_from = dt
+
+        dt = op.to_operating_day_ref_or_to_date.to_datetime().date()
+        if my_to is None or my_to > dt:
+            my_to = dt
+
+    for dta in load_generator(db_write, DayTypeAssignment):
+        xml_date = dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
+        if isinstance(xml_date, XmlDate):
+            dt = xml_date.to_date()
+            if my_from is None or my_from < dt:
+                my_from = dt
+            if my_to is None or my_to > dt:
+                my_to = dt
+
+    version: Version = project(op, Version)
+    version.start_date = XmlDateTime.from_datetime(datetime.combine(my_from, time.min))
+    version.end_date = XmlDateTime.from_datetime(datetime.combine(my_to, time.min))
+    write_objects(db_write, [version])
+
 def gtfs_sj_processing(db_read: Database, db_write: Database):
     calendar_combinations = set()
     all_day_type_assignments = set()
@@ -363,7 +390,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
 
                     if len(uic_operating_periods) > 0 or len(operating_days) > 0:
                         day_type, day_type_assignments, operating_period = gtfs_day_type(day_type, day_type_assignments, operating_days, uic_operating_periods, operating_periods)
-                        yield day_type, day_type_assignments, operating_period
+                        yield day_type, day_type_assignments, [operating_period]
                     else:
                         yield day_type, day_type_assignments, operating_periods
 

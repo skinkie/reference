@@ -595,7 +595,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                                                                   valid_day_bits=valid_day_bits, from_operating_day_ref_or_from_date=XmlDateTime.from_datetime(my_from),
                                                                   to_operating_day_ref_or_to_date=XmlDateTime.from_datetime(my_to))
 
-                        res_dta: DayTypeAssignment = project(DayType, DayTypeAssignment)
+                        res_dta: DayTypeAssignment = project(my_day_type, DayTypeAssignment)
                         res_dta.is_available = True
                         res_dta.day_type_ref = day_type_ref
                         res_dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = getRef(uic_operating_period)
