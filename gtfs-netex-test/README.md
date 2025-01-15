@@ -66,9 +66,10 @@ git submodule init
 ```
 If you later want to update it
 ```
-git submodule update
+git submodule update --init
 ```
 
+We check out the next branch. If you need a different XSD, you can add it as a parameter in the scripts on your own.
 ### Duckdb and windows
 In some cases for duckdb to work properly on windows machines, it is necessary that the Mircrsoft Visual C++ Resitributable is installed:
 - https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170

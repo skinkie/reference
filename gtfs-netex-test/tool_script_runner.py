@@ -104,7 +104,7 @@ def set_defaults(keyvaluestr):
     defaults.update(result)
 
 
-def download(folder, url):
+def download(folder, url, forced=False):
     try:
         # Create the folder if it doesn't exist
         if not os.path.exists(folder):
@@ -112,6 +112,12 @@ def download(folder, url):
 
         # Get the filename from the URL
         filename = os.path.basename(url)
+
+        if forced==False:
+            # Download only when not exists
+            path=os.path.join(folder, filename)
+            if os.path.exists(path):
+                log_all(logging.INFO,f"File: {path} exists already.Will use that one")
 
         # Download the file
         urllib.request.urlretrieve(url, os.path.join(folder, filename))
