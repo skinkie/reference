@@ -179,7 +179,7 @@
         {"script": "epip_db_to_xml.py", "args": "%%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_check_assertions.py", "args": "./aux_test_input/swiss-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "%%dir%%/%%block%%-netex.xml"},
-        {"script": "tool_xml_validator.py", "args": "%%dir%%/%%block%%-netex.xml C:/Users/ue71603/MG_Daten/github/NeTEx1/xsd/netex_publication.xsd"},
+        {"script": "tool_xml_validator.py", "args": "%%dir%%/%%block%%-netex.xml ./netex-xsd/xsd/NeTEx_publication.xsd"},
         {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb Line random %%dir%%/line.xml True"},
         {"script": "related_explorer.py", "args": "%%dir%%/netex2-database.duckdb ServiceJourney random %%dir%%/sj.xml True"},
         {"script": "related_explorer.py", "args": "%%dir%%/swiss-import.duckdb ServiceJourney random %%dir%%/sj1.xml True"},
