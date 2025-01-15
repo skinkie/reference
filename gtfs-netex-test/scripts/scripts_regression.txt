@@ -43,7 +43,7 @@
         {"step":11,"script": "tool_check_db.py", "args": "%%dir%%/netex-database_step5.duckdb"},
         {"step":12,"script": "tool_check_db.py", "args": "%%dir%%/nl2-gtfs_step8.duckdb"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip %%dir%%/%%block%%-wpd-map_step14.html 1 %%log%%"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip %%dir%%/%%block%%-wpd-map_step14.html 1"}
          ]
   },
 
@@ -64,7 +64,7 @@
         {"step":11,"script": "tool_check_db.py", "args": "%%dir%%/netex-database_step5.duckdb"},
         {"step":12,"script": "tool_check_db.py", "args": "%%dir%%/nl2-gtfs_step8.duckdb"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip %%dir%%/%%block%%-wpd-map_step14.html 1 %%log%%"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip %%dir%%/%%block%%-wpd-map_step14.html 1"}
          ]
   },
 
@@ -85,7 +85,7 @@
         {"step":11,"script": "tool_check_db.py", "args": "%%dir%%/netex-database_step5.duckdb"},
         {"step":12,"script": "tool_check_db.py", "args": "%%dir%%/nl2-gtfs_step8.duckdb"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip %%dir%%/%%block%%-wpd-map_step314.html 1 %%log%%"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip %%dir%%/%%block%%-wpd-map_step314.html 1"}
          ]
   },
 
@@ -106,7 +106,7 @@
         {"step":11,"script": "tool_check_db.py", "args": "%%dir%%/netex-database_step5.duckdb"},
         {"step":12,"script": "tool_check_db.py", "args": "%%dir%%/nl2-gtfs_step8.duckdb"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-wpd-gtfs.zip_step9"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip %%dir%%/%%block%%-wpd-map_step14.html 1 %%log%%"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-wpd-gtfs_step9.zip %%dir%%/%%block%%-wpd-map_step14.html 1"}
          ]
   },
   {
@@ -165,7 +165,7 @@
         {"step":9,"script": "gtfs_db_to_db.py", "args": "%%dir%%/netex3-database_step8.duckdb %%dir%%/netex4-database_step9.duckdb"},
         {"step":10,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/netex4-database_step9.duckdb %%dir%%/%%block%%-gtfs_step10.zip"},
         {"step":11,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-gtfs_step10.zip"},
-        {"step":12,"script": "#gtfs_show_map.py", "args": "--log=%%log%% --limitation 10 %%dir%%/%%block%%-gtfs_step10.zip %%dir%%/%%block%%-map_step12.html"}
+        {"step":12,"script": "#gtfs_show_map.py", "args": "--limitation 10 %%dir%%/%%block%%-gtfs_step10.zip %%dir%%/%%block%%-map_step12.html"}
         ]
   },
 
