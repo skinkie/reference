@@ -1,11 +1,13 @@
 import sys
 import warnings
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from decimal import Decimal, ROUND_HALF_UP
 from functools import partial
-from itertools import chain
 from multiprocessing import Pool
 from typing import Generator, List, Dict
+import itertools
+
+from dateutil.rrule import rrule, DAILY
 
 import netex_monkeypatching
 
@@ -40,7 +42,7 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     OperatingPeriodRef, DayTypeRefsRelStructure, DayTypesRelStructure, OperatingPeriodsRelStructure, \
     DayTypeAssignmentsRelStructure, RouteView, LineRef, FlexibleLineRef, RouteRef, TimetabledPassingTimesRelStructure, \
     TimeDemandType, Quay, StopPointInJourneyPattern, PointsInJourneyPatternRelStructure, \
-    TransportOrganisationRefsRelStructure
+    TransportOrganisationRefsRelStructure, OperatingPeriod, OperatingDayRef, UicOperatingPeriodRef, OperatingDay
 
 from netexio.database import Database
 
@@ -521,13 +523,88 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
 
     if len(uic_operating_periods) == 0:
         service_calendars: List[ServiceCalendar] = load_local(db_read, ServiceCalendar)
-        # TODO: WORKAROUND
-        write_objects(db_write, service_calendars, True, True)
+        if len(service_calendars) > 0:
+            # TODO: WORKAROUND
+            write_objects(db_write, service_calendars, True, True)
 
-        # TODO
-        # day_types = getIndex(list(chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(db_read, DayType))
-        # uic_operating_periods = list(chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars if service_calendar.operating_periods] + load_local(db_read, UicOperatingPeriod)))
-        # day_type_assignments = list(chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments]))
+        else:
+            day_types = getIndex(list(itertools.chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(db_read, DayType, embedding=True))
+            uic_operating_periods = getIndex(list(itertools.chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars if service_calendar.operating_periods])) + load_local(db_read, UicOperatingPeriod, embedding=True))
+            day_type_assignments = list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, DayTypeAssignment, embedding=True)
+            operating_periods = getIndex(list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, OperatingPeriod, embedding=True))
+            operating_days = getIndex(list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, OperatingDay, embedding=True))
+
+            result_day_type_assignments = []
+            result_uic_operating_periods = []
+
+            for day_type_ref, my_day_type_assignments in itertools.groupby(day_type_assignments, key=lambda day_type_assignment: day_type_assignment.day_type_ref):
+                t = list(my_day_type_assignments)
+                my_day_type = day_types[day_type_ref.ref]
+                my_uic_operating_periods = [uic_operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef)]
+                my_operating_periods: list[OperatingPeriod] = [operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef) and (dta.is_available is None or dta.is_available)]
+                # my_operating_days = [operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in day_type_assignments if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef)]
+                my_operational_dates = []
+                my_from = None
+                my_to = None
+
+                if len(my_uic_operating_periods) == 0:
+                    if my_day_type.properties and len(my_day_type.properties.property_of_day) == 1:
+                        # TODO: comes from servicecalendarepip.py
+                        byweekday = ServiceCalendarEPIPFrame.mapDaysOfWeekToByWeekday(my_day_type.properties.property_of_day[0].days_of_week)
+
+                        for op in my_operating_periods:
+                            if my_from is None or my_from > op.from_operating_day_ref_or_from_date.to_datetime():
+                                my_from = op.from_operating_day_ref_or_from_date.to_datetime()
+                            if my_to is None or my_to < op.to_operating_day_ref_or_to_date.to_datetime():
+                                my_to = op.to_operating_day_ref_or_to_date.to_datetime()
+
+                            my_operational_dates += list(
+                                rrule(DAILY, byweekday=byweekday, dtstart=op.from_operating_day_ref_or_from_date.to_datetime(),
+                                      until=op.to_operating_day_ref_or_to_date.to_datetime()))
+
+                        my_operational_dates = set(my_operational_dates)
+                        for dta in t:
+                            if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef):
+                                dt = operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref].calendar_date
+                                if dta.is_available is None or dta.is_available:
+                                    my_operational_dates.add(dt)
+                                else:
+                                    try:
+                                        my_operational_dates.remove(dt)
+                                    except:
+                                        pass
+                            elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
+                                dt = dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.to_date()
+                                if dta.is_available is None or dta.is_available:
+                                    my_operational_dates.add(dt)
+                                else:
+                                    try:
+                                        my_operational_dates.remove(dt)
+                                    except:
+                                        pass
+
+                    if len(my_operational_dates) > 0:
+                        valid_days = sorted(my_operational_dates)
+                        if my_from is None:
+                            my_from = valid_days[0]
+                        if my_to is None:
+                            my_to = valid_days[-1]
+                        valid_day_bits = ''.join([str((my_from + timedelta(days=i) in valid_days) * 1) for i in
+                                                  range(0, (my_to - my_from).days + 1)])
+                        uic_operating_period = UicOperatingPeriod(id=day_type_ref.ref.replace(':DayType:', ':UicOperatingPeriod:'), version=day_type_ref.version,
+                                                                  valid_day_bits=valid_day_bits, from_operating_day_ref_or_from_date=XmlDateTime.from_datetime(my_from),
+                                                                  to_operating_day_ref_or_to_date=XmlDateTime.from_datetime(my_to))
+
+                        res_dta: DayTypeAssignment = project(DayType, DayTypeAssignment)
+                        res_dta.is_available = True
+                        res_dta.day_type_ref = day_type_ref
+                        res_dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = getRef(uic_operating_period)
+
+                        result_day_type_assignments.append(res_dta)
+                        result_uic_operating_periods.append(uic_operating_period)
+
+            service_calendar = get_service_calendar(day_types, result_uic_operating_periods, result_day_type_assignments, generator_defaults)
+            write_objects(db_write, [service_calendar], True, True)
 
     else:
         # TODO: Quick "fix" this should be done differently, because we cannot assure that the ServiceCalendar stored, is actually following EPIP.
@@ -585,48 +662,45 @@ def epip_remove_keylist_extensions(db_read: Database, db_write: Database, genera
     write_generator(db_write, ServiceJourney, query4(db_read))
 
 
-def export_epip_network_offer(db_orig: Database, db_target: Database) -> PublicationDelivery:
-    # The way how con_orig, and con_target have been modelled, is too hardcoded.
-    # An alternative would be to put all the contents in the con_target.
-    # TODO: Refactor to a single db_target
-
-    codespace_ref_or_codespace = GeneratorTester(load_generator(db_orig, Codespace))
-    data_source = GeneratorTester(load_generator(db_orig, DataSource))
-    organisation_or_transport_organisation = load_local(db_orig, Authority) + load_local(db_orig, Operator)
-    value_set = GeneratorTester(load_generator(db_orig, ValueSet))
-    transport_administrative_zone = GeneratorTester(load_generator(db_orig, TransportAdministrativeZone))
+def export_epip_network_offer(db_epip: Database) -> PublicationDelivery:
+    codespace_ref_or_codespace = GeneratorTester(load_generator(db_epip, Codespace))
+    data_source = GeneratorTester(load_generator(db_epip, DataSource))
+    organisation_or_transport_organisation = load_local(db_epip, Authority) + load_local(db_epip, Operator)
+    value_set = GeneratorTester(load_generator(db_epip, ValueSet))
+    transport_administrative_zone = GeneratorTester(load_generator(db_epip, TransportAdministrativeZone))
 
     all_locales = {org.locale for org in organisation_or_transport_organisation if org.locale is not None}
     if len(all_locales) > 1:
         log_print("TODO: Test case for multiple TimetableFrames!")
 
-    transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(db_orig, VehicleType))
-    responsibility_set = GeneratorTester(load_generator(db_target, ResponsibilitySet))
+    transport_type_dummy_type_or_train_type = GeneratorTester(load_generator(db_epip, VehicleType))
+    responsibility_set = GeneratorTester(load_generator(db_epip, ResponsibilitySet))
 
-    stop_place = GeneratorTester(load_generator(db_target, StopPlace))
-    topographic_place = GeneratorTester(load_generator(db_orig, TopographicPlace))
+    stop_place = GeneratorTester(load_generator(db_epip, StopPlace))
+    topographic_place = GeneratorTester(load_generator(db_epip, TopographicPlace))
 
-    direction = GeneratorTester(load_generator(db_target, Direction))
-    line = GeneratorTester(chain(load_generator(db_target, Line), load_generator(db_orig, FlexibleLine)))
-    network = GeneratorTester(load_generator(db_orig, Network, 0))
-    # network = GeneratorTester(load_generator(db_orig, Network, 1))
-    destination_display = GeneratorTester(load_generator(db_orig, DestinationDisplay))
-    scheduled_stop_point = GeneratorTester(load_generator(db_target, ScheduledStopPoint))
-    tariff_zone = GeneratorTester(load_generator(db_target, TariffZone))
-    service_link = GeneratorTester(load_generator(db_target, ServiceLink))
-    journey_pattern = GeneratorTester(load_generator(db_target, ServiceJourneyPattern))
+    direction = GeneratorTester(load_generator(db_epip, Direction))
+    line = GeneratorTester(chain(load_generator(db_epip, Line), load_generator(db_epip, FlexibleLine)))
+    network = GeneratorTester(load_generator(db_epip, Network, 0))
+    # network = GeneratorTester(load_generator(db_epip, Network, 1))
+    destination_display = GeneratorTester(load_generator(db_epip, DestinationDisplay))
+    scheduled_stop_point = GeneratorTester(load_generator(db_epip, ScheduledStopPoint))
+    tariff_zone = GeneratorTester(load_generator(db_epip, TariffZone))
+    service_link = GeneratorTester(load_generator(db_epip, ServiceLink))
+    journey_pattern = GeneratorTester(load_generator(db_epip, ServiceJourneyPattern))
     transfer = GeneratorTester(
-        chain(load_generator(db_target, Connection), load_generator(db_target, SiteConnection),
-              load_generator(db_target, DefaultConnection)))
-    stop_assignment = GeneratorTester(load_generator(db_target, PassengerStopAssignment))
-    notice = GeneratorTester(load_generator(db_target, Notice))
+        chain(load_generator(db_epip, Connection), load_generator(db_epip, SiteConnection),
+              load_generator(db_epip, DefaultConnection)))
+    stop_assignment = GeneratorTester(load_generator(db_epip, PassengerStopAssignment))
+    notice = GeneratorTester(load_generator(db_epip, Notice))
 
-    service_journey = GeneratorTester(load_generator(db_target, ServiceJourney))
-    service_journey_interchange = GeneratorTester(load_generator(db_target, ServiceJourneyInterchange))
+    service_journey = GeneratorTester(load_generator(db_epip, ServiceJourney))
+    service_journey_interchange = GeneratorTester(load_generator(db_epip, ServiceJourneyInterchange))
 
-    service_calendar = GeneratorTester(load_generator(db_target, ServiceCalendar, 1))
+    # TODO: Refactor this to make the ServiceCalendar only at the last point
+    service_calendar = GeneratorTester(load_generator(db_epip, ServiceCalendar, 1))
 
-    other_referenced_classes = [Codespace, DataSource, Authority, Operator, ValueSet,
+    other_referenced_classes = [Authority, Operator, ValueSet,
                                 TransportAdministrativeZone, ResponsibilitySet, StopPlace,
                                 TopographicPlace, Direction, Line, FlexibleLine,
                                 Network, DestinationDisplay, ScheduledStopPoint, TariffZone, ServiceLink,
@@ -635,7 +709,7 @@ def export_epip_network_offer(db_orig: Database, db_target: Database) -> Publica
                                 ServiceJourneyInterchange]
 
     other_referenced_objects = GeneratorTester(
-        fetch_references_classes_generator(db_orig, db_target, other_referenced_classes))
+        fetch_references_classes_generator(db_epip, other_referenced_classes))
 
     version = date.today().strftime("%Y%m%d")
 

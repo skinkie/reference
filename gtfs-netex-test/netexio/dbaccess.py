@@ -223,9 +223,9 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
 object_cache = {}
 
 
-def fetch_references_classes_generator(db: Database, db2: Database, classes: list):
+def fetch_references_classes_generator(db: Database, classes: list):
     cur = db.cursor()
-    cur2 = db2.cursor()
+    cur2 = db.cursor() # TODO
 
     list_classes = ', '.join([f"'{get_object_name(clazz)}'" for clazz in classes])
     processed = set()

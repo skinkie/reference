@@ -8,7 +8,7 @@
         {"script": "gtfs_import_to_db.py", "args": "./aux_test_input/blablacar.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
         {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"}
         ]
@@ -22,7 +22,7 @@
         {"script": "gtfs_import_to_db.py", "args": "d:/input/SOLEA.GTFS_current.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
         {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"}
         ]
@@ -35,7 +35,7 @@
        {"script": "clean_tmp", "args": "%%dir%%"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% d:/input/IT-ITC4-ATM_METRO-NeTEx_L1.xml.gz %%dir%%/swiss-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
@@ -52,7 +52,7 @@
         {"script": "clean_tmp", "args": "%%dir%%"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% d:/input/IT-ITC1-TRENITALIA-NeTEx_L1.xml.gz %%dir%%/netex-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/general-netex-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
@@ -68,7 +68,7 @@
         {"script": "clean_tmp", "args": "%%dir%%"},
         {"script": "swiss_to_db.py", "args": "--log=%%log%% d:/input/PROD_NETEX_TT_1.10_CHE_SKI_2024_OEV-SCHWEIZ_TIMETABLE_4_313_202406270606.zip %%dir%%/swiss-import.duckdb"},
         {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/swiss-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
+        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/swiss-assertions.txt %%dir%%/%%block%%-netex.xml"},
         {"script": "tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
         {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
