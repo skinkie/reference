@@ -88,7 +88,7 @@ class NordicProfile:
         return network
 
     @staticmethod
-    def getOperationalDates(uic_operating_period: UicOperatingPeriod) -> List[datetime.datetime]:
+    def getOperationalDates(uic_operating_period: UicOperatingPeriod) -> list[datetime.date]:
         operational_dates = [(uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(days=i)).date()
                              for i in
                              range(0, len(uic_operating_period.valid_day_bits)) if

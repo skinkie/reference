@@ -1,5 +1,3 @@
-from typing import List
-
 from netexio.database import Database
 from netexio.dbaccess import setup_database, open_netex_file, insert_database
 from utils import get_interesting_classes
@@ -7,7 +5,7 @@ from aux_logging import *
 from transformers.embedding import embedding_update
 
 
-def main(filenames: List[str], database: str, clean_database: bool = True):
+def main(filenames: list[str], database: str, clean_database: bool = True):
 
     # Workaround for https://github.com/duckdb/duckdb/issues/8261
     if clean_database:
