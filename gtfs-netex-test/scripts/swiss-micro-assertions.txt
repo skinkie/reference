@@ -1,0 +1,19 @@
+# Assertions for swiss-micro NeTEx file
+xpathcountgreater //* 1000
+xpathcountequal //netex:SiteFrame 1
+contains PublicationDelivery
+contains \d{4}-\d{2}-\d{2}
+xpathcountgreater //netex:StopPlace 10
+xpathcountgreater //netex:Operator 3
+xpathcountgreater //netex:Quay 80
+xpathcountgreater //netex:ScheduledStopPoint 80
+xpathcountgreater //netex:InterchangeRule 20
+xpathcountgreater //netex:AccessibilityAssessment 100
+xpathcountgreater //netex:Line 1
+xpathcountgreater //netex:UicOperatingPeriod 1
+
+
+
+
+
+

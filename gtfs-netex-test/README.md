@@ -177,29 +177,33 @@ e.g. use
 
 `python tool_script_runner.py ./scripts/scripts_regression.txt run.log swiss4 `
 
-Example draft of block "at1":
+Example draft of block "blablacar":
 
-    [  {
+     {
     "block": "blablacar",
     "url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
-    "download_url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
+    "download_url":"https://github.com/user-attachments/files/18202184/blablacar.zip",
     "description":"Blablacar data",
     "scripts": [
-        {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "gtfs_import_to_db.py", "args": "./aux_test_input/blablacar.zip %%dir%%/gtfs-import.duckdb --log=%%log%% "},
-        {"script": "gtfs_convert_to_db.py", "args": "--log=%%log%% %%dir%%/gtfs-import.duckdb %%dir%%/netex-import.duckdb"},
-        {"script": "epip_db_to_db.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb"},
-        {"script": "epip_db_to_xml.py", "args": "--log=%%log%% %%dir%%/netex-import.duckdb %%dir%%/netex-database.duckdb %%dir%%/%%block%%-netex.xml"},
-        {"script": "./tools/tool_netex_check_assertions.py", "args": "--log=%%log%% ./aux_test_input/blablacar-assertions.txt %%dir%%/%%block%%-netex.xml"},
-        {"script": "./tools/tool_netex_stats.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml"},
-        {"script": "netex_to_db.py", "args": "--log=%%log%% %%dir%%/%%block%%-netex.xml %%dir%%/netex-database.duckdb"},
-        {"script": "netex_db_to_gtfs.py", "args": "--log=%%log%% %%dir%%/netex-database.duckdb %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "./tools/tool_simple_gtfs_validator.py", "args": "--log=%%log%% %%dir%%/%%block%%-gtfs.zip"},
-        {"script": "gtfs_show_map.py", "args": "--log=%%log%% --limitation 100 %%dir%%/%%block%%-gtfs.zip %%dir%%/%%block%%-map.html"}
+        {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"step":3,"script": "gtfs_import_to_db.py", "args": "%%inputfilepath%% %%dir%%/gtfs-import_step3.duckdb"},
+        {"step":4,"script": "remove_file", "args": "%%inputfilepath%%"},
+        {"step":5,"script": "gtfs_convert_to_db.py", "args": "%%dir%%/gtfs-import_step3.duckdb %%dir%%/netex-import_step5.duckdb"},
+        {"step":6,"script": "epip_db_to_db.py", "args": "%%dir%%/netex-import_step5.duckdb %%dir%%/netex-database_step6.duckdb"},
+        {"step":7,"script": "epip_db_to_xml.py", "args": "%%dir%%/netex-database_step6.duckdb %%dir%%/%%block%%-netex_step7.xml"},
+        {"step":8,"script": "tool_netex_check_assertions.py", "args": "./scripts/blablacar-assertions.txt %%dir%%/%%block%%-netex_step7.xml"},
+        {"step":9,"script": "tool_netex_stats.py", "args": "%%dir%%/%%block%%-netex_step7.xml"},
+        {"step":10,"script": "netex_to_db.py", "args": "[%%dir%%/%%block%%-netex_step7.xml] %%dir%%/netex3-database_step10.duckdb True"},
+        {"step":11,"script": "gtfs_db_to_db.py", "args": "%%dir%%/netex3-database_step10.duckdb %%dir%%/netex4-database_step11.duckdb"},
+        {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/netex4-database_step11.duckdb %%dir%%/%%block%%-gtfs_step12.zip"},
+        {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/%%block%%-gtfs_step12.zip"},
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/%%block%%-gtfs_step12.zip %%dir%%/%%block%%-map_step14.html --limitation=10"}
         ]
-  }]
+        }
+  
 
-There are currently three possible placeholders:
+There are currently possible placeholders:
 - %%dir%%  (the directory where the output should be stored. the block name is used to create a subdirectory there.)
 - %%log%%  (the logfile it will be put into %%dir%%/%%block%%)
 - %%block%% (the name of the block meaning the script sequence to proceed. If set to "all" it will run the entire script file.)
