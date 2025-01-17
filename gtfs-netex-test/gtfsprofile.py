@@ -552,19 +552,8 @@ class GtfsProfile:
 
     @staticmethod
     def projectServiceJourneyToTrip(service_journey: ServiceJourney | TemplateServiceJourney, service_journey_pattern: ServiceJourneyPattern) -> dict:
-        if service_journey.day_types:
-            service_id = service_journey.day_types.day_type_ref[0]
-        else:
-            # TODO: Handle valid between
-            ids = []
-            for vc in service_journey.validity_conditions_or_valid_between[0].choice:
-                ids.append(re.sub('_[12]$', '', vc.ref))
-
-            service_id = '+'.join(list(set(ids)))
-
-
         trip = {'route_id': GtfsProfile.getOriginalGtfsIdFromRef(GtfsProfile.getLineRef(service_journey, service_journey_pattern)),
-                'service_id': GtfsProfile.getOriginalGtfsIdFromRef(service_id),  # TODO: Guard for duplicates, and AvailabilityCondition
+                'service_id': GtfsProfile.getOriginalGtfsIdFromRef(service_journey.day_types.day_type_ref[0]),  # TODO: Guard for duplicates, and AvailabilityCondition
                 'trip_id': GtfsProfile.getOriginalGtfsId(service_journey, 'trip_id'),
                 'trip_headsign': '', # service_journey.destination.destination_display_ref,
                 'trip_short_name': '',
