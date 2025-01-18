@@ -37,7 +37,11 @@ def embedding_update(db: Database, clean=False):
     for clazz in db.tables():
         # TODO: The DISTINCT here is actually a bug in the collection process, must investigate.
         objectname = get_object_name(clazz)
-        con.execute(f"INSERT INTO temp_embedded SELECT DISTINCT CAST(z[1] AS TEXT), CAST(z[2] AS TEXT), CAST(z[3] AS TEXT), CAST(z[4] AS TEXT), CAST(z[5] AS TEXT), CAST(z[6] AS TEXT), CAST(z[7] AS INTEGER), CAST(z[8] AS TEXT) FROM (SELECT CAST(unnest(x) AS VARCHAR[]) AS z  FROM (SELECT embedding(object, '{objectname}') AS x FROM {objectname} WHERE COALESCE(last_modified < (SELECT COALESCE(embedding_last_modified, NOW()) FROM meta), TRUE)));")
+        try:
+            con.execute(f"INSERT INTO temp_embedded SELECT DISTINCT CAST(z[1] AS TEXT), CAST(z[2] AS TEXT), CAST(z[3] AS TEXT), CAST(z[4] AS TEXT), CAST(z[5] AS TEXT), CAST(z[6] AS TEXT), CAST(z[7] AS INTEGER), CAST(z[8] AS TEXT) FROM (SELECT CAST(unnest(x) AS VARCHAR[]) AS z  FROM (SELECT embedding(object, '{objectname}') AS x FROM {objectname} WHERE COALESCE(last_modified < (SELECT COALESCE(embedding_last_modified, NOW()) FROM meta), TRUE)));")
+        except Exception as err:
+            print(f"failure in: {objectname} {err}")
+            raise
 
     # con.execute("UPDATE meta SET embedding_last_modified = NOW();")
 

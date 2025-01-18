@@ -1,4 +1,5 @@
 import sys
+import warnings
 from typing import T, List, Generator, Tuple
 
 import duckdb
@@ -840,6 +841,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     current_datasource_ref = None
     current_responsibility_set_ref = None
     current_location_system = None
+    last_version = None
     skip_frame = False
 
     location_srsName = None
@@ -898,6 +900,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                     if current_location_system is None:
                         if fd.default_location_system is not None:
                             current_location_system = fd.default_location_system
+                last_version = None
 
                 skip_frame = False
                 continue
@@ -936,10 +939,23 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                 id = element.attrib['id']
 
                 version = element.attrib.get('version', None)
+                if version is not None:
+                    last_version = version
+
                 order = element.attrib.get('order', None)
                 object = xml_serializer.unmarshall(element, clazz)
 
                 if hasattr(clazz, 'order'):
+                    if order is None:
+                        warnings.warn(f"{localname} {id} does not have a required order, setting it to 1.")
+                        order = 1
+                        object.order = order
+
+                    if version is None:
+                        version = last_version
+                        object.version = version
+                        warnings.warn(f"{localname} {id} does not have a required version, inheriting it {version}.")
+
                     sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());"""
                     try:
                         cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
@@ -949,6 +965,11 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         pass
 
                 elif hasattr(clazz, 'version'):
+                    if version is None:
+                        version = last_version
+                        object.version = version
+                        warnings.warn(f"{localname} {id} does not have a required version, inheriting it {version}.")
+
                     sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());"""
                     try:
                         cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
