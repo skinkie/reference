@@ -837,6 +837,7 @@ def epip_service_journey_interchange(db_read: Database, db_write: Database, gene
             service_journey_interchange: ServiceJourneyInterchange = project(journey_meeting, ServiceJourneyInterchange)
             yield service_journey_interchange
 
+        """
         _load_generator = load_generator(db_read, InterchangeRule)
         for interchange_rule in _load_generator:
             interchange_rule: InterchangeRule
@@ -857,6 +858,6 @@ def epip_service_journey_interchange(db_read: Database, db_write: Database, gene
                 warnings.warn("Unhandled interchange rule, unspecific")
             # TODO: If for Feeder and Distributor no ServiceJourneyRef is specified, something should actually compute all relevant Interchanges once applied to ServiceJourneyInterchange.
 
-
+        """
 
     write_generator(db_write, ServiceJourneyInterchange, query1(db_read))
