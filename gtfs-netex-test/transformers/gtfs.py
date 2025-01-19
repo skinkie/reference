@@ -83,6 +83,10 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
         line.authority_ref = None
         line.responsibility_set_ref_attribute = None
         line.branding_ref = None
+        line.type_of_line_ref = None
+        line.type_of_service_ref = None
+        line.type_of_product_category_ref = None
+        line.types_of_payment_method = None
 
         if line.operator_ref is None:
             db_read.logger.error(f"Line {line.id} does not have an operator_ref assigned.")
@@ -113,11 +117,15 @@ def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
 
             if sj.passing_times:
                 CallsProfile.getCallsFromTimetabledPassingTimes(sj, sjp)
+                sj.journey_pattern_ref = None
+                sj.passing_times = None
                 return sj
 
             elif sj.time_demand_type_ref:
                 tdt: TimeDemandType = get_single(db_read, TimeDemandType, sj.time_demand_type_ref.ref, cursor=True)
                 CallsProfile.getCallsFromTimeDemandType(sj, sjp, tdt)
+                sj.journey_pattern_ref = None
+                sj.time_demand_type_ref = None
                 return sj
 
             else:
@@ -125,30 +133,40 @@ def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
 
 def calendars_to_daytype(db_read: Database, sj: ServiceJourney) -> DayTypeRefsRelStructure | ValidityConditionsRelStructure:
     vcs: set[str] = set()
+    vcs2: list[AvailabilityCondition|AvailabilityConditionRef] = []
 
     # We take validity conditions as priority
-    if isinstance(sj.validity_conditions_or_valid_between, ValidityConditionsRelStructure):
-        for vc in sj.validity_conditions_or_valid_between.choice:
-            if isinstance(vc, AvailabilityCondition):
-                vcs.add(vc.id)
-            elif isinstance(vc, AvailabilityConditionRef):
-                vcs.add(vc.ref)
-            else:
-                warnings.warn("Unimplemented other validity condition on ServiceJourney")  # TODO: Only report once
+    if sj.validity_conditions_or_valid_between is not None:
+        for vc in sj.validity_conditions_or_valid_between:
+            if isinstance(vc, ValidityConditionsRelStructure):
+                for vci in vc.choice:
+                    if isinstance(vci, AvailabilityCondition):
+                        if vci.id not in vcs:
+                            vcs2.append(vci)
+                        vcs.add(vci.id)
+                    elif isinstance(vci, AvailabilityConditionRef):
+                        if vci.ref not in vcs:
+                            vcs2.append(vci)
+                        vcs.add(vci.ref)
+                    else:
+                        warnings.warn("Unimplemented other validity condition on ServiceJourney")  # TODO: Only report once
 
-        if len(vcs) > 1:
-            ref = hashlib.md5((';'.join(vcs)).encode('utf-8')).hexdigest()[0:5]
-            sj.day_types.day_type_ref = DayTypeRef(ref=ref, version=sj.version)
+        vcsl = list(sorted(vcs))
+
+        if len(vcsl) > 1:
+            ref = hashlib.md5((';'.join(vcsl)).encode('utf-8')).hexdigest()[0:5]
+            sj.day_types = DayTypeRefsRelStructure(day_type_ref=[DayTypeRef(ref=ref, version=sj.version)])
 
         else:
-            sj.day_types.day_type_ref = DayTypeRef(ref=vcs[0].replace(":AvailabilityCondition:", ":DayType:"), version=sj.version)
+            sj.day_types = DayTypeRefsRelStructure(day_type_ref=[DayTypeRef(ref=vcsl[0].replace(":AvailabilityCondition:", ":DayType:"), version=sj.version)])
 
-        return sj
+        sj.validity_conditions_or_valid_between = None
+        return ValidityConditionsRelStructure(choice=vcs2)
 
     elif sj.day_types is not None:
         if len(sj.day_types.day_type_ref) > 1:
             ref = hashlib.md5((';'.join([dt.ref for dt in sj.day_types.day_type_ref])).encode('utf-8')).hexdigest()[0:5]
-            sj.day_types.day_type_ref = DayTypeRef(ref=ref, version=sj.version)
+            sj.day_types.day_type_ref = [DayTypeRef(ref=ref, version=sj.version)]
         # else:
         # This would be a no op, the DayType can be reused.
 
@@ -167,7 +185,7 @@ def gtfs_day_type(day_type: DayType, day_type_assignments: list[DayTypeAssignmen
 
     # TODO: reduce the enormous complexity and duplications in the function below
 
-    if len(uic_operating_periods) > 1 or len(operating_periods) > 1 or (len(uic_operating_periods) > 0 or len(operating_periods) > 0):
+    if len(uic_operating_periods) > 1 or len(operating_periods) > 1:
         warnings.warn("We can't handle multiple operating periods yet, only considering the first!")
 
     my_day_type_assignments = []
@@ -213,10 +231,10 @@ def gtfs_day_type(day_type: DayType, day_type_assignments: list[DayTypeAssignmen
                     uic_operating_period = uic_operating_periods[
                         dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]
                     for dt in NordicProfile.getOperationalDates(uic_operating_period):
-                        dta = copy.deepcopy(dta)
-                        dta.id += '_' + str(dt).replace('-', '')
-                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(dt)
-                        my_day_type_assignments.append(dta)
+                        dtai = copy.deepcopy(dta)
+                        dtai.id += '_' + str(dt).replace('-', '')
+                        dtai.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = XmlDate.from_date(dt)
+                        my_day_type_assignments.append(dtai)
 
                 elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef):
                     operating_day: OperatingDay = operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]
@@ -353,6 +371,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
             sj: ServiceJourney
             add_calls(db_read, sj)
             calendar_combinations.add(calendars_to_daytype(db_read, sj))
+            sj.route_ref = None # TODO: #112
             yield sj
 
             """
@@ -367,18 +386,18 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
 
     write_generator(db_write, ServiceJourney, query_sj(db_read))
 
-    # TODO: At this point we have calendar_combinations, but we skip the extreme case where the DayType is limited by the AvailabilityCondition
     def query_daytype(db_read, calendar_combinations):
         dtas = getIndexByGroup(load_local(db_read, DayTypeAssignment, cursor=True, embedding=True),'day_type_ref.ref')
 
         for option in calendar_combinations:
             if isinstance(option, ValidityConditionsRelStructure):
                 if len(option.choice) == 1:
-                    if isinstance(option.choice, AvailabilityConditionRef):
-                        availability_condition = load_local(db_read, AvailabilityCondition, limit=1, filter=option.choice.ref, cursor=True, embedding=True)[0]
-                    elif isinstance(option.choice, AvailabilityCondition):
-                        availability_condition = option.choice
+                    if isinstance(option.choice[0], AvailabilityConditionRef):
+                        availability_condition = load_local(db_read, AvailabilityCondition, limit=1, filter=option.choice[0].ref, cursor=True, embedding=True)[0]
+                    elif isinstance(option.choice[0], AvailabilityCondition):
+                        availability_condition = option.choice[0]
                     else:
+                        availability_condition = None
                         warnings.warn("We cannot yet handle other validity conditions")
 
                     day_type, day_type_assignments, operating_days, uic_operating_period = get_day_type_from_availability_condition(db_read, availability_condition)
