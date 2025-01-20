@@ -136,7 +136,7 @@ def calendars_to_daytype(db_read: Database, sj: ServiceJourney) -> DayTypeRefsRe
     vcs2: list[AvailabilityCondition|AvailabilityConditionRef] = []
 
     # We take validity conditions as priority
-    if sj.validity_conditions_or_valid_between is not None:
+    if sj.validity_conditions_or_valid_between is not None and len(sj.validity_conditions_or_valid_between) > 0:
         for vc in sj.validity_conditions_or_valid_between:
             if isinstance(vc, ValidityConditionsRelStructure):
                 for vci in vc.choice:
@@ -153,7 +153,10 @@ def calendars_to_daytype(db_read: Database, sj: ServiceJourney) -> DayTypeRefsRe
 
         vcsl = list(sorted(vcs))
 
-        if len(vcsl) > 1:
+        if len(vcsl) == 0:
+            warnings.warn(f"No availability conditions at all for {sj.id}")
+
+        elif len(vcsl) > 1:
             ref = hashlib.md5((';'.join(vcsl)).encode('utf-8')).hexdigest()[0:5]
             sj.day_types = DayTypeRefsRelStructure(day_type_ref=[DayTypeRef(ref=ref, version=sj.version)])
 
@@ -250,10 +253,10 @@ def gtfs_day_type(day_type: DayType, day_type_assignments: list[DayTypeAssignmen
                 if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date,
                               UicOperatingPeriodRef) or (
                         isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date,
-                                   OperatingPeriodRef) or dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.name_of_ref_class == 'UicOperatingPeriod'):
+                                   OperatingPeriodRef) and dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.name_of_ref_class == 'UicOperatingPeriod'):
 
                     uic_operating_period = uic_operating_periods[
-                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date]
+                        dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref]
 
                     for i in range(0, len(uic_operating_period.valid_day_bits)):
                         dt = (uic_operating_period.from_operating_day_ref_or_from_date.to_datetime() + timedelta(

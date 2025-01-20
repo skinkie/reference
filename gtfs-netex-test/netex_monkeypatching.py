@@ -2,7 +2,8 @@ from netex import VersionOfObjectRefStructure, ServiceJourneyRef, ServiceJourney
     ServiceJourneyPattern, RouteRefStructure, RouteLinkRefStructure, ScheduledStopPointRefStructure, ScheduledStopPoint, \
     RouteLink, Route, Quay, QuayRefStructure, StopPlaceRefStructure, StopPlace, TimingPoint, TimingPointRefStructure, \
     ServiceLink, ServiceLinkRefStructure, TimingLink, TimingLinkRefStructure, Locale, LocaleStructure, OperatorRef, \
-    DayTypeRef, DayTypesInFrameRelStructure, DayTypeRefsRelStructure, ValidityConditionsRelStructure
+    DayTypeRef, DayTypesInFrameRelStructure, DayTypeRefsRelStructure, ValidityConditionsRelStructure, \
+    UicOperatingPeriodRef, OperatingPeriodRef
 
 from netexio.dbaccess import get_single
 
@@ -14,6 +15,8 @@ ServiceJourneyRef.__hash__ = ref_version_hash
 ServiceJourneyPatternRef.__hash__ = ref_version_hash
 OperatorRef.__hash__ = ref_version_hash
 DayTypeRef.__hash__ = ref_version_hash
+OperatingPeriodRef.__hash__ = ref_version_hash
+UicOperatingPeriodRef.__hash__ = ref_version_hash
 
 def day_type_refs_hash(self: DayTypeRefsRelStructure):
     return hash('\n'.join([dtr.ref + ';' + dtr.version for dtr in self.day_type_ref]))

@@ -9,6 +9,7 @@ from xsdata.formats.dataclass.serializers.writers import XmlEventWriter
 from xsdata.models.datatype import XmlDateTime, XmlDuration, XmlTime
 import random
 
+from netexio import dbaccess
 from netexio.database import Database
 from netexio.dbaccess import load_local, recursive_resolve
 import netex
@@ -29,6 +30,8 @@ serializer_config.ignore_default_attributes = True
 serializer = XmlSerializer(config=serializer_config, writer=XmlEventWriter)
 
 def fetch(database: str, object_type: str, object_filter: str, output_filename: str):
+    dbaccess.object_cache = {}  # TODO
+
     classes = get_interesting_classes()
     if object_type not in classes[0]:
         log_all(logging.WARN, 'related_explorer', f"no such object type found {object_type}")

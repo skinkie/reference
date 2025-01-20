@@ -14,6 +14,7 @@ import lxml
 import hashlib
 
 from callsprofile import CallsProfile
+from netexio import dbaccess
 from netexio.database import Database
 from netexio.dbaccess import load_local, load_generator, get_single
 from gtfsprofile import GtfsProfile
@@ -38,6 +39,8 @@ from transformers.gtfs import gtfs_calendar_and_dates, gtfs_calendar_and_dates2
 
 
 def extract(archive, database: str):
+    dbaccess.object_cache = {} # TODO
+
     agencies = {}
     used_agencies = set([])
     routes = {}
