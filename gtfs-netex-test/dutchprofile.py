@@ -18,7 +18,8 @@ from netex import Codespace, VehicleScheduleFrame, Version, ServiceCalendarFrame
     TimingLinksInFrameRelStructure, JourneyPatternsInFrameRelStructure, TimeDemandTypesInFrameRelStructure, \
     CodespacesInFrameRelStructure, CodespacesRelStructure, TransportAdministrativeZone, ZonesInFrameRelStructure, \
     NoticeAssignment, Notice, NoticesInFrameRelStructure, NoticeAssignmentsInFrameRelStructure, ServiceJourney, \
-    Authority, Operator, ParticipantRef, ExternalObjectRefStructure
+    Authority, Operator, ParticipantRef, ExternalObjectRefStructure, TypesOfValueInFrameRelStructure, \
+    TypeOfProductCategory
 from refs import getId, getRef
 
 BISON_VERSION = '9.2.4'
@@ -34,7 +35,7 @@ class DutchProfile:
                          organisations: List[Union[Authority, Operator]]=None,
                          operational_contexts: List[OperationalContext]=None,
                          vehicle_types: List[VehicleType]=None,
-                         zones: List[TransportAdministrativeZone]=None) -> List[ResourceFrame]:
+                         zones: List[TransportAdministrativeZone]=None, type_of_value: list[TypeOfProductCategory]=None) -> List[ResourceFrame]:
         if data_sources is not None and len(data_sources) > 0:
             data_sources = DataSourcesInFrameRelStructure(data_source=data_sources)
 
@@ -64,6 +65,7 @@ class DutchProfile:
                 organisations=organisations,
                 operational_contexts=operational_contexts,
                 vehicle_types=vehicle_types,
+                types_of_value=TypesOfValueInFrameRelStructure(choice=type_of_value) if type_of_value is not None and len(type_of_value) > 0 else None,
                 zones=zones,
             )
             return [resource_frame]

@@ -61,7 +61,7 @@ with open('scrape-output/doeksen-{}.csv'.format(from_date.isoformat().replace('-
                         for departure in document['departures']:
                             flattened = flatten(departure)
                             if flattened['duration'] > 200:
-                                print("..")
+                                print(f"https://api-2021.rederij-doeksen.nl/departures/{f}/{t}/{departure_date}")
                             writer.writerow(flattened)
                         csvfile.flush()
                     else:

@@ -6,7 +6,8 @@ from xsdata.models.datatype import XmlTime, XmlDuration
 from gtfs_convert_to_db import date_to_xmldatetime, gtfs_date
 from netex import AvailabilityCondition, Codespace, ServiceJourney, ValidityConditionsRelStructure, Version, \
     PrivateCode, TimeDemandTypeRef, TimeDemandType, ServiceJourneyPatternRef, ServiceJourneyPattern, \
-    JourneyRunTimesRelStructure, JourneyRunTime, VehicleTypeRef, VehicleType, TimingLinkRef, TimingLink
+    JourneyRunTimesRelStructure, JourneyRunTime, VehicleTypeRef, VehicleType, TimingLinkRef, TimingLink, \
+    TypeOfProductCategory, TypeOfProductCategoryRef
 from refs import getBitString2, getId, getRef
 
 
@@ -36,7 +37,7 @@ class SimpleTimetable:
                 operating_date, departure = line['departure'].split('T')
                 departure = departure.split('+')[0]
 
-                key = '_'.join([line['from'], line['to'], departure, line['duration'], line['vessel']])
+                key = '_'.join([line['from'], line['to'], departure, line['duration'], line['vessel'], line['vesselName']])
                 operating_dates = simple_timetable.get(key, [])
                 operating_dates.append(gtfs_date(operating_date.replace('-', '')))
                 simple_timetable[key] = operating_dates
@@ -47,15 +48,17 @@ class SimpleTimetable:
 
         from_ssps = []
 
+        tpc_sneldienst = TypeOfProductCategoryRef(ref=getId(TypeOfProductCategory, self.codespace, "sneldienst"), version=self.version.version)
+
         for key, operating_dates in simple_timetable.items():
-            from_ssp, _to_ssp, _time, _duration, _vessel = key.split('_')
+            from_ssp, _to_ssp, _time, _duration, _vessel, _vesselName = key.split('_')
             if from_ssp not in from_ssps:
                 from_ssps.append(from_ssp)
 
         from_ssps = sorted(from_ssps)
 
         for key, operating_dates in simple_timetable.items():
-            from_ssp, to_ssp, time, duration, vessel = key.split('_')
+            from_ssp, to_ssp, time, duration, vessel, vesselName = key.split('_')
             ac_hash = hash(tuple(operating_dates)) # TODO replace with hashlib.sha256
             ac_hash = ("%0.2X" % (ac_hash**2))[0:8]
             ac = availability_conditions.get(ac_hash, None)
@@ -94,6 +97,7 @@ class SimpleTimetable:
                                 journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 departure_time=XmlTime(hour=int(time[0:2]), minute=int(time[3:5]), second=0),
                                 vehicle_type_ref_or_train_ref=VehicleTypeRef(ref=getId(VehicleType, self.codespace, vessel), version=self.version.version),
+                                type_of_product_category_ref=tpc_sneldienst if vesselName.lower() == 'sneldienst' else None,
                            validity_conditions_or_valid_between=[ValidityConditionsRelStructure(choice=getRef(ac))])
 
             sjs.append(sj)

@@ -24,7 +24,8 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, AuthorityRef, OrganisationRefStructure, ServiceJourney, \
     DirectionType, TransportTypeVersionStructure, MobilityFacilityList, PassengerCommsFacilityList, \
-    SanitaryFacilityList, MealFacilityList, AssistanceFacilityList, VehicleAccessFacilityList, PublicCodeStructure
+    SanitaryFacilityList, MealFacilityList, AssistanceFacilityList, VehicleAccessFacilityList, PublicCodeStructure, \
+    TypeOfProductCategoryRef, TypeOfProductCategory
 import datetime
 
 from refs import getId, getRef, getFakeRef
@@ -62,6 +63,7 @@ for ac in availability_conditions:
     if version.end_date.to_datetime() < ac.to_date.to_datetime():
         version.end_date = ac.to_date
 
+tpc_sneldienst = TypeOfProductCategory(id=getId(TypeOfProductCategory, codespace, "sneldienst"), version=version.version, name=MultilingualString(value="Sneldienst"), description=MultilingualString(value="Snellere boot tussen Harlingen, Vlieland en Terschelling."))
 
 data_source = DataSource(id=getId(DataSource, codespace, short_name),
                          version=version.version,
@@ -319,7 +321,7 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
                                                                 vehicle_type_vlieland,
                                                                 vehicle_type_wdv,
                                                                 vehicle_type_wb,
-                                                                vehicle_type_friesland], zones=[transport_administrative_zone])
+                                                                vehicle_type_friesland], zones=[transport_administrative_zone], type_of_value=[tpc_sneldienst])
 
 line_ht = Line(id=getId(Line, codespace, "HT"), version=version.version, name=MultilingualString(value="Harlingen - Terschelling"),
               monitored=False,
