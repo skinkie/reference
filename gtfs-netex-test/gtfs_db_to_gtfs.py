@@ -164,7 +164,7 @@ def extract(archive, database: str):
 
             for calendar in calendars.values():
                 if calendar['end_date'] > max_date:
-                    max_date = calendar_date['date']
+                    max_date = calendar['end_date']
 
         for service_id, exceptions in calendar_dates.items():
             for calendar_date in exceptions:
