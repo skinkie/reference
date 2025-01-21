@@ -31,7 +31,7 @@
     "download_url":"https://github.com/user-attachments/files/18202156/NeTEx_TESO_TESO_20241112_20241112.xml.gz",
     "scripts": [
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%/"},
         {"step":3,"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/03-import.duckdb True"},
         {"step":4,"script": "remove_file", "args": "%%inputfilepath%%"},
         {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/03-import.duckdb %%dir%%/05-netex-database.duckdb"},
@@ -52,7 +52,7 @@
     "download_url":"https://github.com/user-attachments/files/18202160/NeTEx_WPD_WPD_20241112_20241112.xml.gz",
     "scripts": [
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%/"},
         {"step":3,"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/03-import.duckdb True"},
         {"step":4,"script": "remove_file", "args": "%%inputfilepath%%"},
         {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/03-import.duckdb %%dir%%/05-netex-database.duckdb"},
@@ -73,7 +73,7 @@
     "download_url":"https://github.com/user-attachments/files/18202170/NeTEx_WSF_WSF_20241112_20241112.xml.gz",
     "scripts": [
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
         {"step":3,"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/03-import.duckdb True"},
         {"step":4,"script": "remove_file", "args": "%%inputfilepath%%"},
         {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/03-import.duckdb %%dir%%/05-netex-database.duckdb"},
@@ -94,7 +94,7 @@
     "download_url":"https://github.com/user-attachments/files/18202171/NeTEx_WSF_WSF_20241203_20241203.xml.gz",
     "scripts": [
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
         {"step":3,"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/03-import.duckdb True"},
         {"step":4,"script": "remove_file", "args": "%%inputfilepath%%"},
         {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/03-import.duckdb %%dir%%/05-netex-database.duckdb"},
@@ -114,7 +114,7 @@
     "download_url":"https://github.com/user-attachments/files/18201749/swiss_interchange.zip",
     "scripts": [
        {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
         {"step":3,"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/03-import.duckdb True"},
         {"step":4,"script": "remove_file", "args": "%%inputfilepath%%"},
         {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/03-import.duckdb %%dir%%/05-netex-database.duckdb"},
@@ -134,7 +134,7 @@
     "description":"Blablacar data",
     "scripts": [
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
         {"step":3,"script": "gtfs_import_to_db.py", "args": "%%inputfilepath%% %%dir%%/03-gtfs-import.duckdb"},
         {"step":4,"script": "remove_file", "args": "%%inputfilepath%%"},
         {"step":5,"script": "gtfs_convert_to_db.py", "args": "%%dir%%/03-gtfs-import.duckdb %%dir%%/05-netex-import.duckdb"},
@@ -144,7 +144,7 @@
         {"step":9,"script": "tool_netex_stats.py", "args": "%%dir%%/07-%%block%%-netex.xml"},
         {"step":10,"script": "netex_to_db.py", "args": "[%%dir%%/07-%%block%%-netex.xml] %%dir%%/10-netex-database.duckdb True"},
         {"step":11,"script": "gtfs_db_to_db.py", "args": "%%dir%%/10-netex-database.duckdb %%dir%%/11-netex-database.duckdb"},
-        {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/11-netex-database_step.duckdb %%dir%%/12-%%block%%-gtfs.zip"},
+        {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/11-netex-database.duckdb %%dir%%/12-%%block%%-gtfs.zip"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/12-%%block%%-gtfs.zip"},
         {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/12-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html --limitation=10"}
         ]
@@ -155,8 +155,8 @@
     "description":"Flixbus data",
     "scripts": [
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "download_input_file", "args": "%%dir%%/%%block%%/"},
-        {"step":3,"script": "gtfs_import_to_db.py", "args": "%%inputfilepath%% %%dir%%/gtfs-import_step3.duckdb"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
+        {"step":3,"script": "gtfs_import_to_db.py", "args": "%%inputfilepath%% %%dir%%/03-gtfs-import.duckdb"},
        {"step":4,"script": "remove_file", "args": "%%inputfilepath%%"},
         {"step":5,"script": "gtfs_convert_to_db.py", "args": "%%dir%%/03-gtfs-import.duckdb %%dir%%/05-netex-import.duckdb"},
         {"step":6,"script": "epip_db_to_db.py", "args": "%%dir%%/05-netex-import.duckdb %%dir%%/06-netex-database.duckdb"},
@@ -165,7 +165,7 @@
         {"step":9,"script": "tool_netex_stats.py", "args": "%%dir%%/07-%%block%%-netex.xml"},
         {"step":10,"script": "netex_to_db.py", "args": "[%%dir%%/07-%%block%%-netex.xml] %%dir%%/10-netex-database.duckdb True"},
         {"step":11,"script": "gtfs_db_to_db.py", "args": "%%dir%%/10-netex-database.duckdb %%dir%%/11-netex-database.duckdb"},
-        {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/11-netex-database_step.duckdb %%dir%%/12-%%block%%-gtfs.zip"},
+        {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/11-netex-database.duckdb %%dir%%/12-%%block%%-gtfs.zip"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/12-%%block%%-gtfs.zip"},
         {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/12-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html --limitation=10"}
         ]
