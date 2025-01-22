@@ -6,6 +6,8 @@ from aux_logging import *
 import traceback
 import xml.etree.ElementTree as ET
 
+from netexio.dbaccess import open_netex_file
+
 # elements to count and report in the statistics
 elementlist = ['ResourceFrame','ResponsibilitySet','Notice','TypeofProductCategory','AlternativeText','AlternativeName','ServiceCalendarFrame','DayType','DayTypeAssignment','Organisation',
  'Operator','Authority','SiteFrame','StopPlace','Quay','ServiceFrame','Direction','Network','Line','GroupOfLines','DefaultConnection','AvailabilityCondition','ScheduledStopPoint','StopArea','TariffZone',
@@ -18,30 +20,33 @@ def get_element_names(node):
         element_names.extend(get_element_names(child))
     return element_names
 
-def main(file: str):
+def main(filename: str):
     global processing_data
     log_print("***************************************************")
-    log_print("file: " + file)
+    log_print("file: " + filename)
     log_print("***************************************************")
-    log_all(logging.WARN,  "aux_netex_stats")
-    tree=ET.parse(file)
+    log_all(logging.INFO,  "aux_netex_stats")
+    for sub_file in open_netex_file(filename):
+        log_all(logging.INFO, f"Processing file.")
+        tree = ET.parse(sub_file)
 
-    rt=tree.getroot()
+        rt = tree.getroot()
 
-    # Get the element names of all nodes
-    element_names = get_element_names(rt)
+        # Get the element names of all nodes
+        element_names = get_element_names(rt)
 
-    # Print the list of element names
-    #print("All element types found:")
-    #for name in element_names:
-    #    print(name)
-    log_print("***************************************************")
+        # Print the list of element names
+        # print("All element types found:")
+        # for name in element_names:
+        #    print(name)
+        log_print("***************************************************")
 
-    for el in elementlist:
-        srch= ".//{http://www.netex.org.uk/netex}"+el
-        res=rt.findall(srch)
-        if not(res == None):
-            log_all(logging.INFO,  el + ": " + str(len(res)))
+        for el in elementlist:
+            srch = ".//{http://www.netex.org.uk/netex}" + el
+            res = rt.findall(srch)
+            if not (res == None):
+                log_all(logging.INFO, el + ": " + str(len(res)))
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='NeTEx statistics')

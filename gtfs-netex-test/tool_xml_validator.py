@@ -5,6 +5,8 @@ from aux_logging import *
 import traceback
 from lxml import etree
 
+from netexio.dbaccess import open_netex_file
+
 
 def check_xsd_validity(xsd_file):
     try:
@@ -31,12 +33,15 @@ def validate_xml(xml_file, xmlschema):
 def main(folder, xsd_schema):
     xmlschema = etree.XMLSchema(etree.parse(xsd_schema))
     for root, dirs, files in os.walk(folder):
-        for file in files:
-            if file.endswith(".xml"):
-                xsd_file = os.path.join(root, file)
-                validate_xml(xsd_file, xmlschema)
-            if file.endswith(".xsd"):
-                xsd_file = os.path.join(root, file)
+        for filename in files:
+            log_all(logging.INFO,f"Processing file: {filename}")
+            file_full_path = os.path.join(root, filename)
+            if filename.endswith(".xml") or filename.endswith(".xml.gz"):  #TODO zips are not processed (because might be GTFS)
+                for sub_file in open_netex_file(file_full_path):
+                    validate_xml(sub_file, xmlschema)
+
+            if filename.endswith(".xsd"):
+                xsd_file = os.path.join(root, filename)
                 check_xsd_validity(xsd_file)
 
 
