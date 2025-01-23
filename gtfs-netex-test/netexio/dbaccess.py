@@ -20,7 +20,7 @@ from netexio.database import Database
 from netexio.xmlserializer import MyXmlSerializer
 from transformers.references import replace_with_reference_inplace
 from utils import get_object_name, get_element_name_with_ns
-
+from aux_logging import *
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
 context = XmlContext()

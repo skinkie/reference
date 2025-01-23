@@ -1,3 +1,4 @@
+import logging
 import shlex
 import subprocess
 import sys
@@ -120,6 +121,7 @@ def download(folder, url, forced=False):
                 log_all(logging.INFO,f"File: {path} exists already.Will use that one")
 
         # Download the file
+        log_all(logging.INFO,f'Download from: {url}')
         urllib.request.urlretrieve(url, os.path.join(folder, filename))
 
         # Return the downloaded file path
