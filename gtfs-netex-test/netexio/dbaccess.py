@@ -84,8 +84,6 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
 
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
-
-
 def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False) -> List[T]:
     objectname = get_object_name(clazz)
 
@@ -118,7 +116,6 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         objs += list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent))
 
     return objs
-
 
 def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=set([]), inwards=True, outwards=True):
     for x in resolved:
@@ -216,7 +213,8 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
                                                                embedding=True, embedded_parent=True)
                                     if len(resolved_objs) > 0:
                                         recursive_resolve(db, resolved_objs[0], resolved, filter,
-                                                          filter_class, inwards, outwards)  # TODO: not only consider the first
+                                                          filter_class, inwards,
+                                                          outwards)  # TODO: not only consider the first
                         else:
                             log_all(logging.WARN, 'related_explorer', f"Cannot resolve embedded {obj.ref}")
 
@@ -226,7 +224,7 @@ object_cache = {}
 
 def fetch_references_classes_generator(db: Database, classes: list):
     cur = db.cursor()
-    cur2 = db.cursor() # TODO
+    cur2 = db.cursor()  # TODO
 
     list_classes = ', '.join([f"'{get_object_name(clazz)}'" for clazz in classes])
     processed = set()
@@ -260,12 +258,13 @@ def fetch_references_classes_generator(db: Database, classes: list):
         clazz_name, ref, version = result
 
         # TODO: we cannot trust SQL objectname
-        results = load_local(db, db.get_class_by_name(clazz_name), limit=1, filter=ref, cursor=True, embedding=True, embedded_parent=True)
+        results = load_local(db, db.get_class_by_name(clazz_name), limit=1, filter=ref, cursor=True, embedding=True,
+                             embedded_parent=True)
         if len(results) > 0:
             needle = get_object_name(results[0].__class__) + '|' + results[0].id
-            if results[0].__class__ in classes: # Don't export classes, which are part of the main delivery
+            if results[0].__class__ in classes:  # Don't export classes, which are part of the main delivery
                 pass
-            elif needle in processed: # Don't export classes which have been exported already, maybe this can be solved at the database layer
+            elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
                 pass
             else:
                 processed.add(needle)
@@ -333,8 +332,8 @@ def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=Tr
     if embedding:
         yield from load_embedded_transparent_generator(db, clazz, limit, filter)
 
-object_cache = {}
 
+object_cache = {}
 
 
 def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False) -> List[T]:
@@ -343,11 +342,17 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
     cur = db.cursor()
     try:
         if filter is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;", (filter, objectname,))
+            cur.execute(
+                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;",
+                (filter, objectname,))
         elif limit is not None:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id LIMIT ?;", (objectname, limit,))
+            cur.execute(
+                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id LIMIT ?;",
+                (objectname, limit,))
         else:
-            cur.execute(f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id;", (objectname,))
+            cur.execute(
+                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id;",
+                (objectname,))
     except:
         return
 
@@ -362,7 +367,8 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             needle = '|'.join([parent_id, parent_version, parent_clazz])
 
             if needle not in object_cache:
-                cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? ORDER BY id LIMIT 1;", (parent_id, parent_version,))
+                cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? ORDER BY id LIMIT 1;",
+                             (parent_id, parent_version,))
                 object = cur2.fetchone()
                 object_cache[needle] = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
 
@@ -383,7 +389,10 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
     except TypeError:
         pass
 
+
 from lxml import etree
+
+
 def load_lxml_generator(con, clazz, limit=None):
     objectname = get_object_name(clazz)
 
@@ -398,6 +407,7 @@ def load_lxml_generator(con, clazz, limit=None):
         if xml is None:
             break
         yield etree.fromstring(xml[0])
+
 
 def write_lxml_generator(db: Database, clazz, generator: Generator):
     objectname = get_object_name(clazz)
@@ -440,13 +450,19 @@ def write_lxml_generator(db: Database, clazz, generator: Generator):
         print('\r', objectname, i, end='')
 
     if hasattr(clazz, 'order'):
-        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', _prepare4(generator, objectname))
+        cur.execute(
+            f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
+            _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
-        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', _prepare3(generator, objectname))
+        cur.execute(
+            f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
+            _prepare3(generator, objectname))
     else:
-        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', _prepare2(generator, objectname))
+        cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
+                    _prepare2(generator, objectname))
 
     print('\n')
+
 
 def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
     if cursor:
@@ -494,7 +510,6 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
     else:
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
 
-
     print(sql_create_table)
     cur.execute(sql_create_table)
 
@@ -502,25 +517,36 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
         if many:
             print(objectname, len(objs))
             if hasattr(clazz, 'order'):
-                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', [(obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)) for obj in objs])
+                cur.executemany(
+                    f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
+                    [(obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)) for obj in objs])
             elif hasattr(clazz, 'version'):
-                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', [(obj.id, obj.version, db.serializer.marshall(obj, objectname)) for obj in objs])
+                cur.executemany(
+                    f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
+                    [(obj.id, obj.version, db.serializer.marshall(obj, objectname)) for obj in objs])
             else:
-                cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
-                                [(obj.id, db.serializer.marshall(obj, objectname)) for obj in objs])
+                cur.executemany(
+                    f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
+                    [(obj.id, db.serializer.marshall(obj, objectname)) for obj in objs])
         else:
             for i in range(0, len(objs)):
                 obj = objs[i]
                 if hasattr(clazz, 'order'):
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', (obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)))
+                    cur.execute(
+                        f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
+                        (obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)))
                 elif hasattr(clazz, 'version'):
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', (obj.id, obj.version, db.serializer.marshall(obj, objectname)))
+                    cur.execute(
+                        f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
+                        (obj.id, obj.version, db.serializer.marshall(obj, objectname)))
                 else:
-                    cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', (obj.id, db.serializer.marshall(obj, objectname)))
+                    cur.execute(
+                        f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
+                        (obj.id, db.serializer.marshall(obj, objectname)))
 
                 if not silent:
                     if i % 13 == 0:
-                        print('\r', objectname, str(i), end = '')
+                        print('\r', objectname, str(i), end='')
         if not silent:
             print('\r', objectname, len(objs), end='')
     except:
@@ -575,27 +601,36 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
     if hasattr(clazz, 'order'):
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare4(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', a)
+                cur.execute(
+                    f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
+                    a)
         else:
-            cur.executemany(f'INSERT INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', _prepare4(generator, objectname))
+            cur.executemany(
+                f'INSERT INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
+                _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare3(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', a)
+                cur.execute(
+                    f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
+                    a)
         else:
-            cur.executemany(f'INSERT INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', _prepare3(generator, objectname))
+            cur.executemany(f'INSERT INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
+                            _prepare3(generator, objectname))
     else:
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare2(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', a)
         else:
-            cur.executemany(f'INSERT INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', _prepare2(generator, objectname))
+            cur.executemany(f'INSERT INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
+                            _prepare2(generator, objectname))
 
     print('\n')
 
+
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False):
     if db_read.read_only:
-        print (f"ATTACH IF NOT EXISTS '{db_read.database_file}' AS db_read (READ_ONLY);")
+        print(f"ATTACH IF NOT EXISTS '{db_read.database_file}' AS db_read (READ_ONLY);")
         db_write.con.execute(f"ATTACH DATABASE '{db_read.database_file}' AS db_read (READ_ONLY);")
         for clazz in classes:
             objectname = get_object_name(clazz)
@@ -622,6 +657,17 @@ def copy_table(db_read: Database, db_write: Database, classes: list, clean=False
             except CatalogException:
                 pass
 
+
+def missing_class_update(source_db: Database, target_db: Database):
+    # TODO: As written in #223 some of the objects have not been copied at this point, but are still referenced.
+    target_classes = set(target_db.tables())
+    referencing_classes = set(target_db.referencing())
+    embedded_classes = set(target_db.embedded())
+    missing_classes = referencing_classes - (
+        target_classes.union(embedded_classes))  # This is naive because there may be indirections
+    copy_table(source_db, target_db, missing_classes)
+
+
 def create_table_sql(db: Database, clazz: T) -> str:
     objectname = get_object_name(clazz)
     optionals = {x[0]: x[1][1] for x in list_attributes(clazz) if x[0] in ('order', 'version')}
@@ -644,6 +690,7 @@ def create_table_sql(db: Database, clazz: T) -> str:
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
 
     return sql_create_table
+
 
 def update_generator(db: Database, clazz, generator: Generator):
     cur = db.cursor()
@@ -696,23 +743,33 @@ def update_generator(db: Database, clazz, generator: Generator):
     if hasattr(clazz, 'order'):
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare4(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', a)
+                cur.execute(
+                    f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
+                    a)
         else:
-            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());', _prepare4(generator, objectname))
+            cur.executemany(
+                f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
+                _prepare4(generator, objectname))
     elif hasattr(clazz, 'version'):
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare3(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', a)
+                cur.execute(
+                    f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
+                    a)
         else:
-            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());', _prepare3(generator, objectname))
+            cur.executemany(
+                f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
+                _prepare3(generator, objectname))
     else:
         if cur.__class__.__name__ == 'DuckDBPyConnection':
             for a in _prepare2(generator, objectname):
                 cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', a)
         else:
-            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', _prepare2(generator, objectname))
+            cur.executemany(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
+                            _prepare2(generator, objectname))
 
     print('\n')
+
 
 def setup_database(db: Database, classes, clean=False, cursor=False):
     if cursor:
@@ -744,6 +801,7 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
         print(sql_create_table)
         cur.execute(sql_create_table)
 
+
 def get_local_name(element):
     if hasattr(element, 'Meta') and hasattr(element.Meta, 'name'):
         return element.Meta.name
@@ -755,7 +813,8 @@ def update_embedded_referencing(deserialized) -> Generator[list[str], None, None
         if hasattr(obj, 'id'):
             if obj.id is not None:
                 yield [
-                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version, get_object_name(obj.__class__),
+                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version,
+                    get_object_name(obj.__class__),
                     obj.id,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0',
@@ -771,10 +830,12 @@ def update_embedded_referencing(deserialized) -> Generator[list[str], None, None
                         obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
                 yield [
-                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version, obj.name_of_ref_class,
+                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version,
+                    obj.name_of_ref_class,
                     obj.ref,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0', None]
+
 
 """
 def update_embedded_referencing(con, object, inner_loop=None):
@@ -805,15 +866,23 @@ def update_embedded_referencing(con, object, inner_loop=None):
                 obj.version if hasattr(obj, 'version') and obj.version is not None else 'any', obj.order if hasattr(obj, 'order') and obj.order is not None else 0))
 """
 
+
 def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
     xml_serializer = MyXmlSerializer()
     clsmembers = inspect.getmembers(netex, inspect.isclass)
-    all_frames = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.VersionFrameVersionStructure in x[1].__mro__]
+    all_frames = [get_local_name(x[1]) for x in clsmembers if
+                  hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.VersionFrameVersionStructure in x[
+                      1].__mro__]
 
     # See: https://github.com/NeTEx-CEN/NeTEx/issues/788
     # all_datasource_refs = [x[0] for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and hasattr(x[1], 'data_source_ref_attribute')]
-    all_datasource_refs = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.DataManagedObjectStructure  in x[1].__mro__]
-    all_responsibility_set_refs = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace') and netex.EntityInVersionStructure  in x[1].__mro__]
+    all_datasource_refs = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta,
+                                                                                                         'namespace') and netex.DataManagedObjectStructure in
+                           x[1].__mro__]
+    all_responsibility_set_refs = [get_local_name(x[1]) for x in clsmembers if
+                                   hasattr(x[1], 'Meta') and hasattr(x[1].Meta,
+                                                                     'namespace') and netex.EntityInVersionStructure in
+                                   x[1].__mro__]
     all_srs_name = [get_local_name(x[1]) for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1], 'srs_name')]
 
     frame_defaults_stack = []
@@ -906,7 +975,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                 continue
 
             if skip_frame:
-               continue
+                continue
 
             if current_framedefaults is not None:
                 if current_datasource_ref is not None and localname in all_datasource_refs:
@@ -920,7 +989,8 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                 if current_location_system is not None:
                     if localname in all_srs_name:
                         if 'srsName' not in element.attrib:
-                            element.attrib['srsName'] = location_srsName if location_srsName is not None else current_location_system
+                            element.attrib[
+                                'srsName'] = location_srsName if location_srsName is not None else current_location_system
 
                     if localname == 'Location':
                         if 'srsName' not in element.attrib:
@@ -928,7 +998,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
                         location_srsName = None
 
-            if current_element_tag == element.tag: # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
+            if current_element_tag == element.tag:  # https://stackoverflow.com/questions/65935392/why-does-elementtree-iterparse-sometimes-retrieve-xml-elements-incompletely
                 if 'id' not in element.attrib:
                     current_element_tag = None
                     # print(xml)
@@ -1009,7 +1079,8 @@ def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     if issubclass(obj.__class__, EntityInVersionStructure) and obj.data_source_ref_attribute is not None:
         yield DataSourceRefStructure(ref=obj.data_source_ref_attribute), depth + ['data_source_ref_attribute']
     if issubclass(obj.__class__, DataManagedObject) and obj.responsibility_set_ref_attribute is not None:
-        yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute), depth + ['responsibility_set_ref_attribute']
+        yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute), depth + [
+            'responsibility_set_ref_attribute']
 
     mydepth = depth.copy()
     mydepth.append(0)
@@ -1041,7 +1112,9 @@ def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
                                 yield from recursive_attributes(x, mydepth)
                     mydepth.pop()
 
+
 import inspect
+
 
 def resolve_all_references(con, classes, cursor=False):
     all_class_names = {name for name, obj in inspect.getmembers(netex) if inspect.isclass(obj)}
@@ -1077,9 +1150,8 @@ def resolve_all_references(con, classes, cursor=False):
                     elif obj.__class__.__name__.endswith('Ref'):
                         obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
-
                 if obj.name_of_ref_class not in all_class_names:
-                # if not hasattr(netex, obj.name_of_ref_class):
+                    # if not hasattr(netex, obj.name_of_ref_class):
                     # hack for non-existing structures
                     print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
                     continue
@@ -1089,10 +1161,11 @@ def resolve_all_references(con, classes, cursor=False):
                 else:
                     order = 0
 
-
                 sql_insert_object = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                 try:
-                    cur.execute(sql_insert_object, (get_object_name(parent.__class__), parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
+                    cur.execute(sql_insert_object, (
+                    get_object_name(parent.__class__), parent.id, parent.version, obj.name_of_ref_class, obj.ref,
+                    obj.version or 'any', order))
                 except duckdb.duckdb.ConstraintException:
                     pass
 
@@ -1124,7 +1197,6 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
     cur.execute(sql_create_table)
     cur.execute("TRUNCATE embedded;")
 
-
     for clazz in clazz_by_name.values():
         print(clazz)
         for parent in load_generator(con, clazz, embedding=False):
@@ -1133,13 +1205,14 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
             for obj in recursive_attributes(parent):
                 if hasattr(obj, 'id'):
                     if obj.id is not None:
-                        version =  obj.version if hasattr(obj, 'version') and obj.version is not None else 'any'
+                        version = obj.version if hasattr(obj, 'version') and obj.version is not None else 'any'
                         order = obj.order if hasattr(obj, 'order') and obj.order is not None else 0
 
                         sql_insert_object = "INSERT INTO embedded (parent_class, parent_id, parent_version, class, id, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                         try:
                             cur.execute(sql_insert_object, (
-                            get_object_name(clazz), parent.id, parent.version, get_object_name(obj.__class__), obj.id, version, order))
+                                get_object_name(clazz), parent.id, parent.version, get_object_name(obj.__class__),
+                                obj.id, version, order))
                         except:
                             raise
 
@@ -1151,9 +1224,8 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
                         elif obj.__class__.__name__.endswith('Ref'):
                             obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
-
                     if obj.name_of_ref_class not in all_class_names:
-                    # if not hasattr(netex, obj.name_of_ref_class):
+                        # if not hasattr(netex, obj.name_of_ref_class):
                         # hack for non-existing structures
                         print(f'No attribute found in module {netex} for {obj.name_of_ref_class}.')
                         continue
@@ -1163,10 +1235,11 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
                     else:
                         order = 0
 
-
                     sql_insert_object = "INSERT OR REPLACE INTO referencing (parent_class, parent_id, parent_version, class, ref, version, ordr) VALUES (?, ?, ?, ?, ?, ?, ?);"
                     try:
-                        cur.execute(sql_insert_object, (get_object_name(parent.__class__), parent.id, parent.version, obj.name_of_ref_class, obj.ref, obj.version or 'any', order))
+                        cur.execute(sql_insert_object, (
+                        get_object_name(parent.__class__), parent.id, parent.version, obj.name_of_ref_class, obj.ref,
+                        obj.version or 'any', order))
                     except duckdb.duckdb.ConstraintException:
                         pass
 
@@ -1188,8 +1261,10 @@ def attach_objects(con, read_database: str, clazz: T):
     attach_source(con, read_database)
     con.execute(f"INSERT INTO {objectname} SELECT * FROM original.{objectname};")
 
+
 def attach_source(con, read_database: str):
     con.execute(f"ATTACH IF NOT EXISTS '{read_database}' AS original (READ_ONLY);")
+
 
 def open_netex_file(filename):
     if filename.endswith('.xml.gz'):
@@ -1203,4 +1278,3 @@ def open_netex_file(filename):
             l_zipfilename = zipfilename.filename.lower()
             if l_zipfilename.endswith('.xml.gz') or l_zipfilename.endswith('.xml'):
                 yield zip.open(zipfilename)
-

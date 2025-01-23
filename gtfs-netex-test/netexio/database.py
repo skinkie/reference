@@ -40,5 +40,25 @@ class Database:
             tables = {self.get_class_by_name(table) for table, in cur.fetchall() if table[0].isupper()} # TODO: Remove other classes from default namespace!
             return sorted(tables.intersection(exclusively), key=lambda v: v.__name__)
 
+    def referencing(self, exclusively: set[T]=None):
+        if exclusively is None:
+            exclusively = set(self.serializer.interesting_classes)
+
+        if self.con:
+            cur = self.con.cursor()
+            cur.execute("SELECT DISTINCT class FROM referencing;")
+            tables = {self.get_class_by_name(table) for table, in cur.fetchall() if table[0].isupper()} # TODO: Remove other classes from default namespace!
+            return sorted(tables.intersection(exclusively), key=lambda v: v.__name__)
+
+    def embedded(self, exclusively: set[T]=None):
+        if exclusively is None:
+            exclusively = set(self.serializer.interesting_classes)
+
+        if self.con:
+            cur = self.con.cursor()
+            cur.execute("SELECT DISTINCT class FROM embedded;")
+            tables = {self.get_class_by_name(table) for table, in cur.fetchall() if table[0].isupper()} # TODO: Remove other classes from default namespace!
+            return sorted(tables.intersection(exclusively), key=lambda v: v.__name__)
+
     def get_class_by_name(self, name: str):
         return self.serializer.name_object[name]

@@ -10,7 +10,7 @@ from netex import Codespace, AvailabilityCondition, NoticeAssignment, Notice, Sc
     ServiceJourneyPattern, PassengerStopAssignment, DefaultConnection, SiteConnection, Connection, DataSource, \
     Authority, ValueSet, TransportAdministrativeZone, TopographicPlace, Network, DestinationDisplay, VehicleType
 from netexio.database import Database
-from netexio.dbaccess import setup_database, copy_table
+from netexio.dbaccess import setup_database, copy_table, missing_class_update
 from utils import get_interesting_classes
 from netexio.dbaccess import attach_source, attach_objects
 
@@ -56,9 +56,11 @@ def main(source_database_file: str, target_database_file: str):
             infer_directions_from_sjps_and_apply(target_db, target_db, generator_defaults)
             # TODO: epip_noticeassignment(source_db, target_db, generator_defaults)
 
-        reprojection_update(target_db, 'urn:ogc:def:crs:EPSG::4326')
+            reprojection_update(target_db, 'urn:ogc:def:crs:EPSG::4326')
 
-        embedding_update(target_db)
+            embedding_update(target_db)
+
+            missing_class_update(source_db, target_db)
 
 if __name__ == '__main__':
     import argparse
