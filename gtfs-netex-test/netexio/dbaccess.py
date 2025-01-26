@@ -301,7 +301,6 @@ def fetch_references_classes_generator(db: Database, classes: list):
     # Practically this could still lead to a reference from an embedded class, which may already be included
     # (or not, hence we would need to assure that those objects are not in the class list)
     query = f"SELECT DISTINCT class, ref, version FROM referencing WHERE class NOT IN ({list_classes}) ORDER BY class;"
-    print(query)
     cur2.execute(query)
     while True:
         result = cur2.fetchone()
@@ -562,7 +561,6 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
     else:
         sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
 
-    print(sql_create_table)
     cur.execute(sql_create_table)
 
     try:
@@ -682,7 +680,6 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
 
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False):
     if db_read.read_only:
-        print(f"ATTACH IF NOT EXISTS '{db_read.database_file}' AS db_read (READ_ONLY);")
         db_write.con.execute(f"ATTACH DATABASE '{db_read.database_file}' AS db_read (READ_ONLY);")
         for clazz in classes:
             objectname = get_object_name(clazz)
@@ -839,18 +836,15 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
         cur.execute("VACUUM;")
 
     sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
-    print(sql_create_table)
     cur.execute(sql_create_table)
 
     sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
-    print(sql_create_table)
     cur.execute(sql_create_table)
 
     create_meta(db)
 
     for clazz in interesting_classes:
         sql_create_table = create_table_sql(db, clazz)
-        print(sql_create_table)
         cur.execute(sql_create_table)
 
 
@@ -1185,14 +1179,13 @@ def resolve_all_references(con, classes, cursor=False):
 
     cur.execute("SET wal_autocheckpoint='1TB';")
     sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
-    print(sql_create_table)
     cur.execute(sql_create_table)
     cur.execute("TRUNCATE referencing;")
 
     for clazz in clazz_by_name.values():
-        print(clazz)
+        # print(clazz)
         for parent in load_generator(con, clazz):
-            print(parent.id)
+            # print(parent.id)
             for obj in recursive_attributes(parent):
                 if obj.name_of_ref_class is None:
                     # Hack, because NeTEx does not define the default name of ref class yet
@@ -1250,7 +1243,7 @@ def resolve_all_references_and_embeddings(con, classes, cursor=False):
     cur.execute("TRUNCATE embedded;")
 
     for clazz in clazz_by_name.values():
-        print(clazz)
+        # print(clazz)
         for parent in load_generator(con, clazz, embedding=False):
             # print(parent.id)
             count = 0
