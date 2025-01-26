@@ -24,11 +24,15 @@ def stop_place_to_ssp(db: Database) -> dict[str, str]:
         ssp_id = getIdOrRef(psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point)
         if psa.taxi_rank_ref_or_stop_place_ref_or_stop_place is not None:
             id = getIdOrRef(psa.taxi_rank_ref_or_stop_place_ref_or_stop_place)
-            result[id] = result.get(id, []).append(ssp_id)
+            l = result.get(id, [])
+            l.append(ssp_id)
+            result[id] = l
 
         if psa.taxi_stand_ref_or_quay_ref_or_quay is not None:
             id = getIdOrRef(psa.taxi_stand_ref_or_quay_ref_or_quay)
-            result[id] = result.get(id, []).append(ssp_id)
+            l = result.get(id, [])
+            l.append(ssp_id)
+            result[id] = l
 
     for sp in load_generator(db, StopPlace):
         sp: StopPlace
@@ -39,9 +43,13 @@ def stop_place_to_ssp(db: Database) -> dict[str, str]:
                 id = getIdOrRef(q)
                 if id in result and not parent_added:
                     parent_added = result[id] # This is also too naive, there maybe 1:N assignments
-                    result[sp.id] = result.get(sp.id, []).append(parent_added)
+                    l = result.get(id, [])
+                    l.append(parent_added)
+                    result[sp.id] = l
                 elif id not in result and parent_added:
-                    result[id] = result.get(id, []).append(parent_added)
+                    l = result.get(id, [])
+                    l.append(parent_added)
+                    result[id] = l
 
     return result
 
