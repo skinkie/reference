@@ -424,7 +424,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
                         ref = dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
 
                         # TODO: Fix this kind of pattern by abstracting the reference fetching
-                        if isinstance(ref, UicOperatingPeriodRef) or (isinstance(ref, OperatingPeriodRef) or ref.name_of_ref_class == 'UicOperatingPeriod'):
+                        if isinstance(ref, UicOperatingPeriodRef) or (isinstance(ref, OperatingPeriodRef) and ref.name_of_ref_class == 'UicOperatingPeriod'):
                             uic_operating_periods.append(load_local(db_read, UicOperatingPeriod, limit=1, filter=ref.ref, cursor=True, embedding=True)[0])
                         elif isinstance(ref, OperatingPeriodRef):
                             operating_periods.append(load_local(db_read, OperatingPeriod, limit=1, filter=ref.ref, cursor=True, embedding=True)[0])
