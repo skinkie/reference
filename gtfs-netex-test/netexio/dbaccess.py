@@ -271,9 +271,6 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
                             log_all(logging.WARN, 'related_explorer', f"Cannot resolve embedded {obj.ref}")
 
 
-object_cache = {}
-
-
 def fetch_references_classes_generator(db: Database, classes: list):
     cur = db.cursor()
     cur2 = db.cursor()  # TODO
@@ -384,9 +381,6 @@ def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=Tr
         yield from load_embedded_transparent_generator(db, clazz, limit, filter)
 
 
-object_cache = {}
-
-
 def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False) -> List[T]:
     objectname = get_object_name(clazz)
 
@@ -417,13 +411,13 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             parent_id, parent_version, parent_clazz, path = result
             needle = '|'.join([parent_id, parent_version, parent_clazz])
 
-            if needle not in object_cache:
+            if needle not in db.object_cache:
                 cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? ORDER BY id LIMIT 1;",
                              (parent_id, parent_version,))
                 object = cur2.fetchone()
-                object_cache[needle] = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
+                db.object_cache[needle] = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
 
-            obj = object_cache[needle]
+            obj = db.object_cache[needle]
             if obj is not None:
                 if parent:
                     yield obj

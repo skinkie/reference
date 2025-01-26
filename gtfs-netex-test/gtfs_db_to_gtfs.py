@@ -39,8 +39,6 @@ from transformers.gtfs import gtfs_calendar_and_dates, gtfs_calendar_and_dates2
 
 
 def extract(archive, database: str):
-    dbaccess.object_cache = {} # TODO
-
     agencies = {}
     used_agencies = set([])
     routes = {}

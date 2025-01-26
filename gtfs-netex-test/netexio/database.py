@@ -12,6 +12,7 @@ class Database:
     read_only: bool
     serializer: Serializer
     con: duckdb.DuckDBPyConnection
+    object_cache: dict
 
     def __init__(self, database_file: str, read_only: bool=True, logger: Logger=None, serializer=MyPickleSerializer):
         self.con = None
@@ -19,6 +20,7 @@ class Database:
         self.read_only = read_only
         self.logger = logger
         self.serializer = serializer()
+        self.object_cache = {}
 
     def cursor(self):
         return self.con.cursor()
