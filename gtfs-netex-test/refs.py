@@ -38,6 +38,14 @@ def getRef(obj: object, klass=None):
         instance.name_of_ref_class = name
     return instance
 
+def getFakeRefByClass(id: str, klass: T, version: str = None) -> T:
+    asobj = klass.__name__ + 'Ref'  # Was: RefStructure
+    klass = globals()[asobj]
+    instance = klass(id=id)
+    if version is not None:
+        instance.version = version
+    return instance
+
 def getFakeRef(id: str, klass: T, version: str, version_ref: str = None) -> T:
     if id is None:
         return None

@@ -12,6 +12,7 @@ from dateutil.rrule import rrule, DAILY
 import netex_monkeypatching
 
 from aux_logging import log_print
+from transformers.interchanges import interchange_rules_to_service_journey_interchanges
 from utils import project, chain, GeneratorTester
 
 from xsdata.models.datatype import XmlDateTime, XmlDate
@@ -821,7 +822,7 @@ def export_epip_network_offer(db_epip: Database) -> PublicationDelivery:
 
     return publication_delivery
 
-def epip_service_journey_interchange(db_read: Database, db_write: Database, generator_defaults: dict) -> Generator:
+def epip_service_journey_interchange(db_read: Database, db_write: Database, generator_defaults: dict):
     print(sys._getframe().f_code.co_name)
 
     def query1(db_read: Database) -> Generator:
@@ -861,3 +862,6 @@ def epip_service_journey_interchange(db_read: Database, db_write: Database, gene
         """
 
     write_generator(db_write, ServiceJourneyInterchange, query1(db_read))
+
+def epip_interchange_rule(db_read: Database, db_write: Database, generator_defaults: dict):
+    write_generator(db_write, ServiceJourneyInterchange, interchange_rules_to_service_journey_interchanges(db_read), empty=False)

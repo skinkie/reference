@@ -11,6 +11,7 @@ from netex import Codespace, AvailabilityCondition, NoticeAssignment, Notice, Sc
     Authority, ValueSet, TransportAdministrativeZone, TopographicPlace, Network, DestinationDisplay, VehicleType
 from netexio.database import Database
 from netexio.dbaccess import setup_database, copy_table, missing_class_update
+from transformers.interchanges import interchange_rules_to_service_journey_interchanges
 from utils import get_interesting_classes
 from netexio.dbaccess import attach_source, attach_objects
 
@@ -31,7 +32,7 @@ serializer = XmlSerializer(config=serializer_config)
 
 import netex_monkeypatching
 from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory, epip_site_frame_memory, \
-    epip_service_journey_generator, epip_service_journey_interchange
+    epip_service_journey_generator, epip_service_journey_interchange, epip_interchange_rule
 
 from transformers.epip import EPIP_CLASSES
 from aux_logging import *
@@ -53,6 +54,7 @@ def main(source_database_file: str, target_database_file: str):
             epip_site_frame_memory(source_db, target_db, generator_defaults)
             epip_service_journey_generator(source_db, target_db, generator_defaults, None)
             epip_service_journey_interchange(source_db, target_db, generator_defaults)
+            epip_interchange_rule(source_db, target_db, generator_defaults)
             infer_directions_from_sjps_and_apply(target_db, target_db, generator_defaults)
             # TODO: epip_noticeassignment(source_db, target_db, generator_defaults)
 

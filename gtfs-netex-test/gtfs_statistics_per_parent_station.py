@@ -1,0 +1,5 @@
+select parent_station, array_agg(stop_id) from stops group by parent_station limit 10;
+
+create table passages as select stops.stop_id, stop_name, stop_lat, stop_lon, passages from (select coalesce(parent_station, stop_id) as stop_id, count(*) as passages from trips join calendar_dates using (service_id) join stop_times using (trip_id) join stops using (stop_id) where calendar_dates.date = '20250117' group by coalesce(parent_station, stop_id)) as z join stops using (stop_id) order by passages desc;
+
+update passages set stop_lon = x.stop_lon, stop_lat = x.stop_lat from (select distinct first_value(stop_id) over (partition by parent_station) as stop_id, parent_station, stop_lat, stop_lon from stops where parent_station in (select stop_id from passages where stop_lat < 40)) as x where x.parent_station = passages.stop_id;

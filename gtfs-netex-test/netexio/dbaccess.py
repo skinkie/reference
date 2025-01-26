@@ -18,6 +18,7 @@ from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfOb
     EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
 from netexio.database import Database
 from netexio.xmlserializer import MyXmlSerializer
+from refs import getRef, getFakeRefByClass
 from transformers.references import replace_with_reference_inplace
 from utils import get_object_name, get_element_name_with_ns
 from aux_logging import *
@@ -116,6 +117,57 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         objs += list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent))
 
     return objs
+
+def load_references_generator(db: Database, clazz: T, filter=None, cursor=False ) -> Generator:
+    objectname = get_object_name(clazz)
+
+    if cursor:
+        cur = db.cursor()
+    else:
+        cur = db.con
+
+    try:
+        if filter is not None:
+            cur.execute(f"select parent_class, parent_id, parent_version, class, ref, version from referencing where parent_class = ? and parent_id = ?;", (objectname, filter))
+        else:
+            cur.execute(f"select parent_class, parent_id, parent_version, class, ref, version from referencing where parent_class = ?;", (objectname,))
+    except:
+        pass
+        return []
+
+    objs: List[T] = []
+
+    if filter is None:
+        for parent_klass, parent_id, parent_version, klass, ref, version in cur.fetchall():
+            yield getFakeRefByClass(parent_id, db.get_class_by_name(parent_klass), parent_version), getFakeRefByClass(ref, db.get_class_by_name(klass), version)
+
+
+def load_embedding_generator(db: Database, clazz: T, filter=None, cursor=False) -> Generator:
+    objectname = get_object_name(clazz)
+
+    if cursor:
+        cur = db.cursor()
+    else:
+        cur = db.con
+
+    try:
+        if filter is not None:
+            cur.execute(
+                f"select parent_class, parent_id, parent_version, class, ref, version from embedded where parent_class = ? and parent_id = ?;",
+                (objectname, filter))
+        else:
+            cur.execute(
+                f"select parent_class, parent_id, parent_version, class, ref, version from embedded where parent_class = ?;",
+                (objectname,))
+    except:
+        pass
+        return []
+
+    objs: List[T] = []
+
+    if filter is None:
+        for parent_klass, parent_id, parent_version, klass, ref, version in cur.fetchall():
+            yield getFakeRefByClass(parent_id, db.get_class_by_name(parent_klass), parent_version), getFakeRefByClass(ref, db.get_class_by_name(klass), version)
 
 def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=set([]), inwards=True, outwards=True):
     for x in resolved:
