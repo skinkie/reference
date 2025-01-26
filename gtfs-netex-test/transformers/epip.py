@@ -12,6 +12,7 @@ from dateutil.rrule import rrule, DAILY
 import netex_monkeypatching
 
 from aux_logging import log_print
+from routesprofile import RoutesProfile
 from transformers.interchanges import interchange_rules_to_service_journey_interchanges
 from utils import project, chain, GeneratorTester
 
@@ -517,6 +518,20 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
     # This check is a bit naive, if mixed files would exists, still not all ServiceJourneyPatterns would be available.
     # If we would instead 'mix' the Original + the generated one, that would also be an issue for anything that would have updated the object.
     if len(sjps.values()) > 0:
+        # TODO: At this point we should have a check to know if the ServiceJourneyPattern is geographically enabled, or not
+        route_point_projection = {}
+        for ssp in load_generator(db_read, ScheduledStopPoint):
+            l = list(RoutesProfile.route_point_projection(ssp))
+            if len(l) > 0:
+                route_point_projection[getRef(ssp).ref] = l[0]
+
+        if len(route_point_projection) > 0:
+            for sjp in sjps.values():
+                if isinstance(sjp.route_ref_or_route_view, RouteRef):
+                    routes: list[Route] = load_local(db_read, Route, limit=1, filter=sjp.route_ref_or_route_view.ref, cursor=True)
+                    if len(routes) > 0:
+                        RoutesProfile.projectRouteToServiceLinks(db_read, sjp, routes[0], route_point_projection, generator_defaults)
+
         write_objects(db_write, list(sjps.values()), True, True)
 
     # Until we can persistently attach database this doesnot make sense

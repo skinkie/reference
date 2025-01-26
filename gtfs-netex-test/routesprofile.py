@@ -8,6 +8,7 @@ import utils
 from netex import Codespace, ServiceLink, RouteLink, RoutePoint, RoutePointRefStructure, TimingLink, PointRefStructure, \
     TimingPoint, ScheduledStopPoint, TimingPointVersionStructure, ScheduledStopPointRefStructure, Route, \
     PointProjection, ServiceJourneyPattern, StopPointInJourneyPattern, PosList, ServiceLinkRefStructure
+from netexio.database import Database
 from netexio.dbaccess import load_local
 
 
@@ -22,7 +23,7 @@ class RoutesProfile:
                             yield utils.project(projection.project_to_point_ref, RoutePointRefStructure)
 
     @staticmethod
-    def projectRouteToServiceLinks(con, sjp: ServiceJourneyPattern, route: Route, route_point_projection: Dict[str, RoutePointRefStructure], generator_defaults: dict) -> Generator[ServiceLink, None, ServiceJourneyPattern]:
+    def projectRouteToServiceLinks(db: Database, sjp: ServiceJourneyPattern, route: Route, route_point_projection: Dict[str, RoutePointRefStructure], generator_defaults: dict) -> Generator[ServiceLink, None, ServiceJourneyPattern]:
         # Two variants:
         # 1. pointsInSequence has PointONRoute/OnwardRouteLinkRef;
         # 2. linksInSequence
@@ -31,7 +32,7 @@ class RoutesProfile:
         if route.points_in_sequence:
             links_in_sequence = [por.onward_route_link_ref for por in route.points_in_sequence.point_on_route if por.onward_route_link_ref]
             # TODO: #142
-            route_links_in_sequence: List[RouteLink] = [load_local(con, RouteLink, filter=lis.ref, cursor=True)[0] for lis in links_in_sequence]
+            route_links_in_sequence: List[RouteLink] = [load_local(db, RouteLink, filter=lis.ref, cursor=True, limit=1)[0] for lis in links_in_sequence]
             route_i = 0
 
             if sjp.points_in_sequence:
