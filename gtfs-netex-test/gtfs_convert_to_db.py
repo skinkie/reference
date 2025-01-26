@@ -424,7 +424,7 @@ class GtfsNeTexProfile(CallsProfile):
                                            name=MultilingualString(value=stop_names[i]),
                                            public_code=PublicCodeStructure(value=stop_codes[i]) if stop_codes[i] is not None else None,
                                            description=getOptionalString(get_or_none(stop_descs, i)),
-                                           private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
+                                           private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]) if location_types[i] == 1 else None,
                                            locale=Locale(time_zone=stop_timezones[i]) if stop_timezones[i] is not None else None,
                                            parent_zone_ref=ZoneRefStructure(ref=zone_ids[i], version_ref="EXTERNAL") if zone_ids[i] is not None else None,
                                            accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, self.codespace, 'StopPlace_' + stop_ids[i]),
@@ -439,8 +439,6 @@ class GtfsNeTexProfile(CallsProfile):
                     stop_places[stop_place.id] = stop_place
                 else:
                     stop_place_id = getId(StopPlace, self.codespace, parent_stations[i])
-                    if stop_place_id == 'SBB:StopPlace:Parent8583337':
-                        pass
                     if stop_place_id in stop_places:
                         stop_place = stop_places[getId(StopPlace, self.codespace, parent_stations[i])]
                     else:
@@ -450,7 +448,7 @@ class GtfsNeTexProfile(CallsProfile):
                                                name=MultilingualString(value=stop_names[i]),
                                                public_code=PublicCodeStructure(value=stop_codes[i]) if stop_codes[i] is not None else None,
                                                description=getOptionalString(get_or_none(stop_descs, i)),
-                                               private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]),
+                                               private_codes=PrivateCodes(private_code=[PrivateCode(value=stop_ids[i], type_value="stop_id")]) if location_types[i] == 1 else None,
                                                locale=Locale(time_zone=stop_timezones[i]) if stop_timezones[
                                                                                                  i] is not None else None,
                                                parent_zone_ref=ZoneRefStructure(ref=zone_ids[i],
