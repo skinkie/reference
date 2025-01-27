@@ -46,8 +46,8 @@ from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory
 from transformers.epip import EPIP_CLASSES
 
 from swiss_to_db import SWISS_CLASSES
-
-generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
+from configuration import defaults
+generator_defaults = {'codespace': Codespace(xmlns=defaults["codespace"]), 'version': defaults["version"]} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
 
 SOURCE_DATABASE_FILE = "/home/netex/swiss.sqlite"
 TARGET_DATABASE_FILE = "/home/netex/swiss-target.sqlite"

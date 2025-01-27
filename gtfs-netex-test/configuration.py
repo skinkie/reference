@@ -20,6 +20,8 @@ defaults["feed_publisher_name"]= "Publication Delivery"
 defaults["feed_publisher_url"]= "http://publicationdelivery.eu"
 defaults["os"]= "windows"
 defaults["authority_reference"] = True
+defaults["codespace"]="OPENOV"
+defaults["version"]=1
 input_dir = "d:/input"
 processing_data =  "d:/aux_testing_processing"
 
