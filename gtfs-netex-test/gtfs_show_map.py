@@ -18,7 +18,7 @@ def generate_random_dark_color():
 
 
 def main(gtfs_zip_file, map_file, limitation):
-    global processing_data
+    #global processing_data
     limitation=int(limitation)
     # Read GTFS files using pandas
     # Read the GTFS files directly from the ZIP archive using pandas

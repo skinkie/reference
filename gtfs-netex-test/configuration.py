@@ -23,7 +23,6 @@ defaults["authority_reference"] = True
 input_dir = "d:/input"
 processing_data =  "d:/aux_testing_processing"
 
-
 # a local configuration overwrites the general one. The local_configuration must not be added to github
 try:
     from local_configuration import *
