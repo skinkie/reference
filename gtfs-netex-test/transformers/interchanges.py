@@ -3,11 +3,12 @@ from typing import Generator
 
 from netex import InterchangeRule, InterchangeRuleParameterStructure, StopAreaRef, StopPlaceRef, ScheduledStopPointRef, \
     StopPlace, PassengerStopAssignment, ServiceJourney, LineRef, FlexibleLineRef, ServiceJourneyPattern, RouteView, \
-    Route, RouteRef, ServiceJourneyRef, FareScheduledStopPointRef, ServiceJourneyInterchange, ServiceJourneyRefStructure
+    Route, RouteRef, ServiceJourneyRef, FareScheduledStopPointRef, ServiceJourneyInterchange, \
+    ServiceJourneyRefStructure, ScheduledStopPointRefStructure, VehicleJourneyRefStructure
 from netexio.database import Database
 from netexio.dbaccess import load_local, load_references_generator, load_embedding_generator, load_generator
 from refs import getFakeRef
-from utils import project
+from utils import project, projectRef
 
 
 def getIdOrRef(obj):
@@ -164,13 +165,13 @@ def interchange_rules_to_service_journey_interchanges(db: Database) -> Generator
         else:
             warnings.warn("TODO: implement non-servicejourneyref interchange")
 
-        if isinstance(interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRef) and \
-            isinstance(interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRef) and \
+        if isinstance(interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRefStructure) and \
+            isinstance(interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRefStructure) and \
             isinstance(interchange_rule.feeder_filter.scheduled_stop_point_ref, ScheduledStopPointRef) and \
             isinstance(interchange_rule.distributor_filter.scheduled_stop_point_ref, ScheduledStopPointRef):
-            sji: ServiceJourneyInterchange = project(interchange_rule, ServiceJourneyInterchange)
-            sji.from_journey_ref = interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator
-            sji.to_journey_ref = interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator
-            sji.from_point_ref = interchange_rule.feeder_filter.scheduled_stop_point_ref
-            sji.to_point_ref = interchange_rule.distributor_filter.scheduled_stop_point_ref
+            sji: ServiceJourneyInterchange = project(interchange_rule, ServiceJourneyInterchange,
+                                                     from_journey_ref=projectRef(interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator, VehicleJourneyRefStructure),
+                                                     to_journey_ref=projectRef(interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator, VehicleJourneyRefStructure),
+                                                     from_point_ref=projectRef(interchange_rule.feeder_filter.scheduled_stop_point_ref, ScheduledStopPointRefStructure),
+                                                     to_point_ref=projectRef(interchange_rule.distributor_filter.scheduled_stop_point_ref, ScheduledStopPointRefStructure))
             yield sji
