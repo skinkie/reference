@@ -39,9 +39,15 @@ from aux_logging import *
 
 generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
 
-def main(source_database_file: str, target_database_file: str):
+def main(source_database_file: str, target_database_file: str, clean_database: bool=True):
     classes = get_interesting_classes(filter=EPIP_CLASSES)
 
+    # Workaround for https://github.com/duckdb/duckdb/issues/8261
+    if clean_database:
+        try:
+            os.remove(target_database_file)
+        except:
+            pass
     with Database(target_database_file, read_only=False) as target_db:
         setup_database(target_db, classes, True)
         # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
