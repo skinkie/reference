@@ -400,7 +400,7 @@ class GtfsProfile:
         route = {'route_id': GtfsProfile.getOriginalGtfsId(line, 'route_id'),
                  'agency_id': GtfsProfile.getOriginalGtfsIdFromRef(agency_id),
                  'route_short_name': GtfsProfile.getOptionalPrivateCode(line.public_code), # This is used as VehicleType or PublicCode
-                 'route_long_name': '', # GtfsProfile.getOptionalMultilingualString(line.name), # This is used as destination
+                 'route_long_name': GtfsProfile.getOptionalMultilingualString(line.name), # This is used as destination
                  'route_desc': GtfsProfile.getOptionalMultilingualString(line.description),
                  'route_type': GtfsProfile.projectVehicleModeToRouteType(line.transport_mode),
                  'route_url': GtfsProfile.getInfoLinkWithUrl(line.document_links),
