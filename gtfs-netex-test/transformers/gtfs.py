@@ -335,12 +335,12 @@ def gtfs_generate_deprecated_version(db_write: Database) -> Version:
     for op in load_generator(db_write, OperatingPeriod):
         op: OperatingPeriod
         dt = op.from_operating_day_ref_or_from_date.to_datetime().date()
-        if my_from is None or my_from < dt:
+        if my_from is None or my_from > dt:
             my_from = dt
             last_op = op
 
         dt = op.to_operating_day_ref_or_to_date.to_datetime().date()
-        if my_to is None or my_to > dt:
+        if my_to is None or my_to < dt:
             my_to = dt
             last_op = op
 
@@ -348,11 +348,11 @@ def gtfs_generate_deprecated_version(db_write: Database) -> Version:
         xml_date = dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date
         if isinstance(xml_date, XmlDate):
             dt = xml_date.to_date()
-            if my_from is None or my_from < dt:
+            if my_from is None or my_from > dt:
                 my_from = dt
                 last_op = dta
 
-            if my_to is None or my_to > dt:
+            if my_to is None or my_to < dt:
                 my_to = dt
                 last_op = dta
 
