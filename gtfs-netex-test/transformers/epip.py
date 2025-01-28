@@ -850,7 +850,8 @@ def epip_service_journey_interchange(db_read: Database, db_write: Database, gene
         _load_generator = load_generator(db_read, JourneyMeeting)
         for journey_meeting in _load_generator:
             journey_meeting: JourneyMeeting
-            service_journey_interchange: ServiceJourneyInterchange = project(journey_meeting, ServiceJourneyInterchange)
+            # TODO: I want the from_journey ref having the "correct" name_of_ref_class
+            service_journey_interchange: ServiceJourneyInterchange = project(journey_meeting, ServiceJourneyInterchange, from_point_ref=journey_meeting.at_stop_point_ref, to_point_ref=journey_meeting.at_stop_point_ref)
             yield service_journey_interchange
 
         """
