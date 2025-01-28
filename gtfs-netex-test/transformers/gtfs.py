@@ -507,7 +507,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                     yield tsj
 
                 elif tsj.time_demand_type_ref:
-                    tdt: TimeDemandType = get_single(db_read, TimeDemandType, sj.time_demand_type_ref.ref, cursor=True)
+                    tdt: TimeDemandType = get_single(db_read, TimeDemandType, tsj.time_demand_type_ref.ref, cursor=True)
                     CallsProfile.getCallsFromTimeDemandType(tsj, sjp, tdt)
                     yield tsj
 
