@@ -110,7 +110,7 @@
   },
   {
     "block": "swissinterchange",
-    "download_url":"https://github.com/user-attachments/files/18201749/swiss_interchange.zip",
+    "download_url":"https://github.com/user-attachments/files/18577272/swiss_interchange.zip",
     "scripts": [
        {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
         {"step":2,"script": "download_input_file", "args": "%%dir%%"},
