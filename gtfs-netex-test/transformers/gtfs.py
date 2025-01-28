@@ -1,4 +1,5 @@
 import hashlib
+import logging
 import sys
 import warnings
 from datetime import timedelta, datetime, time
@@ -22,6 +23,7 @@ from nordicprofile import NordicProfile
 from refs import getRef, getIndex, getIndexByGroup, getId
 from transformers.daytype import get_day_type_from_availability_condition, datetime_weekday_to_dow
 from utils import project, chain
+from aux_logging import *
 
 import netex_monkeypatching
 
@@ -77,7 +79,7 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
                 # TODO: Now we would like to filter on a property such as LineRef, but that may obviously be unavailable...
                 # TODO: Implement the reference chain by the reference table, so it finds the object of interest, by joins (inna-search)
                 # TODO: Iff multiple OperatorRefs are pointing to the same LineRef, the LineRef must be duplicated for GTFS export.
-                db_read.logger.info("Operator not found for {line}. Implement Innasearch.")
+                log_all(logging.INFO,f"Operator not found for {line}. Implement Innasearch.")
                 pass
 
         line.authority_ref = None
@@ -89,7 +91,7 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
         line.types_of_payment_method = None
 
         if line.operator_ref is None:
-            db_read.logger.error(f"Line {line.id} does not have an operator_ref assigned.")
+            log_all(logging.ERROR,f"Line {line.id} does not have an operator_ref assigned.")
 
     write_objects(db_write, list(operators.values()), True, True)
     write_objects(db_write, lines, True, True)
@@ -102,7 +104,7 @@ def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
         sjp: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern, sj.journey_pattern_ref.ref,
                                                 cursor=True)
         if sjp is None:
-            db_read.logger.error("No SJP")
+            log_all(logging.ERROR,"No SJP")
 
         else:
             # TODO: very costly to do it here for every ServiceJourneyPattern
@@ -129,7 +131,7 @@ def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
                 return sj
 
             else:
-                db_read.logger.error("Unimplemented method to calls")
+                log_all(logging.ERROR,"Unimplemented method to calls")
 
 def calendars_to_daytype(db_read: Database, sj: ServiceJourney) -> DayTypeRefsRelStructure | ValidityConditionsRelStructure:
     vcs: set[str] = set()
@@ -149,12 +151,12 @@ def calendars_to_daytype(db_read: Database, sj: ServiceJourney) -> DayTypeRefsRe
                             vcs2.append(vci)
                         vcs.add(vci.ref)
                     else:
-                        warnings.warn("Unimplemented other validity condition on ServiceJourney")  # TODO: Only report once
+                        log_once(logging.WARN, "vc-3","Unimplemented other validity condition on ServiceJourney")  # TODO: Only report once
 
         vcsl = list(sorted(vcs))
 
         if len(vcsl) == 0:
-            warnings.warn(f"No availability conditions at all for {sj.id}")
+            log_once(logging.WARN, "ac-2",f"No availability conditions at all for {sj.id}")
 
         elif len(vcsl) > 1:
             ref = hashlib.md5((';'.join(vcsl)).encode('utf-8')).hexdigest()[0:5]
@@ -189,7 +191,7 @@ def gtfs_day_type(day_type: DayType, day_type_assignments: list[DayTypeAssignmen
     # TODO: reduce the enormous complexity and duplications in the function below
 
     if len(uic_operating_periods) > 1 or len(operating_periods) > 1:
-        warnings.warn("We can't handle multiple operating periods yet, only considering the first!")
+        log_once(logging.WARN, "op","We can't handle multiple operating periods yet, only considering the first!")
 
     my_day_type_assignments = []
     my_operating_period = None
@@ -401,7 +403,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
                         availability_condition = option.choice[0]
                     else:
                         availability_condition = None
-                        warnings.warn("We cannot yet handle other validity conditions")
+                        log_once(logging.WARN, "vc-2","We cannot yet handle other validity conditions")
 
                     day_type, day_type_assignments, operating_days, uic_operating_period = get_day_type_from_availability_condition(db_read, availability_condition)
                     day_type, day_type_assignments, operating_period = gtfs_day_type(day_type, day_type_assignments, operating_days, [uic_operating_period], [])
@@ -411,7 +413,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
                     yield day_type, day_type_assignments, operating_period
                 else:
                     # TODO
-                    warnings.warn("We cannot yet handle availability condition aggregation")
+                    log_once(logging.WARN, "ac","We cannot yet handle availability condition aggregation")
 
             elif isinstance(option, DayTypeRefsRelStructure):
                 if len(option.day_type_ref) == 1:
@@ -442,7 +444,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
 
                 else:
                     # TODO
-                    warnings.warn("We cannot yet handle day type aggregation")
+                    log_once(logging.WARN, "dt-1""We cannot yet handle day type aggregation")
 
     for day_type, day_type_assignments, operating_periods in query_daytype(db_read, calendar_combinations):
         # TODO: Figure out if there can be a parallel receiver for a generator
@@ -461,7 +463,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
             else:
                 sjp: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern, sj.journey_pattern_ref.ref, cursor=True)
                 if sjp is None:
-                    db_read.logger.error("No SJP")
+                    log_all(logging.ERROR,"No SJP")
 
                 else:
                     # TODO: very costly to do it here for every ServiceJourneyPattern
@@ -484,7 +486,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                         yield sj
 
                     else:
-                        db_read.logger.error("Unimplemented method to calls")
+                        log_all(logging.ERROR,"Unimplemented method to calls")
 
 
     write_generator(db_write, ServiceJourney, query_sj(db_read))
@@ -498,7 +500,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
             else:
                 sjp: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern, tsj.journey_pattern_ref.ref, cursor=True)
                 if sjp is None:
-                    db_read.logger.error("No SJP")
+                    log_all(logging.ERROR,"No SJP")
 
                 elif tsj.passing_times:
                     CallsProfile.getCallsFromTimetabledPassingTimes(tsj, sjp)
@@ -510,7 +512,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                     yield tsj
 
                 else:
-                    db_read.logger.error("Unimplemented method to calls")
+                    log_all(logging.ERROR,"Unimplemented method to calls")
 
 
     write_generator(db_write, TemplateServiceJourney, query_tsj(db_read))
@@ -738,7 +740,7 @@ def gtfs_calendar_and_dates(db_read: Database, day_type_ref: DayTypeRef, day_typ
             negative = day_type_assignments[0]
 
         if positive is None or negative is None:
-            warnings.warn("Two day type assignments, not matching GTFS Profile")
+            log_once(logging.WARN,"dt","Two day type assignments, not matching GTFS Profile")
             return
 
         if isinstance(positive.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
@@ -752,7 +754,7 @@ def gtfs_calendar_and_dates(db_read: Database, day_type_ref: DayTypeRef, day_typ
             uic_operating_period_negative = None
 
         if uic_operating_period_positive is None or uic_operating_period_negative is None:
-            warnings.warn("No dual UicOperatingPeriod found, not matching GTFS Profile")
+            log_once(logging.WARN,"uic","No dual UicOperatingPeriod found, not matching GTFS Profile")
             return
 
         if uic_operating_period_positive.days_of_week:
@@ -825,7 +827,7 @@ def gtfs_calendar_generator(db_read: Database, db_write: Database, generator_def
                     elif isinstance(vc, AvailabilityConditionRef):
                         vcs.add(vc.ref)
                     else:
-                        warnings.warn("Unimplemented other validity condition on ServiceJourney") # TODO: Only report once
+                        log_once(logging.WARN,"validity","Unimplemented other validity condition on ServiceJourney") # TODO: Only report once
 
             if sj.day_types is not None:
                 for day_type_ref in sj.day_types.day_type_ref:

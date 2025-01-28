@@ -16,14 +16,6 @@ from transformers.projection import reprojection_update
 def main(source_database_file: str, target_database_file: str, clean_database: bool=True):
     classes = get_interesting_classes(GTFS_CLASSES)
 
-    # Workaround for https://github.com/duckdb/duckdb/issues/8261
-    if clean_database:
-        try:
-            os.remove(target_database_file)
-        except:
-            pass
-
-
     with Database(target_database_file, read_only=False) as db_write:
         # Target requires: Version, DataSource, Codespace, Authority, Operator, Branding, StopPlace, PassengerStopAssignment, ScheduledStopPoint, Line, DayType, ServiceJourney, TemplateServiceJourney, JourneyMeeting, ServiceJourneyInterchange
 

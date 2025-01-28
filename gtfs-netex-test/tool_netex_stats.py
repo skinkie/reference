@@ -21,7 +21,6 @@ def get_element_names(node):
     return element_names
 
 def main(filename: str):
-    global processing_data
     log_print("***************************************************")
     log_print("file: " + filename)
     log_print("***************************************************")

@@ -9,7 +9,7 @@ from netexio.database import Database
 from netexio.dbaccess import load_local, load_references_generator, load_embedding_generator, load_generator
 from refs import getFakeRef
 from utils import project, projectRef
-
+from aux_logging import *
 
 def getIdOrRef(obj):
     if hasattr(obj, 'ref'):
@@ -141,10 +141,10 @@ def interchange_rules_to_service_journey_interchanges(db: Database) -> Generator
                             interchange_rule.feeder_filter.scheduled_stop_point_ref = ssp_ref
                             break
                 else:
-                    warnings.warn("We cannot find {sj_ref.ref} for {interchange_rule}.")
+                    log_once(logging.WARN, "sj","We cannot find {sj_ref.ref} for {interchange_rule}.")
 
         else:
-            warnings.warn("TODO: implement non-servicejourneyref interchange")
+            log_once(logging.WARN, "sj-2","TODO: implement non-servicejourneyref interchange")
 
 
         if interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator and isinstance(interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRefStructure):
@@ -160,10 +160,10 @@ def interchange_rules_to_service_journey_interchanges(db: Database) -> Generator
                             interchange_rule.distributor_filter.scheduled_stop_point_ref = ssp_ref
                             break
                 else:
-                    warnings.warn("We cannot find {sj_ref.ref} for {interchange_rule}.")
+                    log_once(logging.WARN,"sj-2""We cannot find {sj_ref.ref} for {interchange_rule}.")
 
         else:
-            warnings.warn("TODO: implement non-servicejourneyref interchange")
+            log_once(logging.WARN, "sj-3","TODO: implement non-servicejourneyref interchange")
 
         if isinstance(interchange_rule.feeder_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRefStructure) and \
             isinstance(interchange_rule.distributor_filter.service_journey_ref_or_journey_designator_or_service_designator, ServiceJourneyRefStructure) and \
