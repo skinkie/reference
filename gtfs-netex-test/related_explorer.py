@@ -77,10 +77,13 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
 
 def main(netex,object_type,object_filter,output,referencing):
     with Database(netex,read_only=False) as db:
+        # TODO: Refactor this into a normal test
         references_exist = False
         try:
             db.con.execute("SELECT * FROM referencing LIMIT 1;")
+            db.con.fetchall()
             db.con.execute("SELECT * FROM embedded LIMIT 1;")
+            db.con.fetchall()
             references_exist = True
         except:
             pass

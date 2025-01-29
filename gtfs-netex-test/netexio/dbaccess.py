@@ -17,6 +17,7 @@ from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
     EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
 from netexio.database import Database
+from netexio.serializer import Serializer
 from netexio.xmlserializer import MyXmlSerializer
 from refs import getRef, getFakeRefByClass
 from transformers.references import replace_with_reference_inplace
@@ -848,10 +849,10 @@ def get_local_name(element):
     return element.__name__
 
 
-def update_embedded_referencing(deserialized) -> Generator[list[str], None, None]:
+def update_embedded_referencing(serializer: Serializer, deserialized) -> Generator[list[str], None, None]:
     for obj, path in recursive_attributes(deserialized, []):
         if hasattr(obj, 'id'):
-            if obj.id is not None:
+            if obj.id is not None and obj.__class__ in serializer.interesting_classes:
                 yield [
                     get_object_name(deserialized.__class__), deserialized.id, deserialized.version,
                     get_object_name(obj.__class__),

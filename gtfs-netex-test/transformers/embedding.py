@@ -9,7 +9,7 @@ from utils import get_object_name
 
 def embedding_udf(serializer: Serializer, serialized: bytes, clazz: str) -> list[str]:
     deserialized = serializer.unmarshall(serialized, clazz)
-    return [x for x in update_embedded_referencing(deserialized) if len(x) > 0]
+    return [x for x in update_embedded_referencing(serializer, deserialized) if len(x) > 0]
     # return result
 
 def embedding_update(db: Database, clean=False):
