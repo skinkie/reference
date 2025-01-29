@@ -217,22 +217,24 @@
          ]
   },
         {
-    "block": "lombardiacomo",
-    "url":"https://www.cciss.it/nap/mmtis/public/catalog/Dataset/5486",
+    "block": "5t",
+    "url":"https://www.cciss.it/nap/mmtis/public/catalog/Dataset/6",
+    "download_url":"https://github.com/user-attachments/files/18589535/IT-ITC1-TRENITALIA_L1.xml.gz",
     "scripts": [
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "netex_to_db.py", "args": "[C:/Users/ue71603/Downloads/IT-ITC4-TRENITALIA_126_L1.xml.gz] %%dir%%/02-import.duckdb True"},
-        {"step":3,"script": "tool_netex_check_assertions.py", "args": "./scripts/general-netex-assertions.txt C:/Users/ue71603/Downloads/IT-ITC4-COMO-FUNBUS_191_L1.xml.gz"},
-        {"step":4,"script": "tool_netex_stats.py", "args": "C:/Users/ue71603/Downloads/IT-ITC4-COMO-FUNBUS_191_L1.xml.gz"},
-        {"step":5,"script": "tool_xml_validator.py", "args": "C:/Users/ue71603/Downloads/IT-ITC4-COMO-FUNBUS_191_L1.xml.gz ./netex-xsd/xsd/NeTEx_publication.xsd"},
-        {"step":6,"script": "#epip_db_to_db.py", "args": "%%dir%%/02-import.duckdb %%dir%%/07-netex-database.duckdb"},
-        {"step":7,"script": "#epip_db_to_xml.py", "args": "%%dir%%/07-netex-database.duckdb %%dir%%/08-%%block%%-netex.xml.gz"},
-        {"step":8,"script": "#netex_to_db.py", "args": "[%%dir%%/08-%%block%%-netex.xml.gz] %%dir%%/08-gtfs.duckdb True"},
-        {"step":9,"script": "#related_explorer.py", "args": "%%dir%%/08-gtfs.duckdb Line random %%dir%%/09-line.xml True"},
-        {"step":10,"script": "gtfs_db_to_db.py", "args": "%%dir%%/02-import.duckdb %%dir%%/10-gtfs.duckdb"},
-        {"step":11,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/02-import.duckdb %%dir%%/11-%%block%%-gtfs.zip"},
-        {"step":12,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/11-%%block%%-gtfs.zip"},
-        {"step":13,"script": "gtfs_show_map.py", "args": "%%dir%%/11-%%block%%-gtfs.zip %%dir%%/13-%%block%%-map.html 1"}
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
+        {"step":3,"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/02-import.duckdb True"},
+        {"step":4,"script": "tool_netex_check_assertions.py", "args": "./scripts/general-netex-assertions.txt %%inputfilepath%%"},
+        {"step":5,"script": "tool_netex_stats.py", "args": "%%inputfilepath%%"},
+        {"step":6,"script": "tool_xml_validator.py", "args": "%%inputfilepath%% ./netex-xsd/xsd/NeTEx_publication.xsd"},
+        {"step":7,"script": "epip_db_to_db.py", "args": "%%dir%%/02-import.duckdb %%dir%%/07-netex-database.duckdb"},
+        {"step":8,"script": "epip_db_to_xml.py", "args": "%%dir%%/07-netex-database.duckdb %%dir%%/08-%%block%%-netex.xml.gz"},
+        {"step":9,"script": "netex_to_db.py", "args": "[%%dir%%/08-%%block%%-netex.xml.gz] %%dir%%/08-gtfs.duckdb True"},
+        {"step":10,"script": "related_explorer.py", "args": "%%dir%%/08-gtfs.duckdb Line random %%dir%%/09-line.xml.gz True"},
+        {"step":11,"script": "gtfs_db_to_db.py", "args": "%%dir%%/08-gtfs.duckdb %%dir%%/10-gtfs.duckdb"},
+        {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/10-gtfs.duckdb %%dir%%/11-%%block%%-gtfs.zip"},
+        {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/11-%%block%%-gtfs.zip"},
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/11-%%block%%-gtfs.zip %%dir%%/13-%%block%%-map.html 1"}
          ]
   },
   {
