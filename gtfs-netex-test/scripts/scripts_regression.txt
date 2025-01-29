@@ -171,11 +171,14 @@
   },
 
        {
-    "block": "swiss4",
+       "block": "swiss4",
+       "download_url":"https://github.com/user-attachments/files/18593829/swiss4.zip",
+    "description":"Reduced Swiss data set for tests, still a bit large",
     "scripts": [
-        {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":2,"script": "set_defaults", "args": "authority='SKI+'; time_zone='Europe/Berlin'; feed_publisher_name='SBB SKI+'; feed_publisher_url='https://opentransportdata.swiss'"},
-        {"step":3,"script": "swiss_to_db.py", "args": "%%inputdir%%/swiss4.zip %%dir%%/03-swiss-import.duckdb True True"},
+        {"step":0,"script": "clean_tmp", "args": "%%dir%%"},
+        {"step":1,"script": "set_defaults", "args": "authority='SKI+'; time_zone='Europe/Berlin'; feed_publisher_name='SBB SKI+'; feed_publisher_url='https://opentransportdata.swiss'"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
+        {"step":3,"script": "swiss_to_db.py", "args": "%%inputfilepath%% %%dir%%/03-swiss-import.duckdb True True"},
         {"step":4,"script": "epip_db_to_db.py", "args": "%%dir%%/03-swiss-import.duckdb %%dir%%/04-netex-database.duckdb"},
         {"step":5,"script": "epip_db_to_xml.py", "args": "%%dir%%/04-netex-database.duckdb %%dir%%/05-%%block%%-netex.xml.gz"},
         {"step":6,"script": "tool_netex_check_assertions.py", "args": "./scripts/swiss-assertions.txt %%dir%%/05-%%block%%-netex.xml.gz"},
@@ -193,7 +196,6 @@
 
         ]
   },
-
 
        {
     "block": "lombardiatrainitalia",
