@@ -429,7 +429,16 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
                         if isinstance(ref, UicOperatingPeriodRef) or (isinstance(ref, OperatingPeriodRef) and ref.name_of_ref_class == 'UicOperatingPeriod'):
                             uic_operating_periods.append(load_local(db_read, UicOperatingPeriod, limit=1, filter=ref.ref, cursor=True, embedding=True)[0])
                         elif isinstance(ref, OperatingPeriodRef):
-                            operating_periods.append(load_local(db_read, OperatingPeriod, limit=1, filter=ref.ref, cursor=True, embedding=True)[0])
+                            r = load_local(db_read, OperatingPeriod, limit=1, filter=ref.ref, cursor=True, embedding=True)
+                            if len(r) > 0:
+                                operating_periods.append(r[0])
+                            else:
+                                # TODO: we must be able to query child classes directly.
+                                r = load_local(db_read, UicOperatingPeriod, limit=1, filter=ref.ref, cursor=True, embedding=True)
+                                if len(r) > 0:
+                                    uic_operating_periods.append(r[0])
+                                else:
+                                    log_all(logging.ERROR, f"{ref} cannot be found.")
                         elif isinstance(ref, OperatingDayRef):
                             operating_days.append(load_local(db_read, OperatingDay, limit=1, filter=ref.ref, cursor=True, embedding=True)[0])
 

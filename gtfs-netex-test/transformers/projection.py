@@ -1,10 +1,12 @@
 import functools
+import logging
 from decimal import Decimal, ROUND_HALF_UP
 from itertools import chain
 
 from pyproj import Transformer
 from pyproj.exceptions import CRSError
 
+from aux_logging import log_once
 from mro_attributes import list_attributes
 from netex import Polygon, PosList, Pos, LocationStructure2, LineString, SimplePointVersionStructure, MultiSurface
 from netexio.database import Database
@@ -49,8 +51,9 @@ def reprojection(deserialized: object, crs_to: str):
                 continue
 
             transformer = get_transformer_by_srs_name(obj, crs_to)
-            project_linestring2(transformer, obj)
-            obj.srs_name = crs_to
+            if transformer is not None:
+                project_linestring2(transformer, obj)
+                obj.srs_name = crs_to
 
         elif isinstance(obj, Polygon):
             project_polygon(obj, crs_to)
@@ -102,10 +105,14 @@ def get_transformer_by_srs_name(location, crs_to) -> Transformer:
             transformer = Transformer.from_crs(srs_name, crs_to) # TODO: Test if we can use accuracy instead of quantitize later
         except CRSError:
             # TODO: Implement logging rule that handles error
-            raise
+            log_once(logging.ERROR, f"Unknown transformation {srs_name} for {crs_to}, we now assume WGS84, and hope the target is available")
+            transformer = Transformer.from_crs('urn:ogc:def:crs:EPSG::4326', crs_to)
             pass
         except:
-            raise
+            log_once(logging.ERROR, f"Unknown transformation {srs_name} for {crs_to}, we now assume WGS84, and hope the target is available")
+            transformer = Transformer.from_crs('urn:ogc:def:crs:EPSG::4326', crs_to)
+            pass
+
         transformers[mapping] = transformer
     return transformer
 

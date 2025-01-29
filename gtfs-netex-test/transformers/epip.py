@@ -430,7 +430,6 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                 else:
                     if sj_line_ref is not None:
                         service_journey_pattern.route_ref_or_route_view.flexible_line_ref_or_line_ref_or_line_view = sj_line_ref
-                        sjps[service_journey_pattern.id] = service_journey_pattern
                     else:
                         print("RouteView: Other options to recover line not available")
 
@@ -439,7 +438,6 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                                           service_journey_pattern.route_ref_or_route_view.version)
                 service_journey_pattern.route_ref_or_route_view = RouteView(
                     flexible_line_ref_or_line_ref_or_line_view=route.line_ref)
-                sjps[service_journey_pattern.id] = service_journey_pattern
 
                 if service_journey_pattern.direction_type is None:
                     service_journey_pattern.direction_type = route.direction_type.value
@@ -452,7 +450,6 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
 
         else:
             service_journey_pattern.route_ref_or_route_view = RouteView(flexible_line_ref_or_line_ref_or_line_view=sj_line_ref)
-            sjps[service_journey_pattern.id] = service_journey_pattern
 
     def process(sj: ServiceJourney, db_read: Database, db_write: Database, generator_defaults: dict):
         sj: ServiceJourney
@@ -489,6 +486,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
             CallsProfile.getPassingTimesFromTimeDemandType(sj, service_journey_pattern, time_demand_type)
 
         recover_line_ref(sj, service_journey_pattern, db_read)
+        sjps[service_journey_pattern.id] = service_journey_pattern
 
         service_journey_ac_to_day_type(sj, availability_conditions, day_types, uic_operating_periods, day_type_assignments)
 
