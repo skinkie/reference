@@ -18,8 +18,9 @@ DayTypeRef.__hash__ = ref_version_hash
 OperatingPeriodRef.__hash__ = ref_version_hash
 UicOperatingPeriodRef.__hash__ = ref_version_hash
 
+# TODO: the following hashes us version or 'any' to overcome (invalid) None situations, it would be better if we could create hashes that would capture the true NeTEx-any situation
 def day_type_refs_hash(self: DayTypeRefsRelStructure):
-    return hash('\n'.join([dtr.ref + ';' + dtr.version for dtr in self.day_type_ref]))
+    return hash('\n'.join([dtr.ref + ';' + (dtr.version or 'any') for dtr in self.day_type_ref]))
 
 DayTypeRefsRelStructure.__hash__ = day_type_refs_hash
 
@@ -27,9 +28,9 @@ def vc_refs_hash(self: ValidityConditionsRelStructure):
     refs = []
     for vc in self.choice:
         if hasattr(vc, 'id'):
-            refs.append(vc.id + ';' + vc.version)
+            refs.append(vc.id + ';' + (vc.version or 'any'))
         elif hasattr(vc, 'ref'):
-            refs.append(vc.ref + ';' + vc.version)
+            refs.append(vc.ref + ';' + (vc.version or 'any'))
 
     return hash('\n'.join(refs))
 
@@ -37,7 +38,7 @@ ValidityConditionsRelStructure.__hash__ = vc_refs_hash
 
 
 def id_version_hash(self):
-    return hash(self.id + ';' + self.version)
+    return hash(self.id + ';' + (self.version or 'any'))
 
 ServiceJourney.__hash__ = id_version_hash
 ServiceJourneyPattern.__hash__ = id_version_hash
