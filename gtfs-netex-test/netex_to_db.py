@@ -14,6 +14,13 @@ def main(filenames: list[str], database: str, clean_database: bool = True):
         except:
             pass
 
+    # if filenames is not a list of str  => error
+    if not (isinstance(filenames, list) and all(isinstance(item, str) for item in filenames)):
+        log_all(logging.ERROR,f'filenames parameter must be a [] of file names.')
+        log_flush()
+        exit(1)
+
+
     with Database(database, read_only=False, logger=logging.getLogger("script_runner")) as db:
         classes = get_interesting_classes()
 
