@@ -44,6 +44,8 @@ def load_and_run(file_name, args_string):
     return result
 
 def replace_in_string(input, search, replace):
+    if search in input and (replace == '' or replace=="NOT SET YET"):
+        raise ValueError(f"Replace string cannot be empty when search string ({search})exists in input.")
     return input.replace(search, replace)
 
 # command to clean a directory from temp files (mostly duckdb)
