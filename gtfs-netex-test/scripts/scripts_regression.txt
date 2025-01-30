@@ -192,7 +192,7 @@
         {"step":14,"script": "gtfs_db_to_db.py", "args": "%%dir%%/13-netex-database.duckdb %%dir%%/14-netex-database.duckdb"},
         {"step":15,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/14-netex-database.duckdb %%dir%%/15-%%block%%-gtfs.zip"},
         {"step":16,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/15-%%block%%-gtfs.zip"},
-        {"step":17,"script": "gtfs_show_map.py", "args": "%%dir%%/15-%%block%%-gtfs.zip %%dir%%/17-%%block%%-map.html 10"}
+        {"step":17,"script": "gtfs_show_map.py", "args": "%%dir%%/15-%%block%%-gtfs.zip %%dir%%/17-%%block%%-map.html 1"}
 
         ]
   },

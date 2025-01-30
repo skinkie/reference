@@ -1,3 +1,4 @@
+import logging
 import math
 import random
 import time
@@ -164,15 +165,21 @@ def main(gtfs_zip_file, map_file, limitation):
 
 def handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_dict, stops_dict, stop_coords_list,
                            stop_coords_list_str, route_names, route_name_dict):
-    for trip_id in trips_dict[route_id]:
+    if trips_dict.get(route_id)==None:
+        log_once(logging.ERROR,'mapping',f'No trips for route {route_id}')
+        return
+    for trip_id in trips_dict.get(route_id):
         stop_coords = []
         trip_name = trips_names_dict[route_id][trips_dict[route_id].index(trip_id)]
 
         for stop_id in stop_times_dict[trip_id]:
-            stop_coord = stops_dict[stop_id]
+            if stops_dict.get(stop_id)==None:
+                log_once(logging.ERROR,'no coordinates',f'no coordinates available: {trip_id} - {stop_id}')
+            else:
+                stop_coord = stops_dict[stop_id]
 
-            if stop_coord:
-                stop_coords.append(stop_coord)
+                if stop_coord:
+                    stop_coords.append(stop_coord)
 
         # remove full duplicate lines or sub-lines we stringify the arrays for efficiency
         stop_coords_str = array_of_array_to_string(stop_coords)
