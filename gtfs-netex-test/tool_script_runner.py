@@ -115,6 +115,9 @@ def download(folder, url, forced=False):
 
         # Get the filename from the URL
         filename = os.path.basename(url)
+        # work around for swiss data, where it is "permalink"
+        if filename=="permalink":
+            filename="swiss.zip"
 
         if forced==False:
             # Download only when not exists
@@ -124,7 +127,17 @@ def download(folder, url, forced=False):
 
         # Download the file
         log_all(logging.INFO,f'Download from: {url}')
-        urllib.request.urlretrieve(url, os.path.join(folder, filename))
+        try:
+            opener = urllib.request.build_opener()
+            opener.addheaders = [('User-Agent', 'MyApp/1.0')]
+            urllib.request.install_opener(opener)
+            urllib.request.urlretrieve(url, os.path.join(folder, filename))
+            log_all(logging.INFO,"File downloaded successfully.")
+
+        except urllib.error.HTTPError as e:
+            log_all(logging.ERROR,f"HTTP Error: {e.code} - {e.reason}")
+        except urllib.error.URLError as e:
+            log_all(logging.ERROR,f"URL Error: {e.reason}")
 
         # Return the downloaded file path
         return os.path.join(folder, filename)
@@ -216,6 +229,9 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
                 # Execute the download command. The file under the download_url is copied to a folder
                 folder = script_args
                 script_input_file_path=download(folder,script_download_url)
+                if script_input_file_path=="FILE NOT FOUND":
+                    log_all(logging.ERROR,"No file downloaded")
+                    exit(1)
                 log_all(logging.INFO, f"Command 'download_input_file' executed for url: {script_download_url}\n")
                 continue
             if script_name == 'remove_file':
