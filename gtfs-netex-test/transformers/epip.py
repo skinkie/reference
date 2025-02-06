@@ -1,17 +1,18 @@
+import logging
 import sys
 import warnings
 from datetime import datetime, date, timedelta
 from decimal import Decimal, ROUND_HALF_UP
 from functools import partial
 from multiprocessing import Pool
-from typing import Generator, List, Dict
+from typing import Generator, List, Dict, Set
 import itertools
 
 from dateutil.rrule import rrule, DAILY
 
 import netex_monkeypatching
 
-from aux_logging import log_print
+from aux_logging import log_print, log_all
 from routesprofile import RoutesProfile
 from transformers.interchanges import interchange_rules_to_service_journey_interchanges
 from utils import project, chain, GeneratorTester
@@ -407,7 +408,8 @@ def get_service_calendar(day_types: Dict[str, DayType],
 
 def epip_service_journey_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool):
     print(sys._getframe().f_code.co_name)
-    sjps: Dict[str, ServiceJourneyPattern] = {}
+    # sjps: Dict[str, ServiceJourneyPattern] = {}
+    sjp_ids: Set[str] = set()
     availability_conditions: Dict[str, AvailabilityCondition] = {}
     day_types: Dict[str, DayType] = {}
     uic_operating_periods: List[UicOperatingPeriod] = []
@@ -458,22 +460,23 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         service_journey_pattern: ServiceJourneyPattern = None
 
         if sj.passing_times:
-            service_journey_pattern: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern,
-                                                                        sj.journey_pattern_ref.ref,
-                                                                        sj.journey_pattern_ref.version)
-
-            # Since we don't do it ourselves, we might want to check the poor input offered.
-            infer_id_and_order_and_apply(sj)
-
-        elif sj.calls:
-            if sj.journey_pattern_ref:
+            if sj.journey_pattern_ref.ref not in sjp_ids:
                 service_journey_pattern: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern,
                                                                             sj.journey_pattern_ref.ref,
                                                                             sj.journey_pattern_ref.version)
+
+                # Since we don't do it ourselves, we might want to check the poor input offered.
+                infer_id_and_order_and_apply(sj)
+
+        elif sj.calls:
+            if sj.journey_pattern_ref:
+                pass
+                # service_journey_pattern: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern,
+                #                                                            sj.journey_pattern_ref.ref,
+                #                                                            sj.journey_pattern_ref.version)
             else:
                 service_journey_pattern = service_journey_pattern_from_calls(sj, generator_defaults)
                 sj.journey_pattern_ref = getRef(service_journey_pattern)
-                sjps[service_journey_pattern.id] = service_journey_pattern
 
             sj.passing_times = TimetabledPassingTimesRelStructure(timetabled_passing_time=TimetablePassingTimesProfile.getTimetabledPassingtimesFromCalls(sj, service_journey_pattern))
 
@@ -485,8 +488,22 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                                                           sj.time_demand_type_ref.version)
             CallsProfile.getPassingTimesFromTimeDemandType(sj, service_journey_pattern, time_demand_type)
 
-        recover_line_ref(sj, service_journey_pattern, db_read)
-        sjps[service_journey_pattern.id] = service_journey_pattern
+        # If we already know that this generated SJP already exists, we should not even add it.
+        if service_journey_pattern.id not in sjp_ids:
+            recover_line_ref(sj, service_journey_pattern, db_read)
+            sjp_ids.add(service_journey_pattern.id)
+
+            # TODO: Here we need to add it to the new database
+            # sjps[service_journey_pattern.id] = service_journey_pattern
+
+            if len(route_point_projection) > 0:
+                if isinstance(service_journey_pattern.route_ref_or_route_view, RouteRef):
+                    routes: list[Route] = load_local(db_read, Route, limit=1, filter=service_journey_pattern.route_ref_or_route_view.ref, cursor=True)
+                    if len(routes) > 0:
+                        RoutesProfile.projectRouteToServiceLinks(db_read, service_journey_pattern, routes[0], route_point_projection, generator_defaults)
+
+            write_objects(db_write, [service_journey_pattern], empty=False, many=False, cursor=True)
+            sjp_ids.add(service_journey_pattern.id)
 
         service_journey_ac_to_day_type(sj, availability_conditions, day_types, uic_operating_periods, day_type_assignments)
 
@@ -509,33 +526,21 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         # for sj in pool.imap_unordered(partial(process, read_database=read_database, write_database=write_database, generator_defaults=generator_defaults), _load_generator, chunksize=100):
         #     yield sj
 
+    # TODO: At this point we should have a check to know if the ServiceJourneyPattern is geographically enabled, or not
+    log_all(logging.INFO, "Indexing RoutePoint to ScheduledStopPoint")
+    route_point_projection = {}
+    for ssp in load_generator(db_read, ScheduledStopPoint):
+        l = list(RoutesProfile.route_point_projection(ssp))
+        if len(l) > 0:
+            route_point_projection[getRef(ssp).ref] = l[0]
+
+    log_all(logging.INFO, "Indexing AvailabilityConditions")
     availability_conditions = getIndex(load_local(db_read, AvailabilityCondition))
 
+    log_all(logging.INFO, "Service journeys for now")
     write_generator(db_write, ServiceJourney, query(db_read), True)
 
-    # This check is a bit naive, if mixed files would exists, still not all ServiceJourneyPatterns would be available.
-    # If we would instead 'mix' the Original + the generated one, that would also be an issue for anything that would have updated the object.
-    if len(sjps.values()) > 0:
-        # TODO: At this point we should have a check to know if the ServiceJourneyPattern is geographically enabled, or not
-        route_point_projection = {}
-        for ssp in load_generator(db_read, ScheduledStopPoint):
-            l = list(RoutesProfile.route_point_projection(ssp))
-            if len(l) > 0:
-                route_point_projection[getRef(ssp).ref] = l[0]
-
-        if len(route_point_projection) > 0:
-            for sjp in sjps.values():
-                if isinstance(sjp.route_ref_or_route_view, RouteRef):
-                    routes: list[Route] = load_local(db_read, Route, limit=1, filter=sjp.route_ref_or_route_view.ref, cursor=True)
-                    if len(routes) > 0:
-                        RoutesProfile.projectRouteToServiceLinks(db_read, sjp, routes[0], route_point_projection, generator_defaults)
-
-        write_objects(db_write, list(sjps.values()), True, True)
-
-    # Until we can persistently attach database this doesnot make sense
-    # else:
-    #    attach_objects(db_write, read_database, ServiceJourneyPattern)
-
+    log_all(logging.INFO, "ServiceCalendar creation...")
     if len(uic_operating_periods) == 0:
         service_calendars: List[ServiceCalendar] = load_local(db_read, ServiceCalendar)
         if len(service_calendars) > 0:

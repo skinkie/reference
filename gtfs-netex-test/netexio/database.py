@@ -25,6 +25,9 @@ class Database:
     def cursor(self):
         return self.con.cursor()
 
+    def clean_cache(self):
+        self.object_cache = {}
+
     def __enter__(self):
         self.con = duckdb.connect(self.database_file, read_only=self.read_only)
         return self

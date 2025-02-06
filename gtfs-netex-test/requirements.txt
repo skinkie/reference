@@ -7,3 +7,4 @@ pandas
 multiprocess
 folium
 pytz
+memory_profiler

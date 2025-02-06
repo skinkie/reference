@@ -4,6 +4,7 @@ from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler, lxml
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
+from memory_profiler import memory_usage
 
 from netex import Codespace, AvailabilityCondition, NoticeAssignment, Notice, ScheduledStopPoint, \
     ServiceJourneyInterchange, Operator, ResponsibilitySet, StopPlace, Direction, Line, TariffZone, ServiceLink, \
@@ -48,21 +49,47 @@ def main(source_database_file: str, target_database_file: str):
         # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
 
         with Database(source_database_file, read_only=True) as source_db:
+            log_all(logging.INFO, "Copy all tables as-is " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             copy_table(source_db, target_db,[Codespace, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True)
+            source_db.clean_cache()
+
+            log_all(logging.INFO, "Copy lines, in EPIP style " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_line_memory(source_db, target_db, generator_defaults)
+            source_db.clean_cache()
+
+            log_all(logging.INFO, "Fix Quay / StopPlace locations " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             infer_locations_from_quay_or_stopplace_and_apply(source_db, target_db, generator_defaults)
-            # epip_scheduled_stop_point_memory(target_db, target_db, generator_defaults)
+            source_db.clean_cache()
+            # # epip_scheduled_stop_point_memory(target_db, target_db, generator_defaults)
+
+            log_all(logging.INFO, "Investigate this site frame step " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_site_frame_memory(source_db, target_db, generator_defaults)
+            source_db.clean_cache()
+
+            log_all(logging.INFO, "Service journeys for now " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_service_journey_generator(source_db, target_db, generator_defaults, None)
+            source_db.clean_cache()
+
+            log_all(logging.INFO, "ServiceJourneyInterchange additions " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_service_journey_interchange(source_db, target_db, generator_defaults)
+            source_db.clean_cache()
+
+            log_all(logging.INFO, "InterchangeRule additions " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_interchange_rule(source_db, target_db, generator_defaults)
+            source_db.clean_cache()
+
+            log_all(logging.INFO, "Infer directions from ServiceJourneyPatterns, and apply " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             infer_directions_from_sjps_and_apply(target_db, target_db, generator_defaults)
+            source_db.clean_cache()
             # TODO: epip_noticeassignment(source_db, target_db, generator_defaults)
 
+            log_all(logging.INFO, "Reprojection Update " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             reprojection_update(target_db, 'urn:ogc:def:crs:EPSG::4326')
 
+            log_all(logging.INFO, "Embedding update " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             embedding_update(target_db)
 
+            log_all(logging.INFO, "Copy remaining classes " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             missing_class_update(source_db, target_db)
 
 if __name__ == '__main__':
