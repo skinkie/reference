@@ -497,6 +497,9 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
             else:
                 service_journey_pattern = service_journey_pattern_from_calls(sj, generator_defaults)
                 sj.journey_pattern_ref = getRef(service_journey_pattern)
+                if sj.journey_pattern_view:
+                    if service_journey_pattern.destination_display_ref_or_destination_display_view:
+                        service_journey_pattern.destination_display_ref_or_destination_display_view =  sj.journey_pattern_view.destination_display_ref_or_destination_display_view
 
             sj.passing_times = TimetabledPassingTimesRelStructure(timetabled_passing_time=TimetablePassingTimesProfile.getTimetabledPassingtimesFromCalls(sj, service_journey_pattern))
 
