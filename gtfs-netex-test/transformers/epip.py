@@ -390,21 +390,41 @@ def get_service_calendar(day_types: Dict[str, DayType],
                      uic_operating_periods: List[UicOperatingPeriod],
                      day_type_assignments: List[DayTypeAssignment],
                      generator_defaults: dict):
-    from_date: datetime
-    to_date: datetime
 
     if len(uic_operating_periods) == 0:
+        # TODO: This should never happen, since EPIP specifies the use of UicOperatingPeriod
+        from_date: date = date(2099, 1, 1)
+        to_date: date = date(1999, 1, 1)
+
         warnings.warn("No uic_operating_periods available, submit this example to github")
+        for day_type_assignment in day_type_assignments:
+            if isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
+                d = day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.date()
+                if d < from_date:
+                    from_date = d
+                if d > to_date:
+                    to_date = d
 
-    from_date = min([uic.from_operating_day_ref_or_from_date.to_datetime() for uic in uic_operating_periods])
-    to_date = max([uic.to_operating_day_ref_or_to_date.to_datetime() for uic in uic_operating_periods])
+        return ServiceCalendar(id=getId(ServiceCalendar, generator_defaults['codespace'], "ServiceCalendar"),
+                               version=generator_defaults['version'],
+                               from_date=XmlDate.from_date(from_date), to_date=XmlDate.from_date(to_date),
+                               day_types=DayTypesRelStructure(day_type_ref_or_day_type=list(day_types.values())),
+                               operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods),
+                               day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments))
 
-    return ServiceCalendar(id=getId(ServiceCalendar, generator_defaults['codespace'], "ServiceCalendar"),
-                           version=generator_defaults['version'],
-                           from_date=XmlDate.from_date(from_date.date()), to_date=XmlDate.from_date(to_date.date()),
-                           day_types=DayTypesRelStructure(day_type_ref_or_day_type=list(day_types.values())),
-                           operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods),
-                           day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments))
+    else:
+        from_date: datetime
+        to_date: datetime
+
+        from_date = min([uic.from_operating_day_ref_or_from_date.to_datetime() for uic in uic_operating_periods])
+        to_date = max([uic.to_operating_day_ref_or_to_date.to_datetime() for uic in uic_operating_periods])
+
+        return ServiceCalendar(id=getId(ServiceCalendar, generator_defaults['codespace'], "ServiceCalendar"),
+                               version=generator_defaults['version'],
+                               from_date=XmlDate.from_date(from_date.date()), to_date=XmlDate.from_date(to_date.date()),
+                               day_types=DayTypesRelStructure(day_type_ref_or_day_type=list(day_types.values())),
+                               operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods),
+                               day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments))
 
 def epip_service_journey_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool):
     print(sys._getframe().f_code.co_name)
@@ -563,7 +583,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                 my_uic_operating_periods = [uic_operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef)]
                 my_operating_periods: list[OperatingPeriod] = [operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef) and (dta.is_available is None or dta.is_available)]
                 # my_operating_days = [operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in day_type_assignments if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef)]
-                my_operational_dates = []
+                my_operational_dates = [dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.to_datetime() for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate) and (dta.is_available is None or dta.is_available)]
                 my_from = None
                 my_to = None
 
