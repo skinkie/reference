@@ -525,6 +525,8 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                     if len(routes) > 0:
                         RoutesProfile.projectRouteToServiceLinks(db_read, service_journey_pattern, routes[0], route_point_projection, generator_defaults)
 
+            # TODO Issue #242: handle LinkSequenceProjectionRef / LinkSequenceProjection
+
             write_objects(db_write, [service_journey_pattern], empty=False, many=False, cursor=True)
             sjp_ids.add(service_journey_pattern.id)
 
@@ -540,6 +542,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         sj.extensions = None
         sj.notice_assignments = None
         sj.calls = None
+        sj.link_sequence_projection_ref_or_link_sequence_projection = None
         return sj
 
     def query(db_read: Database) -> Generator:
