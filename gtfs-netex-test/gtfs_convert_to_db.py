@@ -898,6 +898,7 @@ class GtfsNeTexProfile(CallsProfile):
         day_types = []
         day_type_assignments = []
         operating_periods = []
+        fake_day_type_ids = set([])
 
         with self.conn.cursor() as cur:
             cur.execute(**exceptions_sql)
@@ -907,13 +908,14 @@ class GtfsNeTexProfile(CallsProfile):
             for i in range(0, len(service_ids)):
                 exception_type = int(exceptions_df['exception_type'][i])
                 if exception_type in (1, 2):
+                    day_type_id = getFakeRef(self.get_service_id_dt(service_ids[i]), DayTypeRef, self.version.version)
+                    fake_day_type_ids.add(service_ids[i])
                     day_type_assignments.append(DayTypeAssignment(
                         id=f"{self.get_service_id_dt(service_ids[i]).replace('DayType', 'DayTypeAssignment')}_{str(exceptions_df['date'][i])}_{str(exception_type)}",
                         version=self.version.version,
                         order=1,
-                        day_type_ref=getFakeRef(self.get_service_id_dt(service_ids[i]), DayTypeRef, self.version.version),
+                        day_type_ref=day_type_id,
                         uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date=date_to_xmldate(gtfs_date(exceptions_df['date'][i])), is_available=True if exception_type == 1 else False))
-
 
             cur.execute(**day_type_sql)
             df = cur.df()
@@ -953,6 +955,7 @@ class GtfsNeTexProfile(CallsProfile):
                                    properties=PropertiesOfDayRelStructure(property_of_day=[PropertyOfDay(days_of_week=days_of_week)])
                                    )
                 day_types.append(day_type)
+                fake_day_type_ids.remove(service_ids[i])
 
                 operating_period = OperatingPeriod(id=self.get_service_id_dt(service_ids[i]).replace('DayType', 'OperatingPeriod'),
                                                           version=self.version.version,
@@ -967,12 +970,15 @@ class GtfsNeTexProfile(CallsProfile):
                     day_type_ref=getFakeRef(self.get_service_id_dt(service_ids[i]), DayTypeRef, self.version.version),
                     uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date=getRef(operating_period)))
 
+        for service_id in fake_day_type_ids:
+            day_type = DayType(id=self.get_service_id_dt(service_id), version=self.version.version,
+                               private_codes=PrivateCodes(private_code=[PrivateCode(type_value="service_id", value=service_id)]))
+            day_types.append(day_type)
+
         return day_types, day_type_assignments, operating_periods
 
-
-
     def getInterchangeRules(self, transfers_sql={'query': """select transfers.*, from_stop.location_type as from_stop_location_type, to_stop.location_type as to_stop_location_type from transfers join stops as from_stop on (from_stop_id = from_stop.stop_id) join stops as to_stop on (to_stop_id = to_stop.stop_id) order by from_route_id, to_route_id, from_trip_id, to_trip_id, from_stop_id, to_stop_id;"""}) -> Generator[InterchangeRule, None, None]:
-        # from_stop_id, to_stop_id, from_route_id, to_route_id, from_trip_id, to_trip_id, transfer_type, min_transfer_time
+        # from_stop_id, to_stop_id, from_route_id, to_route_id, from_trip_id, to_trip_id, transfer_type, min_transfer_time:
         with self.conn.cursor() as cur:
             cur.execute(**transfers_sql)
             transfers_df = cur.df()
@@ -2202,6 +2208,7 @@ class GtfsNeTexProfile(CallsProfile):
         write_objects(con, [self.codespace], empty=True, many=True)
         write_objects(con, [self.data_source], empty=True, many=True)
         write_objects(con, [self.version], empty=True, many=True)
+        # write_objects(con, [self.frame_defaults], empty=True)
 
         write_objects(con, self.getOperators(), empty=True, many=True)
         stop_areas = self.getStopAreas()
