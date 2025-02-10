@@ -12,7 +12,7 @@ def embedding_udf(serializer: Serializer, serialized: bytes, clazz: str) -> list
     return [x for x in update_embedded_referencing(serializer, deserialized) if len(x) > 0]
     # return result
 
-def embedding_update(db: Database, clean=False):
+def embedding_update(db: Database, clean=False, filter_clazz=None):
     con = db.con
     con.create_function('embedding', functools.partial(embedding_udf, db.serializer), return_type=list[str])
 
@@ -32,9 +32,13 @@ def embedding_update(db: Database, clean=False):
         con.execute("TRUNCATE embedded;")
         con.execute("TRUNCATE referencing;")
 
+    if filter_clazz:
+        filter_in = ', '.join(["'" + get_object_name(clazz) + "'" for clazz in filter_clazz])
+        con.execute(f"DELETE FROM referencing WHERE parent_class IN ({filter_in});")
+
     con.begin()
 
-    for clazz in db.tables():
+    for clazz in (filter_clazz or db.tables()):
         # TODO: The DISTINCT here is actually a bug in the collection process, must investigate.
         objectname = get_object_name(clazz)
         try:
