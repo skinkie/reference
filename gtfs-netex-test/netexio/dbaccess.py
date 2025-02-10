@@ -387,9 +387,9 @@ def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=Tr
         if filter is not None:
             cur.execute(f"SELECT object FROM {objectname} WHERE id = ?;", (filter,))
         elif limit is not None:
-            cur.execute(f"SELECT object FROM {objectname} ORDER BY id LIMIT {limit};")
+            cur.execute(f"SELECT object FROM {objectname} LIMIT {limit};")
         else:
-            cur.execute(f"SELECT object FROM {objectname} ORDER BY id;")
+            cur.execute(f"SELECT object FROM {objectname};")
     except:
         pass
         if embedding:
@@ -437,7 +437,7 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             needle = '|'.join([parent_id, parent_version, parent_clazz])
 
             if needle not in db.object_cache:
-                cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? ORDER BY id LIMIT 1;",
+                cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? LIMIT 1;",
                              (parent_id, parent_version,))
                 object = cur2.fetchone()
                 db.object_cache[needle] = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
