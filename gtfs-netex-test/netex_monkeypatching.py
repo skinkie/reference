@@ -3,7 +3,7 @@ from netex import VersionOfObjectRefStructure, ServiceJourneyRef, ServiceJourney
     RouteLink, Route, Quay, QuayRefStructure, StopPlaceRefStructure, StopPlace, TimingPoint, TimingPointRefStructure, \
     ServiceLink, ServiceLinkRefStructure, TimingLink, TimingLinkRefStructure, Locale, LocaleStructure, OperatorRef, \
     DayTypeRef, DayTypesInFrameRelStructure, DayTypeRefsRelStructure, ValidityConditionsRelStructure, \
-    UicOperatingPeriodRef, OperatingPeriodRef
+    UicOperatingPeriodRef, OperatingPeriodRef, LineRef, QuayRef, ScheduledStopPointRef
 
 from netexio.dbaccess import get_single
 
@@ -17,6 +17,9 @@ OperatorRef.__hash__ = ref_version_hash
 DayTypeRef.__hash__ = ref_version_hash
 OperatingPeriodRef.__hash__ = ref_version_hash
 UicOperatingPeriodRef.__hash__ = ref_version_hash
+LineRef.__hash__ = ref_version_hash
+QuayRef.__hash__ = ref_version_hash
+ScheduledStopPointRef.__hash__ = ref_version_hash
 
 # TODO: the following hashes us version or 'any' to overcome (invalid) None situations, it would be better if we could create hashes that would capture the true NeTEx-any situation
 def day_type_refs_hash(self: DayTypeRefsRelStructure):
