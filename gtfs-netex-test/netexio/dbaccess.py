@@ -142,6 +142,31 @@ def load_references_generator(db: Database, clazz: T, filter=None, cursor=False 
         for parent_klass, parent_id, parent_version, klass, ref, version in cur.fetchall():
             yield getFakeRefByClass(parent_id, db.get_class_by_name(parent_klass), parent_version), getFakeRefByClass(ref, db.get_class_by_name(klass), version)
 
+def load_references_inwards_generator(db: Database, clazz: T, filter=None, cursor=False ) -> Generator:
+    objectname = get_object_name(clazz)
+
+    if cursor:
+        cur = db.cursor()
+    else:
+        cur = db.con
+
+    try:
+        if filter is not None:
+            cur.execute(f"select parent_class, parent_id, parent_version, class, ref, version from referencing where class = ? and ref = ? order by ref, parent_class, parent_id;", (objectname, filter))
+        else:
+            cur.execute(f"select parent_class, parent_id, parent_version, class, ref, version from referencing where class = ? order by ref, parent_class, parent_id;", (objectname,))
+    except:
+        pass
+        return []
+
+    objs: List[T] = []
+
+    if filter is None:
+        for parent_klass, parent_id, parent_version, klass, ref, version in cur.fetchall():
+            yield getFakeRefByClass(ref, db.get_class_by_name(klass), version), getFakeRefByClass(parent_id, db.get_class_by_name(parent_klass), parent_version)
+
+    # Wat is de invloed van spiegelneuronen op die ontwikkeling van een meerling, in interactie op "hetzelfde niveau"
+    #  okibo-specialneeds@gmail.com Fabienne Naber
 
 def load_embedding_generator(db: Database, clazz: T, filter=None, cursor=False) -> Generator:
     objectname = get_object_name(clazz)
@@ -154,15 +179,14 @@ def load_embedding_generator(db: Database, clazz: T, filter=None, cursor=False) 
     try:
         if filter is not None:
             cur.execute(
-                f"select parent_class, parent_id, parent_version, class, ref, version from embedded where parent_class = ? and parent_id = ?;",
+                f"select parent_class, parent_id, parent_version, class, id, version from embedded where parent_class = ? and parent_id = ? order by class, id;",
                 (objectname, filter))
         else:
             cur.execute(
-                f"select parent_class, parent_id, parent_version, class, ref, version from embedded where parent_class = ?;",
+                f"select parent_class, parent_id, parent_version, class, id, version from embedded where parent_class = ? order by parent_id, class, id;",
                 (objectname,))
     except:
-        pass
-        return []
+        return
 
     objs: List[T] = []
 
@@ -531,6 +555,21 @@ def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
     if row is not None:
         obj = db.serializer.unmarshall(row[0], clazz)
         return obj
+
+def delete_objects(db: Database, objs, cursor=False):
+    if len(objs) == 0:
+        return
+
+    if cursor:
+        cur = db.cursor()
+    else:
+        cur = db.con
+
+    clazz = objs[0].__class__
+    objectname = get_object_name(clazz)
+
+    ids = ', '.join(["'" + (o.id or o.ref) + "'" for o in objs])
+    cur.execute("DELETE FROM {objectname} WHERE id IN ({ids});")
 
 
 def write_objects(db: Database, objs, empty=False, many=False, silent=False, cursor=False):
