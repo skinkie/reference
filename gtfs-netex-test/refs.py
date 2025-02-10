@@ -3,6 +3,7 @@ from typing import Optional, List, T
 
 from netex import *
 from utils import get_object_name
+import re
 
 def getRef(obj: object, klass=None):
     if obj is None:
@@ -41,10 +42,18 @@ def getRef(obj: object, klass=None):
 def getFakeRefByClass(id: str, klass: T, version: str = None) -> T:
     asobj = klass.__name__ + 'Ref'  # Was: RefStructure
     klass = globals()[asobj]
-    instance = klass(id=id)
+    instance = klass(ref=id)
     if version is not None:
         instance.version = version
     return instance
+
+def getClassFromRefClass(ref):
+    if ref.name_of_ref_class is not None:
+        klass = ref.name_of_ref_class
+    else:
+        klass = re.sub(r'LineRef(Structure)?', 'Line', ref.__name__)
+
+    return globals()[klass]
 
 def getFakeRef(id: str, klass: T, version: str, version_ref: str = None) -> T:
     if id is None:
