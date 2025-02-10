@@ -3,14 +3,15 @@ from itertools import groupby
 from typing import List, Generator, Tuple
 
 from netexio.database import Database
-from netexio.dbaccess import load_local, write_objects, write_generator
+from netexio.dbaccess import load_local, write_objects, write_generator, load_embedding_generator, \
+    load_references_inwards_generator, load_generator
 from refs import getIndex, getRef
 from utils import project
 
 import duckdb as sqlite
 
 from netex import ScheduledStopPoint, StopArea, StopPlace, Quay, QuaysRelStructure, SimplePointVersionStructure, \
-    PassengerStopAssignment
+    PassengerStopAssignment, QuayRef, StopPlaceRef, ScheduledStopPointRef
 
 
 def infer_stop_place_from_scheduled_stop_point(scheduled_stop_point: ScheduledStopPoint) -> (StopPlace, List[PassengerStopAssignment]):
@@ -60,3 +61,20 @@ def infer_stop_places(db_read: Database, db_write: Database, generator_defaults:
     for stop_place, psas in groupby_stop_area(stop_areas, scheduled_stop_points):
         write_objects(db_write, [stop_place], False, False)
         write_objects(db_write, psas, False, False)
+
+# Create an inverse index for ScheduledStopPoint to StopPlace
+def index_scheduled_stopplace(db_read: Database) -> Generator[Tuple[ScheduledStopPoint, StopPlaceRef], None, None]:
+    index_quay = {}
+
+    # Get all quays embedded in a StopPlace
+    for parent, child in load_embedding_generator(db_read, StopPlace, cursor=True):
+        if isinstance(child, QuayRef):
+            index_quay[child] = parent
+
+    for psa in load_generator(db_read, PassengerStopAssignment):
+        psa: PassengerStopAssignment
+        if isinstance(psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point, ScheduledStopPointRef):
+            if isinstance(psa.taxi_rank_ref_or_stop_place_ref_or_stop_place, StopPlaceRef):
+                yield psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point, psa.taxi_rank_ref_or_stop_place_ref_or_stop_place
+            elif isinstance(psa.taxi_stand_ref_or_quay_ref_or_quay, QuayRef):
+                yield psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point, index_quay[psa.taxi_stand_ref_or_quay_ref_or_quay]
