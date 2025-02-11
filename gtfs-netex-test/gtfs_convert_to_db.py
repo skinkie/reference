@@ -116,6 +116,7 @@ class GtfsNeTexProfile(CallsProfile):
                                                            default_location_system="urn:ogc:def:crs:EPSG::4326",
                                                            default_system_of_units=SystemOfUnits.SI_METRES
                                                            )
+            frame_defaults.id = 'fake'
 
             return (codespace, data_source, version, frame_defaults)
 
@@ -2208,7 +2209,7 @@ class GtfsNeTexProfile(CallsProfile):
         write_objects(con, [self.codespace], empty=True, many=True)
         write_objects(con, [self.data_source], empty=True, many=True)
         write_objects(con, [self.version], empty=True, many=True)
-        # write_objects(con, [self.frame_defaults], empty=True)
+        write_objects(con, [self.frame_defaults], empty=True)
 
         write_objects(con, self.getOperators(), empty=True, many=True)
         stop_areas = self.getStopAreas()
