@@ -33,7 +33,7 @@ serializer = XmlSerializer(config=serializer_config)
 
 import netex_monkeypatching
 from transformers.epip import epip_line_memory, epip_scheduled_stop_point_memory, epip_site_frame_memory, \
-    epip_service_journey_generator, epip_service_journey_interchange, epip_interchange_rule
+    epip_service_journey_generator, epip_service_journey_interchange, epip_interchange_rule, epip_service_calendar
 
 from transformers.epip import EPIP_CLASSES
 from aux_logging import *
@@ -66,7 +66,7 @@ def main(source_database_file: str, target_database_file: str):
             epip_site_frame_memory(source_db, target_db, generator_defaults)
             source_db.clean_cache()
 
-            log_all(logging.INFO, "Service journeys for now " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
+            log_all(logging.INFO, "Service journeys " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_service_journey_generator(source_db, target_db, generator_defaults, None)
             source_db.clean_cache()
 

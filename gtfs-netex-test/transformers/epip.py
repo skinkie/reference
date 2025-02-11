@@ -1,3 +1,4 @@
+from memory_profiler import memory_usage
 import logging
 import sys
 import warnings
@@ -12,7 +13,7 @@ from dateutil.rrule import rrule, DAILY
 
 import netex_monkeypatching
 
-from aux_logging import log_print, log_all
+from aux_logging import log_print, log_all, log_once
 from routesprofile import RoutesProfile
 from transformers.interchanges import interchange_rules_to_service_journey_interchanges
 from utils import project, chain, GeneratorTester
@@ -46,13 +47,13 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
     DayTypeAssignmentsRelStructure, RouteView, LineRef, FlexibleLineRef, RouteRef, TimetabledPassingTimesRelStructure, \
     TimeDemandType, Quay, StopPointInJourneyPattern, PointsInJourneyPatternRelStructure, \
     TransportOrganisationRefsRelStructure, OperatingPeriod, OperatingDayRef, UicOperatingPeriodRef, OperatingDay, \
-    ServiceJourneyRef
+    ServiceJourneyRef, DayTypeRef, CodespaceStructure
 
 from netexio.database import Database
 
 from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, \
     recursive_attributes, fetch_references_classes_generator
-from refs import getIndex, getRef, getId
+from refs import getIndex, getRef, getId, getFakeRef
 from servicecalendarepip import ServiceCalendarEPIPFrame
 from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from transformers.projection import project_location_4326, project_polygon
@@ -300,23 +301,21 @@ def service_journey_pattern_from_calls(sj: ServiceJourney, generator_defaults: d
 
     return ServiceJourneyPattern(id=getId(ServiceJourneyPattern, generator_defaults['codespace'], id), version=sj.version,
                                  route_ref_or_route_view=RouteView(flexible_line_ref_or_line_ref_or_line_view=sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view),
-                                 direction_type=sj.direction_type, destination_display_ref_or_destination_display_view=sj.journey_pattern_view.destination_display_ref_or_destination_display_view,
+                                 direction_type=sj.direction_type, destination_display_ref_or_destination_display_view=sj.journey_pattern_view.destination_display_ref_or_destination_display_view if sj.journey_pattern_view else None,
                                  points_in_sequence=PointsInJourneyPatternRelStructure(point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=piss))
 
 
-def service_journey_ac_to_day_type(service_journey: ServiceJourney,
-                                   availability_conditions: Dict[str, AvailabilityCondition],
-                                   day_types: Dict[str, DayType],
-                                   uic_operating_periods: List[UicOperatingPeriod],
-                                   day_type_assignments: List[DayTypeAssignment]):
+def service_journey_ac_to_day_type(db_read: Database, db_write: Database, service_journey: ServiceJourney, availability_conditions_ids: Set[str], day_types_ids: Set[str], uic_operating_periods_ids: Set[str], day_type_assignments_ids: Set[str]):
     acs = []
 
+    # TODO: Investigate if AvailabilityConditions are in fact used
     for ac in service_journey.validity_conditions_or_valid_between:
         if isinstance(ac, ValidityConditionsRelStructure):
             ac: ValidityConditionsRelStructure
             for a in ac.choice:
                 if isinstance(a, AvailabilityConditionRef):
-                    acs.append(availability_conditions[a.ref])
+                    this_ac = get_single(db_read, AvailabilityCondition, a.ref, a.version, cursor=True)
+                    acs.append(this_ac)
                 elif isinstance(a, AvailabilityCondition):
                     acs.append(a)
                 else:
@@ -333,12 +332,13 @@ def service_journey_ac_to_day_type(service_journey: ServiceJourney,
 
     # TODO: this will fail in extreme cases
     if len(acs) > 0:
+        # TODO: Maybe sort and hash the id's to form a unique instance
         day_type_id = acs[0].id.replace('AvailabilityCondition', 'DayType')
     else:
         warnings.warn(f'Check {service_journey.id}')
         return
 
-    if day_type_id not in day_types:
+    if day_type_id not in day_types_ids:
         valid_days, days_of_week = ServiceCalendarEPIPFrame.positiveAvailabilityCondition(acs)
 
         if len(valid_days) == 0:
@@ -351,7 +351,8 @@ def service_journey_ac_to_day_type(service_journey: ServiceJourney,
                                                       to_operating_day_ref_or_to_date=acs[0].from_date, # Since the entire string is empty anyway?
                                                       valid_day_bits="0",
                                                       days_of_week=days_of_week)
-            uic_operating_periods.append(uic_operating_period)
+            uic_operating_periods_ids.add(uic_operating_period.id)
+            write_objects(db_write, [uic_operating_period], silent=True, cursor=True)
 
         else:
             uic_operating_period = UicOperatingPeriod(id=acs[0].id.replace('AvailabilityCondition', 'UicOperatingPeriod'),
@@ -365,12 +366,14 @@ def service_journey_ac_to_day_type(service_journey: ServiceJourney,
                                                       valid_day_bits=ServiceCalendarEPIPFrame.valid_days_to_bits(
                                                           valid_days),
                                                       days_of_week=days_of_week)
-            uic_operating_periods.append(uic_operating_period)
+            uic_operating_periods_ids.add(uic_operating_period.id)
+            write_objects(db_write, [uic_operating_period], silent=True, cursor=True)
 
         day_type = DayType(id=day_type_id, version=service_journey.version,
                            derived_from_object_ref=service_journey.id,
                            derived_from_version_ref_attribute=service_journey.version)
-        day_types[day_type_id] = day_type
+        day_types_ids.add(day_type.id)
+        write_objects(db_write, [day_type], silent=True, cursor=True)
 
         day_type_assignment = DayTypeAssignment(id=acs[0].id.replace('AvailabilityCondition', 'DayTypeAssignment'),
                                                 version=acs[0].version,
@@ -381,18 +384,20 @@ def service_journey_ac_to_day_type(service_journey: ServiceJourney,
                                                     uic_operating_period, OperatingPeriodRef),
                                                 day_type_ref=getRef(day_type)
                                                 )
-        day_type_assignments.append(day_type_assignment)
+        day_type_assignments_ids.add(day_type_assignment.id)
+        write_objects(db_write, [day_type_assignment], silent=True, cursor=True)
+        day_type_ref = getRef(day_type)
+    else:
+        day_type_ref = getFakeRef(day_type_id, DayTypeRef, service_journey.version)  # TODO: Prevent fake ref
 
-    day_type = day_types[day_type_id]
-    service_journey.day_types = DayTypeRefsRelStructure(day_type_ref=[getRef(day_type)])
+    service_journey.day_types = DayTypeRefsRelStructure(day_type_ref=[day_type_ref])
 
-def get_service_calendar(day_types: Dict[str, DayType],
-                     uic_operating_periods: List[UicOperatingPeriod],
-                     day_type_assignments: List[DayTypeAssignment],
-                     generator_defaults: dict):
-
+def get_service_calendar(db_write: Database, generator_defaults: dict):
+    """
     if len(uic_operating_periods) == 0:
         # TODO: This should never happen, since EPIP specifies the use of UicOperatingPeriod
+        log_once(logging.ERROR, "There are no UIC Operating Periods")
+
         from_date: date = date(2099, 1, 1)
         to_date: date = date(1999, 1, 1)
 
@@ -411,29 +416,45 @@ def get_service_calendar(day_types: Dict[str, DayType],
                                day_types=DayTypesRelStructure(day_type_ref_or_day_type=list(day_types.values())),
                                operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods),
                                day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments))
-
+        return None
     else:
-        from_date: datetime
-        to_date: datetime
+    """
 
-        from_date = min([uic.from_operating_day_ref_or_from_date.to_datetime() for uic in uic_operating_periods])
-        to_date = max([uic.to_operating_day_ref_or_to_date.to_datetime() for uic in uic_operating_periods])
+    from_date: datetime = datetime.max
+    to_date: datetime = datetime.min
+    for uic in load_generator(db_write, UicOperatingPeriod):
+        dt = uic.from_operating_day_ref_or_from_date.to_datetime()
+        if from_date > dt:
+            from_date = dt
 
-        return ServiceCalendar(id=getId(ServiceCalendar, generator_defaults['codespace'], "ServiceCalendar"),
-                               version=generator_defaults['version'],
-                               from_date=XmlDate.from_date(from_date.date()), to_date=XmlDate.from_date(to_date.date()),
-                               day_types=DayTypesRelStructure(day_type_ref_or_day_type=list(day_types.values())),
-                               operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods),
-                               day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments))
+        dt = uic.to_operating_day_ref_or_to_date.to_datetime()
+        if to_date < dt:
+            to_date = dt
+
+    day_types = GeneratorTester(load_generator(db_write, DayType))
+    uic_operating_periods = GeneratorTester(load_generator(db_write, UicOperatingPeriod))
+    day_type_assignments = GeneratorTester(load_generator(db_write, DayTypeAssignment))
+
+    return ServiceCalendar(id=getId(ServiceCalendar, generator_defaults['codespace'], "ServiceCalendar"),
+                           version=generator_defaults['version'],
+                           from_date=XmlDate.from_date(from_date.date()), to_date=XmlDate.from_date(to_date.date()),
+                           day_types=DayTypesRelStructure(day_type_ref_or_day_type=day_types.generator()) if day_types.has_value() else None,
+                           operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods.generator()) if uic_operating_periods.has_value() else None,
+                           day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments.generator()) if day_type_assignments.has_value() else None)
 
 def epip_service_journey_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool):
     print(sys._getframe().f_code.co_name)
     # sjps: Dict[str, ServiceJourneyPattern] = {}
     sjp_ids: Set[str] = set()
-    availability_conditions: Dict[str, AvailabilityCondition] = {}
-    day_types: Dict[str, DayType] = {}
-    uic_operating_periods: List[UicOperatingPeriod] = []
-    day_type_assignments: List[DayTypeAssignment] = []
+    availability_conditions_ids: Set[str] = set()
+    day_types_ids: Set[str] = set()
+    uic_operating_periods_ids: Set[str] = set()
+    day_type_assignments_ids: Set[str] = set()
+
+    # availability_conditions: Dict[str, AvailabilityCondition] = {}
+    # day_types: Dict[str, DayType] = {}
+    # uic_operating_periods: List[UicOperatingPeriod] = []
+    # day_type_assignments: List[DayTypeAssignment] = []
 
     def recover_line_ref(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern, db_read):
         sj_line_ref = None
@@ -524,10 +545,11 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
 
             # TODO Issue #242: handle LinkSequenceProjectionRef / LinkSequenceProjection
 
-            write_objects(db_write, [service_journey_pattern], empty=False, many=False, cursor=True)
+            write_objects(db_write, [service_journey_pattern], empty=False, many=False, cursor=True, silent=True)
             sjp_ids.add(service_journey_pattern.id)
 
-        service_journey_ac_to_day_type(sj, availability_conditions, day_types, uic_operating_periods, day_type_assignments)
+        # service_journey_ac_to_day_type(sj, availability_conditions, day_types, uic_operating_periods, day_type_assignments)
+        service_journey_ac_to_day_type(db_read, db_write, sj, availability_conditions_ids, day_types_ids, uic_operating_periods_ids, day_type_assignments_ids)
 
         # TODO: AvailabilityCondition -> Uic
 
@@ -542,6 +564,9 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         sj.link_sequence_projection_ref_or_link_sequence_projection = None
         sj.journey_pattern_view = None
         sj.direction_type = None
+        
+        # TODO: prevent caching altogether?
+        # db_read.clean_cache()
         return sj
 
     def query(db_read: Database) -> Generator:
@@ -552,21 +577,25 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         #     yield sj
 
     # TODO: At this point we should have a check to know if the ServiceJourneyPattern is geographically enabled, or not
-    log_all(logging.INFO, "Indexing RoutePoint to ScheduledStopPoint")
+
+    log_all(logging.INFO, "Indexing RoutePoint to ScheduledStopPoint " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
     route_point_projection = {}
     for ssp in load_generator(db_read, ScheduledStopPoint):
         l = list(RoutesProfile.route_point_projection(ssp))
         if len(l) > 0:
             route_point_projection[getRef(ssp).ref] = l[0]
 
-    log_all(logging.INFO, "Indexing AvailabilityConditions")
-    availability_conditions = getIndex(load_local(db_read, AvailabilityCondition))
+    # log_all(logging.INFO, "Indexing AvailabilityConditions " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
+    # vailability_conditions = getIndex(load_local(db_read, AvailabilityCondition))
 
-    log_all(logging.INFO, "Service journeys for now")
+    log_all(logging.INFO, "Service journeys for now " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
     write_generator(db_write, ServiceJourney, query(db_read), True)
 
-    log_all(logging.INFO, "ServiceCalendar creation...")
-    if len(uic_operating_periods) == 0:
+def epip_service_calendar(db_read: Database, db_write: Database, generator_defaults: dict):
+    log_all(logging.INFO, "ServiceCalendar creation..."+ str(memory_usage(-1, interval=.1, timeout=1)[0]))
+    """
+    # TODO: This really should be refactored
+    if len(uic_operating_periods_ids) == 0:
         service_calendars: List[ServiceCalendar] = load_local(db_read, ServiceCalendar)
         if len(service_calendars) > 0:
             # TODO: WORKAROUND
@@ -649,12 +678,12 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                         result_day_type_assignments.append(res_dta)
                         result_uic_operating_periods.append(uic_operating_period)
 
-            service_calendar = get_service_calendar(day_types, result_uic_operating_periods, result_day_type_assignments, generator_defaults)
+            service_calendar = get_service_calendar(db_write, generator_defaults)
             write_objects(db_write, [service_calendar], True, True)
 
     else:
         # TODO: Quick "fix" this should be done differently, because we cannot assure that the ServiceCalendar stored, is actually following EPIP.
-        service_calendar = get_service_calendar(day_types, uic_operating_periods, day_type_assignments, generator_defaults)
+        service_calendar = get_service_calendar(db_write, generator_defaults)
         write_objects(db_write, [service_calendar], True, True)
 
     # availability_conditions = load_local(db_read, AvailabilityCondition)
@@ -672,6 +701,9 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
         # service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
         # write_objects(write_con, [service_calendar], True, False)
+    """
+    service_calendar = get_service_calendar(db_write, generator_defaults)
+    write_objects(db_write, [service_calendar], True, cursor=True)
 
 def epip_remove_keylist_extensions(db_read: Database, db_write: Database, generator_defaults: dict):
     def process(deserialised, keys: List):
@@ -744,7 +776,7 @@ def export_epip_network_offer(db_epip: Database) -> PublicationDelivery:
     service_journey_interchange = GeneratorTester(load_generator(db_epip, ServiceJourneyInterchange))
 
     # TODO: Refactor this to make the ServiceCalendar only at the last point
-    service_calendar = GeneratorTester(load_generator(db_epip, ServiceCalendar, 1))
+    # service_calendar = GeneratorTester(load_generator(db_epip, ServiceCalendar, 1))
 
     other_referenced_classes = [Authority, Operator, ValueSet,
                                 TransportAdministrativeZone, ResponsibilitySet, StopPlace,
@@ -848,9 +880,7 @@ def export_epip_network_offer(db_epip: Database) -> PublicationDelivery:
                         ServiceCalendarFrame(
                             id="EU_PI_CALENDAR", version=version,
                             type_of_frame_ref=TypeOfFrameRef(ref='epip:EU_PI_CALENDAR', version_ref='1.0'),
-                            service_calendar=list(service_calendar.generator())[
-                                0] if service_calendar.has_value() else None,
-                            # Warning; we must handle multiple stuff
+                            service_calendar=get_service_calendar(db_epip, {'codespace': Codespace(xmlns=defaults['codespace']), 'version': version}), # TODO: do differently
                         ),
 
                         GeneralFrame(
