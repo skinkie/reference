@@ -5,6 +5,9 @@ import re
 from typing import T, Generator
 from xsdata.models.datatype import XmlDateTime, XmlDuration
 
+from netex import VersionFrameDefaultsStructure
+
+
 def get_object_name(clazz: T) -> str:
     return getattr(clazz.Meta, 'name', clazz.__name__) if hasattr(clazz, 'Meta') else clazz.__name__
 
@@ -81,7 +84,7 @@ def get_boring_classes():
     clsmembers = inspect.getmembers(netex, inspect.isclass)
 
     # The interesting class members certainly will have a "Meta class" with a namespace
-    interesting_members = [x[1] for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace')]
+    interesting_members = [x[1] for x in clsmembers if hasattr(x[1], 'Meta') and hasattr(x[1].Meta, 'namespace')] + [VersionFrameDefaultsStructure]
 
     return interesting_members
 
