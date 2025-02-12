@@ -1,4 +1,3 @@
-import sys
 from typing import T
 from utils import get_object_name, get_boring_classes, get_interesting_classes
 
