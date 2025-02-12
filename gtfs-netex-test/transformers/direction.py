@@ -1,8 +1,8 @@
-from typing import Iterable, Dict, Generator
+from typing import Dict, Generator
 
 from netexio.database import Database
-from netexio.dbaccess import write_objects, load_generator, write_generator, update_generator
-from netex import ServiceJourneyPattern, Direction, MultilingualString, DirectionType, ServiceJourney, DirectionRef
+from netexio.dbaccess import write_objects, load_generator, update_generator
+from netex import ServiceJourneyPattern, Direction, MultilingualString, DirectionRef
 from refs import getId, getRef
 
 
