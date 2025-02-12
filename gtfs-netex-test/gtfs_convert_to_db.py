@@ -956,7 +956,10 @@ class GtfsNeTexProfile(CallsProfile):
                                    properties=PropertiesOfDayRelStructure(property_of_day=[PropertyOfDay(days_of_week=days_of_week)])
                                    )
                 day_types.append(day_type)
-                fake_day_type_ids.remove(service_ids[i])
+                try:
+                    fake_day_type_ids.remove(service_ids[i])
+                except KeyError:
+                    pass
 
                 operating_period = OperatingPeriod(id=self.get_service_id_dt(service_ids[i]).replace('DayType', 'OperatingPeriod'),
                                                           version=self.version.version,
