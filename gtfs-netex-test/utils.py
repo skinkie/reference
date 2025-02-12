@@ -6,7 +6,7 @@ from typing import T, Generator
 from xsdata.models.datatype import XmlDateTime, XmlDuration
 
 def get_object_name(clazz: T) -> str:
-    return getattr(clazz.Meta, 'name', clazz.__name__)
+    return getattr(clazz.Meta, 'name', clazz.__name__) if hasattr(clazz, 'Meta') else clazz.__name__
 
 def get_element_name_with_ns(clazz):
     name = get_object_name(clazz)
