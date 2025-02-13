@@ -592,99 +592,101 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
     write_generator(db_write, ServiceJourney, query(db_read), True)
 
 def epip_service_calendar(db_read: Database, db_write: Database, generator_defaults: dict):
-    log_all(logging.INFO, "ServiceCalendar creation..."+ str(memory_usage(-1, interval=.1, timeout=1)[0]))
-    """
-    # TODO: This really should be refactored
-    if len(uic_operating_periods_ids) == 0:
-        service_calendars: List[ServiceCalendar] = load_local(db_read, ServiceCalendar)
-        if len(service_calendars) > 0:
-            # TODO: WORKAROUND
-            write_objects(db_write, service_calendars, True, True)
+    log_all(logging.INFO, "Calendar creation..."+ str(memory_usage(-1, interval=.1, timeout=1)[0]))
 
-        else:
-            day_types = getIndex(list(itertools.chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(db_read, DayType, embedding=True))
-            uic_operating_periods = getIndex(list(itertools.chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars if service_calendar.operating_periods])) + load_local(db_read, UicOperatingPeriod, embedding=True))
-            day_type_assignments = list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, DayTypeAssignment, embedding=True)
-            operating_periods = getIndex(list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, OperatingPeriod, embedding=True))
-            operating_days = getIndex(list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, OperatingDay, embedding=True))
-
-            result_day_type_assignments = []
-            result_uic_operating_periods = []
-
-            for day_type_ref, my_day_type_assignments in itertools.groupby(day_type_assignments, key=lambda day_type_assignment: day_type_assignment.day_type_ref):
-                t = list(my_day_type_assignments)
-                my_day_type = day_types[day_type_ref.ref]
-                my_uic_operating_periods = [uic_operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef)]
-                my_operating_periods: list[OperatingPeriod] = [operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef) and (dta.is_available is None or dta.is_available)]
-                # my_operating_days = [operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in day_type_assignments if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef)]
-                my_operational_dates = [dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.to_datetime() for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate) and (dta.is_available is None or dta.is_available)]
-                my_from = None
-                my_to = None
-
-                if len(my_uic_operating_periods) == 0:
-                    if my_day_type.properties and len(my_day_type.properties.property_of_day) == 1:
-                        # TODO: comes from servicecalendarepip.py
-                        byweekday = ServiceCalendarEPIPFrame.mapDaysOfWeekToByWeekday(my_day_type.properties.property_of_day[0].days_of_week)
-
-                        for op in my_operating_periods:
-                            if my_from is None or my_from > op.from_operating_day_ref_or_from_date.to_datetime():
-                                my_from = op.from_operating_day_ref_or_from_date.to_datetime()
-                            if my_to is None or my_to < op.to_operating_day_ref_or_to_date.to_datetime():
-                                my_to = op.to_operating_day_ref_or_to_date.to_datetime()
-
-                            my_operational_dates += list(
-                                rrule(DAILY, byweekday=byweekday, dtstart=op.from_operating_day_ref_or_from_date.to_datetime(),
-                                      until=op.to_operating_day_ref_or_to_date.to_datetime()))
-
-                        my_operational_dates = set(my_operational_dates)
-                        for dta in t:
-                            if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef):
-                                dt = operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref].calendar_date
-                                if dta.is_available is None or dta.is_available:
-                                    my_operational_dates.add(dt)
-                                else:
-                                    try:
-                                        my_operational_dates.remove(dt)
-                                    except:
-                                        pass
-                            elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
-                                dt = dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.to_date()
-                                if dta.is_available is None or dta.is_available:
-                                    my_operational_dates.add(dt)
-                                else:
-                                    try:
-                                        my_operational_dates.remove(dt)
-                                    except:
-                                        pass
-
-                    if len(my_operational_dates) > 0:
-                        valid_days = sorted(my_operational_dates)
-                        if my_from is None:
-                            my_from = valid_days[0]
-                        if my_to is None:
-                            my_to = valid_days[-1]
-                        valid_day_bits = ''.join([str((my_from + timedelta(days=i) in valid_days) * 1) for i in
-                                                  range(0, (my_to - my_from).days + 1)])
-                        uic_operating_period = UicOperatingPeriod(id=day_type_ref.ref.replace(':DayType:', ':UicOperatingPeriod:'), version=day_type_ref.version,
-                                                                  valid_day_bits=valid_day_bits, from_operating_day_ref_or_from_date=XmlDateTime.from_datetime(my_from),
-                                                                  to_operating_day_ref_or_to_date=XmlDateTime.from_datetime(my_to))
-
-                        res_dta: DayTypeAssignment = project(my_day_type, DayTypeAssignment)
-                        res_dta.order = 1
-                        res_dta.is_available = True
-                        res_dta.day_type_ref = day_type_ref
-                        res_dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = getRef(uic_operating_period)
-
-                        result_day_type_assignments.append(res_dta)
-                        result_uic_operating_periods.append(uic_operating_period)
-
-            service_calendar = get_service_calendar(db_write, generator_defaults)
-            write_objects(db_write, [service_calendar], True, True)
+    service_calendars: List[ServiceCalendar] = load_local(db_read, ServiceCalendar)
+    if False and len(service_calendars) > 0:
+        # TODO: WORKAROUND
+        pass
+        # write_objects(db_write, service_calendars, True, True)
 
     else:
-        # TODO: Quick "fix" this should be done differently, because we cannot assure that the ServiceCalendar stored, is actually following EPIP.
-        service_calendar = get_service_calendar(db_write, generator_defaults)
-        write_objects(db_write, [service_calendar], True, True)
+        day_types = getIndex(list(itertools.chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(db_read, DayType, embedding=True))
+        uic_operating_periods = getIndex(list(itertools.chain.from_iterable([service_calendar.operating_periods.uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period for service_calendar in service_calendars if service_calendar.operating_periods])) + load_local(db_read, UicOperatingPeriod, embedding=True))
+        day_type_assignments = list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, DayTypeAssignment, embedding=True)
+        operating_periods = getIndex(list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, OperatingPeriod, embedding=True))
+        operating_days = getIndex(list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, OperatingDay, embedding=True))
+
+        result_day_type_assignments = []
+        result_uic_operating_periods = []
+
+        for day_type_ref, my_day_type_assignments in itertools.groupby(day_type_assignments, key=lambda day_type_assignment: day_type_assignment.day_type_ref):
+            t = list(my_day_type_assignments)
+            my_day_type = day_types[day_type_ref.ref]
+            my_uic_operating_periods = [uic_operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef)]
+            my_operating_periods: list[OperatingPeriod] = [operating_periods[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef) and (dta.is_available is None or dta.is_available)]
+            # my_operating_days = [operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref] for dta in day_type_assignments if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef)]
+            my_operational_dates = [dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.to_datetime() for dta in t if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate) and (dta.is_available is None or dta.is_available)]
+            my_from = None
+            my_to = None
+
+            if len(my_uic_operating_periods) == 0:
+                if my_day_type.properties and len(my_day_type.properties.property_of_day) == 1:
+                    # TODO: comes from servicecalendarepip.py
+                    byweekday = ServiceCalendarEPIPFrame.mapDaysOfWeekToByWeekday(my_day_type.properties.property_of_day[0].days_of_week)
+
+                    for op in my_operating_periods:
+                        if my_from is None or my_from > op.from_operating_day_ref_or_from_date.to_datetime():
+                            my_from = op.from_operating_day_ref_or_from_date.to_datetime()
+                        if my_to is None or my_to < op.to_operating_day_ref_or_to_date.to_datetime():
+                            my_to = op.to_operating_day_ref_or_to_date.to_datetime()
+
+                        my_operational_dates += list(
+                            rrule(DAILY, byweekday=byweekday, dtstart=op.from_operating_day_ref_or_from_date.to_datetime(),
+                                  until=op.to_operating_day_ref_or_to_date.to_datetime()))
+
+                    my_operational_dates = set(my_operational_dates)
+                    for dta in t:
+                        if isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingDayRef):
+                            dt = operating_days[dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref].calendar_date
+                            if dta.is_available is None or dta.is_available:
+                                my_operational_dates.add(dt)
+                            else:
+                                try:
+                                    my_operational_dates.remove(dt)
+                                except:
+                                    pass
+                        elif isinstance(dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, XmlDate):
+                            dt = dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.to_date()
+                            if dta.is_available is None or dta.is_available:
+                                my_operational_dates.add(dt)
+                            else:
+                                try:
+                                    my_operational_dates.remove(dt)
+                                except:
+                                    pass
+
+                if len(my_operational_dates) > 0:
+                    valid_days = sorted(my_operational_dates)
+                    if my_from is None:
+                        my_from = valid_days[0]
+                    if my_to is None:
+                        my_to = valid_days[-1]
+                    valid_day_bits = ''.join([str((my_from + timedelta(days=i) in valid_days) * 1) for i in
+                                              range(0, (my_to - my_from).days + 1)])
+                    uic_operating_period = UicOperatingPeriod(id=day_type_ref.ref.replace(':DayType:', ':UicOperatingPeriod:'), version=day_type_ref.version,
+                                                              valid_day_bits=valid_day_bits, from_operating_day_ref_or_from_date=XmlDateTime.from_datetime(my_from),
+                                                              to_operating_day_ref_or_to_date=XmlDateTime.from_datetime(my_to))
+
+                    res_dta: DayTypeAssignment = project(my_day_type, DayTypeAssignment)
+                    res_dta.order = 1
+                    res_dta.is_available = True
+                    res_dta.day_type_ref = day_type_ref
+                    res_dta.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date = getRef(uic_operating_period)
+
+                    result_day_type_assignments.append(res_dta)
+                    result_uic_operating_periods.append(uic_operating_period)
+
+        write_objects(db_write, result_day_type_assignments, empty=True, many=True, cursor=True)
+        write_objects(db_write, result_uic_operating_periods, empty=True, many=True, cursor=True)
+
+        # service_calendar = get_service_calendar(db_write, generator_defaults)
+        # write_objects(db_write, [service_calendar], True, True)
+
+    # else:
+    # TODO: Quick "fix" this should be done differently, because we cannot assure that the ServiceCalendar stored, is actually following EPIP.
+    # service_calendar = get_service_calendar(db_write, generator_defaults)
+    # write_objects(db_write, [service_calendar], True, True)
 
     # availability_conditions = load_local(db_read, AvailabilityCondition)
     # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
@@ -701,9 +703,9 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
         # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
         # service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
         # write_objects(write_con, [service_calendar], True, False)
-    """
-    service_calendar = get_service_calendar(db_write, generator_defaults)
-    write_objects(db_write, [service_calendar], True, cursor=True)
+
+    # service_calendar = get_service_calendar(db_write, generator_defaults)
+    # write_objects(db_write, [service_calendar], True, cursor=True)
 
 def epip_remove_keylist_extensions(db_read: Database, db_write: Database, generator_defaults: dict):
     def process(deserialised, keys: List):
@@ -784,7 +786,7 @@ def export_epip_network_offer(db_epip: Database) -> PublicationDelivery:
                                 Network, DestinationDisplay, ScheduledStopPoint, TariffZone, ServiceLink,
                                 ServiceJourneyPattern, Connection, SiteConnection, DefaultConnection,
                                 PassengerStopAssignment, Notice, ServiceJourney, ServiceCalendar, VehicleType,
-                                ServiceJourneyInterchange]
+                                ServiceJourneyInterchange, DayType, DayTypeAssignment, UicOperatingPeriod]
 
     other_referenced_objects = GeneratorTester(
         fetch_references_classes_generator(db_epip, other_referenced_classes))

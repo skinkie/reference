@@ -70,6 +70,10 @@ def main(source_database_file: str, target_database_file: str):
             epip_service_journey_generator(source_db, target_db, generator_defaults, None)
             source_db.clean_cache()
 
+            log_all(logging.INFO, "Calendars " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
+            epip_service_calendar(source_db, target_db, generator_defaults)
+            source_db.clean_cache()
+
             log_all(logging.INFO, "ServiceJourneyInterchange additions " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_service_journey_interchange(source_db, target_db, generator_defaults)
             source_db.clean_cache()
