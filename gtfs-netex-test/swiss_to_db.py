@@ -1,3 +1,4 @@
+import logging
 import sys
 
 import os
@@ -32,10 +33,13 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
 
         setup_database(db, classes, clean_database)
 
+        log_once(logging.INFO, f"Starting to load {swiss_zip_file}")
         for file in open_netex_file(swiss_zip_file):
+            log_once(logging.INFO, f"Inserting {file}")
             insert_database(db, classes, file)
 
         if referencing:
+            log_once(logging.INFO, f"Embedding update!")
             embedding_update(db)
 
 def check_if_swiss_file(file_handler):
