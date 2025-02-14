@@ -25,6 +25,17 @@ defaults["version"]=1
 input_dir = "d:/input"
 processing_data =  "d:/aux_testing_processing"
 
+
+ftpconns = {
+    'sbb_ftp':
+        {
+        'server': 'ftp.example.com',
+        'directory': '/upload/directory',
+        'username': 'your_username',
+        'password': 'your_password',
+        'port': 21
+        }
+}
 # a local configuration overwrites the general one. The local_configuration must not be added to github
 try:
     from local_configuration import *
