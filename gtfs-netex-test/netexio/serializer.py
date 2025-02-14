@@ -1,5 +1,7 @@
 from typing import T
 from utils import get_object_name, get_boring_classes, get_interesting_classes
+import netex
+netex.set_all = frozenset(netex.__all__) # This is the true performance step
 
 class Serializer:
     sql_type = 'TEXT'

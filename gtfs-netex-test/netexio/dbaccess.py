@@ -1153,8 +1153,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
     # cur.execute("DROP TABLE temp_embedded;")
 
-netex.set_all = frozenset(netex.__all__) # This is the true performance step
-
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     # qprint(obj.__class__.__name__)
     if issubclass(obj.__class__, EntityInVersionStructure) and obj.data_source_ref_attribute is not None:
