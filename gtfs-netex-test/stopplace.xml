@@ -1,0 +1,812 @@
+<?xml version="1.0"?>
+<StopPlace id="NL:CHB:StopPlace:8400319" version="20250214" xmlns="http://www.netex.org.uk/netex" xmlns:gml="http://www.opengis.net/gml/3.2">
+  <Name>'s-Hertogenbosch</Name>
+  <PrivateCode>NL:S:ht</PrivateCode>
+  <Centroid>
+    <Location>
+      <gml:pos>148526 411289</gml:pos>
+    </Location>
+  </Centroid>
+  <AccessibilityAssessment id="NL:CHB:AccessibilityAssessment:S_8400319" version="20250214">
+    <MobilityImpairedAccess>true</MobilityImpairedAccess>
+    <limitations>
+      <AccessibilityLimitation>
+        <WheelchairAccess>true</WheelchairAccess>
+        <StepFreeAccess>true</StepFreeAccess>
+        <LevelAccessIntoVehicle>true</LevelAccessIntoVehicle>
+        <VisualSignsAvailable>true</VisualSignsAvailable>
+        <TactileGuidanceAvailable>true</TactileGuidanceAvailable>
+      </AccessibilityLimitation>
+    </limitations>
+  </AccessibilityAssessment>
+  <facilities>
+    <SiteFacilitySet id="NL:CHB:SiteFacilitySet:8400319" version="20250214">
+      <MobilityFacilityList>tactileGuidingStrips</MobilityFacilityList>
+      <SanitaryFacilityList>toilet</SanitaryFacilityList>
+      <TicketingFacilityList>ticketMachines</TicketingFacilityList>
+      <AccessFacilityList>lift</AccessFacilityList>
+    </SiteFacilitySet>
+  </facilities>
+  <levels>
+    <Level id="NL:CHB:Level:8400319_0" version="20250214">
+      <Name>Begane grond</Name>
+      <ShortName>0</ShortName>
+      <PublicCode>0</PublicCode>
+      <RelativeLevelOrder>0</RelativeLevelOrder>
+    </Level>
+    <Level id="NL:CHB:Level:8400319_1" version="20250214">
+      <Name>1</Name>
+      <ShortName>1</ShortName>
+      <PublicCode>1</PublicCode>
+      <RelativeLevelOrder>1</RelativeLevelOrder>
+    </Level>
+    <Level id="NL:CHB:Level:8400319_2" version="20250214">
+      <Name>2</Name>
+      <ShortName>2</ShortName>
+      <PublicCode>2</PublicCode>
+      <RelativeLevelOrder>2</RelativeLevelOrder>
+    </Level>
+  </levels>
+  <placeEquipments>
+    <LiftEquipment id="NL:CHB:LiftEquipment:8400319_003" version="20250214">
+      <PrivateCode>18116</PrivateCode>
+      <PublicCode>HT-LIF-003</PublicCode>
+      <Description>HT-LIF-003 Spoor 1</Description>
+      <Width>0.9</Width>
+      <Depth>2.1</Depth>
+      <MaximumLoad>1000</MaximumLoad>
+      <BrailleButtons>true</BrailleButtons>
+      <ThroughLoader>true</ThroughLoader>
+      <TactileActuators>true</TactileActuators>
+      <AccousticAnnouncements>true</AccousticAnnouncements>
+    </LiftEquipment>
+    <LiftEquipment id="NL:CHB:LiftEquipment:8400319_001" version="20250214">
+      <PrivateCode>18325</PrivateCode>
+      <PublicCode>HT-LIF-001</PublicCode>
+      <Description>HT-LIF-001 Voorplein/centrumzijde</Description>
+      <Width>0.9</Width>
+      <Depth>2.1</Depth>
+      <MaximumLoad>1000</MaximumLoad>
+      <BrailleButtons>true</BrailleButtons>
+      <ThroughLoader>true</ThroughLoader>
+      <TactileActuators>false</TactileActuators>
+      <AccousticAnnouncements>false</AccousticAnnouncements>
+    </LiftEquipment>
+    <LiftEquipment id="NL:CHB:LiftEquipment:8400319_006" version="20250214">
+      <PrivateCode>18328</PrivateCode>
+      <PublicCode>HT-LIF-006</PublicCode>
+      <Description>HT-LIF-006 Westzijde/rechtbankzijde</Description>
+      <Width>0.9</Width>
+      <Depth>2.1</Depth>
+      <MaximumLoad>1000</MaximumLoad>
+      <BrailleButtons>true</BrailleButtons>
+      <ThroughLoader>true</ThroughLoader>
+      <TactileActuators>false</TactileActuators>
+      <AccousticAnnouncements>false</AccousticAnnouncements>
+    </LiftEquipment>
+    <LiftEquipment id="NL:CHB:LiftEquipment:8400319_004" version="20250214">
+      <PrivateCode>18475</PrivateCode>
+      <PublicCode>HT-LIF-004</PublicCode>
+      <Description>HT-LIF-004 Spoor 3/4</Description>
+      <Width>0.9</Width>
+      <Depth>2.1</Depth>
+      <MaximumLoad>1000</MaximumLoad>
+      <BrailleButtons>true</BrailleButtons>
+      <ThroughLoader>true</ThroughLoader>
+      <TactileActuators>true</TactileActuators>
+      <AccousticAnnouncements>true</AccousticAnnouncements>
+    </LiftEquipment>
+    <LiftEquipment id="NL:CHB:LiftEquipment:8400319_005" version="20250214">
+      <PrivateCode>18476</PrivateCode>
+      <PublicCode>HT-LIF-005</PublicCode>
+      <Description>HT-LIF-005 Spoor 6/7</Description>
+      <Width>0.9</Width>
+      <Depth>2.1</Depth>
+      <MaximumLoad>1000</MaximumLoad>
+      <BrailleButtons>true</BrailleButtons>
+      <ThroughLoader>true</ThroughLoader>
+      <TactileActuators>true</TactileActuators>
+      <AccousticAnnouncements>true</AccousticAnnouncements>
+    </LiftEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_001" version="20250214">
+      <PrivateCode>18569</PrivateCode>
+      <PublicCode>HT-ROL-001</PublicCode>
+      <Description>HT spoor 1/2 neer HT-ROL-001 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_004" version="20250214">
+      <PrivateCode>18717</PrivateCode>
+      <PublicCode>HT-ROL-004</PublicCode>
+      <Description>HT spoor 3/4b op HT-ROL-004 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_009" version="20250214">
+      <PrivateCode>18726</PrivateCode>
+      <PublicCode>HT-ROL-009</PublicCode>
+      <Description>HT Achterzijd neer HT-ROL-009 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_010" version="20250214">
+      <PrivateCode>18728</PrivateCode>
+      <PublicCode>HT-ROL-010</PublicCode>
+      <Description>HT Achterzijde op HT-ROL-010 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_007" version="20250214">
+      <PrivateCode>18732</PrivateCode>
+      <PublicCode>HT-ROL-007</PublicCode>
+      <Description>HT spoor 6/7b neer HT-ROL-007 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_008" version="20250214">
+      <PrivateCode>18733</PrivateCode>
+      <PublicCode>HT-ROL-008</PublicCode>
+      <Description>HT spoor 6/7b op HT-ROL-008 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_013" version="20250214">
+      <PrivateCode>18734</PrivateCode>
+      <PublicCode>HT-ROL-013</PublicCode>
+      <Description>HT spoor 6/7a op HT-ROL-013 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_005" version="20250214">
+      <PrivateCode>18735</PrivateCode>
+      <PublicCode>HT-ROL-005</PublicCode>
+      <Description>HT spoor 3/4a op HT-ROL-005 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_012" version="20250214">
+      <PrivateCode>18748</PrivateCode>
+      <PublicCode>HT-ROL-012</PublicCode>
+      <Description>HT Voorzijde neer HT-ROL-012 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_011" version="20250214">
+      <PrivateCode>18768</PrivateCode>
+      <PublicCode>HT-ROL-011</PublicCode>
+      <Description>HT Voorzijde op HT-ROL-011 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_014" version="20250214">
+      <PrivateCode>18782</PrivateCode>
+      <PublicCode>HT-ROL-014</PublicCode>
+      <Description>HT spoor 6/7a neer HT-ROL-014 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_006" version="20250214">
+      <PrivateCode>18783</PrivateCode>
+      <PublicCode>HT-ROL-006</PublicCode>
+      <Description>HT spoor 3/4a neer HT-ROL-006 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_003" version="20250214">
+      <PrivateCode>18784</PrivateCode>
+      <PublicCode>HT-ROL-003</PublicCode>
+      <Description>HT spoor 3/4b neer HT-ROL-003 Roltrap</Description>
+    </EscalatorEquipment>
+    <EscalatorEquipment id="NL:CHB:EscalatorEquipment:8400319_002" version="20250214">
+      <PrivateCode>18821</PrivateCode>
+      <PublicCode>HT-ROL-002</PublicCode>
+      <Description>HT spoor 1/2 op HT-ROL-002 Roltrap</Description>
+    </EscalatorEquipment>
+    <RampEquipment id="NL:CHB:RampEquipment:8400319_13904" version="20250214">
+      <PrivateCode>13904</PrivateCode>
+    </RampEquipment>
+    <RampEquipment id="NL:CHB:RampEquipment:8400319_13577" version="20250214">
+      <PrivateCode>13577</PrivateCode>
+    </RampEquipment>
+  </placeEquipments>
+  <quays>
+    <Quay id="NL:CHB:Quay:8400319_1b" version="20250214">
+      <Name>Spoor 1b</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148520 411157</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>1b</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_1" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_3b" version="20250214">
+      <Name>Spoor 3b</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148504 411162</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>3b</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_3" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_1" version="20250214">
+      <Name>Spoor 1</Name>
+      <gml:Polygon gml:id="P_NL_CHB_Quay_8400319_1" srsName="urn:ogc:def:crs:EPSG::28992">
+        <gml:exterior>
+          <gml:LinearRing>
+            <gml:posList count="15">148508.92 411098.16 148503.24 411099.63 148503.08 411099.68 148502.36 411099.87 148532.25 411217.26 148545.67 411269.81 148614.30 411537.13 148621.68 411535.32 148623.72 411534.82 148601.37 411423.06 148592.55 411382.93 148591.00 411376.87 148557.10 411245.65 148516.66 411116.07 148508.92 411098.16</gml:posList>
+          </gml:LinearRing>
+        </gml:exterior>
+      </gml:Polygon>
+      <LevelRef ref="NL:CHB:Level:8400319_0" versionRef="20250214"/>
+      <equipmentPlaces>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_LEq_003_Q_1" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18116_NL_CHB_Quay_8400319_1" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148564.94 411312.52 148566.88 411312.04 148567.62 411314.95 148565.68 411315.44 148564.94 411312.52</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <LiftEquipmentRef ref="NL:CHB:LiftEquipment:8400319_003" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_001_Q_1" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18569_NL_CHB_Quay_8400319_1" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148558.88 411294.09 148557.91 411294.33 148554.23 411279.76 148555.20 411279.51 148558.88 411294.09</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_001" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_002_Q_1" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18821_NL_CHB_Quay_8400319_1" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148561.77 411293.36 148560.80 411293.60 148557.11 411279.03 148558.08 411278.78 148561.77 411293.36</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_002" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+      </equipmentPlaces>
+      <PublicCode>1</PublicCode>
+      <QuayType>railPlatform</QuayType>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_3a" version="20250214">
+      <Name>Spoor 3a</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148567 411410</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>3a</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_3" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_7a" version="20250214">
+      <Name>Spoor 7a</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148530 411420</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>7a</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_7" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_6b" version="20250214">
+      <Name>Spoor 6b</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148475 411169</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>6b</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_6" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_3" version="20250214">
+      <Name>Spoor 3</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148535 411291</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>3</PublicCode>
+      <QuayType>railPlatform</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_3n4" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_6" version="20250214">
+      <Name>Spoor 6</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148508 411298</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>6</PublicCode>
+      <QuayType>railPlatform</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_5n7" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_7" version="20250214">
+      <Name>Spoor 7</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148501 411298</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>7</PublicCode>
+      <QuayType>railPlatform</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_5n7" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_7b" version="20250214">
+      <Name>Spoor 7b</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148468 411171</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>7b</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_7" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_4b" version="20250214">
+      <Name>Spoor 4b</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148491 411165</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>4b</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_4" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_6a" version="20250214">
+      <Name>Spoor 6a</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148539 411418</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>6a</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_6" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_5b" version="20250214">
+      <Name>Spoor 5b</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148482 411167</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>5b</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_5n7" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_1a" version="20250214">
+      <Name>Spoor 1a</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148585 411405</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>1a</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_1" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_4" version="20250214">
+      <Name>Spoor 4</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148527 411292</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>4</PublicCode>
+      <QuayType>railPlatform</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_3n4" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_4a" version="20250214">
+      <Name>Spoor 4a</Name>
+      <Centroid>
+        <Location>
+          <gml:pos>148555 411413</gml:pos>
+        </Location>
+      </Centroid>
+      <PublicCode>4a</PublicCode>
+      <QuayType>railPlatformSector</QuayType>
+      <ParentQuayRef ref="NL:CHB:Quay:8400319_4" version="20250214"/>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_3n4" version="20250214">
+      <Name>Spoor 3 en 4</Name>
+      <gml:Polygon gml:id="P_NL_CHB_Quay_8400319_3n4" srsName="urn:ogc:def:crs:EPSG::28992">
+        <gml:exterior>
+          <gml:LinearRing>
+            <gml:posList count="55">589336.61 6744481.73 589305.93 6744361.07 589305.53 6744359.51 589304.25 6744354.50 589303.87 6744353.02 589294.28 6744315.44 589254.61 6744160.14 589221.26 6744027.70 589219.20 6744019.85 589211.27 6743991.26 589202.92 6743962.35 589195.49 6743938.78 589183.21 6743901.93 589172.51 6743871.12 589158.93 6743832.80 589158.87 6743832.65 589148.76 6743803.66 589143.76 6743805.48 589142.82 6743805.82 589140.42 6743806.69 589138.71 6743807.16 589140.73 6743814.56 589146.45 6743837.44 589157.04 6743879.79 589165.57 6743912.47 589171.13 6743934.78 589184.79 6743988.01 589193.36 6744022.29 589203.63 6744061.60 589269.74 6744321.67 589312.00 6744487.92 589312.00 6744487.92 589319.31 6744516.66 589319.31 6744516.65 589365.42 6744698.06 589383.12 6744769.45 589403.45 6744850.05 589409.74 6744874.27 589417.15 6744872.47 589420.92 6744871.56 589415.55 6744849.97 589415.49 6744849.75 589411.54 6744850.73 589408.78 6744839.82 589401.70 6744811.79 589408.20 6744809.93 589415.10 6744838.33 589422.64 6744836.90 589413.58 6744790.19 589410.74 6744776.89 589403.57 6744745.38 589394.31 6744708.66 589390.30 6744693.63 589343.90 6744510.51 589336.61 6744481.73</gml:posList>
+          </gml:LinearRing>
+        </gml:exterior>
+      </gml:Polygon>
+      <LevelRef ref="NL:CHB:Level:8400319_0" versionRef="20250214"/>
+      <equipmentPlaces>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_REq_13577_Q_3n4" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_13577_NL_CHB_Quay_8400319_3n4" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="18">148611.61 411604.90 148607.69 411605.83 148606.71 411602.01 148604.84 411594.68 148603.26 411588.47 148604.47 411588.12 148605.28 411587.89 148606.06 411587.67 148606.42 411587.57 148607.30 411587.31 148608.58 411592.56 148608.67 411592.92 148609.03 411594.37 148610.47 411600.26 148610.88 411601.91 148611.04 411602.57 148611.17 411603.13 148611.61 411604.90</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <RampEquipmentRef ref="NL:CHB:RampEquipment:8400319_13577" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_LEq_004_Q_3n4" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18475_NL_CHB_Quay_8400319_3n4" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148537.27 411319.86 148539.21 411319.37 148539.95 411322.29 148538.01 411322.77 148537.27 411319.86</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <LiftEquipmentRef ref="NL:CHB:LiftEquipment:8400319_004" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_004_Q_3n4" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18717_NL_CHB_Quay_8400319_3n4" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148537.23 411299.70 148536.27 411299.95 148532.58 411285.37 148533.55 411285.13 148537.23 411299.70</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_004" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_005_Q_3n4" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18735_NL_CHB_Quay_8400319_3n4" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148539.37 411334.28 148538.41 411334.52 148534.72 411319.95 148535.69 411319.70 148539.37 411334.28</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_005" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_006_Q_3n4" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18783_NL_CHB_Quay_8400319_3n4" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148544.50 411333.08 148543.53 411333.32 148539.85 411318.75 148540.82 411318.50 148544.50 411333.08</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_006" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_003_Q_3n4" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18784_NL_CHB_Quay_8400319_3n4" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148534.27 411300.45 148533.30 411300.70 148529.61 411286.12 148530.58 411285.88 148534.27 411300.45</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_003" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+      </equipmentPlaces>
+      <PublicCode>3-4</PublicCode>
+      <QuayType>railIslandPlatform</QuayType>
+    </Quay>
+    <Quay id="NL:CHB:Quay:8400319_5n7" version="20250214">
+      <Name>Spoor 6, 7, 5b</Name>
+      <gml:Polygon gml:id="P_NL_CHB_Quay_8400319_5n7" srsName="urn:ogc:def:crs:EPSG::28992">
+        <gml:exterior>
+          <gml:LinearRing>
+            <gml:posList count="39">589289.79 6744493.52 589259.13 6744372.75 589252.12 6744374.51 589252.75 6744376.98 589254.53 6744384.04 589249.89 6744385.24 589248.10 6744378.18 589247.46 6744375.68 589247.12 6744375.76 589245.07 6744367.71 589245.40 6744367.63 589244.92 6744365.73 589243.09 6744358.55 589243.61 6744358.42 589241.88 6744351.56 589237.42 6744333.96 589240.35 6744333.20 589243.07 6744332.50 589247.50 6744350.11 589249.23 6744356.97 589247.81 6744357.34 589249.62 6744364.52 589250.10 6744366.45 589257.08 6744364.70 589186.92 6744086.83 589137.48 6743893.02 589130.66 6743865.02 589127.26 6743865.65 589121.80 6743866.75 589116.66 6743867.73 589123.81 6743902.47 589130.08 6743931.05 589137.73 6743962.79 589154.50 6744029.45 589167.90 6744081.27 589197.29 6744196.12 589244.75 6744385.32 589273.24 6744497.68 589289.79 6744493.52</gml:posList>
+          </gml:LinearRing>
+        </gml:exterior>
+      </gml:Polygon>
+      <LevelRef ref="NL:CHB:Level:8400319_2" versionRef="20250214"/>
+      <PublicCode>5-7</PublicCode>
+      <QuayType>railIslandPlatform</QuayType>
+    </Quay>
+  </quays>
+  <accessSpaces>
+    <AccessSpace id="Accessspace:CHB:8400319:4207" version="20250214">
+      <PrivateCode>4207</PrivateCode>
+      <Centroid>
+        <Location>
+          <gml:pos>148593 411311</gml:pos>
+        </Location>
+      </Centroid>
+      <gml:Polygon gml:id="P_Accessspace_CHB_8400319_4207" srsName="urn:ogc:def:crs:EPSG::28992">
+        <gml:exterior>
+          <gml:LinearRing>
+            <gml:posList count="11">148594.24 411311.25 148597.16 411311.77 148597.46 411312.99 148594.85 411313.65 148595.25 411315.20 148591.63 411316.12 148589.49 411307.68 148594.19 411306.49 148594.98 411309.60 148593.89 411309.88 148594.24 411311.25</gml:posList>
+          </gml:LinearRing>
+        </gml:exterior>
+      </gml:Polygon>
+      <LevelRef ref="NL:CHB:Level:8400319_0" versionRef="20250214"/>
+      <AccessSpaceType>wc</AccessSpaceType>
+      <PassageType>none</PassageType>
+    </AccessSpace>
+    <AccessSpace id="Accessspace:CHB:8400319:4072" version="20250214">
+      <PrivateCode>4072</PrivateCode>
+      <Centroid>
+        <Location>
+          <gml:pos>148525 411313</gml:pos>
+        </Location>
+      </Centroid>
+      <gml:Polygon gml:id="P_Accessspace_CHB_8400319_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+        <gml:exterior>
+          <gml:LinearRing>
+            <gml:posList count="44">148518.52 411350.46 148517.38 411350.74 148516.23 411351.03 148515.74 411349.03 148512.62 411349.80 148506.45 411324.90 148509.04 411324.26 148508.77 411323.14 148490.55 411327.65 148481.34 411329.93 148470.47 411332.63 148468.82 411325.98 148461.39 411327.82 148460.83 411325.54 148468.26 411323.70 148466.79 411317.79 148580.40 411289.66 148581.65 411294.70 148572.56 411296.96 148573.79 411301.93 148582.88 411299.67 148584.08 411304.50 148564.84 411309.26 148565.19 411310.67 148566.26 411311.18 148566.55 411312.35 148561.59 411313.57 148561.25 411312.18 148561.89 411310.69 148561.73 411310.03 148552.07 411312.42 148537.12 411316.12 148537.47 411317.53 148538.54 411318.04 148538.83 411319.21 148536.45 411319.80 148535.63 411316.49 148521.58 411319.97 148512.01 411322.34 148512.28 411323.46 148514.88 411322.82 148521.04 411347.71 148518.03 411348.46 148518.52 411350.46</gml:posList>
+          </gml:LinearRing>
+        </gml:exterior>
+      </gml:Polygon>
+      <LevelRef ref="NL:CHB:Level:8400319_1" versionRef="20250214"/>
+      <equipmentPlaces>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_LEq_003_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18116_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148564.94 411312.52 148566.88 411312.04 148567.62 411314.95 148565.68 411315.44 148564.94 411312.52</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <LiftEquipmentRef ref="NL:CHB:LiftEquipment:8400319_003" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_LEq_006_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18328_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148459.47 411330.02 148458.95 411328.09 148461.85 411327.30 148462.37 411329.24 148459.47 411330.02</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <LiftEquipmentRef ref="NL:CHB:LiftEquipment:8400319_006" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_LEq_004_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18475_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148537.27 411319.86 148539.21 411319.37 148539.95 411322.29 148538.01 411322.77 148537.27 411319.86</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <LiftEquipmentRef ref="NL:CHB:LiftEquipment:8400319_004" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_LEq_005_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18476_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148514.29 411339.29 148516.23 411338.81 148516.97 411341.72 148515.03 411342.21 148514.29 411339.29</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <LiftEquipmentRef ref="NL:CHB:LiftEquipment:8400319_005" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_001_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18569_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148558.88 411294.09 148557.91 411294.33 148554.23 411279.76 148555.20 411279.51 148558.88 411294.09</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_001" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_004_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18717_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148537.23 411299.70 148536.27 411299.95 148532.58 411285.37 148533.55 411285.13 148537.23 411299.70</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_004" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_009_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18726_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148454.18 411335.57 148454.42 411336.54 148439.85 411340.22 148439.60 411339.25 148454.18 411335.57</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_009" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_010_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18728_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148453.21 411332.14 148453.45 411333.11 148438.88 411336.80 148438.63 411335.83 148453.21 411332.14</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_010" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_007_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18732_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148506.03 411307.39 148505.06 411307.64 148501.38 411293.06 148502.35 411292.82 148506.03 411307.39</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_007" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_008_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18733_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148508.89 411306.68 148507.92 411306.92 148504.23 411292.35 148505.20 411292.10 148508.89 411306.68</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_008" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_013_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18734_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148513.96 411339.17 148512.99 411339.41 148509.31 411324.84 148510.28 411324.59 148513.96 411339.17</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_013" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_005_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18735_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148539.37 411334.28 148538.41 411334.52 148534.72 411319.95 148535.69 411319.70 148539.37 411334.28</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_005" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_014_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18782_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148517.18 411338.37 148516.21 411338.61 148512.52 411324.04 148513.49 411323.79 148517.18 411338.37</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_014" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_006_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18783_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148544.50 411333.08 148543.53 411333.32 148539.85 411318.75 148540.82 411318.50 148544.50 411333.08</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_006" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_003_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18784_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148534.27 411300.45 148533.30 411300.70 148529.61 411286.12 148530.58 411285.88 148534.27 411300.45</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_003" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_002_A_4072" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18821_4072" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148561.77 411293.36 148560.80 411293.60 148557.11 411279.03 148558.08 411278.78 148561.77 411293.36</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_002" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+      </equipmentPlaces>
+      <AccessSpaceType>overpass</AccessSpaceType>
+      <PassageType>overpass</PassageType>
+    </AccessSpace>
+    <AccessSpace id="Accessspace:CHB:8400319:4141" version="20250214">
+      <PrivateCode>4141</PrivateCode>
+      <Centroid>
+        <Location>
+          <gml:pos>148593 411294</gml:pos>
+        </Location>
+      </Centroid>
+      <gml:Polygon gml:id="P_Accessspace_CHB_8400319_4141" srsName="urn:ogc:def:crs:EPSG::28992">
+        <gml:exterior>
+          <gml:LinearRing>
+            <gml:posList count="69">148603.94 411294.17 148602.23 411294.60 148602.35 411295.09 148600.11 411295.67 148601.01 411299.22 148603.26 411298.65 148603.38 411299.14 148604.39 411298.89 148605.25 411304.96 148600.30 411305.67 148599.58 411302.80 148596.59 411303.58 148597.13 411305.67 148596.74 411305.77 148597.61 411309.22 148596.04 411309.62 148594.62 411304.03 148592.58 411304.55 148592.93 411305.95 148585.45 411306.76 148584.69 411303.78 148584.46 411303.84 148583.15 411298.94 148586.55 411298.08 148585.29 411293.13 148581.89 411294.00 148580.63 411289.00 148580.53 411289.03 148580.49 411288.85 148580.58 411288.83 148579.98 411286.45 148579.97 411286.45 148579.33 411285.58 148579.77 411285.47 148579.42 411284.09 148579.81 411283.99 148579.78 411283.90 148581.65 411283.74 148581.65 411283.67 148583.20 411283.55 148583.19 411283.47 148584.80 411283.34 148584.81 411283.60 148587.05 411283.48 148587.34 411284.60 148591.14 411283.64 148591.13 411283.61 148591.48 411283.52 148591.48 411283.50 148593.95 411282.88 148593.96 411282.91 148594.68 411282.73 148594.77 411282.05 148602.50 411281.21 148602.53 411281.48 148602.52 411281.48 148602.68 411283.00 148599.49 411283.81 148599.68 411284.58 148598.84 411284.80 148599.76 411288.38 148600.59 411288.17 148600.77 411288.87 148603.37 411288.21 148603.55 411290.03 148609.15 411288.60 148609.74 411290.93 148603.78 411292.44 148603.94 411294.17</gml:posList>
+          </gml:LinearRing>
+        </gml:exterior>
+      </gml:Polygon>
+      <LevelRef ref="NL:CHB:Level:8400319_1" versionRef="20250214"/>
+      <equipmentPlaces>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_LEq_001_A_4141" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18325_4141" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148609.87 411291.17 148609.42 411289.22 148612.35 411288.53 148612.80 411290.48 148609.87 411291.17</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <LiftEquipmentRef ref="NL:CHB:LiftEquipment:8400319_001" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_012_A_4141" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18748_4141" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148614.10 411290.53 148614.35 411291.49 148599.77 411295.18 148599.53 411294.21 148614.10 411290.53</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_012" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+        <EquipmentPlace id="NL:CHB:EquipmentPlace:8400319_EEq_011_A_4141" version="20250214">
+          <gml:Polygon gml:id="P_CHB_EquipmentPlace_8400319_18768_4141" srsName="urn:ogc:def:crs:EPSG::28992">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList count="5">148614.44 411291.98 148614.68 411292.95 148600.11 411296.63 148599.86 411295.66 148614.44 411291.98</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+          <placeEquipments>
+            <EscalatorEquipmentRef ref="NL:CHB:EscalatorEquipment:8400319_011" version="20250214"/>
+          </placeEquipments>
+        </EquipmentPlace>
+      </equipmentPlaces>
+      <AccessSpaceType>bookingHall</AccessSpaceType>
+      <PassageType>pathway</PassageType>
+    </AccessSpace>
+    <AccessSpace id="Accessspace:CHB:8400319:4254" version="20250214">
+      <PrivateCode>4254</PrivateCode>
+      <Centroid>
+        <Location>
+          <gml:pos>148575 411299</gml:pos>
+        </Location>
+      </Centroid>
+      <gml:Polygon gml:id="P_Accessspace_CHB_8400319_4254" srsName="urn:ogc:def:crs:EPSG::28992">
+        <gml:exterior>
+          <gml:LinearRing>
+            <gml:posList count="7">148576.69 411300.29 148574.51 411300.83 148574.26 411299.82 148573.32 411300.05 148573.02 411298.83 148576.14 411298.05 148576.69 411300.29</gml:posList>
+          </gml:LinearRing>
+        </gml:exterior>
+      </gml:Polygon>
+      <LevelRef ref="NL:CHB:Level:8400319_1" versionRef="20250214"/>
+      <AccessSpaceType>wc</AccessSpaceType>
+      <PassageType>none</PassageType>
+    </AccessSpace>
+  </accessSpaces>
+</StopPlace>
