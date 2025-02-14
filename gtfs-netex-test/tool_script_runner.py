@@ -9,7 +9,14 @@ from aux_logging import *
 from configuration import *
 import traceback
 import urllib.request
+from datetime import datetime
 
+def reversedate():
+    # Get the current date
+    current_date = datetime.now()
+    # Format the date as YYYYMMDD
+    formatted_date = current_date.strftime('%Y%m%d')
+    return formatted_date
 def create_list_from_string(input_string):
     # Remove the square brackets from the string
     cleaned_string = input_string.strip('[]')
@@ -195,6 +202,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
             script_args = replace_in_string(script_args, "%%inputfilepath%%", script_input_file_path)
             script_args = replace_in_string(script_args, "%%block%%", block["block"])
             script_args = replace_in_string(script_args, "%%log%%", block["block"] + "/" + log_file)
+            script_args = replace_in_string(script_args, "%%date%%", reversedate())
 
             # if the processing dir doesn't exist, then we create it
             os.makedirs(processdir, exist_ok=True)
