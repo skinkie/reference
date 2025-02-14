@@ -1153,14 +1153,15 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
     # cur.execute("DROP TABLE temp_embedded;")
 
+netex.set_all = frozenset(netex.__all__) # This is the true performance step
 
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     # qprint(obj.__class__.__name__)
     if issubclass(obj.__class__, EntityInVersionStructure) and obj.data_source_ref_attribute is not None:
         yield DataSourceRefStructure(ref=obj.data_source_ref_attribute), depth + ['data_source_ref_attribute']
+
     if issubclass(obj.__class__, DataManagedObject) and obj.responsibility_set_ref_attribute is not None:
-        yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute), depth + [
-            'responsibility_set_ref_attribute']
+        yield ResponsibilitySetRef(ref=obj.responsibility_set_ref_attribute), depth + ['responsibility_set_ref_attribute']
 
     mydepth = depth.copy()
     mydepth.append(0)
@@ -1173,7 +1174,7 @@ def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
                 yield v, mydepth
 
             else:
-                if (v.__class__.__name__ in netex.__all__ and hasattr(v, '__dict__')):
+                if hasattr(v, '__dict__') and v.__class__.__name__ in netex.set_all:
                     if hasattr(v, 'id'):
                         yield v, mydepth
                     yield from recursive_attributes(v, mydepth)
@@ -1183,10 +1184,9 @@ def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
                         mydepth[-1] = j
                         x = v[j]
                         if x is not None:
-                            if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__,
-                                                                                         VersionOfObjectRefStructure):
+                            if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__, VersionOfObjectRefStructure):
                                 yield x, mydepth
-                            elif (x.__class__.__name__ in netex.__all__ and hasattr(x, '__dict__')):
+                            elif hasattr(x, '__dict__') and x.__class__.__name__ in netex.set_all:
                                 if hasattr(x, 'id'):
                                     yield x, mydepth
                                 yield from recursive_attributes(x, mydepth)
