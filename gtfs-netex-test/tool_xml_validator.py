@@ -1,10 +1,8 @@
 # @https://github.com/ue71603, 2024
-import logging
-import os
+
 from aux_logging import *
 import traceback
 from lxml import etree
-
 from netexio.dbaccess import open_netex_file
 
 
@@ -20,14 +18,18 @@ def check_xsd_validity(xsd_file):
 
 def validate_xml(xml_file, xmlschema):
     try:
+
+        # Validate the XML file against the schema
         xmlschema.assertValid(etree.parse(xml_file))
-        log_all(logging.INFO,f"{xml_file} is valid against {xmlschema}")
+        # Check for any errors captured by the handler
+        log_all(logging.INFO, f"{xml_file} is valid against the schema")
     except etree.XMLSchemaError as e:
-        log_all(logging.ERROR,f"{xml_file} is invalid: {str(e)}")
+        log_all(logging.ERROR, f"{xml_file} is invalid: {str(e)}")
         raise e
     except Exception as e:
-        log_all(logging.ERROR,f"An error occurred while validating {xml_file}: {str(e)}")
+        log_all(logging.ERROR, f"An error occurred while validating {xml_file}: {str(e)}")
         raise e
+
     return True
 
 def main(folder, xsd_schema):

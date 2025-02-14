@@ -1,4 +1,3 @@
-import logging
 import re
 from lxml import etree
 from aux_logging import *
@@ -8,18 +7,18 @@ from netexio.dbaccess import open_netex_file
 
 
 def main(assertions_file, input_file):
-    tree = etree.parse(input_file)
     # Define the namespace URI
     namespace_uri = 'http://www.netex.org.uk/netex'
-
     # Create the namespace map with the URI as the value
     namespaces = {'netex': namespace_uri}
-
-    with open(assertions_file, 'r',encoding='utf-8') as file:
+    file_generator = open_netex_file(input_file)
+    with open(assertions_file, 'r', encoding='utf-8') as file:
         assertions = file.readlines()
-
-    for sub_file in open_netex_file(input_file):
-        input_content=str(sub_file.read(),"UTF-8")
+    for sub_file in file_generator:
+        log_print(f"working on {sub_file}")
+        input = sub_file.read()
+        tree =  etree.fromstring(input)
+        input_content = str(input, "UTF-8")
         failed = 0
         for assertion in assertions:
             assertion = assertion.strip()
@@ -29,9 +28,10 @@ def main(assertions_file, input_file):
             elif assertion.startswith('contains'):
                 regex = assertion.split(' ', 1)[1]
                 if re.search(regex, input_content, flags=re.UNICODE):
-                    log_print(f'Assertion PASSed: File contains regex "{regex}"')
+                    log_print(f'Assertion passed: File {sub_file}: contains regex "{regex}"')
                 else:
-                    log_all(logging.ERROR, "assertions", f'Assertion FAILed: File does not contain regex "{regex}"')
+                    log_all(logging.ERROR,
+                            f'Assertion failed: File {sub_file} does not contain regex "{regex}"')
                     failed = 1
             elif assertion.startswith('xpathcountequal'):
                 parts = assertion.split(' ')
@@ -39,10 +39,10 @@ def main(assertions_file, input_file):
                 expected_count = int(parts[2])
                 results = tree.xpath(xpath_expression, namespaces=namespaces)
                 if len(results) == expected_count:
-                    log_print(f'Assertion PASSed: XPath "{xpath_expression}" has {expected_count} results')
+                    log_print(f'Assertion passed: {sub_file}: XPath "{xpath_expression}" has {expected_count} results')
                 else:
-                    log_all(logging.ERROR, "assertions",
-                            f'Assertion FAILed: XPath "{xpath_expression}" does not have {expected_count} results, was {len(results)}')
+                    log_all(logging.ERROR,
+                            f'Assertion failed: {sub_file}: XPath "{xpath_expression}" for {sub_file} does not have {expected_count} results, was {len(results)}')
                     failed = 1
             elif assertion.startswith('xpathcountgreater'):
                 parts = assertion.split(' ')
@@ -51,15 +51,20 @@ def main(assertions_file, input_file):
                 results = tree.xpath(xpath_expression, namespaces=namespaces)
                 if len(results) > expected_count:
                     log_print(
-                        f'Assertion PASSed: XPath "{xpath_expression}" has more than {expected_count} results, was {len(results)}')
+                        f'Assertion passeded: {sub_file}: XPath "{xpath_expression}" has more than {expected_count} results, was {len(results)}')
                 else:
-                    log_all(logging.ERROR, f'Assertion FAILed: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
+                    log_all(logging.ERROR,
+                            f'Assertion Failed: {sub_file}: XPath "{xpath_expression}" does not have more than {expected_count} results, was {len(results)}')
                     failed = 1
             elif len(assertion.strip()) > 0:
-                log_all(logging.ERROR,  f'Invalid assertion: {assertion}')
+                log_all(logging.ERROR, f'Invalid assertion: {assertion}')
                 failed = 1
         if (failed > 0):
             exit(1)
+
+
+
+
 
 
 
