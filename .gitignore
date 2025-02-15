@@ -2,3 +2,4 @@ gtfs-netex-test/aux_test_input/
 gtfs-netex-test/aux_test_processing
 .idea/
 gtfs-netex-test/local_configuration.py
+*.xt
