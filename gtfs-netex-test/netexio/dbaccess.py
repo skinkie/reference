@@ -1156,7 +1156,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     # cur.execute("INSERT OR REPLACE INTO referencing SELECT DISTINCT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
 
     # cur.execute("DROP TABLE temp_embedded;")
-
 @profile
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     # qprint(obj.__class__.__name__)
