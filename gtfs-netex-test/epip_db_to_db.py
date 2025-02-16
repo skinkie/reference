@@ -9,7 +9,8 @@ from memory_profiler import memory_usage
 from netex import Codespace, AvailabilityCondition, NoticeAssignment, Notice, ScheduledStopPoint, \
     ServiceJourneyInterchange, Operator, ResponsibilitySet, StopPlace, Direction, Line, TariffZone, ServiceLink, \
     ServiceJourneyPattern, PassengerStopAssignment, DefaultConnection, SiteConnection, Connection, DataSource, \
-    Authority, ValueSet, TransportAdministrativeZone, TopographicPlace, Network, DestinationDisplay, VehicleType
+    Authority, ValueSet, TransportAdministrativeZone, TopographicPlace, Network, DestinationDisplay, VehicleType, \
+    ServiceJourney, DayType, DayTypeAssignment, UicOperatingPeriod
 from netexio.database import Database
 from netexio.dbaccess import setup_database, copy_table, missing_class_update
 from transformers.interchanges import interchange_rules_to_service_journey_interchanges
@@ -50,7 +51,7 @@ def main(source_database_file: str, target_database_file: str):
 
         with Database(source_database_file, read_only=True) as source_db:
             log_all(logging.INFO, "Copy all tables as-is " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
-            copy_table(source_db, target_db,[Codespace, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True)
+            copy_table(source_db, target_db,[Codespace, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True, embedding=True)
             source_db.clean_cache()
 
             log_all(logging.INFO, "Copy lines, in EPIP style " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
@@ -91,7 +92,7 @@ def main(source_database_file: str, target_database_file: str):
             reprojection_update(target_db, 'urn:ogc:def:crs:EPSG::4326')
 
             log_all(logging.INFO, "Embedding update " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
-            embedding_update(target_db)
+            embedding_update(target_db, filter_clazz=[Line, StopPlace, ServiceJourneyPattern, ServiceJourney, DayType, DayTypeAssignment, UicOperatingPeriod, ServiceJourneyInterchange, Direction])
 
             log_all(logging.INFO, "Copy remaining classes " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             missing_class_update(source_db, target_db)

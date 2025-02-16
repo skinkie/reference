@@ -715,7 +715,7 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
     print('\n')
 
 
-def copy_table(db_read: Database, db_write: Database, classes: list, clean=False):
+def copy_table(db_read: Database, db_write: Database, classes: list, clean=False, embedding=False):
     if db_read.read_only:
         db_write.con.execute(f"ATTACH DATABASE '{db_read.database_file}' AS db_read (READ_ONLY);")
         for clazz in classes:
@@ -730,6 +730,17 @@ def copy_table(db_read: Database, db_write: Database, classes: list, clean=False
             except CatalogException:
                 pass
 
+        if embedding:
+            sql_create_table = "CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
+            db_write.con.execute(sql_create_table)
+
+            sql_create_table = "CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
+            db_write.con.execute(sql_create_table)
+
+            in_tables = ', '.join([f"'{get_object_name(clazz)}'" for clazz in classes])
+            db_write.con.execute(f'INSERT OR REPLACE INTO embedded SELECT * FROM db_read.embedded WHERE parent_class IN ({in_tables});')
+            db_write.con.execute(f'INSERT OR REPLACE INTO referencing SELECT * FROM db_read.referencing WHERE parent_class IN ({in_tables});')
+
         db_write.con.execute(f"DETACH db_read;")
 
     else:
@@ -743,6 +754,10 @@ def copy_table(db_read: Database, db_write: Database, classes: list, clean=False
             except CatalogException:
                 pass
 
+        if embedding:
+            # TODO: Maybe we can also copy this
+            # TODO: Does not work due to circular import embedding_update(db_write, filter_clazz=classes)
+            pass
 
 def missing_class_update(source_db: Database, target_db: Database):
     # TODO: As written in #223 some of the objects have not been copied at this point, but are still referenced.

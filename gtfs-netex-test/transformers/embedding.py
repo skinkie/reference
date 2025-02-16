@@ -2,7 +2,7 @@ import functools
 from typing import Generator
 
 from netexio.database import Database
-from netexio.dbaccess import recursive_attributes, update_embedded_referencing, create_meta
+from netexio.dbaccess import update_embedded_referencing
 from netexio.serializer import Serializer
 from utils import get_object_name
 

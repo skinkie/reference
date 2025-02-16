@@ -35,7 +35,7 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
 
         log_all(logging.INFO, f"Starting to load {swiss_zip_file}")
         for file in open_netex_file(swiss_zip_file):
-            log_all(logging.INFO, f"Inserting {file}")
+            log_all(logging.INFO, f"Inserting {file.name}")
             insert_database(db, classes, file)
 
         if referencing:
