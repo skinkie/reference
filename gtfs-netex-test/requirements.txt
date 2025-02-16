@@ -8,3 +8,4 @@ multiprocess
 folium
 pytz
 memory_profiler
+line_profiler
