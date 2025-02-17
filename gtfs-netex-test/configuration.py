@@ -24,7 +24,7 @@ defaults["codespace"]="OPENOV"
 defaults["version"]=1
 input_dir = "d:/input"
 processing_data =  "d:/aux_testing_processing"
-
+gtfs_validator= "gtfs-validator-6.0.0-cli.jar"
 
 ftpconns = {
     'sbb_ftp':

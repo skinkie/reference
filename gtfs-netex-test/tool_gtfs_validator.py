@@ -4,15 +4,22 @@ import subprocess
 import json
 from aux_logging import *
 import traceback
+from configuration import gtfs_validator
 
-def print_stats(stats):
-    log_all(logging.INFO,"GTFS Statistics:")
-    for key, value in stats.items():
-        log_all(logging.INFO,f"{key}: {value}")
+def check_file_exists(file_name, folder):
+    file_path = os.path.join(folder, file_name)
+    return os.path.exists(file_path)
 
 def main(gtfs_file,res_folder):
     # Build the shell command
-    command = f'java -jar ./gtfs-validator/gtfs-validator-6.0.0-cli.jar -i {gtfs_file} -o {res_folder}'
+    folder = './gtfs-validator'
+    if check_file_exists(gtfs_validator, folder):
+        print(f"The file '{gtfs_validator}' exists in the folder.")
+    else:
+        print(f"The file '{gtfs_validator}' does not exist in the folder.")
+        raise
+    validator_path=folder+"/"+gtfs_validator
+    command = f'java -jar {validator_path} -i {gtfs_file} -o {res_folder}'
     log_all(logging.INFO,command)
     # Execute the command in the shell
     subprocess.run(command, shell=True)
