@@ -44,7 +44,7 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
     LineInDirectionRef, EmptyType2, StopPlaceRef, ServiceJourneyRefStructure, PrivateCodes, DayTypeAssignment, \
     DayTypeRefsRelStructure, ServiceCalendarFrame, DayTypesInFrameRelStructure, \
     OperatingPeriodsInFrameRelStructure, DayTypeAssignmentsInFrameRelStructure, DayTypeRef, OperatingPeriod, \
-    PublicCodeStructure
+    PublicCodeStructure, GeneralFrame
 
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
 from aux_logging import *
@@ -116,7 +116,6 @@ class GtfsNeTexProfile(CallsProfile):
                                                            default_location_system="urn:ogc:def:crs:EPSG::4326",
                                                            default_system_of_units=SystemOfUnits.SI_METRES
                                                            )
-            frame_defaults.id = 'fake'
 
             return (codespace, data_source, version, frame_defaults)
 
@@ -1726,7 +1725,7 @@ class GtfsNeTexProfile(CallsProfile):
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
                         if prev_call and shape_dist_traveled:
                             distance = shape_dist_traveled - prev_shape_traveled
-                            prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
+                            prev_call.onward_service_link_ref_or_onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
                         call = Call(id=self.get_trip_id_call(trip_ids[i], stop_sequences[index_j]),
                                     version=self.version.version,
@@ -2212,7 +2211,9 @@ class GtfsNeTexProfile(CallsProfile):
         write_objects(con, [self.codespace], empty=True, many=True)
         write_objects(con, [self.data_source], empty=True, many=True)
         write_objects(con, [self.version], empty=True, many=True)
-        write_objects(con, [self.frame_defaults], empty=True)
+
+        gf = GeneralFrame(id="Defaults", version="any", frame_defaults=self.frame_defaults)
+        write_objects(con, [gf], empty=True)
 
         write_objects(con, self.getOperators(), empty=True, many=True)
         stop_areas = self.getStopAreas()

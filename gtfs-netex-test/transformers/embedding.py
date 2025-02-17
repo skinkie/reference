@@ -38,7 +38,7 @@ def embedding_update(db: Database, clean=False, filter_clazz=None):
 
     con.begin()
 
-    for clazz in (filter_clazz or db.tables()):
+    for clazz in set(filter_clazz).intersection(db.tables()) if filter_clazz else db.tables():
         # TODO: The DISTINCT here is actually a bug in the collection process, must investigate.
         objectname = get_object_name(clazz)
         try:
