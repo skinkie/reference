@@ -14,10 +14,10 @@ def main(gtfs_file,res_folder):
     # Build the shell command
     folder = './gtfs-validator'
     if check_file_exists(gtfs_validator, folder):
-        print(f"The file '{gtfs_validator}' exists in the folder.")
+        log_all(logging.INFO,f"The file '{gtfs_validator}' exists in the folder.")
     else:
-        print(f"The file '{gtfs_validator}' does not exist in the folder.")
-        raise
+        log_all(logging.WARN,f"The file '{gtfs_validator}' does not exist in the folder.")
+        return
     validator_path=folder+"/"+gtfs_validator
     command = f'java -jar {validator_path} -i {gtfs_file} -o {res_folder}'
     log_all(logging.INFO,command)
