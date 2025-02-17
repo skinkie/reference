@@ -5,7 +5,7 @@ from .link_in_link_sequence_versioned_child_structure import LinkInLinkSequenceV
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LinkInLinkSequence(LinkInLinkSequenceVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

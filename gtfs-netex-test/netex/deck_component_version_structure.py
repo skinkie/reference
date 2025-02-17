@@ -10,7 +10,7 @@ from .fare_class_enumeration import FareClassEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckComponentVersionStructure(EquipableSpaceVersionStructure):
     class Meta:
         name = "DeckComponent_VersionStructure"

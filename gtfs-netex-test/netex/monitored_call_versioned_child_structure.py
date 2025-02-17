@@ -11,7 +11,7 @@ from .target_passing_time_view import TargetPassingTimeView
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MonitoredCallVersionedChildStructure(CallVersionedChildStructure):
     class Meta:
         name = "MonitoredCall_VersionedChildStructure"

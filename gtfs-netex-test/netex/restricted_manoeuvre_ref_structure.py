@@ -5,6 +5,6 @@ from .infrastructure_link_restriction_ref_structure import InfrastructureLinkRes
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RestrictedManoeuvreRefStructure(InfrastructureLinkRestrictionRefStructure):
     pass

@@ -6,7 +6,7 @@ from .private_code import PrivateCode
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AliasStructure:
     private_code: PrivateCode = field(
         metadata={

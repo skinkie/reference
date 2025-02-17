@@ -8,7 +8,7 @@ from .vehicle_meeting_point_assignment_version_structure import VehicleMeetingPo
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DynamicVehicleMeetingPointAssignmentVersionStructure(VehicleMeetingPointAssignmentVersionStructure):
     class Meta:
         name = "DynamicVehicleMeetingPointAssignment_VersionStructure"

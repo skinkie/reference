@@ -14,7 +14,7 @@ from .subscription_qualifier_structure import SubscriptionQualifierStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractServiceDeliveryStructure(ResponseStructure):
     request_message_ref_or_subscriber_ref_or_subscription_filter_ref_or_subscription_ref: list[Union[MessageQualifierStructure, ParticipantRefStructure, SubscriptionFilterRefStructure, SubscriptionQualifierStructure]] = field(
         default_factory=list,

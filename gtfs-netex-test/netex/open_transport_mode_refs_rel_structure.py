@@ -6,7 +6,7 @@ from .open_transport_mode_ref import OpenTransportModeRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OpenTransportModeRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "openTransportModeRefs_RelStructure"

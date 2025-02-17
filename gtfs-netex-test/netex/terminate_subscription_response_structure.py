@@ -6,7 +6,7 @@ from .termination_response_status_structure import TerminationResponseStatusStru
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TerminateSubscriptionResponseStructure(ResponseEndpointStructure):
     termination_response_status: list[TerminationResponseStatusStructure] = field(
         default_factory=list,

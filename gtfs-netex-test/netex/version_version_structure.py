@@ -13,7 +13,7 @@ from .version_type_enumeration import VersionTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VersionVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "Version_VersionStructure"

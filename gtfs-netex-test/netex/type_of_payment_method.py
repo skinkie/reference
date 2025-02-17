@@ -5,7 +5,7 @@ from .type_of_payment_method_value_structure import TypeOfPaymentMethodValueStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfPaymentMethod(TypeOfPaymentMethodValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

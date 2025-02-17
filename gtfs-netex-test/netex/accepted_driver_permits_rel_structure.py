@@ -9,7 +9,7 @@ from .type_of_driver_permit_ref import TypeOfDriverPermitRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AcceptedDriverPermitsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "acceptedDriverPermits_RelStructure"
@@ -25,7 +25,7 @@ class AcceptedDriverPermitsRelStructure(ContainmentAggregationStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AcceptedDriverPermitVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "AcceptedDriverPermit_VersionStructure"
@@ -56,7 +56,7 @@ class AcceptedDriverPermitVersionStructure(DataManagedObjectStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AcceptedDriverPermit(AcceptedDriverPermitVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

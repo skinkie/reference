@@ -5,7 +5,7 @@ from .luggage_allowance_version_structure import LuggageAllowanceVersionStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LuggageAllowance(LuggageAllowanceVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

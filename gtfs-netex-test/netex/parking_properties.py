@@ -5,7 +5,7 @@ from .parking_properties_versioned_child_structure import ParkingPropertiesVersi
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ParkingProperties(ParkingPropertiesVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

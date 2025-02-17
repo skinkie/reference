@@ -5,7 +5,7 @@ from .type_of_retail_device_ref_structure import TypeOfRetailDeviceRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfRetailDeviceRef(TypeOfRetailDeviceRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

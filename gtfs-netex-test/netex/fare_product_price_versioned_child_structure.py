@@ -14,7 +14,7 @@ from .usage_discount_right_ref import UsageDiscountRightRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareProductPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "FareProductPrice_VersionedChildStructure"

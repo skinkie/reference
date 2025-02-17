@@ -5,7 +5,7 @@ from .type_of_product_category_ref_structure import TypeOfProductCategoryRefStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfProductCategoryRef(TypeOfProductCategoryRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

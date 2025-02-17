@@ -6,7 +6,7 @@ from .sections_in_sequence_rel_structure import FareSection
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareSectionsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "fareSectionsInFrame_RelStructure"

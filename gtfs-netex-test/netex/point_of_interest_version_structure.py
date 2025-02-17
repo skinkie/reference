@@ -13,7 +13,7 @@ from .topographic_place_refs_rel_structure import TopographicPlaceRefsRelStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOfInterestVersionStructure(SiteVersionStructure):
     class Meta:
         name = "PointOfInterest_VersionStructure"

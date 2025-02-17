@@ -1182,16 +1182,16 @@ def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
 
     mydepth = depth.copy()
     mydepth.append(0)
-    for key in obj.__dict__.keys():
+    for key in obj.__dataclass_fields__.keys():
         mydepth[-1] = key
-        v = obj.__dict__.get(key, None)
+        v = getattr(obj, key, None)
         if v is not None:
             # print(v)
             if issubclass(v.__class__, VersionOfObjectRef) or issubclass(v.__class__, VersionOfObjectRefStructure):
                 yield v, mydepth
 
             else:
-                if hasattr(v, '__dict__') and v.__class__.__name__ in netex.set_all:
+                if hasattr(v, '__dataclass_fields__') and v.__class__.__name__ in netex.set_all:
                     if hasattr(v, 'id'):
                         yield v, mydepth
                     yield from recursive_attributes(v, mydepth)
@@ -1203,7 +1203,7 @@ def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
                         if x is not None:
                             if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__, VersionOfObjectRefStructure):
                                 yield x, mydepth
-                            elif hasattr(x, '__dict__') and x.__class__.__name__ in netex.set_all:
+                            elif hasattr(x, '__dataclass_fields__') and x.__class__.__name__ in netex.set_all:
                                 if hasattr(x, 'id'):
                                     yield x, mydepth
                                 yield from recursive_attributes(x, mydepth)

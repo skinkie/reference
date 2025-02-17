@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SimpleObjectRefStructure:
     value: str = field(
         default="",

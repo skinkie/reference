@@ -5,7 +5,7 @@ from .vehicle_pooler_profile_version_structure import VehiclePoolerProfileVersio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehiclePoolerProfile(VehiclePoolerProfileVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

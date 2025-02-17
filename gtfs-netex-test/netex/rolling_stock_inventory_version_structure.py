@@ -10,7 +10,7 @@ from .rolling_stock_items_rel_structure import RollingStockItemsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RollingStockInventoryVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "RollingStockInventory_VersionStructure"

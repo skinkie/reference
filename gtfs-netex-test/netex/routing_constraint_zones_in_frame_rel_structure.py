@@ -6,7 +6,7 @@ from .routing_constraint_zone import RoutingConstraintZone
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RoutingConstraintZonesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "routingConstraintZonesInFrame_RelStructure"

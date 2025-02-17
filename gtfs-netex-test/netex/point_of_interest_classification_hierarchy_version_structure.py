@@ -7,7 +7,7 @@ from .point_of_interest_classification_hierarchy_members_rel_structure import Po
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOfInterestClassificationHierarchyVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "PointOfInterestClassificationHierarchy_VersionStructure"

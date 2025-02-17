@@ -5,7 +5,7 @@ from .validable_element_price_ref_structure import ValidableElementPriceRefStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidableElementPriceRef(ValidableElementPriceRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

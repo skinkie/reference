@@ -9,7 +9,7 @@ from .responsibility_role_assignments_rel_structure import ResponsibilityRoleAss
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ResponsibilitySetVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "ResponsibilitySet_VersionStructure"

@@ -14,7 +14,7 @@ from .route_ref import RouteRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RouteDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "Route_DerivedViewStructure"

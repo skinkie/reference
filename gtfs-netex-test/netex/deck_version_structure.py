@@ -14,7 +14,7 @@ from .spot_rows_rel_structure import SpotRowsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "Deck_VersionStructure"

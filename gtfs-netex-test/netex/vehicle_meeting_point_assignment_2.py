@@ -5,7 +5,7 @@ from .assignment_version_structure_1 import AssignmentVersionStructure1
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleMeetingPointAssignment2(AssignmentVersionStructure1):
     class Meta:
         name = "VehicleMeetingPointAssignment_"

@@ -5,7 +5,7 @@ from .group_of_sales_offer_packages_version_structure import GroupOfSalesOfferPa
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfSalesOfferPackages(GroupOfSalesOfferPackagesVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

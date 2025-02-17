@@ -32,7 +32,7 @@ from .wire_link_ref_by_value import WireLinkRefByValue
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LinkRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "linkRefs_RelStructure"

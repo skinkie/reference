@@ -8,7 +8,7 @@ from .tariff_zone import TariffZone
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TariffZonesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "tariffZonesInFrame_RelStructure"

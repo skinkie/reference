@@ -7,7 +7,7 @@ from .group_of_entities_version_structure import GroupOfEntitiesVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfDistributionChannelsVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "GroupOfDistributionChannels_VersionStructure"

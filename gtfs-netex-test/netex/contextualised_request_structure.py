@@ -10,7 +10,7 @@ from .service_request_context_structure import ServiceRequestContextStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ContextualisedRequestStructure:
     service_request_context: Optional[ServiceRequestContextStructure] = field(
         default=None,

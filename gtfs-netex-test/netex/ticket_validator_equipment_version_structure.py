@@ -8,7 +8,7 @@ from .ticket_validator_enumeration import TicketValidatorEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TicketValidatorEquipmentVersionStructure(PassengerEquipmentVersionStructure):
     class Meta:
         name = "TicketValidatorEquipment_VersionStructure"

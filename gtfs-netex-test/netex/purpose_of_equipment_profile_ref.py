@@ -5,7 +5,7 @@ from .purpose_of_equipment_profile_ref_structure import PurposeOfEquipmentProfil
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PurposeOfEquipmentProfileRef(PurposeOfEquipmentProfileRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -13,7 +13,7 @@ from .passenger_entrance_ref import PassengerEntranceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckEntranceUsageVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "DeckEntranceUsage_VersionedChildStructure"

@@ -5,7 +5,7 @@ from .mode_restriction_assessment_ref_structure import ModeRestrictionAssessment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ModeRestrictionAssessmentRef(ModeRestrictionAssessmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

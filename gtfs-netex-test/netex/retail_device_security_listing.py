@@ -5,7 +5,7 @@ from .retail_device_security_listing_versioned_child_structure import RetailDevi
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RetailDeviceSecurityListing(RetailDeviceSecurityListingVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

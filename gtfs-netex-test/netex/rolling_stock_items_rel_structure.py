@@ -10,7 +10,7 @@ from .trailing_rolling_stock_item_ref import TrailingRollingStockItemRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RollingStockItemsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "rollingStockItems_RelStructure"

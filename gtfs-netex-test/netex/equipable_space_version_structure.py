@@ -14,7 +14,7 @@ from .site_facility_set_ref import SiteFacilitySetRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EquipableSpaceVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "EquipableSpace_VersionStructure"

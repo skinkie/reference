@@ -48,7 +48,7 @@ from .type_of_payment_method_ref import TypeOfPaymentMethodRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareContractEntriesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "fareContractEntries_RelStructure"
@@ -120,7 +120,7 @@ class FareContractEntriesRelStructure(ContainmentAggregationStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerPurchasePackageVersionStructure(PriceableObjectVersionStructure):
     class Meta:
         name = "CustomerPurchasePackage_VersionStructure"
@@ -285,13 +285,13 @@ class CustomerPurchasePackageVersionStructure(PriceableObjectVersionStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerPurchasePackage(CustomerPurchasePackageVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerPurchasePackagesRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "customerPurchasePackages_RelStructure"
@@ -316,7 +316,7 @@ class CustomerPurchasePackagesRelStructure(OneToManyRelationshipStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SalesTransactionVersionStructure(FareContractEntryVersionStructure):
     class Meta:
         name = "SalesTransaction_VersionStructure"
@@ -446,7 +446,7 @@ class SalesTransactionVersionStructure(FareContractEntryVersionStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SalesTransaction(SalesTransactionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

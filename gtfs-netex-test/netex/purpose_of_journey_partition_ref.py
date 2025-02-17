@@ -5,7 +5,7 @@ from .purpose_of_journey_partition_ref_structure import PurposeOfJourneyPartitio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PurposeOfJourneyPartitionRef(PurposeOfJourneyPartitionRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -5,7 +5,7 @@ from .complex_feature_projection_version_structure import ComplexFeatureProjecti
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ComplexFeatureProjection(ComplexFeatureProjectionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

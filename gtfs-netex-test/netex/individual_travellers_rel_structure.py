@@ -8,7 +8,7 @@ from .individual_traveller_ref import IndividualTravellerRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class IndividualTravellersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "individualTravellers_RelStructure"

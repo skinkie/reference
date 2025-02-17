@@ -5,7 +5,7 @@ from .uic_rate_type_enumeration import UicRateTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UicTrainRate:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

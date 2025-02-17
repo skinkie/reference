@@ -10,7 +10,7 @@ from .producer_response_structure import ProducerResponseStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceDeliveryStructure(ProducerResponseStructure):
     status: Optional[bool] = field(
         default=None,
@@ -52,7 +52,7 @@ class ServiceDeliveryStructure(ProducerResponseStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ErrorCondition:
         capability_not_supported_error_or_other_error: Optional[Union[CapabilityNotSupportedError, OtherError]] = field(
             default=None,

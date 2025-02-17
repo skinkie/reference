@@ -5,7 +5,7 @@ from .deck_space_capacity_versioned_child_structure import DeckSpaceCapacityVers
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckSpaceCapacity(DeckSpaceCapacityVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

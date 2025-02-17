@@ -14,7 +14,7 @@ from .subscription_qualifier_structure import SubscriptionQualifierStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class StatusResponseStructure(ResponseStructure):
     request_message_ref: Optional[MessageQualifierStructure] = field(
         default=None,

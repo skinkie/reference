@@ -5,7 +5,7 @@ from .default_dead_run_run_time_versioned_child_structure import DefaultDeadRunR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DefaultDeadRunRunTime(DefaultDeadRunRunTimeVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

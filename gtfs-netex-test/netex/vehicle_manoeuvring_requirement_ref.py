@@ -5,7 +5,7 @@ from .vehicle_manoeuvring_requirement_ref_structure import VehicleManoeuvringReq
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleManoeuvringRequirementRef(VehicleManoeuvringRequirementRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

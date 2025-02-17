@@ -6,7 +6,7 @@ from .stair_equipment_version_structure import StairEquipmentVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EscalatorEquipmentVersionStructure(StairEquipmentVersionStructure):
     class Meta:
         name = "EscalatorEquipment_VersionStructure"

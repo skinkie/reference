@@ -15,7 +15,7 @@ from .public_code_structure import PublicCodeStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleStopPlaceVersionStructure(PlaceVersionStructure):
     class Meta:
         name = "FlexibleStopPlace_VersionStructure"
@@ -67,7 +67,7 @@ class FlexibleStopPlaceVersionStructure(PlaceVersionStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Areas:
         flexible_area_or_flexible_area_ref_or_hail_and_ride_area_or_hail_and_ride_area_ref: list[Union[FlexibleArea, FlexibleAreaRef, HailAndRideArea, HailAndRideAreaRef]] = field(
             default_factory=list,

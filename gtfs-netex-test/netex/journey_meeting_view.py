@@ -5,7 +5,7 @@ from .journey_meeting_derived_view_structure import JourneyMeetingDerivedViewStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyMeetingView(JourneyMeetingDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -6,7 +6,7 @@ from .observed_passing_time_versioned_child_structure import ObservedPassingTime
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ObservedPassingTime(ObservedPassingTimeVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

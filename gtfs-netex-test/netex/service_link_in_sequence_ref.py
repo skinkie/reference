@@ -5,7 +5,7 @@ from .service_link_in_sequence_ref_structure import ServiceLinkInSequenceRefStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceLinkInSequenceRef(ServiceLinkInSequenceRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

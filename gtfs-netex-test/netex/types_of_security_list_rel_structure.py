@@ -8,7 +8,7 @@ from .type_of_security_list_ref import TypeOfSecurityListRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypesOfSecurityListRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typesOfSecurityList_RelStructure"

@@ -5,7 +5,7 @@ from .tractive_rolling_stock_item_ref_structure import TractiveRollingStockItemR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TractiveRollingStockItemRef(TractiveRollingStockItemRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

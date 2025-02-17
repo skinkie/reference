@@ -5,7 +5,7 @@ from .passenger_accessibility_needs_structure import PassengerAccessibilityNeeds
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerAccessibilityNeeds(PassengerAccessibilityNeedsStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

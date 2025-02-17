@@ -5,7 +5,7 @@ from .terminate_subscription_response_structure import TerminateSubscriptionResp
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TerminateSubscriptionResponse(TerminateSubscriptionResponseStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

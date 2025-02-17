@@ -7,7 +7,7 @@ from .transport_description_structure import TransportDescriptionStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractCapabilitiesStructure:
     general_interaction: Optional[CapabilityGeneralInteractionStructure] = field(
         default=None,

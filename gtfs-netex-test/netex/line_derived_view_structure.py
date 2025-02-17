@@ -14,7 +14,7 @@ from .type_of_line_ref import TypeOfLineRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LineDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "Line_DerivedViewStructure"

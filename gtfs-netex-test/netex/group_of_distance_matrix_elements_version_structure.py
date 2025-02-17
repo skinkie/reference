@@ -15,7 +15,7 @@ from .priceable_object_version_structure import (
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfDistanceMatrixElementsVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "GroupOfDistanceMatrixElements_VersionStructure"

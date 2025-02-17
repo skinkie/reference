@@ -12,7 +12,7 @@ from .site_path_link_ref import SitePathLinkRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SitePathLinkRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "sitePathLinkRefs_RelStructure"

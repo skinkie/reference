@@ -6,7 +6,7 @@ from .service_exclusion import ServiceExclusion
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceExclusionsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "serviceExclusionsInFrame_RelStructure"

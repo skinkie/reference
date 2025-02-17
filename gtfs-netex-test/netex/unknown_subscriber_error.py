@@ -5,7 +5,7 @@ from .unknown_subscriber_error_structure import UnknownSubscriberErrorStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UnknownSubscriberError(UnknownSubscriberErrorStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

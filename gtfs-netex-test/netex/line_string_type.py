@@ -9,7 +9,7 @@ from .pos_list import PosList
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LineStringType(AbstractCurveType):
     pos_or_point_property_or_pos_list: list[Union[Pos, PointProperty, PosList]] = field(
         default_factory=list,

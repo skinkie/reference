@@ -34,7 +34,7 @@ from .vias_rel_structure import ViasRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CallVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "Call_VersionedChildStructure"

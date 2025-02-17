@@ -6,7 +6,7 @@ from xsdata.models.datatype import XmlDuration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TransferDurationStructure:
     default_duration: Optional[XmlDuration] = field(
         default=None,

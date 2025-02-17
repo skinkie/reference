@@ -5,7 +5,7 @@ from .type_of_medium_access_device_value_structure import TypeOfMediumAccessDevi
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfMediumAccessDevice(TypeOfMediumAccessDeviceValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

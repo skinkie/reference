@@ -6,7 +6,7 @@ from .single_journey_ref import SingleJourneyRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SingleJourneyRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "singleJourneyRefs_RelStructure"

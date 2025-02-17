@@ -8,7 +8,7 @@ from .types_of_value_structure import TypesOfValueStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValueSetVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "ValueSet_VersionStructure"

@@ -9,7 +9,7 @@ from .relief_point import ReliefPoint
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ReliefPointsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "reliefPointsInFrame_RelStructure"

@@ -8,7 +8,7 @@ from .journey_accounting_ref import JourneyAccountingRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyAccountingsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "journeyAccountings_RelStructure"

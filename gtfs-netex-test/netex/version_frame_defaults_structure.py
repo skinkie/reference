@@ -10,7 +10,7 @@ from .system_of_units import SystemOfUnits
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VersionFrameDefaultsStructure:
     default_codespace_ref: Optional[CodespaceRefStructure] = field(
         default=None,

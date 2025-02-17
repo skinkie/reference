@@ -8,7 +8,7 @@ from .vehicle_manoeuvring_requirement_ref import VehicleManoeuvringRequirementRe
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleManoeuvringRequirementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleManoeuvringRequirements_RelStructure"

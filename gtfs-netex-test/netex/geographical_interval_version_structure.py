@@ -10,7 +10,7 @@ from .interval_type_enumeration import IntervalTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GeographicalIntervalVersionStructure(FareIntervalVersionStructure):
     class Meta:
         name = "GeographicalInterval_VersionStructure"

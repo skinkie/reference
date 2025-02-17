@@ -5,7 +5,7 @@ from .eligibility_change_policy_version_structure import EligibilityChangePolicy
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EligibilityChangePolicy(EligibilityChangePolicyVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

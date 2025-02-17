@@ -5,7 +5,7 @@ from .all_public_transport_organisations_ref_structure import AllPublicTransport
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AllPublicTransportOrganisationsRef(AllPublicTransportOrganisationsRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

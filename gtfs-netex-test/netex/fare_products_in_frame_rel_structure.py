@@ -13,7 +13,7 @@ from .usage_discount_right import UsageDiscountRight
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareProductsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "fareProductsInFrame_RelStructure"

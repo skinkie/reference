@@ -5,7 +5,7 @@ from .ticket_validator_equipment_version_structure import TicketValidatorEquipme
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TicketValidatorEquipment(TicketValidatorEquipmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

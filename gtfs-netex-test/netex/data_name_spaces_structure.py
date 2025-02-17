@@ -4,7 +4,7 @@ from typing import Optional
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataNameSpacesStructure:
     stop_point_name_space: Optional[str] = field(
         default=None,

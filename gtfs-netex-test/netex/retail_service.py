@@ -5,7 +5,7 @@ from .retail_service_version_structure import RetailServiceVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RetailService(RetailServiceVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

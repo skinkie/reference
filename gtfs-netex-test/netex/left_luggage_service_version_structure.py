@@ -9,7 +9,7 @@ from .customer_service_version_structure import CustomerServiceVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LeftLuggageServiceVersionStructure(CustomerServiceVersionStructure):
     class Meta:
         name = "LeftLuggageService_VersionStructure"

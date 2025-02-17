@@ -6,7 +6,7 @@ from .point_of_interest_classification import PointOfInterestClassification
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOfInterestClassificationsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "pointOfInterestClassificationsInFrame_RelStructure"

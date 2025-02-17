@@ -7,7 +7,7 @@ from .aggregation_type import AggregationType
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractGeometricAggregateType(AbstractGeometryType):
     aggregation_type: Optional[AggregationType] = field(
         default=None,

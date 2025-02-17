@@ -16,7 +16,7 @@ from .usage_discount_right_ref import UsageDiscountRightRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceAccessRightRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "serviceAccessRightRefs_RelStructure"

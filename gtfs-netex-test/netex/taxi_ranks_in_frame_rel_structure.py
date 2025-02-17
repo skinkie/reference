@@ -6,7 +6,7 @@ from .taxi_rank import TaxiRank
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TaxiRanksInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "taxiRanksInFrame_RelStructure"

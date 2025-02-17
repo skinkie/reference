@@ -5,7 +5,7 @@ from .subscription_terminated_notification_structure import SubscriptionTerminat
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SubscriptionTerminatedNotification(SubscriptionTerminatedNotificationStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

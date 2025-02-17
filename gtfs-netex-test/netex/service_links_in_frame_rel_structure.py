@@ -6,7 +6,7 @@ from .service_link import ServiceLink
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceLinksInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "serviceLinksInFrame_RelStructure"

@@ -5,7 +5,7 @@ from .service_not_available_error_structure import ServiceNotAvailableErrorStruc
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceNotAvailableError(ServiceNotAvailableErrorStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

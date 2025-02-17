@@ -6,7 +6,7 @@ from .error_code_structure import ErrorCodeStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CapabilityNotSupportedErrorStructure(ErrorCodeStructure):
     capability_ref: Optional[str] = field(
         default=None,

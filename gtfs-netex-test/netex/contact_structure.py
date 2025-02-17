@@ -7,7 +7,7 @@ from .contact_ref import ContactRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ContactStructure(ContactDetailsStructure):
     contact_ref: Optional[ContactRef] = field(
         default=None,

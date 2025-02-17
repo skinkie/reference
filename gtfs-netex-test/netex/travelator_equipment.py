@@ -5,7 +5,7 @@ from .travelator_equipment_version_structure import TravelatorEquipmentVersionSt
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TravelatorEquipment(TravelatorEquipmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

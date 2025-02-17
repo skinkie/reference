@@ -5,7 +5,7 @@ from .type_of_passenger_information_equipment_ref_structure import TypeOfPasseng
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfPassengerInformationEquipmentRef(TypeOfPassengerInformationEquipmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

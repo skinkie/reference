@@ -10,7 +10,7 @@ from .stop_assignment_version_structure import StopAssignmentVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleStopAssignmentVersionStructure(StopAssignmentVersionStructure):
     class Meta:
         name = "FlexibleStopAssignment_VersionStructure"

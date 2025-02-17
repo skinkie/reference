@@ -10,7 +10,7 @@ from .template_service_journey_ref import TemplateServiceJourneyRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DefaultServiceJourneyRunTimeVersionedChildStructure(JourneyTimingVersionedChildStructure):
     class Meta:
         name = "DefaultServiceJourneyRunTime_VersionedChildStructure"

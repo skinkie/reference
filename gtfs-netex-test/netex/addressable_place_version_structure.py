@@ -8,7 +8,7 @@ from .road_address import RoadAddress
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AddressablePlaceVersionStructure(PlaceVersionStructure):
     class Meta:
         name = "AddressablePlace_VersionStructure"

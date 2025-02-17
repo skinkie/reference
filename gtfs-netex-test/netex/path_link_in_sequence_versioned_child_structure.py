@@ -15,7 +15,7 @@ from .transition_enumeration import TransitionEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PathLinkInSequenceVersionedChildStructure(LinkInLinkSequenceVersionedChildStructure):
     class Meta:
         name = "PathLinkInSequence_VersionedChildStructure"
@@ -101,7 +101,7 @@ class PathLinkInSequenceVersionedChildStructure(LinkInLinkSequenceVersionedChild
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Views:
         path_link_view: PathLinkView = field(
             metadata={

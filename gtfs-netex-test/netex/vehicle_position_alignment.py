@@ -5,7 +5,7 @@ from .vehicle_position_alignment_version_structure import VehiclePositionAlignme
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehiclePositionAlignment(VehiclePositionAlignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

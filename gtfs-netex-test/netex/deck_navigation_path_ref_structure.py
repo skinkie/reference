@@ -5,6 +5,6 @@ from .generic_navigation_path_ref_structure import GenericNavigationPathRefStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckNavigationPathRefStructure(GenericNavigationPathRefStructure):
     pass

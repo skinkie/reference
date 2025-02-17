@@ -9,7 +9,7 @@ from .vehicle_mode import VehicleMode
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimingLinkVersionStructure(LinkVersionStructure):
     class Meta:
         name = "TimingLink_VersionStructure"

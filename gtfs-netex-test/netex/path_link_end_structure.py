@@ -10,7 +10,7 @@ from .site_path_junction_ref import SitePathJunctionRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PathLinkEndStructure:
     place_ref_or_deck_path_junction_ref_or_path_junction_ref_or_site_path_junction_ref_or_generic_path_junction_ref: Optional[Union[PlaceRefStructure, DeckPathJunctionRef, PathJunctionRef, SitePathJunctionRef, GenericPathJunctionRef]] = field(
         default=None,

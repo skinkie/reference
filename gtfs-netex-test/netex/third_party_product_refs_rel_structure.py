@@ -6,7 +6,7 @@ from .third_party_product_ref import ThirdPartyProductRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ThirdPartyProductRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "thirdPartyProductRefs_RelStructure"

@@ -20,7 +20,7 @@ from .vehicle_journey_ref import VehicleJourneyRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfServicesMemberStructure(AbstractGroupMemberVersionedChildStructure):
     group_of_services_ref: Optional[GroupOfServicesRefStructure] = field(
         default=None,

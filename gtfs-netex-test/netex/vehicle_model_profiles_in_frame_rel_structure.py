@@ -8,7 +8,7 @@ from .cycle_model_profile import CycleModelProfile
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleModelProfilesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleModelProfilesInFrame_RelStructure"

@@ -31,7 +31,7 @@ from .travel_agent_ref import TravelAgentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SiteVersionStructure(SiteElementVersionStructure):
     class Meta:
         name = "Site_VersionStructure"

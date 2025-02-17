@@ -45,7 +45,7 @@ from .validable_elements_in_frame_rel_structure import ValidableElementsInFrameR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareFrameVersionFrameStructure(CommonVersionFrameStructure):
     class Meta:
         name = "FareFrame_VersionFrameStructure"

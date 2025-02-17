@@ -20,7 +20,7 @@ from .zone_derived_view_structure import ZoneDerivedViewStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DistanceMatrixElementVersionStructure(PriceableObjectVersionStructure):
     class Meta:
         name = "DistanceMatrixElement_VersionStructure"

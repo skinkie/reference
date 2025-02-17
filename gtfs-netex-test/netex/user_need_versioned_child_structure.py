@@ -10,7 +10,7 @@ from .psychosensory_need_enumeration import PsychosensoryNeedEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UserNeedVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "UserNeed_VersionedChildStructure"

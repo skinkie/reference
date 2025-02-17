@@ -5,7 +5,7 @@ from .customer_purchase_package_price_versioned_child_structure import CustomerP
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerPurchasePackagePrice(CustomerPurchasePackagePriceVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

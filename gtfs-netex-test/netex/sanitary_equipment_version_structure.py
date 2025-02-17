@@ -13,7 +13,7 @@ from .toilets_type_enumeration import ToiletsTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SanitaryEquipmentVersionStructure(PassengerEquipmentVersionStructure):
     class Meta:
         name = "SanitaryEquipment_VersionStructure"

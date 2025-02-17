@@ -6,7 +6,7 @@ from .point_in_single_journey_path_ref import PointInSingleJourneyPathRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointInSingleJourneyPathRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "PointInSingleJourneyPathRefs_RelStructure"

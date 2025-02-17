@@ -34,7 +34,7 @@ from .vehicle_schedule_frame_ref import VehicleScheduleFrameRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NetworkFrameTopicStructure(TopicStructure):
     current_or_changed_since_or_current_at_or_historic_between_or_selection_validity_conditions: Optional[Union[EmptyType2, "NetworkFrameTopicStructure.ChangedSince", "NetworkFrameTopicStructure.CurrentAt", ClosedTimestampRangeStructure, "NetworkFrameTopicStructure.SelectionValidityConditions"]] = field(
         default=None,
@@ -179,7 +179,7 @@ class NetworkFrameTopicStructure(TopicStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class SelectionValidityConditions:
         validity_condition: list[Union[SimpleAvailabilityCondition, ValidDuring, AvailabilityCondition, ValidityRuleParameter, ValidityTrigger, ValidityCondition]] = field(
             default_factory=list,
@@ -220,7 +220,7 @@ class NetworkFrameTopicStructure(TopicStructure):
             },
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ChangedSince:
         value: XmlDateTime = field(
             metadata={
@@ -228,7 +228,7 @@ class NetworkFrameTopicStructure(TopicStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class CurrentAt:
         value: XmlDateTime = field(
             metadata={

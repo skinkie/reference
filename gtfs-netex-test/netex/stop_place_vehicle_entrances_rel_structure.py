@@ -8,7 +8,7 @@ from .vehicle_entrance_ref import VehicleEntranceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class StopPlaceVehicleEntrancesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "stopPlaceVehicleEntrances_RelStructure"

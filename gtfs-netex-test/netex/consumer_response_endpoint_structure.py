@@ -8,7 +8,7 @@ from .response_structure import ResponseStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ConsumerResponseEndpointStructure(ResponseStructure):
     consumer_ref: Optional[ParticipantRefStructure] = field(
         default=None,

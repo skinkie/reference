@@ -10,7 +10,7 @@ from .vehicle_collection_enumeration import VehicleCollectionEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ConditionSummaryStructure:
     fare_structure_type: Optional[FareStructureTypeEnumeration] = field(
         default=None,

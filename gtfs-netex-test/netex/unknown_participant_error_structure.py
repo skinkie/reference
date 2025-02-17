@@ -7,7 +7,7 @@ from .participant_ref_structure import ParticipantRefStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UnknownParticipantErrorStructure(ErrorCodeStructure):
     participant_ref: Optional[ParticipantRefStructure] = field(
         default=None,

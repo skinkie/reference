@@ -5,7 +5,7 @@ from .data_object_service_capabilities_structure import DataObjectServiceCapabil
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataObjectServiceCapabilities(DataObjectServiceCapabilitiesStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

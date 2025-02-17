@@ -9,7 +9,7 @@ from .network_frame_topic import NetworkFrameTopic
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataObjectRequestStructure(AbstractFunctionalServiceRequestStructure):
     topics: "DataObjectRequestStructure.Topics" = field(
         metadata={
@@ -35,7 +35,7 @@ class DataObjectRequestStructure(AbstractFunctionalServiceRequestStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Topics:
         network_frame_topic: NetworkFrameTopic = field(
             metadata={

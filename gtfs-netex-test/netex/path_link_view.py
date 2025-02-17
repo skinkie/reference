@@ -5,7 +5,7 @@ from .generic_path_link_derived_view_structure import GenericPathLinkDerivedView
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PathLinkView(GenericPathLinkDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

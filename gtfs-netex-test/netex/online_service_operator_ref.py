@@ -5,7 +5,7 @@ from .online_service_operator_ref_structure import OnlineServiceOperatorRefStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OnlineServiceOperatorRef(OnlineServiceOperatorRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

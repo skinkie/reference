@@ -13,7 +13,7 @@ from .vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerStopAssignmentDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "PassengerStopAssignment_DerivedViewStructure"

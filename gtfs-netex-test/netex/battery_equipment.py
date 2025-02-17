@@ -5,7 +5,7 @@ from .battery_equipment_version_structure import BatteryEquipmentVersionStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class BatteryEquipment(BatteryEquipmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -8,7 +8,7 @@ from .via_versioned_child_structure import ViaVersionedChildStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ViasRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "vias_RelStructure"

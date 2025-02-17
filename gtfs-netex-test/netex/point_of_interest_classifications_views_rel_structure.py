@@ -8,7 +8,7 @@ from .point_of_interest_classification_view import PointOfInterestClassification
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOfInterestClassificationsViewsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "pointOfInterestClassificationsViews_RelStructure"

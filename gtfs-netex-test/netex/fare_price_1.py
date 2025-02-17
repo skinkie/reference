@@ -5,7 +5,7 @@ from .fare_price_versioned_child_structure import FarePriceVersionedChildStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FarePrice1(FarePriceVersionedChildStructure):
     class Meta:
         name = "FarePrice"

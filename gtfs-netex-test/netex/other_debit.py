@@ -6,7 +6,7 @@ from .other_debit_version_structure import OtherDebitVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OtherDebit(OtherDebitVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

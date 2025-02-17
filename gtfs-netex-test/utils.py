@@ -17,14 +17,14 @@ def get_element_name_with_ns(clazz):
 
 def project(obj, clazz: T, **kwargs) -> T:
     # if issubclass(obj.__class__, clazz_intermediate):
-    attributes = {x: y for x, y in obj.__dict__.items() if x in list(clazz.__dataclass_fields__.keys()) if (hasattr(clazz.__dataclass_fields__[x], 'init') and clazz.__dataclass_fields__[x].init != False)}
+    attributes = {x: getattr(obj, x, None) for x in clazz.__dataclass_fields__.keys() if (hasattr(clazz.__dataclass_fields__[x], 'init') and clazz.__dataclass_fields__[x].init != False)}
     if 'id' in attributes:
         attributes['id'] = attributes['id'].replace(f":{get_object_name(obj.__class__)}:", f":{get_object_name(clazz)}:")
 
     return clazz(**{**attributes, **kwargs})
 
 def projectRef(obj, clazz: T) -> T:
-    attributes = {x: y for x, y in obj.__dict__.items() if x in list(clazz.__dataclass_fields__.keys()) if (hasattr(clazz.__dataclass_fields__[x], 'init') and clazz.__dataclass_fields__[x].init != False)}
+    attributes = {x: getattr(obj, x, None) for x in clazz.__dataclass_fields__.keys() if (hasattr(clazz.__dataclass_fields__[x], 'init') and clazz.__dataclass_fields__[x].init != False)}
     if 'name_of_ref_class' not in attributes or attributes['name_of_ref_class'] is None:
         attributes['name_of_ref_class'] = re.sub(r'Ref(Structure)?', '', obj.__class__.__name__)
 

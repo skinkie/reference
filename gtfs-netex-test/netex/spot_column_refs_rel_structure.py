@@ -6,7 +6,7 @@ from .spot_column_ref import SpotColumnRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SpotColumnRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "spotColumnRefs_RelStructure"

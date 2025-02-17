@@ -9,7 +9,7 @@ from .vehicle_access_credentials_assignment_ref import VehicleAccessCredentialsA
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceAccessCodeVersionStructure(TravelDocumentVersionStructure):
     class Meta:
         name = "ServiceAccessCode_VersionStructure"

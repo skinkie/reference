@@ -6,7 +6,7 @@ from .network import Network
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NetworksInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "networksInFrame_RelStructure"

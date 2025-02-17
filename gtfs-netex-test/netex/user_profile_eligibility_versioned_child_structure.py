@@ -9,7 +9,7 @@ from .vehicle_pooler_profile_ref import VehiclePoolerProfileRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UserProfileEligibilityVersionedChildStructure(CustomerEligibilityVersionedChildStructure):
     class Meta:
         name = "UserProfileEligibility_VersionedChildStructure"

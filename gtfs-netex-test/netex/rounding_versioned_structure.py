@@ -10,7 +10,7 @@ from .rounding_steps_rel_structure import RoundingStepsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RoundingVersionedStructure(DataManagedObjectStructure):
     class Meta:
         name = "Rounding_VersionedStructure"

@@ -6,7 +6,7 @@ from .frame_containment_structure import FrameContainmentStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SalesTransactionsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "salesTransactionsInFrame_RelStructure"

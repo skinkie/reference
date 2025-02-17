@@ -6,7 +6,7 @@ from .train_size_enumeration import TrainSizeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainSizeStructure:
     number_of_cars: Optional[int] = field(
         default=None,

@@ -7,7 +7,7 @@ from .customer_eligibility_versioned_child_structure import CustomerEligibilityV
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CommercialProfileEligibilityVersionedChildStructure(CustomerEligibilityVersionedChildStructure):
     class Meta:
         name = "CommercialProfileEligibility_VersionedChildStructure"

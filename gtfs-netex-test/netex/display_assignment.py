@@ -7,7 +7,7 @@ from .status_enumeration import StatusEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DisplayAssignment(DisplayAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

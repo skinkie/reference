@@ -10,7 +10,7 @@ from .service_pattern_ref import ServicePatternRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyPatternLayoverStructure(JourneyLayoverStructure):
     journey_pattern_ref: Optional[Union[ServiceJourneyPatternRef, ServicePatternRef, DeadRunJourneyPatternRef, JourneyPatternRef]] = field(
         default=None,

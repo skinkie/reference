@@ -5,7 +5,7 @@ from .sales_offer_package_entitlement_given_version_structure import SalesOfferP
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SalesOfferPackageEntitlementGiven(SalesOfferPackageEntitlementGivenVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

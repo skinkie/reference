@@ -5,7 +5,7 @@ from .type_of_usage_parameter_ref_structure import TypeOfUsageParameterRefStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfUsageParameterRef(TypeOfUsageParameterRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

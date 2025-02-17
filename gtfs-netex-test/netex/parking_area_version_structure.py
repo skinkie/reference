@@ -10,7 +10,7 @@ from .parking_properties_rel_structure import ParkingPropertiesRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ParkingAreaVersionStructure(ParkingComponentVersionStructure):
     class Meta:
         name = "ParkingArea_VersionStructure"

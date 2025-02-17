@@ -6,7 +6,7 @@ from .rolling_stock_inventory import RollingStockInventory
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RollingStockInventoriesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "rollingStockInventories_RelStructure"

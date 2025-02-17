@@ -8,7 +8,7 @@ from .department_ref import DepartmentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DepartmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "departments_RelStructure"

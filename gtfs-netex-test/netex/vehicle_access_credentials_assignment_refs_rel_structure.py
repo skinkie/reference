@@ -6,7 +6,7 @@ from .vehicle_access_credentials_assignment_ref import VehicleAccessCredentialsA
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleAccessCredentialsAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "vehicleAccessCredentialsAssignmentRefs_RelStructure"

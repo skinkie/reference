@@ -5,7 +5,7 @@ from .operating_day_derived_view_structure import OperatingDayDerivedViewStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OperatingDayView(OperatingDayDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

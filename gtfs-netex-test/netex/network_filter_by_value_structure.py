@@ -58,7 +58,7 @@ from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NetworkFilterByValueStructure(ObjectFilterByValueStructure):
     network_ref: Optional[NetworkRef] = field(
         default=None,
@@ -76,7 +76,7 @@ class NetworkFilterByValueStructure(ObjectFilterByValueStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Places:
         choice: list[
             Union[

@@ -6,7 +6,7 @@ from .validity_parameter_assignment import ValidityParameterAssignment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidityParameterAssignmentsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "validityParameterAssignmentsInFrame_RelStructure"

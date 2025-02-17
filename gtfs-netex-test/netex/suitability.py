@@ -6,7 +6,7 @@ from .suitability_versioned_child_structure import SuitabilityVersionedChildStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class Suitability(SuitabilityVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

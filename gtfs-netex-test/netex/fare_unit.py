@@ -6,7 +6,7 @@ from .fare_unit_version_structure import FareUnitVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareUnit(FareUnitVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

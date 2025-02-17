@@ -5,7 +5,7 @@ from .vehicle_equipment_profile_ref_structure import VehicleEquipmentProfileRefS
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleEquipmentProfileRef(VehicleEquipmentProfileRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -6,7 +6,7 @@ from .customer_payment_means import CustomerPaymentMeans
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerPaymentMeansRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "customerPaymentMeans_RelStructure"

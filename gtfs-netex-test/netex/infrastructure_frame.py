@@ -5,7 +5,7 @@ from .infrastructure_version_frame_structure import InfrastructureVersionFrameSt
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class InfrastructureFrame(InfrastructureVersionFrameStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

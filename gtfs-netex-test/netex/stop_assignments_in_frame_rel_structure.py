@@ -16,7 +16,7 @@ from .vehicle_type_stop_assignment import VehicleTypeStopAssignment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class StopAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "stopAssignmentsInFrame_RelStructure"

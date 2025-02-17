@@ -8,7 +8,7 @@ from .vehicle_type_version_structure import VehicleTypeVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainVersionStructure(VehicleTypeVersionStructure):
     class Meta:
         name = "Train_VersionStructure"

@@ -6,7 +6,7 @@ from .nil_reason_enumeration_value import NilReasonEnumerationValue
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ReferenceType:
     owns: bool = field(
         default=False,

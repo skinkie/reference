@@ -6,7 +6,7 @@ from .time_unit_version_structure import TimeUnitVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimeUnit(TimeUnitVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

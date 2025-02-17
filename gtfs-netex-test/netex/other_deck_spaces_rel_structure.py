@@ -8,7 +8,7 @@ from .other_deck_space_ref import OtherDeckSpaceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OtherDeckSpacesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "otherDeckSpaces_RelStructure"

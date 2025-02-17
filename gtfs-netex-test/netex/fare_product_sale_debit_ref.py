@@ -5,7 +5,7 @@ from .fare_product_sale_debit_ref_structure import FareProductSaleDebitRefStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareProductSaleDebitRef(FareProductSaleDebitRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

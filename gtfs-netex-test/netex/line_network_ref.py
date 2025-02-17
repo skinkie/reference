@@ -5,7 +5,7 @@ from .line_network_ref_structure import LineNetworkRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LineNetworkRef(LineNetworkRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

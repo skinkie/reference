@@ -13,7 +13,7 @@ from .validity_parameter_assignments_rel_structure import ValidityParameterAssig
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidableElementVersionStructure(PriceableObjectVersionStructure):
     class Meta:
         name = "ValidableElement_VersionStructure"

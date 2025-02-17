@@ -10,7 +10,7 @@ from .site_navigation_path_ref import SiteNavigationPathRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GenericNavigationPathRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "GenericNavigationPathRefs_RelStructure"

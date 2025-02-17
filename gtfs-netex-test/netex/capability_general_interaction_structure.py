@@ -4,7 +4,7 @@ from typing import Optional
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CapabilityGeneralInteractionStructure:
     interaction: "CapabilityGeneralInteractionStructure.Interaction" = field(
         metadata={
@@ -67,7 +67,7 @@ class CapabilityGeneralInteractionStructure:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Interaction:
         request_response: bool = field(
             default=True,
@@ -88,7 +88,7 @@ class CapabilityGeneralInteractionStructure:
             },
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Delivery:
         direct_delivery: bool = field(
             metadata={

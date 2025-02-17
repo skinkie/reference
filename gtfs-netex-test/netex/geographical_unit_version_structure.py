@@ -8,7 +8,7 @@ from .geographical_unit_prices_rel_structure import GeographicalUnitPricesRelStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GeographicalUnitVersionStructure(FareUnitVersionStructure):
     class Meta:
         name = "GeographicalUnit_VersionStructure"

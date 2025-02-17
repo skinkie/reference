@@ -12,7 +12,7 @@ from .vehicle_access_credential_assignments_rel_structure import VehicleAccessCr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MobilityJourneyVersionFrameStructure(CommonVersionFrameStructure):
     class Meta:
         name = "MobilityJourney_VersionFrameStructure"

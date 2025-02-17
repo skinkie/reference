@@ -14,7 +14,7 @@ from .vehicle_model_ref import VehicleModelRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RollingStockItemVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "RollingStockItem_VersionStructure"

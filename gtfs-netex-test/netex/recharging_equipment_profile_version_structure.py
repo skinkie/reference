@@ -13,7 +13,7 @@ from .vehicle_equipment_profile_version_structure import VehicleEquipmentProfile
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RechargingEquipmentProfileVersionStructure(VehicleEquipmentProfileVersionStructure):
     class Meta:
         name = "RechargingEquipmentProfile_VersionStructure"

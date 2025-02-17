@@ -10,7 +10,7 @@ from .site_connection import SiteConnection
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TransfersInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "transfersInFrame_RelStructure"

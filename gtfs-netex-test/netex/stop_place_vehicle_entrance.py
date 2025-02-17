@@ -6,7 +6,7 @@ from .stop_place_vehicle_entrance_version_structure import StopPlaceVehicleEntra
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class StopPlaceVehicleEntrance(StopPlaceVehicleEntranceVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

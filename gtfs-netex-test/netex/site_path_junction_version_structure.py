@@ -16,7 +16,7 @@ from .zone_ref_structure import ZoneRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SitePathJunctionVersionStructure(GenericPathJunctionVersionStructure):
     class Meta:
         name = "SitePathJunction_VersionStructure"

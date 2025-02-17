@@ -10,7 +10,7 @@ from .version_of_object_ref_structure import VersionOfObjectRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TraceStructure:
     object_ref: Optional[VersionOfObjectRefStructure] = field(
         default=None,

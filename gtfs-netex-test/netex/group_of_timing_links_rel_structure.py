@@ -7,7 +7,7 @@ from .timing_link_refs_rel_structure import TimingLinkRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfTimingLinksRelStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "GroupOfTimingLinks_RelStructure"

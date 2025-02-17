@@ -8,7 +8,7 @@ from .organisation_part_version_structure import OrganisationPartVersionStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ControlCentreVersionStructure(OrganisationPartVersionStructure):
     class Meta:
         name = "ControlCentre_VersionStructure"

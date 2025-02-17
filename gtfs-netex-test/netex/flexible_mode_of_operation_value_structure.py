@@ -7,7 +7,7 @@ from .flexible_operation_type_enumeration import FlexibleOperationTypeEnumeratio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleModeOfOperationValueStructure(ConventionalModeOfOperationValueStructure):
     class Meta:
         name = "FlexibleModeOfOperation_ValueStructure"

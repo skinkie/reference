@@ -15,7 +15,7 @@ from .timing_point_ref import TimingPointRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyWaitTimeVersionedChildStructure(JourneyTimingVersionedChildStructure):
     class Meta:
         name = "JourneyWaitTime_VersionedChildStructure"

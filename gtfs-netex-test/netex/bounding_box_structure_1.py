@@ -5,7 +5,7 @@ from .location_structure_1 import LocationStructure1
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class BoundingBoxStructure1:
     class Meta:
         name = "BoundingBoxStructure"

@@ -5,7 +5,7 @@ from .distance_matrix_element_ref_structure import DistanceMatrixElementRefStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DistanceMatrixElementRef(DistanceMatrixElementRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

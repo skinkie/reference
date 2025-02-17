@@ -7,7 +7,7 @@ from .geographical_interval_ref import GeographicalIntervalRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GeographicalIntervalPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "GeographicalIntervalPrice_VersionedChildStructure"

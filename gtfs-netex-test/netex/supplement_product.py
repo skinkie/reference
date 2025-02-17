@@ -5,7 +5,7 @@ from .supplement_product_version_structure import SupplementProductVersionStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SupplementProduct(SupplementProductVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

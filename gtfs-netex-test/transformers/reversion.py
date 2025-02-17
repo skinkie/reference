@@ -8,13 +8,14 @@ from utils import get_object_name
 
 
 def simple_recursive_attributes(obj):
-    for _k, v in obj.__dict__.items():
+    for attr in obj.__dataclass_fields__.keys():
+        v = getattr(obj, attr, None)
         if v is not None:
             if issubclass(v.__class__, VersionOfObjectRef) or issubclass(v.__class__, VersionOfObjectRefStructure):
                 yield v
 
             else:
-                if hasattr(v, '__dict__') and v.__class__.__name__ in netex.set_all:
+                if hasattr(v, '__dataclass_fields__') and v.__class__.__name__ in netex.set_all:
                     if hasattr(v, 'id'):
                         yield v
                     yield from simple_recursive_attributes(v)
@@ -24,7 +25,7 @@ def simple_recursive_attributes(obj):
                         if x is not None:
                             if issubclass(x.__class__, VersionOfObjectRef) or issubclass(x.__class__, VersionOfObjectRefStructure):
                                 yield x
-                            elif hasattr(x, '__dict__') and x.__class__.__name__ in netex.set_all:
+                            elif hasattr(x, '__dataclass_fields__') and x.__class__.__name__ in netex.set_all:
                                 if hasattr(x, 'id'):
                                     yield x
                                 yield from simple_recursive_attributes(x)

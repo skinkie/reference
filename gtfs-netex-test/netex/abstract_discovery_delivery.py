@@ -5,7 +5,7 @@ from .abstract_discovery_delivery_structure import AbstractDiscoveryDeliveryStru
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractDiscoveryDelivery(AbstractDiscoveryDeliveryStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

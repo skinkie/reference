@@ -5,7 +5,7 @@ from .distribution_channel_ref_structure_element import DistributionChannelRefSt
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DistributionChannelRef(DistributionChannelRefStructureElement):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

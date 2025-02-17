@@ -6,7 +6,7 @@ from .journey_meeting import JourneyMeeting
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyMeetingsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "journeyMeetingsInFrame_RelStructure"

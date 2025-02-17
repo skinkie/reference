@@ -6,7 +6,7 @@ from .duty import Duty
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DutiesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "dutiesInFrame_RelStructure"

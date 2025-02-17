@@ -5,7 +5,7 @@ from .endpoint_not_available_access_structure import EndpointNotAvailableAccessS
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EndpointNotAvailableAccessError(EndpointNotAvailableAccessStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

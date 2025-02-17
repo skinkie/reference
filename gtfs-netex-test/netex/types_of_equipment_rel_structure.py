@@ -8,7 +8,7 @@ from .type_of_equipment_ref import TypeOfEquipmentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypesOfEquipmentRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typesOfEquipment_RelStructure"

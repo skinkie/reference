@@ -5,7 +5,7 @@ from .type_of_fare_structure_element_version_structure import TypeOfFareStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfFareStructureElement(TypeOfFareStructureElementVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -8,7 +8,7 @@ from .fare_point_in_pattern_ref import FarePointInPatternRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FarePointsInPatternRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "farePointsInPattern_RelStructure"

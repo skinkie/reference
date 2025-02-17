@@ -8,7 +8,7 @@ from .participant_ref_structure import ParticipantRefStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ProducerRequestEndpointStructure(AuthenticatedRequestStructure):
     address: Optional[str] = field(
         default=None,

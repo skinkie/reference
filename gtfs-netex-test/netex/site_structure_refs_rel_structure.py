@@ -6,7 +6,7 @@ from .site_structure_ref import SiteStructureRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SiteStructureRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "siteStructureRefs_RelStructure"

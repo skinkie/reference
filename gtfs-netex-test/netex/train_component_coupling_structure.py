@@ -6,7 +6,7 @@ from .through_access_enumeration import ThroughAccessEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainComponentCouplingStructure:
     splittable: Optional[bool] = field(
         default=None,

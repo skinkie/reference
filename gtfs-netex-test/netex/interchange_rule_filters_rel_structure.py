@@ -6,7 +6,7 @@ from .interchange_rule_filter import InterchangeRuleFilter
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class InterchangeRuleFiltersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "interchangeRuleFilters_RelStructure"

@@ -5,7 +5,7 @@ from .type_of_line_value_structure import TypeOfLineValueStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfLine(TypeOfLineValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

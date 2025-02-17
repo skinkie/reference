@@ -5,7 +5,7 @@ from .link_projection_version_structure import LinkProjectionVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LinkProjection(LinkProjectionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

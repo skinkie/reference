@@ -7,7 +7,7 @@ from .service_journey_pattern_type_enumeration import ServiceJourneyPatternTypeE
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceJourneyPatternVersionStructure(JourneyPatternVersionStructure):
     class Meta:
         name = "ServiceJourneyPattern_VersionStructure"

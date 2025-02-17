@@ -5,6 +5,6 @@ from .deck_component_ref_structure import DeckComponentRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckEntranceRefStructure(DeckComponentRefStructure):
     pass

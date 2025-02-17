@@ -5,7 +5,7 @@ from .entitlement_required_ref_structure import EntitlementRequiredRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EntitlementRequiredRef(EntitlementRequiredRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

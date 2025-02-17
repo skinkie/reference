@@ -8,7 +8,7 @@ from .navigation_path_ref import NavigationPathRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NavigationPathsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "navigationPaths_RelStructure"

@@ -6,7 +6,7 @@ from .vehicle_journey_stop_assignment import VehicleJourneyStopAssignment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleJourneyStopAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleJourneyStopAssignmentsInFrame_RelStructure"

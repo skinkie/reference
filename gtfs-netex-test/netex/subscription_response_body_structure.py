@@ -8,7 +8,7 @@ from .response_status import ResponseStatus
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SubscriptionResponseBodyStructure:
     response_status: list[ResponseStatus] = field(
         default_factory=list,

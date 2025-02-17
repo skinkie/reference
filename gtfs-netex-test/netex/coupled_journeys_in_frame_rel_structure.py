@@ -6,7 +6,7 @@ from .coupled_journey import CoupledJourney
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CoupledJourneysInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "coupledJourneysInFrame_RelStructure"

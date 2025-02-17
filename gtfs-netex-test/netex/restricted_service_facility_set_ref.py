@@ -5,7 +5,7 @@ from .restricted_service_facility_set_ref_structure import RestrictedServiceFaci
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RestrictedServiceFacilitySetRef(RestrictedServiceFacilitySetRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -6,7 +6,7 @@ from .validable_element import ValidableElement
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidableElementsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "validableElementsInFrame_RelStructure"

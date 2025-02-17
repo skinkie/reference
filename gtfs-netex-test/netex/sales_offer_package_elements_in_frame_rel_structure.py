@@ -6,7 +6,7 @@ from .sales_offer_package_element import SalesOfferPackageElement
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SalesOfferPackageElementsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "salesOfferPackageElementsInFrame_RelStructure"

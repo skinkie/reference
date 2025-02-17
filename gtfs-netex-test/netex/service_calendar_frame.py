@@ -5,7 +5,7 @@ from .service_calendar_frame_version_frame_structure import ServiceCalendarFrame
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceCalendarFrame(ServiceCalendarFrameVersionFrameStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

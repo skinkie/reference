@@ -7,7 +7,7 @@ from .subscription_context_structure import SubscriptionContextStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractSubscriptionRequestStructure(RequestStructure):
     consumer_address: Optional[str] = field(
         default=None,

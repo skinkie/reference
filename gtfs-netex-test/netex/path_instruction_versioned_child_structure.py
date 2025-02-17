@@ -15,7 +15,7 @@ from .transition_enumeration import TransitionEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PathInstructionVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "PathInstruction_VersionedChildStructure"

@@ -5,6 +5,6 @@ from .point_in_journey_pattern_ref_structure import PointInJourneyPatternRefStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class StopPointInJourneyPatternRefStructure(PointInJourneyPatternRefStructure):
     pass

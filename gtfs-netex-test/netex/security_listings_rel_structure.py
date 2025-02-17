@@ -12,7 +12,7 @@ from .travel_document_security_listing import TravelDocumentSecurityListing
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SecurityListingsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "securityListings_RelStructure"

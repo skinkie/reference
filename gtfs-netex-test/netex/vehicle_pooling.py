@@ -5,7 +5,7 @@ from .vehicle_pooling_mode_of_operation_value_structure import VehiclePoolingMod
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehiclePooling(VehiclePoolingModeOfOperationValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

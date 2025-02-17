@@ -5,7 +5,7 @@ from .train_element_type_version_structure import TrainElementTypeVersionStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainElement(TrainElementTypeVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

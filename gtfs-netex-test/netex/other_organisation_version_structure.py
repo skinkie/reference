@@ -7,7 +7,7 @@ from .postal_address_version_structure import PostalAddressVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OtherOrganisationVersionStructure(OrganisationVersionStructure):
     class Meta:
         name = "OtherOrganisation_VersionStructure"

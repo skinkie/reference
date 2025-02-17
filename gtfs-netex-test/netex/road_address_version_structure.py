@@ -9,7 +9,7 @@ from .road_number_range_structure import RoadNumberRangeStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RoadAddressVersionStructure(AddressVersionStructure):
     class Meta:
         name = "RoadAddress_VersionStructure"

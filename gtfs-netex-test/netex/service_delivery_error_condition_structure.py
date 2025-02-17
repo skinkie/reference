@@ -21,7 +21,7 @@ from .unknown_participant_error import UnknownParticipantError
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceDeliveryErrorConditionStructure:
     choice: Optional[
         Union[

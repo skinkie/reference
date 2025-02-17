@@ -7,7 +7,7 @@ from .polygon import Polygon
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SurfacePropertyType:
     polygon: Optional[Polygon] = field(
         default=None,

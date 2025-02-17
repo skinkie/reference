@@ -7,3 +7,5 @@ class MedicalFacilityEnumeration(Enum):
     UNKNOWN = "unknown"
     DEFIBRILLATOR = "defibrillator"
     ALCOHOL_TEST = "alcoholTest"
+    HAND_SANITIZER = "handSanitizer"
+    OTHER = "other"

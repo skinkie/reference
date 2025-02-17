@@ -6,7 +6,7 @@ from .vehicle_sharing_place_assignment_ref import VehicleSharingPlaceAssignmentR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleSharingPlaceAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "VehicleSharingPlaceAssignmentRefs_RelStructure"

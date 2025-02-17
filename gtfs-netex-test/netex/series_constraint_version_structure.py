@@ -18,7 +18,7 @@ from .zones_in_series_rel_structure import ZonesInSeriesRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SeriesConstraintVersionStructure(PriceableObjectVersionStructure):
     class Meta:
         name = "SeriesConstraint_VersionStructure"

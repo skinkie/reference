@@ -8,7 +8,7 @@ from .surface_members import SurfaceMembers
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MultiSurfaceType(AbstractGeometricAggregateType):
     surface_member: list[SurfaceMember] = field(
         default_factory=list,

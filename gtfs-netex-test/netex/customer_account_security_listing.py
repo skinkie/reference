@@ -5,7 +5,7 @@ from .customer_account_security_listing_versioned_child_structure import Custome
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerAccountSecurityListing(CustomerAccountSecurityListingVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

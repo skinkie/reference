@@ -8,7 +8,7 @@ from .type_of_responsibility_role_ref import TypeOfResponsibilityRoleRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ResponsibilityRoleVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "ResponsibilityRole_VersionStructure"

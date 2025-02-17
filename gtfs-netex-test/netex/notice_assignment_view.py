@@ -6,7 +6,7 @@ from .notice_assignment_derived_view_structure import NoticeAssignmentDerivedVie
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NoticeAssignmentView(NoticeAssignmentDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

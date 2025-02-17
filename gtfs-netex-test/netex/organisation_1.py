@@ -5,7 +5,7 @@ from .organisation_version_structure import OrganisationVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class Organisation1(OrganisationVersionStructure):
     class Meta:
         name = "Organisation"

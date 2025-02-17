@@ -10,7 +10,7 @@ from .passenger_space_ref import PassengerSpaceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckSpacesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "deckSpaces_RelStructure"

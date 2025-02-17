@@ -6,7 +6,7 @@ from .vehicle_type_zone_restriction import VehicleTypeZoneRestriction
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleTypeZoneRestrictionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleTypeZoneRestrictions_RelStructure"

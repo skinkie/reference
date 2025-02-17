@@ -8,7 +8,7 @@ from .serviced_organisation_type_enumeration import ServicedOrganisationTypeEnum
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServicedOrganisationVersionStructure(OtherOrganisationVersionStructure):
     class Meta:
         name = "ServicedOrganisation_VersionStructure"

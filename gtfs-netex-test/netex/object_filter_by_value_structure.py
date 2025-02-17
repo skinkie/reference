@@ -624,7 +624,7 @@ from .zone_ref import ZoneRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ObjectFilterByValueStructure:
     layer_ref: Optional[LayerRef] = field(
         default=None,
@@ -651,7 +651,7 @@ class ObjectFilterByValueStructure:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ObjectReferences:
         choice: list[
             Union[

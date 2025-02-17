@@ -5,7 +5,7 @@ from .timing_link_in_journey_pattern_versioned_child_structure import TimingLink
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimingLinkInJourneyPattern(TimingLinkInJourneyPatternVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -8,7 +8,7 @@ from .compass_bearing8_enumeration import CompassBearing8Enumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LiftCallEquipmentVersionStructure(AccessEquipmentVersionStructure):
     class Meta:
         name = "LiftCallEquipment_VersionStructure"

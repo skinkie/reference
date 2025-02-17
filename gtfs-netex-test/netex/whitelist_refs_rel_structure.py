@@ -6,7 +6,7 @@ from .whitelist_ref import WhitelistRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class WhitelistRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "whitelistRefs_RelStructure"

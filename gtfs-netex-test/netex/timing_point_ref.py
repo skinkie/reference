@@ -5,7 +5,7 @@ from .timing_point_ref_structure import TimingPointRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimingPointRef(TimingPointRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

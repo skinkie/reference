@@ -31,7 +31,7 @@ from .validable_element_price_ref import ValidableElementPriceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PriceRuleStepResultStructure:
     fare_price_ref: Optional[
         Union[

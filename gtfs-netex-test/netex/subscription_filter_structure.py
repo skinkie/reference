@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SubscriptionFilterStructure:
     value: str = field(
         default="",

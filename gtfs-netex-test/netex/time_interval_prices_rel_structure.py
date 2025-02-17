@@ -9,7 +9,7 @@ from .time_interval_price_versioned_child_structure import TimeIntervalPriceVers
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimeIntervalPricesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "timeIntervalPrices_RelStructure"

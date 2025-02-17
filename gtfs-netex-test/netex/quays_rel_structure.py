@@ -9,7 +9,7 @@ from .taxi_stand_ref import TaxiStandRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class QuaysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "quays_RelStructure"

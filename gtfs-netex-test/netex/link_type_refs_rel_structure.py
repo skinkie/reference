@@ -6,7 +6,7 @@ from .type_of_link_ref import TypeOfLinkRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LinkTypeRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "linkTypeRefs_RelStructure"

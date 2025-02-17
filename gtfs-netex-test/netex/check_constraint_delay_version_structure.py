@@ -10,7 +10,7 @@ from .class_of_use_ref import ClassOfUseRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CheckConstraintDelayVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "CheckConstraintDelay_VersionStructure"

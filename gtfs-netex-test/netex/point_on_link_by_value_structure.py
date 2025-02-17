@@ -5,7 +5,7 @@ from typing import Optional
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOnLinkByValueStructure:
     distance_from_start: Optional[Decimal] = field(
         default=None,

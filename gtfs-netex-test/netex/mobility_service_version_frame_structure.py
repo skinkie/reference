@@ -17,7 +17,7 @@ from .vehicle_service_place_assignments_rel_structure import VehicleServicePlace
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MobilityServiceVersionFrameStructure(CommonVersionFrameStructure):
     class Meta:
         name = "MobilityService_VersionFrameStructure"

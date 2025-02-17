@@ -6,7 +6,7 @@ from .type_of_link_sequence_value_structure import TypeOfLinkSequenceValueStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfLinkSequence(TypeOfLinkSequenceValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -39,7 +39,7 @@ from .vehicle_pooler_profile import VehiclePoolerProfile
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UsageParametersInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "usageParametersInFrame_RelStructure"

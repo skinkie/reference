@@ -5,7 +5,7 @@ from .abstract_service_capabilities_response_structure import AbstractServiceCap
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractFunctionalServiceCapabilitiesResponse(AbstractServiceCapabilitiesResponseStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

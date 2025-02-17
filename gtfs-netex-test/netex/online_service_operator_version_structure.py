@@ -11,7 +11,7 @@ from .road_address import RoadAddress
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OnlineServiceOperatorVersionStructure(OrganisationVersionStructure):
     class Meta:
         name = "OnlineServiceOperator_VersionStructure"
@@ -55,7 +55,7 @@ class OnlineServiceOperatorVersionStructure(OrganisationVersionStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Address(PostalAddressVersionStructure):
         members: Any = field(
             init=False,

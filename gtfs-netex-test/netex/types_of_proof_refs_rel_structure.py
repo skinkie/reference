@@ -6,7 +6,7 @@ from .type_of_proof_ref import TypeOfProofRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypesOfProofRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typesOfProofRefs_RelStructure"

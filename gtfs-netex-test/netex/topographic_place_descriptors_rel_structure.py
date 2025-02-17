@@ -6,7 +6,7 @@ from .topographic_place_descriptor_versioned_child_structure import TopographicP
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TopographicPlaceDescriptorsRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "topographicPlaceDescriptors_RelStructure"

@@ -9,7 +9,7 @@ from .polygon import Polygon
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GeometryArrayPropertyType:
     abstract_geometric_aggregate_or_abstract_surface_or_abstract_curve_or_abstract_geometric_primitive: list[Union[MultiSurface, Polygon, LineString, Point1]] = field(
         default_factory=list,

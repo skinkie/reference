@@ -5,7 +5,7 @@ from .recharging_equipment_profile_version_structure import RechargingEquipmentP
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RechargingEquipmentProfile(RechargingEquipmentProfileVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

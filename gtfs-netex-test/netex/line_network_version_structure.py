@@ -12,7 +12,7 @@ from .network_ref import NetworkRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LineNetworkVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "LineNetwork_VersionStructure"

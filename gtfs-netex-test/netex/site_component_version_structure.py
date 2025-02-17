@@ -13,7 +13,7 @@ from .site_ref_structure import SiteRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SiteComponentVersionStructure(SiteElementVersionStructure):
     class Meta:
         name = "SiteComponent_VersionStructure"

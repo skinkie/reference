@@ -5,7 +5,7 @@ from .abstract_service_request_structure import AbstractServiceRequestStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractServiceRequest(AbstractServiceRequestStructure):
     class Meta:
         namespace = "http://www.siri.org.uk/siri"

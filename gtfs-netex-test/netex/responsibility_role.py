@@ -5,7 +5,7 @@ from .responsibility_role_version_structure import ResponsibilityRoleVersionStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ResponsibilityRole(ResponsibilityRoleVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

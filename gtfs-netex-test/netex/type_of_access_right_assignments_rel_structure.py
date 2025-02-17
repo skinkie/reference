@@ -8,7 +8,7 @@ from .type_of_access_right_assignment_ref import TypeOfAccessRightAssignmentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfAccessRightAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "TypeOfAccessRightAssignments_RelStructure"

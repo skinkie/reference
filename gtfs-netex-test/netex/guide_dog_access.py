@@ -5,7 +5,7 @@ from .limitation_status_enumeration import LimitationStatusEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GuideDogAccess:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

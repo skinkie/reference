@@ -6,7 +6,7 @@ from .service_booking_arrangement import ServiceBookingArrangement
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceBookingArrangementsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "serviceBookingArrangementsInFrame_RelStructure"

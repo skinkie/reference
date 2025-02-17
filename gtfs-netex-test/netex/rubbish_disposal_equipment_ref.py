@@ -5,7 +5,7 @@ from .rubbish_disposal_equipment_ref_structure import RubbishDisposalEquipmentRe
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RubbishDisposalEquipmentRef(RubbishDisposalEquipmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

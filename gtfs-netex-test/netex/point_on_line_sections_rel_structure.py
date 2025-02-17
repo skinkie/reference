@@ -6,7 +6,7 @@ from .point_on_line_section import PointOnLineSection
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOnLineSectionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "pointOnLineSections_RelStructure"

@@ -9,7 +9,7 @@ from .network_ref import NetworkRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NetworkDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "Network_DerivedViewStructure"

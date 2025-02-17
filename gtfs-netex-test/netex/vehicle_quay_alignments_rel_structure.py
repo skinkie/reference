@@ -6,7 +6,7 @@ from .vehicle_quay_alignment import VehicleQuayAlignment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleQuayAlignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleQuayAlignments_RelStructure"

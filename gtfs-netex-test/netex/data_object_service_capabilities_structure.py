@@ -7,7 +7,7 @@ from .data_object_capability_request_policy_structure import DataObjectCapabilit
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataObjectServiceCapabilitiesStructure(AbstractCapabilitiesStructure):
     topic_filtering: Optional["DataObjectServiceCapabilitiesStructure.TopicFiltering"] = field(
         default=None,
@@ -42,7 +42,7 @@ class DataObjectServiceCapabilitiesStructure(AbstractCapabilitiesStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class TopicFiltering:
         filter_by_frame: Optional[bool] = field(
             default=None,
@@ -53,7 +53,7 @@ class DataObjectServiceCapabilitiesStructure(AbstractCapabilitiesStructure):
             },
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class SubscriptionPolicy:
         has_incremental_updates: Optional[bool] = field(
             default=None,

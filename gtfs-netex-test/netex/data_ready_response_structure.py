@@ -10,7 +10,7 @@ from .unknown_subscription_error import UnknownSubscriptionError
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataReadyResponseStructure(ConsumerResponseEndpointStructure):
     status: Optional[Status] = field(
         default=None,
@@ -29,7 +29,7 @@ class DataReadyResponseStructure(ConsumerResponseEndpointStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ErrorCondition:
         unknown_subscription_error_or_other_error: Optional[Union[UnknownSubscriptionError, OtherError]] = field(
             default=None,

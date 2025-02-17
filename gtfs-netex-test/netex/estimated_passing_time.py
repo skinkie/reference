@@ -6,7 +6,7 @@ from .estimated_passing_time_versioned_child_structure import EstimatedPassingTi
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EstimatedPassingTime(EstimatedPassingTimeVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

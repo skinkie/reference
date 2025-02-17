@@ -6,7 +6,7 @@ from .operational_context_ref import OperationalContextRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OperationalContexRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "operationalContexRefs_RelStructure"

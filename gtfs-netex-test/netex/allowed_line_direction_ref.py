@@ -5,7 +5,7 @@ from .allowed_line_direction_ref_structure import AllowedLineDirectionRefStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AllowedLineDirectionRef(AllowedLineDirectionRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

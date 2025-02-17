@@ -6,7 +6,7 @@ from .derived_view_structure import DerivedViewStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GenericPathLinkDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "GenericPathLink_DerivedViewStructure"

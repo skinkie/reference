@@ -16,7 +16,7 @@ from .train_stop_assignments_rel_structure import TrainStopAssignmentsRelStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerStopAssignmentVersionStructure(StopAssignmentVersionStructure):
     class Meta:
         name = "PassengerStopAssignment_VersionStructure"

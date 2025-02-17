@@ -6,7 +6,7 @@ from .offence_debit_version_structure import OffenceDebitVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OffenceDebit(OffenceDebitVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

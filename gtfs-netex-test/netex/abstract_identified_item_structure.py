@@ -6,7 +6,7 @@ from .abstract_item_structure import AbstractItemStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractIdentifiedItemStructure(AbstractItemStructure):
     item_identifier: Optional[str] = field(
         default=None,

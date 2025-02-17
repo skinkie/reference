@@ -23,7 +23,7 @@ from .wire_point_ref import WirePointRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexiblePointPropertiesVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "FlexiblePointProperties_VersionedChildStructure"

@@ -8,7 +8,7 @@ from .sales_offer_package_element_ref import SalesOfferPackageElementRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SalesOfferPackageElementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "salesOfferPackageElements_RelStructure"

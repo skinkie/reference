@@ -5,7 +5,7 @@ from .type_of_access_right_assignment_ref_structure import TypeOfAccessRightAssi
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfAccessRightAssignmentRef(TypeOfAccessRightAssignmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

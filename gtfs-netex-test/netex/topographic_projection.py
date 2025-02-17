@@ -5,7 +5,7 @@ from .topographic_projection_version_structure import TopographicProjectionVersi
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TopographicProjection(TopographicProjectionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

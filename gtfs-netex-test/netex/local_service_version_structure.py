@@ -7,7 +7,7 @@ from .type_of_service_feature_refs_rel_structure import TypeOfServiceFeatureRefs
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LocalServiceVersionStructure(EquipmentVersionStructure):
     class Meta:
         name = "LocalService_VersionStructure"

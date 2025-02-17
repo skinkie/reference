@@ -9,7 +9,7 @@ from .requestor_ref import RequestorRef
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RequestStructure(AuthenticatedRequestStructure):
     address: Optional[str] = field(
         default=None,

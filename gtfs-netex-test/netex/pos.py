@@ -5,7 +5,7 @@ from .direct_position_type import DirectPositionType
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class Pos(DirectPositionType):
     class Meta:
         name = "pos"

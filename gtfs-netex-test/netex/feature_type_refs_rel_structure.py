@@ -6,7 +6,7 @@ from .type_of_feature_ref import TypeOfFeatureRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FeatureTypeRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "featureTypeRefs_RelStructure"

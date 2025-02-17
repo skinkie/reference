@@ -8,7 +8,7 @@ from .retail_device_ref import RetailDeviceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RetailDevicesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "RetailDevices_RelStructure"

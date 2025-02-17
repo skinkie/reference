@@ -9,7 +9,7 @@ from .vehicle_side_enumeration import VehicleSideEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckWindowVersionStructure(DeckComponentVersionStructure):
     class Meta:
         name = "DeckWindow_VersionStructure"

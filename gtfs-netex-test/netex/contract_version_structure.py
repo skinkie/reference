@@ -11,7 +11,7 @@ from .organisation_refs_rel_structure import OrganisationRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ContractVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "Contract_VersionStructure"

@@ -5,6 +5,6 @@ from .medium_access_device_ref_structure import MediumAccessDeviceRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MobileDeviceRefStructure(MediumAccessDeviceRefStructure):
     pass

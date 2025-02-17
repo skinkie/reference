@@ -7,7 +7,7 @@ from .topographic_place_ref import TopographicPlaceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TopographicPlacesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "topographicPlaces_RelStructure"

@@ -6,7 +6,7 @@ from .path_instruction import PathInstruction
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PathInstructionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "pathInstructions_RelStructure"

@@ -8,7 +8,7 @@ from .driver_trip_time_ref import DriverTripTimeRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DriverTripTimesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "driverTripTimes_RelStructure"

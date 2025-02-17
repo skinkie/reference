@@ -8,7 +8,7 @@ from .trailing_rolling_stock_item_ref import TrailingRollingStockItemRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RollingStockItemRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "rollingStockItemRefs_RelStructure"

@@ -6,7 +6,7 @@ from .empty_type_1 import EmptyType1
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CapabilityRequestPolicyStructure:
     national_language: list[str] = field(
         default_factory=list,

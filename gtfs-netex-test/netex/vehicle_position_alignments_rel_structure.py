@@ -6,7 +6,7 @@ from .vehicle_position_alignment import VehiclePositionAlignment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehiclePositionAlignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehiclePositionAlignments_RelStructure"

@@ -10,7 +10,7 @@ from .passing_time_versioned_child_structure import PassingTimeVersionedChildStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimetabledPassingTimeVersionedChildStructure(PassingTimeVersionedChildStructure):
     class Meta:
         name = "TimetabledPassingTime_VersionedChildStructure"

@@ -5,7 +5,7 @@ from .topographic_place_derived_view_structure import TopographicPlaceDerivedVie
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TopographicPlaceView(TopographicPlaceDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

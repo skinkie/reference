@@ -5,7 +5,7 @@ from .usage_discount_right_version_structure import UsageDiscountRightVersionStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UsageDiscountRight(UsageDiscountRightVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

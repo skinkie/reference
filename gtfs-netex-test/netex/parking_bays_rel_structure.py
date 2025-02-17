@@ -14,7 +14,7 @@ from .vehicle_sharing_parking_bay_ref import VehicleSharingParkingBayRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ParkingBaysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "parkingBays_RelStructure"

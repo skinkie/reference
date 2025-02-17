@@ -22,7 +22,7 @@ from .service_facility_sets_rel_structure import ServiceFacilitySetsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckPathJunctionVersionStructure(GenericPathJunctionVersionStructure):
     class Meta:
         name = "DeckPathJunction_VersionStructure"

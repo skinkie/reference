@@ -6,7 +6,7 @@ from .logical_display import LogicalDisplay
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LogicalDisplaysInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "logicalDisplaysInFrame_RelStructure"

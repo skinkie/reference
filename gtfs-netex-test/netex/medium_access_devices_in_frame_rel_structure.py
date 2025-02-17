@@ -9,7 +9,7 @@ from .smartcard import Smartcard
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MediumAccessDevicesInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "mediumAccessDevicesInFrame_RelStructure"

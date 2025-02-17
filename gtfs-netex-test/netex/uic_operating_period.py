@@ -6,7 +6,7 @@ from .uic_operating_period_version_structure import UicOperatingPeriodVersionStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UicOperatingPeriod(UicOperatingPeriodVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -17,7 +17,7 @@ from .type_of_retail_device_ref import TypeOfRetailDeviceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RetailDeviceVersionStructure(InstalledEquipmentVersionStructure):
     class Meta:
         name = "RetailDevice_VersionStructure"

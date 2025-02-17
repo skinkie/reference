@@ -5,7 +5,7 @@ from .pricing_service_versioned_structure import PricingServiceVersionedStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PricingService(PricingServiceVersionedStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

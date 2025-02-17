@@ -263,7 +263,7 @@ class TimeDemandTypesProfile:
     @staticmethod
     def getObjectFromObject(obj, new_clazz, id=None):
         attributes = set([x.name for x in dataclasses.fields(new_clazz)]).intersection(set([x.name for x in dataclasses.fields(obj.__class__)]))
-        new_obj = new_clazz(**{x: obj.__dict__[x] for x in attributes})
+        new_obj = new_clazz(**{x: getattr(obj, x) for x in attributes})
         if id is not None:
             new_obj.id = id
         return new_obj

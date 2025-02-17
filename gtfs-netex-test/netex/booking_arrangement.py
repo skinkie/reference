@@ -5,7 +5,7 @@ from .booking_arrangement_version_structure import BookingArrangementVersionStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class BookingArrangement(BookingArrangementVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

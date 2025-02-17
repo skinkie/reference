@@ -5,7 +5,7 @@ from .type_of_driver_permit_value_structure import TypeOfDriverPermitValueStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfDriverPermit(TypeOfDriverPermitValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

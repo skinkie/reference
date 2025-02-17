@@ -5,7 +5,7 @@ from .group_of_distance_matrix_elements_ref_structure_element import GroupOfDist
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfDistanceMatrixElementsRef(GroupOfDistanceMatrixElementsRefStructureElement):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

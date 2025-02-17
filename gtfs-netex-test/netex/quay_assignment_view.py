@@ -5,7 +5,7 @@ from .passenger_stop_assignment_derived_view_structure import PassengerStopAssig
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class QuayAssignmentView(PassengerStopAssignmentDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

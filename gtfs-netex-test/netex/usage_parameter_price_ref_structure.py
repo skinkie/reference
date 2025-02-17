@@ -5,6 +5,6 @@ from .fare_price_ref_structure import FarePriceRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UsageParameterPriceRefStructure(FarePriceRefStructure):
     pass

@@ -8,7 +8,7 @@ from .type_of_facility_ref import TypeOfFacilityRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypesOfFacilityRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typesOfFacility_RelStructure"

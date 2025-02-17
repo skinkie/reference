@@ -8,7 +8,7 @@ from .operator_ref import OperatorRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TransportOrganisationRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "transportOrganisationRefs_RelStructure"

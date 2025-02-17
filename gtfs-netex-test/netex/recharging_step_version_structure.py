@@ -26,7 +26,7 @@ from .vehicle_type_refs_rel_structure import VehicleTypeRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RechargingStepVersionStructure(VersionedChildStructure):
     class Meta:
         name = "RechargingStep_VersionStructure"

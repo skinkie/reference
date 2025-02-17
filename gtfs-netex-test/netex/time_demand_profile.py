@@ -5,7 +5,7 @@ from .time_demand_profile_version_structure import TimeDemandProfileVersionStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimeDemandProfile(TimeDemandProfileVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

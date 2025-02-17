@@ -16,7 +16,7 @@ from .usage_validity_type_enumeration import UsageValidityTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UsageValidityPeriodVersionStructure(UsageParameterVersionStructure):
     class Meta:
         name = "UsageValidityPeriod_VersionStructure"

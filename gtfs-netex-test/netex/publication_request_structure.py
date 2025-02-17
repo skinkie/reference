@@ -12,7 +12,7 @@ from .participant_ref import ParticipantRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PublicationRequestStructure:
     request_timestamp: XmlDateTime = field(
         metadata={
@@ -68,7 +68,7 @@ class PublicationRequestStructure:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Topics:
         network_frame_topic: list[NetworkFrameTopicStructure] = field(
             default_factory=list,

@@ -6,7 +6,7 @@ from .type_of_service_ref import TypeOfServiceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfServiceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "typeOfServiceRefs_RelStructure"

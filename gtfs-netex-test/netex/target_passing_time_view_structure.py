@@ -9,7 +9,7 @@ from .passing_time_view_structure import PassingTimeViewStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TargetPassingTimeViewStructure(PassingTimeViewStructure):
     class Meta:
         name = "TargetPassingTime_ViewStructure"
@@ -77,7 +77,7 @@ class TargetPassingTimeViewStructure(PassingTimeViewStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class AimedArrivalTime:
         value: XmlTime = field(
             metadata={
@@ -85,7 +85,7 @@ class TargetPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ArrivalDayOffset:
         value: int = field(
             metadata={
@@ -93,7 +93,7 @@ class TargetPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class AimedDepartureTime:
         value: XmlTime = field(
             metadata={
@@ -101,7 +101,7 @@ class TargetPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class DepartureDayOffset:
         value: int = field(
             metadata={
@@ -109,7 +109,7 @@ class TargetPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class AimedNonstopPassingTime:
         value: XmlTime = field(
             metadata={
@@ -117,7 +117,7 @@ class TargetPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class PassingDayOffset:
         value: int = field(
             metadata={

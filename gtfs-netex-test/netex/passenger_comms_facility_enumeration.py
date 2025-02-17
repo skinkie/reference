@@ -15,3 +15,6 @@ class PassengerCommsFacilityEnumeration(Enum):
     INTERNET = "internet"
     POST_OFFICE = "postOffice"
     POST_BOX = "postBox"
+    USB_APOWER_SOCKET = "usbAPowerSocket"
+    USB_CPOWER_SOCKET = "usbCPowerSocket"
+    OTHER = "other"

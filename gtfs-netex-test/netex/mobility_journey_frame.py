@@ -5,7 +5,7 @@ from .mobility_journey_version_frame_structure import MobilityJourneyVersionFram
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MobilityJourneyFrame(MobilityJourneyVersionFrameStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

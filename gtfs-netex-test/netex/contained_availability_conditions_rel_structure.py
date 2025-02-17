@@ -6,7 +6,7 @@ from .entity_in_version_structure import AvailabilityCondition
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ContainedAvailabilityConditionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "containedAvailabilityConditions_RelStructure"

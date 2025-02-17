@@ -5,7 +5,7 @@ from .vehicle_charging_equipment_ref_structure import VehicleChargingEquipmentRe
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleChargingEquipmentRef(VehicleChargingEquipmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

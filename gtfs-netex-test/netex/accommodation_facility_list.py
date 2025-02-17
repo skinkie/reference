@@ -5,7 +5,7 @@ from .accommodation_facility_enumeration import AccommodationFacilityEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AccommodationFacilityList:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

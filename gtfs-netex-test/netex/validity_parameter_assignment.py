@@ -5,7 +5,7 @@ from .validity_parameter_assignment_version_structure import ValidityParameterAs
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidityParameterAssignment(ValidityParameterAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

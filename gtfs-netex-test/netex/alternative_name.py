@@ -6,7 +6,7 @@ from .alternative_name_versioned_child_structure import AlternativeNameVersioned
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AlternativeName(AlternativeNameVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

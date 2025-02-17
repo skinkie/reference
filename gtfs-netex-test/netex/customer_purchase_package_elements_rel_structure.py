@@ -6,7 +6,7 @@ from .customer_purchase_package_element import CustomerPurchasePackageElement
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerPurchasePackageElementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "customerPurchasePackageElements_RelStructure"

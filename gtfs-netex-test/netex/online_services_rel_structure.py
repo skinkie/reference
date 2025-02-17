@@ -6,7 +6,7 @@ from .online_service import OnlineService
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OnlineServicesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "onlineServices_RelStructure"

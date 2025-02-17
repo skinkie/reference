@@ -37,7 +37,7 @@ from .validity_parameters_rel_structure import ValidityParametersRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AccessRightParameterAssignmentVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "AccessRightParameterAssignment_VersionStructure"

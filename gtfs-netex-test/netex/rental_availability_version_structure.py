@@ -7,7 +7,7 @@ from .parking_ref import ParkingRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RentalAvailabilityVersionStructure(LogEntryVersionStructure):
     class Meta:
         name = "RentalAvailability_VersionStructure"

@@ -6,7 +6,7 @@ from .version import Version
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VersionsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "versionsInFrame_RelStructure"

@@ -8,7 +8,7 @@ from .point_of_interest_hierarchy_ref import PointOfInterestHierarchyRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOfInterestClassificationHierarchyMemberStructure(VersionedChildStructure):
     point_of_interest_hierarchy_ref: Optional[PointOfInterestHierarchyRef] = field(
         default=None,

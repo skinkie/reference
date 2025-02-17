@@ -12,7 +12,7 @@ from .trip_debit_ref import TripDebitRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareDebitRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "fareDebitRefs_RelStructure"

@@ -11,7 +11,7 @@ from .stop_point_in_journey_pattern_ref_structure import StopPointInJourneyPatte
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RestrictedServiceFacilitySetVersionStructure(ServiceFacilitySetVersionStructure):
     class Meta:
         name = "RestrictedServiceFacilitySet_VersionStructure"
@@ -74,18 +74,18 @@ class RestrictedServiceFacilitySetVersionStructure(ServiceFacilitySetVersionStru
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class FromCall(CallRefStructure):
         pass
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ToCall(CallRefStructure):
         pass
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class FromStopPointInJourneyPattern(StopPointInJourneyPatternRefStructure):
         pass
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ToStopPointInJourneyPattern(StopPointInJourneyPatternRefStructure):
         pass

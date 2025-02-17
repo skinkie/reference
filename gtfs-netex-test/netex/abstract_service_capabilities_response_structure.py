@@ -10,7 +10,7 @@ from .status import Status
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractServiceCapabilitiesResponseStructure(ResponseStructure):
     request_message_ref: Optional[MessageQualifierStructure] = field(
         default=None,

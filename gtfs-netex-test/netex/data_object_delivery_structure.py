@@ -9,7 +9,7 @@ from .extensions_2 import Extensions2
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataObjectDeliveryStructure(AbstractServiceDeliveryStructure):
     data_object_request: Optional[DataObjectRequest] = field(
         default=None,

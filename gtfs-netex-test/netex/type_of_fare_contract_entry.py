@@ -5,7 +5,7 @@ from .type_of_fare_contract_entry_version_structure import TypeOfFareContractEnt
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfFareContractEntry(TypeOfFareContractEntryVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

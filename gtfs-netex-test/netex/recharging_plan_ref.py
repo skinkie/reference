@@ -5,7 +5,7 @@ from .recharging_plan_ref_structure import RechargingPlanRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RechargingPlanRef(RechargingPlanRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

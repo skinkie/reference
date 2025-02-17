@@ -6,7 +6,7 @@ from .type_of_travel_document_ref import TypeOfTravelDocumentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfTravelDocumentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "TypeOfTravelDocumentRefs_RelStructure"

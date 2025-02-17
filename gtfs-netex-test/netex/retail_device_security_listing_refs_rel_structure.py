@@ -6,7 +6,7 @@ from .retail_device_security_listing_ref import RetailDeviceSecurityListingRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RetailDeviceSecurityListingRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "RetailDeviceSecurityListingRefs_RelStructure"

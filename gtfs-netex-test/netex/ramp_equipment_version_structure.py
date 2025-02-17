@@ -11,7 +11,7 @@ from .safety_edge_enumeration import SafetyEdgeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RampEquipmentVersionStructure(AccessEquipmentVersionStructure):
     class Meta:
         name = "RampEquipment_VersionStructure"

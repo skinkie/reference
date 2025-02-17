@@ -9,7 +9,7 @@ from .other_error import OtherError
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceDeliveryBodyStructure:
     status: Optional[bool] = field(
         default=None,
@@ -51,7 +51,7 @@ class ServiceDeliveryBodyStructure:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ErrorCondition:
         capability_not_supported_error_or_other_error: Optional[Union[CapabilityNotSupportedError, OtherError]] = field(
             default=None,

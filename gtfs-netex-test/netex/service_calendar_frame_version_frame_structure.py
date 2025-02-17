@@ -13,7 +13,7 @@ from .timebands_in_frame_rel_structure import TimebandsInFrameRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceCalendarFrameVersionFrameStructure(CommonVersionFrameStructure):
     class Meta:
         name = "ServiceCalendarFrame_VersionFrameStructure"

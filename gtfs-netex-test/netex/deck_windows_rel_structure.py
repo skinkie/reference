@@ -8,7 +8,7 @@ from .deck_window_ref import DeckWindowRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckWindowsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "deckWindows_RelStructure"

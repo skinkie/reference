@@ -6,7 +6,7 @@ from .item_ref_structure import ItemRefStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractRequiredReferencingItemStructure(AbstractItemStructure):
     item_ref: ItemRefStructure = field(
         metadata={

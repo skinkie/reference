@@ -10,7 +10,7 @@ from .train_number_ref import TrainNumberRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TravelSpecificationJourneyRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "travelSpecificationJourneyRefs_RelStructure"

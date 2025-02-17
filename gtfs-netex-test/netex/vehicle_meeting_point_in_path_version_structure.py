@@ -7,7 +7,7 @@ from .point_in_journey_pattern_versioned_child_structure import PointInJourneyPa
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleMeetingPointInPathVersionStructure(PointInJourneyPatternVersionedChildStructure):
     class Meta:
         name = "VehicleMeetingPointInPath_VersionStructure"

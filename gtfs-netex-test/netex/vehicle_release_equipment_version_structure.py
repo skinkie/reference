@@ -7,7 +7,7 @@ from .locking_mechanism_enumeration import LockingMechanismEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleReleaseEquipmentVersionStructure(InstalledEquipmentVersionStructure):
     class Meta:
         name = "VehicleReleaseEquipment_VersionStructure"

@@ -8,7 +8,7 @@ from .occupancy_view_version_structure import OccupancyViewVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OccupancyViewRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "OccupancyView_RelStructure"

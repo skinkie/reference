@@ -6,7 +6,7 @@ from .target_passing_time import TargetPassingTime
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TargetPassingTimesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "targetPassingTimes_RelStructure"

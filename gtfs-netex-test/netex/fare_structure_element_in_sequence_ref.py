@@ -5,7 +5,7 @@ from .fare_structure_element_in_sequence_ref_structure import FareStructureEleme
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareStructureElementInSequenceRef(FareStructureElementInSequenceRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

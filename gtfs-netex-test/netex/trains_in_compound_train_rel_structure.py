@@ -6,7 +6,7 @@ from .train_in_compound_train_versioned_child_structure import TrainInCompoundTr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainsInCompoundTrainRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "trainsInCompoundTrain_RelStructure"

@@ -14,7 +14,7 @@ from .train_element_type_type_enumeration import TrainElementTypeTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainComponentDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "TrainComponent_DerivedViewStructure"
@@ -104,7 +104,7 @@ class TrainComponentDerivedViewStructure(DerivedViewStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class TrainElementTypeType:
         value: TrainElementTypeTypeEnumeration = field(
             metadata={
@@ -112,7 +112,7 @@ class TrainComponentDerivedViewStructure(DerivedViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class TrainElementType:
         value: TrainElementTypeTypeEnumeration = field(
             metadata={

@@ -5,7 +5,7 @@ from .reserved_space_facility_enumeration import ReservedSpaceFacilityEnumeratio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ReservedSpaceFacilityList:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

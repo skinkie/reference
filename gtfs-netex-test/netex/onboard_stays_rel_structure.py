@@ -6,7 +6,7 @@ from .onboard_stay import OnboardStay
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OnboardStaysRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "onboardStays_RelStructure"

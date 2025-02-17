@@ -6,7 +6,7 @@ from .vehicle_meeting_point_in_path import VehicleMeetingPointInPath
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleMeetingPointsInSequenceRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleMeetingPointsInSequence_RelStructure"

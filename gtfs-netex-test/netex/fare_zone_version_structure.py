@@ -15,7 +15,7 @@ from .zone_topology_enumeration import ZoneTopologyEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareZoneVersionStructure(TariffZoneVersionStructure):
     class Meta:
         name = "FareZone_VersionStructure"

@@ -8,7 +8,7 @@ from .rounding_step_ref import RoundingStepRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RoundingStepVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "RoundingStep_VersionedChildStructure"

@@ -14,7 +14,7 @@ from .ticketing_service_facility_list import TicketingServiceFacilityList
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TicketingEquipmentVersionStructure(PassengerEquipmentVersionStructure):
     class Meta:
         name = "TicketingEquipment_VersionStructure"

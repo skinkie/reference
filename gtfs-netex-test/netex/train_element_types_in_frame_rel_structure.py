@@ -9,7 +9,7 @@ from .train_element import TrainElement
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainElementTypesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "trainElementTypesInFrame_RelStructure"

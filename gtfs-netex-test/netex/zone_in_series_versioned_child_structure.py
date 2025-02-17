@@ -8,7 +8,7 @@ from .tariff_zone_ref import TariffZoneRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ZoneInSeriesVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "ZoneInSeries_VersionedChildStructure"

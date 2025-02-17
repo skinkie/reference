@@ -6,7 +6,7 @@ from xsdata.models.datatype import XmlDuration
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SubscriptionContextStructure:
     heartbeat_interval: Optional[XmlDuration] = field(
         default=None,

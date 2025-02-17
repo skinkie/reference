@@ -6,7 +6,7 @@ from .strict_containment_aggregation_structure import StrictContainmentAggregati
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AlternativeNamesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "alternativeNames_RelStructure"

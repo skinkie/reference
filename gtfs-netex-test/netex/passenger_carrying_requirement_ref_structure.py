@@ -5,6 +5,6 @@ from .vehicle_requirement_ref_structure import VehicleRequirementRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerCarryingRequirementRefStructure(VehicleRequirementRefStructure):
     pass

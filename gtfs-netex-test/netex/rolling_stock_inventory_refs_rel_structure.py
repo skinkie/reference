@@ -6,7 +6,7 @@ from .rolling_stock_inventory_ref import RollingStockInventoryRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RollingStockInventoryRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "rollingStockInventoryRefs_RelStructure"

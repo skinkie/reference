@@ -6,7 +6,7 @@ from .compression_method_enumeration import CompressionMethodEnumeration
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TransportDescriptionStructure:
     communications_transport_method: CommunicationsTransportMethodEnumeration = field(
         default=CommunicationsTransportMethodEnumeration.HTTP_POST,

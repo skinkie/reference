@@ -5,7 +5,7 @@ from .service_journey_pattern_interchange_ref_structure import ServiceJourneyPat
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceJourneyPatternInterchangeRef(ServiceJourneyPatternInterchangeRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

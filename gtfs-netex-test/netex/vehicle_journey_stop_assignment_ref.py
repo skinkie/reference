@@ -5,7 +5,7 @@ from .vehicle_journey_stop_assignment_ref_structure import VehicleJourneyStopAss
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleJourneyStopAssignmentRef(VehicleJourneyStopAssignmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

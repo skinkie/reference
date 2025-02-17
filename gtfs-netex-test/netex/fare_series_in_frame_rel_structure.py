@@ -6,7 +6,7 @@ from .series_constraint import SeriesConstraint
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareSeriesInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "fareSeriesInFrame_RelStructure"

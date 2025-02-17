@@ -9,7 +9,7 @@ from .passenger_boarding_position_assignment_ref import PassengerBoardingPositio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerBoardingPositionAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "passengerBoardingPositionAssignments_RelStructure"

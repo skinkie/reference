@@ -5,7 +5,7 @@ from .tram_submode_enumeration import TramSubmodeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TramSubmode:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

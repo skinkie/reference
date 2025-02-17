@@ -5,7 +5,7 @@ from .passenger_at_stop_time_ref_structure import PassengerAtStopTimeRefStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerAtStopTimeRef(PassengerAtStopTimeRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -4,7 +4,7 @@ from typing import Optional
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CodeListType:
     value: list[str] = field(
         default_factory=list,

@@ -5,7 +5,7 @@ from .group_of_link_sequences_version_structure import GroupOfLinkSequencesVersi
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfLinkSequences(GroupOfLinkSequencesVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

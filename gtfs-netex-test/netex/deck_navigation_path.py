@@ -5,7 +5,7 @@ from .deck_navigation_path_version_structure import DeckNavigationPathVersionStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckNavigationPath(DeckNavigationPathVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

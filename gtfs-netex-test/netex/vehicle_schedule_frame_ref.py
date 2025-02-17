@@ -5,7 +5,7 @@ from .vehicle_schedule_frame_ref_structure import VehicleScheduleFrameRefStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleScheduleFrameRef(VehicleScheduleFrameRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

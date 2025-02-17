@@ -5,7 +5,7 @@ from .dead_run_journey_pattern_version_structure import DeadRunJourneyPatternVer
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeadRunJourneyPattern(DeadRunJourneyPatternVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

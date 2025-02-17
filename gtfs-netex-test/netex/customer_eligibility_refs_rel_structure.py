@@ -9,7 +9,7 @@ from .user_profile_eligibility_ref import UserProfileEligibilityRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerEligibilityRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "customerEligibilityRefs_RelStructure"

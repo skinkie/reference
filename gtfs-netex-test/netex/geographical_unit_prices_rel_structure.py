@@ -10,7 +10,7 @@ from .strict_containment_aggregation_structure import StrictContainmentAggregati
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GeographicalUnitPricesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "geographicalUnitPrices_RelStructure"
@@ -40,7 +40,7 @@ class GeographicalUnitPricesRelStructure(StrictContainmentAggregationStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GeographicalUnitPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "GeographicalUnitPrice_VersionedChildStructure"

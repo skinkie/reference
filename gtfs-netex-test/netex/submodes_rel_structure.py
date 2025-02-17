@@ -6,7 +6,7 @@ from .submode import Submode
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SubmodesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "submodes_RelStructure"

@@ -14,7 +14,7 @@ from .notice_assignments_rel_structure import NoticeAssignmentsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfServicesVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "GroupOfServices_VersionStructure"
@@ -93,7 +93,7 @@ class GroupOfServicesVersionStructure(GroupOfEntitiesVersionStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class DayTypes:
         day_type_ref: list[DayTypeRefStructure] = field(
             default_factory=list,

@@ -8,7 +8,7 @@ from .retail_consortium_ref import RetailConsortiumRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RetailConsortiumsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "retailConsortiums_RelStructure"

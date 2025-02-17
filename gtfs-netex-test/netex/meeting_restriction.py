@@ -5,7 +5,7 @@ from .meeting_restriction_version_structure import MeetingRestrictionVersionStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MeetingRestriction(MeetingRestrictionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

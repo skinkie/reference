@@ -10,7 +10,7 @@ from .relationship_ref import RelationshipRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ClassRelationshipInFrameStructure:
     relationship_ref: RelationshipRef = field(
         metadata={

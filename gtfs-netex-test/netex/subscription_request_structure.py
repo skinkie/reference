@@ -6,7 +6,7 @@ from .data_object_subscription_request import DataObjectSubscriptionRequest
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SubscriptionRequestStructure(AbstractSubscriptionRequestStructure):
     data_object_subscription_request: list[DataObjectSubscriptionRequest] = field(
         default_factory=list,

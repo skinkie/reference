@@ -9,7 +9,7 @@ from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehiclePositionAlignmentVersionStructure(VersionedChildStructure):
     class Meta:
         name = "VehiclePositionAlignment_VersionStructure"

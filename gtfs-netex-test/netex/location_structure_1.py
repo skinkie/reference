@@ -7,7 +7,7 @@ from .coordinates_structure import CoordinatesStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LocationStructure1:
     class Meta:
         name = "LocationStructure"
@@ -58,7 +58,7 @@ class LocationStructure1:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Longitude:
         value: Decimal = field(
             metadata={
@@ -68,7 +68,7 @@ class LocationStructure1:
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Latitude:
         value: Decimal = field(
             metadata={

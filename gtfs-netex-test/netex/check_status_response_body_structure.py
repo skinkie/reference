@@ -11,7 +11,7 @@ from .status import Status
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CheckStatusResponseBodyStructure:
     status: Optional[Status] = field(
         default=None,
@@ -62,7 +62,7 @@ class CheckStatusResponseBodyStructure:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ErrorCondition:
         service_not_available_error_or_other_error: Optional[Union[ServiceNotAvailableError, OtherError]] = field(
             default=None,

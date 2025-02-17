@@ -9,7 +9,7 @@ from .supply_contract_ref import SupplyContractRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ContractRefRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "ContractRef_RelStructure"

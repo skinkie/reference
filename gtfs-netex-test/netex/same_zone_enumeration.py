@@ -13,3 +13,4 @@ class SameZoneEnumeration(Enum):
     CONTAINING = "containing"
     EQUIVALENT = "equivalent"
     DIFFERENT = "different"
+    NEIGHBOURING = "neighbouring"

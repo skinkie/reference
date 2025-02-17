@@ -6,7 +6,7 @@ from .group_of_tariff_zones import GroupOfTariffZones
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupsOfTariffZonesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "groupsOfTariffZonesInFrame_RelStructure"

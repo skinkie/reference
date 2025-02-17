@@ -6,7 +6,7 @@ from .priceable_object_ref_structure import PriceableObjectRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SeriesConstraintRefStructure2(PriceableObjectRefStructure):
     class Meta:
         name = "SeriesConstraintRefStructure_"

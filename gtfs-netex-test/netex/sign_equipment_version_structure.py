@@ -11,7 +11,7 @@ from .print_presentation_structure import PrintPresentationStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SignEquipmentVersionStructure(PlaceEquipmentVersionStructure):
     class Meta:
         name = "SignEquipment_VersionStructure"

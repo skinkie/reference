@@ -5,7 +5,7 @@ from .all_vehicle_modes_of_transport_enumeration import AllVehicleModesOfTranspo
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AllVehicleModes:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

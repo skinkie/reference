@@ -11,7 +11,7 @@ from .step_condition_enumeration import StepConditionEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class StairEquipmentVersionStructure(AccessEquipmentVersionStructure):
     class Meta:
         name = "StairEquipment_VersionStructure"

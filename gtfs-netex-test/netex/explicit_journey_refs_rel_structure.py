@@ -10,7 +10,7 @@ from .vehicle_journey_ref import VehicleJourneyRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ExplicitJourneyRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "explicitJourneyRefs_RelStructure"

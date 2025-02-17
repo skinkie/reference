@@ -10,7 +10,7 @@ from .time_demand_type_refs_rel_structure import TimeDemandTypeRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "JourneyFrequencyGroup_VersionStructure"
@@ -77,7 +77,7 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class FirstDayOffset:
         value: int = field(
             metadata={
@@ -85,7 +85,7 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class LastDepartureTime:
         value: XmlTime = field(
             metadata={
@@ -93,7 +93,7 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class LastDayOffset:
         value: int = field(
             metadata={
@@ -101,7 +101,7 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class FirstArrivalTime:
         value: XmlTime = field(
             metadata={
@@ -109,7 +109,7 @@ class JourneyFrequencyGroupVersionStructure(GroupOfEntitiesVersionStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class LastArrivalTime:
         value: XmlTime = field(
             metadata={

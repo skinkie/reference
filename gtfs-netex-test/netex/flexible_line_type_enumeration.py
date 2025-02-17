@@ -13,4 +13,5 @@ class FlexibleLineTypeEnumeration(Enum):
     MIXED_FLEXIBLE = "mixedFlexible"
     MIXED_FLEXIBLE_AND_FIXED = "mixedFlexibleAndFixed"
     FIXED = "fixed"
+    NOT_FLEXIBLE = "notFlexible"
     OTHER = "other"

@@ -8,7 +8,7 @@ from .private_code_structure import PrivateCodeStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CountryVersionStructure(PlaceVersionStructure):
     class Meta:
         name = "Country_VersionStructure"

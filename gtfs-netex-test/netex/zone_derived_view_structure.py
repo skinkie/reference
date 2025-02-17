@@ -16,7 +16,7 @@ from .zone_ref import ZoneRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ZoneDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "Zone_DerivedViewStructure"

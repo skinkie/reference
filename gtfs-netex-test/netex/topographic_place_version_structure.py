@@ -14,7 +14,7 @@ from .topographic_place_type_enumeration import TopographicPlaceTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TopographicPlaceVersionStructure(PlaceVersionStructure):
     class Meta:
         name = "TopographicPlace_VersionStructure"

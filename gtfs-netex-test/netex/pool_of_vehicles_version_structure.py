@@ -16,7 +16,7 @@ from .vehicle_sharing_service_ref import VehicleSharingServiceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PoolOfVehiclesVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "PoolOfVehicles_VersionStructure"

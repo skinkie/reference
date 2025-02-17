@@ -6,7 +6,7 @@ from .installed_equipment_version_structure import InstalledEquipmentVersionStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerEquipmentVersionStructure(InstalledEquipmentVersionStructure):
     class Meta:
         name = "PassengerEquipment_VersionStructure"

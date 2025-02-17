@@ -5,7 +5,7 @@ from .type_of_plug_value_structure import TypeOfPlugValueStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfPlug(TypeOfPlugValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

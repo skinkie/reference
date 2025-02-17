@@ -5,7 +5,7 @@ from .headway_ref_structure import HeadwayRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class HeadwayRef(HeadwayRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

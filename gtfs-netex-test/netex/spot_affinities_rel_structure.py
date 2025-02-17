@@ -6,7 +6,7 @@ from .spot_affinity import SpotAffinity
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SpotAffinitiesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "spotAffinities_RelStructure"

@@ -5,7 +5,7 @@ from .check_constraint_delay_version_structure import CheckConstraintDelayVersio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CheckConstraintDelay(CheckConstraintDelayVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

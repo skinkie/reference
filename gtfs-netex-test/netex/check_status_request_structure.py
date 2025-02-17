@@ -7,7 +7,7 @@ from .request_structure import RequestStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CheckStatusRequestStructure(RequestStructure):
     extensions: Optional[Extensions1] = field(
         default=None,

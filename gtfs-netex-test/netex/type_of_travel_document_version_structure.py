@@ -10,7 +10,7 @@ from .types_of_machine_readabilities_rel_structure import TypesOfMachineReadabil
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfTravelDocumentVersionStructure(TypeOfEntityVersionStructure):
     class Meta:
         name = "TypeOfTravelDocument_VersionStructure"

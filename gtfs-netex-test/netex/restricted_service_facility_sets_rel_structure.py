@@ -8,7 +8,7 @@ from .restricted_service_facility_set_ref import RestrictedServiceFacilitySetRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RestrictedServiceFacilitySetsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "restrictedServiceFacilitySets_RelStructure"

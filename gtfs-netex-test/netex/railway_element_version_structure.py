@@ -6,7 +6,7 @@ from .railway_point_ref_structure import RailwayPointRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RailwayElementVersionStructure(InfrastructureLinkVersionStructure):
     class Meta:
         name = "RailwayElement_VersionStructure"

@@ -8,7 +8,7 @@ from .site_path_junction import SitePathJunction
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SitePathJunctionsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "sitePathJunctionsInFrame_RelStructure"

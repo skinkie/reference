@@ -13,7 +13,7 @@ from .recharging_steps_rel_structure import RechargingStepsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RechargingPlanVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "RechargingPlan_VersionStructure"

@@ -6,7 +6,7 @@ from .entity_in_version_structure import ValidityTriggerVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidityTriggersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "validityTriggers_RelStructure"

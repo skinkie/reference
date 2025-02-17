@@ -5,7 +5,7 @@ from .personal_mode_of_operation_ref_structure import PersonalModeOfOperationRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PersonalModeOfOperationRef(PersonalModeOfOperationRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

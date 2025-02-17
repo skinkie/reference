@@ -5,7 +5,7 @@ from .scheduled_stop_point_derived_view_structure import ScheduledStopPointDeriv
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ScheduledStopPointView(ScheduledStopPointDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

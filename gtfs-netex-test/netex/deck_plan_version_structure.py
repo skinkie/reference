@@ -13,7 +13,7 @@ from .vehicle_orientation_enumeration import VehicleOrientationEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckPlanVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "DeckPlan_VersionStructure"

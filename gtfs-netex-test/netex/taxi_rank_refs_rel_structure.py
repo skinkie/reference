@@ -6,7 +6,7 @@ from .taxi_stand_ref import TaxiStandRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TaxiRankRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "taxiRankRefs_RelStructure"

@@ -5,7 +5,7 @@ from .resource_frame_version_frame_structure import ResourceFrameVersionFrameStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ResourceFrame(ResourceFrameVersionFrameStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

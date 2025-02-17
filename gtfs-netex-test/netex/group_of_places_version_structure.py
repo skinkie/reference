@@ -9,7 +9,7 @@ from .place_refs_rel_structure import PlaceRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfPlacesVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "GroupOfPlaces_VersionStructure"

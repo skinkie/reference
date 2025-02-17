@@ -5,7 +5,7 @@ from .interchange_rule_parameter_structure import InterchangeRuleParameterStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class InterchangeRuleFilter(InterchangeRuleParameterStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

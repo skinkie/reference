@@ -5,7 +5,7 @@ from .passenger_vehicle_capacity_structure import PassengerVehicleCapacityStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerVehicleCapacity(PassengerVehicleCapacityStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

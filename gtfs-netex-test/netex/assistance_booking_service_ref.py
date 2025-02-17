@@ -5,7 +5,7 @@ from .assistance_booking_service_ref_structure import AssistanceBookingServiceRe
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AssistanceBookingServiceRef(AssistanceBookingServiceRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -9,7 +9,7 @@ from .passenger_vehicle_capacity import PassengerVehicleCapacity
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerCapacitiesRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "passengerCapacities_RelStructure"

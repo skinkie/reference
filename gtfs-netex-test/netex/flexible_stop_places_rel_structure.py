@@ -8,7 +8,7 @@ from .flexible_stop_place_ref import FlexibleStopPlaceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleStopPlacesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "flexibleStopPlaces_RelStructure"

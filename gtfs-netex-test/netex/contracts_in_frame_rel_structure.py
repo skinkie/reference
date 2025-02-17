@@ -6,7 +6,7 @@ from .contract import Contract
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ContractsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "contractsInFrame_RelStructure"

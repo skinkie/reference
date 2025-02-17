@@ -5,7 +5,7 @@ from .series_constraint_price_versioned_child_structure import SeriesConstraintP
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SeriesConstraintPrice(SeriesConstraintPriceVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

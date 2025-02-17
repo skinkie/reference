@@ -6,7 +6,7 @@ from .related_organisation import RelatedOrganisation
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RelatedOrganisationsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "relatedOrganisations_RelStructure"

@@ -6,7 +6,7 @@ from .taxi_stand import TaxiStand
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TaxiStandsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "taxiStands_RelStructure"

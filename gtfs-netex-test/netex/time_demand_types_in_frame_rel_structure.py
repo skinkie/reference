@@ -6,7 +6,7 @@ from .time_demand_type import TimeDemandType
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimeDemandTypesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "timeDemandTypesInFrame_RelStructure"

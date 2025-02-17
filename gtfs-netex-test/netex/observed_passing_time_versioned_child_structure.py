@@ -9,7 +9,7 @@ from .headway_interval_structure import HeadwayIntervalStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ObservedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildStructure):
     class Meta:
         name = "ObservedPassingTime_VersionedChildStructure"
@@ -77,7 +77,7 @@ class ObservedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildS
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ActualArrivalTime:
         value: XmlTime = field(
             metadata={
@@ -85,7 +85,7 @@ class ObservedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildS
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ArrivalDayOffset:
         value: int = field(
             metadata={
@@ -93,7 +93,7 @@ class ObservedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildS
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ActualDepartureTime:
         value: XmlTime = field(
             metadata={
@@ -101,7 +101,7 @@ class ObservedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildS
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class DepartureDayOffset:
         value: int = field(
             metadata={
@@ -109,7 +109,7 @@ class ObservedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildS
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ActualNonstopPassingTime:
         value: XmlTime = field(
             metadata={
@@ -117,7 +117,7 @@ class ObservedPassingTimeVersionedChildStructure(DatedPassingTimeVersionedChildS
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class PassingTimeDayOffset:
         value: int = field(
             metadata={

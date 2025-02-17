@@ -6,7 +6,7 @@ from .customer_purchase_parameter_assignment import CustomerPurchaseParameterAss
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerPurchaseParameterAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "customerPurchaseParameterAssignments_RelStructure"

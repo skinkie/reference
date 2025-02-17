@@ -6,7 +6,7 @@ from .flexible_service_properties import FlexibleServiceProperties
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleServicePropertiesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "flexibleServicePropertiesInFrame_RelStructure"

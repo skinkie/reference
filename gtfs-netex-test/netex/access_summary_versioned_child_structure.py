@@ -8,7 +8,7 @@ from .transition_enumeration import TransitionEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AccessSummaryVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "AccessSummary_VersionedChildStructure"

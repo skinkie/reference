@@ -7,7 +7,7 @@ from .sensor_communications_enumeration import SensorCommunicationsEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SensorEquipmentVersionStructure(InstalledEquipmentVersionStructure):
     class Meta:
         name = "SensorEquipment_VersionStructure"

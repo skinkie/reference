@@ -13,7 +13,7 @@ from .vehicle_orientation_enumeration import VehicleOrientationEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainInCompoundTrainVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "TrainInCompoundTrain_VersionedChildStructure"

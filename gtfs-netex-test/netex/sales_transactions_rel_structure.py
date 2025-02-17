@@ -8,7 +8,7 @@ from .sales_transaction_ref import SalesTransactionRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SalesTransactionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "salesTransactions_RelStructure"

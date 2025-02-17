@@ -7,7 +7,7 @@ from .timeband_refs_rel_structure import TimebandRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RhythmicalJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructure):
     class Meta:
         name = "RhythmicalJourneyGroup_VersionStructure"

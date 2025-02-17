@@ -15,7 +15,7 @@ from .private_code import PrivateCode
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class InterchangeVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "Interchange_VersionStructure"

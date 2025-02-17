@@ -5,7 +5,7 @@ from .residential_qualification_version_structure import ResidentialQualificatio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ResidentialQualification(ResidentialQualificationVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

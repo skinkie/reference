@@ -5,7 +5,7 @@ from .taxi_service_place_assignment_version_structure import TaxiServicePlaceAss
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TaxiServicePlaceAssignment(TaxiServicePlaceAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

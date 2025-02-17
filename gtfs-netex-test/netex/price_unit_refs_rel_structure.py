@@ -6,7 +6,7 @@ from .price_unit_ref import PriceUnitRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PriceUnitRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "priceUnitRefs_RelStructure"

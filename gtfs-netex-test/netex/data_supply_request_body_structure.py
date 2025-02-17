@@ -6,7 +6,7 @@ from .message_ref_structure import MessageRefStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataSupplyRequestBodyStructure:
     notification_ref: Optional[MessageRefStructure] = field(
         default=None,

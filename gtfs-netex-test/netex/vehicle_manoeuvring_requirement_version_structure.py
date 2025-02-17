@@ -7,7 +7,7 @@ from .vehicle_requirement_version_structure import VehicleRequirementVersionStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleManoeuvringRequirementVersionStructure(VehicleRequirementVersionStructure):
     class Meta:
         name = "VehicleManoeuvringRequirement_VersionStructure"

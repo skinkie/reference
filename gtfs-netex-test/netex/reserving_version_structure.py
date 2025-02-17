@@ -14,7 +14,7 @@ from .seat_allocation_method_enumeration import SeatAllocationMethodEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ReservingVersionStructure(BookingPolicyVersionStructure):
     class Meta:
         name = "Reserving_VersionStructure"

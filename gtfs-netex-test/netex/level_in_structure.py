@@ -5,7 +5,7 @@ from .level_in_structure_version_structure import LevelInStructureVersionStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LevelInStructure(LevelInStructureVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

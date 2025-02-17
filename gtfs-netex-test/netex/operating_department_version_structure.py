@@ -7,7 +7,7 @@ from .operational_contex_refs_rel_structure import OperationalContexRefsRelStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OperatingDepartmentVersionStructure(DepartmentVersionStructure):
     class Meta:
         name = "OperatingDepartment_VersionStructure"

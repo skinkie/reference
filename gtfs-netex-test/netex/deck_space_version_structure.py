@@ -13,7 +13,7 @@ from .type_of_deck_space_ref import TypeOfDeckSpaceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckSpaceVersionStructure(DeckComponentVersionStructure):
     class Meta:
         name = "DeckSpace_VersionStructure"

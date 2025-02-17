@@ -7,7 +7,7 @@ from .locatable_spot_version_structure import LocatableSpotVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LuggageSpotVersionStructure(LocatableSpotVersionStructure):
     class Meta:
         name = "LuggageSpot_VersionStructure"

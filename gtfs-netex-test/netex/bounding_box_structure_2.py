@@ -5,7 +5,7 @@ from .location_structure_2 import LocationStructure2
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class BoundingBoxStructure2:
     class Meta:
         name = "BoundingBoxStructure"

@@ -29,7 +29,7 @@ from .topographic_places_in_frame_rel_structure import TopographicPlacesInFrameR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SiteVersionFrameStructure(CommonVersionFrameStructure):
     class Meta:
         name = "Site_VersionFrameStructure"

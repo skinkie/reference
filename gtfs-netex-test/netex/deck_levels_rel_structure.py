@@ -6,7 +6,7 @@ from .deck_level import DeckLevel
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckLevelsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "deckLevels_RelStructure"

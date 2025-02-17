@@ -5,7 +5,7 @@ from .luggage_service_facility_enumeration import LuggageServiceFacilityEnumerat
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LuggageServiceFacilityList:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -9,7 +9,7 @@ from .passing_time_view_structure import PassingTimeViewStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
     class Meta:
         name = "EstimatedPassingTime_ViewStructure"
@@ -77,7 +77,7 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ExpectedArrivalTime:
         value: XmlTime = field(
             metadata={
@@ -85,7 +85,7 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ArrivalDayOffset:
         value: int = field(
             metadata={
@@ -93,7 +93,7 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ExpectedDepartureTime:
         value: XmlTime = field(
             metadata={
@@ -101,7 +101,7 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class DepartureDayOffset:
         value: int = field(
             metadata={
@@ -109,7 +109,7 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ExpectedNonstopPassingTime:
         value: XmlTime = field(
             metadata={
@@ -117,7 +117,7 @@ class EstimatedPassingTimeViewStructure(PassingTimeViewStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class PassingTimeDayOffset:
         value: int = field(
             metadata={

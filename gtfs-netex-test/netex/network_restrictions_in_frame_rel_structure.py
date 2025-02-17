@@ -10,7 +10,7 @@ from .vehicle_type_at_point import VehicleTypeAtPoint
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NetworkRestrictionsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "networkRestrictionsInFrame_RelStructure"

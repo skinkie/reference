@@ -8,7 +8,7 @@ from .single_journey_refs_rel_structure import SingleJourneyRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfSingleJourneysVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "GroupOfSingleJourneys_VersionStructure"

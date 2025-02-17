@@ -6,7 +6,7 @@ from .place_ref import PlaceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PlaceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "placeRefs_RelStructure"

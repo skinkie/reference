@@ -6,7 +6,7 @@ from .responsibility_set import ResponsibilitySet
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ResponsibilitySetsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "responsibilitySetsInFrame_RelStructure"

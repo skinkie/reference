@@ -7,7 +7,7 @@ from .tractive_element_type_ref import TractiveElementTypeRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TractiveRollingStockItemVersionStructure(RollingStockItemVersionStructure):
     class Meta:
         name = "TractiveRollingStockItem_VersionStructure"

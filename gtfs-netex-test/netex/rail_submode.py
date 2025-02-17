@@ -5,7 +5,7 @@ from .rail_submode_enumeration import RailSubmodeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RailSubmode:
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

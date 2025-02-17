@@ -15,7 +15,7 @@ from .vehicle_type_preferences_rel_structure import VehicleTypePreferencesRelStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimeDemandTypeVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "TimeDemandType_VersionStructure"

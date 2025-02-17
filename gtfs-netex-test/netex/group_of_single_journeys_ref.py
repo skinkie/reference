@@ -5,7 +5,7 @@ from .group_of_single_journeys_ref_structure import GroupOfSingleJourneysRefStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfSingleJourneysRef(GroupOfSingleJourneysRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

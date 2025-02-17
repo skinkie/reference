@@ -8,7 +8,7 @@ from .vehicle_meeting_point_assignment_ref import VehicleMeetingPointAssignmentR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleMeetingPointAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "vehicleMeetingPointAssignmentRefs_RelStructure"

@@ -10,7 +10,7 @@ from .presentation_structure import PresentationStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AllowedLineDirectionVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "AllowedLineDirection_VersionStructure"

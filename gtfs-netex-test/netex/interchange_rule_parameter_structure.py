@@ -24,7 +24,7 @@ from .time_demand_type_ref import TimeDemandTypeRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class InterchangeRuleParameterStructure:
     transport_mode: Optional[AllVehicleModesOfTransportEnumeration] = field(
         default=None,

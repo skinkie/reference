@@ -6,7 +6,7 @@ from .vehicle_journey_wait_time import VehicleJourneyWaitTime
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleJourneyWaitTimesRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "vehicleJourneyWaitTimes_RelStructure"

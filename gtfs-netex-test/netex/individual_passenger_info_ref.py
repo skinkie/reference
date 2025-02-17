@@ -5,7 +5,7 @@ from .individual_passenger_info_ref_structure import IndividualPassengerInfoRefS
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class IndividualPassengerInfoRef(IndividualPassengerInfoRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

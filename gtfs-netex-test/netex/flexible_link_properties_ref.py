@@ -5,7 +5,7 @@ from .flexible_link_properties_ref_structure import FlexibleLinkPropertiesRefStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleLinkPropertiesRef(FlexibleLinkPropertiesRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -5,7 +5,7 @@ from .distance_matrix_element_version_structure import DistanceMatrixElementVers
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DistanceMatrixElement(DistanceMatrixElementVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

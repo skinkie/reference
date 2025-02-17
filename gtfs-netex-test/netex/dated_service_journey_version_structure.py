@@ -22,7 +22,7 @@ from .vehicle_journey_ref import VehicleJourneyRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DatedServiceJourneyVersionStructure(ServiceJourneyVersionStructure):
     class Meta:
         name = "DatedServiceJourney_VersionStructure"

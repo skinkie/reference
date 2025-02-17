@@ -11,7 +11,7 @@ from .entity_in_version_structure import (
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DayTypesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "dayTypesInFrame_RelStructure"

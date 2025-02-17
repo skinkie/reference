@@ -5,7 +5,7 @@ from .vehicle_service_place_assignment_ref_structure import VehicleServicePlaceA
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleServicePlaceAssignmentRef(VehicleServicePlaceAssignmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

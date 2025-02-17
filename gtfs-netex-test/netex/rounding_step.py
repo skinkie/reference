@@ -5,7 +5,7 @@ from .rounding_step_versioned_child_structure import RoundingStepVersionedChildS
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RoundingStep(RoundingStepVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

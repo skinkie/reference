@@ -11,7 +11,7 @@ from .topographic_place_view import TopographicPlaceView
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfServicesEndPointDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "GroupOfServicesEndPoint_DerivedViewStructure"

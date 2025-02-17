@@ -9,7 +9,7 @@ from .supplement_product_enumeration import SupplementProductEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SupplementProductVersionStructure(PreassignedFareProductVersionStructure):
     class Meta:
         name = "SupplementProduct_VersionStructure"

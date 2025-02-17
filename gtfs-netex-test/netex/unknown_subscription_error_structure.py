@@ -7,7 +7,7 @@ from .subscription_qualifier_structure import SubscriptionQualifierStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UnknownSubscriptionErrorStructure(ErrorCodeStructure):
     subscription_code: Optional[SubscriptionQualifierStructure] = field(
         default=None,

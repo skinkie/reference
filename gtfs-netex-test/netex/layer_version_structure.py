@@ -8,7 +8,7 @@ from .version_frame_refs_rel_structure import VersionFrameRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LayerVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "Layer_VersionStructure"

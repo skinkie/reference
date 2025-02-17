@@ -21,7 +21,7 @@ from .type_of_journey_pattern_ref import TypeOfJourneyPatternRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyPatternDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "JourneyPattern_DerivedViewStructure"

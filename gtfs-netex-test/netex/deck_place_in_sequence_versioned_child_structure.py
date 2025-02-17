@@ -17,7 +17,7 @@ from .point_in_link_sequence_versioned_child_structure import PointInLinkSequenc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckPlaceInSequenceVersionedChildStructure(PointInLinkSequenceVersionedChildStructure):
     class Meta:
         name = "DeckPlaceInSequence_VersionedChildStructure"

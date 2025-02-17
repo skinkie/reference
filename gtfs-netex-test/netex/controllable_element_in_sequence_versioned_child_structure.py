@@ -9,7 +9,7 @@ from .fare_structure_element_ref import FareStructureElementRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ControllableElementInSequenceVersionedChildStructure(FareElementInSequenceVersionedChildStructure):
     class Meta:
         name = "ControllableElementInSequence_VersionedChildStructure"

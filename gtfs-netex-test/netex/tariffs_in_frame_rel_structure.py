@@ -6,7 +6,7 @@ from .tariff import Tariff
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TariffsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "tariffsInFrame_RelStructure"

@@ -8,7 +8,7 @@ from .topographic_place_ref import TopographicPlaceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TopographicPlaceDescriptorVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "TopographicPlaceDescriptor_VersionedChildStructure"
@@ -38,7 +38,7 @@ class TopographicPlaceDescriptorVersionedChildStructure(VersionedChildStructure)
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Qualify:
         qualifier_name: MultilingualString = field(
             metadata={

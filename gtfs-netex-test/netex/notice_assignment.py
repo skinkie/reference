@@ -5,7 +5,7 @@ from .notice_assignment_version_structure import NoticeAssignmentVersionStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class NoticeAssignment(NoticeAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

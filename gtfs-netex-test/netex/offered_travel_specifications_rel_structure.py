@@ -8,7 +8,7 @@ from .offered_travel_specification_ref import OfferedTravelSpecificationRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OfferedTravelSpecificationsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "offeredTravelSpecifications_RelStructure"

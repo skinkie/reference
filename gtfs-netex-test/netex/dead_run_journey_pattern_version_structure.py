@@ -5,7 +5,7 @@ from .sections_in_sequence_rel_structure import JourneyPatternVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeadRunJourneyPatternVersionStructure(JourneyPatternVersionStructure):
     class Meta:
         name = "DeadRunJourneyPattern_VersionStructure"

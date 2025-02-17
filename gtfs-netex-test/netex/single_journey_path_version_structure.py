@@ -8,7 +8,7 @@ from .vehicle_meeting_points_in_sequence_rel_structure import VehicleMeetingPoin
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SingleJourneyPathVersionStructure(LinkSequenceVersionStructure):
     class Meta:
         name = "SingleJourneyPath_VersionStructure"

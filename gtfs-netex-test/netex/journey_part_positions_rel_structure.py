@@ -6,7 +6,7 @@ from .journey_part_position import JourneyPartPosition
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyPartPositionsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "journeyPartPositions_RelStructure"

@@ -6,7 +6,7 @@ from .fulfilment_method import FulfilmentMethod
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FulfilmentMethodsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "fulfilmentMethodsInFrame_RelStructure"

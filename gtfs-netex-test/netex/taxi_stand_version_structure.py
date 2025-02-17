@@ -8,7 +8,7 @@ from .quay_version_structure import QuayVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TaxiStandVersionStructure(QuayVersionStructure):
     class Meta:
         name = "TaxiStand_VersionStructure"

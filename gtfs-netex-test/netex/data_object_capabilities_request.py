@@ -5,7 +5,7 @@ from .service_capabilities_request_structure import ServiceCapabilitiesRequestSt
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataObjectCapabilitiesRequest(ServiceCapabilitiesRequestStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

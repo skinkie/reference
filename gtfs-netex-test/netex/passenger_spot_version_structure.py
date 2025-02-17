@@ -9,7 +9,7 @@ from .table_type_enumeration import TableTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerSpotVersionStructure(LocatableSpotVersionStructure):
     class Meta:
         name = "PassengerSpot_VersionStructure"

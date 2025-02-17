@@ -5,7 +5,7 @@ from .service_journey_interchange_derived_view_structure import ServiceJourneyIn
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceJourneyInterchangeView(ServiceJourneyInterchangeDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

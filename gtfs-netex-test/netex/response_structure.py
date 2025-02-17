@@ -5,7 +5,7 @@ from .response_timestamp import ResponseTimestamp
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ResponseStructure:
     response_timestamp: ResponseTimestamp = field(
         metadata={

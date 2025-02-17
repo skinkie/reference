@@ -6,7 +6,7 @@ from .info_links_rel_structure import InfoLinksRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PresentationStructure:
     colour: Optional[bytes] = field(
         default=None,

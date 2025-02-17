@@ -6,7 +6,7 @@ from .error_code_structure import ErrorCodeStructure
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UnknownEndpointErrorStructure(ErrorCodeStructure):
     endpoint: Optional[str] = field(
         default=None,

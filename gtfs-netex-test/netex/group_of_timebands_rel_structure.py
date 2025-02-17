@@ -8,7 +8,7 @@ from .group_of_timebands_versioned_child_structure import GroupOfTimebandsVersio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfTimebandsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "groupOfTimebands_RelStructure"

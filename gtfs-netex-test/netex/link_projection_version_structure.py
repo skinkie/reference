@@ -9,7 +9,7 @@ from .projection_version_structure import ProjectionVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LinkProjectionVersionStructure(ProjectionVersionStructure):
     class Meta:
         name = "LinkProjection_VersionStructure"

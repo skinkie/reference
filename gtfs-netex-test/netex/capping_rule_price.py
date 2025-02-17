@@ -5,7 +5,7 @@ from .capping_rule_price_versioned_child_structure import CappingRulePriceVersio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CappingRulePrice(CappingRulePriceVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

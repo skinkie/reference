@@ -6,7 +6,7 @@ from .vehicle_journey_headway import VehicleJourneyHeadway
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleJourneyHeadwaysRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "vehicleJourneyHeadways_RelStructure"

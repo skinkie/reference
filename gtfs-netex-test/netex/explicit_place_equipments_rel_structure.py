@@ -27,7 +27,7 @@ from .travelator_equipment import TravelatorEquipment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ExplicitPlaceEquipmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "explicitPlaceEquipments_RelStructure"

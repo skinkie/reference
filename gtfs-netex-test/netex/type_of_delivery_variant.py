@@ -5,7 +5,7 @@ from .type_of_delivery_variant_value_structure import TypeOfDeliveryVariantValue
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfDeliveryVariant(TypeOfDeliveryVariantValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

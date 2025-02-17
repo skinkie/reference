@@ -6,7 +6,7 @@ from .vehicle_pooling_driver_info_ref import VehiclePoolingDriverInfoRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehiclePoolingDriverInfoRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "vehiclePoolingDriverInfoRefs_RelStructure"

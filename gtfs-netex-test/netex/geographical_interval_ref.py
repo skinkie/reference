@@ -5,7 +5,7 @@ from .geographical_interval_ref_structure import GeographicalIntervalRefStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GeographicalIntervalRef(GeographicalIntervalRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

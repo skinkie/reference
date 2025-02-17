@@ -5,7 +5,7 @@ from .distance_matrix_element_derived_view_structure import DistanceMatrixElemen
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DistanceMatrixElementView(DistanceMatrixElementDerivedViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

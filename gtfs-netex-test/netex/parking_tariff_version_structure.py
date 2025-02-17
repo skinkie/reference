@@ -37,7 +37,7 @@ from .type_of_tariff_ref import TypeOfTariffRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ParkingTariffVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "ParkingTariff_VersionStructure"

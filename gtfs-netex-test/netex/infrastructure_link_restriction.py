@@ -5,7 +5,7 @@ from .infrastructure_link_restriction_version_structure import InfrastructureLin
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class InfrastructureLinkRestriction(InfrastructureLinkRestrictionVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

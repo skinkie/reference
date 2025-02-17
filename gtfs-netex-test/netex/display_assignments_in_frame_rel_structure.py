@@ -6,7 +6,7 @@ from .display_assignment import DisplayAssignment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DisplayAssignmentsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "displayAssignmentsInFrame_RelStructure"

@@ -16,7 +16,7 @@ from .roundings_rel_structure import RoundingsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PricingParameterSetVersionedStructure(DataManagedObjectStructure):
     class Meta:
         name = "PricingParameterSet_VersionedStructure"

@@ -22,7 +22,7 @@ from .vehicle_journey_stop_assignment_ref import VehicleJourneyStopAssignmentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckEntranceAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "deckEntranceAssignments_RelStructure"
@@ -38,7 +38,7 @@ class DeckEntranceAssignmentsRelStructure(ContainmentAggregationStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerBoardingPositionAssignmentVersionStructure(StopAssignmentVersionStructure):
     class Meta:
         name = "PassengerBoardingPositionAssignment_VersionStructure"
@@ -149,7 +149,7 @@ class PassengerBoardingPositionAssignmentVersionStructure(StopAssignmentVersionS
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckEntranceAssignmentVersionStructure(PassengerBoardingPositionAssignmentVersionStructure):
     class Meta:
         name = "DeckEntranceAssignment_VersionStructure"
@@ -203,7 +203,7 @@ class DeckEntranceAssignmentVersionStructure(PassengerBoardingPositionAssignment
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckEntranceAssignment(DeckEntranceAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

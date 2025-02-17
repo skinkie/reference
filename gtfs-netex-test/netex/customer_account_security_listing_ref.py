@@ -5,7 +5,7 @@ from .customer_account_security_listing_ref_structure import CustomerAccountSecu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerAccountSecurityListingRef(CustomerAccountSecurityListingRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

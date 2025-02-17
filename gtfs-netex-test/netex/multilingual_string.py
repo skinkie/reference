@@ -4,7 +4,7 @@ from typing import Optional
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MultilingualString:
     value: str = field(
         default="",

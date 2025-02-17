@@ -21,7 +21,7 @@ from .terminate_subscription_response import TerminateSubscriptionResponse
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SiriSchema:
     choice: Optional[
         Union[

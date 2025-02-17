@@ -6,7 +6,7 @@ from .type_of_service import TypeOfService
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypesOfServiceInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typesOfServiceInFrame_RelStructure"

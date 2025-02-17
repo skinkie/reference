@@ -5,7 +5,7 @@ from .type_of_rolling_stock_value_structure import TypeOfRollingStockValueStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfRollingStock(TypeOfRollingStockValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

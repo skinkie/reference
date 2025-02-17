@@ -5,7 +5,7 @@ from .parking_passenger_entrance_ref_structure import ParkingPassengerEntranceRe
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ParkingPassengerEntranceRef(ParkingPassengerEntranceRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

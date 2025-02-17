@@ -6,7 +6,7 @@ from .font_size_enumeration import FontSizeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PrintPresentationStructure:
     colour: Optional[str] = field(
         default=None,

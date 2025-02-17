@@ -7,7 +7,7 @@ from .entity_in_version_structure import DataManagedObjectStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerVehicleCapacityStructure(DataManagedObjectStructure):
     vehicle_category: list[AllRoadVehicleCategoryEnumeration] = field(
         default_factory=list,

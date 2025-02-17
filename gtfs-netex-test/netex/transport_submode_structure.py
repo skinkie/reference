@@ -17,7 +17,7 @@ from .water_submode import WaterSubmode
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TransportSubmodeStructure:
     choice: Optional[Union[AirSubmode, BusSubmode, CoachSubmode, FunicularSubmode, MetroSubmode, TramSubmode, TelecabinSubmode, RailSubmode, WaterSubmode, SnowAndIceSubmode, TaxiSubmode, SelfDriveSubmode]] = field(
         default=None,

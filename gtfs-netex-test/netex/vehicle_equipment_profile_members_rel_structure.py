@@ -6,7 +6,7 @@ from .vehicle_equipment_profile_member import VehicleEquipmentProfileMember
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleEquipmentProfileMembersRelStructure(StrictContainmentAggregationStructure):
     class Meta:
         name = "vehicleEquipmentProfileMembers_RelStructure"

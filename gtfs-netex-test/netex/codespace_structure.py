@@ -7,7 +7,7 @@ from .multilingual_string import MultilingualString
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CodespaceStructure(EntityStructure):
     xmlns: str = field(
         metadata={

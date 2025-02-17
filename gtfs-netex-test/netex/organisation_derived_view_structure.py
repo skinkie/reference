@@ -19,7 +19,7 @@ from .travel_agent_ref import TravelAgentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OrganisationDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "Organisation_DerivedViewStructure"

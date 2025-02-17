@@ -7,7 +7,7 @@ from .quality_structure_factor_prices_rel_structure import QualityStructureFacto
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class QualityStructureFactorVersionStructure(FareStructureFactorVersionStructure):
     class Meta:
         name = "QualityStructureFactor_VersionStructure"

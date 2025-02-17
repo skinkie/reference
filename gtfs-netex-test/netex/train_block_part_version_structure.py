@@ -8,7 +8,7 @@ from .block_part_version_structure import BlockPartVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainBlockPartVersionStructure(BlockPartVersionStructure):
     class Meta:
         name = "TrainBlockPart_VersionStructure"

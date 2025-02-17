@@ -5,7 +5,7 @@ from .offered_travel_specification_ref_structure import OfferedTravelSpecificati
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OfferedTravelSpecificationRef(OfferedTravelSpecificationRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

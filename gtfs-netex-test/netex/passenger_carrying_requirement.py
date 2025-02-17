@@ -5,7 +5,7 @@ from .passenger_carrying_requirement_version_structure import PassengerCarryingR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerCarryingRequirement(PassengerCarryingRequirementVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

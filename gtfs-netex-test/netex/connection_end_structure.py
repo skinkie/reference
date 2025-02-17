@@ -11,7 +11,7 @@ from .submode import Submode
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ConnectionEndStructure:
     transport_mode: Optional[AllModesEnumeration] = field(
         default=None,

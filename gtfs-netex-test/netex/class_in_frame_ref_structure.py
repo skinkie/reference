@@ -6,7 +6,7 @@ from .class_ref_type_enumeration import ClassRefTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ClassInFrameRefStructure(ClassRefStructure):
     class_ref_type: ClassRefTypeEnumeration = field(
         default=ClassRefTypeEnumeration.MEMBERS,

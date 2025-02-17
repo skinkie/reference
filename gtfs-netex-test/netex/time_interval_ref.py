@@ -5,7 +5,7 @@ from .time_interval_ref_structure import TimeIntervalRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimeIntervalRef(TimeIntervalRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

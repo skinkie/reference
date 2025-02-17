@@ -5,7 +5,7 @@ from .group_of_distribution_channels_ref_structure import GroupOfDistributionCha
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfDistributionChannelsRef(GroupOfDistributionChannelsRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -22,7 +22,7 @@ from .unknown_subscription_error import UnknownSubscriptionError
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ErrorConditionElementStructure:
     choice: Optional[
         Union[

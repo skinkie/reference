@@ -6,7 +6,7 @@ from .individual_passenger_info import IndividualPassengerInfo
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class IndividualPassengerInfosRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "individualPassengerInfos_RelStructure"

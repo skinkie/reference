@@ -5,7 +5,7 @@ from .type_of_locatable_spot_value_structure import TypeOfLocatableSpotValueStru
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfLocatableSpot(TypeOfLocatableSpotValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

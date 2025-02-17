@@ -7,7 +7,7 @@ from .online_service_refs_rel_structure import OnlineServiceRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CommonVehicleServiceVersionStructure(MobilityServiceVersionStructure):
     class Meta:
         name = "CommonVehicleService_VersionStructure"

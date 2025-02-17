@@ -16,7 +16,7 @@ from .unknown_subscription_error import UnknownSubscriptionError
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TerminationResponseStatusStructure:
     response_timestamp: Optional[ResponseTimestamp] = field(
         default=None,
@@ -75,7 +75,7 @@ class TerminationResponseStatusStructure:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class ErrorCondition:
         capability_not_supported_error_or_unknown_subscriber_error_or_unknown_subscription_error_or_other_error: Optional[Union[CapabilityNotSupportedError, UnknownSubscriberError, UnknownSubscriptionError, OtherError]] = field(
             default=None,

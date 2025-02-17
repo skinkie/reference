@@ -5,7 +5,7 @@ from .activation_assignment_ref_structure import ActivationAssignmentRefStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ActivationAssignmentRef(ActivationAssignmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

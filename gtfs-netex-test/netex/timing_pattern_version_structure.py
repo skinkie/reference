@@ -13,7 +13,7 @@ from .timing_points_rel_structure import TimingPointsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimingPatternVersionStructure(LinkSequenceVersionStructure):
     class Meta:
         name = "TimingPattern_VersionStructure"

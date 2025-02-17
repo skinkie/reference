@@ -8,7 +8,7 @@ from .rental_option_version_structure import RentalOptionVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AdditionalDriverOptionVersionStructure(RentalOptionVersionStructure):
     class Meta:
         name = "AdditionalDriverOption_VersionStructure"

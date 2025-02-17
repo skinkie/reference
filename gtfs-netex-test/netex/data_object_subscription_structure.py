@@ -9,7 +9,7 @@ from .network_frame_subscription_policy_structure import NetworkFrameSubscriptio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DataObjectSubscriptionStructure(AbstractSubscriptionStructure):
     data_object_request: DataObjectRequest = field(
         metadata={

@@ -4,7 +4,7 @@ from typing import Optional
 __NAMESPACE__ = "http://www.siri.org.uk/siri"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ExtensionsStructure1:
     class Meta:
         name = "ExtensionsStructure"

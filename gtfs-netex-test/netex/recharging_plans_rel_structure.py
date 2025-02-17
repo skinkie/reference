@@ -6,7 +6,7 @@ from .recharging_plan import RechargingPlan
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RechargingPlansRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "rechargingPlans_RelStructure"

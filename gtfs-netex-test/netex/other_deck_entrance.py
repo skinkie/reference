@@ -5,7 +5,7 @@ from .other_deck_entrance_version_structure import OtherDeckEntranceVersionStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class OtherDeckEntrance(OtherDeckEntranceVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

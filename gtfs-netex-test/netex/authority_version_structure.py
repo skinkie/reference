@@ -7,7 +7,7 @@ from .type_of_organisation_refs_rel_structure import TypeOfOrganisationRefsRelSt
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AuthorityVersionStructure(TransportOrganisationVersionStructure):
     class Meta:
         name = "Authority_VersionStructure"

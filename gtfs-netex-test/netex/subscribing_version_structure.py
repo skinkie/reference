@@ -13,7 +13,7 @@ from .usage_parameter_version_structure import UsageParameterVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SubscribingVersionStructure(UsageParameterVersionStructure):
     class Meta:
         name = "Subscribing_VersionStructure"

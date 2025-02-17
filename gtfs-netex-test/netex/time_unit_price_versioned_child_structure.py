@@ -7,7 +7,7 @@ from .time_unit_ref import TimeUnitRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimeUnitPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "TimeUnitPrice_VersionedChildStructure"

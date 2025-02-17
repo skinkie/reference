@@ -5,7 +5,7 @@ from .addressable_place_version_structure import AddressablePlaceVersionStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AddressablePlace(AddressablePlaceVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -6,7 +6,7 @@ from .train_component_stop_assignment_ref import TrainComponentStopAssignmentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainComponentStopAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "trainComponentStopAssignmentRefs_RelStructure"

@@ -5,7 +5,7 @@ from .natural_language_string_structure import NaturalLanguageStringStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupReservationStructure:
     name_of_group: NaturalLanguageStringStructure = field(
         metadata={

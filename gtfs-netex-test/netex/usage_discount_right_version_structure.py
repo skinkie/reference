@@ -7,7 +7,7 @@ from .usage_discount_right_enumeration import UsageDiscountRightEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class UsageDiscountRightVersionStructure(FareProductVersionStructure):
     class Meta:
         name = "UsageDiscountRight_VersionStructure"

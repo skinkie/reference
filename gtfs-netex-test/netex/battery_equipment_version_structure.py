@@ -8,7 +8,7 @@ from .type_of_battery_chemistry_ref import TypeOfBatteryChemistryRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class BatteryEquipmentVersionStructure(PlaceEquipmentVersionStructure):
     class Meta:
         name = "BatteryEquipment_VersionStructure"

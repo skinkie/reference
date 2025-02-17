@@ -6,7 +6,7 @@ from .vehicle_access_credentials_assignment import VehicleAccessCredentialsAssig
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleAccessCredentialAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleAccessCredentialAssignments_RelStructure"

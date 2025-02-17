@@ -8,7 +8,7 @@ from .fare_contract_ref import FareContractRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareContractsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "fareContracts_RelStructure"

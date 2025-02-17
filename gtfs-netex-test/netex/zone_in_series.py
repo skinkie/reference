@@ -5,7 +5,7 @@ from .zone_in_series_versioned_child_structure import ZoneInSeriesVersionedChild
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ZoneInSeries(ZoneInSeriesVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -17,7 +17,7 @@ from .wheelchair_access import WheelchairAccess
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AccessibilityLimitationVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "AccessibilityLimitation_VersionedChildStructure"

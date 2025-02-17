@@ -45,7 +45,7 @@ from .vehicle_stopping_position_ref import VehicleStoppingPositionRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleMeetingPointAssignmentVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "VehicleMeetingPointAssignment_VersionStructure"

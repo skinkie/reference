@@ -7,7 +7,7 @@ from .language_usage_structure import LanguageUsageStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LocaleStructure:
     time_zone_offset: Optional[Decimal] = field(
         default=None,
@@ -57,7 +57,7 @@ class LocaleStructure:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Languages:
         language_usage: list[LanguageUsageStructure] = field(
             default_factory=list,

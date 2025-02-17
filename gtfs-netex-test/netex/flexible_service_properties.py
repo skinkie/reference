@@ -5,7 +5,7 @@ from .flexible_service_properties_version_structure import FlexibleServiceProper
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleServiceProperties(FlexibleServicePropertiesVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -9,7 +9,7 @@ from .wire_junction import WireJunction
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class InfrastructureJunctionsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "infrastructureJunctionsInFrame_RelStructure"

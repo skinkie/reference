@@ -7,7 +7,7 @@ from .surface_type_enumeration import SurfaceTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RoughSurfaceStructure(AccessEquipmentVersionStructure):
     surface_type: SurfaceTypeEnumeration = field(
         metadata={

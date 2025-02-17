@@ -5,7 +5,7 @@ from .vehicle_rental_service_version_structure import VehicleRentalServiceVersio
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleRentalService(VehicleRentalServiceVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

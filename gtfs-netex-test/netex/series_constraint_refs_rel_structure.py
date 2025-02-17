@@ -6,7 +6,7 @@ from .series_constraint_ref import SeriesConstraintRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SeriesConstraintRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "seriesConstraintRefs_RelStructure"

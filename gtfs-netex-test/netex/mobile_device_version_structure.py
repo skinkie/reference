@@ -5,7 +5,7 @@ from .medium_access_device_version_structure import MediumAccessDeviceVersionStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MobileDeviceVersionStructure(MediumAccessDeviceVersionStructure):
     class Meta:
         name = "MobileDevice_VersionStructure"

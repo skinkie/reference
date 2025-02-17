@@ -6,7 +6,7 @@ from .group_of_sites import GroupOfSites
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupsOfSitesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "groupsOfSites_RelStructure"

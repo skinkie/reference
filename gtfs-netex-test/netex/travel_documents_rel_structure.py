@@ -10,7 +10,7 @@ from .travel_document_ref import TravelDocumentRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TravelDocumentsRelStructure(FrameContainmentStructure):
     class Meta:
         name = "travelDocuments_RelStructure"

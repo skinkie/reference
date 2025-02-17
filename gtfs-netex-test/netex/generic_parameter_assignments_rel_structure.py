@@ -8,7 +8,7 @@ from .validity_parameter_assignment_version_structure import ValidityParameterAs
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GenericParameterAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "genericParameterAssignments_RelStructure"
@@ -33,7 +33,7 @@ class GenericParameterAssignmentsRelStructure(ContainmentAggregationStructure):
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GenericParameterAssignmentVersionStructure(ValidityParameterAssignmentVersionStructure):
     class Meta:
         name = "GenericParameterAssignment_VersionStructure"
@@ -55,13 +55,13 @@ class GenericParameterAssignmentVersionStructure(ValidityParameterAssignmentVers
     )
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GenericParameterAssignment(GenericParameterAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GenericParameterAssignmentInContext(GenericParameterAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

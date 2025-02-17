@@ -5,7 +5,7 @@ from .timetabled_passing_time_view_structure import TimetabledPassingTimeViewStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TimetabledPassingTimeView(TimetabledPassingTimeViewStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

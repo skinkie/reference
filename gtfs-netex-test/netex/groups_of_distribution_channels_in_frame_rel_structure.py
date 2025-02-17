@@ -6,7 +6,7 @@ from .group_of_distribution_channels import GroupOfDistributionChannels
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupsOfDistributionChannelsInFrameRelStructure(FrameContainmentStructure):
     class Meta:
         name = "groupsOfDistributionChannelsInFrame_RelStructure"

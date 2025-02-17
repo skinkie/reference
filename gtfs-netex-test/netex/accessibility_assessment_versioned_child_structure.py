@@ -10,7 +10,7 @@ from .suitabilities_rel_structure import SuitabilitiesRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AccessibilityAssessmentVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "AccessibilityAssessment_VersionedChildStructure"

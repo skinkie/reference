@@ -6,7 +6,7 @@ from .service_access_code_ref import ServiceAccessCodeRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceAccessCodeRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "serviceAccessCodeRefs_RelStructure"

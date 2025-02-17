@@ -8,7 +8,7 @@ from .vehicle_service_part_ref import VehicleServicePartRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleServicePartsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "vehicleServiceParts_RelStructure"

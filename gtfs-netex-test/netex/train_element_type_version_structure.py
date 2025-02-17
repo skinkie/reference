@@ -15,7 +15,7 @@ from .train_element_type_type_enumeration import TrainElementTypeTypeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainElementTypeVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "TrainElementType_VersionStructure"

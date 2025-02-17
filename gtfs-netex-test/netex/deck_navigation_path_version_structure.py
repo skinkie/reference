@@ -21,7 +21,7 @@ from .transfer_duration_structure import TransferDurationStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckNavigationPathVersionStructure(GenericNavigationPathVersionStructure):
     class Meta:
         name = "DeckNavigationPath_VersionStructure"

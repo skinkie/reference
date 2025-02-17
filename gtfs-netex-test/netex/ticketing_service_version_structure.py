@@ -10,7 +10,7 @@ from .vehicle_mode_enumeration import VehicleModeEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TicketingServiceVersionStructure(LocalServiceVersionStructure):
     class Meta:
         name = "TicketingService_VersionStructure"

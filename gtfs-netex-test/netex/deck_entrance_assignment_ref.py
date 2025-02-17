@@ -5,7 +5,7 @@ from .deck_entrance_assignment_ref_structure import DeckEntranceAssignmentRefStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckEntranceAssignmentRef(DeckEntranceAssignmentRefStructure):
     class Meta:
         name = "deckEntranceAssignmentRef"

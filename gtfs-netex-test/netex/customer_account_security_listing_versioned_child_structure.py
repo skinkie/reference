@@ -7,7 +7,7 @@ from .security_listing_versioned_child_structure import SecurityListingVersioned
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CustomerAccountSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
     class Meta:
         name = "CustomerAccountSecurityListing_VersionedChildStructure"

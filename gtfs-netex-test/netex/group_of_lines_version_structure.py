@@ -20,7 +20,7 @@ from .vehicle_sharing_ref import VehicleSharingRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupOfLinesVersionStructure(GroupOfEntitiesVersionStructure):
     class Meta:
         name = "GroupOfLines_VersionStructure"

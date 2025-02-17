@@ -6,7 +6,7 @@ from .abstract_group_member_versioned_child_structure import AbstractGroupMember
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class AbstractGroupMember(AbstractGroupMemberVersionedChildStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

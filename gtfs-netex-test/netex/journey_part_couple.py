@@ -5,7 +5,7 @@ from .journey_part_couple_version_structure import JourneyPartCoupleVersionStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class JourneyPartCouple(JourneyPartCoupleVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

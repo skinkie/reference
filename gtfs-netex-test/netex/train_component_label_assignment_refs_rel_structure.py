@@ -6,7 +6,7 @@ from .train_component_label_assignment_ref import TrainComponentLabelAssignmentR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainComponentLabelAssignmentRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "TrainComponentLabelAssignmentRefs_RelStructure"

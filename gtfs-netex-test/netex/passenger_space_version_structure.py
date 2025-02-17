@@ -10,7 +10,7 @@ from .spot_affinities_rel_structure import SpotAffinitiesRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerSpaceVersionStructure(DeckSpaceVersionStructure):
     class Meta:
         name = "PassengerSpace_VersionStructure"

@@ -6,7 +6,7 @@ from .recharging_point_assignment import RechargingPointAssignment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RechargingPointAssignmentsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "rechargingPointAssignments_RelStructure"

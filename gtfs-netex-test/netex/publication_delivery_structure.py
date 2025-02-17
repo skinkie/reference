@@ -11,7 +11,7 @@ from .publication_request_structure import PublicationRequestStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PublicationDeliveryStructure:
     publication_timestamp: XmlDateTime = field(
         metadata={

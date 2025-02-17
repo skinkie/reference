@@ -9,7 +9,7 @@ from .type_of_transfer_ref import TypeOfTransferRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TransferRestrictionVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "TransferRestriction_VersionStructure"

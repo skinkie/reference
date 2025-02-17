@@ -5,7 +5,7 @@ from .luggage_spot_equipment_ref_structure import LuggageSpotEquipmentRefStructu
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LuggageSpotEquipmentRef(LuggageSpotEquipmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

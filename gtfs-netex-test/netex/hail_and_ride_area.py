@@ -5,7 +5,7 @@ from .hail_and_ride_area_version_structure import HailAndRideAreaVersionStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class HailAndRideArea(HailAndRideAreaVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

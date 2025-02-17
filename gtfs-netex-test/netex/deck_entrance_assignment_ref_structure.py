@@ -5,7 +5,7 @@ from .passenger_boarding_position_assignment_ref_structure import PassengerBoard
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckEntranceAssignmentRefStructure(PassengerBoardingPositionAssignmentRefStructure):
     class Meta:
         name = "deckEntranceAssignmentRefStructure"

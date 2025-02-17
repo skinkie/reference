@@ -6,7 +6,7 @@ from .type_of_pricing_rule_ref import TypeOfPricingRuleRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfPricingRuleRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "TypeOfPricingRuleRefs_RelStructure"

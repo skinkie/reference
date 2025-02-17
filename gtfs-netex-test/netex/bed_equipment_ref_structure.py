@@ -5,6 +5,6 @@ from .spot_equipment_ref_structure import SpotEquipmentRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class BedEquipmentRefStructure(SpotEquipmentRefStructure):
     pass

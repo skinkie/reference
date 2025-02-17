@@ -5,7 +5,7 @@ from .chauffeured_vehicle_service_version_structure import ChauffeuredVehicleSer
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ChauffeuredVehicleService(ChauffeuredVehicleServiceVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -5,7 +5,7 @@ from .key_value_structure import KeyValueStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class KeyListStructure:
     key_value: list[KeyValueStructure] = field(
         default_factory=list,

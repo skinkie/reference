@@ -5,7 +5,7 @@ from .series_constraint_version_structure import SeriesConstraintVersionStructur
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SeriesConstraint(SeriesConstraintVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

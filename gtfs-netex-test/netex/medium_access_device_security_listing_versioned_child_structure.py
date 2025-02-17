@@ -9,7 +9,7 @@ from .smartcard_ref import SmartcardRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MediumAccessDeviceSecurityListingVersionedChildStructure(SecurityListingVersionedChildStructure):
     class Meta:
         name = "MediumAccessDeviceSecurityListing_VersionedChildStructure"

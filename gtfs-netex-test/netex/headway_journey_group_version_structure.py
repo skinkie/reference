@@ -9,7 +9,7 @@ from .journey_frequency_group_version_structure import JourneyFrequencyGroupVers
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class HeadwayJourneyGroupVersionStructure(JourneyFrequencyGroupVersionStructure):
     class Meta:
         name = "HeadwayJourneyGroup_VersionStructure"

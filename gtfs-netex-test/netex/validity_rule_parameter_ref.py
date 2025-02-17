@@ -5,7 +5,7 @@ from .validity_rule_parameter_ref_structure import ValidityRuleParameterRefStruc
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidityRuleParameterRef(ValidityRuleParameterRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

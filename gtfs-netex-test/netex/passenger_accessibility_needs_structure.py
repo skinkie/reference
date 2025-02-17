@@ -7,7 +7,7 @@ from .user_need import UserNeed
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerAccessibilityNeedsStructure:
     accompanied_by_carer: Optional[bool] = field(
         default=None,
@@ -33,7 +33,7 @@ class PassengerAccessibilityNeedsStructure:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class UserNeeds:
         user_need: list[UserNeed] = field(
             default_factory=list,
@@ -44,7 +44,7 @@ class PassengerAccessibilityNeedsStructure:
             },
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class Suitabilities:
         suitability: list[Suitability] = field(
             default_factory=list,

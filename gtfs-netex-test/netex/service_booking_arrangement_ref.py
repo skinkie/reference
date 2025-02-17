@@ -5,7 +5,7 @@ from .service_booking_arrangement_ref_structure import ServiceBookingArrangement
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceBookingArrangementRef(ServiceBookingArrangementRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

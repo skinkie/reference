@@ -8,7 +8,7 @@ from .type_of_usage_parameter_ref import TypeOfUsageParameterRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfUsageParametersRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "typeOfUsageParameters_RelStructure"

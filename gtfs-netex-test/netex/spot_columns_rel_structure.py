@@ -6,7 +6,7 @@ from .spot_column import SpotColumn
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SpotColumnsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "spotColumns_RelStructure"

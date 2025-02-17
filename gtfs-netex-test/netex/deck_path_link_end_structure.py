@@ -17,7 +17,7 @@ from .passenger_vehicle_spot_ref import PassengerVehicleSpotRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DeckPathLinkEndStructure:
     deck_ref: Optional[DeckRef] = field(
         default=None,

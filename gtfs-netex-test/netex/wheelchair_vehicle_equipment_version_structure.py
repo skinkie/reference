@@ -7,7 +7,7 @@ from .actual_vehicle_equipment_version_structure import ActualVehicleEquipmentVe
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class WheelchairVehicleEquipmentVersionStructure(ActualVehicleEquipmentVersionStructure):
     class Meta:
         name = "WheelchairVehicleEquipment_VersionStructure"

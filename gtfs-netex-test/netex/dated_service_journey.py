@@ -5,7 +5,7 @@ from .dated_service_journey_version_structure import DatedServiceJourneyVersionS
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DatedServiceJourney(DatedServiceJourneyVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

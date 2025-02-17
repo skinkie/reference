@@ -5,7 +5,7 @@ from .train_stop_assignment_version_structure import TrainStopAssignmentVersionS
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TrainStopAssignment(TrainStopAssignmentVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

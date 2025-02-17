@@ -11,7 +11,7 @@ from .standard_fare_table_ref import StandardFareTableRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class CommonCellVersionedChildStructure(VersionedChildStructure):
     class Meta:
         name = "CommonCell_VersionedChildStructure"

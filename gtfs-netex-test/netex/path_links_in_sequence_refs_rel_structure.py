@@ -6,7 +6,7 @@ from .path_link_in_sequence_ref import PathLinkInSequenceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PathLinksInSequenceRefsRelStructure(OneToManyRelationshipStructure):
     class Meta:
         name = "pathLinksInSequenceRefs_RelStructure"

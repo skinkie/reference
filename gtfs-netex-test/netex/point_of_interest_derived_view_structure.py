@@ -9,7 +9,7 @@ from .type_of_place_refs_rel_structure import TypeOfPlaceRefsRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOfInterestDerivedViewStructure(DerivedViewStructure):
     class Meta:
         name = "PointOfInterest_DerivedViewStructure"

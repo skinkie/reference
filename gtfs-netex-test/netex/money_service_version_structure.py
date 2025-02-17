@@ -6,7 +6,7 @@ from .money_service_enumeration import MoneyServiceEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MoneyServiceVersionStructure(LocalServiceVersionStructure):
     class Meta:
         name = "MoneyService_VersionStructure"

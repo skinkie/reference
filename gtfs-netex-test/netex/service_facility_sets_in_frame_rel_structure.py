@@ -6,7 +6,7 @@ from .service_facility_set import ServiceFacilitySet
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ServiceFacilitySetsInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "serviceFacilitySetsInFrame_RelStructure"

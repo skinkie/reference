@@ -7,7 +7,7 @@ from .discounting_rule_versioned_structure import DiscountingRuleVersionedStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LimitingRuleVersionedStructure(DiscountingRuleVersionedStructure):
     class Meta:
         name = "LimitingRule_VersionedStructure"

@@ -6,7 +6,7 @@ from .group_of_services import GroupOfServices
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class GroupsOfServicesInFrameRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "groupsOfServicesInFrame_RelStructure"

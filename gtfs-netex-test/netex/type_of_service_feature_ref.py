@@ -5,7 +5,7 @@ from .type_of_service_feature_ref_structure import TypeOfServiceFeatureRefStruct
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfServiceFeatureRef(TypeOfServiceFeatureRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

@@ -8,7 +8,7 @@ from .sales_offer_package_ref_structure import SalesOfferPackageRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class SalesOfferPackageSubstitutionVersionStructure(AssignmentVersionStructure1):
     class Meta:
         name = "SalesOfferPackageSubstitution_VersionStructure"

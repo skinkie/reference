@@ -8,7 +8,7 @@ from .mobility_service_constraint_zone_ref import MobilityServiceConstraintZoneR
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class MobilityServiceConstraintZonesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "mobilityServiceConstraintZones_RelStructure"

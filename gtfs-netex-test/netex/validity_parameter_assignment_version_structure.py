@@ -14,7 +14,7 @@ from .time_structure_factor_ref import TimeStructureFactorRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidityParameterAssignmentVersionStructure(AccessRightParameterAssignmentVersionStructure):
     class Meta:
         name = "ValidityParameterAssignment_VersionStructure"

@@ -5,7 +5,7 @@ from .flexible_route_version_structure import FlexibleRouteVersionStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleRoute(FlexibleRouteVersionStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

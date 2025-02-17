@@ -9,7 +9,7 @@ from .duty_parts_in_frame_rel_structure import DutyPartsInFrameRelStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DriverScheduleVersionFrameStructure(CommonVersionFrameStructure):
     class Meta:
         name = "DriverSchedule_VersionFrameStructure"

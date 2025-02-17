@@ -11,7 +11,7 @@ from .point_of_interest_space_version_structure_access_space_type import PointOf
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PointOfInterestSpaceVersionStructure(PointOfInterestComponentVersionStructure):
     class Meta:
         name = "PointOfInterestSpace_VersionStructure"

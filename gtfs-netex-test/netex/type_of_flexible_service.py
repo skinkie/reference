@@ -5,7 +5,7 @@ from .type_of_flexible_service_value_structure import TypeOfFlexibleServiceValue
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class TypeOfFlexibleService(TypeOfFlexibleServiceValueStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

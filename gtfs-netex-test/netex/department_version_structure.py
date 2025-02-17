@@ -8,7 +8,7 @@ from .type_of_operation_ref import TypeOfOperationRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DepartmentVersionStructure(OrganisationPartVersionStructure):
     class Meta:
         name = "Department_VersionStructure"

@@ -8,7 +8,7 @@ from .series_presentation_enumeration import SeriesPresentationEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FarePointInPatternVersionedChildStructure(PointInJourneyPatternVersionedChildStructure):
     class Meta:
         name = "FarePointInPattern_VersionedChildStructure"

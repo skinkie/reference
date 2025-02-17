@@ -8,7 +8,7 @@ from .passenger_carrying_requirement_ref import PassengerCarryingRequirementRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerCarryingRequirementsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "passengerCarryingRequirements_RelStructure"

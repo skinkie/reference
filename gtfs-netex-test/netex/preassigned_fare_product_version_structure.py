@@ -7,7 +7,7 @@ from .preassigned_fare_product_enumeration import PreassignedFareProductEnumerat
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PreassignedFareProductVersionStructure(FareProductVersionStructure):
     class Meta:
         name = "PreassignedFareProduct_VersionStructure"

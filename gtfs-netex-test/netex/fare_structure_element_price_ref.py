@@ -5,7 +5,7 @@ from .fare_structure_element_price_ref_structure import FareStructureElementPric
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FareStructureElementPriceRef(FareStructureElementPriceRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

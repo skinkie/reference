@@ -8,7 +8,7 @@ from .line_in_direction_ref import LineInDirectionRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class LinesInDirectionRefsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "linesInDirectionRefs_RelStructure"

@@ -16,7 +16,7 @@ from .purchase_when_enumeration import PurchaseWhenEnumeration
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleLineVersionStructure(LineVersionStructure):
     class Meta:
         name = "FlexibleLine_VersionStructure"
@@ -95,7 +95,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class MinimumBookingPeriod:
         value: XmlDuration = field(
             metadata={
@@ -103,7 +103,7 @@ class FlexibleLineVersionStructure(LineVersionStructure):
             }
         )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class MaximumBookingPeriod:
         value: XmlDuration = field(
             metadata={

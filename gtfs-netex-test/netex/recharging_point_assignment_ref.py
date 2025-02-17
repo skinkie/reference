@@ -5,7 +5,7 @@ from .recharging_point_assignment_ref_structure import RechargingPointAssignment
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class RechargingPointAssignmentRef(RechargingPointAssignmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

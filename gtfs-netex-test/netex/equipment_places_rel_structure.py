@@ -8,7 +8,7 @@ from .equipment_place_ref import EquipmentPlaceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EquipmentPlacesRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "equipmentPlaces_RelStructure"

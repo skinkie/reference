@@ -5,6 +5,6 @@ from .access_right_parameter_assignment_ref_structure import AccessRightParamete
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ControlParameterAssignmentRefStructure(AccessRightParameterAssignmentRefStructure):
     pass

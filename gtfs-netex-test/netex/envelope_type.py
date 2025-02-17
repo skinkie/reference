@@ -7,7 +7,7 @@ from .pos import Pos
 __NAMESPACE__ = "http://www.opengis.net/gml/3.2"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class EnvelopeType:
     lower_corner_or_upper_corner_or_pos: list[Union["EnvelopeType.LowerCorner", "EnvelopeType.UpperCorner", Pos]] = field(
         default_factory=list,
@@ -49,10 +49,10 @@ class EnvelopeType:
         },
     )
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class LowerCorner(DirectPositionType):
         pass
 
-    @dataclass(kw_only=True)
+    @dataclass(slots=True, kw_only=True)
     class UpperCorner(DirectPositionType):
         pass

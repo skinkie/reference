@@ -5,7 +5,7 @@ from .vehicle_type_zone_restriction_ref_structure import VehicleTypeZoneRestrict
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleTypeZoneRestrictionRef(VehicleTypeZoneRestrictionRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

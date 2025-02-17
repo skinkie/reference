@@ -8,7 +8,7 @@ from .passenger_spot_ref import PassengerSpotRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class PassengerSpotsRelStructure(ContainmentAggregationStructure):
     class Meta:
         name = "passengerSpots_RelStructure"

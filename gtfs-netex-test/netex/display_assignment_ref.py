@@ -5,7 +5,7 @@ from .display_assignment_ref_structure import DisplayAssignmentRefStructure
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class DisplayAssignmentRef(DisplayAssignmentRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

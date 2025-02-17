@@ -7,7 +7,7 @@ from .validable_element_ref import ValidableElementRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class ValidableElementPriceVersionedChildStructure(FarePriceVersionedChildStructure):
     class Meta:
         name = "ValidableElementPrice_VersionedChildStructure"

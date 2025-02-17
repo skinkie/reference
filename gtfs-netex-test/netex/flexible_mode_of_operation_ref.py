@@ -5,7 +5,7 @@ from .flexible_mode_of_operation_ref_structure import FlexibleModeOfOperationRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class FlexibleModeOfOperationRef(FlexibleModeOfOperationRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

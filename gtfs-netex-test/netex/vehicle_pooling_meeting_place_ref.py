@@ -5,7 +5,7 @@ from .vehicle_pooling_meeting_place_ref_structure import VehiclePoolingMeetingPl
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehiclePoolingMeetingPlaceRef(VehiclePoolingMeetingPlaceRefStructure):
     class Meta:
         namespace = "http://www.netex.org.uk/netex"

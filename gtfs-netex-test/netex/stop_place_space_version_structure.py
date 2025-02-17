@@ -9,7 +9,7 @@ from .stop_place_component_version_structure import StopPlaceComponentVersionStr
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class StopPlaceSpaceVersionStructure(StopPlaceComponentVersionStructure):
     class Meta:
         name = "StopPlaceSpace_VersionStructure"

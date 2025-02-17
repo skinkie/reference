@@ -9,7 +9,7 @@ from .vehicle_service_ref import VehicleServiceRef
 __NAMESPACE__ = "http://www.netex.org.uk/netex"
 
 
-@dataclass(kw_only=True)
+@dataclass(slots=True, kw_only=True)
 class VehicleServicePartVersionStructure(DataManagedObjectStructure):
     class Meta:
         name = "VehicleServicePart_VersionStructure"
