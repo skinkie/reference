@@ -331,7 +331,7 @@ def service_journey_ac_to_day_type(db_read: Database, db_write: Database, servic
 
 
     # TODO: this will fail in extreme cases
-    if len(acs) > 0:
+    if len(acs) > 0 and acs[0] is not None:
         # TODO: Maybe sort and hash the id's to form a unique instance
         day_type_id = acs[0].id.replace('AvailabilityCondition', 'DayType')
     else:
