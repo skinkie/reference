@@ -50,6 +50,7 @@ def main(source_database_file: str, target_database_file: str):
         # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
 
         with Database(source_database_file, read_only=True) as source_db:
+            """
             log_all(logging.INFO, "Copy all tables as-is " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             copy_table(source_db, target_db,[Codespace, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True, embedding=True)
             source_db.clean_cache()
@@ -66,7 +67,7 @@ def main(source_database_file: str, target_database_file: str):
             log_all(logging.INFO, "Investigate this site frame step " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_site_frame_memory(source_db, target_db, generator_defaults)
             source_db.clean_cache()
-
+            """
             log_all(logging.INFO, "Service journeys " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_service_journey_generator(source_db, target_db, generator_defaults, None, cache=False)
             source_db.clean_cache()

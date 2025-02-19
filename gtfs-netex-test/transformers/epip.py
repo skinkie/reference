@@ -1,4 +1,5 @@
-from memory_profiler import memory_usage
+from mem_top import mem_top
+from memory_profiler import memory_usage # , profile
 import logging
 import sys
 import warnings
@@ -59,6 +60,9 @@ from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from transformers.projection import project_location_4326, project_polygon
 from transformers.timetabled_passing_time import infer_id_and_order_and_apply
 from utils import project
+
+# from pympler.tracker import SummaryTracker
+
 
 EPIP_CLASSES = [ "Codespace", "StopPlace", "RoutePoint", "RouteLink", "Routes", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "ServiceJourneyPattern", "PassengerStopAssignment", "Notice", "NoticeAssignment", "AvailabilityCondition" ]
 
@@ -442,7 +446,9 @@ def get_service_calendar(db_write: Database, generator_defaults: dict):
                            operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods.generator()) if uic_operating_periods.has_value() else None,
                            day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments.generator()) if day_type_assignments.has_value() else None)
 
-@profile
+i: int = 0
+
+# @profile
 def epip_service_journey_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool, cache: bool):
     print(sys._getframe().f_code.co_name)
     # sjps: Dict[str, ServiceJourneyPattern] = {}
@@ -452,12 +458,13 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
     uic_operating_periods_ids: Set[str] = set()
     day_type_assignments_ids: Set[str] = set()
 
+
     # availability_conditions: Dict[str, AvailabilityCondition] = {}
     # day_types: Dict[str, DayType] = {}
     # uic_operating_periods: List[UicOperatingPeriod] = []
     # day_type_assignments: List[DayTypeAssignment] = []
 
-    @profile
+    # @profile
     def recover_line_ref(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern, db_read):
         sj_line_ref = None
         if service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view is not None and (isinstance(service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view, FlexibleLineRef) or isinstance(service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view, LineRef)):
@@ -496,8 +503,9 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         else:
             service_journey_pattern.route_ref_or_route_view = RouteView(flexible_line_ref_or_line_ref_or_line_view=sj_line_ref)
 
-    @profile
+    # @profile
     def process(sj: ServiceJourney, db_read: Database, db_write: Database, generator_defaults: dict):
+        global i
         sj: ServiceJourney
 
         # Prototype, just: TimeDemandType -> PassingTimes
@@ -569,9 +577,17 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         
         # TODO: prevent caching altogether?
         # db_read.clean_cache()
+
+        if i % 1000 == 0:
+            # tracker.print_diff()
+            print(len(db_read.object_cache), len(db_write.object_cache))
+            print(mem_top())
+
+
+        i += 1
         return sj
 
-    @profile
+    # @profile
     def query(db_read: Database) -> Generator:
         _load_generator = load_generator(db_read, ServiceJourney, embedding=False, cache=False)
         for sj in _load_generator:
