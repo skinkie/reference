@@ -442,6 +442,7 @@ def get_service_calendar(db_write: Database, generator_defaults: dict):
                            operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods.generator()) if uic_operating_periods.has_value() else None,
                            day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments.generator()) if day_type_assignments.has_value() else None)
 
+@profile
 def epip_service_journey_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool, cache: bool):
     print(sys._getframe().f_code.co_name)
     # sjps: Dict[str, ServiceJourneyPattern] = {}
@@ -456,6 +457,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
     # uic_operating_periods: List[UicOperatingPeriod] = []
     # day_type_assignments: List[DayTypeAssignment] = []
 
+    @profile
     def recover_line_ref(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern, db_read):
         sj_line_ref = None
         if service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view is not None and (isinstance(service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view, FlexibleLineRef) or isinstance(service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view, LineRef)):
@@ -494,6 +496,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         else:
             service_journey_pattern.route_ref_or_route_view = RouteView(flexible_line_ref_or_line_ref_or_line_view=sj_line_ref)
 
+    @profile
     def process(sj: ServiceJourney, db_read: Database, db_write: Database, generator_defaults: dict):
         sj: ServiceJourney
 
@@ -568,6 +571,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         # db_read.clean_cache()
         return sj
 
+    @profile
     def query(db_read: Database) -> Generator:
         _load_generator = load_generator(db_read, ServiceJourney, embedding=False, cache=False)
         for sj in _load_generator:
