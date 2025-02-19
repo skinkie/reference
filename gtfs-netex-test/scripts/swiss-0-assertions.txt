@@ -1,0 +1,6 @@
+# a comment
+# currently only working for netex
+contains PublicationDelivery
+contains \d{4}-\d{2}-\d{2}
+xpathcountgreater //* 120
+

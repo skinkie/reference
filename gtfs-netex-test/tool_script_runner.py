@@ -125,7 +125,8 @@ def download(folder, url, forced=False):
         # work around for swiss data, where it is "permalink"
         if filename=="permalink":
             filename="swiss.zip"
-
+        if "?" in filename:  #for data from mobigo, that is fetched by an aspx script with parameters
+            filename="netex.zip"
         if forced==False:
             # Download only when not exists
             path=os.path.join(folder, filename)
