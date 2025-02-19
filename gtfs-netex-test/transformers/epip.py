@@ -532,7 +532,6 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         # If we already know that this generated SJP already exists, we should not even add it.
         if service_journey_pattern.id not in sjp_ids:
             recover_line_ref(sj, service_journey_pattern, db_read)
-            sjp_ids.add(service_journey_pattern.id)
 
             # TODO: Here we need to add it to the new database
             # sjps[service_journey_pattern.id] = service_journey_pattern
