@@ -88,7 +88,7 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
 
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
-def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False) -> List[T]:
+def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False, cache=True) -> List[T]:
     objectname = get_object_name(clazz)
 
     if cursor:
@@ -107,7 +107,7 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         pass
         # This is the situation where the objectname is not available at all in the catalogue
         if embedding:
-            return list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent))
+            return list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent, cache))
         else:
             return []
 
@@ -117,7 +117,7 @@ def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, em
         objs.append(obj)
 
     if embedding:
-        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent))
+        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent, cache))
 
     return objs
 
@@ -382,7 +382,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
                 # TODO: The problem may be here that an embedding of this class, has been made a first class object, or an embedding of an existing element.
 
 
-def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True):
+def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, cache=True):
     objectname = get_object_name(clazz)
 
     cur = db.cursor()
@@ -396,7 +396,7 @@ def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=Tr
     except:
         pass
         if embedding:
-            yield from load_embedded_transparent_generator(db, clazz, limit, filter)
+            yield from load_embedded_transparent_generator(db, clazz, limit, filter, cache)
         return
 
     while True:
@@ -406,10 +406,10 @@ def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=Tr
         yield db.serializer.unmarshall(xml[0], clazz)
 
     if embedding:
-        yield from load_embedded_transparent_generator(db, clazz, limit, filter)
+        yield from load_embedded_transparent_generator(db, clazz, limit, filter, cache)
 
 
-def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False) -> List[T]:
+def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False, cache=True) -> List[T]:
     objectname = get_object_name(clazz)
 
     cur = db.cursor()
@@ -439,13 +439,17 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             parent_id, parent_version, parent_clazz, path = result
             needle = '|'.join([parent_id, parent_version, parent_clazz])
 
-            if needle not in db.object_cache:
+            if not cache or needle not in db.object_cache:
                 cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? LIMIT 1;",
                              (parent_id, parent_version,))
                 object = cur2.fetchone()
-                db.object_cache[needle] = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
+                obj = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
+            else:
+                obj =  db.object_cache[needle]
 
-            obj = db.object_cache[needle]
+            if cache:
+                db.object_cache[needle] = obj
+
             if obj is not None:
                 if parent:
                     yield obj

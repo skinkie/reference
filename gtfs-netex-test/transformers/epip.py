@@ -442,7 +442,7 @@ def get_service_calendar(db_write: Database, generator_defaults: dict):
                            operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods.generator()) if uic_operating_periods.has_value() else None,
                            day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments.generator()) if day_type_assignments.has_value() else None)
 
-def epip_service_journey_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool):
+def epip_service_journey_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool, cache: bool):
     print(sys._getframe().f_code.co_name)
     # sjps: Dict[str, ServiceJourneyPattern] = {}
     sjp_ids: Set[str] = set()
@@ -539,7 +539,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
 
             if len(route_point_projection) > 0:
                 if isinstance(service_journey_pattern.route_ref_or_route_view, RouteRef):
-                    routes: list[Route] = load_local(db_read, Route, limit=1, filter=service_journey_pattern.route_ref_or_route_view.ref, cursor=True)
+                    routes: list[Route] = load_local(db_read, Route, limit=1, filter=service_journey_pattern.route_ref_or_route_view.ref, cursor=True, cache=False)
                     if len(routes) > 0:
                         RoutesProfile.projectRouteToServiceLinks(db_read, service_journey_pattern, routes[0], route_point_projection, generator_defaults)
 
@@ -570,7 +570,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         return sj
 
     def query(db_read: Database) -> Generator:
-        _load_generator = load_generator(db_read, ServiceJourney)
+        _load_generator = load_generator(db_read, ServiceJourney, embedding=False, cache=False)
         for sj in _load_generator:
             yield process(sj, db_read, db_write, generator_defaults)
         # for sj in pool.imap_unordered(partial(process, read_database=read_database, write_database=write_database, generator_defaults=generator_defaults), _load_generator, chunksize=100):
@@ -717,22 +717,22 @@ def epip_remove_keylist_extensions(db_read: Database, db_write: Database, genera
         return deserialised
 
     def query1(db_read: Database) -> Generator:
-        _load_generator = load_generator(db_read, StopPlace)
+        _load_generator = load_generator(db_read, StopPlace, embedding=False, cache=False)
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 
     def query2(db_read: Database) -> Generator:
-        _load_generator = load_generator(db_read, ScheduledStopPoint)
+        _load_generator = load_generator(db_read, ScheduledStopPoint, embedding=False, cache=False)
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 
     def query3(db_read: Database) -> Generator:
-        _load_generator = load_generator(db_read, ServiceJourneyPattern)
+        _load_generator = load_generator(db_read, ServiceJourneyPattern, embedding=False, cache=False)
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 
     def query4(db_read: Database) -> Generator:
-        _load_generator = load_generator(db_read, ServiceJourney)
+        _load_generator = load_generator(db_read, ServiceJourney, embedding=False, cache=False)
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 

@@ -68,7 +68,7 @@ def main(source_database_file: str, target_database_file: str):
             source_db.clean_cache()
 
             log_all(logging.INFO, "Service journeys " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
-            epip_service_journey_generator(source_db, target_db, generator_defaults, None)
+            epip_service_journey_generator(source_db, target_db, generator_defaults, None, cache=False)
             source_db.clean_cache()
 
             log_all(logging.INFO, "Calendars " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
