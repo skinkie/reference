@@ -128,6 +128,26 @@
         {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-ch-inter-gtfs.zip %%dir%%/14-%%block%%-map.html 1"}
         ]
   },
+   {
+    "block": "swissinterchange_r",
+    "download_url":"https://github.com/user-attachments/files/18885408/swiss_interchange_resp_set_only.zip",
+    "scripts": [
+       {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
+        {"step":3,"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/03-import.duckdb True"},
+        {"step":4,"script": "#remove_file", "args": "%%inputfilepath%%"},
+        {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/03-import.duckdb %%dir%%/05-netex-database.duckdb"},
+        {"step":6,"script": "epip_db_to_xml.py", "args": "%%dir%%/05-netex-database.duckdb %%dir%%/06-%%block%%-epip-netex.xml.gz"},
+        {"step":7,"script": "netex_to_db.py", "args": "[%%dir%%/06-%%block%%-epip-netex.xml.gz] %%dir%%/07-ch-inter-gtfs.duckdb True"},
+        {"step":8,"script": "gtfs_db_to_db.py", "args": "%%dir%%/07-ch-inter-gtfs.duckdb %%dir%%/08-ch-inter-2-gtfs.duckdb"},
+        {"step":9,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/08-ch-inter-2-gtfs.duckdb %%dir%%/09-%%block%%-ch-inter-gtfs.zip"},
+        {"step":10,"script": "tool_check_db.py", "args": "%%dir%%/03-import.duckdb"},
+        {"step":11,"script": "tool_check_db.py", "args": "%%dir%%/05-netex-database.duckdb"},
+        {"step":12,"script": "tool_check_db.py", "args": "%%dir%%/08-nl-gtfs.duckdb"},
+        {"step":13,"script": "tool_gtfs_validator.py", "args": "%%dir%%/09-%%block%%-ch-inter-gtfs.zip %%dir%%"},
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-ch-inter-gtfs.zip %%dir%%/14-%%block%%-map.html 1"}
+        ]
+  },
     {
     "block": "blablacar",
     "url":"https://transport.data.gouv.fr/datasets/blablacar-bus-horaires-theoriques-et-temps-reel-du-reseau-europeen",
