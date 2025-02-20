@@ -10,6 +10,7 @@ from folium.plugins import MarkerCluster, Search
 from aux_logging import *
 import traceback
 
+
 # Generate a random dark color
 def generate_random_dark_color():
     r = random.randint(0, 200)  # Random red component (0-128)
@@ -75,7 +76,7 @@ def main(gtfs_zip_file, map_file, limitation):
                 if stop_id == stop_id_inner:
                     continue
                 elif stop_id != stop_id_inner:
-                    if stop_id_inner.startswith("Parent"):
+                    if str(stop_id_inner).startswith("Parent"):
                         stop_id_duplicates.append(stop_id_inner)
                         break
 
@@ -196,10 +197,10 @@ def handle_trips_for_route(trips_dict, trips_names_dict, route_id, stop_times_di
         if not no_sub:
             stop_coords_list.append(stop_coords)
             stop_coords_list_str.append(array_of_array_to_string(stop_coords))
-            if math.isnan(trip_name):
+            if isinstance(trip_name, (int, float)):
                 route_names.append(route_name_dict['route_short_name'])
             else:
-                route_names.append(route_name_dict['route_short_name'] + " to " + trip_name)
+                route_names.append(str(route_name_dict['route_short_name']) + " to " + str(trip_name))
 
 
 def array_of_array_to_string(array_of_arrays):
