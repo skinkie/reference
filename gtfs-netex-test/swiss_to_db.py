@@ -28,7 +28,7 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
         except:
             pass
 
-    with Database(database,read_only=False) as db:
+    with Database(database, read_only=False) as db:
         classes = get_interesting_classes(SWISS_CLASSES)
 
         setup_database(db, classes, clean_database)

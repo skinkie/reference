@@ -886,22 +886,15 @@ def setup_database(db: Database, classes, clean=False, cursor=False):
 
     if clean:
         for clazz in interesting_classes:
-            objectname = get_object_name(clazz)
-            sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
-            cur.execute(sql_drop_table)
-        cur.execute("VACUUM;")
+            db.clear_table(clazz)
+        # db.vacuum()
 
-    sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
-    cur.execute(sql_create_table)
+    # TODO:
+    # create_meta(db)
 
-    sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
-    cur.execute(sql_create_table)
-
-    create_meta(db)
-
-    for clazz in interesting_classes:
-        sql_create_table = create_table_sql(db, clazz)
-        cur.execute(sql_create_table)
+    # for clazz in interesting_classes:
+    #     sql_create_table = create_table_sql(db, clazz)
+    #     cur.execute(sql_create_table)
 
 
 def get_local_name(element):
@@ -991,11 +984,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     frame_defaults_stack = []
     if f is None:
         return
-
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
 
     # sql_create_table = "CREATE TABLE IF NOT EXISTS temp_embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT);"
     # cur.execute(sql_create_table)
