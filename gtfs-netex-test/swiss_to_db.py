@@ -6,6 +6,7 @@ import os
 from netexio.database import Database
 from netexio.dbaccess import resolve_all_references_and_embeddings, open_netex_file, setup_database, insert_database
 from utils import get_interesting_classes
+from netexio.pickleserializer import MyPickleSerializer
 import netex_monkeypatching
 from aux_logging import *
 import traceback
@@ -28,7 +29,7 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
         except:
             pass
 
-    with Database(database, read_only=False) as db:
+    with Database(database, MyPickleSerializer(compression=True), read_only=False, logger=logging.getLogger("script_runner")) as db:
         classes = get_interesting_classes(SWISS_CLASSES)
 
         setup_database(db, classes, clean_database)
