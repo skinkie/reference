@@ -9,3 +9,6 @@ folium
 pytz
 memory_profiler
 line_profiler
+lmdb
+cloudpickle
+lz4
