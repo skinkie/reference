@@ -1,31 +1,53 @@
 import os
 import pickle
 from logging import Logger
-from typing import T
+from typing import Generator, Iterator, Type, TypeVar
+T = TypeVar("T")
 
-import duckdb
 import lmdb
+import time
 
-from netexio.pickleserializer import MyPickleSerializer
 from netexio.serializer import Serializer
 from utils import get_object_name
-from vdvserver.generic import serializer
 
+MAP_SIZE = (10 ** 9) * 8
 
 class Database:
     database_file: str
     read_only: bool
     serializer: Serializer
-    con: duckdb.DuckDBPyConnection
     object_cache: dict
 
-    def __init__(self, database_file: str, read_only: bool=True, logger: Logger=None, serializer=MyPickleSerializer):
+    def __init__(self, database_file: str, serializer: Serializer, read_only: bool=True, logger: Logger=None):
         self.database_file = database_file
         self.read_only = read_only
         self.logger = logger
-        self.serializer = serializer()
-        self.env = lmdb.open(self.database_file, map_size=10 ** 9, max_dbs=len(self.serializer.name_object), readonly=self.read_only)
+        self.serializer = serializer
+
         self.object_cache = {}
+        self.dbs = {}
+
+    def open_table(self, klass: T):
+        name: str = get_object_name(klass)
+        if name in self.dbs:
+            return self.dbs[name]
+        else:
+            name_bytes = name.encode('utf-8')
+            try:
+                # Try opening in read-only mode first to isolate the issue
+                db = self.lmdb.open_db(name_bytes)
+            except lmdb.Error as e:
+                if "MDB_NOTFOUND" in str(e):
+                    print(f"Database {name} does not exist, creating it.")
+                    db = self.lmdb.open_db(name_bytes, create=True)
+                else:
+                    raise  # Reraise other LMDB errors
+            except Exception as ex:
+                print(f"Unexpected error: {ex}")
+                raise
+
+            self.dbs[name] = db
+            return db
 
     def cursor(self):
         return self.con.cursor()
@@ -34,54 +56,69 @@ class Database:
         self.object_cache = {}
 
     def __enter__(self):
-        self.con = duckdb.connect(self.database_file, read_only=self.read_only)
+        self.lmdb = lmdb.open(self.database_file, map_size=MAP_SIZE, max_dbs=len(self.serializer.name_object), readonly=self.read_only)
         return self
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
-        self.con.close()
+        self.lmdb.close()
 
-    def clear_table(self, klass: T, clean=False):
-        name = get_object_name(klass)
-        with self.env.begin(write=True) as txn:
-            txn.drop(self.env.open_db(name.encode('utf-8')), delete=False)
+    def clear_tables(self, classes: list[Type[T]]):
+        dbs = [self.open_table(klass) for klass in classes]
+        with self.lmdb.begin(write=True) as txn:
+            for db in dbs:
+                txn.drop(db, delete=False)
 
-    def insert_one_object(self, db, object):
-        key = (row.id, row.version)
-        value =  serializer. serialize_data(row)
-        with env.begin(write=True, db=db) as txn:
-            txn.put(pickle.dumps(key), value)
+    def insert_one_object(self, object, quiet=False):
+        return self.insert_many_objects(object.__class__, [object], quiet)
+
+    def insert_many_objects(self, klass: T, objects: Iterator, quiet=False):
+        objectname: str = get_object_name(klass)
+        now = time.time()
+
+        i = 0
+        with self.lmdb.begin(write=True, db=self.open_table(klass)) as txn:
+            for object in objects:
+                key = (object.id, object.version)
+                # TODO: do something with "now"
+                value = self.serializer.marshall(object, klass)
+                txn.put(pickle.dumps(key), value)
+                if not quiet and i % 13 == 0:
+                    print('\r', objectname, str(i), end='')
+                i += 1
+
+        if not quiet:
+            print('\r', objectname, str(i), end='\n')
 
     def vacuum(self):
-        tmp_file = self.database_file + "_compacted.mdb"
-        self.env.copy(path=tmp_file, compact=True)
-        self.env.close()
-        os.rename(tmp_file, self.database_file)
-        self.env = lmdb.open(self.database_file, map_size=10 ** 9, max_dbs=len(self.serializer.name_object), readonly=self.read_only)
+        if self.lmdb:
+            tmp_file = self.database_file + "_compacted.mdb"
+            self.lmdb.copy(path=tmp_file, compact=True)
+            self.lmdb.close()
+            os.rename(tmp_file, self.database_file)
+            self.lmdb = lmdb.open(self.database_file, map_size=MAP_SIZE, max_dbs=len(self.serializer.name_object), readonly=self.read_only)
 
     def tables(self, exclusively: set[T]=None):
         if exclusively is None:
             exclusively = set(self.serializer.interesting_classes)
 
-        if self.env:
+        if self.lmdb:
             # Try to open each database by index, starting from 0 up to max_dbs
             tables = set([])
-            for db_index in range(self.env.info()['num_dbs']):
-                try:
-                    # Try to get the name of each database
-                    table = self.env.open_db(db_index=db_index, readonly=True).encode("utf-8")
-                    tables.add(self.get_class_by_name(table))
-                except lmdb.Error:
-                    # If a database doesn't exist, skip it
-                    continue
+            with self.lmdb.begin() as txn:
+                cursor = txn.cursor()
+                for key, _ in cursor:
+                    name = key.decode('utf-8')
+                    if name[0] != '_':
+                        tables.add(self.get_class_by_name(name))
             return sorted(tables.intersection(exclusively), key=lambda v: v.__name__)
 
     def referencing(self, exclusively: set[T]=None):
         if exclusively is None:
             exclusively = set(self.serializer.interesting_classes)
 
-        if self.env:
+        if self.lmdb:
             tables = set([])
-            with self.env.begin(write=False, db=self.env.open_db(b'referencing', readonly=True)) as txn:
+            with self.lmdb.begin(write=False, db=self.lmdb.open_db(b'_referencing', readonly=True)) as txn:
                 cursor = txn.cursor()
                 for _key, value in cursor:
                     _parent_class, _parent_id, _parent_version, klass, _ref, _version = pickle.loads(value)
@@ -93,9 +130,9 @@ class Database:
         if exclusively is None:
             exclusively = set(self.serializer.interesting_classes)
 
-        if self.env:
+        if self.lmdb:
             tables = set([])
-            with self.env.begin(write=False, db=self.env.open_db(b'embedded', readonly=True)) as txn:
+            with self.lmdb.begin(write=False, db=self.lmdb.open_db(b'_embedded', readonly=True)) as txn:
                 cursor = txn.cursor()
                 for _key, value in cursor:
                     _parent_class, _parent_id, _parent_version, klass, _id, _version, _order, _path = pickle.loads(value)

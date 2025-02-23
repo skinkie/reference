@@ -1,7 +1,9 @@
+import pickle
 import sys
 import warnings
 from typing import T, List, Generator, Tuple
 
+import cloudpickle
 import duckdb
 from duckdb.duckdb import CatalogException
 
@@ -383,89 +385,65 @@ def fetch_references_classes_generator(db: Database, classes: list):
 
 
 def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, cache=True):
-    objectname = get_object_name(clazz)
+    if db.lmdb:
+        with db.lmdb.begin(write=False, db=db.open_table(clazz)) as txn:
+            cursor = txn.cursor()
+            if filter:
+                for key, value in cursor:
+                    id, version = pickle.loads(key)
+                    if id == filter:
+                        value = db.serializer.unmarshall(value, clazz)
+                        yield value
+            elif limit is not None:
+                i = 0
+                for _key, value in cursor:
+                    if i < limit:
+                        value = db.serializer.unmarshall(value, clazz)
+                        yield value
+                    else:
+                        break
+                    i += 1
+            else:
+                for _key, value in cursor:
+                    value = db.serializer.unmarshall(value, clazz)
+                    yield value
 
-    cur = db.cursor()
-    try:
-        if filter is not None:
-            cur.execute(f"SELECT object FROM {objectname} WHERE id = ?;", (filter,))
-        elif limit is not None:
-            cur.execute(f"SELECT object FROM {objectname} LIMIT {limit};")
-        else:
-            cur.execute(f"SELECT object FROM {objectname};")
-    except:
-        pass
         if embedding:
             yield from load_embedded_transparent_generator(db, clazz, limit, filter, cache)
-        return
-
-    while True:
-        xml = cur.fetchone()
-        if xml is None:
-            break
-        yield db.serializer.unmarshall(xml[0], clazz)
-
-    if embedding:
-        yield from load_embedded_transparent_generator(db, clazz, limit, filter, cache)
-
 
 def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False, cache=True) -> List[T]:
     objectname = get_object_name(clazz)
 
-    cur = db.cursor()
-    try:
-        if filter is not None:
-            cur.execute(
-                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;",
-                (filter, objectname,))
-        elif limit is not None:
-            cur.execute(
-                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id LIMIT ?;",
-                (objectname, limit,))
-        else:
-            cur.execute(
-                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id;",
-                (objectname,))
-    except:
-        return
+    if db.lmdb:
+        with db.lmdb.begin(db=db.lmdb.open_db(b'_embedded', readonly=True)) as txn:
+            cursor = txn.cursor()
+            i = 0
+            for key, value in cursor:
+                parent_id, parent_version, parent_clazz, _ = pickle.loads(key)
+                id, version, clazz, order, path = pickle.loads(key)
 
-    try:
-        cur2 = db.cursor()
-        while True:
-            result = cur.fetchone()
-            if result is None:
-                break
-
-            parent_id, parent_version, parent_clazz, path = result
-            needle = '|'.join([parent_id, parent_version, parent_clazz])
-
-            if not cache or needle not in db.object_cache:
-                cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? LIMIT 1;",
-                             (parent_id, parent_version,))
-                object = cur2.fetchone()
-                obj = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
-            else:
-                obj =  db.object_cache[needle]
-
-            if cache:
-                db.object_cache[needle] = obj
-
-            if obj is not None:
-                if parent:
-                    yield obj
-
-                else:
-                    # TODO: separate function
-                    split = []
-                    for p in path.split('.'):
-                        if p.isnumeric():
-                            p = int(p)
-                        split.append(p)
-                    yield resolve_attr(obj, split)
-
-    except TypeError:
-        pass
-
+                if clazz == objectname:
+                    if filter and filter != id:
+                        continue
+                    else:
+                        if limit is None or i < limit:
+                            with db.lmdb.begin(db=db.lmdb.open_db(db.get_class_by_name(parent_clazz), readonly=True)) as txn2:
+                                value = txn2.get(pickle.dumps(parent_id, parent_version))
+                                if value is not None:
+                                    obj = cloudpickle.loads(value)
+                                    if parent:
+                                        yield obj
+                                    else:
+                                        # TODO: separate function
+                                        split = []
+                                        for p in path.split('.'):
+                                            if p.isnumeric():
+                                                p = int(p)
+                                            split.append(p)
+                                        yield resolve_attr(obj, split)
+                            i += 1
+                        else:
+                            break
 
 from lxml import etree
 
@@ -646,78 +624,10 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
 
 
 def write_generator(db: Database, clazz, generator: Generator, empty=False):
-    cur = db.cursor()
-    objectname = get_object_name(clazz)
-
     if empty:
-        sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
-        cur.execute(sql_drop_table)
+        db.clear_table(clazz)
 
-    if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
-    elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
-    else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
-
-    cur.execute(sql_create_table)
-
-    def _prepare4(generator4, objectname):
-        i = 0
-        for obj in generator4:
-            if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
-            i += 1
-            yield obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)
-        print('\r', objectname, i, end='')
-
-    def _prepare3(generator3, objectname):
-        i = 0
-        for obj in generator3:
-            if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
-            i += 1
-            yield obj.id, obj.version, db.serializer.marshall(obj, objectname)
-        print('\r', objectname, i, end='')
-
-    def _prepare2(generator2, objectname):
-        i = 0
-        for obj in generator2:
-            if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
-            i += 1
-            yield obj.id, db.serializer.marshall(obj, objectname)
-        print('\r', objectname, i, end='')
-
-    if hasattr(clazz, 'order'):
-        if cur.__class__.__name__ == 'DuckDBPyConnection':
-            for a in _prepare4(generator, objectname):
-                cur.execute(
-                    f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
-                    a)
-        else:
-            cur.executemany(
-                f'INSERT INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
-                _prepare4(generator, objectname))
-    elif hasattr(clazz, 'version'):
-        if cur.__class__.__name__ == 'DuckDBPyConnection':
-            for a in _prepare3(generator, objectname):
-                cur.execute(
-                    f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
-                    a)
-        else:
-            cur.executemany(f'INSERT INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
-                            _prepare3(generator, objectname))
-    else:
-        if cur.__class__.__name__ == 'DuckDBPyConnection':
-            for a in _prepare2(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', a)
-        else:
-            cur.executemany(f'INSERT INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
-                            _prepare2(generator, objectname))
-
-    print('\n')
-
+    db.insert_many_objects(clazz, generator)
 
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False, embedding=False):
     if db_read.read_only:
@@ -877,16 +787,10 @@ def update_generator(db: Database, clazz, generator: Generator):
 
 
 def setup_database(db: Database, classes, clean=False, cursor=False):
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
-
     clean_element_names, interesting_element_names, interesting_classes = classes
 
     if clean:
-        for clazz in interesting_classes:
-            db.clear_table(clazz)
+        db.clear_tables(interesting_classes)
         # db.vacuum()
 
     # TODO:
@@ -1117,9 +1021,10 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         object.version = version
                         warnings.warn(f"{localname} {id} does not have a required version, inheriting it {version}.")
 
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());"""
+                    # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());"""
                     try:
-                        cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
+                        db.insert_one_object(object, True)
+                        # cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise
@@ -1131,18 +1036,20 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         object.version = version
                         warnings.warn(f"{localname} {id} does not have a required version, inheriting it {version}.")
 
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());"""
+                    # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());"""
                     try:
-                        cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
+                        db.insert_one_object(object, True)
+                        # cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise
                         pass
 
                 else:
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object, last_modified) VALUES (?, ?, NOW());"""
+                    # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object, last_modified) VALUES (?, ?, NOW());"""
                     try:
-                        cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
+                        db.insert_one_object(object, True)
+                        # cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise

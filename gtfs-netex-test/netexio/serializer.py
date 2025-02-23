@@ -7,7 +7,6 @@ class Serializer:
     sql_type = 'TEXT'
 
     def __init__(self):
-
         self.name_object = {}
         for clazz in get_boring_classes():
             self.name_object[get_object_name(clazz)] = clazz
