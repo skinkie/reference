@@ -453,7 +453,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
 
                 else:
                     # TODO
-                    log_once(logging.WARN, "dt-1""We cannot yet handle day type aggregation")
+                    log_once(logging.WARN, "dt-1", "We cannot yet handle day type aggregation")
 
     for day_type, day_type_assignments, operating_periods in query_daytype(db_read, calendar_combinations):
         # TODO: Figure out if there can be a parallel receiver for a generator

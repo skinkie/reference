@@ -24,14 +24,14 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
 
     with Database(database, MyPickleSerializer(compression=True), read_only=False, logger=logging.getLogger("script_runner")) as db:
         classes = get_interesting_classes(SWISS_CLASSES)
-        """
+
         setup_database(db, classes, clean_database)
 
         log_all(logging.INFO, f"Starting to load {swiss_zip_file}")
         for file in open_netex_file(swiss_zip_file):
             log_all(logging.INFO, f"Inserting {file.name}")
             insert_database(db, classes, file)
-        """
+
         if referencing:
             log_all(logging.INFO, f"Embedding update!")
             embedding_update(db)
