@@ -9,20 +9,20 @@ from netexio.dbaccess import update_embedded_referencing
 from netexio.serializer import Serializer
 from utils import get_object_name
 
-def embedding_update(db: Database):
+def embedding_update(db: Database, filter_clazz: list):
     task_queue = queue.Queue(maxsize=1000)  # Prevents excessive memory usage
     stop_signal = object()  # Special object to signal the writer to stop
-    db_embedding = db.lmdb.open_db(b"_embedding")
-    db_referencing = db.lmdb.open_db(b"_referencing")
+    db_embedding = db.env.open_db(b"_embedding")
+    db_referencing = db.env.open_db(b"_referencing")
 
     # Drop existing databases
-    with db.lmdb.begin(write=True) as txn:
+    with db.env.begin(write=True) as txn:
         txn.drop(db_embedding, delete=False)
         txn.drop(db_referencing, delete=False)
 
     def reader(table):
         """ Reads from the table and pushes modified data to the queue. """
-        with db.lmdb.begin(write=False, db=db.open_table(table)) as txn_ro:
+        with db.env.begin(write=False, db=db.open_db(table)) as txn_ro:
             cursor = txn_ro.cursor()
             for db_key, db_value in cursor:  # Rename outer loop variables
                 i, j = 0, 0
@@ -30,7 +30,7 @@ def embedding_update(db: Database):
 
                 for embedding in update_embedded_referencing(db.serializer, deserialized):
                     key_data = (embedding[0], embedding[1], embedding[2])
-                    if embedding[7] is None:
+                    if embedding[7] is not None:
                         embedding_key = (*key_data, i)
                         embedding_value = (embedding[3], embedding[4], embedding[5], embedding[6], embedding[7])
                         task_queue.put((b"_embedding", embedding_key, embedding_value))
@@ -54,7 +54,7 @@ def embedding_update(db: Database):
                     break  # Stop if queue remains empty
 
             # Use a short-lived transaction for each batch
-            with db.lmdb.begin(write=True) as txn:
+            with db.env.begin(write=True) as txn:
                 for db_name, key, value in batch:
                     if db_name == stop_signal:  # Stop signal received
                         return  # Exit writer function

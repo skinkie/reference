@@ -1,4 +1,4 @@
-from memory_profiler import memory_usage
+from memory_profiler import memory_usage, profile
 import logging
 import sys
 import warnings
@@ -352,7 +352,7 @@ def service_journey_ac_to_day_type(db_read: Database, db_write: Database, servic
                                                       valid_day_bits="0",
                                                       days_of_week=days_of_week)
             uic_operating_periods_ids.add(uic_operating_period.id)
-            write_objects(db_write, [uic_operating_period], silent=True, cursor=True)
+            db_write.insert_object_on_queue(UicOperatingPeriod, [uic_operating_period])
 
         else:
             uic_operating_period = UicOperatingPeriod(id=acs[0].id.replace('AvailabilityCondition', 'UicOperatingPeriod'),
@@ -367,13 +367,13 @@ def service_journey_ac_to_day_type(db_read: Database, db_write: Database, servic
                                                           valid_days),
                                                       days_of_week=days_of_week)
             uic_operating_periods_ids.add(uic_operating_period.id)
-            write_objects(db_write, [uic_operating_period], silent=True, cursor=True)
+            db_write.insert_object_on_queue(UicOperatingPeriod, [uic_operating_period])
 
         day_type = DayType(id=day_type_id, version=service_journey.version,
                            derived_from_object_ref=service_journey.id,
                            derived_from_version_ref_attribute=service_journey.version)
         day_types_ids.add(day_type.id)
-        write_objects(db_write, [day_type], silent=True, cursor=True)
+        db_write.insert_object_on_queue(DayType, [day_type])
 
         day_type_assignment = DayTypeAssignment(id=acs[0].id.replace('AvailabilityCondition', 'DayTypeAssignment'),
                                                 version=acs[0].version,
@@ -385,7 +385,7 @@ def service_journey_ac_to_day_type(db_read: Database, db_write: Database, servic
                                                 day_type_ref=getRef(day_type)
                                                 )
         day_type_assignments_ids.add(day_type_assignment.id)
-        write_objects(db_write, [day_type_assignment], silent=True, cursor=True)
+        db_write.insert_object_on_queue(DayTypeAssignment, [day_type_assignment])
         day_type_ref = getRef(day_type)
     else:
         day_type_ref = getFakeRef(day_type_id, DayTypeRef, service_journey.version)  # TODO: Prevent fake ref
@@ -442,7 +442,6 @@ def get_service_calendar(db_write: Database, generator_defaults: dict):
                            operating_periods=OperatingPeriodsRelStructure(uic_operating_period_ref_or_operating_period_ref_or_operating_period_or_uic_operating_period=uic_operating_periods.generator()) if uic_operating_periods.has_value() else None,
                            day_type_assignments=DayTypeAssignmentsRelStructure(day_type_assignment=day_type_assignments.generator()) if day_type_assignments.has_value() else None)
 
-@profile
 def epip_service_journey_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool, cache: bool):
     print(sys._getframe().f_code.co_name)
     # sjps: Dict[str, ServiceJourneyPattern] = {}
@@ -457,7 +456,6 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
     # uic_operating_periods: List[UicOperatingPeriod] = []
     # day_type_assignments: List[DayTypeAssignment] = []
 
-    @profile
     def recover_line_ref(service_journey: ServiceJourney, service_journey_pattern: ServiceJourneyPattern, db_read):
         sj_line_ref = None
         if service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view is not None and (isinstance(service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view, FlexibleLineRef) or isinstance(service_journey.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view, LineRef)):
@@ -496,7 +494,6 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         else:
             service_journey_pattern.route_ref_or_route_view = RouteView(flexible_line_ref_or_line_ref_or_line_view=sj_line_ref)
 
-    @profile
     def process(sj: ServiceJourney, db_read: Database, db_write: Database, generator_defaults: dict):
         sj: ServiceJourney
 
@@ -547,7 +544,9 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
 
             # TODO Issue #242: handle LinkSequenceProjectionRef / LinkSequenceProjection
 
-            write_objects(db_write, [service_journey_pattern], empty=False, many=False, cursor=True, silent=True)
+            db_write.insert_object_on_queue(ServiceJourneyPattern, [service_journey_pattern])
+
+            # TODO: We might be able to avoid it if we work with prefix keys
             sjp_ids.add(service_journey_pattern.id)
 
         # service_journey_ac_to_day_type(sj, availability_conditions, day_types, uic_operating_periods, day_type_assignments)
@@ -571,7 +570,6 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         # db_read.clean_cache()
         return sj
 
-    @profile
     def query(db_read: Database) -> Generator:
         _load_generator = load_generator(db_read, ServiceJourney, embedding=False, cache=False)
         for sj in _load_generator:

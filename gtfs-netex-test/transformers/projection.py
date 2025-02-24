@@ -75,19 +75,38 @@ def reprojection_udf(serializer: Serializer, serialized: bytes, clazz: str, crs_
     reserialised = serializer.marshall(result, clazz)
     return reserialised
 
-def reprojection_update(db: Database, crs_to: str):
-    con = db.con
-    con.create_function('reprojection', functools.partial(reprojection_udf, db.serializer), return_type=bytes)
-
-    con.begin()
+def reprojection_update(db: Database, crs_to: str, batch_size=100_000, max_mem=4 * 1024 ** 3):
+    def _commit_batch(db, src_db, batch):
+        """Commits a batch of key-value pairs to LMDB."""
+        with db.env.begin(write=True, db=src_db) as dst_txn:
+            for dst_key, dst_value in batch:
+                dst_txn.put(dst_key, dst_value)
 
     for clazz in db.tables(exclusively=set(get_all_geo_elements())):
-        objectname = get_object_name(clazz)
-        con.execute(f"UPDATE {objectname} SET object = reprojection(object, '{objectname}', ?);", (crs_to,))
+        src_db = db.open_db(clazz, readonly=True)
+        if not db:
+            continue
 
-    con.commit()
+        src_db = db.open_db(clazz, readonly=False)
+        with db.env.begin(db=src_db, write=False) as src_txn:
+            cursor = src_txn.cursor()
+            batch = []
+            total_size = 0
 
-    con.remove_function('reprojection')
+            for key, value in cursor:
+                transformed_value = db.serializer.marshall(reprojection(db.serializer.unmarshall(value, clazz), crs_to), clazz)
+                batch.append((key, transformed_value))
+                total_size += len(key) + len(transformed_value)
+
+                if len(batch) >= batch_size or total_size >= max_mem:
+                    _commit_batch(db, src_db, batch)
+                    batch.clear()
+                    total_size = 0  # Reset memory counter
+
+            # Final commit for remaining records
+            if batch:
+                _commit_batch(db, src_db, batch)
+
 
 def get_transformer_by_srs_name(location, crs_to) -> Transformer:
     if hasattr(location, 'pos') and location.pos is not None:

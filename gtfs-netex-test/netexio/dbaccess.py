@@ -1,7 +1,7 @@
 import pickle
 import sys
 import warnings
-from typing import T, List, Generator, Tuple
+from typing import T, List, Generator, Tuple, Iterator
 
 import cloudpickle
 import duckdb
@@ -90,38 +90,8 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
 
     return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
 
-def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False, cache=True) -> List[T]:
-    objectname = get_object_name(clazz)
-
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
-
-    try:
-        if filter is not None:
-            cur.execute(f"SELECT object FROM {objectname} WHERE id = ?;", (filter,))
-        elif limit is not None:
-            cur.execute(f"SELECT object FROM {objectname} ORDER BY id LIMIT {limit};")
-        else:
-            cur.execute(f"SELECT object FROM {objectname} ORDER BY id;")
-    except:
-        pass
-        # This is the situation where the objectname is not available at all in the catalogue
-        if embedding:
-            return list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent, cache))
-        else:
-            return []
-
-    objs: List[T] = []
-    for xml, in cur.fetchall():
-        obj = db.serializer.unmarshall(xml, clazz)
-        objs.append(obj)
-
-    if embedding:
-        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent, cache))
-
-    return objs
+def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False, cache=True) -> list[T]:
+    return list(load_generator(db, clazz, limit, filter, embedding, embedded_parent, cache))
 
 def load_references_generator(db: Database, clazz: T, filter=None, cursor=False ) -> Generator:
     objectname = get_object_name(clazz)
@@ -384,9 +354,9 @@ def fetch_references_classes_generator(db: Database, classes: list):
                 # TODO: The problem may be here that an embedding of this class, has been made a first class object, or an embedding of an existing element.
 
 
-def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, cache=True):
-    if db.lmdb:
-        with db.lmdb.begin(write=False, db=db.open_db(clazz)) as txn:
+def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, parent=False, cache=True):
+    if db.env:
+        with db.env.begin(write=False, db=db.open_db(clazz)) as txn:
             cursor = txn.cursor()
             if filter:
                 for key, value in cursor:
@@ -409,25 +379,25 @@ def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=Tr
                     yield value
 
         if embedding:
-            yield from load_embedded_transparent_generator(db, clazz, limit, filter, cache)
+            yield from load_embedded_transparent_generator(db, clazz, limit, filter, parent, cache)
 
 def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False, cache=True) -> List[T]:
     objectname = get_object_name(clazz)
 
-    if db.lmdb:
-        with db.lmdb.begin(db=db.lmdb.open_db(b'_embedded', readonly=True)) as txn:
+    if db.env:
+        with db.env.begin(db=db.env.open_db(b'_embedding'), write=False) as txn:
             cursor = txn.cursor()
             i = 0
             for key, value in cursor:
                 parent_id, parent_version, parent_clazz, _ = pickle.loads(key)
-                id, version, clazz, order, path = pickle.loads(key)
+                id, version, clazz, order, path = pickle.loads(value)
 
                 if clazz == objectname:
                     if filter and filter != id:
                         continue
                     else:
                         if limit is None or i < limit:
-                            with db.lmdb.begin(db=db.lmdb.open_db(db.get_class_by_name(parent_clazz), readonly=True)) as txn2:
+                            with db.env.begin(db=db.env.open_db(db.get_class_by_name(parent_clazz), write=False)) as txn2:
                                 value = txn2.get(pickle.dumps(parent_id, parent_version))
                                 if value is not None:
                                     obj = cloudpickle.loads(value)
@@ -520,26 +490,19 @@ def write_lxml_generator(db: Database, clazz, generator: Generator):
 
 
 def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
-    if cursor:
-        cur = db.cursor()
+    if version:
+        with db.env.begin(write=False, db=db.open_db(clazz, True)) as txn:
+            value = txn.get(pickle.dumps((id, version)))
+            if value:
+                return db.serializer.unmarshall(value, clazz)
     else:
-        cur = db.con
+        with db.env.begin(write=False, db=db.open_db(clazz, True)) as txn:
+            cursor = txn.cursor()
+            for key, value in cursor:
+                key_id, _ = pickle.loads(key)
+                if key_id == id:
+                    return db.serializer.unmarshall(value, clazz)
 
-    objectname = get_object_name(clazz)
-
-    try:
-        if version == 'any' or version is None:
-            cur.execute(f"SELECT object FROM {objectname} WHERE id = ? ORDER BY version DESC LIMIT 1;", (id,))
-        else:
-            cur.execute(f"SELECT object FROM {objectname} WHERE id = ? AND version = ? LIMIT 1;", (id, version,))
-    except:
-        pass
-        return
-
-    row = cur.fetchone()
-    if row is not None:
-        obj = db.serializer.unmarshall(row[0], clazz)
-        return obj
 
 def delete_objects(db: Database, objs, cursor=False):
     if len(objs) == 0:
@@ -561,12 +524,15 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
     if len(objs) == 0:
         return
 
+    clazz = objs[0].__class__
+    db.insert_many_objects(clazz, objs)
+
+    """
     if cursor:
         cur = db.cursor()
     else:
         cur = db.con
 
-    clazz = objs[0].__class__
     objectname = get_object_name(clazz)
 
     if empty:
@@ -621,16 +587,17 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
     except:
         raise
         # pass
-
+    """
 
 def write_generator(db: Database, clazz, generator: Generator, empty=False):
     if empty:
-        db.clear_table(clazz)
+        db.clear_tables([clazz])
 
     db.insert_many_objects(clazz, generator)
 
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False, embedding=False):
     for klass in classes:
+        print(klass.__name__)
         db_read.copy_db(db_write, klass)
 
     if embedding:
@@ -671,6 +638,9 @@ def create_table_sql(db: Database, clazz: T) -> str:
 
 
 def update_generator(db: Database, clazz, generator: Generator):
+    db.insert_many_objects(clazz, generator)
+
+    """
     cur = db.cursor()
     objectname = get_object_name(clazz)
 
@@ -747,7 +717,7 @@ def update_generator(db: Database, clazz, generator: Generator):
                             _prepare2(generator, objectname))
 
     print('\n')
-
+    """
 
 def setup_database(db: Database, classes, clean=False, cursor=False):
     clean_element_names, interesting_element_names, interesting_classes = classes

@@ -13,6 +13,7 @@ from netex import Codespace, AvailabilityCondition, NoticeAssignment, Notice, Sc
     ServiceJourney, DayType, DayTypeAssignment, UicOperatingPeriod
 from netexio.database import Database
 from netexio.dbaccess import setup_database, copy_table, missing_class_update
+from netexio.pickleserializer import MyPickleSerializer
 from transformers.interchanges import interchange_rules_to_service_journey_interchanges
 from utils import get_interesting_classes
 from netexio.dbaccess import attach_source, attach_objects
@@ -45,11 +46,11 @@ generator_defaults = {'codespace': Codespace(xmlns=defaults["codespace"]), 'vers
 def main(source_database_file: str, target_database_file: str):
     classes = get_interesting_classes(filter=EPIP_CLASSES)
 
-    with Database(target_database_file, read_only=False) as target_db:
+    with Database(target_database_file, serializer=MyPickleSerializer(compression=True), read_only=False) as target_db:
         setup_database(target_db, classes, True)
         # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
 
-        with Database(source_database_file, read_only=True) as source_db:
+        with Database(source_database_file, MyPickleSerializer(compression=True), read_only=True) as source_db:
             log_all(logging.INFO, "Copy all tables as-is " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             copy_table(source_db, target_db,[Codespace, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True, embedding=True)
             source_db.clean_cache()
