@@ -42,10 +42,10 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
 
         objs=[]
         if object_filter == "random":
-            objs = load_local(db, getattr(netex, object_type))
+            objs = load_local(db, db.get_class_by_name(object_type))
             objs = [random.choice(objs)] # randomly select one
         else:
-            objs = load_local(db, getattr(netex, object_type), filter=object_filter)
+            objs = load_local(db, db.get_class_by_name(object_type), filter=object_filter)
 
         if len(objs) > 0:
             obj = objs[0]
@@ -77,19 +77,8 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
             log_all(logging.WARN, f"no such object found {object_type},{object_filter}")
 
 def main(netex,object_type,object_filter,output,referencing):
-    with Database(netex,read_only=False) as db:
-        # TODO: Refactor this into a normal test
-        references_exist = False
-        try:
-            db.con.execute("SELECT * FROM referencing LIMIT 1;")
-            db.con.fetchall()
-            db.con.execute("SELECT * FROM embedded LIMIT 1;")
-            db.con.fetchall()
-            references_exist = True
-        except:
-            pass
-
-        if referencing or not references_exist:
+    with Database(netex, serializer=MyPickleSerializer(compression=True), read_only=False) as db:
+        if referencing:
             log_all(logging.INFO, f"updating embedded and referencing tables")
             embedding_update(db)
 

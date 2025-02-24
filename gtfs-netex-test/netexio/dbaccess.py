@@ -53,8 +53,8 @@ def load_embedded(db: Database, clazz: T, filter, cursor=False):
     with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
-            parent_class, parent_id, parent_version, *_ = pickle.dumps(key)
-            embedding_class, embedding_id, embedding_version, *_ = pickle.dumps(value)
+            parent_class, parent_id, parent_version, *_ = pickle.loads(key)
+            embedding_class, embedding_id, embedding_version, *_ = pickle.loads(value)
             if embedding_id == filter and embedding_class == objectname:
                 result.append((parent_id, parent_version, parent_class,))
 
@@ -68,8 +68,8 @@ def load_referencing(db: Database, clazz: T, filter, cursor=False):
     with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
-            parent_class, parent_id, parent_version, *_ = pickle.dumps(key)
-            referencing_class, referencing_id, referencing_version, *_ = pickle.dumps(value)
+            parent_class, parent_id, parent_version, *_ = pickle.loads(key)
+            referencing_class, referencing_id, referencing_version, *_ = pickle.loads(value)
             if parent_id == filter and parent_class == objectname:
                 result.append((referencing_id, referencing_version, referencing_class,))
 
@@ -83,8 +83,8 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
     with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
-            parent_class, parent_id, parent_version, *_ = pickle.dumps(key)
-            referencing_class, referencing_id, referencing_version, *_ = pickle.dumps(value)
+            parent_class, parent_id, parent_version, *_ = pickle.loads(key)
+            referencing_class, referencing_id, referencing_version, *_ = pickle.loads(value)
             if referencing_id == filter and referencing_class == objectname:
                 result.append((parent_id, parent_version, parent_class,))
 
@@ -387,24 +387,25 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             cursor = txn.cursor()
             i = 0
             for key, value in cursor:
-                parent_id, parent_version, parent_clazz, _ = pickle.loads(key)
-                id, version, clazz, order, path = pickle.loads(value)
+                parent_clazz, parent_id, parent_version, _ = pickle.loads(key)
+                embedding_clazz, embedding_id, embedding_version, embedding_order, embedding_path = pickle.loads(value)
 
-                if clazz == objectname:
-                    if filter and filter != id:
+                if embedding_clazz == objectname:
+                    if filter and filter != embedding_id:
                         continue
                     else:
                         if limit is None or i < limit:
-                            with db.env.begin(db=db.env.open_db(db.get_class_by_name(parent_clazz), write=False)) as txn2:
-                                value = txn2.get(pickle.dumps(parent_id, parent_version))
-                                if value is not None:
-                                    obj = cloudpickle.loads(value)
+                            parent_clazz = db.get_class_by_name(parent_clazz)
+                            with db.env.begin(db=db.open_db(parent_clazz, readonly=True)) as txn2:
+                                value2 = txn2.get(pickle.dumps((parent_id, parent_version,)))
+                                if value2 is not None:
+                                    obj = db.serializer.unmarshall(value2, parent_clazz)
                                     if parent:
                                         yield obj
                                     else:
                                         # TODO: separate function
                                         split = []
-                                        for p in path.split('.'):
+                                        for p in embedding_path.split('.'):
                                             if p.isnumeric():
                                                 p = int(p)
                                             split.append(p)
