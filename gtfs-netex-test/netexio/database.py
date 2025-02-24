@@ -75,7 +75,7 @@ class Database:
 
             try:
                 for _ in range(batch_size):
-                    item = self.task_queue.get(timeout=15) # TODO reduce back to 3
+                    item = self.task_queue.get(timeout=3) # TODO reduce back to 3
                     if item is self.stop_signal:
                         self.task_queue.put(self.stop_signal)  # Ensure stop is propagated
                         break
