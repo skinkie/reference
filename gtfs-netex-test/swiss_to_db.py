@@ -15,30 +15,23 @@ from transformers.embedding import embedding_update
 
 SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "TemplateServiceJourney", "ServiceCalendar", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace", "ResponsibilitySet"]
 
-def main(swiss_zip_file: str, database: str, clean_database: bool = True, referencing: bool = False):
+def main(swiss_zip_file: str, database: str, clean_database: bool = True, referencing: bool = True):
     for file in open_netex_file(swiss_zip_file):
         if file.name.endswith(".xml"):
             if not check_if_swiss_file(file):
                 print("File names do not fit Swiss data:. So no Swiss data")
                 sys.exit(2)
 
-    if clean_database:
-        # Workaround for https://github.com/duckdb/duckdb/issues/8261
-        try:
-            os.remove(database)
-        except:
-            pass
-
     with Database(database, MyPickleSerializer(compression=True), read_only=False, logger=logging.getLogger("script_runner")) as db:
         classes = get_interesting_classes(SWISS_CLASSES)
-
+        """
         setup_database(db, classes, clean_database)
 
         log_all(logging.INFO, f"Starting to load {swiss_zip_file}")
         for file in open_netex_file(swiss_zip_file):
             log_all(logging.INFO, f"Inserting {file.name}")
             insert_database(db, classes, file)
-
+        """
         if referencing:
             log_all(logging.INFO, f"Embedding update!")
             embedding_update(db)

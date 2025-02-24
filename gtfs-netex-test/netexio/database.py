@@ -10,7 +10,7 @@ import time
 from netexio.serializer import Serializer
 from utils import get_object_name
 
-MAP_SIZE = (10 ** 9) * 16
+MAP_SIZE = (10 ** 9) * 32
 
 class Database:
     database_file: str
