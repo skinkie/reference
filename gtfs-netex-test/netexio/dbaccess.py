@@ -386,7 +386,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
 
 def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, cache=True):
     if db.lmdb:
-        with db.lmdb.begin(write=False, db=db.open_table(clazz)) as txn:
+        with db.lmdb.begin(write=False, db=db.open_db(clazz)) as txn:
             cursor = txn.cursor()
             if filter:
                 for key, value in cursor:
@@ -630,48 +630,11 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
     db.insert_many_objects(clazz, generator)
 
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False, embedding=False):
-    if db_read.read_only:
-        db_write.con.execute(f"ATTACH DATABASE '{db_read.database_file}' AS db_read (READ_ONLY);")
-        for clazz in classes:
-            objectname = get_object_name(clazz)
-            try:
-                if clean:
-                    db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
+    for klass in classes:
+        db_read.copy_db(db_write, klass)
 
-                sql_create_table = create_table_sql(db_write, clazz)
-                db_write.con.execute(sql_create_table)
-                db_write.con.execute(f'INSERT OR REPLACE INTO {objectname} SELECT * FROM db_read.{objectname};')
-            except CatalogException:
-                pass
-
-        if embedding:
-            sql_create_table = "CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
-            db_write.con.execute(sql_create_table)
-
-            sql_create_table = "CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
-            db_write.con.execute(sql_create_table)
-
-            in_tables = ', '.join([f"'{get_object_name(clazz)}'" for clazz in classes])
-            db_write.con.execute(f'INSERT OR REPLACE INTO embedded SELECT * FROM db_read.embedded WHERE parent_class IN ({in_tables});')
-            db_write.con.execute(f'INSERT OR REPLACE INTO referencing SELECT * FROM db_read.referencing WHERE parent_class IN ({in_tables});')
-
-        db_write.con.execute(f"DETACH db_read;")
-
-    else:
-        for clazz in classes:
-            try:
-                if clean:
-                    objectname = get_object_name(clazz)
-                    db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
-
-                write_generator(db_write, clazz, load_generator(db_read, clazz, embedding=False))
-            except CatalogException:
-                pass
-
-        if embedding:
-            # TODO: Maybe we can also copy this
-            # TODO: Does not work due to circular import embedding_update(db_write, filter_clazz=classes)
-            pass
+    if embedding:
+        db_read.copy_db_embedding(db_write, classes)
 
 def missing_class_update(source_db: Database, target_db: Database):
     # TODO: As written in #223 some of the objects have not been copied at this point, but are still referenced.
