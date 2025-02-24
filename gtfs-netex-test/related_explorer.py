@@ -13,6 +13,7 @@ from netexio import dbaccess
 from netexio.database import Database
 from netexio.dbaccess import load_local, recursive_resolve
 import netex
+from netexio.pickleserializer import MyPickleSerializer
 from utils import get_interesting_classes
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
@@ -35,7 +36,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
         log_all(logging.WARN, 'related_explorer', f"no such object type found {object_type}")
         return
 
-    with Database(database) as db:
+    with Database(database, serializer=MyPickleSerializer(compression=True)) as db:
         filter_set = {Route, ServiceJourneyPattern}
         filter_set.add(db.get_class_by_name(object_type))
 

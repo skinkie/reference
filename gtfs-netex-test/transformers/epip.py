@@ -608,6 +608,7 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
         operating_periods = getIndex(list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, OperatingPeriod, embedding=True))
         operating_days = getIndex(list(itertools.chain.from_iterable([service_calendar.day_type_assignments.day_type_assignment for service_calendar in service_calendars if service_calendar.day_type_assignments])) + load_local(db_read, OperatingDay, embedding=True))
 
+        result_day_type = []
         result_day_type_assignments = []
         result_uic_operating_periods = []
 
@@ -677,7 +678,12 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
 
                     result_day_type_assignments.append(res_dta)
                     result_uic_operating_periods.append(uic_operating_period)
+            else:
+                result_day_type_assignments += t
+                result_uic_operating_periods += my_uic_operating_periods
+            result_day_type += [my_day_type]
 
+        write_objects(db_write, result_day_type, empty=True, many=True, cursor=True)
         write_objects(db_write, result_day_type_assignments, empty=True, many=True, cursor=True)
         write_objects(db_write, result_uic_operating_periods, empty=True, many=True, cursor=True)
 

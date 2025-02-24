@@ -14,6 +14,7 @@ from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
 
 from callsprofile import CallsProfile
 from netexio.database import Database
+from netexio.pickleserializer import MyPickleSerializer
 from utils import get_interesting_classes
 from netexio.dbaccess import write_objects, write_generator, resolve_all_references, \
     resolve_all_references_and_embeddings, create_meta
@@ -2279,9 +2280,9 @@ def main(database_gtfs: str, database_netex: str):
     except:
         pass
 
-    with Database(database_netex, read_only=False) as db_write:
+    with Database(database_netex, serializer=MyPickleSerializer(compression=True), read_only=False) as db_write:
         gtfs.database(db_write)
-        create_meta(db_write)
+        # create_meta(db_write)
         embedding_update(db_write)
 
 if __name__ == '__main__':

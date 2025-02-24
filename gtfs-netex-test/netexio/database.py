@@ -55,7 +55,8 @@ class Database:
 
         total_size = 0
         for obj in objects:
-            key = pickle.dumps((obj.id, obj.version))
+            version = obj.version if hasattr(obj, 'version') else None
+            key = pickle.dumps((obj.id, version))
             value = self.serializer.marshall(obj, klass)
             item_size = len(key) + len(value)
 
@@ -74,7 +75,7 @@ class Database:
 
             try:
                 for _ in range(batch_size):
-                    item = self.task_queue.get(timeout=3)
+                    item = self.task_queue.get(timeout=15) # TODO reduce back to 3
                     if item is self.stop_signal:
                         self.task_queue.put(self.stop_signal)  # Ensure stop is propagated
                         break
@@ -90,7 +91,7 @@ class Database:
 
             with self.env.begin(write=True) as txn:
                 for db_handle, key, value in batch:
-                    txn.put(key, value, db=db_handle)
+                        txn.put(key, value, db=db_handle)
 
             if item is self.stop_signal:
                 break

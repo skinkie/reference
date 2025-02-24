@@ -7,6 +7,7 @@ from netex import DataSource, Codespace, StopPlace, PassengerStopAssignment, Sch
     DayType, DayTypeAssignment, UicOperatingPeriod, Version, StopArea, InterchangeRule
 from netexio.database import Database
 from netexio.dbaccess import setup_database,  write_objects, load_local, copy_table
+from netexio.pickleserializer import MyPickleSerializer
 from utils import get_interesting_classes
 from transformers.gtfs import GTFS_CLASSES, gtfs_operator_line_memory, gtfs_calls_generator, \
     apply_availability_conditions_via_day_type_ref, gtfs_sj_processing, gtfs_generate_deprecated_version
@@ -16,12 +17,12 @@ from transformers.projection import reprojection_update
 def main(source_database_file: str, target_database_file: str, clean_database: bool=True):
     classes = get_interesting_classes(GTFS_CLASSES)
 
-    with Database(target_database_file, read_only=False) as db_write:
+    with Database(target_database_file, serializer=MyPickleSerializer(compression=True), read_only=False) as db_write:
         # Target requires: Version, DataSource, Codespace, Authority, Operator, Branding, StopPlace, PassengerStopAssignment, ScheduledStopPoint, Line, DayType, ServiceJourney, TemplateServiceJourney, JourneyMeeting, ServiceJourneyInterchange
 
         setup_database(db_write, classes, True)
 
-        with Database(source_database_file, read_only=True) as db_read:
+        with Database(source_database_file, serializer=MyPickleSerializer(compression=True), read_only=True) as db_read:
             # Copy tables that we don't change as-is.
             copy_table(db_read, db_write,[DataSource, Codespace, StopPlace, PassengerStopAssignment, ScheduledStopPoint, StopArea, InterchangeRule, Version], clean=True)
 

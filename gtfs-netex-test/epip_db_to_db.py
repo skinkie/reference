@@ -52,7 +52,7 @@ def main(source_database_file: str, target_database_file: str):
 
         with Database(source_database_file, MyPickleSerializer(compression=True), read_only=True) as source_db:
             log_all(logging.INFO, "Copy all tables as-is " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
-            copy_table(source_db, target_db,[Codespace, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True, embedding=True)
+            copy_table(source_db, target_db,[Codespace, Direction, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True, embedding=True)
             source_db.clean_cache()
 
             log_all(logging.INFO, "Copy lines, in EPIP style " + str(memory_usage(-1, interval=.1, timeout=1)[0]))

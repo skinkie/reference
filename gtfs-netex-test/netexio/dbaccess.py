@@ -17,7 +17,7 @@ import netex
 from netexio.attributes import resolve_attr
 from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
-    EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
+    EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure, Codespace
 from netexio.database import Database
 from netexio.serializer import Serializer
 from netexio.xmlserializer import MyXmlSerializer
@@ -48,47 +48,48 @@ def load_embedded(db: Database, clazz: T, filter, cursor=False):
     # TODO: maybe return something here, which includes *ALL* objects that are embedded within this object, so it does not have to be resolved anymore
     objectname = get_object_name(clazz)
 
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
+    result = []
 
-    try:
-        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, objectname,))
-    except:
-        return []
+    with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as txn:
+        cursor = txn.cursor()
+        for key, value in cursor:
+            parent_class, parent_id, parent_version, *_ = pickle.dumps(key)
+            embedding_class, embedding_id, embedding_version, *_ = pickle.dumps(value)
+            if embedding_id == filter and embedding_class == objectname:
+                result.append((parent_id, parent_version, parent_class,))
 
-    return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
+    return result
 
 def load_referencing(db: Database, clazz: T, filter, cursor=False):
     objectname = get_object_name(clazz)
 
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
+    result = []
 
-    try:
-        cur.execute(f"SELECT ref, version, class FROM referencing WHERE parent_id = ? and parent_class = ?;", (filter, objectname,))
-    except:
-        return []
+    with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as txn:
+        cursor = txn.cursor()
+        for key, value in cursor:
+            parent_class, parent_id, parent_version, *_ = pickle.dumps(key)
+            referencing_class, referencing_id, referencing_version, *_ = pickle.dumps(value)
+            if parent_id == filter and parent_class == objectname:
+                result.append((referencing_id, referencing_version, referencing_class,))
 
-    return [(ref, version, clazz,) for ref, version, clazz in cur.fetchall()]
+    return result
 
 def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
     objectname = get_object_name(clazz)
 
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
+    result = []
 
-    try:
-        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM referencing WHERE ref = ? and class = ?;", (filter, objectname,))
-    except:
-        return []
+    with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as txn:
+        cursor = txn.cursor()
+        for key, value in cursor:
+            parent_class, parent_id, parent_version, *_ = pickle.dumps(key)
+            referencing_class, referencing_id, referencing_version, *_ = pickle.dumps(value)
+            if referencing_id == filter and referencing_class == objectname:
+                result.append((parent_id, parent_version, parent_class,))
 
-    return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
+    return result
+
 
 def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False, cache=True) -> list[T]:
     return list(load_generator(db, clazz, limit, filter, embedding, embedded_parent, cache))
@@ -272,91 +273,88 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
 
 
 def fetch_references_classes_generator(db: Database, classes: list):
-    cur = db.cursor()
-    cur2 = db.cursor()  # TODO
-
-    list_classes = ', '.join([f"'{get_object_name(clazz)}'" for clazz in classes])
+    list_classes = {get_object_name(clazz) for clazz in classes}
     processed = set()
 
     # Find all embeddings and objects the target profile, elements must not be added directly later, but referenced.
-    query = "SELECT DISTINCT class, id, version FROM embedded;"
-    cur2.execute(query)
-    existing_ids = {(clazz, ref, version,) for clazz, ref, version in cur2.fetchall()}
+    existing_ids = set()
+    with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as src_txn:
+        cursor = src_txn.cursor()
+        for _key, value in cursor:
+            clazz, ref, version, *_ = pickle.loads(value)
+            existing_ids.add((clazz, ref, version))
 
     for clazz in classes:
-        objectname = get_object_name(clazz)
-        query = f"SELECT DISTINCT id, version FROM {objectname}"
-        try:
-            cur2.execute(query)
-            set2 = {(objectname, id, version,) for id, version in cur2.fetchall()}
-            existing_ids = existing_ids.union(set2)
-        except duckdb.duckdb.CatalogException:
-            pass
+        db_name = db.open_db(clazz, readonly=True)
+        if not db_name:
+            continue
 
-    print(".")
+        with db.env.begin(db=db_name, write=False) as src_txn:
+            cursor = src_txn.cursor()
+            for key, _value in cursor:
+                id, version = pickle.loads(key)
+                existing_ids.add((clazz, ref, version))
 
-    # Practically this could still lead to a reference from an embedded class, which may already be included
-    # (or not, hence we would need to assure that those objects are not in the class list)
-    query = f"SELECT DISTINCT class, ref, version FROM referencing WHERE class NOT IN ({list_classes}) ORDER BY class;"
-    cur2.execute(query)
-    while True:
-        result = cur2.fetchone()
-        if result is None:
-            break
-        clazz_name, ref, version = result
-
-        # TODO: we cannot trust SQL objectname
-        results = load_local(db, db.get_class_by_name(clazz_name), limit=1, filter=ref, cursor=True, embedding=True,
-                             embedded_parent=True)
-        if len(results) > 0:
-            needle = get_object_name(results[0].__class__) + '|' + results[0].id
-            if results[0].__class__ in classes:  # Don't export classes, which are part of the main delivery
-                pass
-            elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
-                pass
-            else:
-                processed.add(needle)
-
-                # Maybe make separater function
-                query = "SELECT DISTINCT class, id, version, path FROM embedded WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
-                cur.execute(query,
-                            (get_object_name(results[0].__class__), results[0].id, results[0].version,))
-
-                for clazz, id, version, path in cur.fetchall():
-                    if (clazz, id, version,) in existing_ids:
-                        replace_with_reference_inplace(results[0], path)
-                yield results[0]
-
-                # An element may obviously also include other references.
-                resolved = []
-                filter_set = {results[0].__class__}.union(classes)
-                recursive_resolve(db, results[0], resolved, results[0].id, filter_set, False, True)
-
-                for resolve in resolved:
-                    needle = get_object_name(resolve.__class__) + '|' + resolve.id
-                    if resolve.__class__ in classes:  # Don't export classes, which are part of the main delivery
+    with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as src_txn:
+        cursor = src_txn.cursor()
+        for _key, value in cursor:
+            ref_class, ref_id, ref_version, ref_order = pickle.loads(value)
+            if ref_class not in list_classes:
+                results = load_local(db, db.get_class_by_name(ref_class), limit=1, filter=ref_id, cursor=True, embedding=True, embedded_parent=True)
+                if len(results) > 0:
+                    needle = get_object_name(results[0].__class__) + '|' + results[0].id
+                    if results[0].__class__ in classes:  # Don't export classes, which are part of the main delivery
                         pass
                     elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
                         pass
                     else:
                         processed.add(needle)
-                        # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
-                        query = "SELECT DISTINCT class, id, version, path FROM embedded WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
-                        cur.execute(query, (get_object_name(resolve.__class__), resolve.id, resolve.version,))
+                        with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as src_txn2:
+                            # TODO: Very expensive
+                            cursor2 = src_txn2.cursor()
+                            for key2, value2 in cursor2:
+                                parent_class, parent_id, parent_version, *_ = pickle.dumps(key2)
+                                if parent_class == ref_class and parent_id == ref_id and parent_version == ref_version:
+                                    embedding_class, embedding_id, embedding_version, embedding_path = pickle.dumps(value2)
+                                    if (embedding_class, embedding_id, embedding_version) in existing_ids:
+                                        replace_with_reference_inplace(results[0], embedding_path)
 
-                        for clazz, id, version, path in cur.fetchall():
-                            if (clazz, id, version,) in existing_ids:
-                                replace_with_reference_inplace(resolve, path)
+                        yield results[0]
 
-                        yield resolve
+                        # An element may obviously also include other references.
+                        resolved = []
+                        filter_set = {results[0].__class__}.union(classes)
+                        recursive_resolve(db, results[0], resolved, results[0].id, filter_set, False, True)
 
-                # TODO: The problem may be here that an embedding of this class, has been made a first class object, or an embedding of an existing element.
+                        for resolve in resolved:
+                            needle = get_object_name(resolve.__class__) + '|' + resolve.id
+                            if resolve.__class__ in classes:  # Don't export classes, which are part of the main delivery
+                                pass
+                            elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
+                                pass
+                            else:
+                                processed.add(needle)
+                                # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
+                                resolve_class = get_object_name(resolve.__class__)
+                                with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as src_txn2:
+                                    # TODO: Very expensive
+                                    cursor2 = src_txn2.cursor()
+                                    for key2, value2 in cursor2:
+                                        parent_class, parent_id, parent_version, i = pickle.dumps(key)
+                                        if parent_class == resolve_class and parent_id == resolve.id and parent_version == resolve.version:
+                                            embedding_class, embedding_id, embedding_version, embedding_path = pickle.dumps(value2)
+                                            if (embedding_class, embedding_id, embedding_version) in existing_ids:
+                                                replace_with_reference_inplace(resolve, embedding_path)
+
+                                yield resolve
 
 def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, parent=False, cache=True):
-    if db.env:
-        with db.env.begin(write=False, db=db.open_db(clazz)) as txn:
+    if clazz == Codespace:
+        pass
+    if db.env and db.open_db(clazz, readonly=True) is not None:
+        with db.env.begin(write=False, db=db.open_db(clazz, readonly=True)) as txn:
             cursor = txn.cursor()
             if filter:
                 for key, value in cursor:

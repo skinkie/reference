@@ -9,7 +9,7 @@ from netexio.dbaccess import update_embedded_referencing
 from netexio.serializer import Serializer
 from utils import get_object_name
 
-def embedding_update(db: Database, filter_clazz: list):
+def embedding_update(db: Database, filter_clazz: list=None):
     task_queue = queue.Queue(maxsize=1000)  # Prevents excessive memory usage
     stop_signal = object()  # Special object to signal the writer to stop
     db_embedding = db.env.open_db(b"_embedding")
