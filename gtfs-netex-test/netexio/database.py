@@ -67,7 +67,7 @@ class Database:
             #     self.task_queue.put(self.stop_signal)  # Force commit
             #    total_size = 0  # Reset memory counter
 
-    def writer(self, batch_size=100_000, max_mem=4 * 1024 ** 3):
+    def writer(self, batch_size=1_000, max_mem=4 * 1024 ** 3):
         """ Writes data from the queue to LMDB in batches. """
         while True:
             batch = []
