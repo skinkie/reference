@@ -85,7 +85,6 @@
   },
 
 
-
              {
     "block": "fr_sncf_ter",
     "url":"https://eu.ftp.opendatasoft.com/sncf/horaires/export-ter-netex-last.zip",
@@ -107,6 +106,26 @@
          ]
   },
 
+             {
+    "block": "at-test",
+    "url":"https://github.com/user-attachments/files/18965099/20250224-2317_netex_vmobil_2025.zip",
+    "download_url":"https://github.com/user-attachments/files/18965099/20250224-2317_netex_vmobil_2025.zip",
+    "scripts": [
+        {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
+        {"step":2,"script": "download_input_file", "args": "%%dir%%"},
+        {"step":3,"script": "netex_to_db.py", "args": "[%%inputfilepath%%] %%dir%%/03-import.duckdb True"},
+        {"step":4,"script": "epip_db_to_db.py", "args": "%%dir%%/03-import.duckdb %%dir%%/04-netex-database.duckdb"},
+        {"step":5,"script": "epip_db_to_xml.py", "args": "%%dir%%/04-netex-database.duckdb %%dir%%/05-%%block%%-netex.xml.gz"},
+        {"step":6,"script": "netex_to_db.py", "args": "[%%dir%%/05-%%block%%-netex.xml.gz] %%dir%%/06-gtfs.duckdb True"},
+        {"step":7,"script": "gtfs_db_to_db.py", "args": "%%dir%%/06-gtfs.duckdb %%dir%%/07-gtfs.duckdb"},
+        {"step":8,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/07-gtfs.duckdb %%dir%%/08-%%block%%-gtfs.zip"},
+        {"step":9,"script": "tool_netex_check_assertions.py", "args": "./scripts/general-netex-assertions.txt %%dir%%/05-%%block%%-netex.xml.gz"},
+        {"step":10,"script": "tool_netex_stats.py", "args": "%%dir%%/05-%%block%%-netex.xml.gz"},
+        {"step":11,"script": "tool_xml_validator.py", "args": "%%dir%%/05-%%block%%-netex.xml.gz ./netex-xsd/xsd/NeTEx_publication.xsd"},
+        {"step":12,"script": "tool_gtfs_validator.py", "args": "%%dir%%/08-%%block%%-gtfs.zip %%dir%%"},
+        {"step":13,"script": "gtfs_show_map.py", "args": "%%dir%%/08-%%block%%-gtfs.zip %%dir%%/13-%%block%%-map.html 1"}
+         ]
+  },
 {
 "block":"sncf-list",
 "description":"List of all sncf data to fetch and transform",
