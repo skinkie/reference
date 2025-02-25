@@ -2197,7 +2197,7 @@ class GtfsNeTexProfile(CallsProfile):
                 self.serializer.write(out, self.getPublicationDelivery(operators, [line], stop_areas, scheduled_stop_points, service_journeys, day_types, operating_periods, day_type_assignments), self.ns_map)
 
     def database(self, con):
-        write_objects(con, self.lines, empty=True, many=True)
+        con.insert_many_objects(Line, self.lines, block=False)
 
         # This still sucks :-) shape is in every ServiceJourney now
         # in order to solve it, we must find the route point that matches the
@@ -2209,37 +2209,39 @@ class GtfsNeTexProfile(CallsProfile):
         # write_objects(con, self.route_links, True, True)
         # write_objects(con, self.routes, True, True)
 
-        write_objects(con, [self.codespace], empty=True, many=True)
-        write_objects(con, [self.data_source], empty=True, many=True)
-        write_objects(con, [self.version], empty=True, many=True)
+        con.insert_many_objects(Codespace, [self.codespace], block=False)
+        con.insert_many_objects(DataSource, [self.data_source], block=False)
+        con.insert_many_objects(Version, [self.version], block=False)
 
         gf = GeneralFrame(id="Defaults", version="any", frame_defaults=self.frame_defaults)
-        write_objects(con, [gf], empty=True)
+        con.insert_many_objects(GeneralFrame, [gf], block=False)
 
-        write_objects(con, self.getOperators(), empty=True, many=True)
+        con.insert_many_objects(Operator, self.getOperators(), block=False)
+
         stop_areas = self.getStopAreas()
-        write_objects(con, stop_areas, empty=True, many=True)
-        write_objects(con, self.getScheduledStopPoints(stop_areas), empty=True, many=True)
+        con.insert_many_objects(StopArea, stop_areas, block=False)
+        con.insert_many_objects(ScheduledStopPoint, self.getScheduledStopPoints(stop_areas), block=False)
         stop_areas = None
 
         stop_places, passenger_stop_assignments = self.getStopPlaces()
-        write_objects(con, stop_places, empty=True, many=True)
-        write_objects(con, passenger_stop_assignments, empty=True, many=True)
+        con.insert_many_objects(StopPlace, stop_places, block=False)
+        con.insert_many_objects(PassengerStopAssignment, passenger_stop_assignments, block=False)
         stop_places = stop_passenger_stop_assignments = None
 
         day_types, day_type_assignments, operating_periods = self.getDayTypes()
-        write_objects(con, day_types, empty=True, many=True)
-        write_objects(con, day_type_assignments, empty=True, many=True)
-        write_objects(con, operating_periods, empty=True, many=True)
+        con.insert_many_objects(DayType, day_types, block=False)
+        con.insert_many_objects(DayTypeAssignment, day_type_assignments, block=False)
+        con.insert_many_objects(OperatingPeriod, operating_periods, block=False)
 
         # availability_conditions = self.getAvailabilityConditions()
         # write_objects(con, availability_conditions, empty=True, many=True)
 
-        write_generator(con, ServiceJourney, self.getServiceJourneys2DayType(), empty=True)
-        write_generator(con, TemplateServiceJourney, self.getTemplateServiceJourneysDayType(), empty=True)
+        con.insert_many_objects(ServiceJourney, self.getServiceJourneys2DayType(), block=False)
+        con.insert_many_objects(TemplateServiceJourney, self.getTemplateServiceJourneysDayType(), block=False)
 
-        write_generator(con, InterchangeRule, self.getInterchangeRules(), empty=True)
+        con.insert_many_objects(InterchangeRule, self.getInterchangeRules(), block=False)
 
+        con.block_until_done()
 
     def __init__(self, conn, serializer):
         self.conn = conn

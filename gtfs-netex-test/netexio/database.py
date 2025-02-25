@@ -36,7 +36,7 @@ class Database:
         self.stop_signal = object()  # Unique object to signal termination
         self.lock = threading.Lock()  # Ensure only one writer thread runs
 
-    def start_writer_if_needed(self, batch_size=100_000, max_mem=4 * 1024 ** 3):
+    def start_writer_if_needed(self, batch_size=1_000, max_mem=4 * 1024 ** 3):
         """ Starts the writer thread if it's not already running. """
         with self.lock:
             if self.task_queue is None:
@@ -53,7 +53,7 @@ class Database:
         db_handle = self.open_db(klass)
         self.start_writer_if_needed(batch_size, max_mem)
 
-        total_size = 0
+        # total_size = 0
         for obj in objects:
             version = obj.version if hasattr(obj, 'version') else None
             key = pickle.dumps((obj.id, version))
@@ -61,11 +61,11 @@ class Database:
             item_size = len(key) + len(value)
 
             self.task_queue.put((db_handle, key, value))
-            total_size += item_size
+            # total_size += item_size
 
-            if total_size >= max_mem:
-                self.task_queue.put(self.stop_signal)  # Force commit
-                total_size = 0  # Reset memory counter
+            # if total_size >= max_mem:
+            #     self.task_queue.put(self.stop_signal)  # Force commit
+            #    total_size = 0  # Reset memory counter
 
     def writer(self, batch_size=100_000, max_mem=4 * 1024 ** 3):
         """ Writes data from the queue to LMDB in batches. """
@@ -77,7 +77,7 @@ class Database:
                 for _ in range(batch_size):
                     item = self.task_queue.get(timeout=3) # TODO reduce back to 3
                     if item is self.stop_signal:
-                        self.task_queue.put(self.stop_signal)  # Ensure stop is propagated
+                        # self.task_queue.put(self.stop_signal)  # Ensure stop is propagated
                         break
                     batch.append(item)
                     total_size += len(item[1]) + len(item[2])  # Key + Value size
@@ -86,12 +86,14 @@ class Database:
                         break  # Commit early if memory limit is reached
 
             except queue.Empty:
-                if not batch:
-                    break  # Stop if queue remains empty
+                pass
+                # if not batch:
+                #    break  # Stop if queue remains empty
 
-            with self.env.begin(write=True) as txn:
-                for db_handle, key, value in batch:
-                        txn.put(key, value, db=db_handle)
+            if batch:
+                with self.env.begin(write=True) as txn:
+                    for db_handle, key, value in batch:
+                            txn.put(key, value, db=db_handle)
 
             if item is self.stop_signal:
                 break
@@ -101,20 +103,25 @@ class Database:
             self.task_queue = None
             self.writer_thread = None
 
-    def insert_many_objects(self, klass, objects, batch_size=100_000, max_mem=4 * 1024 ** 3, quiet=False):
+    def insert_many_objects(self, klass, objects, batch_size=1_000, max_mem=4 * 1024 ** 3, quiet=False, block=False):
         """ Wrapper around insert_object_on_queue to ensure objects are written in batch. """
         self.insert_object_on_queue(klass, objects, batch_size, max_mem)
 
-        if not quiet:
-            print(f"Insertion of {get_object_name(klass)} objects started.")
+        if block:
+            if not quiet:
+                print(f"Insertion of {get_object_name(klass)} objects started.")
 
-        self.task_queue.put(self.stop_signal)
-        self.writer_thread.join()  # Wait for writer to finish
+            self.block_until_done()
 
-        if not quiet:
-            print(f"Insertion of {get_object_name(klass)} objects completed.")
+            if not quiet:
+                print(f"Insertion of {get_object_name(klass)} objects completed.")
 
-    def copy_db(self, target: Database, klass: T, batch_size=100_000, max_mem=4 * 1024 ** 3):
+    def block_until_done(self):
+        if self.writer_thread:
+            self.task_queue.put(self.stop_signal)
+            self.writer_thread.join() # Wait for writer to finish
+
+    def copy_db(self, target: Database, klass: T, batch_size=1_000, max_mem=4 * 1024 ** 3):
         """
         Copies a single database from `src_env` to `dst_env` with high throughput.
 
@@ -158,7 +165,7 @@ class Database:
                     dst_txn.put(k, v)
                 dst_txn.commit()
 
-    def copy_db_embedding(self, target: Database, classes: list[T], batch_size=100_000, max_mem=4 * 1024 ** 3):
+    def copy_db_embedding(self, target: Database, classes: list[T], batch_size=1_000, max_mem=4 * 1024 ** 3):
         """
         Copies '_referencing' and '_embedding' databases from `self.env` to `target.env` with high throughput.
 
@@ -242,6 +249,7 @@ class Database:
         return self
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
+        self.block_until_done()
         self.env.close()
 
     def clear_tables(self, classes: list[Type[T]]):

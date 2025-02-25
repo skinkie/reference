@@ -1,4 +1,4 @@
-from memory_profiler import memory_usage, profile
+from memory_profiler import memory_usage
 import logging
 import sys
 import warnings

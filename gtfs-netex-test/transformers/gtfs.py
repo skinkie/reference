@@ -389,6 +389,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
             avc = load_local(db_read, AvailabilityCondition, embedding=True)
             """
 
+    log_all(logging.INFO, "Processing ServiceJourneys")
     write_generator(db_write, ServiceJourney, query_sj(db_read))
 
     def query_daytype(db_read, calendar_combinations):
@@ -455,12 +456,15 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
                     # TODO
                     log_once(logging.WARN, "dt-1", "We cannot yet handle day type aggregation")
 
+    log_all(logging.INFO, "Processing Calendars")
     for day_type, day_type_assignments, operating_periods in query_daytype(db_read, calendar_combinations):
         # TODO: Figure out if there can be a parallel receiver for a generator
-        write_objects(db_write, [day_type])
-        write_objects(db_write, day_type_assignments, many=True)
+        db_write.insert_many_objects(DayType, [day_type], block=False)
+        db_write.insert_many_objects(DayTypeAssignment, day_type_assignments, block=False)
         if operating_periods is not None and len(operating_periods) > 0:
-            write_objects(db_write, operating_periods)
+            db_write.insert_many_objects(UicOperatingPeriod, operating_periods, block=False)
+
+    # db_write.block_until_done()
 
 def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaults: dict):
     def query_sj(db_read: Database) -> Generator:

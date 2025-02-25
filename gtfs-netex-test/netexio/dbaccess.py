@@ -25,7 +25,6 @@ from refs import getRef, getFakeRefByClass
 from transformers.references import replace_with_reference_inplace
 from utils import get_object_name, get_element_name_with_ns
 from aux_logging import *
-from line_profiler import profile
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -169,7 +168,6 @@ def load_embedding_generator(db: Database, clazz: T, filter=None, cursor=False) 
         for parent_klass, parent_id, parent_version, klass, ref, version in cur.fetchall():
             yield getFakeRefByClass(parent_id, db.get_class_by_name(parent_klass), parent_version), getFakeRefByClass(ref, db.get_class_by_name(klass), version)
 
-@profile
 def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=set([]), inwards=True, outwards=True):
     for x in resolved:
         if parent.id == x.id and parent.__class__ == x.__class__:
@@ -739,7 +737,6 @@ def get_local_name(element):
     return element.__name__
 
 
-@profile
 def update_embedded_referencing(serializer: Serializer, deserialized) -> Generator[list[str], None, None]:
     for obj, path in recursive_attributes(deserialized, []):
         if hasattr(obj, 'id'):
@@ -1002,7 +999,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     # cur.execute("INSERT OR REPLACE INTO referencing SELECT DISTINCT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
 
     # cur.execute("DROP TABLE temp_embedded;")
-@profile
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     # qprint(obj.__class__.__name__)
     if issubclass(obj.__class__, EntityInVersionStructure) and obj.data_source_ref_attribute is not None:
