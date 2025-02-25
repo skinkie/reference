@@ -462,7 +462,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
         db_write.insert_many_objects(DayType, [day_type], block=False)
         db_write.insert_many_objects(DayTypeAssignment, day_type_assignments, block=False)
         if operating_periods is not None and len(operating_periods) > 0:
-            db_write.insert_many_objects(UicOperatingPeriod, operating_periods, block=False)
+            db_write.insert_many_objects(OperatingPeriod, operating_periods, block=False)
 
     # db_write.block_until_done()
 
