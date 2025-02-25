@@ -312,9 +312,9 @@ def fetch_references_classes_generator(db: Database, classes: list):
                             # TODO: Very expensive
                             cursor2 = src_txn2.cursor()
                             for key2, value2 in cursor2:
-                                parent_class, parent_id, parent_version, *_ = pickle.dumps(key2)
+                                parent_class, parent_id, parent_version, *_ = pickle.loads(key2)
                                 if parent_class == ref_class and parent_id == ref_id and parent_version == ref_version:
-                                    embedding_class, embedding_id, embedding_version, embedding_path = pickle.dumps(value2)
+                                    embedding_class, embedding_id, embedding_version, embedding_path = pickle.loads(value2)
                                     if (embedding_class, embedding_id, embedding_version) in existing_ids:
                                         replace_with_reference_inplace(results[0], embedding_path)
 
@@ -340,9 +340,9 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                     # TODO: Very expensive
                                     cursor2 = src_txn2.cursor()
                                     for key2, value2 in cursor2:
-                                        parent_class, parent_id, parent_version, i = pickle.dumps(key)
+                                        parent_class, parent_id, parent_version, i = pickle.loads(key)
                                         if parent_class == resolve_class and parent_id == resolve.id and parent_version == resolve.version:
-                                            embedding_class, embedding_id, embedding_version, embedding_path = pickle.dumps(value2)
+                                            embedding_class, embedding_id, embedding_version, embedding_path = pickle.loads(value2)
                                             if (embedding_class, embedding_id, embedding_version) in existing_ids:
                                                 replace_with_reference_inplace(resolve, embedding_path)
 
@@ -395,7 +395,7 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                         if limit is None or i < limit:
                             parent_clazz = db.get_class_by_name(parent_clazz)
                             with db.env.begin(db=db.open_db(parent_clazz, readonly=True)) as txn2:
-                                value2 = txn2.get(pickle.dumps((parent_id, parent_version,)))
+                                value2 = txn2.get(pickle.dumps((parent_id, parent_version)))
                                 if value2 is not None:
                                     obj = db.serializer.unmarshall(value2, parent_clazz)
                                     if parent:
@@ -487,16 +487,20 @@ def write_lxml_generator(db: Database, clazz, generator: Generator):
 
 
 def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
+    db_src = db.open_db(clazz, True)
+    if not db_src:
+        return
+
     if version:
-        with db.env.begin(write=False, db=db.open_db(clazz, True)) as txn:
+        with db.env.begin(write=False, db=db_src) as txn:
             value = txn.get(pickle.dumps((id, version)))
             if value:
                 return db.serializer.unmarshall(value, clazz)
     else:
-        with db.env.begin(write=False, db=db.open_db(clazz, True)) as txn:
+        with db.env.begin(write=False, db=db_src) as txn:
             cursor = txn.cursor()
             for key, value in cursor:
-                key_id, _ = pickle.loads(key)
+                key_id, *_ = pickle.loads(key)
                 if key_id == id:
                     return db.serializer.unmarshall(value, clazz)
 

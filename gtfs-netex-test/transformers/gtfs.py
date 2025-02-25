@@ -693,7 +693,8 @@ def gtfs_calendar_and_dates2(db_read: Database, day_type: DayType, day_type_assi
                                 'exception_type': 2 if day_type_assignment.is_available is not None and day_type_assignment.is_available == False else 1 },))
         elif isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef):
             operating_period: OperatingPeriod = get_single(db_read, OperatingPeriod, day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref)
-            yield from gtfs_calendar2(service_id, day_type, operating_period)
+            if operating_period:
+                yield from gtfs_calendar2(service_id, day_type, operating_period)
 
 def gtfs_calendar_and_dates(db_read: Database, day_type_ref: DayTypeRef, day_type_assignments: list[DayTypeAssignment]):
     day_type: DayType = get_single(db_read, DayTypeAssignment, day_type_ref.ref)

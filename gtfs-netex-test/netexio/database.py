@@ -93,7 +93,7 @@ class Database:
             if batch:
                 with self.env.begin(write=True) as txn:
                     for db_handle, key, value in batch:
-                            txn.put(key, value, db=db_handle)
+                        txn.put(key, value, db=db_handle)
 
             if item is self.stop_signal:
                 break
@@ -253,6 +253,9 @@ class Database:
         self.env.close()
 
     def clear_tables(self, classes: list[Type[T]]):
+        # TODO: This is not how we should do it
+        self.block_until_done()
+
         dbs = [self.open_db(klass) for klass in classes]
         with self.env.begin(write=True) as txn:
             for db in dbs:

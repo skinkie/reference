@@ -82,6 +82,9 @@ def reprojection_update(db: Database, crs_to: str, batch_size=100_000, max_mem=4
             for dst_key, dst_value in batch:
                 dst_txn.put(dst_key, dst_value)
 
+    # TODO: Remove when fixed
+    db.block_until_done()
+
     for clazz in db.tables(exclusively=set(get_all_geo_elements())):
         src_db = db.open_db(clazz, readonly=True)
         if not src_db:
