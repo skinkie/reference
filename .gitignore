@@ -3,3 +3,4 @@ gtfs-netex-test/aux_test_processing
 .idea/
 gtfs-netex-test/local_configuration.py
 *.xt
+gtfs-netex-test/gtfs-validator/gtfs-validator-6.0.0-cli.jar
