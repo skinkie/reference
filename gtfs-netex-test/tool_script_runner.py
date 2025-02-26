@@ -134,6 +134,8 @@ def download(folder, url, forced=False):
             filename="swiss.zip"
         if "?" in filename:  #for data from mobigo, that is fetched by an aspx script with parameters
             filename="source.zip"
+        if "Resource" in filename: # for italian data
+            filename="source.xml.gz"
         if forced==False:
             # Download only when not exists
             path=os.path.join(folder, filename)

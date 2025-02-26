@@ -223,8 +223,6 @@
          ]
   },
 
-
-
        {
     "block": "at-test",
     "url":"https://mobilitydata.gv.at/daten/soll-fahrplandaten-netex",
@@ -246,6 +244,34 @@
         {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/11-%%block%%-gtfs.zip %%dir%%/13-%%block%%-map.html 1"}
          ]
   },
+
+  {
+"block":"it-list",
+"description":"List of all sncf data to fetch and transform",
+    "url":"https://www.cciss.it/nap/mmtis/public/catalog/Dataset/5486",
+"description":"Regions: Aostatal, Piemont, Lombarei, Trentino-Südtirol, Venetien, (Friaul, Lulisch Venetien)",
+"download_urls":[
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/131116/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/131873/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/131910/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/131947/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/132386/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/132195/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/131494/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/310527/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/315/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/194547/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/2219/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/180710/checkedResource",
+    "https://www.cciss.it/nap/mmtis/public/api/v1/download/blob/Asset/181861/checkedResource"
+
+
+],
+"scripts": [
+ {"step":"1", "script": "process_url_list", "args": "netex2epipgtfs"}
+]
+},
+
 
        {
     "block": "lombardiatrainitalia",
