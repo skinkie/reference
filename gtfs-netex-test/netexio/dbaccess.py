@@ -396,7 +396,7 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                         if limit is None or i < limit:
                             parent_clazz = db.get_class_by_name(parent_clazz)
                             with db.env.begin(db=db.open_db(parent_clazz, readonly=True)) as txn2:
-                                prefix = self.encode_pair(parent_id, parent_version, parent_clazz)
+                                prefix = db.encode_pair(parent_id, parent_version, parent_clazz)
                                 value2 = txn2.get(prefix)
                                 if value2 is not None:
                                     obj = db.serializer.unmarshall(value2, parent_clazz)
