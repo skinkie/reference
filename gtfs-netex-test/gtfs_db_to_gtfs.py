@@ -16,7 +16,7 @@ import hashlib
 from callsprofile import CallsProfile
 from netexio import dbaccess
 from netexio.database import Database
-from netexio.dbaccess import load_local, load_generator, get_single
+from netexio.dbaccess import load_local, load_generator
 from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
     Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
