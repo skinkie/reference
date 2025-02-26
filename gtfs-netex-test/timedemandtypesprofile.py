@@ -17,7 +17,7 @@ from netex import ServiceJourney, ServiceJourneyPattern, StopPointInJourneyPatte
     JourneyRunTime, JourneyWaitTime, JourneyRunTimesRelStructure, TimingLinkRef, JourneyWaitTimesRelStructure, \
     ScheduledStopPointRef, TimingLinkRefStructure, PublicationDelivery, GeneralFrame, ServiceLink, \
     TimingPointInJourneyPattern
-from netexio.dbaccess import load_local, write_objects, get_single
+from netexio.dbaccess import load_local, write_objects
 from refs import getRef, getIndex, getId, getFakeRef
 import sys
 class TimeDemandTypesProfile:
@@ -406,11 +406,11 @@ class TimeDemandTypesProfile:
     def getServiceJourneyPatternGenerator(self, read_con, write_con, service_journey: ServiceJourney, ssps: Dict[str, ScheduledStopPoint]) -> ServiceJourneyPattern:
         if service_journey.journey_pattern_ref is not None:
             # Have we already processed it?
-            sjp = get_single(write_con, ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
+            sjp = write_con.get_single(ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
             if sjp is not None:
                 return sjp
 
-            sjp = get_single(read_con, ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
+            sjp = read_con.get_single(ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
             if sjp is not None:
                 # TODO zorg er voor dat hier de onwards in ieder geval zijn gezet
                 piss = sjp.points_in_sequence.point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern
@@ -425,9 +425,9 @@ class TimeDemandTypesProfile:
                                            TimeDemandTypesProfile.getHexHash(hash(ssp.id + "-" +
                                                                                   ssp_next.id)))
 
-                            tl = get_single(read_con, TimingLink, tl_ref)
+                            tl = read_con.get_single(TimingLink, tl_ref)
                             if tl is None:
-                                tl = get_single(write_con, TimingLink, tl_ref)
+                                tl = write_con.get_single(TimingLink, tl_ref)
                                 if tl is None:
                                     tl = TimingLink(id=tl_ref,
                                                     version=self.version.version,
@@ -456,9 +456,9 @@ class TimeDemandTypesProfile:
                     tl_ref = getId(TimingLink, self.codespace, TimeDemandTypesProfile.getHexHash(hash(ssp.ref + "-" + ssp_next.ref)))
 
                 # TODO: Something smart that if the table does not exist in read, it will never try again.
-                tl = get_single(read_con, TimingLink, tl_ref)
+                tl = read_con.get_single(TimingLink, tl_ref)
                 if tl is None:
-                    tl = get_single(write_con, TimingLink, tl_ref)
+                    tl = write_con.get_single(TimingLink, tl_ref)
                     if tl is None:
                         tl = TimingLink(id=tl_ref,
                                         version=self.version.version,
@@ -478,7 +478,7 @@ class TimeDemandTypesProfile:
             if service_journey.journey_pattern_ref is not None:
                 id = service_journey.journey_pattern_ref.ref
 
-            sjp = get_single(write_con, ServiceJourneyPattern, id, service_journey.version)
+            sjp = write_con.get_single(ServiceJourneyPattern, id, service_journey.version)
             if sjp is not None:
                 return sjp
 

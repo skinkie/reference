@@ -10,6 +10,8 @@ T = TypeVar("T")
 
 import lmdb
 import time
+import string
+import re
 
 from netexio.serializer import Serializer
 from utils import get_object_name
@@ -36,6 +38,79 @@ class Database:
         self.stop_signal = object()  # Unique object to signal termination
         self.lock = threading.Lock()  # Ensure only one writer thread runs
 
+    def custom_encode(value, word):
+        SPECIAL_CHAR = '*'  # Placeholder for special characters
+        WORD_MASK = '#'  # Placeholder for the specified word
+
+        # Convert everything to uppercase
+        value = value.upper()
+        word = word.upper()
+
+        # Replace the word with #
+        value = re.sub(rf'\b{re.escape(word)}\b', WORD_MASK, value)
+
+        # Replace special characters
+        return ''.join(
+            char if char in string.ascii_uppercase or char in string.digits or char == WORD_MASK else SPECIAL_CHAR
+            for char in value
+        )
+
+    @staticmethod
+    def encode_pair(id, version, clazz):
+        SPECIAL_CHAR = b'*'  # Placeholder for special characters
+        WORD_MASK = b'#'  # Placeholder for the specified word
+
+        # Convert everything to uppercase
+        value = id.upper()
+        obj_name = get_object_name(clazz).upper()
+
+        # Replace the word with #
+        value = re.sub(rf'\b{re.escape(obj_name)}\b', '#', value)
+
+        # Replace special characters
+        encoded_bytes = bytearray()
+        for char in value:
+            if char in string.ascii_uppercase or char in string.digits or char == "#":
+                encoded_bytes.append(ord(char))
+            else:
+                encoded_bytes.append(ord('*'))  # Replace special characters
+
+        encoded_bytes.append(ord('-'))
+
+        if version is not None:
+            version = version.upper()
+            # Replace the word with #
+            version = re.sub(rf'\b{re.escape(obj_name)}\b', '#', version)
+
+            for char in version:
+                if char in string.ascii_uppercase or char in string.digits or char == "#":
+                    encoded_bytes.append(ord(char))
+                else:
+                    encoded_bytes.append(ord('*'))  # Replace special characters
+
+        return bytes(encoded_bytes)
+
+    def get_single(self, clazz: T, id, version=None) -> T:
+        db = self.open_db(clazz, readonly=True)
+        if db is None:
+            return
+
+        prefix = self.encode_pair(id, version, clazz)
+        with self.env.begin(write=False, db=db) as txn:
+            if version:
+                value = txn.get(prefix)
+                if value:
+                    return self.serializer.unmarshall(value, clazz)
+            else:
+                cursor = txn.cursor()
+                if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+                    for key, value in cursor:
+                        if not key.startswith(prefix):
+                            break  # Stop when keys no longer match the prefix
+
+                        # TODO: What about handling the validity too here?
+                        return self.serializer.unmarshall(value, clazz)
+
     def start_writer_if_needed(self, batch_size=1_000, max_mem=4 * 1024 ** 3):
         """ Starts the writer thread if it's not already running. """
         with self.lock:
@@ -56,7 +131,7 @@ class Database:
         # total_size = 0
         for obj in objects:
             version = obj.version if hasattr(obj, 'version') else None
-            key = pickle.dumps((obj.id, version))
+            key = self.encode_pair(obj.id, version, klass)
             value = self.serializer.marshall(obj, klass)
             item_size = len(key) + len(value)
 

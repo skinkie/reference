@@ -51,7 +51,7 @@ from netex import PublicationDelivery, ParticipantRef, MultilingualString, DataO
 
 from netexio.database import Database
 
-from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, get_single, \
+from netexio.dbaccess import load_generator, load_local, write_generator, write_objects, \
     recursive_attributes, fetch_references_classes_generator
 from refs import getIndex, getRef, getId, getFakeRef
 from servicecalendarepip import ServiceCalendarEPIPFrame
@@ -314,7 +314,7 @@ def service_journey_ac_to_day_type(db_read: Database, db_write: Database, servic
             ac: ValidityConditionsRelStructure
             for a in ac.choice:
                 if isinstance(a, AvailabilityConditionRef):
-                    this_ac = get_single(db_read, AvailabilityCondition, a.ref, a.version, cursor=True)
+                    this_ac = db_read.get_single(AvailabilityCondition, a.ref, a.version)
                     acs.append(this_ac)
                 elif isinstance(a, AvailabilityCondition):
                     acs.append(a)
@@ -477,7 +477,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
                         print("RouteView: Other options to recover line not available")
 
             elif isinstance(service_journey_pattern.route_ref_or_route_view, RouteRef):
-                route: Route = get_single(db_read, Route, service_journey_pattern.route_ref_or_route_view.ref,
+                route: Route = db_read.get_single(Route, service_journey_pattern.route_ref_or_route_view.ref,
                                           service_journey_pattern.route_ref_or_route_view.version)
                 service_journey_pattern.route_ref_or_route_view = RouteView(
                     flexible_line_ref_or_line_ref_or_line_view=route.line_ref)
@@ -502,7 +502,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
 
         if sj.passing_times:
             if sj.journey_pattern_ref.ref not in sjp_ids:
-                service_journey_pattern: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern,
+                service_journey_pattern: ServiceJourneyPattern = db_read.get_single(ServiceJourneyPattern,
                                                                             sj.journey_pattern_ref.ref,
                                                                             sj.journey_pattern_ref.version)
 
@@ -512,7 +512,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
         elif sj.calls:
             if sj.journey_pattern_ref:
                 pass
-                # service_journey_pattern: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern,
+                # service_journey_pattern: ServiceJourneyPattern = db_read.get_single(ServiceJourneyPattern,
                 #                                                            sj.journey_pattern_ref.ref,
                 #                                                            sj.journey_pattern_ref.version)
             else:
@@ -522,10 +522,10 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
             sj.passing_times = TimetabledPassingTimesRelStructure(timetabled_passing_time=TimetablePassingTimesProfile.getTimetabledPassingtimesFromCalls(sj, service_journey_pattern))
 
         elif sj.time_demand_type_ref:
-            service_journey_pattern: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern,
+            service_journey_pattern: ServiceJourneyPattern = db_read.get_single(ServiceJourneyPattern,
                                                                         sj.journey_pattern_ref.ref,
                                                                         sj.journey_pattern_ref.version)
-            time_demand_type: TimeDemandType = get_single(db_read, TimeDemandType, sj.time_demand_type_ref.ref,
+            time_demand_type: TimeDemandType = db_read.get_single(TimeDemandType, sj.time_demand_type_ref.ref,
                                                           sj.time_demand_type_ref.version)
             CallsProfile.getPassingTimesFromTimeDemandType(sj, service_journey_pattern, time_demand_type)
 

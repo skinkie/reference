@@ -287,11 +287,11 @@ def fetch_references_classes_generator(db: Database, classes: list):
         if not db_name:
             continue
 
+        # TODO: Implement prefix based code
         with db.env.begin(db=db_name, write=False) as src_txn:
             cursor = src_txn.cursor()
             for key, _value in cursor:
-                id, version = pickle.loads(key)
-                existing_ids.add((clazz, ref, version))
+                existing_ids.add((clazz, key))
 
     with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as src_txn:
         cursor = src_txn.cursor()
@@ -315,7 +315,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                 parent_class, parent_id, parent_version, *_ = pickle.loads(key2)
                                 if parent_class == ref_class and parent_id == ref_id and parent_version == ref_version:
                                     embedding_class, embedding_id, embedding_version, embedding_path = pickle.loads(value2)
-                                    if (embedding_class, embedding_id, embedding_version) in existing_ids:
+                                    if (embedding_class, db.encode_pair(embedding_id, embedding_version, get_class_by_name(embedding_class))) in existing_ids:
                                         replace_with_reference_inplace(results[0], embedding_path)
 
                         yield results[0]
@@ -343,23 +343,24 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                         parent_class, parent_id, parent_version, i = pickle.loads(key)
                                         if parent_class == resolve_class and parent_id == resolve.id and parent_version == resolve.version:
                                             embedding_class, embedding_id, embedding_version, embedding_path = pickle.loads(value2)
-                                            if (embedding_class, embedding_id, embedding_version) in existing_ids:
+                                            if (embedding_class, db.encode_pair(embedding_id, embedding_version, get_class_by_name(embedding_class))) in existing_ids:
                                                 replace_with_reference_inplace(resolve, embedding_path)
 
                                 yield resolve
 
 def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, parent=False, cache=True):
-    if clazz == Codespace:
-        pass
     if db.env and db.open_db(clazz, readonly=True) is not None:
         with db.env.begin(write=False, db=db.open_db(clazz, readonly=True)) as txn:
             cursor = txn.cursor()
             if filter:
-                for key, value in cursor:
-                    id, version = pickle.loads(key)
-                    if id == filter:
-                        value = db.serializer.unmarshall(value, clazz)
-                        yield value
+                prefix = db.encode_pair(filter, None, clazz)
+                if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+                    for key, value in cursor:
+                        if not key.startswith(prefix):
+                            break  # Stop when keys no longer match the prefix
+
+                        yield db.serializer.unmarshall(value, clazz)
+
             elif limit is not None:
                 i = 0
                 for _key, value in cursor:
@@ -395,7 +396,8 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                         if limit is None or i < limit:
                             parent_clazz = db.get_class_by_name(parent_clazz)
                             with db.env.begin(db=db.open_db(parent_clazz, readonly=True)) as txn2:
-                                value2 = txn2.get(pickle.dumps((parent_id, parent_version)))
+                                prefix = self.encode_pair(parent_id, parent_version, parent_clazz)
+                                value2 = txn2.get(prefix)
                                 if value2 is not None:
                                     obj = db.serializer.unmarshall(value2, parent_clazz)
                                     if parent:
@@ -484,26 +486,6 @@ def write_lxml_generator(db: Database, clazz, generator: Generator):
                     _prepare2(generator, objectname))
 
     print('\n')
-
-
-def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
-    db_src = db.open_db(clazz, True)
-    if not db_src:
-        return
-
-    if version:
-        with db.env.begin(write=False, db=db_src) as txn:
-            value = txn.get(pickle.dumps((id, version)))
-            if value:
-                return db.serializer.unmarshall(value, clazz)
-    else:
-        with db.env.begin(write=False, db=db_src) as txn:
-            cursor = txn.cursor()
-            for key, value in cursor:
-                key_id, *_ = pickle.loads(key)
-                if key_id == id:
-                    return db.serializer.unmarshall(value, clazz)
-
 
 def delete_objects(db: Database, objs, cursor=False):
     if len(objs) == 0:
