@@ -137,9 +137,6 @@
  {"step":"1", "script": "process_url_list", "args": "netex2epip"}
 ]
 },
-
-
-
 {
 "block":"mobigo-list",
 "description":"List of some mobigo data to fetch and transform",

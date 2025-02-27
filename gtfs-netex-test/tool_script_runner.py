@@ -172,7 +172,7 @@ def remove_file(path):
     else:
         raise FileNotFoundError(f"File not found: {path}")
 
-def main(script_file,log_file, log_level, todo_block,begin_step,url=None):
+def main(script_file,log_file, log_level, todo_block,begin_step,url=None, parent_block=""):
     # blockexisted
     blockexisted=False
     # Read the scripts from a file
@@ -182,7 +182,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step,url=None):
     # go through each block
     for block in data:
         if url:
-            processdir= processing_data + "/" + todo_block+ "-"+str(custom_hash(url))
+            processdir= processing_data + "/" + parent_block+"-"+todo_block+ "-"+str(custom_hash(url))
         else:
             processdir = processing_data + "/" + block["block"]
         blockstop = False
@@ -200,7 +200,8 @@ def main(script_file,log_file, log_level, todo_block,begin_step,url=None):
         for script in scripts:
             step=step+1
             # skip some steps if this is mandated
-            if step < begin_step:
+
+            if not "download_urls" in block.keys() and (step < begin_step): #if it is a list we always begin with 1 the begin_step is then used within the list
                 continue
             if blockstop == True:
                 break
@@ -261,7 +262,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step,url=None):
             if script_name == "process_url_list":
                 for url in block.get("download_urls"):
                     newblock=script_args
-                    main(list_scripts,log_file,log_level,newblock, 0, url=url)
+                    main(list_scripts,log_file,log_level,newblock, begin_step, url=url, parent_block=block["block"])
                 # only one process_url_list can be in a block
                 return
             if script_name == 'remove_file':
