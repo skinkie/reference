@@ -6,6 +6,9 @@ import queue
 import threading
 from logging import Logger
 from typing import Generator, Iterator, Type, TypeVar
+
+from netexio.activelrucache import ActiveLRUCache
+
 T = TypeVar("T")
 
 import lmdb
@@ -38,6 +41,8 @@ class Database:
         self.stop_signal = object()  # Unique object to signal termination
         self.lock = threading.Lock()  # Ensure only one writer thread runs
 
+        self.cache = ActiveLRUCache(100)
+
     def custom_encode(value, word):
         SPECIAL_CHAR = '*'  # Placeholder for special characters
         WORD_MASK = '#'  # Placeholder for the specified word
@@ -56,7 +61,7 @@ class Database:
         )
 
     @staticmethod
-    def encode_pair(id, version, clazz):
+    def encode_pair(id, version, clazz, include_clazz=False):
         SPECIAL_CHAR = b'*'  # Placeholder for special characters
         WORD_MASK = b'#'  # Placeholder for the specified word
 
@@ -64,11 +69,21 @@ class Database:
         value = id.upper()
         obj_name = get_object_name(clazz).upper()
 
+        # Replace special characters
+        encoded_bytes = bytearray()
+
+        if include_clazz:
+            for char in obj_name:
+                if char in string.ascii_uppercase or char in string.digits or char == "#":
+                    encoded_bytes.append(ord(char))
+                else:
+                    encoded_bytes.append(ord('*'))  # Replace special characters
+
+            encoded_bytes.append(ord('-'))
+
         # Replace the word with #
         value = re.sub(rf'\b{re.escape(obj_name)}\b', '#', value)
 
-        # Replace special characters
-        encoded_bytes = bytearray()
         for char in value:
             if char in string.ascii_uppercase or char in string.digits or char == "#":
                 encoded_bytes.append(ord(char))

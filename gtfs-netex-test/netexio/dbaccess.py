@@ -395,21 +395,28 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                     else:
                         if limit is None or i < limit:
                             parent_clazz = db.get_class_by_name(parent_clazz)
-                            with db.env.begin(db=db.open_db(parent_clazz, readonly=True)) as txn2:
-                                prefix = db.encode_pair(parent_id, parent_version, parent_clazz)
-                                value2 = txn2.get(prefix)
-                                if value2 is not None:
-                                    obj = db.serializer.unmarshall(value2, parent_clazz)
-                                    if parent:
-                                        yield obj
-                                    else:
-                                        # TODO: separate function
-                                        split = []
-                                        for p in embedding_path.split('.'):
-                                            if p.isnumeric():
-                                                p = int(p)
-                                            split.append(p)
-                                        yield resolve_attr(obj, split)
+                            cache_key = db.encode_pair(parent_id, parent_version, parent_clazz, include_clazz=True)
+                            obj = db.cache.get(cache_key, None) # TODO
+
+                            if obj is None:
+                                with db.env.begin(db=db.open_db(parent_clazz, readonly=True)) as txn2:
+                                    prefix = db.encode_pair(parent_id, parent_version, parent_clazz)
+                                    value2 = txn2.get(prefix)
+                                    if value2 is not None:
+                                        obj = db.serializer.unmarshall(value2, parent_clazz)
+                                        db.cache.add(cache_key, obj)
+
+                            if obj is not None:
+                                if parent:
+                                    yield obj
+                                else:
+                                    # TODO: separate function
+                                    split = []
+                                    for p in embedding_path.split('.'):
+                                        if p.isnumeric():
+                                            p = int(p)
+                                        split.append(p)
+                                    yield resolve_attr(obj, split)
                             i += 1
                         else:
                             break
