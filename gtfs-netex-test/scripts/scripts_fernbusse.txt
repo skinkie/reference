@@ -35,19 +35,21 @@
        "block": "merge_fernbusse",
     "description":"Merge Fernbusse and upload it",
     "scripts": [
-        {"step":0,"script": "clean_tmp", "args": "%%dir%%"},
-        {"step":1,"script": "set_defaults", "args": "authority='SKI+'; time_zone='Europe/Berlin'; feed_publisher_name='SBB-SKI+'; feed_publisher_url='https://opentransportdata.swiss'"},
-        {"step":2,"script": "netex_to_db.py", "args": "[%%dir%%/flixbus-prod/epip_netex_flixbus.zip %%dir%%/blablacar-prod/epip_netex_blablacar.zip] %%dir%%/02-gtfs.duckdb True"},
-        {"step":3,"script": "epip_db_to_xml.py", "args": "%%dir%%/02-gtfs.duckdb True %%dir%%/epip_netex_fernbusse.xml.zip"},
-        {"step":4,"script": "gtfs_db_to_db.py", "args": "%%dir%%/02-gtfs.duckdb %%dir%%/04-gtfs.duckdb"},
-        {"step":5,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/04-gtfs.duckdb %%dir%%/gtfs_fernbusse.zip"},
-        {"step":6,"script": "tool_netex_check_assertions.py", "args": "./scripts/general-netex-assertions.txt %%dir%%/epip_netex_fernbusse.xml.zip"},
-        {"step":7,"script": "tool_netex_stats.py", "args": "%%dir%%/epip_netex_fernbusse.xml.zip"},
-        {"step":8,"script": "tool_xml_validator.py", "args": "%%dir%%/epip_netex_fernbusse.xml.zip ./netex-xsd/xsd/NeTEx_publication.xsd"},
-        {"step":9,"script": "tool_gtfs_validator.py", "args": "%%dir%%/gtfs_fernbusse.zip %%dir%%"},
-        {"step":10,"script": "gtfs_show_map.py", "args": "%%dir%%/gtfs_fernbusse.zip %%dir%%/13-%%block%%-map.html 1"},
-        {"step":11,"script": "gtfs_show_map.py", "args": "%%dir%%/gtfs_fernbusse.zip %%dir%%/13-%%block%%-map.html 1"},
-        {"step":14,"script": "tool_ftp_upload.py", "args": "%%dir%%/epip_netex_fernbusse.xml.zip fernbusftp"}
+        {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
+        {"step":2,"script": "set_defaults", "args": "authority='SKI+'; time_zone='Europe/Berlin'; feed_publisher_name='SBB-SKI+'; feed_publisher_url='https://opentransportdata.swiss'"},
+        {"step":3,"script": "netex_to_db.py", "args": "[%%dir%%/../flixbus-prod/epip_netex_flixbus.zip %%dir%%/../blablacar-prod/epip_netex_blablacar.zip] %%dir%%/03-gtfs.duckdb True"},
+        {"step":4,"script": "epip_db_to_db.py", "args": "%%dir%%/03-gtfs.duckdb %%dir%%/04-epip.duckdb"},
+        {"step":5,"script": "epip_db_to_xml.py", "args": "%%dir%%/04-epip.duckdb %%dir%%/epip_netex_fernbusse.xml.zip"},
+        {"step":6,"script": "netex_to_db.py", "args": "[%%dir%%/epip_netex_fernbusse.xml.zip] %%dir%%/06-gtfs.duckdb True"},
+        {"step":7,"script": "gtfs_db_to_db.py", "args": "%%dir%%/06-gtfs.duckdb %%dir%%/07-gtfs.duckdb"},
+        {"step":8,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/07-gtfs.duckdb %%dir%%/gtfs_fernbusse.zip"},
+        {"step":9,"script": "tool_netex_check_assertions.py", "args": "./scripts/general-netex-assertions.txt %%dir%%/epip_netex_fernbusse.xml.zip"},
+        {"step":10,"script": "tool_netex_stats.py", "args": "%%dir%%/epip_netex_fernbusse.xml.zip"},
+        {"step":11,"script": "tool_xml_validator.py", "args": "%%dir%%/epip_netex_fernbusse.xml.zip ./netex-xsd/xsd/NeTEx_publication.xsd"},
+        {"step":12,"script": "tool_gtfs_validator.py", "args": "%%dir%%/gtfs_fernbusse.zip %%dir%%"},
+        {"step":13,"script": "gtfs_show_map.py", "args": "%%dir%%/gtfs_fernbusse.zip %%dir%%/13-%%block%%-map.html 1"},
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/gtfs_fernbusse.zip %%dir%%/13-%%block%%-map.html 1"},
+        {"step":115,"script": "tool_ftp_upload.py", "args": "%%dir%%/epip_netex_fernbusse.xml.zip sbb_ftp"}
 
         ]
   }
