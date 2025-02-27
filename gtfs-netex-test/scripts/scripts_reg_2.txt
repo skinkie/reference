@@ -153,7 +153,6 @@
  {"step":"1", "script": "process_url_list", "args": "gtfs2epip"}
 ]
 },
-
 {
 "block":"de-list",
 "description":"List of a first GTFS from Germany",
