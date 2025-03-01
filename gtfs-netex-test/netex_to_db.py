@@ -21,8 +21,7 @@ def main(filenames: list[str], database: str, clean_database: bool = True):
         log_flush()
         exit(1)
 
-
-    with Database(database, MyPickleSerializer(compression=True), read_only=False, logger=logging.getLogger("script_runner")) as db:
+    with Database(database, MyPickleSerializer(compression=True), read_only=False, logger=logging.getLogger("script_runner"), direct_embedding=True) as db:
         classes = get_interesting_classes()
 
         if clean_database:
@@ -32,7 +31,10 @@ def main(filenames: list[str], database: str, clean_database: bool = True):
             for sub_file in open_netex_file(filename):
                 insert_database(db, classes, sub_file)
 
-        embedding_update(db)
+        if not db.direct_embedding:
+            embedding_update(db)
+        else:
+            log_once(logging.INFO, "direct_embedding", "Direct embedding was active.")
 
 if __name__ == '__main__':
     import argparse

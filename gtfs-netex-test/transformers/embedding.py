@@ -1,10 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from netexio.database import Database
+
 import functools
 import pickle
 import queue
 import threading
 from typing import Generator
-
-from netexio.database import Database
 from netexio.dbaccess import update_embedded_referencing
 from netexio.serializer import Serializer
 from utils import get_object_name

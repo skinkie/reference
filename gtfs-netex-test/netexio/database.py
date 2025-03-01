@@ -8,6 +8,7 @@ from logging import Logger
 from typing import Generator, Iterator, Type, TypeVar
 
 from netexio.activelrucache import ActiveLRUCache
+from netexio.dbaccess import update_embedded_referencing
 
 T = TypeVar("T")
 
@@ -27,7 +28,7 @@ class Database:
     serializer: Serializer
     object_cache: dict
 
-    def __init__(self, database_file: str, serializer: Serializer, read_only: bool=True, logger: Logger=None):
+    def __init__(self, database_file: str, serializer: Serializer, read_only: bool=True, logger: Logger=None, direct_embedding=False):
         self.database_file = database_file
         self.read_only = read_only
         self.logger = logger
@@ -42,6 +43,8 @@ class Database:
         self.lock = threading.Lock()  # Ensure only one writer thread runs
 
         self.cache = ActiveLRUCache(100)
+
+        self.direct_embedding = direct_embedding
 
     def custom_encode(value, word):
         SPECIAL_CHAR = '*'  # Placeholder for special characters
@@ -62,46 +65,26 @@ class Database:
 
     @staticmethod
     def encode_pair(id, version, clazz, include_clazz=False):
-        SPECIAL_CHAR = b'*'  # Placeholder for special characters
-        WORD_MASK = b'#'  # Placeholder for the specified word
+        SPECIAL_CHAR = b'*'
+        WORD_MASK = b'#'
 
-        # Convert everything to uppercase
-        value = id.upper()
+        def encode_string(value, obj_name):
+            """Encodes a string by replacing special characters and masking the object name."""
+            value = re.sub(rf'\b{re.escape(obj_name)}\b', '#', value.upper())
+            return bytes(ord(char) if char in string.ascii_uppercase or char in string.digits or char == "#" else ord('*') for char in value)
+
         obj_name = get_object_name(clazz).upper()
-
-        # Replace special characters
         encoded_bytes = bytearray()
 
         if include_clazz:
-            for char in obj_name:
-                if char in string.ascii_uppercase or char in string.digits or char == "#":
-                    encoded_bytes.append(ord(char))
-                else:
-                    encoded_bytes.append(ord('*'))  # Replace special characters
-
+            encoded_bytes.extend(encode_string(obj_name, obj_name))
             encoded_bytes.append(ord('-'))
 
-        # Replace the word with #
-        value = re.sub(rf'\b{re.escape(obj_name)}\b', '#', value)
-
-        for char in value:
-            if char in string.ascii_uppercase or char in string.digits or char == "#":
-                encoded_bytes.append(ord(char))
-            else:
-                encoded_bytes.append(ord('*'))  # Replace special characters
-
+        encoded_bytes.extend(encode_string(id, obj_name))
         encoded_bytes.append(ord('-'))
 
         if version is not None:
-            version = version.upper()
-            # Replace the word with #
-            version = re.sub(rf'\b{re.escape(obj_name)}\b', '#', version)
-
-            for char in version:
-                if char in string.ascii_uppercase or char in string.digits or char == "#":
-                    encoded_bytes.append(ord(char))
-                else:
-                    encoded_bytes.append(ord('*'))  # Replace special characters
+            encoded_bytes.extend(encode_string(version, obj_name))
 
         return bytes(encoded_bytes)
 
@@ -138,6 +121,23 @@ class Database:
                 )
                 self.writer_thread.start()
 
+    def insert_embedding_on_queue(self, object):
+        # TODO: This will only work in the situation where there are more references, or more embeddings, than the current status (such as an empty database)
+
+        i, j = 0, 0
+        for embedding in update_embedded_referencing(self.serializer, object):
+            key_data = (embedding[0], embedding[1], embedding[2])
+            if embedding[7] is not None:
+                embedding_key = (*key_data, i)
+                embedding_value = (embedding[3], embedding[4], embedding[5], embedding[6], embedding[7])
+                self.task_queue.put((self.db_embedding, pickle.dumps(embedding_key), pickle.dumps(embedding_value)))
+                i += 1
+            else:
+                ref_key = (*key_data, j)
+                ref_value = (embedding[3], embedding[4], embedding[5], embedding[6])
+                self.task_queue.put((self.db_referencing, pickle.dumps(ref_key), pickle.dumps(ref_value)))
+                j += 1
+
     def insert_object_on_queue(self, klass, objects, batch_size=100_000, max_mem=4 * 1024 ** 3):
         """ Places objects in the shared queue for writing, starting writer if needed. """
         db_handle = self.open_db(klass)
@@ -151,6 +151,10 @@ class Database:
             item_size = len(key) + len(value)
 
             self.task_queue.put((db_handle, key, value))
+
+            if self.direct_embedding:
+                self.insert_embedding_on_queue(obj)
+
             # total_size += item_size
 
             # if total_size >= max_mem:
@@ -336,6 +340,12 @@ class Database:
 
     def __enter__(self):
         self.env = lmdb.open(self.database_file, map_size=MAP_SIZE, max_dbs=len(self.serializer.name_object), readonly=self.read_only)
+        try:
+            self.db_embedding = self.env.open_db(b"_embedding")
+            self.db_referencing = self.env.open_db(b"_referencing")
+        except:
+            pass
+
         return self
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
