@@ -163,7 +163,7 @@ def remove_file(path):
     else:
         raise FileNotFoundError(f"File not found: {path}")
 
-def main(script_file,log_file, log_level, todo_block,begin_step):
+def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=99999,this_step=-1):
     # blockexisted
     blockexisted=False
     # Read the scripts from a file
@@ -188,10 +188,17 @@ def main(script_file,log_file, log_level, todo_block,begin_step):
         for script in scripts:
             step=step+1
             # skip some steps if this is mandated
-            if step < begin_step:
-                continue
-            if blockstop == True:
-                break
+            if step != this_step:
+                if step < begin_step:
+                    continue
+                if blockstop == True:
+                    break
+                if step > end_step:
+                    # only process until here
+                    break
+            else:
+                blockstop == True # we only process this one step
+
             start_time = time.time()
 
             script_name = script['script']
@@ -281,10 +288,12 @@ if __name__ == "__main__":
     parser.add_argument('log_file', type=str, help='name of the log file')
     parser.add_argument('blockname', type=str, help='Block name to do')
     parser.add_argument('--begin_step', type=int, default=1, help='The begin step (default: 1)')
+    parser.add_argument('--end_step', type=int, default=999999, help='last step to execute. default not set.')
+    parser.add_argument('--this_step', type=int, default=-1, help='not set. Only this step is done')
     parser.add_argument('--log_level', type=int , default=logging.INFO, help='The log level (use logging constants)')
     args = parser.parse_args()
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
-        main(args.script_file, args.log_file, args.log_level, args.blockname, args.begin_step)
+        main(args.script_file, args.log_file, args.log_level, args.blockname, begin_step=args.begin_step,end_step=args.end_step, this_step=args.this_step)
     except Exception as e:
         log_all(logging.ERROR, f'{e} {traceback.format_exc()}')
