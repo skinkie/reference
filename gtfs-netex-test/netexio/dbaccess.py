@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from netexio.database import Database
+
 import pickle
 import sys
 import warnings
@@ -18,13 +24,13 @@ from netexio.attributes import resolve_attr
 from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
     EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure, Codespace
-from netexio.database import Database
 from netexio.serializer import Serializer
 from netexio.xmlserializer import MyXmlSerializer
 from refs import getRef, getFakeRefByClass
 from transformers.references import replace_with_reference_inplace
 from utils import get_object_name, get_element_name_with_ns
 from aux_logging import *
+
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -789,7 +795,7 @@ def update_embedded_referencing(con, object, inner_loop=None):
 """
 
 
-def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
+def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False, direct_embedding=False):
     xml_serializer = MyXmlSerializer()
     clsmembers = inspect.getmembers(netex, inspect.isclass)
     all_frames = [get_local_name(x[1]) for x in clsmembers if

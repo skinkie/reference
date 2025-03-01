@@ -22,7 +22,7 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
                 print("File names do not fit Swiss data:. So no Swiss data")
                 sys.exit(2)
 
-    with Database(database, MyPickleSerializer(compression=True), read_only=False, logger=logging.getLogger("script_runner")) as db:
+    with Database(database, MyPickleSerializer(compression=True), read_only=False, logger=logging.getLogger("script_runner"), direct_embedding=True) as db:
         classes = get_interesting_classes(SWISS_CLASSES)
 
         setup_database(db, classes, clean_database)
@@ -32,9 +32,12 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
             log_all(logging.INFO, f"Inserting {file.name}")
             insert_database(db, classes, file)
 
-        if referencing:
+        if not db.direct_embedding:
             log_all(logging.INFO, f"Embedding update!")
             embedding_update(db)
+            log_all(logging.INFO, f"Done!")
+        else:
+            log_once(logging.INFO, "direct_embedding", "Direct embedding was active.")
 
 def check_if_swiss_file(file_handler):
     if file_handler.name.endswith(".xml"):
