@@ -83,7 +83,8 @@ class Database:
         encoded_bytes.extend(encode_string(id, obj_name))
         encoded_bytes.append(ord('-'))
 
-        if version is not None:
+        if version is not None and version != 'any':
+:
             encoded_bytes.extend(encode_string(version, obj_name))
 
         return bytes(encoded_bytes)
