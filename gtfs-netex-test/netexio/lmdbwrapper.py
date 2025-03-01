@@ -70,7 +70,7 @@ class LMDBDatabase:
 if __name__ == '__main__':
     lmdb_db = LMDBDatabase("/tmp/test.lmdb", initial_size=1000 * 1024)
     for j in range(0, 10000):
-        items = [(i, [b'a' * 3072]) for i in range(0, 1024)]
+        items = [(i * j, [b'a' * 3072]) for i in range(0, 1024)]
         lmdb_db.batched_write(db_name=b"test", items=items, batch_size=10000)
 
     lmdb_db.close()
