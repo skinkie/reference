@@ -1292,7 +1292,7 @@ class GtfsNeTexProfile(CallsProfile):
                 departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[i])
 
                 shape_dist_traveled = get_or_none(shape_dist_traveleds, i)
-                if prev_call and shape_dist_traveled:
+                if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                     distance = shape_dist_traveled - prev_shape_traveled
                     prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -1446,7 +1446,7 @@ class GtfsNeTexProfile(CallsProfile):
                 departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[i])
 
                 shape_dist_traveled = get_or_none(shape_dist_traveleds, i)
-                if prev_call and shape_dist_traveled:
+                if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                     distance = shape_dist_traveled - prev_shape_traveled
                     prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -1580,7 +1580,7 @@ class GtfsNeTexProfile(CallsProfile):
                         departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[index_j])
 
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
-                        if prev_call and shape_dist_traveled:
+                        if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -1724,7 +1724,7 @@ class GtfsNeTexProfile(CallsProfile):
                         departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[index_j])
 
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
-                        if prev_call and shape_dist_traveled:
+                        if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_ref_or_onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -1887,7 +1887,7 @@ class GtfsNeTexProfile(CallsProfile):
                         departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[index_j])
 
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
-                        if prev_call and shape_dist_traveled:
+                        if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -2055,7 +2055,7 @@ class GtfsNeTexProfile(CallsProfile):
                         departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[index_j])
 
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
-                        if prev_call and shape_dist_traveled:
+                        if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
