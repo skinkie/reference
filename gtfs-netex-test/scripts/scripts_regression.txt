@@ -42,7 +42,9 @@
         {"step":11,"script": "#tool_check_db.py", "args": "%%dir%%/05-netex-database.duckdb"},
         {"step":12,"script": "#tool_check_db.py", "args": "%%dir%%/08-gtfs.duckdb"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/09-%%block%%gtfs.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%gtfs.zip %%dir%%/14-%%block%%map.html 1"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%gtfs.zip %%dir%%/14-%%block%%map.html 1"},
+        {"step":15,"script": "clean_tmp", "args": "%%dir%%"}
+
          ]
   },
 
@@ -63,7 +65,9 @@
         {"step":11,"script": "#tool_check_db.py", "args": "%%dir%%/05-netex-database.duckdb"},
         {"step":12,"script": "#tool_check_db.py", "args": "%%dir%%/08-gtfs.duckdb"},
         {"step":13,"script": "#tool_simple_gtfs_validator.py", "args": "%%dir%%/09-%%block%%-gtfs.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 1"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 1"},
+        {"step":15,"script": "clean_tmp", "args": "%%dir%%"}
+
          ]
   },
 
@@ -84,7 +88,9 @@
         {"step":11,"script": "#tool_check_db.py", "args": "%%dir%%/05-netex-database.duckdb"},
         {"step":12,"script": "#tool_check_db.py", "args": "%%dir%%/08-gtfs.duckdb"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/09-%%block%%-gtfs.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 1"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 1"},
+        {"step":15,"script": "clean_tmp", "args": "%%dir%%"}
+
          ]
   },
 
@@ -105,7 +111,9 @@
         {"step":11,"script": "#tool_check_db.py", "args": "%%dir%%/05-netex-database.duckdb"},
         {"step":12,"script": "#tool_check_db.py", "args": "%%dir%%/08-gtfs.duckdb"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/09-%%block%%-gtfs.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 1"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 1"},
+        {"step":15,"script": "clean_tmp", "args": "%%dir%%"}
+
          ]
   },
   {
@@ -125,7 +133,8 @@
         {"step":11,"script": "#tool_check_db.py", "args": "%%dir%%/05-netex-database.duckdb"},
         {"step":12,"script": "#tool_check_db.py", "args": "%%dir%%/08-nl-gtfs.duckdb"},
         {"step":13,"script": "tool_gtfs_validator.py", "args": "%%dir%%/09-%%block%%-ch-inter-gtfs.zip %%dir%%"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-ch-inter-gtfs.zip %%dir%%/14-%%block%%-map.html 1"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/09-%%block%%-ch-inter-gtfs.zip %%dir%%/14-%%block%%-map.html 1"},
+        {"step":15,"script": "clean_tmp", "args": "%%dir%%"}
         ]
   },
     {
@@ -148,7 +157,8 @@
         {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/11-netex-database.lmdb %%dir%%/12-%%block%%-gtfs.zip"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/12-%%block%%-gtfs.zip"},
         {"step":14,"script": "tool_gtfs_validator.py", "args": "%%dir%%/12-%%block%%-gtfs.zip %%dir%%"},
-        {"step":15,"script": "gtfs_show_map.py", "args": "%%dir%%/12-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 10"}
+        {"step":15,"script": "gtfs_show_map.py", "args": "%%dir%%/12-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 10"},
+        {"step":16,"script": "clean_tmp", "args": "%%dir%%"}
         ]
   },
   {
@@ -169,7 +179,8 @@
         {"step":11,"script": "gtfs_db_to_db.py", "args": "%%dir%%/10-netex-database.lmdb %%dir%%/11-netex-database.lmdb"},
         {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/11-netex-database.lmdb %%dir%%/12-%%block%%-gtfs.zip"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/12-%%block%%-gtfs.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/12-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 10"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/12-%%block%%-gtfs.zip %%dir%%/14-%%block%%-map.html 10"},
+        {"step":16,"script": "clean_tmp", "args": "%%dir%%"}
         ]
   },
 
@@ -196,7 +207,8 @@
         {"step":15,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/14-netex-database.lmdb %%dir%%/15-%%block%%-gtfs.zip"},
         {"step":16,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/15-%%block%%-gtfs.zip"},
         {"step":17,"script": "gtfs_show_map.py", "args": "%%dir%%/15-%%block%%-gtfs.zip %%dir%%/17-%%block%%-map.html 1"},
-        {"step":18,"script": "tool_gtfs_validator.py", "args": "%%dir%%/15-%%block%%-gtfs.zip %%dir%%"}
+        {"step":18,"script": "tool_gtfs_validator.py", "args": "%%dir%%/15-%%block%%-gtfs.zip %%dir%%"},
+        {"step":19,"script": "clean_tmp", "args": "%%dir%%"}
 
         ]
   },
@@ -219,7 +231,8 @@
         {"step":11,"script": "gtfs_db_to_db.py", "args": "%%dir%%/08-gtfs.duckdb %%dir%%/10-gtfs.duckdb"},
         {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/10-gtfs.duckdb %%dir%%/11-%%block%%-gtfs.zip"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/11-%%block%%-gtfs.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/11-%%block%%-gtfs.zip %%dir%%/13-%%block%%-map.html 1"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/11-%%block%%-gtfs.zip %%dir%%/13-%%block%%-map.html 1"},
+        {"step":15,"script": "clean_tmp", "args": "%%dir%%"}
          ]
   },
         {
@@ -240,14 +253,8 @@
         {"step":11,"script": "gtfs_db_to_db.py", "args": "%%dir%%/08-gtfs.duckdb %%dir%%/10-gtfs.duckdb"},
         {"step":12,"script": "gtfs_db_to_gtfs.py", "args": "%%dir%%/10-gtfs.duckdb %%dir%%/11-%%block%%-gtfs.zip"},
         {"step":13,"script": "tool_simple_gtfs_validator.py", "args": "%%dir%%/11-%%block%%-gtfs.zip"},
-        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/11-%%block%%-gtfs.zip %%dir%%/13-%%block%%-map.html 1"}
+        {"step":14,"script": "gtfs_show_map.py", "args": "%%dir%%/11-%%block%%-gtfs.zip %%dir%%/13-%%block%%-map.html 1"},
+        {"step":15,"script": "clean_tmp", "args": "%%dir%%"}
          ]
-  },
-  {
-    "block": "logtest",
-    "scripts": [
-        {"script": "clean_tmp", "args": "%%dir%%"},
-        {"script": "tool_test_logger.py", "args": "%%log%%"}
-        ]
   }
 ]
