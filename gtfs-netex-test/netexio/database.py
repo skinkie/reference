@@ -60,7 +60,6 @@ class Database:
         self.max_mem = max_mem
         self.serializer = serializer
         self.max_dbs = len(self.serializer.name_object) + 2
-        print('max_dbs', self.max_dbs)
 
         self.cache = ActiveLRUCache(100)
 
