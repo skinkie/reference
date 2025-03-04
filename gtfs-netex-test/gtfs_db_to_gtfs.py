@@ -54,7 +54,7 @@ def extract(archive, database: str):
     # GtfsProfile.writeToZipFile(archive, 'trips.txt', [GtfsProfile.empty_trip], write_header=True)
     # GtfsProfile.writeToZipFile(archive, 'stop_times.txt', [GtfsProfile.empty_stop_time], write_header=True)
 
-    with Database(database, serializer=MyPickleSerializer(compression=True)) as db_read:
+    with Database(database, serializer=MyPickleSerializer(compression=True), readonly=True) as db_read:
         datasources: List[DataSource] = load_local(db_read, DataSource, 1)
         codespaces: List[Codespace] = load_local(db_read, Codespace, 1)
 

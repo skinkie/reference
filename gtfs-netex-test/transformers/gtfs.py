@@ -93,8 +93,8 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
         if line.operator_ref is None:
             log_all(logging.ERROR,f"Line {line.id} does not have an operator_ref assigned.")
 
-    write_objects(db_write, list(operators.values()), True, True)
-    write_objects(db_write, lines, True, True)
+    db_write.insert_objects_on_queue(Operator, list(operators.values()), True)
+    db_write.insert_objects_on_queue(Line, lines, True)
 
 # TODO: move to separate file (calls profiles)
 def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
@@ -359,7 +359,7 @@ def gtfs_generate_deprecated_version(db_write: Database) -> Version:
         version: Version = project(last_op, Version)
         version.start_date = XmlDateTime.from_datetime(datetime.combine(my_from, time.min))
         version.end_date = XmlDateTime.from_datetime(datetime.combine(my_to, time.min))
-        write_objects(db_write, [version])
+        db_write.insert_one_object(version)
     else:
         warnings.warn("No calendars at all?")
 
@@ -389,7 +389,7 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
             """
 
     log_all(logging.INFO, "Processing ServiceJourneys")
-    write_generator(db_write, ServiceJourney, query_sj(db_read))
+    db_write.insert_objects_on_queue(ServiceJourney, query_sj(db_read))
 
     def query_daytype(db_read, calendar_combinations):
         dtas = getIndexByGroup(load_local(db_read, DayTypeAssignment, cursor=True, embedding=True),'day_type_ref.ref')
@@ -458,11 +458,10 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
 
     log_all(logging.INFO, "Processing Calendars")
     for day_type, day_type_assignments, operating_periods in query_daytype(db_read, calendar_combinations):
-        # TODO: Figure out if there can be a parallel receiver for a generator
-        db_write.insert_many_objects(DayType, [day_type], block=False)
-        db_write.insert_many_objects(DayTypeAssignment, day_type_assignments, block=False)
+        db_write.insert_one_object(day_type)
+        db_write.insert_objects_on_queue(DayTypeAssignment, day_type_assignments)
         if operating_periods is not None and len(operating_periods) > 0:
-            db_write.insert_many_objects(OperatingPeriod, operating_periods, block=False)
+            db_write.insert_objects_on_queue(OperatingPeriod, operating_periods)
 
     # db_write.block_until_done()
 
@@ -502,7 +501,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                         log_all(logging.ERROR,"Unimplemented method to calls")
 
 
-    write_generator(db_write, ServiceJourney, query_sj(db_read))
+    db_write.insert_objects_on_queue(ServiceJourney, query_sj(db_read))
 
     def query_tsj(db_read: Database) -> Generator:
         _load_generator = load_generator(db_read, TemplateServiceJourney)
@@ -528,7 +527,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                     log_all(logging.ERROR,"Unimplemented method to calls")
 
 
-    write_generator(db_write, TemplateServiceJourney, query_tsj(db_read))
+    db_write.insert_objects_on_queue(TemplateServiceJourney, query_tsj(db_read))
 
 def day_type_assignment_to_ac(day_type_assignment: DayTypeAssignment, day_type: DayType, ops: dict[str, OperatingPeriod | UicOperatingPeriod], ods: dict[str, OperatingDay]):
     ac: AvailabilityCondition = project(day_type_assignment, AvailabilityCondition)
@@ -628,12 +627,12 @@ def apply_availability_conditions_via_day_type_ref(db_read: Database, db_write: 
     mapping = {}
 
     copy_table(db_read, db_write, [AvailabilityCondition])
-    write_generator(db_write, AvailabilityCondition, query_sc(mapping))
+    db_write.insert_objects_on_queue(AvailabilityCondition, query_sc(mapping))
     # The point is here that we now "normalise" everything to availability conditions, but this isn't the target format yet.
 
-    write_generator(db_write, DayType, load_generator(db_read, DayType, embedding=True))
-    write_generator(db_write, ServiceJourney, query_sj(db_read, mapping, ServiceJourney))
-    write_generator(db_write, TemplateServiceJourney, query_sj(db_read, mapping, TemplateServiceJourney))
+    db_write.insert_objects_on_queue(DayType, load_generator(db_read, DayType))
+    db_write.insert_objects_on_queue(ServiceJourney, query_sj(db_read, mapping, ServiceJourney))
+    db_write.insert_objects_on_queue(TemplateServiceJourney, query_sj(db_read, mapping, TemplateServiceJourney))
 
 def gtfs_calendar2(service_id: str, day_type: DayType, operating_period: OperatingPeriod):
     yield tuple(({'service_id': service_id,

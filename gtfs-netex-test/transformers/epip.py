@@ -90,7 +90,7 @@ def epip_line_generator(db_read: Database, db_write: Database, generator_default
         for line in pool.imap_unordered(process, _load_generator, chunksize=100):
             yield line
 
-    write_generator(db_write, Line, query(db_read), True)
+    db_write.insert_objects_on_queue(Line, query(db_read), True)
 
 def epip_line_memory(db_read: Database, db_write: Database, generator_defaults):
     print(sys._getframe().f_code.co_name)
@@ -114,7 +114,7 @@ def epip_line_memory(db_read: Database, db_write: Database, generator_defaults):
                     line.additional_operators = TransportOrganisationRefsRelStructure(transport_organisation_ref=[line.authority_ref])
                 line.authority_ref = None
 
-    write_objects(db_write, lines, True, True)
+    db_write.insert_objects_on_queue(Line, lines,True)
 
 def epip_scheduled_stop_point_generator(db_read: Database, db_write: Database, generator_defaults: dict, pool: Pool):
     print(sys._getframe().f_code.co_name)
@@ -131,7 +131,7 @@ def epip_scheduled_stop_point_generator(db_read: Database, db_write: Database, g
         for ssp in pool.imap_unordered(partial(process, generator_defaults=generator_defaults), _load_generator, chunksize=100):
             yield ssp
 
-    write_generator(db_write, ScheduledStopPoint, query(db_read), True)
+    db_write.insert_objects_on_queue(ScheduledStopPoint, query(db_read), True)
 
 def epip_scheduled_stop_point_memory(db_read: Database, db_write: Database, generator_defaults: dict):
     print(sys._getframe().f_code.co_name)
@@ -145,7 +145,7 @@ def epip_scheduled_stop_point_memory(db_read: Database, db_write: Database, gene
         else:
             print(f"ScheduledStopPoint {ssp.id} does not have a location.")
 
-    write_objects(db_write, scheduled_stop_points, True, True)
+    db_write.insert_objects_on_queue(ScheduledStopPoint, scheduled_stop_points,True)
 
 def epip_site_frame_memory(db_read: Database, db_write: Database, generator_defaults):
     print(sys._getframe().f_code.co_name)
@@ -184,7 +184,7 @@ def epip_site_frame_memory(db_read: Database, db_write: Database, generator_defa
             retain_stop_assignments.append(stop_assignment)
 
     if len(retain_stop_assignments) > 0:
-        write_objects(db_write, retain_stop_assignments, True, True)
+        db_write.insert_objects_on_queue(PassengerStopAssignment, retain_stop_assignments,  True)
 
     stop_places: List[StopPlace] = load_local(db_read, StopPlace)
     retained_stop_places: List[StopPlace] = []
@@ -243,7 +243,7 @@ def epip_site_frame_memory(db_read: Database, db_write: Database, generator_defa
         """
         retained_stop_places.append(stop_place)
 
-    write_objects(db_write, retained_stop_places, True, True)
+    db_write.insert_objects_on_queue(StopPlace, retained_stop_places, True)
 
 def epip_timetabled_passing_times_memory(db_read: Database, db_write: Database, generator_defaults, dynamics=[]):
     print(sys._getframe().f_code.co_name)
@@ -262,7 +262,7 @@ def epip_timetabled_passing_times_memory(db_read: Database, db_write: Database, 
     availability_conditions = load_local(db_read, AvailabilityCondition)
     servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
     service_calendar = servicecalendarepip.availabilityConditionsToServiceCalendar(service_journeys, availability_conditions)
-    write_objects(db_write, [service_calendar], True, False)
+    db_write.insert_objects_on_queue(ServiceCalendar,[service_calendar], False)
 
     for sj in service_journeys:
         sj: ServiceJourney
@@ -275,7 +275,7 @@ def epip_timetabled_passing_times_memory(db_read: Database, db_write: Database, 
         # for dynamic in dynamics:
         #     dynamic(sj)
 
-    write_objects(db_write, service_journeys, True, False)
+    db_write.insert_objects_on_queue(ServiceJourney, service_journeys, False)
 
 import hashlib
 
@@ -352,7 +352,7 @@ def service_journey_ac_to_day_type(db_read: Database, db_write: Database, servic
                                                       valid_day_bits="0",
                                                       days_of_week=days_of_week)
             uic_operating_periods_ids.add(uic_operating_period.id)
-            db_write.insert_object_on_queue(UicOperatingPeriod, [uic_operating_period])
+            db_write.insert_one_object(uic_operating_period)
 
         else:
             uic_operating_period = UicOperatingPeriod(id=acs[0].id.replace('AvailabilityCondition', 'UicOperatingPeriod'),
@@ -367,13 +367,13 @@ def service_journey_ac_to_day_type(db_read: Database, db_write: Database, servic
                                                           valid_days),
                                                       days_of_week=days_of_week)
             uic_operating_periods_ids.add(uic_operating_period.id)
-            db_write.insert_object_on_queue(UicOperatingPeriod, [uic_operating_period])
+            db_write.insert_one_object(uic_operating_period)
 
         day_type = DayType(id=day_type_id, version=service_journey.version,
                            derived_from_object_ref=service_journey.id,
                            derived_from_version_ref_attribute=service_journey.version)
         day_types_ids.add(day_type.id)
-        db_write.insert_object_on_queue(DayType, [day_type])
+        db_write.insert_one_object(day_type)
 
         day_type_assignment = DayTypeAssignment(id=acs[0].id.replace('AvailabilityCondition', 'DayTypeAssignment'),
                                                 version=acs[0].version,
@@ -385,7 +385,7 @@ def service_journey_ac_to_day_type(db_read: Database, db_write: Database, servic
                                                 day_type_ref=getRef(day_type)
                                                 )
         day_type_assignments_ids.add(day_type_assignment.id)
-        db_write.insert_object_on_queue(DayTypeAssignment, [day_type_assignment])
+        db_write.insert_one_object(day_type_assignment)
         day_type_ref = getRef(day_type)
     else:
         day_type_ref = getFakeRef(day_type_id, DayTypeRef, service_journey.version)  # TODO: Prevent fake ref
@@ -544,7 +544,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
 
             # TODO Issue #242: handle LinkSequenceProjectionRef / LinkSequenceProjection
 
-            db_write.insert_object_on_queue(ServiceJourneyPattern, [service_journey_pattern])
+            db_write.insert_one_object(service_journey_pattern)
 
             # TODO: We might be able to avoid it if we work with prefix keys
             sjp_ids.add(service_journey_pattern.id)
@@ -590,7 +590,7 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
     # vailability_conditions = getIndex(load_local(db_read, AvailabilityCondition))
 
     log_all(logging.INFO, "Service journeys for now " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
-    write_generator(db_write, ServiceJourney, query(db_read), True)
+    db_write.insert_objects_on_queue(ServiceJourney, query(db_read), True)
 
 def epip_service_calendar(db_read: Database, db_write: Database, generator_defaults: dict):
     log_all(logging.INFO, "Calendar creation..."+ str(memory_usage(-1, interval=.1, timeout=1)[0]))
@@ -599,7 +599,7 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
     if False and len(service_calendars) > 0:
         # TODO: WORKAROUND
         pass
-        # write_objects(db_write, service_calendars, True, True)
+        # db_write.insert_objects_on_queue(service_calendars, True, True)
 
     else:
         day_types = getIndex(list(itertools.chain.from_iterable([service_calendar.day_types.day_type_ref_or_day_type for service_calendar in service_calendars if service_calendar.day_types])) + load_local(db_read, DayType, embedding=True))
@@ -683,17 +683,17 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
                 result_uic_operating_periods += my_uic_operating_periods
             result_day_type += [my_day_type]
 
-        write_objects(db_write, result_day_type, empty=True, many=True, cursor=True)
-        write_objects(db_write, result_day_type_assignments, empty=True, many=True, cursor=True)
-        write_objects(db_write, result_uic_operating_periods, empty=True, many=True, cursor=True)
+        db_write.insert_objects_on_queue(DayType, result_day_type, empty=True)
+        db_write.insert_objects_on_queue(DayTypeAssignment, result_day_type_assignments, empty=True)
+        db_write.insert_objects_on_queue(UicOperatingPeriod, result_uic_operating_periods, empty=True)
 
         # service_calendar = get_service_calendar(db_write, generator_defaults)
-        # write_objects(db_write, [service_calendar], True, True)
+        # db_write.insert_objects_on_queue([service_calendar], True, True)
 
     # else:
     # TODO: Quick "fix" this should be done differently, because we cannot assure that the ServiceCalendar stored, is actually following EPIP.
     # service_calendar = get_service_calendar(db_write, generator_defaults)
-    # write_objects(db_write, [service_calendar], True, True)
+    # db_write.insert_objects_on_queue([service_calendar], True, True)
 
     # availability_conditions = load_local(db_read, AvailabilityCondition)
     # servicecalendarepip = ServiceCalendarEPIPFrame(generator_defaults['codespace'])
@@ -712,7 +712,7 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
         # write_objects(write_con, [service_calendar], True, False)
 
     # service_calendar = get_service_calendar(db_write, generator_defaults)
-    # write_objects(db_write, [service_calendar], True, cursor=True)
+    # db_write.insert_objects_on_queue([service_calendar], True, cursor=True)
 
 def epip_remove_keylist_extensions(db_read: Database, db_write: Database, generator_defaults: dict):
     def process(deserialised, keys: List):
@@ -743,10 +743,10 @@ def epip_remove_keylist_extensions(db_read: Database, db_write: Database, genera
         for obj in _load_generator:
             yield process(obj, ['key_list', 'extensions'])
 
-    write_generator(db_write, StopPlace, query1(db_read))
-    write_generator(db_write, ScheduledStopPoint, query2(db_read))
-    write_generator(db_write, ServiceJourneyPattern, query3(db_read))
-    write_generator(db_write, ServiceJourney, query4(db_read))
+    db_write.insert_objects_on_queue(StopPlace, query1(db_read))
+    db_write.insert_objects_on_queue(ScheduledStopPoint, query2(db_read))
+    db_write.insert_objects_on_queue(ServiceJourneyPattern, query3(db_read))
+    db_write.insert_objects_on_queue(ServiceJourney, query4(db_read))
 
 
 def export_epip_network_offer(db_epip: Database) -> PublicationDelivery:
@@ -944,7 +944,7 @@ def epip_service_journey_interchange(db_read: Database, db_write: Database, gene
 
         """
 
-    write_generator(db_write, ServiceJourneyInterchange, query1(db_read))
+    db_write.insert_objects_on_queue(ServiceJourneyInterchange, query1(db_read))
 
 def epip_interchange_rule(db_read: Database, db_write: Database, generator_defaults: dict):
-    write_generator(db_write, ServiceJourneyInterchange, interchange_rules_to_service_journey_interchanges(db_read), empty=False)
+    db_write.insert_objects_on_queue(ServiceJourneyInterchange, interchange_rules_to_service_journey_interchanges(db_read))

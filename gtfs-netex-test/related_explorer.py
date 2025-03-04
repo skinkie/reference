@@ -36,7 +36,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
         log_all(logging.WARN, 'related_explorer', f"no such object type found {object_type}")
         return
 
-    with Database(database, serializer=MyPickleSerializer(compression=True)) as db:
+    with Database(database, serializer=MyPickleSerializer(compression=True), readonly=True) as db:
         filter_set = {Route, ServiceJourneyPattern}
         filter_set.add(db.get_class_by_name(object_type))
 
@@ -77,7 +77,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
             log_all(logging.WARN, f"no such object found {object_type},{object_filter}")
 
 def main(netex,object_type,object_filter,output,referencing):
-    with Database(netex, serializer=MyPickleSerializer(compression=True), read_only=False) as db:
+    with Database(netex, serializer=MyPickleSerializer(compression=True), readonly=False) as db:
         if referencing:
             log_all(logging.INFO, f"updating embedded and referencing tables")
             embedding_update(db)

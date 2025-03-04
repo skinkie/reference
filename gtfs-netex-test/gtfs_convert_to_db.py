@@ -2197,7 +2197,7 @@ class GtfsNeTexProfile(CallsProfile):
                 self.serializer.write(out, self.getPublicationDelivery(operators, [line], stop_areas, scheduled_stop_points, service_journeys, day_types, operating_periods, day_type_assignments), self.ns_map)
 
     def database(self, con):
-        con.insert_many_objects(Line, self.lines, block=False)
+        con.insert_objects_on_queue(Line, self.lines)
 
         # This still sucks :-) shape is in every ServiceJourney now
         # in order to solve it, we must find the route point that matches the
@@ -2209,39 +2209,37 @@ class GtfsNeTexProfile(CallsProfile):
         # write_objects(con, self.route_links, True, True)
         # write_objects(con, self.routes, True, True)
 
-        con.insert_many_objects(Codespace, [self.codespace], block=False)
-        con.insert_many_objects(DataSource, [self.data_source], block=False)
-        con.insert_many_objects(Version, [self.version], block=False)
+        con.insert_objects_on_queue(Codespace, [self.codespace])
+        con.insert_objects_on_queue(DataSource, [self.data_source])
+        con.insert_objects_on_queue(Version, [self.version])
 
         gf = GeneralFrame(id="Defaults", version="any", frame_defaults=self.frame_defaults)
-        con.insert_many_objects(GeneralFrame, [gf], block=False)
+        con.insert_objects_on_queue(GeneralFrame, [gf])
 
-        con.insert_many_objects(Operator, self.getOperators(), block=False)
+        con.insert_objects_on_queue(Operator, self.getOperators())
 
         stop_areas = self.getStopAreas()
-        con.insert_many_objects(StopArea, stop_areas, block=False)
-        con.insert_many_objects(ScheduledStopPoint, self.getScheduledStopPoints(stop_areas), block=False)
+        con.insert_objects_on_queue(StopArea, stop_areas)
+        con.insert_objects_on_queue(ScheduledStopPoint, self.getScheduledStopPoints(stop_areas))
         stop_areas = None
 
         stop_places, passenger_stop_assignments = self.getStopPlaces()
-        con.insert_many_objects(StopPlace, stop_places, block=False)
-        con.insert_many_objects(PassengerStopAssignment, passenger_stop_assignments, block=False)
+        con.insert_objects_on_queue(StopPlace, stop_places)
+        con.insert_objects_on_queue(PassengerStopAssignment, passenger_stop_assignments)
         stop_places = stop_passenger_stop_assignments = None
 
         day_types, day_type_assignments, operating_periods = self.getDayTypes()
-        con.insert_many_objects(DayType, day_types, block=False)
-        con.insert_many_objects(DayTypeAssignment, day_type_assignments, block=False)
-        con.insert_many_objects(OperatingPeriod, operating_periods, block=False)
+        con.insert_objects_on_queue(DayType, day_types)
+        con.insert_objects_on_queue(DayTypeAssignment, day_type_assignments)
+        con.insert_objects_on_queue(OperatingPeriod, operating_periods)
 
         # availability_conditions = self.getAvailabilityConditions()
         # write_objects(con, availability_conditions, empty=True, many=True)
 
-        con.insert_many_objects(ServiceJourney, self.getServiceJourneys2DayType(), block=False)
-        con.insert_many_objects(TemplateServiceJourney, self.getTemplateServiceJourneysDayType(), block=False)
+        con.insert_objects_on_queue(ServiceJourney, self.getServiceJourneys2DayType())
+        con.insert_objects_on_queue(TemplateServiceJourney, self.getTemplateServiceJourneysDayType())
 
-        con.insert_many_objects(InterchangeRule, self.getInterchangeRules(), block=False)
-
-        con.block_until_done()
+        con.insert_objects_on_queue(InterchangeRule, self.getInterchangeRules())
 
     def __init__(self, conn, serializer):
         self.conn = conn
@@ -2282,10 +2280,8 @@ def main(database_gtfs: str, database_netex: str):
     except:
         pass
 
-    with Database(database_netex, serializer=MyPickleSerializer(compression=True), read_only=False) as db_write:
+    with Database(database_netex, serializer=MyPickleSerializer(compression=True), readonly=False) as db_write:
         gtfs.database(db_write)
-        # create_meta(db_write)
-        embedding_update(db_write)
 
 if __name__ == '__main__':
     import argparse

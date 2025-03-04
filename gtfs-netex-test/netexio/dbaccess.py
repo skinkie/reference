@@ -23,7 +23,8 @@ import netex
 from netexio.attributes import resolve_attr
 from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
-    EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure, Codespace
+    EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure, Codespace, \
+    PassengerStopAssignment
 from netexio.serializer import Serializer
 from netexio.xmlserializer import MyXmlSerializer
 from refs import getRef, getFakeRefByClass
@@ -58,8 +59,8 @@ def load_embedded(db: Database, clazz: T, filter, cursor=False):
     with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
-            parent_class, parent_id, parent_version, *_ = pickle.loads(key)
-            embedding_class, embedding_id, embedding_version, *_ = pickle.loads(value)
+            # parent_class, parent_id, parent_version, *_ = pickle.loads(key)
+            parent_class, parent_id, parent_version, embedding_class, embedding_id, embedding_version, *_ = pickle.loads(value)
             if embedding_id == filter and embedding_class == objectname:
                 result.append((parent_id, parent_version, parent_class,))
 
@@ -73,8 +74,9 @@ def load_referencing(db: Database, clazz: T, filter, cursor=False):
     with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
-            parent_class, parent_id, parent_version, *_ = pickle.loads(key)
-            referencing_class, referencing_id, referencing_version, *_ = pickle.loads(value)
+            # TODO: See if we can do a smarter key for easy lookup
+            # parent_class, parent_id, parent_version, *_ = pickle.loads(key)
+            parent_class, parent_id, parent_version, referencing_class, referencing_id, referencing_version, *_ = pickle.loads(value)
             if parent_id == filter and parent_class == objectname:
                 result.append((referencing_id, referencing_version, referencing_class,))
 
@@ -88,8 +90,8 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
     with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
-            parent_class, parent_id, parent_version, *_ = pickle.loads(key)
-            referencing_class, referencing_id, referencing_version, *_ = pickle.loads(value)
+            # TODO: See if we can do a smarter key for easy lookup
+            parent_class, parent_id, parent_version, referencing_class, referencing_id, referencing_version, *_ = pickle.loads(value)
             if referencing_id == filter and referencing_class == objectname:
                 result.append((parent_id, parent_version, parent_class,))
 
@@ -289,7 +291,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
             existing_ids.add((clazz, ref, version))
 
     for clazz in classes:
-        db_name = db.open_db(clazz, readonly=True)
+        db_name = db.open_db(clazz)
         if not db_name:
             continue
 
@@ -302,7 +304,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
     with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as src_txn:
         cursor = src_txn.cursor()
         for _key, value in cursor:
-            ref_class, ref_id, ref_version, ref_order = pickle.loads(value)
+            parent_class, parent_id, parent_version, ref_class, ref_id, ref_version, ref_order = pickle.loads(value)
             if ref_class not in list_classes:
                 results = load_local(db, db.get_class_by_name(ref_class), limit=1, filter=ref_id, cursor=True, embedding=True, embedded_parent=True)
                 if len(results) > 0:
@@ -315,13 +317,12 @@ def fetch_references_classes_generator(db: Database, classes: list):
                         processed.add(needle)
 
                         with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as src_txn2:
-                            # TODO: Very expensive
+                            # TODO: Very expensive sequential scan
                             cursor2 = src_txn2.cursor()
                             for key2, value2 in cursor2:
-                                parent_class, parent_id, parent_version, *_ = pickle.loads(key2)
+                                parent_class, parent_id, parent_version, _, embedding_class, embedding_id, embedding_version, embedding_path = cloudpickle.loads(value2)
                                 if parent_class == ref_class and parent_id == ref_id and parent_version == ref_version:
-                                    embedding_class, embedding_id, embedding_version, embedding_path = pickle.loads(value2)
-                                    if (embedding_class, db.encode_pair(embedding_id, embedding_version, get_class_by_name(embedding_class))) in existing_ids:
+                                    if (embedding_class, db.serializer.encode_key(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
                                         replace_with_reference_inplace(results[0], embedding_path)
 
                         yield results[0]
@@ -349,17 +350,20 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                         parent_class, parent_id, parent_version, i = pickle.loads(key)
                                         if parent_class == resolve_class and parent_id == resolve.id and parent_version == resolve.version:
                                             embedding_class, embedding_id, embedding_version, embedding_path = pickle.loads(value2)
-                                            if (embedding_class, db.encode_pair(embedding_id, embedding_version, get_class_by_name(embedding_class))) in existing_ids:
+                                            if (embedding_class, db.encode_pair(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
                                                 replace_with_reference_inplace(resolve, embedding_path)
 
                                 yield resolve
 
 def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, parent=False, cache=True):
-    if db.env and db.open_db(clazz, readonly=True) is not None:
-        with db.env.begin(write=False, db=db.open_db(clazz, readonly=True)) as txn:
+    if clazz == PassengerStopAssignment:
+        pass
+
+    if db.env and db.open_db(clazz) is not None:
+        with db.env.begin(write=False, db=db.open_db(clazz)) as txn:
             cursor = txn.cursor()
             if filter:
-                prefix = db.encode_pair(filter, None, clazz)
+                prefix = db.serializer.encode_key(filter, None, clazz)
                 if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
                     for key, value in cursor:
                         if not key.startswith(prefix):
@@ -381,19 +385,18 @@ def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=Tr
                     value = db.serializer.unmarshall(value, clazz)
                     yield value
 
-        if embedding:
-            yield from load_embedded_transparent_generator(db, clazz, limit, filter, parent, cache)
+    if embedding:
+        yield from load_embedded_transparent_generator(db, clazz, limit, filter, parent, cache)
 
-def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False, cache=True) -> List[T]:
+def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False, cache=True):
     objectname = get_object_name(clazz)
 
     if db.env:
-        with db.env.begin(db=db.env.open_db(b'_embedding'), write=False) as txn:
+        with db.env.begin(db=db.db_embedding, write=False) as txn:
             cursor = txn.cursor()
             i = 0
-            for key, value in cursor:
-                parent_clazz, parent_id, parent_version, _ = pickle.loads(key)
-                embedding_clazz, embedding_id, embedding_version, embedding_order, embedding_path = pickle.loads(value)
+            for _key, value in cursor:
+                parent_clazz, parent_id, parent_version, embedding_clazz, embedding_id, embedding_version, embedding_order, embedding_path = cloudpickle.loads(value)
 
                 if embedding_clazz == objectname:
                     if filter and filter != embedding_id:
@@ -401,16 +404,8 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                     else:
                         if limit is None or i < limit:
                             parent_clazz = db.get_class_by_name(parent_clazz)
-                            cache_key = db.encode_pair(parent_id, parent_version, parent_clazz, include_clazz=True)
-                            obj = db.cache.get(cache_key, None) # TODO
-
-                            if obj is None:
-                                with db.env.begin(db=db.open_db(parent_clazz, readonly=True)) as txn2:
-                                    prefix = db.encode_pair(parent_id, parent_version, parent_clazz)
-                                    value2 = txn2.get(prefix)
-                                    if value2 is not None:
-                                        obj = db.serializer.unmarshall(value2, parent_clazz)
-                                        db.cache.add(cache_key, obj)
+                            cache_key = db.serializer.encode_key(parent_id, parent_version, parent_clazz, True)
+                            obj = db.cache.get(cache_key, lambda: db.get_single(parent_clazz, parent_id, parent_version))
 
                             if obj is not None:
                                 if parent:
@@ -587,9 +582,9 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
 
 def write_generator(db: Database, clazz, generator: Generator, empty=False):
     if empty:
-        db.clear_tables([clazz])
+        db.clear([clazz])
 
-    db.insert_many_objects(clazz, generator)
+    db.insert_objects_on_queue(clazz, generator)
 
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False, embedding=False):
     for klass in classes:
@@ -715,11 +710,11 @@ def update_generator(db: Database, clazz, generator: Generator):
     print('\n')
     """
 
-def setup_database(db: Database, classes, clean=False, cursor=False):
+def setup_database(db: Database, classes, clean=False):
     clean_element_names, interesting_element_names, interesting_classes = classes
 
     if clean:
-        db.clear_tables(interesting_classes)
+        db.drop(interesting_classes)
         # db.vacuum()
 
     # TODO:
@@ -741,7 +736,7 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
         if hasattr(obj, 'id'):
             if obj.id is not None and obj.__class__ in serializer.interesting_classes:
                 yield [
-                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version,
+                    deserialized.__class__, deserialized.id, deserialized.version,
                     get_object_name(obj.__class__),
                     obj.id,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
@@ -758,7 +753,7 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
                         obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
                 yield [
-                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version,
+                    deserialized.__class__, deserialized.id, deserialized.version,
                     obj.name_of_ref_class,
                     obj.ref,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
@@ -951,7 +946,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
                     # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());"""
                     try:
-                        db.insert_one_object(object, True)
+                        db.insert_one_object(object)
                         # cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
@@ -966,7 +961,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
 
                     # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());"""
                     try:
-                        db.insert_one_object(object, True)
+                        db.insert_one_object(object)
                         # cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
@@ -976,7 +971,7 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                 else:
                     # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object, last_modified) VALUES (?, ?, NOW());"""
                     try:
-                        db.insert_one_object(object, True)
+                        db.insert_one_object(object)
                         # cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))

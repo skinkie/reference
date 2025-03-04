@@ -13,10 +13,10 @@ class ActiveLRUCache:
             self.cache.move_to_end(key)  # Mark as recently used
             return self.cache[key]
 
-        # TODO
-        # value = load_func(key)
-        # self._add(key, value)
-        # return value
+        value = load_func()
+        if value is not None:
+            self._add(key, value)
+        return value
 
     def add(self, key, value):
         self._add(key, value)

@@ -8,7 +8,7 @@ from aux_logging import *
 from transformers.epip import export_epip_network_offer
 
 def main(database_epip: str, output_filename: str):
-    with Database(database_epip, serializer=MyPickleSerializer(compression=True), read_only=True) as db_epip:
+    with Database(database_epip, serializer=MyPickleSerializer(compression=True), readonly=False) as db_epip:
         publication_delivery: PublicationDelivery = export_epip_network_offer(db_epip)
         export_publication_delivery_xml(publication_delivery, output_filename)
 
