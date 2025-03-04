@@ -22,7 +22,7 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
                 print("File names do not fit Swiss data:. So no Swiss data")
                 sys.exit(2)
 
-    with Database(database, MyPickleSerializer(compression=True), read_only=False, logger=logging.getLogger("script_runner"), direct_embedding=True) as db:
+    with Database(database, MyPickleSerializer(compression=True), readonly=False, logger=logging.getLogger("script_runner")) as db:
         classes = get_interesting_classes(SWISS_CLASSES)
 
         setup_database(db, classes, clean_database)
