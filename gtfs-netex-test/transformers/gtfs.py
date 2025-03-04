@@ -417,7 +417,6 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
 
             elif isinstance(option, DayTypeRefsRelStructure):
                 if len(option.day_type_ref) == 1:
-                    print(option.day_type_ref[0].ref)
                     day_type = load_local(db_read, DayType, limit=1, filter=option.day_type_ref[0].ref, embedding=True)[0]
                     day_type_assignments = dtas[day_type.id]
                     uic_operating_periods = []

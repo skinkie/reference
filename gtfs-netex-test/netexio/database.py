@@ -235,14 +235,16 @@ class Database:
             key_prefix = self.serializer.encode_key(embedding[1], embedding[2], embedding[0], include_clazz=True)
 
             if embedding[7] is not None:
-                self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_embedding, key_prefix))
+                # TODO: This won't work because of out of order behavior
+                # self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_embedding, key_prefix))
 
                 embedding_key = key_prefix + bytes([ord('-')]) + str(i).encode()
                 embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], embedding[3], embedding[4], embedding[5], embedding[6], embedding[7]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_embedding, embedding_key, embedding_value))
                 i += 1
             else:
-                self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_referencing, key_prefix))
+                # TODO: This won't work because of out of order behavior
+                # self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_referencing, key_prefix))
 
                 ref_key = key_prefix + bytes([ord('-')]) + str(j).encode()
                 ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], embedding[3], embedding[4], embedding[5], embedding[6]))
@@ -265,6 +267,8 @@ class Database:
             key = self.serializer.encode_key(obj.id, version, klass)
             value = self.serializer.marshall(obj, klass)
             self.task_queue.put((LmdbActions.WRITE, db_handle, key, value))
+            if obj.id == 'OPENOV:ServiceCalendar:ServiceCalendar':
+                pass
             self._insert_embedding_on_queue(obj)
 
     def insert_one_object(self, object):
@@ -289,7 +293,7 @@ class Database:
 
             self.task_queue.put((LmdbActions.CLEAR, db_handle))
 
-    def drop(self, classes: list[T]):
+    def drop(self, classes: list[T], embedding=False):
         if self.readonly:
             return
 
@@ -300,6 +304,10 @@ class Database:
                 return
 
             self.task_queue.put((LmdbActions.DROP, db_handle))
+
+        self.task_queue.put((LmdbActions.CLEAR, self.db_embedding))
+        self.task_queue.put((LmdbActions.CLEAR, self.db_referencing))
+
 
     def delete_by_prefix(self, klass: T, prefix: bytes):
         """Schedules deletion of all keys with a given prefix using the writer thread."""

@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from netexio.database import Database
+    from netexio.database import Database, LmdbActions
 
 import pickle
 import sys
@@ -356,9 +356,6 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                 yield resolve
 
 def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, parent=False, cache=True):
-    if clazz == PassengerStopAssignment:
-        pass
-
     if db.env and db.open_db(clazz) is not None:
         with db.env.begin(write=False, db=db.open_db(clazz)) as txn:
             cursor = txn.cursor()
@@ -396,7 +393,8 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             cursor = txn.cursor()
             i = 0
             for _key, value in cursor:
-                parent_clazz, parent_id, parent_version, embedding_clazz, embedding_id, embedding_version, embedding_order, embedding_path = cloudpickle.loads(value)
+                _tmp = cloudpickle.loads(value)
+                parent_clazz, parent_id, parent_version, embedding_clazz, embedding_id, embedding_version, embedding_order, embedding_path = _tmp
 
                 if embedding_clazz == objectname:
                     if filter and filter != embedding_id:
@@ -714,7 +712,7 @@ def setup_database(db: Database, classes, clean=False):
     clean_element_names, interesting_element_names, interesting_classes = classes
 
     if clean:
-        db.drop(interesting_classes)
+        db.drop(interesting_classes, embedding=True)
         # db.vacuum()
 
     # TODO:
