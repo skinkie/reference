@@ -37,7 +37,7 @@ def main(gtfs_file,res_folder):
             log_all(logging.ERROR,'Notices found in system_errors.json')
 
     # Check report.json for notices with severity "ERROR"
-    with open(report_file) as report_file:
+    with open(report_file,encoding='utf-8') as report_file:
         report_data = json.load(report_file)
         if 'notices' in report_data:
             for notice in report_data['notices']:
