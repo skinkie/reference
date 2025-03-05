@@ -149,7 +149,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "PMPWA"), version=ve
 
 sj: ServiceJourney
 for sj in service_journeys:
-    sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type)
+    sj.vehicle_type_ref_or_train_ref = getRef(vehicle_type)
 
 dutchprofile = DutchProfile(codespace, data_source, version)
 resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set_concessie, responsibility_set_financier, responsibility_set_partitie],

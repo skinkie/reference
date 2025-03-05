@@ -32,13 +32,6 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
             log_all(logging.INFO, f"Inserting {file.name}")
             insert_database(db, classes, file)
 
-        if not db.direct_embedding:
-            log_all(logging.INFO, f"Embedding update!")
-            embedding_update(db)
-            log_all(logging.INFO, f"Done!")
-        else:
-            log_once(logging.INFO, "direct_embedding", "Direct embedding was active.")
-
 def check_if_swiss_file(file_handler):
     if file_handler.name.endswith(".xml"):
         fn=file_handler.name
