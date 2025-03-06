@@ -76,6 +76,12 @@ def reprojection_udf(serializer: Serializer, serialized: bytes, clazz: str, crs_
     return reserialised
 
 def reprojection_update(db: Database, crs_to: str, batch_size=100_000, max_mem=4 * 1024 ** 3):
+    # Within this function we are reading and writing towards the target database.
+    # This effectively means that if we would need to resize for whatever reason,
+    # we cannot hold the cursor since access has to be disabled.
+    # We will first validate that we do have remaining capacity.
+    db.guard_free_space(0.10)
+
     for clazz in db.tables(exclusively=set(get_all_geo_elements())):
         src_db = db.open_db(clazz)
         if not src_db:

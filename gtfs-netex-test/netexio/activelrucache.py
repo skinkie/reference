@@ -21,6 +21,10 @@ class ActiveLRUCache:
     def add(self, key, value):
         self._add(key, value)
 
+    def drop(self):
+        self.cache = OrderedDict()
+        self.current_access = set()
+
     def _add(self, key, value):
         if len(self.cache) >= self.max_size:
             self._evict()

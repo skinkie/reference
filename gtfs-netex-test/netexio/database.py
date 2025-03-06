@@ -48,12 +48,12 @@ class Referencing:
 
 class Database:
     def __init__(self, path: str, serializer: Serializer, readonly=True, logger: Logger = None,
-                 initial_size=1 * 1024 ** 3,
+                 initial_size=0.25 * 1024 ** 3,
                  growth_size=None,
-                 max_size=16 * 1024 ** 3, batch_size=10_000, max_mem=4 * 1024 ** 3):
+                 max_size=32 * 1024 ** 3, batch_size=10_000, max_mem=4 * 1024 ** 3):
         self.path = path
         self.logger = logger
-        self.initial_size = initial_size
+        self.initial_size = int(initial_size)
         self.growth_size = growth_size
         self.max_size = max_size
         self.readonly = readonly
@@ -102,15 +102,28 @@ class Database:
         self.block_until_done()
         self.env.close()
 
+    def usage(self) -> tuple[int, int]:
+        with self.lock:
+            allocated_size = self.env.info()["map_size"]
+            used_size = os.path.getsize(self.path)
+            return allocated_size, used_size
+
+    def guard_free_space(self, percentage: float):
+        allocated_size, used_size = self.usage()
+        min_increase = int(allocated_size * percentage)
+        if (allocated_size - used_size) < min_increase:
+            self._resize_env(min_increase)
+
     def _resize_env(self, min_increase=0):
         """Ensures LMDB grows by at least growth_size or min_increase."""
         with self.lock:
             current_size = self.env.info()["map_size"]
             increase = max(self.growth_size, int(min_increase))  # Ensure enough space
-            new_size = min(current_size + increase, self.max_size)
-            if new_size > current_size:
-                print(f"Resizing LMDB from {current_size} to {new_size} bytes")
-                self.env.set_mapsize(new_size)
+            self.growth_size = self.growth_size if self.growth_size else self.initial_size
+            self.initial_size = min(current_size + increase, self.max_size)
+            if self.initial_size > current_size:
+                print(f"Resizing LMDB from {current_size} to {self.initial_size} bytes")
+                self.env.set_mapsize(self.initial_size)
             else:
                 raise RuntimeError("LMDB reached max map size, cannot grow further.")
 
@@ -227,20 +240,23 @@ class Database:
                 del self.dbs[name]
             return db
 
+    def _reopen_dbs(self):
+        for name in self.dbs.keys():
+            name_bytes = name.encode('utf-8')
+            self.dbs[name] = self.env.open_db(name_bytes)
+
     def _insert_embedding_on_queue(self, obj):
         if not hasattr(obj, 'id'):
             return
 
-        # i, j = 0, 0
         for embedding in update_embedded_referencing(self.serializer, obj):
-
             if embedding[7] is not None:
                 embedding_key = self.serializer.encode_key(embedding[4], embedding[5], embedding[3], include_clazz=True)
                 embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2],
                                                      get_object_name(embedding[3]), embedding[4], embedding[5],
                                                      embedding[6], embedding[7]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_embedding, embedding_key, embedding_value))
-                # i += 1
+
             else:
                 # TODO: This won't work because of out of order behavior
                 # self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_referencing, key_prefix))
@@ -249,7 +265,6 @@ class Database:
                 ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2],
                                                get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_referencing, ref_key, ref_value))
-                # j += 1
 
     def insert_objects_on_queue(self, klass: T, objects: Iterable, empty=False):
         """ Places objects in the shared queue for writing, starting writer if needed. """
@@ -342,8 +357,8 @@ class Database:
                 self.env.copy(path=tmp_file, compact=True)
                 self.env.close()
                 os.rename(tmp_file, self.path)
-                self.env = lmdb.open(self.path, map_size=self.initial_size, max_dbs=self.max_dbs,
-                                     readonly=self.readonly)
+                self.__enter__()
+                self._reopen_dbs()
 
     def get_random(self, clazz: T) -> T | None:
         db_handle = self.open_db(clazz)
@@ -444,7 +459,7 @@ class Database:
         _copy_db(self.db_embedding, target.db_referencing)
 
     def clean_cache(self):
-        self.cache = {}
+        self.cache.drop()
 
     def get_class_by_name(self, name: str):
         return self.serializer.name_object[name]
