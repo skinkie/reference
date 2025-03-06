@@ -350,7 +350,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                         parent_class, parent_id, parent_version, i = cloudpickle.loads(key)
                                         if parent_class == resolve_class and parent_id == resolve.id and parent_version == resolve.version:
                                             embedding_class, embedding_id, embedding_version, embedding_path = cloudpickle.loads(value2)
-                                            if (embedding_class, db.encode_pair(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
+                                            if (embedding_class, db.serializer.encode_key(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
                                                 replace_with_reference_inplace(resolve, embedding_path)
 
                                 yield resolve
