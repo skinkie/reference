@@ -19,7 +19,6 @@ from utils import get_interesting_classes
 from netexio.dbaccess import attach_source, attach_objects
 
 from transformers.direction import infer_directions_from_sjps_and_apply
-from transformers.embedding import embedding_update
 from transformers.projection import reprojection_update
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
 import traceback
@@ -93,10 +92,6 @@ def main(source_database_file: str, target_database_file: str):
 
             log_all(logging.INFO, "Reprojection Update " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             reprojection_update(target_db, 'urn:ogc:def:crs:EPSG::4326')
-
-            # NOT required anymore
-            # log_all(logging.INFO, "Embedding update " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
-            # embedding_update(target_db, filter_clazz=[Line, StopPlace, ServiceJourneyPattern, ServiceJourney, DayType, DayTypeAssignment, UicOperatingPeriod, ServiceJourneyInterchange, Direction])
 
             log_all(logging.INFO, "Copy remaining classes " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             missing_class_update(source_db, target_db)

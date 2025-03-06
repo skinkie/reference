@@ -37,8 +37,9 @@ class MyPickleSerializer(Serializer):
             encoded_bytes.extend(encode_string(obj_name, obj_name, False))
             encoded_bytes.append(ord('-'))
 
-        encoded_bytes.extend(encode_string(id, obj_name))
-        encoded_bytes.append(ord('-'))
+        if id is not None:
+            encoded_bytes.extend(encode_string(id, obj_name))
+            encoded_bytes.append(ord('-'))
 
         if version is not None and version != 'any':
             encoded_bytes.extend(encode_string(version, obj_name))

@@ -92,7 +92,7 @@ class Database:
             )
 
         self.db_embedding = self.env.open_db(b"_embedding", create=not self.readonly)
-        self.db_referencing = self.env.open_db(b"_referencing", create=not self.readonly)
+        self.db_referencing = self.env.open_db(b"_referencing", create=not self.readonly, dupsort=True)
 
         return self
 
@@ -229,26 +229,22 @@ class Database:
         if not hasattr(obj, 'id'):
             return
 
-        i, j = 0, 0
+        # i, j = 0, 0
         for embedding in update_embedded_referencing(self.serializer, obj):
-            key_prefix = self.serializer.encode_key(embedding[1], embedding[2], embedding[0], include_clazz=True)
 
             if embedding[7] is not None:
-                # TODO: This won't work because of out of order behavior
-                # self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_embedding, key_prefix))
-
-                embedding_key = key_prefix + bytes([ord('-')]) + str(i).encode()
-                embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], embedding[3], embedding[4], embedding[5], embedding[6], embedding[7]))
+                embedding_key = self.serializer.encode_key(embedding[4], embedding[5], embedding[3], include_clazz=True)
+                embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6], embedding[7]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_embedding, embedding_key, embedding_value))
-                i += 1
+                # i += 1
             else:
                 # TODO: This won't work because of out of order behavior
                 # self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_referencing, key_prefix))
 
-                ref_key = key_prefix + bytes([ord('-')]) + str(j).encode()
-                ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], embedding[3], embedding[4], embedding[5], embedding[6]))
+                ref_key = self.serializer.encode_key(embedding[1], embedding[2], embedding[0], include_clazz=True)
+                ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_referencing, ref_key, ref_value))
-                j += 1
+                # j += 1
 
     def insert_objects_on_queue(self, klass: T, objects: Iterable, empty=False):
         """ Places objects in the shared queue for writing, starting writer if needed. """

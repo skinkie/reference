@@ -23,8 +23,6 @@ from aux_logging import *
 import logging
 import traceback
 
-from transformers.embedding import embedding_update
-
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
 serializer_config.ignore_default_attributes = True
@@ -77,11 +75,6 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
             log_all(logging.WARN, f"no such object found {object_type},{object_filter}")
 
 def main(netex,object_type,object_filter,output,referencing):
-    with Database(netex, serializer=MyPickleSerializer(compression=True), readonly=False) as db:
-        if referencing:
-            log_all(logging.INFO, f"updating embedded and referencing tables")
-            embedding_update(db)
-
     try:
         fetch(netex, object_type, object_filter, output)
     except Exception as e:

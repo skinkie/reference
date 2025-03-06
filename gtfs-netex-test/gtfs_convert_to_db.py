@@ -51,9 +51,6 @@ from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString,
 from aux_logging import *
 import traceback
 
-from transformers.embedding import embedding_update
-
-
 def get_or_none(l: list, i: int, cast_clazz=None):
     if l is None:
         return l

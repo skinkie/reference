@@ -11,8 +11,6 @@ import netex_monkeypatching
 from aux_logging import *
 import traceback
 
-from transformers.embedding import embedding_update
-
 SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "TemplateServiceJourney", "ServiceCalendar", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace", "ResponsibilitySet"]
 
 def main(swiss_zip_file: str, database: str, clean_database: bool = True, referencing: bool = True):

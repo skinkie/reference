@@ -386,43 +386,44 @@ def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=Tr
         yield from load_embedded_transparent_generator(db, clazz, limit, filter, parent, cache)
 
 def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False, cache=True):
+    # TODO: Expensive for classes that are not available, it will do a complete sequential scan and for each time it will depicle each individual object
+
     objectname = get_object_name(clazz)
 
     if db.env:
         with db.env.begin(db=db.db_embedding, write=False) as txn:
-            cursor = txn.cursor()
             i = 0
-            for _key, value in cursor:
-                _tmp = cloudpickle.loads(value)
-                parent_clazz, parent_id, parent_version, embedding_clazz, embedding_id, embedding_version, embedding_order, embedding_path = _tmp
+            prefix = db.serializer.encode_key(filter, None, clazz, True)
+            cursor = txn.cursor()
+            if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+                for key, value in cursor:
+                    if not key.startswith(prefix):
+                        break  # Stop when keys no longer match the prefix
 
-                if embedding_clazz == objectname:
-                    if filter and filter != embedding_id:
-                        continue
-                    else:
-                        if limit is None or i < limit:
-                            parent_clazz = db.get_class_by_name(parent_clazz)
-                            cache_key = db.serializer.encode_key(parent_id, parent_version, parent_clazz, True)
-                            obj = db.cache.get(cache_key, lambda: db.get_single(parent_clazz, parent_id, parent_version))
+                    _tmp = cloudpickle.loads(value)
+                    parent_clazz, parent_id, parent_version, embedding_clazz, embedding_id, embedding_version, embedding_order, embedding_path = _tmp
 
-                            if obj is not None:
-                                if parent:
-                                    yield obj
-                                    if filter:
-                                        break
-                                else:
-                                    # TODO: separate function
-                                    split = []
-                                    for p in embedding_path.split('.'):
-                                        if p.isnumeric():
-                                            p = int(p)
-                                        split.append(p)
-                                    yield resolve_attr(obj, split)
-                                    if filter:
-                                        break
-                            i += 1
-                        else:
-                            break
+                    if limit is None or i < limit:
+                        parent_clazz = db.get_class_by_name(parent_clazz)
+                        cache_key = db.serializer.encode_key(parent_id, parent_version, parent_clazz, True)
+                        obj = db.cache.get(cache_key, lambda: db.get_single(parent_clazz, parent_id, parent_version))
+
+                        if obj is not None:
+                            if parent:
+                                yield obj
+                                if filter:
+                                    break
+                            else:
+                                # TODO: separate function
+                                split = []
+                                for p in embedding_path.split('.'):
+                                    if p.isnumeric():
+                                        p = int(p)
+                                    split.append(p)
+                                yield resolve_attr(obj, split)
+                                if filter:
+                                    break
+                        i += 1
 
 from lxml import etree
 
@@ -739,9 +740,7 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
             if obj.id is not None and obj.__class__ in serializer.interesting_classes:
                 yield [
                     deserialized.__class__, deserialized.id, deserialized.version,
-                    get_object_name(obj.__class__),
-                    obj.id,
-                    obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
+                    obj.__class__, obj.id, obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0',
                     '.'.join([str(s) for s in path])]
 
@@ -756,7 +755,7 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
 
                 yield [
                     deserialized.__class__, deserialized.id, deserialized.version,
-                    obj.name_of_ref_class,
+                    serializer.name_object[obj.name_of_ref_class], # TODO via Database
                     obj.ref,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0', None]
