@@ -389,32 +389,38 @@ class Database:
             if dst_db is None:
                 return
 
-            total_size = 0  # Track memory usage
-            batch = []
+                total_size = 0  # Track memory usage
+                batch = []
 
-            with self.env.begin(db=src_db, write=False) as src_txn:
-                cursor = src_txn.cursor()
-                dst_txn = target.env.begin(write=True, db=dst_db)  # Open initial write transaction
+                while True:
+                    try:
+                        with self.env.begin(db=src_db, write=False) as src_txn:
+                            cursor = src_txn.cursor()
+                            dst_txn = target.env.begin(write=True, db=dst_db)  # Open initial write transaction
 
-                for key, value in cursor:
-                    batch.append((key, value))
-                    total_size += len(key) + len(value)
+                            for key, value in cursor:
+                                batch.append((key, value))
+                                total_size += len(key) + len(value)
 
-                    if len(batch) >= batch_size or total_size >= max_mem:
-                        for k, v in batch:
-                            dst_txn.put(k, v)
+                                if len(batch) >= batch_size or total_size >= max_mem:
+                                    for k, v in batch:
+                                        dst_txn.put(k, v)
 
-                        dst_txn.commit()  # Commit batch
-                        dst_txn = target.env.begin(write=True, db=dst_db)  # Start new txn
+                                    dst_txn.commit()  # Commit batch
+                                    dst_txn = target.env.begin(write=True, db=dst_db)  # Start new txn
 
-                        batch.clear()
-                        total_size = 0  # Reset memory counter
+                                    batch.clear()
+                                    total_size = 0  # Reset memory counter
 
-                # Final commit for remaining records
-                if batch:
-                    for k, v in batch:
-                        dst_txn.put(k, v)
-                    dst_txn.commit()
+                            # Final commit for remaining records
+                            if batch:
+                                for k, v in batch:
+                                    dst_txn.put(k, v)
+                                dst_txn.commit()
+                        break # Success, exit loop
+                    except lmdb.MapFullError:
+                        print("LMDB full, resizing...")
+                        self._resize_env(total_size)
 
     def copy_db_embedding(self, target: Database, classes: list[T], batch_size=1_000, max_mem=4 * 1024 ** 3):
         """
@@ -429,7 +435,7 @@ class Database:
         self.block_until_done()
         target.block_until_done()
 
-        classes_name = {get_object_name(klass).encode() + bytes([ord('-')]) for klass in classes}
+        classes_name = {self.serializer.encode_key(None, None, klass, True) for klass in classes}
 
         def _copy_db(src_db, dst_db):
             """ Helper function to copy data between LMDB databases efficiently. """
@@ -442,36 +448,43 @@ class Database:
             total_size = 0  # Track memory usage
             batch = []
 
-            with self.env.begin(write=False, db=src_db) as src_txn:
-                cursor = src_txn.cursor()
-                dst_txn = target.env.begin(write=True, db=dst_db)  # Open initial write transaction
+            while True:
+                try:
+                    with self.env.begin(write=False, db=src_db) as src_txn:
+                        cursor = src_txn.cursor()
+                        dst_txn = target.env.begin(write=True, db=dst_db)  # Open initial write transaction
 
-                for prefix in classes_name:
-                    if cursor.set_range(prefix):
-                        while cursor.key().startswith(prefix):
-                            key = cursor.key()
-                            value = cursor.value()
-                            batch.append((key, value))
-                            total_size += len(key) + len(value)
+                        for prefix in classes_name:
+                            if cursor.set_range(prefix):
+                                while cursor.key().startswith(prefix):
+                                    key = cursor.key()
+                                    value = cursor.value()
+                                    batch.append((key, value))
+                                    total_size += len(key) + len(value)
 
-                            if len(batch) >= batch_size or total_size >= max_mem:
-                                for k, v in batch:
-                                    dst_txn.put(k, v)
+                                    if len(batch) >= batch_size or total_size >= max_mem:
+                                        for k, v in batch:
+                                            dst_txn.put(k, v)
 
-                                dst_txn.commit()  # Commit batch
-                                dst_txn = target.env.begin(write=True, db=dst_db)  # Start new txn
+                                        dst_txn.commit()  # Commit batch
+                                        dst_txn = target.env.begin(write=True, db=dst_db)  # Start new txn
 
-                                batch.clear()
-                                total_size = 0  # Reset memory counter
+                                        batch.clear()
+                                        total_size = 0  # Reset memory counter
 
-                            if not cursor.next():
-                                break
+                                    if not cursor.next():
+                                        break
 
-                # Final commit for remaining records
-                if batch:
-                    for k, v in batch:
-                        dst_txn.put(k, v)
-                    dst_txn.commit()
+                        # Final commit for remaining records
+                        if batch:
+                            for k, v in batch:
+                                dst_txn.put(k, v)
+                            dst_txn.commit()
+
+                        break # Success, exit loop
+                except lmdb.MapFullError:
+                    print("LMDB full, resizing...")
+                    self._resize_env(total_size)
 
         with target.lock:
             # Copy both databases
