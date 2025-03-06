@@ -347,9 +347,9 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                     # TODO: Very expensive
                                     cursor2 = src_txn2.cursor()
                                     for key2, value2 in cursor2:
-                                        parent_class, parent_id, parent_version, i = pickle.loads(key)
+                                        parent_class, parent_id, parent_version, i = cloudpickle.loads(key)
                                         if parent_class == resolve_class and parent_id == resolve.id and parent_version == resolve.version:
-                                            embedding_class, embedding_id, embedding_version, embedding_path = pickle.loads(value2)
+                                            embedding_class, embedding_id, embedding_version, embedding_path = cloudpickle.loads(value2)
                                             if (embedding_class, db.encode_pair(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
                                                 replace_with_reference_inplace(resolve, embedding_path)
 
@@ -408,6 +408,8 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                             if obj is not None:
                                 if parent:
                                     yield obj
+                                    if filter:
+                                        break
                                 else:
                                     # TODO: separate function
                                     split = []
@@ -416,6 +418,8 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
                                             p = int(p)
                                         split.append(p)
                                     yield resolve_attr(obj, split)
+                                    if filter:
+                                        break
                             i += 1
                         else:
                             break
