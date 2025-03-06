@@ -683,9 +683,9 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
                 result_uic_operating_periods += my_uic_operating_periods
             result_day_type += [my_day_type]
 
-        db_write.insert_objects_on_queue(DayType, result_day_type, empty=True)
-        db_write.insert_objects_on_queue(DayTypeAssignment, result_day_type_assignments, empty=True)
-        db_write.insert_objects_on_queue(UicOperatingPeriod, result_uic_operating_periods, empty=True)
+        db_write.insert_objects_on_queue(DayType, result_day_type, empty=False)
+        db_write.insert_objects_on_queue(DayTypeAssignment, result_day_type_assignments, empty=False)
+        db_write.insert_objects_on_queue(UicOperatingPeriod, result_uic_operating_periods, empty=False)
 
         # service_calendar = get_service_calendar(db_write, generator_defaults)
         # db_write.insert_objects_on_queue([service_calendar], True, True)
