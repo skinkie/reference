@@ -262,8 +262,6 @@ class Database:
             key = self.serializer.encode_key(obj.id, version, klass)
             value = self.serializer.marshall(obj, klass)
             self.task_queue.put((LmdbActions.WRITE, db_handle, key, value))
-            if obj.id == 'OPENOV:ServiceCalendar:ServiceCalendar':
-                pass
             self._insert_embedding_on_queue(obj)
 
     def insert_one_object(self, object):
@@ -364,76 +362,39 @@ class Database:
                         # TODO: What about handling the validity too here?
                         return self.serializer.unmarshall(value, clazz)
 
-    def copy_db(self, target: Database, klass: T, batch_size=1_000, max_mem=4 * 1024 ** 3):
+    def copy_db(self, target: Database, klass: T):
         """
         Copies a single database from `src_env` to `dst_env` with high throughput.
 
         - `src_env`: Source LMDB environment
         - `dst_env`: Destination LMDB environment
-        - `db_name`: Database name (bytes)
-        - `batch_size`: Number of records per transaction commit
-        - `max_mem`: Max memory usage before commit (default: 4GB)
         """
         if target.readonly:
             return
 
-        self.block_until_done()
-        target.block_until_done()
+        target._start_writer_if_needed()
 
-        with target.lock:
-            src_db = self.open_db(klass)
-            if src_db is None:
-                return
+        src_db = self.open_db(klass)
+        if src_db is None:
+            return
 
-            dst_db = target.open_db(klass)
-            if dst_db is None:
-                return
+        dst_db = target.open_db(klass)
+        if dst_db is None:
+            return
 
-                total_size = 0  # Track memory usage
-                batch = []
-
-                while True:
-                    try:
-                        with self.env.begin(db=src_db, write=False) as src_txn:
-                            cursor = src_txn.cursor()
-                            dst_txn = target.env.begin(write=True, db=dst_db)  # Open initial write transaction
-
-                            for key, value in cursor:
-                                batch.append((key, value))
-                                total_size += len(key) + len(value)
-
-                                if len(batch) >= batch_size or total_size >= max_mem:
-                                    for k, v in batch:
-                                        dst_txn.put(k, v)
-
-                                    dst_txn.commit()  # Commit batch
-                                    dst_txn = target.env.begin(write=True, db=dst_db)  # Start new txn
-
-                                    batch.clear()
-                                    total_size = 0  # Reset memory counter
-
-                            # Final commit for remaining records
-                            if batch:
-                                for k, v in batch:
-                                    dst_txn.put(k, v)
-                                dst_txn.commit()
-                        break # Success, exit loop
-                    except lmdb.MapFullError:
-                        print("LMDB full, resizing...")
-                        self._resize_env(total_size)
+        with self.env.begin(write=False, db=src_db) as src_txn:
+            cursor = src_txn.cursor()
+            for key, value in cursor:
+                target.task_queue.put((LmdbActions.WRITE, dst_db, bytes(key), bytes(value)))
 
     def copy_db_embedding(self, target: Database, classes: list[T], batch_size=1_000, max_mem=4 * 1024 ** 3):
         """
         Copies '_referencing' and '_embedding' databases from `self.env` to `target.env` with high throughput.
-
-        - `batch_size`: Number of records per transaction commit
-        - `max_mem`: Max memory usage before commit (default: 4GB)
         """
         if target.readonly:
             return
 
-        self.block_until_done()
-        target.block_until_done()
+        target._start_writer_if_needed()
 
         classes_name = {self.serializer.encode_key(None, None, klass, True) for klass in classes}
 
@@ -445,51 +406,18 @@ class Database:
             if dst_db is None:
                 return
 
-            total_size = 0  # Track memory usage
-            batch = []
+            with self.env.begin(write=False, db=src_db) as src_txn:
+                cursor = src_txn.cursor()
+                for prefix in classes_name:
+                    if cursor.set_range(prefix):
+                        while cursor.key().startswith(prefix):
+                            target.task_queue.put((LmdbActions.WRITE, dst_db, bytes(cursor.key()), bytes(cursor.value())))
+                            if not cursor.next():
+                                break
 
-            while True:
-                try:
-                    with self.env.begin(write=False, db=src_db) as src_txn:
-                        cursor = src_txn.cursor()
-                        dst_txn = target.env.begin(write=True, db=dst_db)  # Open initial write transaction
-
-                        for prefix in classes_name:
-                            if cursor.set_range(prefix):
-                                while cursor.key().startswith(prefix):
-                                    key = cursor.key()
-                                    value = cursor.value()
-                                    batch.append((key, value))
-                                    total_size += len(key) + len(value)
-
-                                    if len(batch) >= batch_size or total_size >= max_mem:
-                                        for k, v in batch:
-                                            dst_txn.put(k, v)
-
-                                        dst_txn.commit()  # Commit batch
-                                        dst_txn = target.env.begin(write=True, db=dst_db)  # Start new txn
-
-                                        batch.clear()
-                                        total_size = 0  # Reset memory counter
-
-                                    if not cursor.next():
-                                        break
-
-                        # Final commit for remaining records
-                        if batch:
-                            for k, v in batch:
-                                dst_txn.put(k, v)
-                            dst_txn.commit()
-
-                        break # Success, exit loop
-                except lmdb.MapFullError:
-                    print("LMDB full, resizing...")
-                    self._resize_env(total_size)
-
-        with target.lock:
-            # Copy both databases
-            _copy_db(self.db_referencing, target.db_referencing)
-            _copy_db(self.db_embedding, target.db_referencing)
+        # Copy both databases
+        _copy_db(self.db_referencing, target.db_referencing)
+        _copy_db(self.db_embedding, target.db_referencing)
 
     def clean_cache(self):
         self.cache = {}
