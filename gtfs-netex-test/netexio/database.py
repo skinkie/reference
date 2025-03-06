@@ -159,7 +159,7 @@ class Database:
             except queue.Empty:
                 pass
 
-            if batch or delete_tasks:
+            if batch or delete_tasks or clear_tasks or drop_tasks:
                 self._process_batch(batch, delete_tasks, clear_tasks, drop_tasks, total_size)
 
             if item is self.stop_signal:
