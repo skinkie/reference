@@ -46,7 +46,7 @@ class Referencing:
 
 
 class Database:
-    def __init__(self, path: str, serializer: Serializer, readonly=True, logger: Logger=None, initial_size=256 * 1024 * 1024,
+    def __init__(self, path: str, serializer: Serializer, readonly=True, logger: Logger=None, initial_size=1 * 1024 ** 3,
                  growth_size=None,
                  max_size=16 * 1024 ** 3, batch_size=10_000, max_mem=4 * 1024 ** 3):
         self.path = path
