@@ -187,7 +187,7 @@ class Database:
                     for db_handle, prefix in delete_tasks:
                         cursor = txn.cursor(db=db_handle)
                         if cursor.set_range(prefix):
-                            while cursor.key().startswith(prefix):
+                            while bytes(cursor.key()).startswith(prefix):
                                 cursor.delete()
                                 if not cursor.next():
                                     break
@@ -394,7 +394,7 @@ class Database:
                 cursor = txn.cursor()
                 if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
                     for key, value in cursor:
-                        if not key.startswith(prefix):
+                        if not bytes(key).startswith(prefix):
                             break  # Stop when keys no longer match the prefix
 
                         # TODO: What about handling the validity too here?
@@ -420,7 +420,7 @@ class Database:
         if dst_db is None:
             return
 
-        with self.env.begin(write=False, db=src_db) as src_txn:
+        with self.env.begin(write=False, buffers=True, db=src_db) as src_txn:
             cursor = src_txn.cursor()
             for key, value in cursor:
                 target.task_queue.put((LmdbActions.WRITE, dst_db, bytes(key), bytes(value)))
@@ -469,7 +469,7 @@ class Database:
             exclusively = set(self.serializer.interesting_classes)
 
         tables = set([])
-        with self.env.begin() as txn:
+        with self.env.begin(buffers=True, write=False) as txn:
             cursor = txn.cursor()
             for key, _ in cursor:
                 name = key.decode('utf-8')
@@ -482,7 +482,7 @@ class Database:
             exclusively = set(self.serializer.interesting_classes)
 
         tables = set([])
-        with self.env.begin(write=False, db=self.db_referencing) as txn:
+        with self.env.begin(write=False, buffers=True, db=self.db_referencing) as txn:
             cursor = txn.cursor()
             for _key, value in cursor:
                 _, _, _, klass, *_ = cloudpickle.loads(value)
@@ -495,7 +495,7 @@ class Database:
             exclusively = set(self.serializer.interesting_classes)
 
         tables = set([])
-        with self.env.begin(write=False, db=self.db_embedding) as txn:
+        with self.env.begin(write=False, buffers=True, db=self.db_embedding) as txn:
             cursor = txn.cursor()
             for _key, value in cursor:
                 _p_klass, _p_id, _p_version, klass, _id, _version, _order, _path = cloudpickle.loads(value)

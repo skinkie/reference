@@ -29,7 +29,7 @@ def embedding_update(db: Database, filter_clazz: list=None):
 
     def reader(table):
         """ Reads from the table and pushes modified data to the queue. """
-        with db.env.begin(write=False, db=db.open_db(table)) as txn_ro:
+        with db.env.begin(write=False, buffers=True, db=db.open_db(table)) as txn_ro:
             cursor = txn_ro.cursor()
             for db_key, db_value in cursor:  # Rename outer loop variables
                 i, j = 0, 0

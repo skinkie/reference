@@ -88,7 +88,7 @@ def reprojection_update(db: Database, crs_to: str, batch_size=100_000, max_mem=4
             continue
 
         src_db = db.open_db(clazz)
-        with db.env.begin(db=src_db, write=False) as src_txn:
+        with db.env.begin(db=src_db, buffers=True, write=False) as src_txn:
             cursor = src_txn.cursor()
 
             for key, value in cursor:

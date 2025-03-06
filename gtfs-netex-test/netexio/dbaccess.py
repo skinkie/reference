@@ -56,7 +56,7 @@ def load_embedded(db: Database, clazz: T, filter, cursor=False):
 
     result = []
 
-    with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as txn:
+    with db.env.begin(db=db.env.open_db(b"_embedding"), buffers=True, write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
             # parent_class, parent_id, parent_version, *_ = pickle.loads(key)
@@ -71,7 +71,7 @@ def load_referencing(db: Database, clazz: T, filter, cursor=False):
 
     result = []
 
-    with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as txn:
+    with db.env.begin(db=db.env.open_db(b"_referencing"), buffers=True, write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
             # TODO: See if we can do a smarter key for easy lookup
@@ -87,7 +87,7 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
 
     result = []
 
-    with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as txn:
+    with db.env.begin(db=db.env.open_db(b"_referencing"), buffers=True, write=False) as txn:
         cursor = txn.cursor()
         for key, value in cursor:
             # TODO: See if we can do a smarter key for easy lookup
@@ -284,7 +284,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
 
     # Find all embeddings and objects the target profile, elements must not be added directly later, but referenced.
     existing_ids = set()
-    with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as src_txn:
+    with db.env.begin(db=db.env.open_db(b"_embedding"), buffers=True, write=False) as src_txn:
         cursor = src_txn.cursor()
         for _key, value in cursor:
             clazz, ref, version, *_ = pickle.loads(value)
@@ -296,12 +296,12 @@ def fetch_references_classes_generator(db: Database, classes: list):
             continue
 
         # TODO: Implement prefix based code
-        with db.env.begin(db=db_name, write=False) as src_txn:
+        with db.env.begin(db=db_name, buffers=True, write=False) as src_txn:
             cursor = src_txn.cursor()
             for key, _value in cursor:
                 existing_ids.add((clazz, key))
 
-    with db.env.begin(db=db.env.open_db(b"_referencing"), write=False) as src_txn:
+    with db.env.begin(db=db.env.open_db(b"_referencing"), buffers=True, write=False) as src_txn:
         cursor = src_txn.cursor()
         for _key, value in cursor:
             parent_class, parent_id, parent_version, ref_class, ref_id, ref_version, ref_order = pickle.loads(value)
@@ -316,7 +316,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
                     else:
                         processed.add(needle)
 
-                        with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as src_txn2:
+                        with db.env.begin(db=db.env.open_db(b"_embedding"), buffers=True, write=False) as src_txn2:
                             # TODO: Very expensive sequential scan
                             cursor2 = src_txn2.cursor()
                             for key2, value2 in cursor2:
@@ -343,7 +343,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                 # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
                                 resolve_class = get_object_name(resolve.__class__)
-                                with db.env.begin(db=db.env.open_db(b"_embedding"), write=False) as src_txn2:
+                                with db.env.begin(db=db.env.open_db(b"_embedding"), buffers=True, write=False) as src_txn2:
                                     # TODO: Very expensive
                                     cursor2 = src_txn2.cursor()
                                     for key2, value2 in cursor2:
@@ -357,13 +357,13 @@ def fetch_references_classes_generator(db: Database, classes: list):
 
 def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, parent=False, cache=True):
     if db.env and db.open_db(clazz) is not None:
-        with db.env.begin(write=False, db=db.open_db(clazz)) as txn:
+        with db.env.begin(write=False, buffers=True, db=db.open_db(clazz)) as txn:
             cursor = txn.cursor()
             if filter:
                 prefix = db.serializer.encode_key(filter, None, clazz)
                 if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
                     for key, value in cursor:
-                        if not key.startswith(prefix):
+                        if not bytes(key).startswith(prefix):
                             break  # Stop when keys no longer match the prefix
 
                         yield db.serializer.unmarshall(value, clazz)
@@ -391,7 +391,7 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
     objectname = get_object_name(clazz)
 
     if db.env:
-        with db.env.begin(db=db.db_embedding, write=False) as txn:
+        with db.env.begin(db=db.db_embedding, buffers=True, write=False) as txn:
             i = 0
             prefix = db.serializer.encode_key(filter, None, clazz, True)
             cursor = txn.cursor()
@@ -740,7 +740,9 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
             if obj.id is not None and obj.__class__ in serializer.interesting_classes:
                 yield [
                     deserialized.__class__, deserialized.id, deserialized.version,
-                    obj.__class__, obj.id, obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
+                    get_object_name(obj.__class__),
+                    obj.id,
+                    obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0',
                     '.'.join([str(s) for s in path])]
 
@@ -755,7 +757,7 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
 
                 yield [
                     deserialized.__class__, deserialized.id, deserialized.version,
-                    serializer.name_object[obj.name_of_ref_class], # TODO via Database
+                    obj.name_of_ref_class,
                     obj.ref,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0', None]
