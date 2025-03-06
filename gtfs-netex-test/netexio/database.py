@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from logging import Logger
+import random
 
 import lmdb
 import threading
@@ -46,7 +47,8 @@ class Referencing:
 
 
 class Database:
-    def __init__(self, path: str, serializer: Serializer, readonly=True, logger: Logger=None, initial_size=1 * 1024 ** 3,
+    def __init__(self, path: str, serializer: Serializer, readonly=True, logger: Logger = None,
+                 initial_size=1 * 1024 ** 3,
                  growth_size=None,
                  max_size=16 * 1024 ** 3, batch_size=10_000, max_mem=4 * 1024 ** 3):
         self.path = path
@@ -155,7 +157,7 @@ class Database:
             self.task_queue = None
             self.writer_thread = None
 
-    def _process_batch(self, batch, delete_tasks, clear_task, drop_task,total_size):
+    def _process_batch(self, batch, delete_tasks, clear_task, drop_task, total_size):
         """Processes a batch of writes and deletions, retrying if needed."""
         while True:
             try:
@@ -234,7 +236,9 @@ class Database:
 
             if embedding[7] is not None:
                 embedding_key = self.serializer.encode_key(embedding[4], embedding[5], embedding[3], include_clazz=True)
-                embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6], embedding[7]))
+                embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2],
+                                                     get_object_name(embedding[3]), embedding[4], embedding[5],
+                                                     embedding[6], embedding[7]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_embedding, embedding_key, embedding_value))
                 # i += 1
             else:
@@ -242,7 +246,8 @@ class Database:
                 # self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_referencing, key_prefix))
 
                 ref_key = self.serializer.encode_key(embedding[1], embedding[2], embedding[0], include_clazz=True)
-                ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6]))
+                ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2],
+                                               get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_referencing, ref_key, ref_value))
                 # j += 1
 
@@ -301,7 +306,6 @@ class Database:
         self.task_queue.put((LmdbActions.CLEAR, self.db_embedding))
         self.task_queue.put((LmdbActions.CLEAR, self.db_referencing))
 
-
     def delete_by_prefix(self, klass: T, prefix: bytes):
         """Schedules deletion of all keys with a given prefix using the writer thread."""
         if self.readonly:
@@ -340,6 +344,25 @@ class Database:
                 os.rename(tmp_file, self.path)
                 self.env = lmdb.open(self.path, map_size=self.initial_size, max_dbs=self.max_dbs,
                                      readonly=self.readonly)
+
+    def get_random(self, clazz: T) -> T | None:
+        db_handle = self.open_db(clazz)
+        if db_handle is None:
+            return None
+
+        with self.env.begin() as txn:
+            cursor = txn.cursor(db_handle)
+
+            # Move to a random position by skipping N random entries
+            if cursor.first():
+                rand_skip = random.randint(0, txn.stat(db_handle)["entries"] - 1)
+                for _ in range(rand_skip):
+                    if not cursor.next():
+                        break  # Stop if we reach the end
+
+                return self.serializer.unmarshall(cursor.value(), clazz)
+
+        return None  # If DB is empty
 
     def get_single(self, clazz: T, id, version=None) -> T | None:
         db = self.open_db(clazz)
@@ -411,7 +434,8 @@ class Database:
                 for prefix in classes_name:
                     if cursor.set_range(prefix):
                         while cursor.key().startswith(prefix):
-                            target.task_queue.put((LmdbActions.WRITE, dst_db, bytes(cursor.key()), bytes(cursor.value())))
+                            target.task_queue.put(
+                                (LmdbActions.WRITE, dst_db, bytes(cursor.key()), bytes(cursor.value())))
                             if not cursor.next():
                                 break
 
@@ -466,7 +490,8 @@ class Database:
 
 
 if __name__ == '__main__':
-    with Database("/tmp/test.lmdb", MyPickleSerializer(compression=True), readonly=False, initial_size=1000 * 1024) as lmdb_db:
+    with Database("/tmp/test.lmdb", MyPickleSerializer(compression=True), readonly=False,
+                  initial_size=1000 * 1024) as lmdb_db:
         # Implement the growing test
         db_handle = lmdb_db.open_db(str)
         for j in range(0, 1000):

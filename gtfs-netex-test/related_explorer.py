@@ -40,8 +40,7 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
 
         objs=[]
         if object_filter == "random":
-            objs = load_local(db, db.get_class_by_name(object_type))
-            objs = [random.choice(objs)] # randomly select one
+            objs = [db.get_random(db.get_class_by_name(object_type))]
         else:
             objs = load_local(db, db.get_class_by_name(object_type), filter=object_filter)
 
