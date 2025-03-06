@@ -365,7 +365,7 @@ class Database:
         if db_handle is None:
             return None
 
-        with self.env.begin() as txn:
+        with self.env.begin(buffers=True) as txn:
             cursor = txn.cursor(db_handle)
 
             # Move to a random position by skipping N random entries
@@ -385,7 +385,7 @@ class Database:
             return None
 
         prefix = self.serializer.encode_key(id, version, clazz)
-        with self.env.begin(write=False, db=db) as txn:
+        with self.env.begin(write=False, buffers=True, db=db) as txn:
             if version:
                 value = txn.get(prefix)
                 if value:
@@ -444,7 +444,7 @@ class Database:
             if dst_db is None:
                 return
 
-            with self.env.begin(write=False, db=src_db) as src_txn:
+            with self.env.begin(write=False, buffers=True, db=src_db) as src_txn:
                 cursor = src_txn.cursor()
                 for prefix in classes_name:
                     if cursor.set_range(prefix):
