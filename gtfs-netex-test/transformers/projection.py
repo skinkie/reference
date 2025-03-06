@@ -9,7 +9,7 @@ from pyproj.exceptions import CRSError
 from aux_logging import log_once
 from mro_attributes import list_attributes
 from netex import Polygon, PosList, Pos, LocationStructure2, LineString, SimplePointVersionStructure, MultiSurface
-from netexio.database import Database
+from netexio.database import Database, LmdbActions
 from netexio.dbaccess import recursive_attributes
 from utils import get_interesting_classes
 
@@ -76,15 +76,6 @@ def reprojection_udf(serializer: Serializer, serialized: bytes, clazz: str, crs_
     return reserialised
 
 def reprojection_update(db: Database, crs_to: str, batch_size=100_000, max_mem=4 * 1024 ** 3):
-    def _commit_batch(db, src_db, batch):
-        """Commits a batch of key-value pairs to LMDB."""
-        with db.env.begin(write=True, db=src_db) as dst_txn:
-            for dst_key, dst_value in batch:
-                dst_txn.put(dst_key, dst_value)
-
-    # TODO: Remove when fixed
-    db.block_until_done()
-
     for clazz in db.tables(exclusively=set(get_all_geo_elements())):
         src_db = db.open_db(clazz)
         if not src_db:
@@ -93,23 +84,11 @@ def reprojection_update(db: Database, crs_to: str, batch_size=100_000, max_mem=4
         src_db = db.open_db(clazz)
         with db.env.begin(db=src_db, write=False) as src_txn:
             cursor = src_txn.cursor()
-            batch = []
-            total_size = 0
 
             for key, value in cursor:
                 transformed_value = db.serializer.marshall(reprojection(db.serializer.unmarshall(value, clazz), crs_to), clazz)
-                batch.append((key, transformed_value))
-                total_size += len(key) + len(transformed_value)
-
-                if len(batch) >= batch_size or total_size >= max_mem:
-                    _commit_batch(db, src_db, batch)
-                    batch.clear()
-                    total_size = 0  # Reset memory counter
-
-            # Final commit for remaining records
-            if batch:
-                _commit_batch(db, src_db, batch)
-
+                # TODO: We may not want to expose our internal task queue.
+                db.task_queue.put((LmdbActions.WRITE, src_db, key, transformed_value))
 
 def get_transformer_by_srs_name(location, crs_to) -> Transformer:
     if hasattr(location, 'pos') and location.pos is not None:
