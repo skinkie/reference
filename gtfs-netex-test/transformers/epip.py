@@ -599,6 +599,7 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
     service_calendars: List[ServiceCalendar] = load_local(db_read, ServiceCalendar)
     if False and len(service_calendars) > 0:
         # TODO: WORKAROUND
+        log_once("problem with epip_service_calender")
         pass
         # db_write.insert_objects_on_queue(service_calendars, True, True)
 
@@ -660,7 +661,13 @@ def epip_service_calendar(db_read: Database, db_write: Database, generator_defau
                                     pass
 
                 if len(my_operational_dates) > 0:
-                    valid_days = sorted(my_operational_dates)
+                    try:
+                        converted_dates = [datetime.combine(date_obj, datetime.min.time()) if isinstance(date_obj, date) and not isinstance(date_obj, datetime) else date_obj for date_obj in my_operational_dates] #TODO why is this a mix between datetime.date and datetime.datetime sometimes
+                        valid_days = sorted(converted_dates)
+                    except:
+                        log_all(logging.ERROR,f"{my_operational_dates}",)
+
+                        raise
                     if my_from is None:
                         my_from = valid_days[0]
                     if my_to is None:
