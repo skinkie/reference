@@ -12,3 +12,4 @@ line_profiler
 lmdb
 cloudpickle
 lz4
+paramiko

@@ -59,6 +59,7 @@ from timetabledpassingtimesprofile import TimetablePassingTimesProfile
 from transformers.projection import project_location_4326, project_polygon
 from transformers.timetabled_passing_time import infer_id_and_order_and_apply
 from utils import project
+from line_profiler import profile
 
 EPIP_CLASSES = [ "Codespace", "StopPlace", "RoutePoint", "RouteLink", "Routes", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "ServiceJourneyPattern", "PassengerStopAssignment", "Notice", "NoticeAssignment", "AvailabilityCondition" ]
 

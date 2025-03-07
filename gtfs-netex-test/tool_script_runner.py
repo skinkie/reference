@@ -10,6 +10,14 @@ from configuration import *
 import traceback
 import urllib.request
 from datetime import datetime
+import re
+
+import hashlib
+
+def custom_hash(value):
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(str(value).encode('utf-8'))
+    return sha256_hash.hexdigest()[-8:]
 
 def reversedate():
     # Get the current date
@@ -17,6 +25,25 @@ def reversedate():
     # Format the date as YYYYMMDD
     formatted_date = current_date.strftime('%Y%m%d')
     return formatted_date
+
+
+def parse_command_line_arguments(input_string):
+    arguments = re.findall(r'\[.*?\]|\S+', input_string)
+    result = []
+    is_list = False
+    for argument in arguments:
+        if argument.startswith('[') and argument.endswith(']'):
+            # Argument is a list enclosed in square brackets
+            list_string = argument[1:-1].strip()
+            if list_string:
+                # Split the list string and add individual elements to the result
+                sublist = list_string.split()
+                result.append(sublist)
+        else:
+            # Argument is a single value
+            result.append(argument)
+    return result
+
 def create_list_from_string(input_string):
     # Remove the square brackets from the string
     cleaned_string = input_string.strip('[]')
@@ -37,11 +64,13 @@ def load_and_run(file_name, args_string):
     mod = __import__(components[0])
     for comp in components[1:]:
         mod = getattr(mod, comp)
-    args = args_string.split()  # Split the string into a list of arguments
+    args = parse_command_line_arguments(args_string)
+    # args = args_string.split()  # Split the string into a list of arguments
     args1 = []
     for arg in args:
         if check_string(arg):
-            arg= create_list_from_string(arg)
+            print(".")
+            # arg= create_list_from_string(arg)
         elif arg == "True":
             arg=True
         elif arg == "False":
@@ -126,7 +155,9 @@ def download(folder, url, forced=False):
         if filename=="permalink":
             filename="swiss.zip"
         if "?" in filename:  #for data from mobigo, that is fetched by an aspx script with parameters
-            filename="netex.zip"
+            filename="source.zip"
+        if "Resource" in filename: # for italian data
+            filename="source.xml.gz"
         if forced==False:
             # Download only when not exists
             path=os.path.join(folder, filename)
@@ -163,7 +194,8 @@ def remove_file(path):
     else:
         raise FileNotFoundError(f"File not found: {path}")
 
-def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=99999,this_step=-1):
+
+def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=99999,this_step=-1,url=None, parent_block=""):
     # blockexisted
     blockexisted=False
     # Read the scripts from a file
@@ -172,7 +204,10 @@ def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=9999
 
     # go through each block
     for block in data:
-        processdir = processing_data + "/" + block["block"]
+        if url:
+            processdir= processing_data + "/" + parent_block+"-"+todo_block+ "-"+str(custom_hash(url))
+        else:
+            processdir = processing_data + "/" + block["block"]
         blockstop = False
         if not todo_block == block["block"]:
             if not todo_block == "all":
@@ -199,11 +234,18 @@ def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=9999
             else:
                 blockstop == True # we only process this one step
 
+            if not "download_urls" in block.keys() and (step < begin_step): #if it is a list we always begin with 1 the begin_step is then used within the list
+                continue
+            if blockstop == True:
+                break
             start_time = time.time()
 
             script_name = script['script']
             script_args = script['args']
-            script_download_url = block.get('download_url')
+            if url:
+                script_download_url=url
+            else:
+                script_download_url = block.get('download_url')
             # replace the placeholder for processdir with the correct values and also the other place holders
             script_args = replace_in_string(script_args, "%%dir%%", processdir)
             script_args = replace_in_string(script_args, "%%inputdir%%", input_dir)
@@ -250,6 +292,12 @@ def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=9999
                     exit(1)
                 log_all(logging.INFO, f"Command 'download_input_file' executed for url: {script_download_url}\n")
                 continue
+            if script_name == "process_url_list":
+                for url in block.get("download_urls"):
+                    newblock=script_args
+                    main(list_scripts,log_file,log_level,newblock, begin_step, url=url, parent_block=block["block"])
+                # only one process_url_list can be in a block
+                return
             if script_name == 'remove_file':
                 # Execute the download command. The file under the download_url is copied to a folder
                 remove_file(script_input_file_path)
