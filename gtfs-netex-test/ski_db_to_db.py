@@ -32,7 +32,7 @@ import netex_monkeypatching
 generator_defaults = {'codespace': Codespace(xmlns='OPENOV'), 'version': 1} # Invent something, that materialises the refs, so VersionFrameDefaultsStructure can be used
 
 def main(source_database_file: str):
-    with Database(source_database_file, read_only=False) as db:
+    with Database(source_database_file, readonly=False) as db:
         infer_operator_from_responsibilityset_and_apply(db, db, generator_defaults)
         infer_locations_from_quay_or_stopplace_and_apply(db, db, generator_defaults)
 

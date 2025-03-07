@@ -9,7 +9,7 @@ from pyproj.exceptions import CRSError
 from aux_logging import log_once
 from mro_attributes import list_attributes
 from netex import Polygon, PosList, Pos, LocationStructure2, LineString, SimplePointVersionStructure, MultiSurface
-from netexio.database import Database
+from netexio.database import Database, LmdbActions
 from netexio.dbaccess import recursive_attributes
 from utils import get_interesting_classes
 
@@ -75,19 +75,27 @@ def reprojection_udf(serializer: Serializer, serialized: bytes, clazz: str, crs_
     reserialised = serializer.marshall(result, clazz)
     return reserialised
 
-def reprojection_update(db: Database, crs_to: str):
-    con = db.con
-    con.create_function('reprojection', functools.partial(reprojection_udf, db.serializer), return_type=bytes)
-
-    con.begin()
+def reprojection_update(db: Database, crs_to: str, batch_size=100_000, max_mem=4 * 1024 ** 3):
+    # Within this function we are reading and writing towards the target database.
+    # This effectively means that if we would need to resize for whatever reason,
+    # we cannot hold the cursor since access has to be disabled.
+    # We will first validate that we do have remaining capacity.
+    db.guard_free_space(0.10)
 
     for clazz in db.tables(exclusively=set(get_all_geo_elements())):
-        objectname = get_object_name(clazz)
-        con.execute(f"UPDATE {objectname} SET object = reprojection(object, '{objectname}', ?);", (crs_to,))
+        src_db = db.open_db(clazz)
+        if not src_db:
+            continue
 
-    con.commit()
+        src_db = db.open_db(clazz)
+        with db.env.begin(db=src_db, buffers=True, write=False) as src_txn:
+            cursor = src_txn.cursor()
 
-    con.remove_function('reprojection')
+            for key, value in cursor:
+                # transformed_value = db.serializer.marshall(reprojection(db.serializer.unmarshall(value, clazz), crs_to), clazz)
+                # TODO: We may not want to expose our internal task queue.
+                # db.task_queue.put((LmdbActions.WRITE, src_db, key, transformed_value))
+                db.insert_one_object(reprojection(db.serializer.unmarshall(value, clazz), crs_to))
 
 def get_transformer_by_srs_name(location, crs_to) -> Transformer:
     if hasattr(location, 'pos') and location.pos is not None:

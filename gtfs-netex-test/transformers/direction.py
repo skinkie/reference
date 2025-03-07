@@ -31,5 +31,5 @@ def infer_directions_from_sjps_and_apply(db_read: Database, db_write: Database, 
             if new_sjp is not None:
                 yield new_sjp
 
-    update_generator(db_write, ServiceJourneyPattern, query(db_read))
-    write_objects(db_write, list(directions.values()), True)
+    db_write.insert_objects_on_queue(ServiceJourneyPattern, query(db_read))
+    db_write.insert_objects_on_queue(Direction, list(directions.values()), True)

@@ -343,7 +343,7 @@ version.end_date = max(d.to_date for d in availability_conditions)
 
 sj: ServiceJourney
 for sj in service_journeys:
-    sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type)
+    sj.vehicle_type_ref_or_train_ref = getRef(vehicle_type)
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 

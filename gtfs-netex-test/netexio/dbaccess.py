@@ -1,7 +1,15 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from netexio.database import Database, LmdbActions
+
+import pickle
 import sys
 import warnings
-from typing import T, List, Generator, Tuple
+from typing import T, List, Generator, Tuple, Iterator
 
+import cloudpickle
 import duckdb
 from duckdb.duckdb import CatalogException
 
@@ -15,15 +23,15 @@ import netex
 from netexio.attributes import resolve_attr
 from mro_attributes import list_attributes
 from netex import VersionFrameDefaultsStructure, VersionOfObjectRef, VersionOfObjectRefStructure, \
-    EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure
-from netexio.database import Database
+    EntityInVersionStructure, DataManagedObject, ResponsibilitySetRef, DataSourceRefStructure, Codespace, \
+    PassengerStopAssignment
 from netexio.serializer import Serializer
 from netexio.xmlserializer import MyXmlSerializer
 from refs import getRef, getFakeRefByClass
 from transformers.references import replace_with_reference_inplace
 from utils import get_object_name, get_element_name_with_ns
 from aux_logging import *
-from line_profiler import profile
+
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
@@ -46,80 +54,59 @@ def load_embedded(db: Database, clazz: T, filter, cursor=False):
     # TODO: maybe return something here, which includes *ALL* objects that are embedded within this object, so it does not have to be resolved anymore
     objectname = get_object_name(clazz)
 
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
+    result = []
 
-    try:
-        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM embedded WHERE id = ? and class = ?;", (filter, objectname,))
-    except:
-        return []
+    with db.env.begin(db=db.env.open_db(b"_embedding"), buffers=True, write=False) as txn:
+        cursor = txn.cursor()
+        for key, value in cursor:
+            # parent_class, parent_id, parent_version, *_ = pickle.loads(key)
+            parent_class, parent_id, parent_version, embedding_class, embedding_id, embedding_version, *_ = pickle.loads(value)
+            if embedding_id == filter and embedding_class == objectname:
+                result.append((parent_id, parent_version, parent_class,))
 
-    return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
+    return result
 
 def load_referencing(db: Database, clazz: T, filter, cursor=False):
     objectname = get_object_name(clazz)
 
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
+    result = []
 
-    try:
-        cur.execute(f"SELECT ref, version, class FROM referencing WHERE parent_id = ? and parent_class = ?;", (filter, objectname,))
-    except:
-        return []
+    prefix = db.serializer.encode_key(filter, None, clazz, include_clazz=True)
 
-    return [(ref, version, clazz,) for ref, version, clazz in cur.fetchall()]
+    with db.env.begin(db=db.db_referencing, buffers=True, write=False) as txn:
+        cursor = txn.cursor()
+        if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+            for key, value in cursor:
+                if not bytes(key).startswith(prefix):
+                    break  # Stop when keys no longer match the prefix
+
+                referencing_class, referencing_id, referencing_version = cloudpickle.loads(value)
+                result.append((referencing_id, referencing_version, referencing_class,))
+
+    return result
 
 def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
     objectname = get_object_name(clazz)
 
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
+    result = []
 
-    try:
-        cur.execute(f"SELECT parent_id, parent_version, parent_class FROM referencing WHERE ref = ? and class = ?;", (filter, objectname,))
-    except:
-        return []
+    prefix = db.serializer.encode_key(filter, None, clazz, include_clazz=True)
 
-    return [(parent_id, parent_version, parent_clazz,) for parent_id, parent_version, parent_clazz in cur.fetchall()]
+    with db.env.begin(db=db.db_referencing_inwards, buffers=True, write=False) as txn:
+        cursor = txn.cursor()
+        if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+            for key, value in cursor:
+                if not bytes(key).startswith(prefix):
+                    break  # Stop when keys no longer match the prefix
 
-def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False, cache=True) -> List[T]:
-    objectname = get_object_name(clazz)
+                parent_class, parent_id, parent_version = cloudpickle.loads(value)
+                result.append((parent_id, parent_version, parent_class,))
 
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
+    return result
 
-    try:
-        if filter is not None:
-            cur.execute(f"SELECT object FROM {objectname} WHERE id = ?;", (filter,))
-        elif limit is not None:
-            cur.execute(f"SELECT object FROM {objectname} ORDER BY id LIMIT {limit};")
-        else:
-            cur.execute(f"SELECT object FROM {objectname} ORDER BY id;")
-    except:
-        pass
-        # This is the situation where the objectname is not available at all in the catalogue
-        if embedding:
-            return list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent, cache))
-        else:
-            return []
 
-    objs: List[T] = []
-    for xml, in cur.fetchall():
-        obj = db.serializer.unmarshall(xml, clazz)
-        objs.append(obj)
-
-    if embedding:
-        objs += list(load_embedded_transparent_generator(db, clazz, limit, filter, embedded_parent, cache))
-
-    return objs
+def load_local(db: Database, clazz: T, limit=None, filter=None, cursor=False, embedding=True, embedded_parent=False, cache=True) -> list[T]:
+    return list(load_generator(db, clazz, limit, filter, embedding, embedded_parent, cache))
 
 def load_references_generator(db: Database, clazz: T, filter=None, cursor=False ) -> Generator:
     objectname = get_object_name(clazz)
@@ -196,7 +183,6 @@ def load_embedding_generator(db: Database, clazz: T, filter=None, cursor=False) 
         for parent_klass, parent_id, parent_version, klass, ref, version in cur.fetchall():
             yield getFakeRefByClass(parent_id, db.get_class_by_name(parent_klass), parent_version), getFakeRefByClass(ref, db.get_class_by_name(klass), version)
 
-@profile
 def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=set([]), inwards=True, outwards=True):
     for x in resolved:
         if parent.id == x.id and parent.__class__ == x.__class__:
@@ -300,172 +286,162 @@ def recursive_resolve(db: Database, parent, resolved, filter=None, filter_class=
 
 
 def fetch_references_classes_generator(db: Database, classes: list):
-    cur = db.cursor()
-    cur2 = db.cursor()  # TODO
-
-    list_classes = ', '.join([f"'{get_object_name(clazz)}'" for clazz in classes])
+    list_classes = {get_object_name(clazz) for clazz in classes}
     processed = set()
 
     # Find all embeddings and objects the target profile, elements must not be added directly later, but referenced.
-    query = "SELECT DISTINCT class, id, version FROM embedded;"
-    cur2.execute(query)
-    existing_ids = {(clazz, ref, version,) for clazz, ref, version in cur2.fetchall()}
+    existing_ids = set()
+    with db.env.begin(db=db.db_embedding, buffers=True, write=False) as src1_txn:
+        cursor = src1_txn.cursor()
+        for _key, value in cursor:
+            clazz, ref, version, *_ = cloudpickle.loads(value)
+            existing_ids.add(db.serializer.encode_key(ref, version, db.get_class_by_name(clazz)))
 
     for clazz in classes:
-        objectname = get_object_name(clazz)
-        query = f"SELECT DISTINCT id, version FROM {objectname}"
-        try:
-            cur2.execute(query)
-            set2 = {(objectname, id, version,) for id, version in cur2.fetchall()}
-            existing_ids = existing_ids.union(set2)
-        except duckdb.duckdb.CatalogException:
-            pass
+        # print(clazz)
+        db_name = db.open_db(clazz)
+        if not db_name:
+            continue
 
-    print(".")
+        with db.env.begin(db=db_name, buffers=True, write=False) as src2_txn:
+            cursor = src2_txn.cursor()
+            for key, _value in cursor:
+                existing_ids.add(key)
 
-    # Practically this could still lead to a reference from an embedded class, which may already be included
-    # (or not, hence we would need to assure that those objects are not in the class list)
-    query = f"SELECT DISTINCT class, ref, version FROM referencing WHERE class NOT IN ({list_classes}) ORDER BY class;"
-    cur2.execute(query)
-    while True:
-        result = cur2.fetchone()
-        if result is None:
-            break
-        clazz_name, ref, version = result
-
-        # TODO: we cannot trust SQL objectname
-        results = load_local(db, db.get_class_by_name(clazz_name), limit=1, filter=ref, cursor=True, embedding=True,
-                             embedded_parent=True)
-        if len(results) > 0:
-            needle = get_object_name(results[0].__class__) + '|' + results[0].id
-            if results[0].__class__ in classes:  # Don't export classes, which are part of the main delivery
-                pass
-            elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
-                pass
-            else:
-                processed.add(needle)
-
-                # Maybe make separater function
-                query = "SELECT DISTINCT class, id, version, path FROM embedded WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
-                cur.execute(query,
-                            (get_object_name(results[0].__class__), results[0].id, results[0].version,))
-
-                for clazz, id, version, path in cur.fetchall():
-                    if (clazz, id, version,) in existing_ids:
-                        replace_with_reference_inplace(results[0], path)
-                yield results[0]
-
-                # An element may obviously also include other references.
-                resolved = []
-                filter_set = {results[0].__class__}.union(classes)
-                recursive_resolve(db, results[0], resolved, results[0].id, filter_set, False, True)
-
-                for resolve in resolved:
-                    needle = get_object_name(resolve.__class__) + '|' + resolve.id
-                    if resolve.__class__ in classes:  # Don't export classes, which are part of the main delivery
+    with db.env.begin(db=db.db_referencing, buffers=True, write=False) as src3_txn:
+        cursor = src3_txn.cursor()
+        for _key, value in cursor:
+            ref_class, ref_id, ref_version = cloudpickle.loads(value) # TODO: check if this goes right
+            if ref_class not in list_classes:
+                results = load_local(db, db.get_class_by_name(ref_class), limit=1, filter=ref_id, cursor=True, embedding=True, embedded_parent=True)
+                if len(results) > 0:
+                    needle = get_object_name(results[0].__class__) + '|' + results[0].id
+                    if results[0].__class__ in classes:  # Don't export classes, which are part of the main delivery
                         pass
                     elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
                         pass
                     else:
                         processed.add(needle)
-                        # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
-                        query = "SELECT DISTINCT class, id, version, path FROM embedded WHERE parent_class = ? AND parent_id = ? AND parent_version = ?;"
-                        cur.execute(query, (get_object_name(resolve.__class__), resolve.id, resolve.version,))
+                        with db.env.begin(db=db.db_embedding, buffers=True, write=False) as src_txn2:
+                            # TODO: Very expensive sequential scan Solved??
+                            cursor2 = src_txn2.cursor()
 
-                        for clazz, id, version, path in cur.fetchall():
-                            if (clazz, id, version,) in existing_ids:
-                                replace_with_reference_inplace(resolve, path)
+                            prefix = db.serializer.encode_key(ref_id, ref_version, db.get_class_by_name(ref_class))
+                            if cursor2.set_range(prefix):  # Position cursor at the first key >= prefix
+                                for key2, value2 in cursor2:
+                                    if not bytes(key2).startswith(prefix):
+                                        break  # Stop when keys no longer match the prefix
 
-                        yield resolve
+                                    embedding_class, embedding_id, embedding_version, embedding_path = cloudpickle.loads(value2)
+                                    if (embedding_class, db.serializer.encode_key(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
+                                        replace_with_reference_inplace(results[0], embedding_path)
 
-                # TODO: The problem may be here that an embedding of this class, has been made a first class object, or an embedding of an existing element.
+                        yield results[0]
 
+                        # An element may obviously also include other references.
+                        resolved = []
+                        filter_set = {results[0].__class__}.union(classes)
+                        recursive_resolve(db, results[0], resolved, results[0].id, filter_set, False, True)
 
-def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, cache=True):
-    objectname = get_object_name(clazz)
+                        for resolve in resolved:
+                            needle = get_object_name(resolve.__class__) + '|' + resolve.id
+                            if resolve.__class__ in classes:  # Don't export classes, which are part of the main delivery
+                                pass
+                            elif needle in processed:  # Don't export classes which have been exported already, maybe this can be solved at the database layer
+                                pass
+                            else:
+                                processed.add(needle)
+                                # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
-    cur = db.cursor()
-    try:
-        if filter is not None:
-            cur.execute(f"SELECT object FROM {objectname} WHERE id = ?;", (filter,))
-        elif limit is not None:
-            cur.execute(f"SELECT object FROM {objectname} LIMIT {limit};")
-        else:
-            cur.execute(f"SELECT object FROM {objectname};")
-    except:
-        pass
-        if embedding:
-            yield from load_embedded_transparent_generator(db, clazz, limit, filter, cache)
-        return
+                                resolve_class = get_object_name(resolve.__class__)
 
-    while True:
-        xml = cur.fetchone()
-        if xml is None:
-            break
-        yield db.serializer.unmarshall(xml[0], clazz)
+                                with db.env.begin(db=db.db_embedding, buffers=True, write=False) as src_txn2:
+                                    # TODO: Very expensive sequential scan Solved??
+                                    cursor2 = src_txn2.cursor()
+
+                                    prefix = db.serializer.encode_key(resolve.id, resolve.version, resolve.__class__)
+                                    if cursor2.set_range(prefix):  # Position cursor at the first key >= prefix
+                                        for key2, value2 in cursor2:
+                                            if not bytes(key2).startswith(prefix):
+                                                break  # Stop when keys no longer match the prefix
+
+                                            embedding_class, embedding_id, embedding_version, embedding_path = cloudpickle.loads(value2)
+                                            if (embedding_class, db.serializer.encode_key(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
+                                                replace_with_reference_inplace(resolve, embedding_path)
+
+                                yield resolve
+
+def load_generator(db: Database, clazz: T, limit=None, filter=None, embedding=True, parent=False, cache=True):
+    if db.env and db.open_db(clazz) is not None:
+        with db.env.begin(write=False, buffers=True, db=db.open_db(clazz)) as txn:
+            cursor = txn.cursor()
+            if filter:
+                prefix = db.serializer.encode_key(filter, None, clazz)
+                if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+                    for key, value in cursor:
+                        if not bytes(key).startswith(prefix):
+                            break  # Stop when keys no longer match the prefix
+
+                        yield db.serializer.unmarshall(value, clazz)
+
+            elif limit is not None:
+                i = 0
+                for _key, value in cursor:
+                    if i < limit:
+                        value = db.serializer.unmarshall(value, clazz)
+                        yield value
+                    else:
+                        break
+                    i += 1
+            else:
+                for _key, value in cursor:
+                    value = db.serializer.unmarshall(value, clazz)
+                    yield value
 
     if embedding:
-        yield from load_embedded_transparent_generator(db, clazz, limit, filter, cache)
+        yield from load_embedded_transparent_generator(db, clazz, limit, filter, parent, cache)
 
+def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False, cache=True):
+    # TODO: Expensive for classes that are not available, it will do a complete sequential scan and for each time it will depicle each individual object
 
-def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filter=None, parent=False, cache=True) -> List[T]:
     objectname = get_object_name(clazz)
 
-    cur = db.cursor()
-    try:
-        if filter is not None:
-            cur.execute(
-                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE id = ? and class = ?;",
-                (filter, objectname,))
-        elif limit is not None:
-            cur.execute(
-                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id LIMIT ?;",
-                (objectname, limit,))
-        else:
-            cur.execute(
-                f"SELECT DISTINCT parent_id, parent_version, parent_class, path FROM embedded WHERE class = ? ORDER BY id;",
-                (objectname,))
-    except:
-        return
+    if db.env:
+        with db.env.begin(db=db.db_embedding_inverse, buffers=True, write=False) as txn:
+            i = 0
+            prefix = db.serializer.encode_key(filter, None, clazz, True)
+            # print(prefix)
+            cursor = txn.cursor()
+            if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+                for key, value in cursor:
+                    if not bytes(key).startswith(prefix):
+                        break  # Stop when keys no longer match the prefix
 
-    try:
-        cur2 = db.cursor()
-        while True:
-            result = cur.fetchone()
-            if result is None:
-                break
+                    _tmp = cloudpickle.loads(value)
+                    parent_clazz, parent_id, parent_version, embedding_path = _tmp
 
-            parent_id, parent_version, parent_clazz, path = result
-            needle = '|'.join([parent_id, parent_version, parent_clazz])
+                    if limit is None or i < limit:
+                        parent_clazz = db.get_class_by_name(parent_clazz)
+                        cache_key = db.serializer.encode_key(parent_id, parent_version, parent_clazz, True)
+                        obj = db.cache.get(cache_key, lambda: db.get_single(parent_clazz, parent_id, parent_version))
 
-            if not cache or needle not in db.object_cache:
-                cur2.execute(f"SELECT object FROM {parent_clazz} WHERE id = ? AND version = ? LIMIT 1;",
-                             (parent_id, parent_version,))
-                object = cur2.fetchone()
-                obj = db.serializer.unmarshall(object[0], db.get_class_by_name(parent_clazz))
-            else:
-                obj =  db.object_cache[needle]
-
-            if cache:
-                db.object_cache[needle] = obj
-
-            if obj is not None:
-                if parent:
-                    yield obj
-
-                else:
-                    # TODO: separate function
-                    split = []
-                    for p in path.split('.'):
-                        if p.isnumeric():
-                            p = int(p)
-                        split.append(p)
-                    yield resolve_attr(obj, split)
-
-    except TypeError:
-        pass
-
+                        if obj is not None:
+                            if parent:
+                                yield obj
+                                if filter:
+                                    break
+                            else:
+                                # TODO: separate function
+                                split = []
+                                for p in embedding_path.split('.'):
+                                    if p.isnumeric():
+                                        p = int(p)
+                                    split.append(p)
+                                yield resolve_attr(obj, split)
+                                if filter:
+                                    break
+                        i += 1
 
 from lxml import etree
 
@@ -540,29 +516,6 @@ def write_lxml_generator(db: Database, clazz, generator: Generator):
 
     print('\n')
 
-
-def get_single(db: Database, clazz: T, id, version=None, cursor=False) -> T:
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
-
-    objectname = get_object_name(clazz)
-
-    try:
-        if version == 'any' or version is None:
-            cur.execute(f"SELECT object FROM {objectname} WHERE id = ? ORDER BY version DESC LIMIT 1;", (id,))
-        else:
-            cur.execute(f"SELECT object FROM {objectname} WHERE id = ? AND version = ? LIMIT 1;", (id, version,))
-    except:
-        pass
-        return
-
-    row = cur.fetchone()
-    if row is not None:
-        obj = db.serializer.unmarshall(row[0], clazz)
-        return obj
-
 def delete_objects(db: Database, objs, cursor=False):
     if len(objs) == 0:
         return
@@ -583,12 +536,15 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
     if len(objs) == 0:
         return
 
+    clazz = objs[0].__class__
+    db.insert_many_objects(clazz, objs)
+
+    """
     if cursor:
         cur = db.cursor()
     else:
         cur = db.con
 
-    clazz = objs[0].__class__
     objectname = get_object_name(clazz)
 
     if empty:
@@ -643,125 +599,21 @@ def write_objects(db: Database, objs, empty=False, many=False, silent=False, cur
     except:
         raise
         # pass
-
+    """
 
 def write_generator(db: Database, clazz, generator: Generator, empty=False):
-    cur = db.cursor()
-    objectname = get_object_name(clazz)
-
     if empty:
-        sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
-        cur.execute(sql_drop_table)
+        db.clear([clazz])
 
-    if hasattr(clazz, 'order'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version, ordr));"
-    elif hasattr(clazz, 'version'):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, version varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id, version));"
-    else:
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {objectname} (id varchar(64) NOT NULL, object {db.serializer.sql_type} NOT NULL, last_modified TIMESTAMP NOT NULL, PRIMARY KEY (id));"
-
-    cur.execute(sql_create_table)
-
-    def _prepare4(generator4, objectname):
-        i = 0
-        for obj in generator4:
-            if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
-            i += 1
-            yield obj.id, obj.version, obj.order, db.serializer.marshall(obj, objectname)
-        print('\r', objectname, i, end='')
-
-    def _prepare3(generator3, objectname):
-        i = 0
-        for obj in generator3:
-            if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
-            i += 1
-            yield obj.id, obj.version, db.serializer.marshall(obj, objectname)
-        print('\r', objectname, i, end='')
-
-    def _prepare2(generator2, objectname):
-        i = 0
-        for obj in generator2:
-            if i % 13 == 0:
-                print('\r', objectname, str(i), end='')
-            i += 1
-            yield obj.id, db.serializer.marshall(obj, objectname)
-        print('\r', objectname, i, end='')
-
-    if hasattr(clazz, 'order'):
-        if cur.__class__.__name__ == 'DuckDBPyConnection':
-            for a in _prepare4(generator, objectname):
-                cur.execute(
-                    f'INSERT OR REPLACE INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
-                    a)
-        else:
-            cur.executemany(
-                f'INSERT INTO {objectname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());',
-                _prepare4(generator, objectname))
-    elif hasattr(clazz, 'version'):
-        if cur.__class__.__name__ == 'DuckDBPyConnection':
-            for a in _prepare3(generator, objectname):
-                cur.execute(
-                    f'INSERT OR REPLACE INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
-                    a)
-        else:
-            cur.executemany(f'INSERT INTO {objectname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());',
-                            _prepare3(generator, objectname))
-    else:
-        if cur.__class__.__name__ == 'DuckDBPyConnection':
-            for a in _prepare2(generator, objectname):
-                cur.execute(f'INSERT OR REPLACE INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());', a)
-        else:
-            cur.executemany(f'INSERT INTO {objectname} (id, object, last_modified) VALUES (?, ?, NOW());',
-                            _prepare2(generator, objectname))
-
-    print('\n')
-
+    db.insert_objects_on_queue(clazz, generator)
 
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False, embedding=False):
-    if db_read.read_only:
-        db_write.con.execute(f"ATTACH DATABASE '{db_read.database_file}' AS db_read (READ_ONLY);")
-        for clazz in classes:
-            objectname = get_object_name(clazz)
-            try:
-                if clean:
-                    db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
+    for klass in classes:
+        # print(klass.__name__)
+        db_read.copy_db(db_write, klass)
 
-                sql_create_table = create_table_sql(db_write, clazz)
-                db_write.con.execute(sql_create_table)
-                db_write.con.execute(f'INSERT OR REPLACE INTO {objectname} SELECT * FROM db_read.{objectname};')
-            except CatalogException:
-                pass
-
-        if embedding:
-            sql_create_table = "CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
-            db_write.con.execute(sql_create_table)
-
-            sql_create_table = "CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
-            db_write.con.execute(sql_create_table)
-
-            in_tables = ', '.join([f"'{get_object_name(clazz)}'" for clazz in classes])
-            db_write.con.execute(f'INSERT OR REPLACE INTO embedded SELECT * FROM db_read.embedded WHERE parent_class IN ({in_tables});')
-            db_write.con.execute(f'INSERT OR REPLACE INTO referencing SELECT * FROM db_read.referencing WHERE parent_class IN ({in_tables});')
-
-        db_write.con.execute(f"DETACH db_read;")
-
-    else:
-        for clazz in classes:
-            try:
-                if clean:
-                    objectname = get_object_name(clazz)
-                    db_write.con.execute(f'DROP TABLE IF EXISTS {objectname};')
-
-                write_generator(db_write, clazz, load_generator(db_read, clazz, embedding=False))
-            except CatalogException:
-                pass
-
-        if embedding:
-            # TODO: Maybe we can also copy this
-            # TODO: Does not work due to circular import embedding_update(db_write, filter_clazz=classes)
-            pass
+    if embedding:
+        db_read.copy_db_embedding(db_write, classes)
 
 def missing_class_update(source_db: Database, target_db: Database):
     # TODO: As written in #223 some of the objects have not been copied at this point, but are still referenced.
@@ -798,6 +650,9 @@ def create_table_sql(db: Database, clazz: T) -> str:
 
 
 def update_generator(db: Database, clazz, generator: Generator):
+    db.insert_many_objects(clazz, generator)
+
+    """
     cur = db.cursor()
     objectname = get_object_name(clazz)
 
@@ -874,34 +729,21 @@ def update_generator(db: Database, clazz, generator: Generator):
                             _prepare2(generator, objectname))
 
     print('\n')
+    """
 
-
-def setup_database(db: Database, classes, clean=False, cursor=False):
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
-
+def setup_database(db: Database, classes, clean=False):
     clean_element_names, interesting_element_names, interesting_classes = classes
 
     if clean:
-        for clazz in interesting_classes:
-            objectname = get_object_name(clazz)
-            sql_drop_table = f"DROP TABLE IF EXISTS {objectname}"
-            cur.execute(sql_drop_table)
-        cur.execute("VACUUM;")
+        db.drop(interesting_classes, embedding=True)
+        # db.vacuum()
 
-    sql_create_table = f"CREATE TABLE IF NOT EXISTS embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT NOT NULL, PRIMARY KEY (parent_class, parent_id, parent_version, class, id, version, ordr));"
-    cur.execute(sql_create_table)
+    # TODO:
+    # create_meta(db)
 
-    sql_create_table = f"CREATE TABLE IF NOT EXISTS referencing (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, ref varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, PRIMARY KEY (parent_class, parent_id, parent_version, class, ref, version, ordr));"
-    cur.execute(sql_create_table)
-
-    create_meta(db)
-
-    for clazz in interesting_classes:
-        sql_create_table = create_table_sql(db, clazz)
-        cur.execute(sql_create_table)
+    # for clazz in interesting_classes:
+    #     sql_create_table = create_table_sql(db, clazz)
+    #     cur.execute(sql_create_table)
 
 
 def get_local_name(element):
@@ -910,17 +752,15 @@ def get_local_name(element):
     return element.__name__
 
 
-@profile
 def update_embedded_referencing(serializer: Serializer, deserialized) -> Generator[list[str], None, None]:
     for obj, path in recursive_attributes(deserialized, []):
         if hasattr(obj, 'id'):
             if obj.id is not None and obj.__class__ in serializer.interesting_classes:
                 yield [
-                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version,
-                    get_object_name(obj.__class__),
+                    deserialized.__class__, deserialized.id, deserialized.version,
+                    obj.__class__,
                     obj.id,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
-                    str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0',
                     '.'.join([str(s) for s in path])]
 
         elif hasattr(obj, 'ref'):
@@ -933,11 +773,11 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
                         obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
                 yield [
-                    get_object_name(deserialized.__class__), deserialized.id, deserialized.version,
-                    obj.name_of_ref_class,
+                    deserialized.__class__, deserialized.id, deserialized.version, # The object that contains the reference
+                    serializer.name_object[obj.name_of_ref_class],                 # The object that the reference is towards
                     obj.ref,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
-                    str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0', None]
+                    None]
 
 
 """
@@ -970,7 +810,7 @@ def update_embedded_referencing(con, object, inner_loop=None):
 """
 
 
-def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False):
+def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cursor=False, direct_embedding=False):
     xml_serializer = MyXmlSerializer()
     clsmembers = inspect.getmembers(netex, inspect.isclass)
     all_frames = [get_local_name(x[1]) for x in clsmembers if
@@ -991,11 +831,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     frame_defaults_stack = []
     if f is None:
         return
-
-    if cursor:
-        cur = db.cursor()
-    else:
-        cur = db.con
 
     # sql_create_table = "CREATE TABLE IF NOT EXISTS temp_embedded (parent_class varchar(64) NOT NULL, parent_id varchar(64) NOT NULL, parent_version varchar(64) not null, class varchar(64) not null, id varchar(64) NOT NULL, version varchar(64) NOT NULL, ordr integer, path TEXT);"
     # cur.execute(sql_create_table)
@@ -1129,9 +964,10 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         object.version = version
                         warnings.warn(f"{localname} {id} does not have a required version, inheriting it {version}.")
 
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());"""
+                    # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, ordr, object, last_modified) VALUES (?, ?, ?, ?, NOW());"""
                     try:
-                        cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
+                        db.insert_one_object(object)
+                        # cur.execute(sql_insert_object, (id, version, order, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise
@@ -1143,18 +979,20 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
                         object.version = version
                         warnings.warn(f"{localname} {id} does not have a required version, inheriting it {version}.")
 
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());"""
+                    # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, version, object, last_modified) VALUES (?, ?, ?, NOW());"""
                     try:
-                        cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
+                        db.insert_one_object(object)
+                        # cur.execute(sql_insert_object, (id, version, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise
                         pass
 
                 else:
-                    sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object, last_modified) VALUES (?, ?, NOW());"""
+                    # sql_insert_object = f"""INSERT OR REPLACE INTO {localname} (id, object, last_modified) VALUES (?, ?, NOW());"""
                     try:
-                        cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
+                        db.insert_one_object(object)
+                        # cur.execute(sql_insert_object, (id, db.serializer.marshall(object, clazz),))
                     except:
                         print(etree.tostring(element))
                         raise
@@ -1175,7 +1013,6 @@ def insert_database(db: Database, classes, f=None, type_of_frame_filter=None, cu
     # cur.execute("INSERT OR REPLACE INTO referencing SELECT DISTINCT parent_class, parent_id, parent_version, \"class\", id, version, ordr FROM temp_embedded WHERE path IS NULL;")
 
     # cur.execute("DROP TABLE temp_embedded;")
-@profile
 def recursive_attributes(obj, depth: List[int]) -> Tuple[object, List[int]]:
     # qprint(obj.__class__.__name__)
     if issubclass(obj.__class__, EntityInVersionStructure) and obj.data_source_ref_attribute is not None:

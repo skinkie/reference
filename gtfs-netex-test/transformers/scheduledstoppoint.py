@@ -50,4 +50,4 @@ def infer_locations_from_quay_or_stopplace_and_apply(db_read: Database, db_write
                 if psa.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref in mapping:
                    ssp_location[psa.fare_scheduled_stop_point_ref_or_scheduled_stop_point_ref_or_scheduled_stop_point.ref] = mapping[psa.taxi_rank_ref_or_stop_place_ref_or_stop_place.ref]
 
-    update_generator(db_write, ScheduledStopPoint, query(db_read))
+    db_write.insert_objects_on_queue(ScheduledStopPoint, query(db_read))

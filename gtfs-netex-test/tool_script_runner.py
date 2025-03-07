@@ -96,7 +96,7 @@ def clean_tmp(f):
 
         if os.path.isfile(item_path):
             # Remove file if it matches the extensions
-            if item.endswith('.duckdb') or item.endswith('.tmp'):  # logs are NOT cleaned (as at least one is already locked)
+            if item.endswith('.duckdb') or item.endswith('.tmp') or item.endswith('lmdb') or item.endswith('mdb'):  # logs are NOT cleaned (as at least one is already locked)
                 try:
                     os.remove(item_path)
                 except Exception as e:
@@ -194,7 +194,8 @@ def remove_file(path):
     else:
         raise FileNotFoundError(f"File not found: {path}")
 
-def main(script_file,log_file, log_level, todo_block,begin_step,url=None, parent_block=""):
+
+def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=99999,this_step=-1,url=None, parent_block=""):
     # blockexisted
     blockexisted=False
     # Read the scripts from a file
@@ -222,6 +223,16 @@ def main(script_file,log_file, log_level, todo_block,begin_step,url=None, parent
         for script in scripts:
             step=step+1
             # skip some steps if this is mandated
+            if step != this_step:
+                if step < begin_step:
+                    continue
+                if blockstop == True:
+                    break
+                if step > end_step:
+                    # only process until here
+                    break
+            else:
+                blockstop == True # we only process this one step
 
             if not "download_urls" in block.keys() and (step < begin_step): #if it is a list we always begin with 1 the begin_step is then used within the list
                 continue
@@ -325,10 +336,12 @@ if __name__ == "__main__":
     parser.add_argument('log_file', type=str, help='name of the log file')
     parser.add_argument('blockname', type=str, help='Block name to do')
     parser.add_argument('--begin_step', type=int, default=1, help='The begin step (default: 1)')
+    parser.add_argument('--end_step', type=int, default=999999, help='last step to execute. default not set.')
+    parser.add_argument('--this_step', type=int, default=-1, help='not set. Only this step is done')
     parser.add_argument('--log_level', type=int , default=logging.INFO, help='The log level (use logging constants)')
     args = parser.parse_args()
     mylogger = prepare_logger(logging.INFO, args.log_file)
     try:
-        main(args.script_file, args.log_file, args.log_level, args.blockname, args.begin_step)
+        main(args.script_file, args.log_file, args.log_level, args.blockname, begin_step=args.begin_step,end_step=args.end_step, this_step=args.this_step)
     except Exception as e:
         log_all(logging.ERROR, f'{e} {traceback.format_exc()}')

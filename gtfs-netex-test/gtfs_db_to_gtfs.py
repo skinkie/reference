@@ -16,12 +16,13 @@ import hashlib
 from callsprofile import CallsProfile
 from netexio import dbaccess
 from netexio.database import Database
-from netexio.dbaccess import load_local, load_generator, get_single
+from netexio.dbaccess import load_local, load_generator
 from gtfsprofile import GtfsProfile
 from netex import Line, StopPlace, Codespace, ScheduledStopPoint, LocationStructure2, PassengerStopAssignment, \
     Authority, Operator, Branding, UicOperatingPeriod, DayTypeAssignment, ServiceJourney, ServiceJourneyPattern, \
     DataSource, StopPlaceEntrance, TemplateServiceJourney, InterchangeRule, ServiceJourneyInterchange, JourneyMeeting, \
     AvailabilityCondition, DayType, PropertiesOfDayRelStructure, DayOfWeekEnumeration, OperatingPeriod, Version
+from netexio.pickleserializer import MyPickleSerializer
 from nordicprofile import NordicProfile
 from refs import getId, getRef, getIndex
 
@@ -53,7 +54,7 @@ def extract(archive, database: str):
     # GtfsProfile.writeToZipFile(archive, 'trips.txt', [GtfsProfile.empty_trip], write_header=True)
     # GtfsProfile.writeToZipFile(archive, 'stop_times.txt', [GtfsProfile.empty_stop_time], write_header=True)
 
-    with Database(database) as db_read:
+    with Database(database, serializer=MyPickleSerializer(compression=True), readonly=True) as db_read:
         datasources: List[DataSource] = load_local(db_read, DataSource, 1)
         codespaces: List[Codespace] = load_local(db_read, Codespace, 1)
 
@@ -214,15 +215,15 @@ def extract(archive, database: str):
         GtfsProfile.writeToZipFile(archive, 'transfers.txt', transfers, write_header=True)
 
         # TODO: This concept is deprecated, we need to store the CompositeFrame ValidBetween on something.
-        version: Version = load_local(db_read, Version)[0]
+        versions = load_local(db_read, Version)
 
         GtfsProfile.writeToZipFile(archive,'feed_info.txt', [{
             'feed_publisher_name': datasources[0].name.value if len(datasources) > 0 else defaults["feed_publisher_name"],
             'feed_publisher_url': codespaces[0].xmlns_url if len(codespaces) > 0 else defaults["feed_publisher_url"],
             'feed_lang': 'en', # TODO
             'default_lang': 'en', # TODO
-            'feed_start_date': str(version.start_date.to_datetime().date()).replace('-', ''),
-            'feed_end_date': str(version.end_date.to_datetime().date()).replace('-', ''),
+            'feed_start_date': str(versions[0].start_date.to_datetime().date()).replace('-', '') if len(versions) > 0 else '',
+            'feed_end_date': str(versions[0].end_date.to_datetime().date()).replace('-', '') if len(versions) > 0 else '',
             'feed_version': str(datetime.date.today()).replace('-', ''),
             'feed_contact_email': '',
             'feed_contact_url': ''

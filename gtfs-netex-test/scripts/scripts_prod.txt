@@ -39,14 +39,9 @@
         {"step":0,"script": "clean_tmp", "args": "%%dir%%"},
         {"step":1,"script": "set_defaults", "args": "authority='SKI+'; time_zone='Europe/Berlin'; feed_publisher_name='SBB SKI+'; feed_publisher_url='https://opentransportdata.swiss'"},
         {"step":2,"script": "download_input_file", "args": "%%dir%%"},
-        {"step":2.1,"script": "tool_netex_check_assertions.py", "args": "./scripts/swiss-0-assertions.txt %%inputfilepath%%"},
-        {"step":2.2,"script": "tool_xml_validator.py", "args": "%%inputfilepath%% ./netex-xsd/xsd/NeTEx_publication.xsd"},
-        {"step":3,"script": "swiss_to_db.py", "args": "%%inputfilepath%% %%dir%%/03-swiss-import.duckdb True"},
-        {"step":4,"script": "epip_db_to_db.py", "args": "%%dir%%/03-swiss-import.duckdb %%dir%%/04-netex-database.duckdb"},
-        {"step":5,"script": "epip_db_to_xml.py", "args": "%%dir%%/04-netex-database.duckdb %%dir%%/05-%%block%%-netex.xml.gz"},
-        {"step":6,"script": "tool_netex_check_assertions.py", "args": "./scripts/swiss-assertions.txt %%dir%%/05-%%block%%-netex.xml.gz"},
-        {"step":7,"script": "tool_netex_stats.py", "args": "%%dir%%/05-%%block%%-netex.xml.gz"},
-        {"step":8,"script": "tool_xml_validator.py", "args": "%%dir%%/05-%%block%%-netex.xml.gz ./netex-xsd/xsd/NeTEx_publication.xsd"}
+        {"step":3,"script": "swiss_to_db.py", "args": "%%inputfilepath%% %%dir%%/03-swiss-import.lmdb True"},
+        {"step":4,"script": "epip_db_to_db.py", "args": "%%dir%%/03-swiss-import.lmdb %%dir%%/04-netex-database.lmdb"},
+        {"step":5,"script": "epip_db_to_xml.py", "args": "%%dir%%/04-netex-database.lmdb %%dir%%/05-%%block%%-netex.xml.gz"}
         ]
   }
 

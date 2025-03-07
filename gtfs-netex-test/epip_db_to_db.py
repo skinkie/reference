@@ -13,12 +13,12 @@ from netex import Codespace, AvailabilityCondition, NoticeAssignment, Notice, Sc
     ServiceJourney, DayType, DayTypeAssignment, UicOperatingPeriod
 from netexio.database import Database
 from netexio.dbaccess import setup_database, copy_table, missing_class_update
+from netexio.pickleserializer import MyPickleSerializer
 from transformers.interchanges import interchange_rules_to_service_journey_interchanges
 from utils import get_interesting_classes
 from netexio.dbaccess import attach_source, attach_objects
 
 from transformers.direction import infer_directions_from_sjps_and_apply
-from transformers.embedding import embedding_update
 from transformers.projection import reprojection_update
 from transformers.scheduledstoppoint import infer_locations_from_quay_or_stopplace_and_apply
 import traceback
@@ -45,13 +45,13 @@ generator_defaults = {'codespace': Codespace(xmlns=defaults["codespace"]), 'vers
 def main(source_database_file: str, target_database_file: str):
     classes = get_interesting_classes(filter=EPIP_CLASSES)
 
-    with Database(target_database_file, read_only=False) as target_db:
+    with Database(target_database_file, serializer=MyPickleSerializer(compression=True), readonly=False) as target_db:
         setup_database(target_db, classes, True)
-        # attach_source(con, source_database_file) does not work persistently, requires an attach at every connection
 
-        with Database(source_database_file, read_only=True) as source_db:
+        with Database(source_database_file, MyPickleSerializer(compression=True), readonly=True) as source_db:
+
             log_all(logging.INFO, "Copy all tables as-is " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
-            copy_table(source_db, target_db,[Codespace, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True, embedding=True)
+            copy_table(source_db, target_db,[Codespace, Direction, DataSource, Authority, Operator, ValueSet, TransportAdministrativeZone, VehicleType, ResponsibilitySet, TopographicPlace, Network, DestinationDisplay, ScheduledStopPoint], clean=True, embedding=True)
             source_db.clean_cache()
 
             log_all(logging.INFO, "Copy lines, in EPIP style " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
@@ -79,9 +79,11 @@ def main(source_database_file: str, target_database_file: str):
             epip_service_journey_interchange(source_db, target_db, generator_defaults)
             source_db.clean_cache()
 
+
             log_all(logging.INFO, "InterchangeRule additions " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             epip_interchange_rule(source_db, target_db, generator_defaults)
             source_db.clean_cache()
+
 
             log_all(logging.INFO, "Infer directions from ServiceJourneyPatterns, and apply " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             infer_directions_from_sjps_and_apply(target_db, target_db, generator_defaults)
@@ -90,9 +92,6 @@ def main(source_database_file: str, target_database_file: str):
 
             log_all(logging.INFO, "Reprojection Update " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             reprojection_update(target_db, 'urn:ogc:def:crs:EPSG::4326')
-
-            log_all(logging.INFO, "Embedding update " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
-            embedding_update(target_db, filter_clazz=[Line, StopPlace, ServiceJourneyPattern, ServiceJourney, DayType, DayTypeAssignment, UicOperatingPeriod, ServiceJourneyInterchange, Direction])
 
             log_all(logging.INFO, "Copy remaining classes " + str(memory_usage(-1, interval=.1, timeout=1)[0]))
             missing_class_update(source_db, target_db)

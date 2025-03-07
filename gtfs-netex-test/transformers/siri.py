@@ -44,11 +44,11 @@ def siri_dated_vehicle_journey_generator(db_read: Database, operating_day: Opera
         if service_journey.calls:
             pass
         elif service_journey.passing_times:
-            service_journey_pattern = get_single(db_read, ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
+            service_journey_pattern = db_read.get_single(ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
             CallsProfile.getCallsFromTimetabledPassingTimes(service_journey, service_journey_pattern)
         elif service_journey.time_demand_type_ref:
-            service_journey_pattern = get_single(db_read, ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
-            time_demand_type = get_single(db_read, TimeDemandType, service_journey.time_demand_type_ref.ref, service_journey.time_demand_type_ref.version)
+            service_journey_pattern = db_read.get_single(ServiceJourneyPattern, service_journey.journey_pattern_ref.ref, service_journey.journey_pattern_ref.version)
+            time_demand_type = db_read.get_single(TimeDemandType, service_journey.time_demand_type_ref.ref, service_journey.time_demand_type_ref.version)
             CallsProfile.getCallsFromTimeDemandType(service_journey, service_journey_pattern, time_demand_type)
 
         service_journey: ServiceJourney

@@ -18,7 +18,7 @@ from netex import Line, Branding, Operator, Authority, ResponsibilitySet, Stakeh
     OperatingDaysRelStructure, OperatingDayRefStructure, UicOperatingPeriod, OperatingDayRef, \
     PropertiesOfDayRelStructure, PropertyOfDay, DayOfWeekEnumeration, DayTypeRefsRelStructure, Version
 from netexio.database import Database
-from netexio.dbaccess import load_generator, load_local, write_objects, get_single, write_generator, copy_table
+from netexio.dbaccess import load_generator, load_local, write_objects, write_generator, copy_table
 from nordicprofile import NordicProfile
 from refs import getRef, getIndex, getIndexByGroup, getId
 from transformers.daytype import get_day_type_from_availability_condition, datetime_weekday_to_dow
@@ -41,30 +41,30 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
     for line in lines:
         # GTFS only has the concept agency (operator) hence all variants will become OperatorRef.
         if line.branding_ref is not None:
-            branding: Branding = get_single(db_read, Branding, line.branding_ref.ref, line.branding_ref.version)
+            branding: Branding = db_read.get_single(Branding, line.branding_ref.ref, line.branding_ref.version)
             operator: Operator = project(branding, Operator)
             operators[operator.id] = operator
             line.operator_ref = getRef(operator)
 
         elif line.operator_ref is not None:
             if line.operator_ref.ref not in operators:
-                operator: Operator = get_single(db_read, Operator, line.operator_ref.ref, line.operator_ref.version)
+                operator: Operator = db_read.get_single(Operator, line.operator_ref.ref, line.operator_ref.version)
                 operators[operator.id] = operator
                 line.operator_ref = getRef(operator)
 
         elif line.authority_ref is not None:
-            authority: Authority = get_single(db_read, Authority, line.authority_ref.ref, line.authority_ref.version)
+            authority: Authority = db_read.get_single(Authority, line.authority_ref.ref, line.authority_ref.version)
             operator: Operator = project(authority, Operator)
             operators[operator.id] = operator
             line.operator_ref = getRef(operator)
 
         elif line.responsibility_set_ref_attribute is not None:
             # TODO: ResponsibilitySet to Operator/Authority should be a separate function
-            responsibility_set: ResponsibilitySet = get_single(db_read, ResponsibilitySet, line.responsibility_set_ref_attribute)
+            responsibility_set: ResponsibilitySet = db_read.get_single(ResponsibilitySet, line.responsibility_set_ref_attribute)
             if responsibility_set is not None and responsibility_set.roles is not None:
                 for role_assignment in responsibility_set.roles.responsibility_role_assignment:
                     if StakeholderRoleTypeEnumeration.OPERATION in role_assignment.stakeholder_role_type or StakeholderRoleTypeEnumeration.OPERATION_1 in role_assignment.stakeholder_role_type:
-                        operator: Operator = get_single(db_read, db_read.get_class_by_name(role_assignment.responsible_organisation_ref.name_of_ref_class), role_assignment.responsible_organisation_ref.ref, role_assignment.responsible_organisation_ref.version)
+                        operator: Operator = db_read.get_single(db_read.get_class_by_name(role_assignment.responsible_organisation_ref.name_of_ref_class), role_assignment.responsible_organisation_ref.ref, role_assignment.responsible_organisation_ref.version)
                         operators[operator.id] = operator
                         line.operator_ref = getRef(operator)
 
@@ -93,16 +93,15 @@ def gtfs_operator_line_memory(db_read: Database, db_write: Database, generator_d
         if line.operator_ref is None:
             log_all(logging.ERROR,f"Line {line.id} does not have an operator_ref assigned.")
 
-    write_objects(db_write, list(operators.values()), True, True)
-    write_objects(db_write, lines, True, True)
+    db_write.insert_objects_on_queue(Operator, list(operators.values()), True)
+    db_write.insert_objects_on_queue(Line, lines, True)
 
 # TODO: move to separate file (calls profiles)
 def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
     if sj.calls:
         return sj
     else:
-        sjp: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern, sj.journey_pattern_ref.ref,
-                                                cursor=True)
+        sjp: ServiceJourneyPattern = db_read.get_single(ServiceJourneyPattern, sj.journey_pattern_ref.ref)
         if sjp is None:
             log_all(logging.ERROR,"No SJP")
 
@@ -114,7 +113,7 @@ def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
                         sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view = sjp.route_ref_or_route_view.flexible_line_ref_or_line_ref_or_line_view
                     elif isinstance(sjp.route_ref_or_route_view, RouteRef):
                         sj.route_ref = sjp.route_ref_or_route_view
-                        route: Route = get_single(db_read, Route, sjp.route_ref_or_route_view.ref, cursor=True)
+                        route: Route = db_read.get_single(Route, sjp.route_ref_or_route_view.ref)
                         sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view = route.line_ref
 
             if sj.passing_times:
@@ -124,7 +123,7 @@ def  add_calls(db_read: Database, sj: ServiceJourney) -> ServiceJourney:
                 return sj
 
             elif sj.time_demand_type_ref:
-                tdt: TimeDemandType = get_single(db_read, TimeDemandType, sj.time_demand_type_ref.ref, cursor=True)
+                tdt: TimeDemandType = db_read.get_single(TimeDemandType, sj.time_demand_type_ref.ref)
                 CallsProfile.getCallsFromTimeDemandType(sj, sjp, tdt)
                 sj.journey_pattern_ref = None
                 sj.time_demand_type_ref = None
@@ -360,7 +359,7 @@ def gtfs_generate_deprecated_version(db_write: Database) -> Version:
         version: Version = project(last_op, Version)
         version.start_date = XmlDateTime.from_datetime(datetime.combine(my_from, time.min))
         version.end_date = XmlDateTime.from_datetime(datetime.combine(my_to, time.min))
-        write_objects(db_write, [version])
+        db_write.insert_one_object(version)
     else:
         warnings.warn("No calendars at all?")
 
@@ -389,7 +388,8 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
             avc = load_local(db_read, AvailabilityCondition, embedding=True)
             """
 
-    write_generator(db_write, ServiceJourney, query_sj(db_read))
+    log_all(logging.INFO, "Processing ServiceJourneys")
+    db_write.insert_objects_on_queue(ServiceJourney, query_sj(db_read))
 
     def query_daytype(db_read, calendar_combinations):
         dtas = getIndexByGroup(load_local(db_read, DayTypeAssignment, cursor=True, embedding=True),'day_type_ref.ref')
@@ -453,14 +453,16 @@ def gtfs_sj_processing(db_read: Database, db_write: Database):
 
                 else:
                     # TODO
-                    log_once(logging.WARN, "dt-1""We cannot yet handle day type aggregation")
+                    log_once(logging.WARN, "dt-1", "We cannot yet handle day type aggregation")
 
+    log_all(logging.INFO, "Processing Calendars")
     for day_type, day_type_assignments, operating_periods in query_daytype(db_read, calendar_combinations):
-        # TODO: Figure out if there can be a parallel receiver for a generator
-        write_objects(db_write, [day_type])
-        write_objects(db_write, day_type_assignments, many=True)
+        db_write.insert_one_object(day_type)
+        db_write.insert_objects_on_queue(DayTypeAssignment, day_type_assignments)
         if operating_periods is not None and len(operating_periods) > 0:
-            write_objects(db_write, operating_periods)
+            db_write.insert_objects_on_queue(OperatingPeriod, operating_periods)
+
+    # db_write.block_until_done()
 
 def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaults: dict):
     def query_sj(db_read: Database) -> Generator:
@@ -470,7 +472,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
             if sj.calls:
                 yield sj
             else:
-                sjp: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern, sj.journey_pattern_ref.ref, cursor=True)
+                sjp: ServiceJourneyPattern = db_read.get_single(ServiceJourneyPattern, sj.journey_pattern_ref.ref)
                 if sjp is None:
                     log_all(logging.ERROR,"No SJP")
 
@@ -482,7 +484,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                                 sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view = sjp.route_ref_or_route_view.flexible_line_ref_or_line_ref_or_line_view
                             elif isinstance(sjp.route_ref_or_route_view, RouteRef):
                                 sj.route_ref = sjp.route_ref_or_route_view
-                                route: Route = get_single(db_read, Route, sjp.route_ref_or_route_view.ref, cursor=True)
+                                route: Route = db_read.get_single(Route, sjp.route_ref_or_route_view.ref)
                                 sj.flexible_line_ref_or_line_ref_or_line_view_or_flexible_line_view = route.line_ref
 
                     if sj.passing_times:
@@ -490,7 +492,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                         yield sj
 
                     elif sj.time_demand_type_ref:
-                        tdt: TimeDemandType = get_single(db_read, TimeDemandType, sj.time_demand_type_ref.ref, cursor=True)
+                        tdt: TimeDemandType = db_read.get_single(TimeDemandType, sj.time_demand_type_ref.ref)
                         CallsProfile.getCallsFromTimeDemandType(sj, sjp, tdt)
                         yield sj
 
@@ -498,7 +500,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                         log_all(logging.ERROR,"Unimplemented method to calls")
 
 
-    write_generator(db_write, ServiceJourney, query_sj(db_read))
+    db_write.insert_objects_on_queue(ServiceJourney, query_sj(db_read))
 
     def query_tsj(db_read: Database) -> Generator:
         _load_generator = load_generator(db_read, TemplateServiceJourney)
@@ -507,7 +509,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
             if tsj.calls:
                 pass
             else:
-                sjp: ServiceJourneyPattern = get_single(db_read, ServiceJourneyPattern, tsj.journey_pattern_ref.ref, cursor=True)
+                sjp: ServiceJourneyPattern = db_read.get_single(ServiceJourneyPattern, tsj.journey_pattern_ref.ref)
                 if sjp is None:
                     log_all(logging.ERROR,"No SJP")
 
@@ -516,7 +518,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                     yield tsj
 
                 elif tsj.time_demand_type_ref:
-                    tdt: TimeDemandType = get_single(db_read, TimeDemandType, tsj.time_demand_type_ref.ref, cursor=True)
+                    tdt: TimeDemandType = db_read.get_single(TimeDemandType, tsj.time_demand_type_ref.ref)
                     CallsProfile.getCallsFromTimeDemandType(tsj, sjp, tdt)
                     yield tsj
 
@@ -524,7 +526,7 @@ def gtfs_calls_generator(db_read: Database, db_write: Database, generator_defaul
                     log_all(logging.ERROR,"Unimplemented method to calls")
 
 
-    write_generator(db_write, TemplateServiceJourney, query_tsj(db_read))
+    db_write.insert_objects_on_queue(TemplateServiceJourney, query_tsj(db_read))
 
 def day_type_assignment_to_ac(day_type_assignment: DayTypeAssignment, day_type: DayType, ops: dict[str, OperatingPeriod | UicOperatingPeriod], ods: dict[str, OperatingDay]):
     ac: AvailabilityCondition = project(day_type_assignment, AvailabilityCondition)
@@ -624,12 +626,12 @@ def apply_availability_conditions_via_day_type_ref(db_read: Database, db_write: 
     mapping = {}
 
     copy_table(db_read, db_write, [AvailabilityCondition])
-    write_generator(db_write, AvailabilityCondition, query_sc(mapping))
+    db_write.insert_objects_on_queue(AvailabilityCondition, query_sc(mapping))
     # The point is here that we now "normalise" everything to availability conditions, but this isn't the target format yet.
 
-    write_generator(db_write, DayType, load_generator(db_read, DayType, embedding=True))
-    write_generator(db_write, ServiceJourney, query_sj(db_read, mapping, ServiceJourney))
-    write_generator(db_write, TemplateServiceJourney, query_sj(db_read, mapping, TemplateServiceJourney))
+    db_write.insert_objects_on_queue(DayType, load_generator(db_read, DayType))
+    db_write.insert_objects_on_queue(ServiceJourney, query_sj(db_read, mapping, ServiceJourney))
+    db_write.insert_objects_on_queue(TemplateServiceJourney, query_sj(db_read, mapping, TemplateServiceJourney))
 
 def gtfs_calendar2(service_id: str, day_type: DayType, operating_period: OperatingPeriod):
     yield tuple(({'service_id': service_id,
@@ -688,11 +690,12 @@ def gtfs_calendar_and_dates2(db_read: Database, day_type: DayType, day_type_assi
                                 'date': str(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.to_date()).replace('-', ''),
                                 'exception_type': 2 if day_type_assignment.is_available is not None and day_type_assignment.is_available == False else 1 },))
         elif isinstance(day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, OperatingPeriodRef):
-            operating_period: OperatingPeriod = get_single(db_read, OperatingPeriod, day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref)
-            yield from gtfs_calendar2(service_id, day_type, operating_period)
+            operating_period: OperatingPeriod = db_read.get_single(OperatingPeriod, day_type_assignment.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date.ref)
+            if operating_period:
+                yield from gtfs_calendar2(service_id, day_type, operating_period)
 
 def gtfs_calendar_and_dates(db_read: Database, day_type_ref: DayTypeRef, day_type_assignments: list[DayTypeAssignment]):
-    day_type: DayType = get_single(db_read, DayTypeAssignment, day_type_ref.ref)
+    day_type: DayType = db_read.get_single(DayTypeAssignment, day_type_ref.ref)
     day_type_assignments: list[DayTypeAssignment] = list(day_type_assignments)
 
     if day_type.private_codes:
@@ -705,7 +708,7 @@ def gtfs_calendar_and_dates(db_read: Database, day_type_ref: DayTypeRef, day_typ
     if len(day_type_assignments) == 1 and day_type_assignments[0].is_available:
         # The provided bitstring will be completely materialised
         if isinstance(day_type_assignments[0].uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
-            uic_operating_period: UicOperatingPeriod = get_single(db_read, UicOperatingPeriod, day_type_assignments[0].uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
+            uic_operating_period: UicOperatingPeriod = db_read.get_single(UicOperatingPeriod, day_type_assignments[0].uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
 
             if uic_operating_period.days_of_week:
                 yield from gtfs_calendar(service_id, uic_operating_period)
@@ -753,12 +756,12 @@ def gtfs_calendar_and_dates(db_read: Database, day_type_ref: DayTypeRef, day_typ
             return
 
         if isinstance(positive.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
-            uic_operating_period_positive: UicOperatingPeriod = get_single(db_read, UicOperatingPeriod, positive.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
+            uic_operating_period_positive: UicOperatingPeriod = db_read.get_single(UicOperatingPeriod, positive.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
         else:
             uic_operating_period_positive = None
 
         if isinstance(negative.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date, UicOperatingPeriodRef):
-            uic_operating_period_negative: UicOperatingPeriod = get_single(db_read, UicOperatingPeriod, negative.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
+            uic_operating_period_negative: UicOperatingPeriod = db_read.get_single(UicOperatingPeriod, negative.uic_operating_period_ref_or_operating_period_ref_or_operating_day_ref_or_date)
         else:
             uic_operating_period_negative = None
 

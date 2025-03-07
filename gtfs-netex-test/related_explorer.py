@@ -13,6 +13,7 @@ from netexio import dbaccess
 from netexio.database import Database
 from netexio.dbaccess import load_local, recursive_resolve
 import netex
+from netexio.pickleserializer import MyPickleSerializer
 from utils import get_interesting_classes
 from netex import ServiceJourney, VersionOfObjectRef, MultilingualString, ScheduledStopPointRef, \
     VersionOfObjectRefStructure, GeneralFrame, PublicationDelivery, ParticipantRef, DataObjectsRelStructure, \
@@ -21,8 +22,6 @@ import netex_monkeypatching
 from aux_logging import *
 import logging
 import traceback
-
-from transformers.embedding import embedding_update
 
 serializer_config = SerializerConfig(ignore_default_attributes=True, xml_declaration=True)
 serializer_config.pretty_print = True
@@ -35,16 +34,15 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
         log_all(logging.WARN, 'related_explorer', f"no such object type found {object_type}")
         return
 
-    with Database(database) as db:
+    with Database(database, serializer=MyPickleSerializer(compression=True), readonly=True) as db:
         filter_set = {Route, ServiceJourneyPattern}
         filter_set.add(db.get_class_by_name(object_type))
 
         objs=[]
         if object_filter == "random":
-            objs = load_local(db, getattr(netex, object_type))
-            objs = [random.choice(objs)] # randomly select one
+            objs = [db.get_random(db.get_class_by_name(object_type))]
         else:
-            objs = load_local(db, getattr(netex, object_type), filter=object_filter)
+            objs = load_local(db, db.get_class_by_name(object_type), filter=object_filter)
 
         if len(objs) > 0:
             obj = objs[0]
@@ -76,22 +74,6 @@ def fetch(database: str, object_type: str, object_filter: str, output_filename: 
             log_all(logging.WARN, f"no such object found {object_type},{object_filter}")
 
 def main(netex,object_type,object_filter,output,referencing):
-    with Database(netex,read_only=False) as db:
-        # TODO: Refactor this into a normal test
-        references_exist = False
-        try:
-            db.con.execute("SELECT * FROM referencing LIMIT 1;")
-            db.con.fetchall()
-            db.con.execute("SELECT * FROM embedded LIMIT 1;")
-            db.con.fetchall()
-            references_exist = True
-        except:
-            pass
-
-        if referencing or not references_exist:
-            log_all(logging.INFO, f"updating embedded and referencing tables")
-            embedding_update(db)
-
     try:
         fetch(netex, object_type, object_filter, output)
     except Exception as e:

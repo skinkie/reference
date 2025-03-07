@@ -14,6 +14,7 @@ from xsdata.models.datatype import XmlDateTime, XmlTime, XmlDate, XmlDuration
 
 from callsprofile import CallsProfile
 from netexio.database import Database
+from netexio.pickleserializer import MyPickleSerializer
 from utils import get_interesting_classes
 from netexio.dbaccess import write_objects, write_generator, resolve_all_references, \
     resolve_all_references_and_embeddings, create_meta
@@ -49,9 +50,6 @@ from netex import Codespace, DataSource, MultilingualString, Version, VersionFra
 from refs import getRef, getIndex, getBitString2, getFakeRef, getOptionalString, getId
 from aux_logging import *
 import traceback
-
-from transformers.embedding import embedding_update
-
 
 def get_or_none(l: list, i: int, cast_clazz=None):
     if l is None:
@@ -1291,7 +1289,7 @@ class GtfsNeTexProfile(CallsProfile):
                 departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[i])
 
                 shape_dist_traveled = get_or_none(shape_dist_traveleds, i)
-                if prev_call and shape_dist_traveled:
+                if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                     distance = shape_dist_traveled - prev_shape_traveled
                     prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -1445,7 +1443,7 @@ class GtfsNeTexProfile(CallsProfile):
                 departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[i])
 
                 shape_dist_traveled = get_or_none(shape_dist_traveleds, i)
-                if prev_call and shape_dist_traveled:
+                if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                     distance = shape_dist_traveled - prev_shape_traveled
                     prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -1579,7 +1577,7 @@ class GtfsNeTexProfile(CallsProfile):
                         departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[index_j])
 
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
-                        if prev_call and shape_dist_traveled:
+                        if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -1723,7 +1721,7 @@ class GtfsNeTexProfile(CallsProfile):
                         departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[index_j])
 
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
-                        if prev_call and shape_dist_traveled:
+                        if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_ref_or_onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -1886,7 +1884,7 @@ class GtfsNeTexProfile(CallsProfile):
                         departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[index_j])
 
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
-                        if prev_call and shape_dist_traveled:
+                        if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -2054,7 +2052,7 @@ class GtfsNeTexProfile(CallsProfile):
                         departure_time, departure_dayoffset = self.noonTimeToNeTEx(departure_times[index_j])
 
                         shape_dist_traveled = get_or_none(shape_dist_traveleds, index_j)
-                        if prev_call and shape_dist_traveled:
+                        if prev_call and shape_dist_traveled is not None and not numpy.isnan(shape_dist_traveled):
                             distance = shape_dist_traveled - prev_shape_traveled
                             prev_call.onward_service_link_view = OnwardServiceLinkView(distance=distance)
 
@@ -2196,7 +2194,7 @@ class GtfsNeTexProfile(CallsProfile):
                 self.serializer.write(out, self.getPublicationDelivery(operators, [line], stop_areas, scheduled_stop_points, service_journeys, day_types, operating_periods, day_type_assignments), self.ns_map)
 
     def database(self, con):
-        write_objects(con, self.lines, empty=True, many=True)
+        con.insert_objects_on_queue(Line, self.lines)
 
         # This still sucks :-) shape is in every ServiceJourney now
         # in order to solve it, we must find the route point that matches the
@@ -2208,37 +2206,37 @@ class GtfsNeTexProfile(CallsProfile):
         # write_objects(con, self.route_links, True, True)
         # write_objects(con, self.routes, True, True)
 
-        write_objects(con, [self.codespace], empty=True, many=True)
-        write_objects(con, [self.data_source], empty=True, many=True)
-        write_objects(con, [self.version], empty=True, many=True)
+        con.insert_objects_on_queue(Codespace, [self.codespace])
+        con.insert_objects_on_queue(DataSource, [self.data_source])
+        con.insert_objects_on_queue(Version, [self.version])
 
         gf = GeneralFrame(id="Defaults", version="any", frame_defaults=self.frame_defaults)
-        write_objects(con, [gf], empty=True)
+        con.insert_objects_on_queue(GeneralFrame, [gf])
 
-        write_objects(con, self.getOperators(), empty=True, many=True)
+        con.insert_objects_on_queue(Operator, self.getOperators())
+
         stop_areas = self.getStopAreas()
-        write_objects(con, stop_areas, empty=True, many=True)
-        write_objects(con, self.getScheduledStopPoints(stop_areas), empty=True, many=True)
+        con.insert_objects_on_queue(StopArea, stop_areas)
+        con.insert_objects_on_queue(ScheduledStopPoint, self.getScheduledStopPoints(stop_areas))
         stop_areas = None
 
         stop_places, passenger_stop_assignments = self.getStopPlaces()
-        write_objects(con, stop_places, empty=True, many=True)
-        write_objects(con, passenger_stop_assignments, empty=True, many=True)
+        con.insert_objects_on_queue(StopPlace, stop_places)
+        con.insert_objects_on_queue(PassengerStopAssignment, passenger_stop_assignments)
         stop_places = stop_passenger_stop_assignments = None
 
         day_types, day_type_assignments, operating_periods = self.getDayTypes()
-        write_objects(con, day_types, empty=True, many=True)
-        write_objects(con, day_type_assignments, empty=True, many=True)
-        write_objects(con, operating_periods, empty=True, many=True)
+        con.insert_objects_on_queue(DayType, day_types)
+        con.insert_objects_on_queue(DayTypeAssignment, day_type_assignments)
+        con.insert_objects_on_queue(OperatingPeriod, operating_periods)
 
         # availability_conditions = self.getAvailabilityConditions()
         # write_objects(con, availability_conditions, empty=True, many=True)
 
-        write_generator(con, ServiceJourney, self.getServiceJourneys2DayType(), empty=True)
-        write_generator(con, TemplateServiceJourney, self.getTemplateServiceJourneysDayType(), empty=True)
+        con.insert_objects_on_queue(ServiceJourney, self.getServiceJourneys2DayType())
+        con.insert_objects_on_queue(TemplateServiceJourney, self.getTemplateServiceJourneysDayType())
 
-        write_generator(con, InterchangeRule, self.getInterchangeRules(), empty=True)
-
+        con.insert_objects_on_queue(InterchangeRule, self.getInterchangeRules())
 
     def __init__(self, conn, serializer):
         self.conn = conn
@@ -2279,10 +2277,8 @@ def main(database_gtfs: str, database_netex: str):
     except:
         pass
 
-    with Database(database_netex, read_only=False) as db_write:
+    with Database(database_netex, serializer=MyPickleSerializer(compression=True), readonly=False) as db_write:
         gtfs.database(db_write)
-        create_meta(db_write)
-        embedding_update(db_write)
 
 if __name__ == '__main__':
     import argparse

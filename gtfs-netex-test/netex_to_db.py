@@ -1,8 +1,8 @@
 from netexio.database import Database
 from netexio.dbaccess import setup_database, open_netex_file, insert_database
+from netexio.pickleserializer import MyPickleSerializer
 from utils import get_interesting_classes
 from aux_logging import *
-from transformers.embedding import embedding_update
 
 
 def main(filenames: list[str], database: str, clean_database: bool = True):
@@ -20,8 +20,7 @@ def main(filenames: list[str], database: str, clean_database: bool = True):
         log_flush()
         exit(1)
 
-
-    with Database(database, read_only=False, logger=logging.getLogger("script_runner")) as db:
+    with Database(database, MyPickleSerializer(compression=True), readonly=False, logger=logging.getLogger("script_runner")) as db:
         classes = get_interesting_classes()
 
         if clean_database:
@@ -30,8 +29,6 @@ def main(filenames: list[str], database: str, clean_database: bool = True):
         for filename in filenames:
             for sub_file in open_netex_file(filename):
                 insert_database(db, classes, sub_file)
-
-        embedding_update(db)
 
 if __name__ == '__main__':
     import argparse

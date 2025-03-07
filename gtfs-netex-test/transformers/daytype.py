@@ -2,7 +2,7 @@ import netex_monkeypatching
 from netex import AvailabilityCondition, UicOperatingPeriod, OperatingDay, DayTypeAssignment, DayType, OperatingDayRef, \
     DayTypeRef, DayOfWeekEnumeration
 from netexio.database import Database
-from netexio.dbaccess import get_single, load_local
+from netexio.dbaccess import load_local
 from refs import getRef
 from utils import project
 

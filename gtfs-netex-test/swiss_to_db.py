@@ -6,29 +6,21 @@ import os
 from netexio.database import Database
 from netexio.dbaccess import resolve_all_references_and_embeddings, open_netex_file, setup_database, insert_database
 from utils import get_interesting_classes
+from netexio.pickleserializer import MyPickleSerializer
 import netex_monkeypatching
 from aux_logging import *
 import traceback
 
-from transformers.embedding import embedding_update
-
 SWISS_CLASSES = ["Codespace", "StopPlace", "ScheduledStopPoint", "Operator", "VehicleType", "Line", "Direction", "DestinationDisplay", "ServiceJourney", "TemplateServiceJourney", "ServiceCalendar", "PassengerStopAssignment", "AvailabilityCondition", "TopographicPlace", "ResponsibilitySet"]
 
-def main(swiss_zip_file: str, database: str, clean_database: bool = True, referencing: bool = False):
+def main(swiss_zip_file: str, database: str, clean_database: bool = True, referencing: bool = True):
     for file in open_netex_file(swiss_zip_file):
         if file.name.endswith(".xml"):
             if not check_if_swiss_file(file):
                 print("File names do not fit Swiss data:. So no Swiss data")
                 sys.exit(2)
 
-    if clean_database:
-        # Workaround for https://github.com/duckdb/duckdb/issues/8261
-        try:
-            os.remove(database)
-        except:
-            pass
-
-    with Database(database,read_only=False) as db:
+    with Database(database, MyPickleSerializer(compression=True), readonly=False, logger=logging.getLogger("script_runner")) as db:
         classes = get_interesting_classes(SWISS_CLASSES)
 
         setup_database(db, classes, clean_database)
@@ -37,10 +29,6 @@ def main(swiss_zip_file: str, database: str, clean_database: bool = True, refere
         for file in open_netex_file(swiss_zip_file):
             log_all(logging.INFO, f"Inserting {file.name}")
             insert_database(db, classes, file)
-
-        if referencing:
-            log_all(logging.INFO, f"Embedding update!")
-            embedding_update(db)
 
 def check_if_swiss_file(file_handler):
     if file_handler.name.endswith(".xml"):
