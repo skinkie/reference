@@ -48,7 +48,7 @@ class Referencing:
 
 class Database:
     def __init__(self, path: str, serializer: Serializer, readonly=True, logger: Logger = None,
-                 initial_size=0.25 * 1024 ** 3,
+                 initial_size=8 * 1024 ** 3,
                  growth_size=None,
                  max_size=32 * 1024 ** 3, batch_size=10_000, max_mem=4 * 1024 ** 3):
         self.path = path
@@ -93,7 +93,7 @@ class Database:
                 sync=False
             )
 
-        self.db_embedding = self.env.open_db(b"_embedding", create=not self.readonly)
+        self.db_embedding = self.env.open_db(b"_embedding", create=not self.readonly, dupsort=True)
         self.db_embedding_inverse = self.env.open_db(b"_embedding_inverse", create=not self.readonly, dupsort=True)
         self.db_referencing = self.env.open_db(b"_referencing", create=not self.readonly, dupsort=True)
         self.db_referencing_inwards = self.env.open_db(b"_referencing_inwards", create=not self.readonly, dupsort=True)
@@ -141,7 +141,7 @@ class Database:
 
             try:
                 for _ in range(self.batch_size):
-                    item = self.task_queue.get(timeout=3)
+                    item = self.task_queue.get(timeout=1)
                     if item is self.stop_signal:
                         break
 
@@ -178,16 +178,16 @@ class Database:
             try:
                 with self.env.begin(write=True) as txn:
                     # Process drops
-                    for db_handle in drop_task:
-                        txn.drop(db=db_handle, delete=True)
+                    for db_handle1 in drop_task:
+                        txn.drop(db=db_handle1, delete=True)
 
                     # Process clears
-                    for db_handle in clear_task:
-                        txn.drop(db=db_handle, delete=False)
+                    for db_handle1 in clear_task:
+                        txn.drop(db=db_handle1, delete=False)
 
                     # Process deletions
-                    for db_handle, prefix in delete_tasks:
-                        cursor = txn.cursor(db=db_handle)
+                    for db_handle1, prefix in delete_tasks:
+                        cursor = txn.cursor(db=db_handle1)
                         if cursor.set_range(prefix):
                             while bytes(cursor.key()).startswith(prefix):
                                 cursor.delete()
@@ -195,8 +195,8 @@ class Database:
                                     break
 
                     # Process insertions
-                    for db_handle, key, value in batch:
-                        txn.put(key, value, db=db_handle)
+                    for db_handle1, key, value in batch:
+                        txn.put(key, value, db=db_handle1)
 
                 break  # Success, exit loop
             except lmdb.MapFullError:
@@ -253,23 +253,32 @@ class Database:
 
         for embedding in update_embedded_referencing(self.serializer, obj):
             if embedding[6] is not None:
-                embedding_key = self.serializer.encode_key(embedding[4], embedding[5], embedding[3], include_clazz=True)
-                embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], embedding[6]))
-                self.task_queue.put((LmdbActions.WRITE, self.db_embedding, embedding_key, embedding_value))
+                embedding_inverse_key = self.serializer.encode_key(embedding[4], embedding[5], embedding[3],
+                                                                   include_clazz=True)
+                # print("embedding_inverse_key", embedding_inverse_key)
+                embedding_inverse_value = cloudpickle.dumps(
+                    (get_object_name(embedding[0]), embedding[1], embedding[2], embedding[6]))
+                self.task_queue.put(
+                    (LmdbActions.WRITE, self.db_embedding_inverse, embedding_inverse_key, embedding_inverse_value))
 
                 embedding_key = self.serializer.encode_key(embedding[1], embedding[2], embedding[0], include_clazz=True)
-                embedding_value = cloudpickle.dumps((get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6]))
-                self.task_queue.put((LmdbActions.WRITE, self.db_embedding_inverse, embedding_key, embedding_value))
+                # print("embedding_key", embedding_key)
+                embedding_value = cloudpickle.dumps(
+                    (get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6]))
+                self.task_queue.put((LmdbActions.WRITE, self.db_embedding, embedding_key, embedding_value))
+
 
             else:
                 # TODO: This won't work because of out of order behavior
                 # self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_referencing, key_prefix))
 
                 ref_key = self.serializer.encode_key(embedding[1], embedding[2], embedding[0], include_clazz=True)
+                # print('referencing', ref_key)
                 ref_value = cloudpickle.dumps((get_object_name(embedding[3]), embedding[4], embedding[5]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_referencing, ref_key, ref_value))
 
                 ref_key = self.serializer.encode_key(embedding[4], embedding[5], embedding[3], include_clazz=True)
+                # print('referencing_inwards', ref_key)
                 ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_referencing_inwards, ref_key, ref_value))
 
@@ -328,7 +337,7 @@ class Database:
         self.task_queue.put((LmdbActions.CLEAR, self.db_embedding))
         self.task_queue.put((LmdbActions.CLEAR, self.db_embedding_inverse))
         self.task_queue.put((LmdbActions.CLEAR, self.db_referencing))
-        self.task_queue.put((LmdbActions.CLEAR, self.db_referencing_inward))
+        self.task_queue.put((LmdbActions.CLEAR, self.db_referencing_inwards))
 
     def delete_by_prefix(self, klass: T, prefix: bytes):
         """Schedules deletion of all keys with a given prefix using the writer thread."""
@@ -346,7 +355,7 @@ class Database:
         if self.readonly:
             return
 
-        if self.writer_thread:
+        if self.writer_thread and self.task_queue:
             self.task_queue.put(self.stop_signal)
             self.writer_thread.join()  # Wait for writer to finish
 
@@ -374,7 +383,7 @@ class Database:
         if db_handle is None:
             return None
 
-        with self.env.begin(buffers=True) as txn:
+        with self.env.begin(buffers=True, write=False) as txn:
             cursor = txn.cursor(db_handle)
 
             # Move to a random position by skipping N random entries

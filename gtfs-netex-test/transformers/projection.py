@@ -92,9 +92,10 @@ def reprojection_update(db: Database, crs_to: str, batch_size=100_000, max_mem=4
             cursor = src_txn.cursor()
 
             for key, value in cursor:
-                transformed_value = db.serializer.marshall(reprojection(db.serializer.unmarshall(value, clazz), crs_to), clazz)
+                # transformed_value = db.serializer.marshall(reprojection(db.serializer.unmarshall(value, clazz), crs_to), clazz)
                 # TODO: We may not want to expose our internal task queue.
-                db.task_queue.put((LmdbActions.WRITE, src_db, key, transformed_value))
+                # db.task_queue.put((LmdbActions.WRITE, src_db, key, transformed_value))
+                db.insert_one_object(reprojection(db.serializer.unmarshall(value, clazz), crs_to))
 
 def get_transformer_by_srs_name(location, crs_to) -> Transformer:
     if hasattr(location, 'pos') and location.pos is not None:

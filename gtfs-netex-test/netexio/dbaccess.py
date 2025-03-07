@@ -291,25 +291,25 @@ def fetch_references_classes_generator(db: Database, classes: list):
 
     # Find all embeddings and objects the target profile, elements must not be added directly later, but referenced.
     existing_ids = set()
-    with db.env.begin(db=db.env.open_db(b"_embedding"), buffers=True, write=False) as src_txn:
-        cursor = src_txn.cursor()
+    with db.env.begin(db=db.db_embedding, buffers=True, write=False) as src1_txn:
+        cursor = src1_txn.cursor()
         for _key, value in cursor:
-            clazz, ref, version, *_ = pickle.loads(value)
-            existing_ids.add((clazz, ref, version))
+            clazz, ref, version, *_ = cloudpickle.loads(value)
+            existing_ids.add(db.serializer.encode_key(ref, version, db.get_class_by_name(clazz)))
 
     for clazz in classes:
+        # print(clazz)
         db_name = db.open_db(clazz)
         if not db_name:
             continue
 
-        # TODO: Implement prefix based code
-        with db.env.begin(db=db_name, buffers=True, write=False) as src_txn:
-            cursor = src_txn.cursor()
+        with db.env.begin(db=db_name, buffers=True, write=False) as src2_txn:
+            cursor = src2_txn.cursor()
             for key, _value in cursor:
-                existing_ids.add((clazz, key))
+                existing_ids.add(key)
 
-    with db.env.begin(db=db.db_referencing_inwards, buffers=True, write=False) as src_txn:
-        cursor = src_txn.cursor()
+    with db.env.begin(db=db.db_referencing, buffers=True, write=False) as src3_txn:
+        cursor = src3_txn.cursor()
         for _key, value in cursor:
             ref_class, ref_id, ref_version = cloudpickle.loads(value) # TODO: check if this goes right
             if ref_class not in list_classes:
@@ -323,7 +323,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
                     else:
                         processed.add(needle)
 
-                        with db.env.begin(db=db.db_embedding_inverse, buffers=True, write=False) as src_txn2:
+                        with db.env.begin(db=db.db_embedding, buffers=True, write=False) as src_txn2:
                             # TODO: Very expensive sequential scan Solved??
                             cursor2 = src_txn2.cursor()
 
@@ -356,7 +356,7 @@ def fetch_references_classes_generator(db: Database, classes: list):
 
                                 resolve_class = get_object_name(resolve.__class__)
 
-                                with db.env.begin(db=db.db_embedding_inverse, buffers=True, write=False) as src_txn2:
+                                with db.env.begin(db=db.db_embedding, buffers=True, write=False) as src_txn2:
                                     # TODO: Very expensive sequential scan Solved??
                                     cursor2 = src_txn2.cursor()
 
@@ -408,9 +408,10 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
     objectname = get_object_name(clazz)
 
     if db.env:
-        with db.env.begin(db=db.db_embedding, buffers=True, write=False) as txn:
+        with db.env.begin(db=db.db_embedding_inverse, buffers=True, write=False) as txn:
             i = 0
             prefix = db.serializer.encode_key(filter, None, clazz, True)
+            # print(prefix)
             cursor = txn.cursor()
             if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
                 for key, value in cursor:
@@ -608,7 +609,7 @@ def write_generator(db: Database, clazz, generator: Generator, empty=False):
 
 def copy_table(db_read: Database, db_write: Database, classes: list, clean=False, embedding=False):
     for klass in classes:
-        print(klass.__name__)
+        # print(klass.__name__)
         db_read.copy_db(db_write, klass)
 
     if embedding:
@@ -772,8 +773,8 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
                         obj.name_of_ref_class = obj.__class__.__name__[0:-3]
 
                 yield [
-                    deserialized.__class__, deserialized.id, deserialized.version,
-                    serializer.name_object[obj.name_of_ref_class],
+                    deserialized.__class__, deserialized.id, deserialized.version, # The object that contains the reference
+                    serializer.name_object[obj.name_of_ref_class],                 # The object that the reference is towards
                     obj.ref,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
                     None]
