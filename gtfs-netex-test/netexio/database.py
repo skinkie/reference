@@ -94,7 +94,9 @@ class Database:
             )
 
         self.db_embedding = self.env.open_db(b"_embedding", create=not self.readonly)
+        self.db_embedding_inverse = self.env.open_db(b"_embedding_inverse", create=not self.readonly, dupsort=True)
         self.db_referencing = self.env.open_db(b"_referencing", create=not self.readonly, dupsort=True)
+        self.db_referencing_inwards = self.env.open_db(b"_referencing_inwards", create=not self.readonly, dupsort=True)
 
         return self
 
@@ -250,21 +252,26 @@ class Database:
             return
 
         for embedding in update_embedded_referencing(self.serializer, obj):
-            if embedding[7] is not None:
+            if embedding[6] is not None:
                 embedding_key = self.serializer.encode_key(embedding[4], embedding[5], embedding[3], include_clazz=True)
-                embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2],
-                                                     get_object_name(embedding[3]), embedding[4], embedding[5],
-                                                     embedding[6], embedding[7]))
+                embedding_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2], embedding[6]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_embedding, embedding_key, embedding_value))
+
+                embedding_key = self.serializer.encode_key(embedding[1], embedding[2], embedding[0], include_clazz=True)
+                embedding_value = cloudpickle.dumps((get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6]))
+                self.task_queue.put((LmdbActions.WRITE, self.db_embedding_inverse, embedding_key, embedding_value))
 
             else:
                 # TODO: This won't work because of out of order behavior
                 # self.task_queue.put((LmdbActions.DELETE_PREFIX, self.db_referencing, key_prefix))
 
                 ref_key = self.serializer.encode_key(embedding[1], embedding[2], embedding[0], include_clazz=True)
-                ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2],
-                                               get_object_name(embedding[3]), embedding[4], embedding[5], embedding[6]))
+                ref_value = cloudpickle.dumps((get_object_name(embedding[3]), embedding[4], embedding[5]))
                 self.task_queue.put((LmdbActions.WRITE, self.db_referencing, ref_key, ref_value))
+
+                ref_key = self.serializer.encode_key(embedding[4], embedding[5], embedding[3], include_clazz=True)
+                ref_value = cloudpickle.dumps((get_object_name(embedding[0]), embedding[1], embedding[2]))
+                self.task_queue.put((LmdbActions.WRITE, self.db_referencing_inwards, ref_key, ref_value))
 
     def insert_objects_on_queue(self, klass: T, objects: Iterable, empty=False):
         """ Places objects in the shared queue for writing, starting writer if needed. """
@@ -319,7 +326,9 @@ class Database:
             self.task_queue.put((LmdbActions.DROP, db_handle))
 
         self.task_queue.put((LmdbActions.CLEAR, self.db_embedding))
+        self.task_queue.put((LmdbActions.CLEAR, self.db_embedding_inverse))
         self.task_queue.put((LmdbActions.CLEAR, self.db_referencing))
+        self.task_queue.put((LmdbActions.CLEAR, self.db_referencing_inward))
 
     def delete_by_prefix(self, klass: T, prefix: bytes):
         """Schedules deletion of all keys with a given prefix using the writer thread."""
@@ -448,15 +457,18 @@ class Database:
                 cursor = src_txn.cursor()
                 for prefix in classes_name:
                     if cursor.set_range(prefix):
-                        while cursor.key().startswith(prefix):
+                        key = bytes(cursor.key())
+                        while key.startswith(prefix):
                             target.task_queue.put(
-                                (LmdbActions.WRITE, dst_db, bytes(cursor.key()), bytes(cursor.value())))
+                                (LmdbActions.WRITE, dst_db, key, bytes(cursor.value())))
                             if not cursor.next():
                                 break
 
         # Copy both databases
         _copy_db(self.db_referencing, target.db_referencing)
-        _copy_db(self.db_embedding, target.db_referencing)
+        _copy_db(self.db_referencing_inwards, target.db_referencing_inwards)
+        _copy_db(self.db_embedding, target.db_embedding)
+        _copy_db(self.db_embedding_inverse, target.db_embedding_inverse)
 
     def clean_cache(self):
         self.cache.drop()
@@ -472,7 +484,7 @@ class Database:
         with self.env.begin(buffers=True, write=False) as txn:
             cursor = txn.cursor()
             for key, _ in cursor:
-                name = key.decode('utf-8')
+                name = bytes(key).decode('utf-8')
                 if name[0] != '_':
                     tables.add(self.get_class_by_name(name))
         return sorted(tables.intersection(exclusively), key=lambda v: v.__name__)
@@ -485,7 +497,7 @@ class Database:
         with self.env.begin(write=False, buffers=True, db=self.db_referencing) as txn:
             cursor = txn.cursor()
             for _key, value in cursor:
-                _, _, _, klass, *_ = cloudpickle.loads(value)
+                klass, *_ = cloudpickle.loads(value)
                 tables.add(self.get_class_by_name(klass))
 
         return sorted(tables.intersection(exclusively), key=lambda v: v.__name__)
@@ -495,10 +507,10 @@ class Database:
             exclusively = set(self.serializer.interesting_classes)
 
         tables = set([])
-        with self.env.begin(write=False, buffers=True, db=self.db_embedding) as txn:
+        with self.env.begin(write=False, buffers=True, db=self.db_embedding_inverse) as txn:
             cursor = txn.cursor()
             for _key, value in cursor:
-                _p_klass, _p_id, _p_version, klass, _id, _version, _order, _path = cloudpickle.loads(value)
+                klass, *_ = cloudpickle.loads(value)
                 tables.add(self.get_class_by_name(klass))
 
         return sorted(tables.intersection(exclusively), key=lambda v: v.__name__)

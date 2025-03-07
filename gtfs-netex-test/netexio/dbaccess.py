@@ -71,13 +71,16 @@ def load_referencing(db: Database, clazz: T, filter, cursor=False):
 
     result = []
 
-    with db.env.begin(db=db.env.open_db(b"_referencing"), buffers=True, write=False) as txn:
+    prefix = db.serializer.encode_key(filter, None, clazz, include_clazz=True)
+
+    with db.env.begin(db=db.db_referencing, buffers=True, write=False) as txn:
         cursor = txn.cursor()
-        for key, value in cursor:
-            # TODO: See if we can do a smarter key for easy lookup
-            # parent_class, parent_id, parent_version, *_ = pickle.loads(key)
-            parent_class, parent_id, parent_version, referencing_class, referencing_id, referencing_version, *_ = pickle.loads(value)
-            if parent_id == filter and parent_class == objectname:
+        if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+            for key, value in cursor:
+                if not bytes(key).startswith(prefix):
+                    break  # Stop when keys no longer match the prefix
+
+                referencing_class, referencing_id, referencing_version = cloudpickle.loads(value)
                 result.append((referencing_id, referencing_version, referencing_class,))
 
     return result
@@ -87,12 +90,16 @@ def load_referencing_inwards(db: Database, clazz: T, filter, cursor=False):
 
     result = []
 
-    with db.env.begin(db=db.env.open_db(b"_referencing"), buffers=True, write=False) as txn:
+    prefix = db.serializer.encode_key(filter, None, clazz, include_clazz=True)
+
+    with db.env.begin(db=db.db_referencing_inwards, buffers=True, write=False) as txn:
         cursor = txn.cursor()
-        for key, value in cursor:
-            # TODO: See if we can do a smarter key for easy lookup
-            parent_class, parent_id, parent_version, referencing_class, referencing_id, referencing_version, *_ = pickle.loads(value)
-            if referencing_id == filter and referencing_class == objectname:
+        if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
+            for key, value in cursor:
+                if not bytes(key).startswith(prefix):
+                    break  # Stop when keys no longer match the prefix
+
+                parent_class, parent_id, parent_version = cloudpickle.loads(value)
                 result.append((parent_id, parent_version, parent_class,))
 
     return result
@@ -301,10 +308,10 @@ def fetch_references_classes_generator(db: Database, classes: list):
             for key, _value in cursor:
                 existing_ids.add((clazz, key))
 
-    with db.env.begin(db=db.env.open_db(b"_referencing"), buffers=True, write=False) as src_txn:
+    with db.env.begin(db=db.db_referencing_inwards, buffers=True, write=False) as src_txn:
         cursor = src_txn.cursor()
         for _key, value in cursor:
-            parent_class, parent_id, parent_version, ref_class, ref_id, ref_version, ref_order = pickle.loads(value)
+            ref_class, ref_id, ref_version = cloudpickle.loads(value) # TODO: check if this goes right
             if ref_class not in list_classes:
                 results = load_local(db, db.get_class_by_name(ref_class), limit=1, filter=ref_id, cursor=True, embedding=True, embedded_parent=True)
                 if len(results) > 0:
@@ -316,12 +323,17 @@ def fetch_references_classes_generator(db: Database, classes: list):
                     else:
                         processed.add(needle)
 
-                        with db.env.begin(db=db.env.open_db(b"_embedding"), buffers=True, write=False) as src_txn2:
-                            # TODO: Very expensive sequential scan
+                        with db.env.begin(db=db.db_embedding_inverse, buffers=True, write=False) as src_txn2:
+                            # TODO: Very expensive sequential scan Solved??
                             cursor2 = src_txn2.cursor()
-                            for key2, value2 in cursor2:
-                                parent_class, parent_id, parent_version, _, embedding_class, embedding_id, embedding_version, embedding_path = cloudpickle.loads(value2)
-                                if parent_class == ref_class and parent_id == ref_id and parent_version == ref_version:
+
+                            prefix = db.serializer.encode_key(ref_id, ref_version, db.get_class_by_name(ref_class))
+                            if cursor2.set_range(prefix):  # Position cursor at the first key >= prefix
+                                for key2, value2 in cursor2:
+                                    if not bytes(key2).startswith(prefix):
+                                        break  # Stop when keys no longer match the prefix
+
+                                    embedding_class, embedding_id, embedding_version, embedding_path = cloudpickle.loads(value2)
                                     if (embedding_class, db.serializer.encode_key(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
                                         replace_with_reference_inplace(results[0], embedding_path)
 
@@ -343,12 +355,17 @@ def fetch_references_classes_generator(db: Database, classes: list):
                                 # We can do two things here, query the database for embeddings, or recursively iterate over the object.
 
                                 resolve_class = get_object_name(resolve.__class__)
-                                with db.env.begin(db=db.env.open_db(b"_embedding"), buffers=True, write=False) as src_txn2:
-                                    # TODO: Very expensive
+
+                                with db.env.begin(db=db.db_embedding_inverse, buffers=True, write=False) as src_txn2:
+                                    # TODO: Very expensive sequential scan Solved??
                                     cursor2 = src_txn2.cursor()
-                                    for key2, value2 in cursor2:
-                                        parent_class, parent_id, parent_version, i = cloudpickle.loads(key)
-                                        if parent_class == resolve_class and parent_id == resolve.id and parent_version == resolve.version:
+
+                                    prefix = db.serializer.encode_key(resolve.id, resolve.version, resolve.__class__)
+                                    if cursor2.set_range(prefix):  # Position cursor at the first key >= prefix
+                                        for key2, value2 in cursor2:
+                                            if not bytes(key2).startswith(prefix):
+                                                break  # Stop when keys no longer match the prefix
+
                                             embedding_class, embedding_id, embedding_version, embedding_path = cloudpickle.loads(value2)
                                             if (embedding_class, db.serializer.encode_key(embedding_id, embedding_version, db.get_class_by_name(embedding_class))) in existing_ids:
                                                 replace_with_reference_inplace(resolve, embedding_path)
@@ -397,11 +414,11 @@ def load_embedded_transparent_generator(db: Database, clazz: T, limit=None, filt
             cursor = txn.cursor()
             if cursor.set_range(prefix):  # Position cursor at the first key >= prefix
                 for key, value in cursor:
-                    if not key.startswith(prefix):
+                    if not bytes(key).startswith(prefix):
                         break  # Stop when keys no longer match the prefix
 
                     _tmp = cloudpickle.loads(value)
-                    parent_clazz, parent_id, parent_version, embedding_clazz, embedding_id, embedding_version, embedding_order, embedding_path = _tmp
+                    parent_clazz, parent_id, parent_version, embedding_path = _tmp
 
                     if limit is None or i < limit:
                         parent_clazz = db.get_class_by_name(parent_clazz)
@@ -740,10 +757,9 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
             if obj.id is not None and obj.__class__ in serializer.interesting_classes:
                 yield [
                     deserialized.__class__, deserialized.id, deserialized.version,
-                    get_object_name(obj.__class__),
+                    obj.__class__,
                     obj.id,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
-                    str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0',
                     '.'.join([str(s) for s in path])]
 
         elif hasattr(obj, 'ref'):
@@ -757,10 +773,10 @@ def update_embedded_referencing(serializer: Serializer, deserialized) -> Generat
 
                 yield [
                     deserialized.__class__, deserialized.id, deserialized.version,
-                    obj.name_of_ref_class,
+                    serializer.name_object[obj.name_of_ref_class],
                     obj.ref,
                     obj.version if hasattr(obj, 'version') and obj.version is not None else 'any',
-                    str(obj.order) if hasattr(obj, 'order') and obj.order is not None else '0', None]
+                    None]
 
 
 """
