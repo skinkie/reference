@@ -8,9 +8,9 @@
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
         {"step":2,"script": "download_input_file", "args": "%%dir%%"},
         {"step":3,"script": "gtfs_import_to_db.py", "args": "%%inputfilepath%% %%dir%%/03-gtfs-import.duckdb"},
-        {"step":4,"script": "gtfs_convert_to_db.py", "args": "%%dir%%/03-gtfs-import.duckdb %%dir%%/05-netex-import.duckdb"},
-        {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/05-netex-import.duckdb %%dir%%/06-netex-database.duckdb"},
-        {"step":6,"script": "epip_db_to_xml.py", "args": "%%dir%%/06-netex-database.duckdb %%dir%%/EPIP_NeTEx_blablacar_%%date%%.zip"},
+        {"step":4,"script": "gtfs_convert_to_db.py", "args": "%%dir%%/03-gtfs-import.duckdb %%dir%%/05-netex-import.lmdb"},
+        {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/05-netex-import.lmdb %%dir%%/06-netex-database.lmdb"},
+        {"step":6,"script": "epip_db_to_xml.py", "args": "%%dir%%/06-netex-database.lmdb %%dir%%/EPIP_NeTEx_blablacar_%%date%%.zip"},
         {"step":7,"script": "tool_netex_check_assertions.py", "args": "./scripts/blablacar-assertions.txt %%dir%%/EPIP_NeTEx_blablacar_%%date%%.zip"},
         {"step":8,"script": "tool_netex_stats.py", "args": "%%dir%%/EPIP_NeTEx_blablacar_%%date%%.zip"}
         ]
@@ -23,9 +23,9 @@
         {"step":1,"script": "clean_tmp", "args": "%%dir%%"},
         {"step":2,"script": "download_input_file", "args": "%%dir%%"},
         {"step":3,"script": "gtfs_import_to_db.py", "args": "%%inputfilepath%% %%dir%%/03-gtfs-import.duckdb"},
-        {"step":4,"script": "gtfs_convert_to_db.py", "args": "%%dir%%/03-gtfs-import.duckdb %%dir%%/05-netex-import.duckdb"},
-        {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/05-netex-import.duckdb %%dir%%/06-netex-database.duckdb"},
-        {"step":6,"script": "epip_db_to_xml.py", "args": "%%dir%%/06-netex-database.duckdb %%dir%%/EPIP_NeTEx_flixbus_%%date%%.zip"},
+        {"step":4,"script": "gtfs_convert_to_db.py", "args": "%%dir%%/03-gtfs-import.duckdb %%dir%%/05-netex-import.lmdb"},
+        {"step":5,"script": "epip_db_to_db.py", "args": "%%dir%%/05-netex-import.lmdb %%dir%%/06-netex-database.lmdb"},
+        {"step":6,"script": "epip_db_to_xml.py", "args": "%%dir%%/06-netex-database.lmdb %%dir%%/EPIP_NeTEx_flixbus_%%date%%.zip"},
         {"step":7,"script": "tool_netex_check_assertions.py", "args": "./scripts/flixbus-assertions.txt %%dir%%/EPIP_NeTEx_flixbus_%%date%%.zip"},
         {"step":8,"script": "tool_netex_stats.py", "args": "%%dir%%/EPIP_NeTEx_flixbus_%%date%%.zip"}
         ]
