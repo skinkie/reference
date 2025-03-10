@@ -163,6 +163,8 @@ def download(folder, url, forced=False):
             filename = "source.zip"
         if "Resource" in filename:  # for italian data
             filename = "source.xml.gz"
+        if filename=="":
+            filename="source.zip"
         if forced==False:
             # Download only when not exists
             path=os.path.join(folder, filename)
