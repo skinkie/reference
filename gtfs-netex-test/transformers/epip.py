@@ -531,6 +531,8 @@ def epip_service_journey_generator(db_read: Database, db_write: Database, genera
             CallsProfile.getPassingTimesFromTimeDemandType(sj, service_journey_pattern, time_demand_type)
 
         # If we already know that this generated SJP already exists, we should not even add it.
+        if service_journey_pattern==None:
+            log_all(logging.ERROR,f'No service journey pattern for journey: {sj}')
         if service_journey_pattern.id not in sjp_ids:
             recover_line_ref(sj, service_journey_pattern, db_read)
 
