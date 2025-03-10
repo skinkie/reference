@@ -11,7 +11,6 @@ import traceback
 import urllib.request
 from datetime import datetime
 import re
-
 import hashlib
 
 def custom_hash(value):
@@ -19,13 +18,19 @@ def custom_hash(value):
     sha256_hash.update(str(value).encode('utf-8'))
     return sha256_hash.hexdigest()[-8:]
 
+
+import hashlib
+
+def custom_hash(value):
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(str(value).encode('utf-8'))
+    return sha256_hash.hexdigest()[-8:]
 def reversedate():
     # Get the current date
     current_date = datetime.now()
     # Format the date as YYYYMMDD
     formatted_date = current_date.strftime('%Y%m%d')
     return formatted_date
-
 
 def parse_command_line_arguments(input_string):
     arguments = re.findall(r'\[.*?\]|\S+', input_string)
@@ -155,9 +160,9 @@ def download(folder, url, forced=False):
         if filename=="permalink":
             filename="swiss.zip"
         if "?" in filename:  #for data from mobigo, that is fetched by an aspx script with parameters
-            filename="source.zip"
-        if "Resource" in filename: # for italian data
-            filename="source.xml.gz"
+            filename = "source.zip"
+        if "Resource" in filename:  # for italian data
+            filename = "source.xml.gz"
         if forced==False:
             # Download only when not exists
             path=os.path.join(folder, filename)
@@ -194,7 +199,6 @@ def remove_file(path):
     else:
         raise FileNotFoundError(f"File not found: {path}")
 
-
 def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=99999,this_step=-1,url=None, parent_block=""):
     # blockexisted
     blockexisted=False
@@ -205,7 +209,7 @@ def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=9999
     # go through each block
     for block in data:
         if url:
-            processdir= processing_data + "/" + parent_block+"-"+todo_block+ "-"+str(custom_hash(url))
+            processdir = processing_data + "/" + parent_block + "-" + todo_block + "-" + str(custom_hash(url))
         else:
             processdir = processing_data + "/" + block["block"]
         blockstop = False
@@ -276,7 +280,12 @@ def main(script_file,log_file, log_level, todo_block,begin_step=1, end_step=9999
                 clean_tmp(folder)
                 log_all(logging.INFO,  f"Command 'clean_tmp' executed for folder: {folder}\n")
                 continue
-
+            if script_name == "process_url_list":
+                for url in block.get("download_urls"):
+                    newblock=script_args
+                    main(list_scripts,log_file,log_level,newblock, begin_step, url=url, parent_block=block["block"])
+                # only one process_url_list can be in a block
+                return
             if script_name == 'clean':
                 # Execute the clean command
                 folder = script_args
