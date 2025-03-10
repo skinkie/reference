@@ -157,7 +157,7 @@
 "block":"de-list",
 "description":"List of a first GTFS from Germany",
 "download_urls":[
-    "https://gtfs.de/de/feeds/de_fv/"
+    "https://download.gtfs.de/germany/fv_free/latest.zip"
 ],
 "scripts": [
  {"step":"1", "script": "process_url_list", "args": "gtfs2epip"}
