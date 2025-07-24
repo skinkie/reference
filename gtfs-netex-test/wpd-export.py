@@ -29,7 +29,7 @@ from netex import PublicationDelivery, GeneralFrame, Codespace, DataSource, Tran
     Extensions2, StopPointInJourneyPattern, DestinationDisplayRef, ProjectionsRelStructure, PointProjection, \
     PointRefStructure, DirectionType, TransportTypeVersionStructure, MobilityFacilityList, PassengerCommsFacilityList, \
     SanitaryFacilityList, MealFacilityList, AssistanceFacilityList, VehicleAccessFacilityList, PublicCodeStructure, \
-    DatedServiceJourney, TimingLink
+    DatedServiceJourney, TimingLink, ValidBetween, PrivateCodes
 from refs import getId, getRef, getFakeRef
 from timedemandtypesprofile import TimeDemandTypesProfile
 
@@ -44,10 +44,12 @@ publication_delivery = parser.from_path(Path("netex-output/wpd-raw.xml"), Public
 general_frame: GeneralFrame = publication_delivery.data_objects.choice[0]
 codespace: Codespace = general_frame.codespaces.codespace_ref_or_codespace[0]
 version: Version = general_frame.versions.version_ref_or_version[0]
+valid_between: ValidBetween = ValidBetween(from_date=version.start_date, to_date=version.end_date)
 
 short_name = "WPD"
+xmlns = "NL:WPD"
 
-dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
+dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="NL:DOVA",
                       xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
 data_source = [x for x in general_frame.members.choice if isinstance(x, DataSource)][0]
@@ -78,7 +80,7 @@ responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, cod
                                                responsible_organisation_ref=getRef(operator, OrganisationRefStructure)),
                                        ]))
 
-responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
+responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, xmlns),
                                        version=version.version,
                                        name=MultilingualString(value="Partitie"),
                                        roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
@@ -97,7 +99,7 @@ operational_context = OperationalContext(id=getId(OperationalContext, codespace,
 vehicle_type_vieroerd = VehicleType(id=getId(VehicleType, codespace, "SIEROERD"), version=version.version,
                            name=MultilingualString(value="Sier en Oerd"),
                            description=MultilingualString(value="Sier en Oerd"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "SIEROERD"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=1200)]),
@@ -128,7 +130,7 @@ vehicle_type_vieroerd = VehicleType(id=getId(VehicleType, codespace, "SIEROERD")
 vehicle_type_rottummonnik = VehicleType(id=getId(VehicleType, codespace, "ROTTUMMONNIK"), version=version.version,
                            name=MultilingualString(value="Rottum en Monnik"),
                            description=MultilingualString(value="Rottum en Monnik"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "ROTTUMMONNIK"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=1000)]),
@@ -159,7 +161,7 @@ vehicle_type_rottummonnik = VehicleType(id=getId(VehicleType, codespace, "ROTTUM
 vehicle_type_fostaborg = VehicleType(id=getId(VehicleType, codespace, "FOSTABORG"), version=version.version,
                            name=MultilingualString(value="Fostaborg"),
                            description=MultilingualString(value="Fostaborg"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=[
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "FOSTABORG"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=48)]),
@@ -185,7 +187,7 @@ vehicle_type_fostaborg = VehicleType(id=getId(VehicleType, codespace, "FOSTABORG
 vehicle_type_esonborg = VehicleType(id=getId(VehicleType, codespace, "ESONBORG"), version=version.version,
                            name=MultilingualString(value="Esonborg"),
                            description=MultilingualString(value="Esonborg"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=[
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "ESONBORG"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=48)]),
@@ -219,48 +221,54 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
 
 line_ha = Line(id=getId(Line, codespace, "HA"), version=version.version, name=MultilingualString(value="Holwerd - Ameland"),
               monitored=False,
-              responsibility_set_ref_attribute=responsibility_set_financier.id,
+               operator_ref=getRef(operator),
+               responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Veer tussen Holwerd en Ameland"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="HA"),
-              private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
+              private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="LinePlanningNumber")),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "HA"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
               )
 
 line_shsa = Line(id=getId(Line, codespace, "SHSA"), version=version.version, name=MultilingualString(value="Holwerd - Ameland (Sneldienst)"),
               monitored=False,
-              responsibility_set_ref_attribute=responsibility_set_financier.id,
+                 operator_ref=getRef(operator),
+
+                 responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Veer tussen Holwerd en Ameland (Sneldienst)"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="SHSA"),
-              private_code=PrivateCode(value="2", type_value="LinePlanningNumber"),
+              private_codes=PrivateCodes(private_code=PrivateCode(value="2", type_value="LinePlanningNumber")),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "SHSA"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
               )
 
 line_ls = Line(id=getId(Line, codespace, "LS"), version=version.version, name=MultilingualString(value="Lauwersoog - Schiermonnikoog"),
               monitored=False,
-              responsibility_set_ref_attribute=responsibility_set_financier.id,
+               operator_ref=getRef(operator),
+
+               responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Veer tussen Lauwersoog en Schiermonnikoog"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="LS"),
-              private_code=PrivateCode(value="3", type_value="LinePlanningNumber"),
+              private_codes=PrivateCodes(private_code=PrivateCode(value="3", type_value="LinePlanningNumber")),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "LS"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
               )
 
 line_slss = Line(id=getId(Line, codespace, "SLSS"), version=version.version, name=MultilingualString(value="Lauwersoog - Schiermonnikoog (Sneldienst)"),
               monitored=False,
-              responsibility_set_ref_attribute=responsibility_set_financier.id,
+                 operator_ref=getRef(operator),
+                 responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Veer tussen Lauwersoog en Schiermonnikoog (Sneldienst)"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="SLSS"),
-              private_code=PrivateCode(value="4", type_value="LinePlanningNumber"),
+              private_codes=PrivateCodes(private_code=PrivateCode(value="4", type_value="LinePlanningNumber")),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "SLSS"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
               )
@@ -392,41 +400,41 @@ routes = [route_hoam, route_amho, route_lasc, route_scla, route_sash, route_shsa
 sa_h = StopArea(id=getId(StopArea, codespace, "HO"),
                  version=version.version,
                  name=MultilingualString(value="Holwerd"),
-                 private_code=PrivateCode(value="1", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Harlingen"))
                  )
 
 sa_a = StopArea(id=getId(StopArea, codespace, "AM"),
                  version=version.version,
                  name=MultilingualString(value="Ameland"),
-                 private_code=PrivateCode(value="2", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="2", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Terschelling"))
                  )
 
 sa_l = StopArea(id=getId(StopArea, codespace, "LA"),
                  version=version.version,
                  name=MultilingualString(value="Laurensoog"),
-                 private_code=PrivateCode(value="3", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="3", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Vlieland"))
                  )
 
 sa_s = StopArea(id=getId(StopArea, codespace, "SC"),
                  version=version.version,
                  name=MultilingualString(value="Schiermonnikoog"),
-                 private_code=PrivateCode(value="4", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="4", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Vlieland"))
                  )
 
 stop_areas=[sa_h, sa_a, sa_l, sa_s]
 
 ssps['H'].stop_areas = StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_h)])
-ssps['H'].private_code=PrivateCode(value="20650001", type_value="UserStopCode")
+ssps['H'].private_codes=PrivateCodes(private_code=PrivateCode(value="20650001", type_value="UserStopCode"))
 ssps['A'].stop_areas = StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_a)])
-ssps['A'].private_code=PrivateCode(value="29190001", type_value="UserStopCode")
+ssps['A'].private_codes=PrivateCodes(private_code=PrivateCode(value="29190001", type_value="UserStopCode"))
 ssps['L'].stop_areas = StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_l)])
-ssps['L'].private_code=PrivateCode(value="10380001", type_value="UserStopCode")
+ssps['L'].private_codes=PrivateCodes(private_code=PrivateCode(value="10380001", type_value="UserStopCode"))
 ssps['S'].stop_areas = StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_s)])
-ssps['S'].private_code=PrivateCode(value="29310001", type_value="UserStopCode")
+ssps['S'].private_codes=PrivateCodes(private_code=PrivateCode(value="29310001", type_value="UserStopCode"))
 
 for ssp in ssps.values():
     rp: RoutePoint = route_points[ssp.id.replace('ScheduledStopPoint', 'RoutePoint')]
@@ -468,13 +476,13 @@ for sj in sjs:
     tdtp.getTimeDemandType(sj, sjps, tdts, tdts_hash, ssps, tls, None)
     """
     sj.private_code = PrivateCode(type_value="JourneyNumber", value=str(int(str(sj.departure_time).replace(':', ''))))
-    if sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:AMHO', 'WPD:ServiceJourneyPattern:HOAM'):
+    if sj.journey_pattern_ref.ref in ('NL:WPD:ServiceJourneyPattern:AMHO', 'NL:WPD:ServiceJourneyPattern:HOAM'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_vieroerd, VehicleTypeRef)
-    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:LASC', 'WPD:ServiceJourneyPattern:SCLA'):
+    elif sj.journey_pattern_ref.ref in ('NL:WPD:ServiceJourneyPattern:LASC', 'NL:WPD:ServiceJourneyPattern:SCLA'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_rottummonnik, VehicleTypeRef)
-    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:SASH', 'WPD:ServiceJourneyPattern:SHSA'):
+    elif sj.journey_pattern_ref.ref in ('NL:WPD:ServiceJourneyPattern:SASH', 'NL:WPD:ServiceJourneyPattern:SHSA'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_fostaborg, VehicleTypeRef)
-    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:SLSS', 'WPD:ServiceJourneyPattern:SSSL'):
+    elif sj.journey_pattern_ref.ref in ('NL:WPD:ServiceJourneyPattern:SLSS', 'NL:WPD:ServiceJourneyPattern:SSSL'):
         sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type_esonborg, VehicleTypeRef)
     """
 
@@ -488,30 +496,30 @@ for tl in tls.values():
             tl.operational_context_ref = rl.operational_context_ref
 
 def setVariants(dd: DestinationDisplay):
-    dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
+    dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id.replace(':DestinationDisplay:', ':DestinationDisplayVariant:') + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
 
 dd_ho = DestinationDisplay(id=getId(DestinationDisplay, codespace, "HO"), version=version.version,
                            name=MultilingualString(value="Holwerd"),
                            front_text=MultilingualString(value="Holwerd"),
-                           private_code=PrivateCode(value="1", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="DestinationCode")))
 setVariants(dd_ho)
 
 dd_am = DestinationDisplay(id=getId(DestinationDisplay, codespace, "AM"), version=version.version,
                            name=MultilingualString(value="Ameland"),
                            front_text=MultilingualString(value="Ameland"),
-                           private_code=PrivateCode(value="2", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="2", type_value="DestinationCode")))
 setVariants(dd_am)
 
 dd_la = DestinationDisplay(id=getId(DestinationDisplay, codespace, "LA"), version=version.version,
                            name=MultilingualString(value="Laurersoog"),
                            front_text=MultilingualString(value="Laurersoog"),
-                           private_code=PrivateCode(value="3", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="3", type_value="DestinationCode")))
 setVariants(dd_la)
 
 dd_sc = DestinationDisplay(id=getId(DestinationDisplay, codespace, "SC"), version=version.version,
                            name=MultilingualString(value="Schiermonnikoog"),
                            front_text=MultilingualString(value="Schiermonnikoog"),
-                           private_code=PrivateCode(value="4", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="4", type_value="DestinationCode")))
 setVariants(dd_sc)
 
 destination_displays=[dd_ho, dd_am, dd_la, dd_sc]
@@ -537,28 +545,28 @@ service_frames = dutchprofile.getServiceFrames(route_points=list(route_points.va
                                                service_journey_patterns=list(sjps.values()), time_demand_types=list(tdts.values()),
                                               notices=None, notice_assignments=None)
 
-sjp_idx = ['WPD:ServiceJourneyPattern:AMHO', 'WPD:ServiceJourneyPattern:HOAM',
- 'WPD:ServiceJourneyPattern:LASC', 'WPD:ServiceJourneyPattern:SCLA',
- 'WPD:ServiceJourneyPattern:SASH', 'WPD:ServiceJourneyPattern:SHSA',
- 'WPD:ServiceJourneyPattern:SLSS', 'WPD:ServiceJourneyPattern:SSSL']
+sjp_idx = ['NL:WPD:ServiceJourneyPattern:AMHO', 'NL:WPD:ServiceJourneyPattern:HOAM',
+ 'NL:WPD:ServiceJourneyPattern:LASC', 'NL:WPD:ServiceJourneyPattern:SCLA',
+ 'NL:WPD:ServiceJourneyPattern:SASH', 'NL:WPD:ServiceJourneyPattern:SHSA',
+ 'NL:WPD:ServiceJourneyPattern:SLSS', 'NL:WPD:ServiceJourneyPattern:SSSL']
 
 for sj in service_journeys:
     sjp_no = sjp_idx.index(sj.journey_pattern_ref.ref) + 1
     private_code = "{:d}{}".format(sjp_no, "{:04d}".format(int(str(sj.departure_time).replace(':', '')[0:4])))
 
-    sj.private_code = PrivateCode(type_value="JourneyNumber", value=private_code)
-    if sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:AMHO', 'WPD:ServiceJourneyPattern:HOAM'):
+    sj.private_codes = PrivateCodes(private_code=PrivateCode(type_value="JourneyNumber", value=private_code))
+    if sj.journey_pattern_ref.ref in ('NL:WPD:ServiceJourneyPattern:AMHO', 'NL:WPD:ServiceJourneyPattern:HOAM'):
         sj.vehicle_type_ref_or_train_ref = getRef(vehicle_type_vieroerd, VehicleTypeRef)
-    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:LASC', 'WPD:ServiceJourneyPattern:SCLA'):
+    elif sj.journey_pattern_ref.ref in ('NL:WPD:ServiceJourneyPattern:LASC', 'NL:WPD:ServiceJourneyPattern:SCLA'):
         sj.vehicle_type_ref_or_train_ref = getRef(vehicle_type_rottummonnik, VehicleTypeRef)
-    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:SASH', 'WPD:ServiceJourneyPattern:SHSA'):
+    elif sj.journey_pattern_ref.ref in ('NL:WPD:ServiceJourneyPattern:SASH', 'NL:WPD:ServiceJourneyPattern:SHSA'):
         sj.vehicle_type_ref_or_train_ref = getRef(vehicle_type_fostaborg, VehicleTypeRef)
-    elif sj.journey_pattern_ref.ref in ('WPD:ServiceJourneyPattern:SLSS', 'WPD:ServiceJourneyPattern:SSSL'):
+    elif sj.journey_pattern_ref.ref in ('NL:WPD:ServiceJourneyPattern:SLSS', 'NL:WPD:ServiceJourneyPattern:SSSL'):
         sj.vehicle_type_ref_or_train_ref = getRef(vehicle_type_esonborg, VehicleTypeRef)
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[dova_codespace, codespace], versions=[version],
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[dova_codespace, codespace], versions=[version], valid_between=valid_between,
                                                  responsibility_set=responsibility_set_partitie,
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste WPD export")

@@ -54,19 +54,24 @@ with open('scrape-output/doeksen-{}.csv'.format(from_date.isoformat().replace('-
         for f in ('H', 'V', 'T'):
             for t in ('H', 'V', 'T'):
                 if f != t:
-                    document = session.get(f"https://api-2021.rederij-doeksen.nl/departures/{f}/{t}/{departure_date}",
-                                           headers=headers).json()
+                    try:
+                        document = session.get(f"https://api-2021.rederij-doeksen.nl/departures/{f}/{t}/{departure_date}",
+                                            headers=headers).json()
 
-                    if 'departures' in document:
-                        for departure in document['departures']:
-                            flattened = flatten(departure)
-                            if flattened['duration'] > 200:
-                                print(f"https://api-2021.rederij-doeksen.nl/departures/{f}/{t}/{departure_date}")
-                            writer.writerow(flattened)
-                        csvfile.flush()
-                    else:
-                        nomoredata = True
-                    time.sleep(0.200)
+                        if 'departures' in document:
+                            for departure in document['departures']:
+                                flattened = flatten(departure)
+                                if flattened['duration'] > 200:
+                                    print(f"https://api-2021.rederij-doeksen.nl/departures/{f}/{t}/{departure_date}")
+                                writer.writerow(flattened)
+                            csvfile.flush()
+                        else:
+                            nomoredata = True
+                    except:
+                        print(f"https://api-2021.rederij-doeksen.nl/departures/{f}/{t}/{departure_date}")
+                        pass
+
+                    time.sleep(1)
 
         if nomoredata:
             break

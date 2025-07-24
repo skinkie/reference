@@ -27,19 +27,20 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ServiceJourney, \
     MobilityFacilityList, SanitaryFacilityList, \
     TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
-    TransportTypeVersionStructure, PublicCodeStructure, Vehicle, DatedServiceJourney
+    TransportTypeVersionStructure, PublicCodeStructure, Vehicle, DatedServiceJourney, ValidBetween, PrivateCodes
 
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
+xmlns = "NL:WSF"
 short_name = "WSF"
 
-codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
+codespace = Codespace(id="{}:Codespace:{}".format("NL:BISON", "WSP"), xmlns=xmlns,
                       xmlns_url="http://bison.dova.nu/ns/WSF", description=MultilingualString(value="Westerschelde Ferry"))
 
-dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
+dova_codespace = Codespace(id="{}:Codespace:{}".format("NL:BISON", "DOVA"), xmlns="NL:DOVA",
                       xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
 start_date = datetime.datetime(year=2023, month=11, day=29)
@@ -59,6 +60,8 @@ service_journeys, availability_conditions = stt.simple_timetable(f"../wsf/scrape
 
 version.start_date = availability_conditions[0].from_date
 version.end_date = availability_conditions[0].to_date
+
+valid_between = ValidBetween(from_date=availability_conditions[0].from_date, to_date=availability_conditions[0].to_date)
 
 data_source = DataSource(id=getId(DataSource, codespace, short_name),
                          version=version.version,
@@ -112,7 +115,7 @@ responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, cod
                                                responsible_organisation_ref=getRef(authority, OrganisationRefStructure)),
                                        ]))
 
-responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
+responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, xmlns),
                                        version=version.version,
                                        name=MultilingualString(value="Partitie"),
                                        roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
@@ -129,8 +132,7 @@ operational_context = OperationalContext(id=getId(OperationalContext, codespace,
 vehicle_type = VehicleType(id=getId(VehicleType, codespace, "PMPWA"), version=version.version,
                            name=MultilingualString(value="Prinses Maxima en Prins Willem Alexander"),
                            description=MultilingualString(value="Prinses Maxima en Prins Willem Alexander"),
-                           # fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "PMPWA"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=186, seating_capacity=186)]),
@@ -161,9 +163,10 @@ line = Line(id=getId(Line, codespace, "WSF"), version=version.version, name=Mult
               responsibility_set_ref_attribute=responsibility_set_concessie.id,
               description=MultilingualString(value="Veer tussen Vlissingen en Breskens"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
+              operator_ref=getRef(operator),
               type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="WSF"),
-              private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
+              private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="LinePlanningNumber")),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "WSF"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
               )
@@ -217,18 +220,18 @@ routes = [route_vb, route_bv]
 lines = [line]
 
 def setVariants(dd: DestinationDisplay):
-    dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
+    dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id.replace(':DestinationDisplay:', ':DestinationDisplayVariant:') + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
 
 dd_v = DestinationDisplay(id=getId(DestinationDisplay, codespace, "V"), version=version.version,
                            name=MultilingualString(value="Vlissingen"),
                            front_text=MultilingualString(value="Vlissingen"),
-                           private_code=PrivateCode(value="1", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="DestinationCode")))
 setVariants(dd_v)
 
 dd_b = DestinationDisplay(id=getId(DestinationDisplay, codespace, "B"), version=version.version,
                            name=MultilingualString(value="Breskens"),
                            front_text=MultilingualString(value="Breskens"),
-                           private_code=PrivateCode(value="2", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="2", type_value="DestinationCode")))
 setVariants(dd_b)
 
 
@@ -237,14 +240,14 @@ destination_displays=[dd_v, dd_b]
 sa_v = StopArea(id=getId(StopArea, codespace, "V"),
                  version=version.version,
                  name=MultilingualString(value="Vlissingen"),
-                 private_code=PrivateCode(value="1", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Vlissingen"))
                  )
 
 sa_b = StopArea(id=getId(StopArea, codespace, "B"),
                  version=version.version,
                  name=MultilingualString(value="Breskens"),
-                 private_code=PrivateCode(value="2", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="2", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Breskens"))
                  )
 
@@ -256,7 +259,7 @@ ssp_v = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "V"), version
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "V"), version=version.version, project_to_point_ref=getRef(rp_v, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_v)]),
-                              private_code=PrivateCode(value="7660001", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="7660001", type_value="UserStopCode")))
 
 ssp_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "B"), version=version.version,
                               name=MultilingualString(value="Breskens, Veerhaven"),
@@ -264,7 +267,7 @@ ssp_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "B"), version
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "B"), version=version.version, project_to_point_ref=getRef(rp_b, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_b)]),
-                              private_code=PrivateCode(value="7960001", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="7960001", type_value="UserStopCode")))
 
 
 scheduled_stop_points=[ssp_v, ssp_b]
@@ -344,7 +347,7 @@ service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version],
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[], valid_between=valid_between,
                                                  responsibility_set=responsibility_set_partitie,
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste WSF export")

@@ -7,7 +7,7 @@ from gtfs_convert_to_db import date_to_xmldatetime, gtfs_date
 from netex import AvailabilityCondition, Codespace, ServiceJourney, ValidityConditionsRelStructure, Version, \
     PrivateCode, TimeDemandTypeRef, TimeDemandType, ServiceJourneyPatternRef, ServiceJourneyPattern, \
     JourneyRunTimesRelStructure, JourneyRunTime, VehicleTypeRef, VehicleType, TimingLinkRef, TimingLink, \
-    TypeOfProductCategory, TypeOfProductCategoryRef
+    TypeOfProductCategory, TypeOfProductCategoryRef, PrivateCodes
 from refs import getBitString2, getId, getRef
 
 
@@ -89,12 +89,12 @@ class SimpleTimetable:
 
 
             sj = ServiceJourney(id=getId(ServiceJourney, self.codespace, key), version=self.version.version,
-                                private_code=PrivateCode(type_value="JourneyNumber",
+                                private_codes=PrivateCodes(private_code=PrivateCode(type_value="JourneyNumber",
                                                          value="{:d}{}".format(from_ssps.index(from_ssp) + 1,
                                                                                "{:06d}".format(
-                                                                                   int(time.replace(':', '')))[0:4])),
+                                                                                   int(time.replace(':', '')))[0:4]))),
                                 time_demand_type_ref=getRef(tdt),
-                                journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
+                                journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp]) + ('_S' if vesselName.lower() == 'sneldienst' else '')), version=self.version.version),
                                 departure_time=XmlTime(hour=int(time[0:2]), minute=int(time[3:5]), second=0),
                                 vehicle_type_ref_or_train_ref=VehicleTypeRef(ref=getId(VehicleType, self.codespace, vessel), version=self.version.version),
                                 type_of_product_category_ref=tpc_sneldienst if vesselName.lower() == 'sneldienst' else None,
@@ -156,8 +156,11 @@ class SimpleTimetable:
                     valid_day_bits=getBitString2(od))
                 availability_conditions[str(ac_hash)] = ac
 
+            if time == '':
+                continue
+
             sj = ServiceJourney(id=getId(ServiceJourney, self.codespace, key), version=self.version.version,
-                                private_code=PrivateCode(type_value="JourneyNumber", value="{:d}{}".format(from_ssps.index(from_ssp) + 1, "{:06d}".format(int(time.replace(':', '')))[0:4])),
+                                private_codes=PrivateCodes(private_code=PrivateCode(type_value="JourneyNumber", value="{:d}{}".format(from_ssps.index(from_ssp) + 1, "{:06d}".format(int(time.replace(':', '')))[0:4]))),
                                 time_demand_type_ref=TimeDemandTypeRef(ref=getId(TimeDemandType, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, '-'.join([from_ssp, to_ssp])), version=self.version.version),
                                 departure_time=XmlTime(hour=int(time[0:2]), minute=int(time[3:5]), second=0),
@@ -220,7 +223,7 @@ class SimpleTimetable:
             sjp = '-'.join([from_ssp, to_ssp])
 
             sj = ServiceJourney(id=getId(ServiceJourney, self.codespace, key), version=self.version.version,
-                                private_code=PrivateCode(type_value="JourneyNumber", value="{:d}{}".format(sjps.index(sjp) + 1, "{:06d}".format(int(time.replace(':', '')))[0:4])),
+                                private_codes=PrivateCodes(private_code=PrivateCode(type_value="JourneyNumber", value="{:d}{}".format(sjps.index(sjp) + 1, "{:06d}".format(int(time.replace(':', '')))[0:4]))),
                                 time_demand_type_ref=TimeDemandTypeRef(ref=getId(TimeDemandType, self.codespace, sjp), version=self.version.version),
                                 journey_pattern_ref=ServiceJourneyPatternRef(ref=getId(ServiceJourneyPattern, self.codespace, sjp), version=self.version.version),
                                 departure_time=XmlTime(hour=int(time[0:2]), minute=int(time[3:5]), second=0),

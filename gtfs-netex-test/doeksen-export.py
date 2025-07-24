@@ -35,6 +35,7 @@ from_date = datetime.date.today().isoformat().replace('-', '')
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
+codespace_xmlns = "NL:DOEKSEN"
 short_name = "DOEKSEN"
 
 codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
@@ -121,7 +122,7 @@ operational_context = OperationalContext(id=getId(OperationalContext, codespace,
 vehicle_type_wdv = VehicleType(id=getId(VehicleType, codespace, "WDV"), version=version.version,
                            name=MultilingualString(value="Willem de Vlamingh"),
                            description=MultilingualString(value="Willem de Vlamingh"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.NATURAL_GAS),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.NATURAL_GAS]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "WDV"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=692)]),
@@ -150,7 +151,7 @@ vehicle_type_wdv = VehicleType(id=getId(VehicleType, codespace, "WDV"), version=
 vehicle_type_wb = VehicleType(id=getId(VehicleType, codespace, "WB"), version=version.version,
                            name=MultilingualString(value="Willem Barentsz"),
                            description=MultilingualString(value="Willem Barentsz"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.NATURAL_GAS),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.NATURAL_GAS]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "WB"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=692)]),
@@ -181,7 +182,7 @@ vehicle_type_wb = VehicleType(id=getId(VehicleType, codespace, "WB"), version=ve
 vehicle_type_friesland = VehicleType(id=getId(VehicleType, codespace, "FR"), version=version.version,
                            name=MultilingualString(value="Friesland"),
                            description=MultilingualString(value="Friesland"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "FRIESLAND"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=1100)]),
@@ -211,7 +212,7 @@ vehicle_type_friesland = VehicleType(id=getId(VehicleType, codespace, "FR"), ver
 vehicle_type_vlieland = VehicleType(id=getId(VehicleType, codespace, "VL"), version=version.version,
                            name=MultilingualString(value="Vlieland"),
                            description=MultilingualString(value="Vlieland"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "VL"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=950)]),
@@ -241,7 +242,7 @@ vehicle_type_vlieland = VehicleType(id=getId(VehicleType, codespace, "VL"), vers
 vehicle_type_koegelwieck = VehicleType(id=getId(VehicleType, codespace, "KW"), version=version.version,
                            name=MultilingualString(value="Koegelwieck"),
                            description=MultilingualString(value="Koegelwieck"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "KW"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=312)]),
@@ -267,7 +268,7 @@ vehicle_type_koegelwieck = VehicleType(id=getId(VehicleType, codespace, "KW"), v
 vehicle_type_tiger = VehicleType(id=getId(VehicleType, codespace, "TI"), version=version.version,
                            name=MultilingualString(value="Tiger"),
                            description=MultilingualString(value="Tiger"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "TI"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=414)]),
@@ -293,7 +294,7 @@ vehicle_type_tiger = VehicleType(id=getId(VehicleType, codespace, "TI"), version
 vehicle_type_zeehond = VehicleType(id=getId(VehicleType, codespace, "ZEE"), version=version.version,
                            name=MultilingualString(value="Zeehond"),
                            description=MultilingualString(value="Zeehond"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "ZEE"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=12)]),
@@ -358,6 +359,48 @@ line_tv = Line(id=getId(Line, codespace, "TV"), version=version.version, name=Mu
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "TV"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
               )
+
+
+
+line_ht_s = Line(id=getId(Line, codespace, "HT-S"), version=version.version, name=MultilingualString(value="Sneldienst Harlingen - Terschelling"),
+              monitored=False,
+              responsibility_set_ref_attribute=responsibility_set_financier.id,
+              description=MultilingualString(value="Sneldienst tussen Harlingen en Terschelling"),
+              transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
+              type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
+              type_of_product_category_ref=getRef(tpc_sneldienst),
+              public_code=PublicCodeStructure(value="HT-S"),
+              private_code=PrivateCode(value="11", type_value="LinePlanningNumber"),
+              accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "HT-S"), version=version.version,
+                                                               mobility_impaired_access=LimitationStatusEnumeration.TRUE)
+              )
+
+line_hv_s = Line(id=getId(Line, codespace, "HV-S"), version=version.version, name=MultilingualString(value="Sneldienst Harlingen - Vlieland"),
+              monitored=False,
+              responsibility_set_ref_attribute=responsibility_set_financier.id,
+              description=MultilingualString(value="Sneldienst tussen Harlingen en Vlieland"),
+              transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
+              type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
+              type_of_product_category_ref=getRef(tpc_sneldienst),
+              public_code=PublicCodeStructure(value="HV-S"),
+              private_code=PrivateCode(value="12", type_value="LinePlanningNumber"),
+              accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "HV-S"), version=version.version,
+                                                               mobility_impaired_access=LimitationStatusEnumeration.TRUE)
+              )
+
+line_tv_s = Line(id=getId(Line, codespace, "TV-S"), version=version.version, name=MultilingualString(value="Sneldienst Terschelling - Vlieland"),
+              monitored=False,
+              responsibility_set_ref_attribute=responsibility_set_financier.id,
+              description=MultilingualString(value="Sneldienst tussen Terschelling en Vlieland"),
+              transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
+              type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
+              type_of_product_category_ref=getRef(tpc_sneldienst),
+              public_code=PublicCodeStructure(value="TV-S"),
+              private_code=PrivateCode(value="13", type_value="LinePlanningNumber"),
+              accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "TV-S"), version=version.version,
+                                                               mobility_impaired_access=LimitationStatusEnumeration.TRUE)
+              )
+
 
 rp_th = RoutePoint(id=getId(RoutePoint, codespace, "TH"), version=version.version, location=LocationStructure2(pos=Pos(value=[143673, 596725], srs_dimension=2)))
 rp_tv = RoutePoint(id=getId(RoutePoint, codespace, "TV"), version=version.version, location=LocationStructure2(pos=Pos(value=[143584, 596671], srs_dimension=2)))
@@ -477,9 +520,72 @@ route_vt = Route(id=getId(Route, codespace, "V-T"), version=version.version,
                    ])
                    )
 
-routes = [route_th, route_ht, route_vh, route_hv, route_tv, route_vt]
 
-lines = [line_hv, line_tv, line_ht]
+
+route_th_s = Route(id=getId(Route, codespace, "T-H_S"), version=version.version,
+                 distance=Decimal('43000'),
+                 line_ref=getRef(line_ht_s),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
+                   points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-H-T_S"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_th), onward_route_link_ref=getRef(rl_th, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-H-H_S"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_ht)),
+                   ])
+                   )
+
+route_ht_s = Route(id=getId(Route, codespace, "H-T_S"), version=version.version,
+                 distance=Decimal('43000'),
+                 line_ref=getRef(line_ht_s),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
+                   points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-T-H_S"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_ht), onward_route_link_ref=getRef(rl_ht, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-T-T_S"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_th)),
+                   ])
+                   )
+
+route_vh_s = Route(id=getId(Route, codespace, "V-H_S"), version=version.version,
+                 distance=Decimal('43000'),
+                 line_ref=getRef(line_hv_s),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
+                   points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-H-T_S"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v), onward_route_link_ref=getRef(rl_vh, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-H-H_S"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_hv)),
+                   ])
+                   )
+
+route_hv_s = Route(id=getId(Route, codespace, "H-V_S"), version=version.version,
+                 distance=Decimal('43000'),
+                 line_ref=getRef(line_hv_s),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
+                   points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-V-T_S"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_hv), onward_route_link_ref=getRef(rl_hv, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "H-V-H_S"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v)),
+                   ])
+                   )
+
+route_tv_s = Route(id=getId(Route, codespace, "T-V_S"), version=version.version,
+                 distance=Decimal('16000'),
+                 line_ref=getRef(line_tv_s),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
+                   points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-V-T_S"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_tv), onward_route_link_ref=getRef(rl_tv, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "T-V-V_S"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v)),
+                   ])
+                   )
+
+route_vt_s = Route(id=getId(Route, codespace, "V-T_S"), version=version.version,
+                 distance=Decimal('16000'),
+                 line_ref=getRef(line_tv_s),
+                   direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
+                   points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-T-fV_S"), version=version.version, order=1, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_v), onward_route_link_ref=getRef(rl_vt, RouteLinkRefStructure)),
+                       PointOnRoute(id=getId(PointOnRoute, codespace, "V-T-T_S"), version=version.version, order=2, point_ref_or_infrastructure_point_ref_or_activation_point_ref_or_timing_point_ref_or_scheduled_stop_point_ref_or_parking_point_ref_or_relief_point_ref_or_route_point_ref=getRef(rp_tv)),
+                   ])
+                   )
+
+
+routes = [route_th, route_ht, route_vh, route_hv, route_tv, route_vt, route_th_s, route_ht_s, route_vh_s, route_hv_s, route_tv_s, route_vt_s]
+
+lines = [line_hv, line_tv, line_ht, line_hv_s, line_tv_s, line_ht_s]
 
 def setVariants(dd: DestinationDisplay):
     dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
@@ -746,7 +852,118 @@ sjp_tv = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "TV-V"
                                  )
 
 
-journey_patterns=[sjp_ht, sjp_th, sjp_hv, sjp_vh, sjp_vt, sjp_tv]
+
+sjp_ht_s = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "HT-TH_S"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_ht_s),
+                                 direction_type=DirectionTypeEnumeration.OUTBOUND,
+                                 destination_display_ref_or_destination_display_view=getRef(dd_t),
+                                 points_in_sequence=PointsInJourneyPatternRelStructure(
+                                     point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "H-T-H_S"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_ht),
+                                                                   onward_timing_link_ref=getRef(tl_ht, TimingLinkRefStructure),
+                                                                   is_wait_point=True),
+                                         StopPointInJourneyPattern(
+                                             id=getId(StopPointInJourneyPattern, codespace, "H-T-T_S"),
+                                             version=version.version, order=2,
+                                             scheduled_stop_point_ref=getRef(ssp_th)),
+                                     ]
+                                    )
+                                 )
+
+sjp_th_s = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "TH-HT_S"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_th_s),
+                                 direction_type=DirectionTypeEnumeration.INBOUND,
+                                 destination_display_ref_or_destination_display_view=getRef(dd_h),
+                                 points_in_sequence=PointsInJourneyPatternRelStructure(
+                                     point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "T-H-T_S"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_th),
+                                                                   onward_timing_link_ref=getRef(tl_th, TimingLinkRefStructure),
+                                                                   is_wait_point=True),
+                                         StopPointInJourneyPattern(
+                                             id=getId(StopPointInJourneyPattern, codespace, "T-H-H_S"),
+                                             version=version.version, order=2,
+                                             scheduled_stop_point_ref=getRef(ssp_ht)),
+                                     ]
+                                    )
+                                 )
+
+sjp_hv_s = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "HV-V_S"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_hv_s),
+                                 direction_type=DirectionTypeEnumeration.OUTBOUND,
+                                 destination_display_ref_or_destination_display_view=getRef(dd_v),
+                                 points_in_sequence=PointsInJourneyPatternRelStructure(
+                                     point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "H-V-H_S"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_hv),
+                                                                   onward_timing_link_ref=getRef(tl_hv, TimingLinkRefStructure),
+                                                                   is_wait_point=True),
+                                         StopPointInJourneyPattern(
+                                             id=getId(StopPointInJourneyPattern, codespace, "H-V-V_S"),
+                                             version=version.version, order=2,
+                                             scheduled_stop_point_ref=getRef(ssp_v)),
+                                     ]
+                                    )
+                                 )
+
+sjp_vh_s = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "V-HV_S"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_vh_s),
+                                 direction_type=DirectionTypeEnumeration.INBOUND,
+                                 destination_display_ref_or_destination_display_view=getRef(dd_h),
+                                 points_in_sequence=PointsInJourneyPatternRelStructure(
+                                     point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "V-H-V_S"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_v),
+                                                                   onward_timing_link_ref=getRef(tl_vh, TimingLinkRefStructure),
+                                                                   is_wait_point=True),
+                                         StopPointInJourneyPattern(
+                                             id=getId(StopPointInJourneyPattern, codespace, "V-H-H_S"),
+                                             version=version.version, order=2,
+                                             scheduled_stop_point_ref=getRef(ssp_hv)),
+                                     ]
+                                    )
+                                 )
+
+sjp_vt_s = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "V-TV_S"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_vt_s),
+                                 direction_type=DirectionTypeEnumeration.OUTBOUND,
+                                 destination_display_ref_or_destination_display_view=getRef(dd_t),
+                                 points_in_sequence=PointsInJourneyPatternRelStructure(
+                                     point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "V-T-H_S"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_v),
+                                                                   onward_timing_link_ref=getRef(tl_vt, TimingLinkRefStructure),
+                                                                   is_wait_point=True),
+                                         StopPointInJourneyPattern(
+                                             id=getId(StopPointInJourneyPattern, codespace, "V-T-T_S"),
+                                             version=version.version, order=2,
+                                             scheduled_stop_point_ref=getRef(ssp_tv)),
+                                     ]
+                                    )
+                                 )
+
+sjp_tv_s = ServiceJourneyPattern(id=getId(ServiceJourneyPattern, codespace, "TV-V_S"), version=version.version,
+                                 route_ref_or_route_view=getRef(route_tv_s),
+                                 direction_type=DirectionTypeEnumeration.INBOUND,
+                                 destination_display_ref_or_destination_display_view=getRef(dd_v),
+                                 points_in_sequence=PointsInJourneyPatternRelStructure(
+                                     point_in_journey_pattern_or_stop_point_in_journey_pattern_or_timing_point_in_journey_pattern=[
+                                         StopPointInJourneyPattern(id=getId(StopPointInJourneyPattern, codespace, "T-V-T_S"), version=version.version, order=1,
+                                                                   scheduled_stop_point_ref=getRef(ssp_tv),
+                                                                   onward_timing_link_ref=getRef(tl_tv, TimingLinkRefStructure),
+                                                                   is_wait_point=True),
+                                         StopPointInJourneyPattern(
+                                             id=getId(StopPointInJourneyPattern, codespace, "T-V-V_S"),
+                                             version=version.version, order=2,
+                                             scheduled_stop_point_ref=getRef(ssp_v)),
+                                     ]
+                                    )
+                                 )
+
+
+
+journey_patterns=[sjp_ht, sjp_th, sjp_hv, sjp_vh, sjp_vt, sjp_tv, sjp_ht_s, sjp_th_s, sjp_hv_s, sjp_vh_s, sjp_vt_s, sjp_tv_s]
 
 service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_links=route_links, routes=routes, lines=lines,
                                                destination_displays=destination_displays, scheduled_stop_points=scheduled_stop_points, stop_areas=stop_areas,

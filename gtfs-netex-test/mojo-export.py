@@ -27,19 +27,21 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ServiceJourney, \
     MobilityFacilityList, SanitaryFacilityList, \
     TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
-    TransportTypeVersionStructure, PublicCodeStructure, ExternalObjectRefStructure
+    TransportTypeVersionStructure, PublicCodeStructure, ExternalObjectRefStructure, PrivateCodes, ValidBetween, Notice, \
+    NoticeAssignment
 
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
-short_name = "OPENOV"
+codespace_xmlns = "NL:MOJO"
+short_name = "MOJO"
 
-codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
-                      xmlns_url="http://bison.dova.nu/ns/OPENOV", description=MultilingualString(value="openOV"))
+codespace = Codespace(id="NL:{}:Codespace:{}".format("BISON", short_name), xmlns=codespace_xmlns,
+                      xmlns_url="http://bison.dova.nu/ns/MOJO", description=MultilingualString(value="MOJO"))
 
-dova_codespace = Codespace(id="{}:Codespace:{}".format("BISON", "DOVA"), xmlns="DOVA",
+dova_codespace = Codespace(id="NL:{}:Codespace:{}".format("BISON", "DOVA"), xmlns="NL:DOVA",
                       xmlns_url="http://bison.dova.nu/ns/DOVA", description=MultilingualString(value="'Centrale' lijsten bijgehouden door DOVA"))
 
 start_date = datetime.datetime(year=2024, month=8, day=15)
@@ -53,37 +55,45 @@ version = Version(id=getId(Version, codespace, today),
                   end_date=XmlDateTime.from_datetime(end_date),
                   version_type=VersionTypeEnumeration.BASELINE)
 
+valid_between = ValidBetween(from_date=XmlDateTime.from_datetime(start_date),
+                             to_date=XmlDateTime.from_datetime(end_date))
+
+
 stt = SimpleTimetable(codespace, version)
 from_date = datetime.date.today().isoformat().replace('-', '')
 
 simple_timetable = {}
-stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2024, 8, 15, 7, 00, 00), datetime.datetime(2024, 8, 16, 00, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2024, 8, 16, 8, 00, 00), datetime.datetime(2024, 8, 16, 17, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2024, 8, 18, 17, 00, 00), datetime.datetime(2024, 8, 19, 00, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2024, 8, 19, 8, 00, 00), datetime.datetime(2024, 8, 19, 13, 30, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2025, 8, 14, 7, 00, 00), datetime.datetime(2025, 8, 15, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2025, 8, 15, 8, 00, 00), datetime.datetime(2025, 8, 15, 17, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2025, 8, 17, 17, 00, 00), datetime.datetime(2025, 8, 18, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LY", "LO", datetime.datetime(2025, 8, 18, 8, 00, 00), datetime.datetime(2025, 8, 18, 13, 30, 00), datetime.timedelta(minutes=10))
 
-stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2024, 8, 15, 7, 30, 00), datetime.datetime(2024, 8, 15, 23, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2024, 8, 16, 8, 00, 00), datetime.datetime(2024, 8, 16, 17, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2024, 8, 18, 16, 30, 00), datetime.datetime(2024, 8, 18, 23, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2024, 8, 19, 8, 00, 00), datetime.datetime(2024, 8, 19, 14, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2025, 8, 14, 7, 30, 00), datetime.datetime(2024, 8, 14, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2025, 8, 15, 8, 00, 00), datetime.datetime(2024, 8, 15, 17, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2025, 8, 17, 16, 30, 00), datetime.datetime(2024, 8, 17, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "LY", datetime.datetime(2025, 8, 18, 8, 00, 00), datetime.datetime(2024, 8, 18, 14, 00, 00), datetime.timedelta(minutes=10))
 
-stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 15, 7, 00, 00), datetime.datetime(2024, 8, 16, 00, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 16, 8, 00, 00), datetime.datetime(2024, 8, 17, 00, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 17, 8, 00, 00), datetime.datetime(2024, 8, 18, 00, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 18, 8, 00, 00), datetime.datetime(2024, 8, 19, 00, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2024, 8, 19, 8, 00, 00), datetime.datetime(2024, 8, 19, 13, 30, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2025, 8, 14, 7, 00, 00), datetime.datetime(2025, 8, 16, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2025, 8, 16, 8, 00, 00), datetime.datetime(2025, 8, 17, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2025, 8, 17, 8, 00, 00), datetime.datetime(2025, 8, 18, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2025, 8, 18, 8, 00, 00), datetime.datetime(2025, 8, 19, 00, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "DR", "LO", datetime.datetime(2025, 8, 19, 8, 00, 00), datetime.datetime(2025, 8, 19, 13, 30, 00), datetime.timedelta(minutes=10))
 
-stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 15, 7, 30, 00), datetime.datetime(2024, 8, 15, 23, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 16, 8, 00, 00), datetime.datetime(2024, 8, 16, 23, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 17, 8, 00, 00), datetime.datetime(2024, 8, 17, 23, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 18, 8, 00, 00), datetime.datetime(2024, 8, 18, 23, 00, 00), datetime.timedelta(minutes=10))
-stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2024, 8, 19, 8, 00, 00), datetime.datetime(2024, 8, 19, 14, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2025, 8, 14, 7, 30, 00), datetime.datetime(2025, 8, 14, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2025, 8, 15, 8, 00, 00), datetime.datetime(2025, 8, 15, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2025, 8, 16, 8, 00, 00), datetime.datetime(2025, 8, 16, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2025, 8, 17, 8, 00, 00), datetime.datetime(2025, 8, 17, 23, 00, 00), datetime.timedelta(minutes=10))
+stt.simple_timetable_interval(simple_timetable, "LO", "DR", datetime.datetime(2025, 8, 18, 8, 00, 00), datetime.datetime(2025, 8, 18, 14, 00, 00), datetime.timedelta(minutes=10))
 
 
 service_journeys, availability_conditions = stt.simple_timetable_from_dict(simple_timetable)
 
 version.start_date = min([ac.from_date for ac in availability_conditions])
 version.end_date = max([ac.to_date for ac in availability_conditions])
+
+valid_between.from_date = min([ac.from_date for ac in availability_conditions])
+valid_between.to_date = max([ac.to_date for ac in availability_conditions])
+
 
 data_source = DataSource(id=getId(DataSource, codespace, short_name),
                          version=version.version,
@@ -95,7 +105,7 @@ transport_administrative_zone_partitie = TransportAdministrativeZone(id=getId(Tr
                                                             version="any",
                                                             name=MultilingualString(value="MOJO Dronten"),
                                                             short_name=MultilingualString(value="MOJOD"),
-                                                            vehicle_modes=[AllModesEnumeration.WATER])
+                                                            vehicle_modes=[AllModesEnumeration.BUS])
 
 
 operator = Operator(id=getId(Operator, codespace, "MOJO"), version=version.version,
@@ -116,7 +126,7 @@ responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, cod
                                            ResponsibilityRoleAssignment(
                                                id=getId(ResponsibilityRoleAssignment, codespace, "Financier"),
                                                version=version.version,
-                                               type_of_responsibility_role_ref_or_responsibility_role_ref=TypeOfResponsibilityRoleRef(ref="BISON:TypeOfResponsibilityRole:financing", version="any"),
+                                               type_of_responsibility_role_ref_or_responsibility_role_ref=TypeOfResponsibilityRoleRef(ref="NL:BISON:TypeOfResponsibilityRole:financing", version="any"),
                                                responsible_organisation_ref=getRef(operator, OrganisationRefStructure)),
                                        ]))
 
@@ -136,8 +146,8 @@ operational_context = OperationalContext(id=getId(OperationalContext, codespace,
 vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Standaard"), version=version.version,
                            name=MultilingualString(value="Touringcar"),
                            description=MultilingualString(value="Touringcar"),
-                           # fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.DIESEL]),
+                           # fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.DIESEL),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=
                                                                       [PassengerCapacity(id=getId(PassengerCapacity, codespace, "Standaard"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=80, seating_capacity=80)]),
@@ -156,7 +166,7 @@ vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Standaard"), versio
 
 sj: ServiceJourney
 for sj in service_journeys:
-    sj.compound_train_ref_or_train_ref_or_vehicle_type_ref = getRef(vehicle_type)
+    sj.vehicle_type_ref_or_train_ref = getRef(vehicle_type)
 
 dutchprofile = DutchProfile(codespace, data_source, version)
 resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], responsibility_sets=[responsibility_set_financier, responsibility_set_partitie],
@@ -169,9 +179,10 @@ line = Line(id=getId(Line, codespace, "MOJO"), version=version.version, name=Mul
               responsibility_set_ref_attribute=responsibility_set_financier.id,
               description=MultilingualString(value="Lowlands Pendelbus"),
               transport_mode=AllVehicleModesOfTransportEnumeration.BUS,
-              type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
+              type_of_service_ref=TypeOfServiceRef(ref="NL:BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="MOJO"),
-              private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
+              private_codes=PrivateCodes(private_code=[PrivateCode(value="1", type_value="LinePlanningNumber")]),
+              operator_ref=getRef(operator),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "MOJO"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.UNKNOWN)
               )
@@ -270,24 +281,24 @@ routes = [route_lylo, route_loly, route_drlo, route_lodr]
 lines = [line]
 
 def setVariants(dd: DestinationDisplay):
-    dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
+    dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id.replace(':DestinationDisplay:', ':DestinationDisplayVariant:') + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="NL:BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
 
 dd_ly = DestinationDisplay(id=getId(DestinationDisplay, codespace, "LY"), version=version.version,
                            name=MultilingualString(value="Station Lelystad"),
                            front_text=MultilingualString(value="Station Lelystad"),
-                           private_code=PrivateCode(value="1", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="DestinationCode")))
 setVariants(dd_ly)
 
 dd_dr = DestinationDisplay(id=getId(DestinationDisplay, codespace, "DR"), version=version.version,
                            name=MultilingualString(value="Station Dronten"),
                            front_text=MultilingualString(value="Station Dronten"),
-                           private_code=PrivateCode(value="2", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="2", type_value="DestinationCode")))
 setVariants(dd_dr)
 
 dd_lo = DestinationDisplay(id=getId(DestinationDisplay, codespace, "LO"), version=version.version,
                            name=MultilingualString(value="Lowlands"),
                            front_text=MultilingualString(value="Lowlands"),
-                           private_code=PrivateCode(value="3", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="3", type_value="DestinationCode")))
 setVariants(dd_lo)
 
 
@@ -296,7 +307,7 @@ destination_displays=[dd_ly, dd_dr, dd_lo]
 sa_ly = StopArea(id=getId(StopArea, codespace, "LY"),
                  version=version.version,
                  name=MultilingualString(value="Lelystad, Station Centrum"),
-                 private_code=PrivateCode(value="49000001", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="49000001", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Lelystad"))
                  )
 
@@ -304,14 +315,14 @@ sa_ly = StopArea(id=getId(StopArea, codespace, "LY"),
 sa_dr = StopArea(id=getId(StopArea, codespace, "DR"),
                  version=version.version,
                  name=MultilingualString(value="Dronten, Station"),
-                 private_code=PrivateCode(value="49430390", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="49430390", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Dronten"))
                  )
 
 sa_lo = StopArea(id=getId(StopArea, codespace, "G"),
                  version=version.version,
                  name=MultilingualString(value="Biddinghuizen, Lowlands"),
-                 private_code=PrivateCode(value="49810001", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="49810001", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Biddinghuizen"))
                  )
 
@@ -323,7 +334,7 @@ ssp_ly = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "LY"), versi
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "LY"), version=version.version, project_to_point_ref=getRef(rp_ly, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_ly)]),
-                              private_code=PrivateCode(value="49000001", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="49000001", type_value="UserStopCode")))
 
 ssp_dr = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DR"), version=version.version,
                               name=MultilingualString(value="Dronten, Station"),
@@ -331,7 +342,7 @@ ssp_dr = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DR"), versi
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DR"), version=version.version, project_to_point_ref=getRef(rp_dr, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dr)]),
-                              private_code=PrivateCode(value="49430425", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="49430425", type_value="UserStopCode")))
 
 ssp_lo = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "LO"), version=version.version,
                               name=MultilingualString(value="Biddinghuizen, Lowlands"),
@@ -339,7 +350,7 @@ ssp_lo = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "LO"), versi
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "LO"), version=version.version, project_to_point_ref=getRef(rp_lo, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_lo)]),
-                              private_code=PrivateCode(value="49810001", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="49810001", type_value="UserStopCode")))
 
 
 scheduled_stop_points=[ssp_ly, ssp_dr, ssp_lo]
@@ -469,15 +480,18 @@ tdt_lodr = TimeDemandType(id=getId(TimeDemandType, codespace, "LO-DR"), version=
 
 time_demand_types=[tdt_lylo, tdt_loly, tdt_drlo, tdt_lodr]
 
+notice = Notice(id=getId(Notice, codespace, "MOJO"), version=version.version, text=MultilingualString(value="Deze ritten zijn gratis toegankelijk voor festivalbezoekers."))
+notice_assignment = NoticeAssignment(id=getId(NoticeAssignment, codespace, "MOJO"), version=version.version, order=1, notice_ref_or_group_of_notices_ref_or_notice=getRef(notice), noticed_object_ref=getRef(line, VersionOfObjectRefStructure))
+
 service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_links=route_links, routes=routes, lines=lines,
                                                destination_displays=destination_displays, scheduled_stop_points=scheduled_stop_points, stop_areas=stop_areas,
                                               stop_assignments=stop_assignments, timing_points=None, timing_links=timing_links, service_journey_patterns=journey_patterns, time_demand_types=time_demand_types,
-                                              notices=None, notice_assignments=None)
+                                              notices=[notice], notice_assignments=[notice_assignment])
 
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version],
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], valid_between=valid_between,
                                                  responsibility_set=responsibility_set_partitie,
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="MOJO export")

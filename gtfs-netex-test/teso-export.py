@@ -24,7 +24,7 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
     ContactStructure, ServiceJourney, MobilityFacilityList, PassengerCommsFacilityList, VehicleAccessFacilityList, \
     SanitaryFacilityList, MealFacilityList, AssistanceFacilityList, PublicCodeStructure, DirectionType, \
-    TransportTypeVersionStructure, TypeOfResponsibilityRoleRef, OrganisationRefStructure
+    TransportTypeVersionStructure, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ValidBetween, PrivateCodes
 
 import datetime
 
@@ -33,9 +33,10 @@ from simpletimetable import SimpleTimetable
 
 ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gml/3.2'}
 
+xmlns = "NL:TESO"
 short_name = "TESO"
 
-codespace = Codespace(id="{}:Codespace:{}".format("BISON", short_name), xmlns=short_name,
+codespace = Codespace(id="{}:Codespace:{}".format("NL:BISON", short_name), xmlns=xmlns,
                       xmlns_url="http://bison.dova.nu/ns/TESO", description=MultilingualString(value="Texels Eigen Stoomboot Onderneming"))
 
 start_date = datetime.datetime(year=2023, month=11, day=29)
@@ -83,11 +84,11 @@ responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, cod
                                            ResponsibilityRoleAssignment(
                                                id=getId(ResponsibilityRoleAssignment, codespace, "Financier"),
                                                version=version.version,
-                                               type_of_responsibility_role_ref_or_responsibility_role_ref=TypeOfResponsibilityRoleRef(ref="BISON:TypeOfResponsibilityRole:financing", version="any"),
+                                               type_of_responsibility_role_ref_or_responsibility_role_ref=TypeOfResponsibilityRoleRef(ref="NL:BISON:TypeOfResponsibilityRole:financing", version="any"),
                                                responsible_organisation_ref=getRef(operator, OrganisationRefStructure)),
                                        ]))
 
-responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
+responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, xmlns),
                                        version=version.version,
                                        name=MultilingualString(value="Partitie"),
                                        roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
@@ -103,7 +104,7 @@ operational_context = OperationalContext(id=getId(OperationalContext, codespace,
 vehicle_type = VehicleType(id=getId(VehicleType, codespace, "Texelstroom2"), version=version.version,
                            name=MultilingualString(value="Texelstroom (2)"),
                            description=MultilingualString(value="Hybride CNG/diesel-elektrische Ro-Ro ferry"),
-                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.TypeOfFuel(value=FuelTypeEnumeration.NATURAL_GAS),
+                           fuel_type_or_type_of_fuel=TransportTypeVersionStructure.FuelType(value=[FuelTypeEnumeration.NATURAL_GAS]),
                            capacities=PassengerCapacitiesRelStructure(passenger_capacity_ref_or_passenger_capacity_or_passenger_vehicle_capacity=[
                                                                       PassengerCapacity(id=getId(PassengerCapacity, codespace, "Texelstroom2"), version=version.version,
                                                                           fare_class=FareClassEnumeration.ANY, total_capacity=1750, seating_capacity=1750)]),
@@ -131,11 +132,12 @@ resource_frames = dutchprofile.getResourceFrames(data_sources=[data_source], res
 line = Line(id=getId(Line, codespace, "TESO"), version=version.version, name=MultilingualString(value="TESO"),
             responsibility_set_ref_attribute=responsibility_set_financier.id,
               monitored=False,
+            operator_ref=getRef(operator),
               description=MultilingualString(value="Veer tussen Den Helder en Texel"),
               transport_mode=AllVehicleModesOfTransportEnumeration.WATER,
-              type_of_service_ref=TypeOfServiceRef(ref="BISON:TypeOfService:Standaard", version="any"),
+              type_of_service_ref=TypeOfServiceRef(ref="NL:BISON:TypeOfService:Standaard", version="any"),
               public_code=PublicCodeStructure(value="TESO"),
-              private_code=PrivateCode(value="1", type_value="LinePlanningNumber"),
+              private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="LinePlanningNumber")),
               accessibility_assessment=AccessibilityAssessment(id=getId(AccessibilityAssessment, codespace, "TESO"), version=version.version,
                                                                mobility_impaired_access=LimitationStatusEnumeration.TRUE)
               )
@@ -189,18 +191,18 @@ routes = [route_dhtx, route_txdh]
 lines = [line]
 
 def setVariants(dd: DestinationDisplay):
-    dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
+    dd.variants = DestinationDisplayVariantsRelStructure(destination_display_variant=[DestinationDisplayVariant(id=dd.id.replace(':DestinationDisplay:', ':DestinationDisplayVariant:') + "-" + str(x), version=dd.version, name=MultilingualString(value=dd.name.value[0:x]), destination_display_variant_media_type=DeliveryVariantTypeEnumeration.ANY, extensions=Extensions2(any_element=[AnyElement(qname="{http://www.netex.org.uk/netex}MaxLength", text="NL:BISON:DisplayTextLength:"+str(x))])) for x in (24, 21, 19, 16)])
 
 dd_dh = DestinationDisplay(id=getId(DestinationDisplay, codespace, "DH"), version=version.version,
                            name=MultilingualString(value="Den Helder"),
                            front_text=MultilingualString(value="Den Helder"),
-                           private_code=PrivateCode(value="1", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="DestinationCode")))
 setVariants(dd_dh)
 
 dd_tx = DestinationDisplay(id=getId(DestinationDisplay, codespace, "TX"), version=version.version,
                            name=MultilingualString(value="Texel"),
                            front_text=MultilingualString(value="Texel"),
-                           private_code=PrivateCode(value="2", type_value="DestinationCode"))
+                           private_codes=PrivateCodes(private_code=PrivateCode(value="2", type_value="DestinationCode")))
 setVariants(dd_tx)
 
 
@@ -209,14 +211,14 @@ destination_displays=[dd_dh, dd_tx]
 sa_dh = StopArea(id=getId(StopArea, codespace, "DH"),
                  version=version.version,
                  name=MultilingualString(value="Den Helder"),
-                 private_code=PrivateCode(value="1", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="1", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="Den Helder"))
                  )
 
 sa_tx = StopArea(id=getId(StopArea, codespace, "TX"),
                  version=version.version,
                  name=MultilingualString(value="Haven"),
-                 private_code=PrivateCode(value="2", type_value="UserStopAreaCode"),
+                 private_codes=PrivateCodes(private_code=PrivateCode(value="2", type_value="UserStopAreaCode")),
                  topographic_place_ref_or_topographic_place_view=TopographicPlaceView(name=MultilingualString(value="'t Horntje"))
                  )
 
@@ -228,7 +230,7 @@ ssp_dh_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-B"), v
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-B-1"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
                               for_alighting=False, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dh)]),
-                              private_code=PrivateCode(value="34000001", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="34000001", type_value="UserStopCode")))
 
 ssp_dh_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-A"), version=version.version,
                               name=MultilingualString(value="Den Helder"),
@@ -236,7 +238,7 @@ ssp_dh_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-A"), v
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-A-3"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
                               for_alighting=True, for_boarding=False,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dh)]),
-                              private_code=PrivateCode(value="34000003", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="34000003", type_value="UserStopCode")))
 
 ssp_tx_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-B"), version=version.version,
                               name=MultilingualString(value="Texel"),
@@ -244,7 +246,7 @@ ssp_tx_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-B"), v
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-B-2"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
                               for_alighting=False, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_tx)]),
-                              private_code=PrivateCode(value="34130002", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="34130002", type_value="UserStopCode")))
 
 ssp_tx_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-A"), version=version.version,
                               name=MultilingualString(value="Texel"),
@@ -252,7 +254,7 @@ ssp_tx_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-A"), v
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-A-4"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
                               for_alighting=True, for_boarding=False,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_tx)]),
-                              private_code=PrivateCode(value="34130004", type_value="UserStopCode"))
+                              private_codes=PrivateCodes(private_code=PrivateCode(value="34130004", type_value="UserStopCode")))
 
 scheduled_stop_points=[ssp_dh_b, ssp_dh_a, ssp_tx_b, ssp_tx_a]
 
@@ -341,13 +343,15 @@ service_journeys, availability_conditions = stt.simple_timetable(f"/tmp/teso-{fr
 version.start_date = min(d.from_date for d in availability_conditions)
 version.end_date = max(d.to_date for d in availability_conditions)
 
+valid_between: ValidBetween = ValidBetween(from_date=version.start_date, to_date=version.end_date)
+
 sj: ServiceJourney
 for sj in service_journeys:
     sj.vehicle_type_ref_or_train_ref = getRef(vehicle_type)
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
 
-composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], responsibility_set=responsibility_set_partitie,
+composite_frame = dutchprofile.getCompositeFrame(codespaces=[codespace], versions=[version], valid_between=valid_between, responsibility_set=responsibility_set_partitie,
                                                  resource_frames=resource_frames, service_frames=service_frames, timetable_frames=timetable_frames)
 publication_delivery = dutchprofile.getPublicationDelivery(composite_frame=composite_frame, description="Eerste TESO export")
 
