@@ -24,7 +24,7 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     PassengerCapacitiesRelStructure, PassengerCapacity, RouteLinkRefStructure, OperatorView, Quay, QuayRef, \
     ContactStructure, ServiceJourney, MobilityFacilityList, PassengerCommsFacilityList, VehicleAccessFacilityList, \
     SanitaryFacilityList, MealFacilityList, AssistanceFacilityList, PublicCodeStructure, DirectionType, \
-    TransportTypeVersionStructure, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ValidBetween, PrivateCodes
+    TransportTypeVersionStructure, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ValidBetween, PrivateCodes, Notice, NoticeAssignment
 
 import datetime
 
@@ -143,23 +143,23 @@ line = Line(id=getId(Line, codespace, "TESO"), version=version.version, name=Mul
               )
 
 
-rp_dh = RoutePoint(id=getId(RoutePoint, codespace, "DH"), version=version.version, location=LocationStructure2(pos=Pos(value=[114066, 553040], srs_dimension=2)))
-rp_tx = RoutePoint(id=getId(RoutePoint, codespace, "TX"), version=version.version, location=LocationStructure2(pos=Pos(value=[114311, 557575], srs_dimension=2)))
+rp_dh = RoutePoint(id=getId(RoutePoint, codespace, "DH"), version=version.version, location=LocationStructure2(pos=Pos(value=[114070.8, 553038.7], srs_dimension=2)))
+rp_tx = RoutePoint(id=getId(RoutePoint, codespace, "TX"), version=version.version, location=LocationStructure2(pos=Pos(value=[114333.9, 557572.3], srs_dimension=2)))
 
 route_points = [rp_dh, rp_tx]
 
 rl_dhtx = RouteLink(id=getId(RouteLink, codespace, "DH-TX"), version=version.version,
-                    distance=Decimal('4000'),
+                    distance=Decimal('4710'),
                     from_point_ref=getRef(rp_dh, RoutePointRefStructure), to_point_ref=getRef(rp_tx, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "DH-TX").replace(":", "_").replace("-", "_"),
-                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=(rp_dh.location.pos.value + rp_tx.location.pos.value))]),
+                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=[114070.8, 553038.7, 114192.6, 553232.3, 114299.8, 553428.8, 114368.4, 553651.9, 114498.7, 554304.8, 114592.8, 554936.5, 114669.2, 555652.6, 114699.6, 556387.1, 114685.4, 556685.3, 114625.7, 556979.0, 114567.3, 557159.3, 114499.9, 557321.6, 114439.8, 557424.8, 114333.9, 557572.3])]),
                     operational_context_ref=getRef(operational_context))
 
 rl_txdh = RouteLink(id=getId(RouteLink, codespace, "TX-DH"), version=version.version,
-                    distance=Decimal('4000'),
+                    distance=Decimal('4710'),
                     from_point_ref=getRef(rp_tx, RoutePointRefStructure), to_point_ref=getRef(rp_dh, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "TX-DH").replace(":", "_").replace("-", "_"),
-                        pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=rp_tx.location.pos.value + rp_dh.location.pos.value)]),
+                        pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=[114333.9, 557572.3, 114439.8, 557424.8, 114499.9, 557321.6, 114567.3, 557159.3, 114625.7, 556979.0, 114685.4, 556685.3, 114699.6, 556387.1, 114669.2, 555652.6, 114592.8, 554936.5, 114498.7, 554304.8, 114368.4, 553651.9, 114299.8, 553428.8, 114192.6, 553232.3, 114070.8, 553038.7])]),
                     operational_context_ref=getRef(operational_context))
 
 route_links = [rl_dhtx, rl_txdh]
@@ -167,7 +167,7 @@ route_links = [rl_dhtx, rl_txdh]
 
 
 route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
-                   distance=Decimal('4000'),
+                   distance=Decimal('4710'),
                    line_ref=getRef(line),
                    direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
@@ -177,7 +177,7 @@ route_dhtx = Route(id=getId(Route, codespace, "DH-TX"), version=version.version,
                    )
 
 route_txdh = Route(id=getId(Route, codespace, "TX-DH"), version=version.version,
-                   distance=Decimal('4000'),
+                   distance=Decimal('4710'),
                    line_ref=getRef(line),
                    direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
@@ -226,7 +226,7 @@ stop_areas=[sa_dh, sa_tx]
 
 ssp_dh_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-B"), version=version.version,
                               name=MultilingualString(value="Den Helder"),
-                              location=LocationStructure2(pos=Pos(value=[114066, 553040], srs_dimension=2)),
+                              location=rp_dh.location,
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-B-1"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
                               for_alighting=False, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dh)]),
@@ -234,7 +234,7 @@ ssp_dh_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-B"), v
 
 ssp_dh_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-A"), version=version.version,
                               name=MultilingualString(value="Den Helder"),
-                              location=LocationStructure2(pos=Pos(value=[114066, 553040], srs_dimension=2)),
+                              location=rp_dh.location,
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-A-3"), version=version.version, project_to_point_ref=getRef(rp_dh, PointRefStructure))]),
                               for_alighting=True, for_boarding=False,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_dh)]),
@@ -242,7 +242,7 @@ ssp_dh_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "DH-A"), v
 
 ssp_tx_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-B"), version=version.version,
                               name=MultilingualString(value="Texel"),
-                              location=LocationStructure2(pos=Pos(value=[114311, 557575], srs_dimension=2)),
+                              location=rp_tx.location,
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-B-2"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
                               for_alighting=False, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_tx)]),
@@ -250,7 +250,7 @@ ssp_tx_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-B"), v
 
 ssp_tx_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-A"), version=version.version,
                               name=MultilingualString(value="Texel"),
-                              location=LocationStructure2(pos=Pos(value=[114311, 557575], srs_dimension=2)),
+                              location=rp_tx.location,
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "DH-A-4"), version=version.version, project_to_point_ref=getRef(rp_tx, PointRefStructure))]),
                               for_alighting=True, for_boarding=False,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_tx)]),
@@ -259,12 +259,12 @@ ssp_tx_a = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "TX-A"), v
 scheduled_stop_points=[ssp_dh_b, ssp_dh_a, ssp_tx_b, ssp_tx_a]
 
 tl_dhtx = TimingLink(id=getId(TimingLink, codespace, "DH-TX"), version=version.version,
-                     distance=Decimal('4000'),
+                     distance=Decimal('4710'),
                     from_point_ref=getRef(ssp_dh_b, TimingPointRefStructure), to_point_ref=getRef(ssp_tx_a, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
 tl_txdh = TimingLink(id=getId(TimingLink, codespace, "TX-DH"), version=version.version,
-                     distance=Decimal('4000'),
+                     distance=Decimal('4710'),
                     from_point_ref=getRef(ssp_tx_b, TimingPointRefStructure), to_point_ref=getRef(ssp_dh_a, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
@@ -331,10 +331,18 @@ tdt_txdh = TimeDemandType(id=getId(TimeDemandType, codespace, "TX-DH"), version=
 
 time_demand_types=[tdt_dhtx, tdt_txdh]
 
+notice_ovchipkaart = Notice(id=getId(Notice, codespace, "GeenOVchipkaart"), version=version.version,
+                            can_be_advertised=True,
+                            text=MultilingualString(value="Voor dit deel van de reis is betalen met de OV-chipkaart of OVpay niet mogelijk."))
+
+notice_assignments = [NoticeAssignment(id=getId(NoticeAssignment, codespace, "GeenOVchipkaart-" + line.id.split(':')[-1]), version=version.version, order=1,
+                     noticed_object_ref=getRef(line, VersionOfObjectRefStructure),
+                     notice_ref_or_group_of_notices_ref_or_notice=getRef(notice_ovchipkaart)) for line in lines]
+
 service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_links=route_links, routes=routes, lines=lines,
                                                destination_displays=destination_displays, scheduled_stop_points=scheduled_stop_points, stop_areas=stop_areas,
                                               stop_assignments=stop_assignments, timing_points=None, timing_links=timing_links, service_journey_patterns=journey_patterns, time_demand_types=time_demand_types,
-                                              notices=None, notice_assignments=None)
+                                              notices=[notice_ovchipkaart], notice_assignments=notice_assignments)
 
 stt = SimpleTimetable(codespace, version)
 from_date = datetime.date.today().isoformat().replace('-', '')

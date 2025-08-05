@@ -27,7 +27,7 @@ from netex import Codespace, Version, VersionTypeEnumeration, DataSource, Multil
     ContactStructure, Authority, TypeOfResponsibilityRoleRef, OrganisationRefStructure, ServiceJourney, \
     MobilityFacilityList, SanitaryFacilityList, \
     TicketingServiceFacilityList, TicketingServiceFacilityEnumeration, VehicleAccessFacilityList, DirectionType, \
-    TransportTypeVersionStructure, PublicCodeStructure, Vehicle, DatedServiceJourney, ValidBetween, PrivateCodes
+    TransportTypeVersionStructure, PublicCodeStructure, Vehicle, DatedServiceJourney, ValidBetween, PrivateCodes, Notice, NoticeAssignment
 
 from refs import getId, getRef, getFakeRef
 from simpletimetable import SimpleTimetable
@@ -37,7 +37,7 @@ ns_map = {'': 'http://www.netex.org.uk/netex', 'gml': 'http://www.opengis.net/gm
 xmlns = "NL:WSF"
 short_name = "WSF"
 
-codespace = Codespace(id="{}:Codespace:{}".format("NL:BISON", "WSP"), xmlns=xmlns,
+codespace = Codespace(id="{}:Codespace:{}".format("NL:BISON", short_name), xmlns=xmlns,
                       xmlns_url="http://bison.dova.nu/ns/WSF", description=MultilingualString(value="Westerschelde Ferry"))
 
 dova_codespace = Codespace(id="{}:Codespace:{}".format("NL:BISON", "DOVA"), xmlns="NL:DOVA",
@@ -115,7 +115,7 @@ responsibility_set_financier = ResponsibilitySet(id=getId(ResponsibilitySet, cod
                                                responsible_organisation_ref=getRef(authority, OrganisationRefStructure)),
                                        ]))
 
-responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, xmlns),
+responsibility_set_partitie = ResponsibilitySet(id=getId(ResponsibilitySet, codespace, short_name),
                                        version=version.version,
                                        name=MultilingualString(value="Partitie"),
                                        roles=ResponsibilityRoleAssignmentsRelStructure(responsibility_role_assignment=[
@@ -172,23 +172,23 @@ line = Line(id=getId(Line, codespace, "WSF"), version=version.version, name=Mult
               )
 
 
-rp_v = RoutePoint(id=getId(RoutePoint, codespace, "V"), version=version.version, location=LocationStructure2(pos=Pos(value=[30576, 385411], srs_dimension=2)))
-rp_b = RoutePoint(id=getId(RoutePoint, codespace, "B"), version=version.version, location=LocationStructure2(pos=Pos(value=[27072, 380785], srs_dimension=2)))
+rp_v = RoutePoint(id=getId(RoutePoint, codespace, "V"), version=version.version, location=LocationStructure2(pos=Pos(value=[30619.8, 385419.6], srs_dimension=2)))
+rp_b = RoutePoint(id=getId(RoutePoint, codespace, "B"), version=version.version, location=LocationStructure2(pos=Pos(value=[27074.3, 380789.0], srs_dimension=2)))
 
 route_points = [rp_v, rp_b]
 
 rl_vb = RouteLink(id=getId(RouteLink, codespace, "V-B"), version=version.version,
-                  distance=Decimal('5803'),
+                  distance=Decimal('6411'),
                   from_point_ref=getRef(rp_v, RoutePointRefStructure), to_point_ref=getRef(rp_b, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "V-B").replace(":", "_").replace("-", "_"),
-                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=(rp_v.location.pos.value + rp_b.location.pos.value))]),
+                                           pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=[30619.8 , 385419.6 , 30698.0 , 385422.7 , 30726.2 , 385415.6 , 30758.1 , 385387.2 , 30855.1 , 385216.3 , 30955.0 , 385012.9 , 31000.6 , 384877.9 , 30977.9 , 384784.5 , 30901.6 , 384693.6 , 27687.3 , 381605.9 , 27354.4 , 381192.3 , 27226.9 , 380974.3 , 27074.3 , 380789.0])]),
                     operational_context_ref=getRef(operational_context))
 
 rl_bv = RouteLink(id=getId(RouteLink, codespace, "B-V"), version=version.version,
-                distance=Decimal('5803'),
+                distance=Decimal('6411'),
                     from_point_ref=getRef(rp_b, RoutePointRefStructure), to_point_ref=getRef(rp_v, RoutePointRefStructure),
                     line_string=LineString(id=getId(RouteLink, codespace, "B-V").replace(":", "_").replace("-", "_"),
-                        pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=rp_b.location.pos.value + rp_v.location.pos.value)]),
+                        pos_or_point_property_or_pos_list=[PosList(srs_dimension=2, count=2, value=[27074.3 , 380789.0 , 27226.9 , 380974.3 , 27354.4 , 381192.3 , 27687.3 , 381605.9 , 30901.6 , 384693.6 , 30977.9 , 384784.5 , 31000.6 , 384877.9 , 30955.0 , 385012.9 , 30855.1 , 385216.3 , 30758.1 , 385387.2 , 30726.2 , 385415.6 , 30698.0 , 385422.7 , 30619.8 , 385419.6])]),
                     operational_context_ref=getRef(operational_context))
 
 route_links = [rl_vb, rl_bv]
@@ -196,7 +196,7 @@ route_links = [rl_vb, rl_bv]
 
 
 route_vb = Route(id=getId(Route, codespace, "V-B"), version=version.version,
-                 distance=Decimal('5803'),
+                 distance=Decimal('6411'),
                  line_ref=getRef(line),
                    direction_type=DirectionType(value=DirectionTypeEnumeration.INBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
@@ -206,7 +206,7 @@ route_vb = Route(id=getId(Route, codespace, "V-B"), version=version.version,
                    )
 
 route_bv = Route(id=getId(Route, codespace, "B-V"), version=version.version,
-                 distance=Decimal('5803'),
+                 distance=Decimal('6411'),
                  line_ref=getRef(line),
                    direction_type=DirectionType(value=DirectionTypeEnumeration.OUTBOUND),
                    points_in_sequence=PointsOnRouteRelStructure(point_on_route=[
@@ -255,7 +255,7 @@ stop_areas=[sa_v, sa_b]
 
 ssp_v = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "V"), version=version.version,
                               name=MultilingualString(value="Vlissingen, Westerhavenweg"),
-                              location=LocationStructure2(pos=Pos(value=[30576, 385411], srs_dimension=2)),
+                              location=rp_v.location,
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "V"), version=version.version, project_to_point_ref=getRef(rp_v, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_v)]),
@@ -263,7 +263,7 @@ ssp_v = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "V"), version
 
 ssp_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "B"), version=version.version,
                               name=MultilingualString(value="Breskens, Veerhaven"),
-                              location=LocationStructure2(pos=Pos(value=[27072, 380785], srs_dimension=2)),
+                              location=rp_b.location,
                               projections=ProjectionsRelStructure(projection_ref_or_projection=[PointProjection(id=getId(PointProjection, codespace, "B"), version=version.version, project_to_point_ref=getRef(rp_b, PointRefStructure))]),
                               for_alighting=True, for_boarding=True,
                               stop_areas=StopAreaRefsRelStructure(stop_area_ref=[getRef(sa_b)]),
@@ -273,12 +273,12 @@ ssp_b = ScheduledStopPoint(id=getId(ScheduledStopPoint, codespace, "B"), version
 scheduled_stop_points=[ssp_v, ssp_b]
 
 tl_vb = TimingLink(id=getId(TimingLink, codespace, "V-B"), version=version.version,
-                   distance=Decimal('5803'),
+                   distance=Decimal('6411'),
                    from_point_ref=getRef(ssp_v, TimingPointRefStructure), to_point_ref=getRef(ssp_b, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
 tl_bv = TimingLink(id=getId(TimingLink, codespace, "B-V"), version=version.version,
-                   distance=Decimal('5803'),
+                   distance=Decimal('6411'),
                    from_point_ref=getRef(ssp_b, TimingPointRefStructure), to_point_ref=getRef(ssp_v, TimingPointRefStructure),
                     operational_context_ref=getRef(operational_context))
 
@@ -339,10 +339,18 @@ tdt_bv = TimeDemandType(id=getId(TimeDemandType, codespace, "B-V"), version=vers
 
 time_demand_types=[tdt_vb, tdt_bv]
 
+notice_ovchipkaart = Notice(id=getId(Notice, codespace, "GeenOVchipkaart"), version=version.version,
+                            can_be_advertised=True,
+                            text=MultilingualString(value="Voor dit deel van de reis is betalen met de OV-chipkaart of OVpay niet mogelijk."))
+
+notice_assignments = [NoticeAssignment(id=getId(NoticeAssignment, codespace, "GeenOVchipkaart-" + line.id.split(':')[-1]), version=version.version, order=1,
+                     noticed_object_ref=getRef(line, VersionOfObjectRefStructure),
+                     notice_ref_or_group_of_notices_ref_or_notice=getRef(notice_ovchipkaart)) for line in lines]
+
 service_frames = dutchprofile.getServiceFrames(route_points=route_points, route_links=route_links, routes=routes, lines=lines,
                                                destination_displays=destination_displays, scheduled_stop_points=scheduled_stop_points, stop_areas=stop_areas,
                                               stop_assignments=stop_assignments, timing_points=None, timing_links=timing_links, service_journey_patterns=journey_patterns, time_demand_types=time_demand_types,
-                                              notices=None, notice_assignments=None)
+                                              notices=[notice_ovchipkaart], notice_assignments=notice_assignments)
 
 
 timetable_frames = dutchprofile.getTimetableFrame(content_validity_conditions=availability_conditions, operator_view=OperatorView(operator_ref=getRef(operator)), vehicle_journeys=service_journeys)
